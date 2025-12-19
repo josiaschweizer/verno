@@ -11,26 +11,27 @@ import org.jspecify.annotations.Nullable;
 
 public final class ViewToolbar extends Composite<HorizontalLayout> {
 
-    public ViewToolbar(@Nullable String viewTitle, Component... components) {
-        var layout = getContent();
+    public ViewToolbar(@Nullable final String viewTitle,
+                       final Component... components) {
+        final var layout = getContent();
         layout.setPadding(true);
         layout.setWrap(true);
         layout.setWidthFull();
         layout.addClassName(LumoUtility.Border.BOTTOM);
 
-        var drawerToggle = new DrawerToggle();
+        final var drawerToggle = new DrawerToggle();
         drawerToggle.addClassNames(LumoUtility.Margin.NONE);
 
-        var title = new H1(viewTitle);
+        final var title = new H1(viewTitle);
         title.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Margin.NONE, LumoUtility.FontWeight.LIGHT);
 
-        var toggleAndTitle = new HorizontalLayout(drawerToggle, title);
+        final var toggleAndTitle = new HorizontalLayout(drawerToggle, title);
         toggleAndTitle.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         layout.add(toggleAndTitle);
         layout.setFlexGrow(1, toggleAndTitle);
 
         if (components.length > 0) {
-            var actions = new HorizontalLayout(components);
+            final var actions = new HorizontalLayout(components);
             actions.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
             layout.add(actions);
         }
