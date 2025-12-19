@@ -1,4 +1,4 @@
-package ch.verno.base.ui;
+package ch.verno.ui.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;

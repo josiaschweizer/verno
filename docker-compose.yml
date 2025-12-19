@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: verno
+      POSTGRES_USER: verno
+      POSTGRES_PASSWORD: verno
+    ports:
+      - "5432:5432"
+    volumes:
+      - verno_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verno -d verno"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  verno_pg:
