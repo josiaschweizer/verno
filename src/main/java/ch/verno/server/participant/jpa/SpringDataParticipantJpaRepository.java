@@ -1,6 +1,6 @@
-package ch.verno.persistence.participant.jpa;
+package ch.verno.server.participant.jpa;
 
-import ch.verno.persistence.participant.entity.ParticipantEntity;
+import ch.verno.server.participant.entity.ParticipantEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataParticipantJpaRepository extends JpaRepository<ParticipantEntity, Long> {

@@ -1,6 +1,6 @@
-package ch.verno.domain.participant;
+package ch.verno.common.participant;
 
-import ch.verno.persistence.participant.entity.ParticipantEntity;
+import ch.verno.server.participant.entity.ParticipantEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class ParticipantService {
 
   @Nonnull
   @Transactional(readOnly = true)
-  public List<ParticipantEntity> list() {
+  public List<ParticipantEntity> getAllParticipants() {
     return participantRepository.findAll();
   }
 }

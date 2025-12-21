@@ -1,4 +1,4 @@
-package ch.verno.persistence.participant.entity;
+package ch.verno.server.participant.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

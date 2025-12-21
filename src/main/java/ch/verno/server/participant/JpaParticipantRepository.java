@@ -1,8 +1,8 @@
-package ch.verno.persistence.participant;
+package ch.verno.server.participant;
 
-import ch.verno.domain.participant.ParticipantRepository;
-import ch.verno.persistence.participant.entity.ParticipantEntity;
-import ch.verno.persistence.participant.jpa.SpringDataParticipantJpaRepository;
+import ch.verno.common.participant.ParticipantRepository;
+import ch.verno.server.participant.entity.ParticipantEntity;
+import ch.verno.server.participant.jpa.SpringDataParticipantJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package ch.verno.domain.participant;
+package ch.verno.common.participant;
 
-import ch.verno.persistence.participant.entity.ParticipantEntity;
+import ch.verno.server.participant.entity.ParticipantEntity;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
