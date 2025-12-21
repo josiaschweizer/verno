@@ -14,38 +14,38 @@ import java.util.UUID;
 public class AppUserJpaAdapter implements AppUserRepositoryPort {
 
   @Nonnull
-  private final AppUserRepository repo;
+  private final AppUserRepository repository;
 
-  public AppUserJpaAdapter(@Nonnull final AppUserRepository repo) {
-    this.repo = repo;
+  public AppUserJpaAdapter(@Nonnull final AppUserRepository repository) {
+    this.repository = repository;
   }
 
   @Nonnull
   @Override
   public Optional<AppUser> findById(@Nonnull final UUID id) {
-    return repo.findById(id).map(AppUserMapper::toDomain);
+    return repository.findById(id).map(AppUserMapper::toDomain);
   }
 
   @Nonnull
   @Override
   public Optional<AppUser> findByEmail(@Nonnull final String email) {
-    return repo.findByEmail(email).map(AppUserMapper::toDomain);
+    return repository.findByEmail(email).map(AppUserMapper::toDomain);
   }
 
   @Override
   public boolean existsByEmail(@Nonnull final String email) {
-    return repo.existsByEmail(email);
+    return repository.existsByEmail(email);
   }
 
   @Nonnull
   @Override
   public AppUser save(@Nonnull final AppUser appUser) {
-    final var saved = repo.save(AppUserMapper.toEntity(appUser));
+    final var saved = repository.save(AppUserMapper.toEntity(appUser));
     return AppUserMapper.toDomain(saved);
   }
 
   @Override
   public void deleteById(@Nonnull final UUID id) {
-    repo.deleteById(id);
+    repository.deleteById(id);
   }
 }

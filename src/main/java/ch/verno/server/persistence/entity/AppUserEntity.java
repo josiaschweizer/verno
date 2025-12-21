@@ -29,23 +29,26 @@ public class AppUserEntity {
     // JPA only
   }
 
-  public static @Nonnull AppUserEntity of(
+  @Nonnull
+  public static AppUserEntity of(
       @Nonnull final UUID id,
       @Nonnull final String email,
       @Nonnull final Instant createdAt
   ) {
-    final var e = new AppUserEntity();
-    e.id = id;
-    e.email = email;
-    e.createdAt = createdAt;
-    return e;
+    final var entity = new AppUserEntity();
+    entity.id = id;
+    entity.email = email;
+    entity.createdAt = createdAt;
+    return entity;
   }
 
-  public @Nonnull UUID getId() {
+  @Nonnull
+  public UUID getId() {
     return id;
   }
 
-  public @Nonnull String getEmail() {
+  @Nonnull
+  public String getEmail() {
     return email;
   }
 
@@ -53,7 +56,8 @@ public class AppUserEntity {
     this.email = email;
   }
 
-  public @Nonnull Instant getCreatedAt() {
+  @Nonnull
+  public Instant getCreatedAt() {
     return createdAt;
   }
 }

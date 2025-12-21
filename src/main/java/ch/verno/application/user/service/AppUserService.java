@@ -4,7 +4,6 @@ import ch.verno.application.user.command.CreateAppUserCommand;
 import ch.verno.domain.model.user.AppUser;
 import ch.verno.domain.repository.AppUserRepositoryPort;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +39,27 @@ public class AppUserService {
   }
 
   @Nonnull
+  private static String requireValidEmail(@Nonnull final String email) {
+    final var trimmed = email.trim();
+    if (trimmed.isEmpty()) {
+      throw new IllegalArgumentException("Email must not be blank");
+    }
+
+    final var at = trimmed.indexOf('@');
+    final var dot = trimmed.lastIndexOf('.');
+    if (at <= 0 || dot <= at + 1 || dot == trimmed.length() - 1) {
+      throw new IllegalArgumentException("Email is not valid: " + trimmed);
+    }
+
+    return trimmed;
+  }
+
+  @Nonnull
   @Transactional
   public AppUser createIfMissing(@Nonnull final String email) {
-    final @Nullable AppUser existing = repository.findByEmail(email).orElse(null);
-    if (existing != null) {
-      return existing;
+    final AppUser existingUser = repository.findByEmail(email).orElse(null);
+    if (existingUser != null) {
+      return existingUser;
     }
 
     final var user = new AppUser(
