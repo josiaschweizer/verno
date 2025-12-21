@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS app_user
-(
-    id         UUID PRIMARY KEY,
-    email      VARCHAR(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP    NOT NULL DEFAULT NOW()
-);
