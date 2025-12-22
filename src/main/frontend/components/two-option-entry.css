@@ -1,0 +1,4 @@
+.two-option-selected {
+    outline: 2px solid var(--lumo-contrast-60pct);
+    outline-offset: -2px;
+}

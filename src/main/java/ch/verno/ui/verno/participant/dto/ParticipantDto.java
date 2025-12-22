@@ -1,7 +1,10 @@
-package ch.verno.ui.verno.participant;
+package ch.verno.ui.verno.participant.dto;
 
-import ch.verno.util.Publ;
+import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
+
+import java.time.LocalDate;
 
 public class ParticipantDto {
   @Nonnull
@@ -10,33 +13,39 @@ public class ParticipantDto {
   private String firstName;
   @Nonnull
   private String lastName;
-  private int age;
+  @Nonnull
+  private LocalDate birthdate;
+  @Nonnull
+  private GenderDto gender;
   @Nonnull
   private String email;
   @Nonnull
-  private String phone;
+  private PhoneNumber phoneNumber;
 
   public ParticipantDto() {
     this.id = 0L;
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
-    this.age = 0;
+    this.birthdate = LocalDate.now();
+    this.gender = new GenderDto(0L, Publ.EMPTY_STRING);
     this.email = Publ.EMPTY_STRING;
-    this.phone = Publ.EMPTY_STRING;
+    this.phoneNumber = PhoneNumber.empty();
   }
 
   public ParticipantDto(@Nonnull final Long id,
                         @Nonnull final String firstName,
                         @Nonnull final String lastName,
-                        final int age,
+                        @Nonnull final LocalDate birthdate,
+                        @Nonnull final GenderDto gender,
                         @Nonnull final String email,
-                        @Nonnull final String phone) {
+                        @Nonnull final PhoneNumber phoneNumber) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.age = age;
+    this.birthdate = birthdate;
+    this.gender = gender;
     this.email = email;
-    this.phone = phone;
+    this.phoneNumber = phoneNumber;
   }
 
 
@@ -67,12 +76,22 @@ public class ParticipantDto {
     this.lastName = lastName;
   }
 
-  public int getAge() {
-    return age;
+  @Nonnull
+  public LocalDate getBirthdate() {
+    return birthdate;
   }
 
-  public void setAge(final int age) {
-    this.age = age;
+  public void setBirthdate(@Nonnull final LocalDate birthdate) {
+    this.birthdate = birthdate;
+  }
+
+  @Nonnull
+  public GenderDto getGender() {
+    return gender;
+  }
+
+  public void setGender(@Nonnull final GenderDto gender) {
+    this.gender = gender;
   }
 
   @Nonnull
@@ -85,11 +104,11 @@ public class ParticipantDto {
   }
 
   @Nonnull
-  public String getPhone() {
-    return phone;
+  public PhoneNumber getPhoneNumber() {
+    return phoneNumber;
   }
 
-  public void setPhone(@Nonnull final String phone) {
-    this.phone = phone;
+  public void setPhoneNumber(@Nonnull final PhoneNumber phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 }

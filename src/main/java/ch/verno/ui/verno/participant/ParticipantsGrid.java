@@ -1,9 +1,12 @@
 package ch.verno.ui.verno.participant;
 
+import ch.verno.common.gender.GenderMapper;
+import ch.verno.common.gender.GenderService;
 import ch.verno.common.participant.ParticipantMapper;
 import ch.verno.common.participant.ParticipantService;
-import ch.verno.ui.base.toolbar.ViewToolbar;
-import ch.verno.ui.lib.URL;
+import ch.verno.common.base.lib.Routes;
+import ch.verno.ui.base.components.toolbar.ViewToolbar;
+import ch.verno.ui.verno.participant.dto.ParticipantDto;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,20 +17,22 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 
-import java.io.Console;
-
-@Route("participants")
+@Route(Routes.PARTICIPANT)
 @PageTitle("Participants Overview")
 @Menu(order = 1, icon = "vaadin:users", title = "Participant Overview")
 public class ParticipantsGrid extends VerticalLayout {
 
   @Nonnull
   private final ParticipantService participantService;
+  @Nonnull
+  private final GenderService genderService;
 
   private Grid<ParticipantDto> grid;
 
-  public ParticipantsGrid(@Nonnull final ParticipantService participantService) {
+  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
+                          @Nonnull final GenderService genderService) {
     this.participantService = participantService;
+    this.genderService = genderService;
 
     init();
   }
@@ -41,17 +46,20 @@ public class ParticipantsGrid extends VerticalLayout {
     grid = new Grid<>();
     addColumn(ParticipantDto::getFirstName, "First Name");
     addColumn(ParticipantDto::getLastName, "Last Name");
-    addColumn(ParticipantDto::getAge, "Age");
+    addColumn(ParticipantDto::getBirthdate, "Age");
     addColumn(ParticipantDto::getEmail, "Email");
-    addColumn(ParticipantDto::getPhone, "Phone");
+    addColumn(ParticipantDto::getPhoneNumber, "Phone");
 
-    final var participants = participantService.getAllParticipants().stream().map(ParticipantMapper::toDto).toList();
+    final var participants = participantService.getAllParticipants().stream().map(entity -> {
+      final var genderById = genderService.getGenderById(entity.getGenderId());
+      return ParticipantMapper.toDto(entity, GenderMapper.toDto(genderById));
+    }).toList();
+
     grid.setItems(participants);
     grid.addItemDoubleClickListener(event -> {
-      final var url = URL.getDetailURL(this.getClass());
-      System.out.println("url = " + url);
-      final var participantId = event.getItem().getId();
-      UI.getCurrent().navigate("participants/detail?id=" + participantId);
+      final var url = Routes.getDetailURL(this.getClass());
+      final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
+      UI.getCurrent().navigate(redirectURL);
     });
 
     setSizeFull();
