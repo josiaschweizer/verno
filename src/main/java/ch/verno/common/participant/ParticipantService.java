@@ -13,7 +13,7 @@ public class ParticipantService {
   @Nonnull
   private final ParticipantRepository participantRepository;
 
-  public ParticipantService(ParticipantRepository participantRepository) {
+  public ParticipantService(@Nonnull final ParticipantRepository participantRepository) {
     this.participantRepository = participantRepository;
   }
 
