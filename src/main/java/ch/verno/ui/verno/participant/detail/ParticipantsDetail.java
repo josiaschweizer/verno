@@ -3,6 +3,7 @@ package ch.verno.ui.verno.participant.detail;
 import ch.verno.common.participant.ParticipantService;
 import ch.verno.ui.base.toolbar.ViewToolbar;
 import ch.verno.ui.verno.participant.ParticipantDto;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -38,6 +39,9 @@ public class ParticipantsDetail extends VerticalLayout {
 
   private void init() {
     final var saveButton = new Button("Save");
+    saveButton.addClickListener(event -> {
+      UI.getCurrent().navigate("participants");
+    });
 
     final var nameLayout = new HorizontalLayout();
     nameLayout.setWidthFull();
