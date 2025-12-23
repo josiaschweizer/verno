@@ -1,12 +1,10 @@
 package ch.verno.ui.verno.participant;
 
-import ch.verno.common.db.mapper.GenderMapper;
-import ch.verno.common.db.service.GenderService;
-import ch.verno.common.db.mapper.ParticipantMapper;
-import ch.verno.common.db.service.ParticipantService;
-import ch.verno.common.base.lib.Routes;
+import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.server.service.GenderService;
+import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
-import ch.verno.ui.verno.participant.dto.ParticipantDto;
+import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -44,21 +42,18 @@ public class ParticipantsGrid extends VerticalLayout {
     });
 
     grid = new Grid<>();
-    addColumn(ParticipantDto::getFirstName, "First Name");
-    addColumn(ParticipantDto::getLastName, "Last Name");
-    addColumn(ParticipantDto::getBirthdate, "Age");
-    addColumn(ParticipantDto::getEmail, "Email");
-    addColumn(ParticipantDto::getPhoneNumber, "Phone");
+    addColumn(ParticipantDto::firstName, "First Name");
+    addColumn(ParticipantDto::lastName, "Last Name");
+    addColumn(ParticipantDto::birthdate, "Age");
+    addColumn(ParticipantDto::email, "Email");
+    addColumn(ParticipantDto::phone, "Phone");
 
-    final var participants = participantService.getAllParticipants().stream().map(entity -> {
-      final var genderById = genderService.getGenderById(entity.getGenderId());
-      return ParticipantMapper.toDto(entity, GenderMapper.toDto(genderById));
-    }).toList();
+    final var participants = participantService.getAllParticipants();
 
     grid.setItems(participants);
     grid.addItemDoubleClickListener(event -> {
       final var url = Routes.getDetailURL(this.getClass());
-      final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
+      final var redirectURL = Routes.getURLWithId(url, event.getItem().id());
       UI.getCurrent().navigate(redirectURL);
     });
 
