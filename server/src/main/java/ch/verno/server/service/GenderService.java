@@ -1,6 +1,9 @@
 package ch.verno.server.service;
 
+import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.service.IGenderService;
+import ch.verno.server.mapper.GenderMapper;
+import ch.verno.server.repository.GenderRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +23,20 @@ public class GenderService implements IGenderService {
   @Nonnull
   @Transactional(readOnly = true)
   @Override
-  public GenderEntity getGenderById(@Nonnull final Long id) {
-    return genderRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Participant not found with id: " + id));
+  public GenderDto getGenderById(@Nonnull final Long id) {
+    final var genderOptional = genderRepository.findById(id);
+    if (genderOptional.isEmpty()) {
+      throw new IllegalArgumentException("Gender not found with id: " + id);
+    }
+
+    return GenderMapper.toDto(genderOptional.get());
   }
 
   @Nonnull
   @Transactional(readOnly = true)
   @Override
-  public List<GenderEntity> getAllGenders() {
-    return genderRepository.findAll();
+  public List<GenderDto> getAllGenders() {
+    return genderRepository.findAll().stream().map(GenderMapper::toDto).toList();
   }
 
 }

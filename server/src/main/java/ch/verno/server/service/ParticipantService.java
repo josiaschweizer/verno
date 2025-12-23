@@ -23,7 +23,7 @@ public class ParticipantService implements IParticipantService {
   @Transactional
   @Override
   public void createParticipant(@Nonnull final ParticipantDto participantEntity) {
-    participantRepository.save(participantEntity);
+    participantRepository.save(ParticipantMapper.toEntity(participantEntity));
   }
 
   @Nonnull

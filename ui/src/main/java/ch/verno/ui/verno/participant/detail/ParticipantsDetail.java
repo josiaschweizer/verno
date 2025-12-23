@@ -79,6 +79,8 @@ public class ParticipantsDetail extends VerticalLayout {
 
     add(new ViewToolbar("Participant Detail", saveButton));
     add(participantLayout);
+
+    binder.setBean(this.participant);
   }
 
   @Nonnull
@@ -107,16 +109,11 @@ public class ParticipantsDetail extends VerticalLayout {
         "Birthdate");
     birthdateEntry.setWidthFull();
 
-    final var genderEntities = genderService.getAllGenders();
-    final List<GenderDto> genderOptions = genderEntities.stream()
-        .map(GenderMapper::toDto)
-        .toList();
-
     final var genderEntry = entryFactory.createTwoOptionEntry(
         ParticipantDto::getGender,
         ParticipantDto::setGender,
         binder,
-        genderOptions,
+        genderService.getAllGenders(),
         GenderDto::name,
         Optional.empty(),
         "Gender"

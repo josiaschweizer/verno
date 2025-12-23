@@ -60,21 +60,20 @@ public class ParticipantDto {
     this.parentTwo = parentTwo;
   }
 
-  public static ParticipantDto empty() {
-    return new ParticipantDto(
-        0L,
-        Publ.EMPTY_STRING,
-        Publ.EMPTY_STRING,
-        LocalDate.now(),
-        GenderDto.empty(),
-        Publ.EMPTY_STRING,
-        PhoneNumber.empty(),
-        CourseLevelDto.empty(),
-        CourseDto.empty(),
-        AddressDto.empty(),
-        ParentDto.empty(),
-        ParentDto.empty()
-    );
+  public ParticipantDto() {
+    this.id = 0L;
+    this.firstName = Publ.EMPTY_STRING;
+    this.lastName = Publ.EMPTY_STRING;
+    this.birthdate = LocalDate.now();
+    this.gender = GenderDto.empty();
+    this.email = Publ.EMPTY_STRING;
+    this.phone = PhoneNumber.empty();
+    this.courseLevel = CourseLevelDto.empty();
+    this.course = CourseDto.empty();
+    this.address = AddressDto.empty();
+    this.parentOne = ParentDto.empty();
+    this.parentTwo = ParentDto.empty();
+
   }
 
   @Nullable

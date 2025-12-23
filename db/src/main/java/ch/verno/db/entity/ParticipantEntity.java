@@ -74,12 +74,12 @@ public class ParticipantEntity {
                            @Nonnull final String lastname,
                            @Nonnull final LocalDate birthdate,
                            @Nonnull final String email,
-                           @Nonnull final PhoneNumber phone) {
+                           @Nonnull final String phone) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.birthdate = birthdate;
     this.email = email;
-    this.phone = phone.toString();
+    this.phone = phone;
   }
 
   public Long getId() {

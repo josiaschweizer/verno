@@ -7,12 +7,12 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaInstructorRepository {
+public class InstructorRepository {
 
   @Nonnull
   private final SpringDataInstructorJpaRepository springDataInstructorJpaRepository;
 
-  public JpaInstructorRepository(@Nonnull final SpringDataInstructorJpaRepository springDataInstructorJpaRepository) {
+  public InstructorRepository(@Nonnull final SpringDataInstructorJpaRepository springDataInstructorJpaRepository) {
     this.springDataInstructorJpaRepository = springDataInstructorJpaRepository;
   }
 

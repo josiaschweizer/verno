@@ -42,18 +42,18 @@ public class ParticipantsGrid extends VerticalLayout {
     });
 
     grid = new Grid<>();
-    addColumn(ParticipantDto::firstName, "First Name");
-    addColumn(ParticipantDto::lastName, "Last Name");
-    addColumn(ParticipantDto::birthdate, "Age");
-    addColumn(ParticipantDto::email, "Email");
-    addColumn(ParticipantDto::phone, "Phone");
+    addColumn(ParticipantDto::getFirstName, "First Name");
+    addColumn(ParticipantDto::getLastName, "Last Name");
+    addColumn(ParticipantDto::getBirthdate, "Age");
+    addColumn(ParticipantDto::getEmail, "Email");
+    addColumn(ParticipantDto::getPhone, "Phone");
 
     final var participants = participantService.getAllParticipants();
 
     grid.setItems(participants);
     grid.addItemDoubleClickListener(event -> {
       final var url = Routes.getDetailURL(this.getClass());
-      final var redirectURL = Routes.getURLWithId(url, event.getItem().id());
+      final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
       UI.getCurrent().navigate(redirectURL);
     });
 

@@ -22,7 +22,7 @@ public final class InstructorMapper {
         entity.getFirstname() == null ? Publ.EMPTY_STRING : entity.getFirstname(),
         entity.getLastname() == null ? Publ.EMPTY_STRING : entity.getLastname(),
         entity.getEmail() == null ? Publ.EMPTY_STRING : entity.getEmail(),
-        entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.of(entity.getPhone()),
+        entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
         GenderMapper.toDto(entity.getGender()),
         AddressMapper.toDto(entity.getAddress())
     );

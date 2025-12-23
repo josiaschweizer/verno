@@ -16,7 +16,7 @@ public final class ParticipantMapper {
   @Nonnull
   public static ParticipantDto toDto(@Nullable final ParticipantEntity entity) {
     if (entity == null) {
-      return ParticipantDto.empty();
+      return new ParticipantDto();
     }
 
     final var birthdate = entity.getBirthdate() == null ? LocalDate.now() : entity.getBirthdate();
@@ -43,26 +43,25 @@ public final class ParticipantMapper {
     }
 
     final var entity = new ParticipantEntity(
-        dto.firstName(),
-        dto.lastName(),
-        dto.birthdate(),
-        dto.email(),
-        dto.phone().isEmpty()
-            ? null
-            : dto.phone()
+        dto.getFirstName(),
+        dto.getLastName(),
+        dto.getBirthdate(),
+        dto.getEmail(),
+        dto.getPhone().isEmpty()
+            ? Publ.EMPTY_STRING
+            : dto.getPhone().toString()
     );
 
-    // ID setzen → entscheidet über INSERT vs UPDATE
-    if (dto.id() != null) {
-      entity.setId(dto.id());
+    if (dto.getId() != null) {
+      entity.setId(dto.getId());
     }
 
-    entity.setGender(GenderMapper.toEntity(dto.gender()));
-    entity.setCourseLevel(CourseLevelMapper.toEntity(dto.courseLevel()));
-    entity.setCourse(CourseMapper.toEntity(dto.course()));
-    entity.setAddress(AddressMapper.toEntity(dto.address()));
-    entity.setParentOne(ParentMapper.toEntity(dto.parentOne()));
-    entity.setParentTwo(ParentMapper.toEntity(dto.parentTwo()));
+    entity.setGender(GenderMapper.toEntity(dto.getGender()));
+    entity.setCourseLevel(CourseLevelMapper.toEntity(dto.getCourseLevel()));
+    entity.setCourse(CourseMapper.toEntity(dto.getCourse()));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
+    entity.setParentOne(ParentMapper.toEntity(dto.getParentOne()));
+    entity.setParentTwo(ParentMapper.toEntity(dto.getParentTwo()));
 
     return entity;
   }

@@ -2,12 +2,13 @@ package ch.verno.server.service;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.service.ICourseService;
+import ch.verno.server.mapper.CourseMapper;
+import ch.verno.server.repository.CourseRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CourseService implements ICourseService {
@@ -22,16 +23,20 @@ public class CourseService implements ICourseService {
   @Nonnull
   @Transactional(readOnly = true)
   @Override
-  public Optional<CourseDto> getCourseById(@Nonnull final Long id) {
-    return courseRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Participant not found with id: " + id));
+  public CourseDto getCourseById(@Nonnull final Long id) {
+    final var foundById = courseRepository.findById(id);
+    if (foundById.isEmpty()) {
+      throw new IllegalArgumentException("Course not found with id: " + id);
+    }
+
+    return CourseMapper.toDto(foundById.get());
   }
 
   @Nonnull
   @Transactional(readOnly = true)
   @Override
   public List<CourseDto> getAllCourses() {
-    return courseRepository.findAll();
+    return courseRepository.findAll().stream().map(CourseMapper::toDto).toList();
   }
 
 }

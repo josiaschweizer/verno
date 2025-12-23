@@ -3,6 +3,7 @@ package ch.verno.ui.lib;
 import ch.verno.common.util.Publ;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 
@@ -30,7 +31,11 @@ public class Routes {
   }
 
   public static String getURLWithId(@Nonnull final String baseURL,
-                                    @Nonnull final Long id) {
+                                    @Nullable final Long id) {
+    if (id == null) {
+      return Publ.EMPTY_STRING;
+    }
+
     return baseURL + VALUE_ACCESSOR_ID + id;
   }
 

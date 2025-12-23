@@ -8,12 +8,12 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaParentRepository {
+public class ParentRepository {
 
   @Nonnull
   private final SpringDataParentJpaRepository springDataParentJpaRepository;
 
-  public JpaParentRepository(@Nonnull final SpringDataParentJpaRepository springDataParentJpaRepository) {
+  public ParentRepository(@Nonnull final SpringDataParentJpaRepository springDataParentJpaRepository) {
     this.springDataParentJpaRepository = springDataParentJpaRepository;
   }
 

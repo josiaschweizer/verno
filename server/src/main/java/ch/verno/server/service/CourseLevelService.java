@@ -24,12 +24,12 @@ public class CourseLevelService implements ICourseLevelService {
   @Transactional(readOnly = true)
   @Override
   public CourseLevelDto getCourseLevelById(@Nonnull final Long id) {
-    final var foundById = courseLevelRepository.findById(id);
-    if (foundById.isEmpty()) {
-      throw new IllegalArgumentException("Participant not found with id: " + id);
+    final var courseLevelOptional = courseLevelRepository.findById(id);
+    if (courseLevelOptional.isEmpty()) {
+      throw new IllegalArgumentException("Course Level not found with id: " + id);
     }
 
-    return CourseLevelMapper.toDto(foundById.get());
+    return CourseLevelMapper.toDto(courseLevelOptional.get());
   }
 
   @Nonnull

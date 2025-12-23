@@ -104,14 +104,14 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     return comboBox;
   }
 
-  @Nonnull
   public TwoOptionEntry<TWOSELECTIONDTO> createTwoOptionEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
                                                               @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
                                                               @Nonnull final Binder<DTO> binder,
                                                               @Nonnull final List<TWOSELECTIONDTO> options,
                                                               @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
                                                               @Nonnull final Optional<String> required,
-                                                              @Nonnull final String label) {
+                                                              @Nonnull final String label
+  ) {
     final var entry = new TwoOptionEntry<>(label, options, optionLabelProvider);
     bindEntry(entry, valueProvider, valueSetter, binder, required);
     return entry;

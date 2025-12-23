@@ -4,11 +4,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
-import java.util.function.Function;
 
 @CssImport("./components/two-option-entry.css")
 public class TwoOptionEntry<T> extends CustomField<T> {
@@ -28,7 +28,7 @@ public class TwoOptionEntry<T> extends CustomField<T> {
 
   public TwoOptionEntry(@Nonnull final String label,
                         @Nonnull final List<T> options,
-                        @Nonnull final Function<T, String> itemLabel) {
+                        @Nonnull final ValueProvider<T, String> itemLabelProvider) {
     if (options.size() != 2) {
       throw new IllegalArgumentException("TwoOptionEntry requires exactly 2 options, but got: " + options.size());
     }
@@ -38,12 +38,10 @@ public class TwoOptionEntry<T> extends CustomField<T> {
 
     setLabel(label);
 
-    leftButton = new Button();
-    leftButton.setText(itemLabel.apply(leftValue));
-    rightButton = new Button();
-    rightButton.setText(itemLabel.apply(rightValue));
+    leftButton = new Button(itemLabelProvider.apply(leftValue));
+    rightButton = new Button(itemLabelProvider.apply(rightValue));
 
-    final var layout = new HorizontalLayout();
+    final var layout = new HorizontalLayout(leftButton, rightButton);
     layout.setWidthFull();
     layout.setPadding(false);
     layout.setSpacing(true);
@@ -54,7 +52,6 @@ public class TwoOptionEntry<T> extends CustomField<T> {
     leftButton.addClickListener(event -> setValue(leftValue));
     rightButton.addClickListener(event -> setValue(rightValue));
 
-    layout.add(leftButton, rightButton);
     add(layout);
 
     updateSelectionStyles(null);
@@ -72,7 +69,7 @@ public class TwoOptionEntry<T> extends CustomField<T> {
     updateSelectionStyles(value);
   }
 
-  private void updateSelectionStyles(T value) {
+  private void updateSelectionStyles(@Nullable final T value) {
     leftButton.getElement().getClassList().set("two-option-selected",
         value != null && value.equals(leftValue));
     rightButton.getElement().getClassList().set("two-option-selected",

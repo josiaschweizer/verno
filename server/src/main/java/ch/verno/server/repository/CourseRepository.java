@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JpaCourseRepository {
+public class CourseRepository {
 
   @Nonnull
   private final SpringDataCourseJpaRepository springDataCourseJpaRepository;
 
-  public JpaCourseRepository(@Nonnull final SpringDataCourseJpaRepository springDataCourseJpaRepository) {
+  public CourseRepository(@Nonnull final SpringDataCourseJpaRepository springDataCourseJpaRepository) {
     this.springDataCourseJpaRepository = springDataCourseJpaRepository;
   }
 

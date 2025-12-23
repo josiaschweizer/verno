@@ -49,12 +49,22 @@ public class ParentEntity {
     // JPA
   }
 
-  // --------------------
-  // getters / setters
-  // --------------------
+  public ParentEntity(@Nonnull final String firstname,
+                      @Nonnull final String lastname,
+                      @Nonnull final String email,
+                      @Nonnull final String phone) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.phone = phone;
+  }
 
   public Long getId() {
     return id;
+  }
+
+  public void setId(final Long id) {
+    this.id = id;
   }
 
   public OffsetDateTime getCreatedAt() {
