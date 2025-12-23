@@ -1,15 +1,16 @@
 package ch.verno.ui.verno.participant.detail;
 
-import ch.verno.common.db.mapper.GenderMapper;
-import ch.verno.common.db.service.CourseLevelService;
-import ch.verno.common.db.service.CourseService;
-import ch.verno.common.db.service.GenderService;
-import ch.verno.common.db.service.ParticipantService;
-import ch.verno.server.entity.CourseLevelEntity;
+
+import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.common.db.dto.GenderDto;
+import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.server.mapper.GenderMapper;
+import ch.verno.server.service.CourseLevelService;
+import ch.verno.server.service.CourseService;
+import ch.verno.server.service.GenderService;
+import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.verno.participant.dto.GenderDto;
-import ch.verno.ui.verno.participant.dto.ParticipantDto;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +21,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -105,14 +107,20 @@ public class ParticipantsDetail extends VerticalLayout {
         "Birthdate");
     birthdateEntry.setWidthFull();
 
+    final var genderEntities = genderService.getAllGenders();
+    final List<GenderDto> genderOptions = genderEntities.stream()
+        .map(GenderMapper::toDto)
+        .toList();
+
     final var genderEntry = entryFactory.createTwoOptionEntry(
         ParticipantDto::getGender,
         ParticipantDto::setGender,
         binder,
-        genderService.getAllGenders().stream().map(GenderMapper::toDto).toList(),
+        genderOptions,
         GenderDto::name,
         Optional.empty(),
-        "Gender");
+        "Gender"
+    );
     genderEntry.setWidthFull();
 
 
@@ -129,8 +137,8 @@ public class ParticipantsDetail extends VerticalLayout {
         "Email address"
     );
     final var phoneEntry = entryFactory.createPhoneNumberEntry(
-        ParticipantDto::getPhoneNumber,
-        ParticipantDto::setPhoneNumber,
+        ParticipantDto::getPhone,
+        ParticipantDto::setPhone,
         binder,
         Optional.empty(),
         "Phone number"
@@ -144,13 +152,13 @@ public class ParticipantsDetail extends VerticalLayout {
     final var courseLevels = courseLevelService.getAllCourseLevels();
     final var options = courseLevels.stream()
         .collect(Collectors.toMap(
-            CourseLevelEntity::getId,
-            CourseLevelEntity::getName
+            CourseLevelDto::id,
+            CourseLevelDto::name
         ));
 
     final var courseLevelEntry = entryFactory.createComboBoxEntry(
-        ParticipantDto::getCourseLevelId,
-        ParticipantDto::setCourseLevelId,
+        participantDto -> participantDto.getCourseLevel().id(),
+        (participantDto, courseLevel) -> participantDto.setCourseLevel(courseLevelService.getCourseLevelById(courseLevel)),
         binder,
         Optional.empty(),
         "Course Level",

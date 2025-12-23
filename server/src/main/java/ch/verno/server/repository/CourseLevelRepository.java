@@ -1,7 +1,34 @@
 package ch.verno.server.repository;
 
-import ch.verno.server.repository.base.BaseRepository;
-import ch.verno.server.entity.CourseLevelEntity;
+import ch.verno.db.entity.CourseLevelEntity;
+import ch.verno.db.jpa.SpringDataCourseLevelJpaRepository;
+import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
-public interface CourseLevelRepository extends BaseRepository<CourseLevelEntity> {
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class CourseLevelRepository {
+
+  @Nonnull
+  private final SpringDataCourseLevelJpaRepository springDataCourseLevelJpaRepository;
+
+  public CourseLevelRepository(@Nonnull final SpringDataCourseLevelJpaRepository springDataCourseLevelJpaRepository) {
+    this.springDataCourseLevelJpaRepository = springDataCourseLevelJpaRepository;
+  }
+
+  @Nonnull
+  public Optional<CourseLevelEntity> findById(final Long id) {
+    return springDataCourseLevelJpaRepository.findById(id);
+  }
+
+  @Nonnull
+  public List<CourseLevelEntity> findAll() {
+    return springDataCourseLevelJpaRepository.findAll();
+  }
+
+  public void save(@Nonnull final CourseLevelEntity courseLevel) {
+    springDataCourseLevelJpaRepository.save(courseLevel);
+  }
 }
