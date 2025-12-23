@@ -21,6 +21,10 @@ public class ParticipantDto {
   private String email;
   @Nonnull
   private PhoneNumber phoneNumber;
+  @Nonnull
+  private Long courseLevelId;
+  @Nonnull
+  private Long courseId;
 
   public ParticipantDto() {
     this.id = 0L;
@@ -30,6 +34,8 @@ public class ParticipantDto {
     this.gender = new GenderDto(0L, Publ.EMPTY_STRING);
     this.email = Publ.EMPTY_STRING;
     this.phoneNumber = PhoneNumber.empty();
+    this.courseLevelId = 0L;
+    this.courseId = 0L;
   }
 
   public ParticipantDto(@Nonnull final Long id,
@@ -38,7 +44,9 @@ public class ParticipantDto {
                         @Nonnull final LocalDate birthdate,
                         @Nonnull final GenderDto gender,
                         @Nonnull final String email,
-                        @Nonnull final PhoneNumber phoneNumber) {
+                        @Nonnull final PhoneNumber phoneNumber,
+                        @Nonnull final Long courseLevelId,
+                        @Nonnull final Long courseId) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -46,6 +54,8 @@ public class ParticipantDto {
     this.gender = gender;
     this.email = email;
     this.phoneNumber = phoneNumber;
+    this.courseLevelId = courseLevelId;
+    this.courseId = courseId;
   }
 
 
@@ -110,5 +120,23 @@ public class ParticipantDto {
 
   public void setPhoneNumber(@Nonnull final PhoneNumber phoneNumber) {
     this.phoneNumber = phoneNumber;
+  }
+
+  @Nonnull
+  public Long getCourseLevelId() {
+    return courseLevelId;
+  }
+
+  public void setCourseLevelId(@Nonnull final Long courseLevelId) {
+    this.courseLevelId = courseLevelId;
+  }
+
+  @Nonnull
+  public Long getCourseId() {
+    return courseId;
+  }
+
+  public void setCourseId(@Nonnull final Long courseId) {
+    this.courseId = courseId;
   }
 }

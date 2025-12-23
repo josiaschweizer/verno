@@ -5,6 +5,7 @@ import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneNumberEntry;
 import ch.verno.ui.base.components.entry.twooption.TwoOptionEntry;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -16,6 +17,7 @@ import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 public class EntryFactory<DTO, TWOSELECTIONDTO> {
@@ -55,6 +57,7 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
                                                  @Nonnull final String label) {
     final var phoneEntry = new PhoneNumberEntry(label);
     phoneEntry.setWidthFull();
+
     final var binding = binder.forField(phoneEntry);
     required.ifPresent(binding::asRequired);
     binding.withValidator(
@@ -64,6 +67,8 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
         ),
         "Invalid phone number"
     );
+    binding.bind(valueProvider, valueSetter);
+
     return phoneEntry;
   }
 
@@ -78,6 +83,25 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     datePicker.setWidthFull();
     bindEntry(datePicker, valueProvider, valueSetter, binder, required);
     return datePicker;
+  }
+
+  @Nonnull
+  public ComboBox<Long> createComboBoxEntry(@Nonnull final ValueProvider<DTO, Long> valueProvider,
+                                            @Nonnull final Setter<DTO, Long> valueSetter,
+                                            @Nonnull final Binder<DTO> binder,
+                                            @Nonnull final Optional<String> required,
+                                            @Nonnull final String label,
+                                            @Nonnull final Map<Long, String> options) {
+    final var comboBox = new ComboBox<Long>(label);
+    comboBox.setWidthFull();
+
+    comboBox.setItems(options.keySet());
+    comboBox.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
+    comboBox.setClearButtonVisible(true);
+
+    bindEntry(comboBox, valueProvider, valueSetter, binder, required);
+
+    return comboBox;
   }
 
   @Nonnull

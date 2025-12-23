@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.participant;
 
-import ch.verno.common.gender.GenderMapper;
-import ch.verno.common.gender.GenderService;
-import ch.verno.common.participant.ParticipantMapper;
-import ch.verno.common.participant.ParticipantService;
+import ch.verno.common.db.mapper.GenderMapper;
+import ch.verno.common.db.service.GenderService;
+import ch.verno.common.db.mapper.ParticipantMapper;
+import ch.verno.common.db.service.ParticipantService;
 import ch.verno.common.base.lib.Routes;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.verno.participant.dto.ParticipantDto;
