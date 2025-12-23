@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Verno" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="verno" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.Application" />
+    <module name="common" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.common.Application" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
