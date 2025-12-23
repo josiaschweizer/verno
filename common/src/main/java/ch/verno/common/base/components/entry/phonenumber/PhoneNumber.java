@@ -31,6 +31,10 @@ public record PhoneNumber(
     );
   }
 
+  public boolean isEmpty() {
+    return callingCode.countryCode() == 0 || phoneNumber.isEmpty();
+  }
+
   @Nonnull
   public static PhoneNumber empty() {
     return new PhoneNumber(
