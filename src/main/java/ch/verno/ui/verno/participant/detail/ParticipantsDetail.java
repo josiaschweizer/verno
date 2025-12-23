@@ -1,10 +1,13 @@
 package ch.verno.ui.verno.participant.detail;
 
-import ch.verno.common.gender.GenderMapper;
-import ch.verno.common.gender.GenderService;
-import ch.verno.common.participant.ParticipantService;
-import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.common.db.mapper.GenderMapper;
+import ch.verno.common.db.service.CourseLevelService;
+import ch.verno.common.db.service.CourseService;
+import ch.verno.common.db.service.GenderService;
+import ch.verno.common.db.service.ParticipantService;
+import ch.verno.server.entity.CourseLevelEntity;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
+import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.verno.participant.dto.GenderDto;
 import ch.verno.ui.verno.participant.dto.ParticipantDto;
 import com.vaadin.flow.component.Component;
@@ -18,6 +21,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Route("participants/detail")
 @PageTitle("Participants Detail View")
@@ -28,6 +32,10 @@ public class ParticipantsDetail extends VerticalLayout {
   @Nonnull
   private final GenderService genderService;
   @Nonnull
+  private final CourseLevelService courseLevelService;
+  @Nonnull
+  private final CourseService courseService;
+  @Nonnull
   private final Binder<ParticipantDto> binder;
   @Nonnull
   private final ParticipantDto participant;
@@ -35,9 +43,14 @@ public class ParticipantsDetail extends VerticalLayout {
   private final EntryFactory<ParticipantDto, GenderDto> entryFactory;
 
   public ParticipantsDetail(@Nonnull final ParticipantService participantService,
-                            @Nonnull final GenderService genderService) {
+                            @Nonnull final GenderService genderService,
+                            @Nonnull final CourseLevelService courseLevelService,
+                            @Nonnull final CourseService courseService) {
     this.participantService = participantService;
     this.genderService = genderService;
+    this.courseLevelService = courseLevelService;
+    this.courseService = courseService;
+
     this.binder = new Binder<>(ParticipantDto.class);
     this.participant = new ParticipantDto();
     this.entryFactory = new EntryFactory<>();
@@ -56,6 +69,7 @@ public class ParticipantsDetail extends VerticalLayout {
     participantLayout.setWidthFull();
     participantLayout.add(createFirstLayer());
     participantLayout.add(createSecondLayer());
+    participantLayout.add(createThirdLayer());
 
     setSizeFull();
     setPadding(false);
@@ -105,7 +119,8 @@ public class ParticipantsDetail extends VerticalLayout {
     return createLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
   }
 
-  public HorizontalLayout createSecondLayer() {
+  @Nonnull
+  private HorizontalLayout createSecondLayer() {
     final var emailEntry = entryFactory.createEmailEntry(
         ParticipantDto::getEmail,
         ParticipantDto::setEmail,
@@ -124,6 +139,28 @@ public class ParticipantsDetail extends VerticalLayout {
     return createLayoutFromComponents(emailEntry, phoneEntry);
   }
 
+  @Nonnull
+  private HorizontalLayout createThirdLayer() {
+    final var courseLevels = courseLevelService.getAllCourseLevels();
+    final var options = courseLevels.stream()
+        .collect(Collectors.toMap(
+            CourseLevelEntity::getId,
+            CourseLevelEntity::getName
+        ));
+
+    final var courseLevelEntry = entryFactory.createComboBoxEntry(
+        ParticipantDto::getCourseLevelId,
+        ParticipantDto::setCourseLevelId,
+        binder,
+        Optional.empty(),
+        "Course Level",
+        options
+    );
+
+    return createLayoutFromComponents(courseLevelEntry);
+  }
+
+  @Nonnull
   private HorizontalLayout createLayoutFromComponents(@Nonnull final Component... components) {
     final var layout = new HorizontalLayout();
     layout.setWidthFull();

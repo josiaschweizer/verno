@@ -25,7 +25,7 @@ you can switch Flow to use Vite development server (default in Vaadin 23.3 and e
    <configuration>
        <systemProperties>
            <vaadin.frontend.hotdeploy>true</vaadin.frontend.hotdeploy>
-       </systemProperties>
+       </systemProperties>x
    </configuration>
 ```
 
