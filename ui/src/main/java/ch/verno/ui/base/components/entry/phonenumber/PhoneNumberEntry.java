@@ -20,10 +20,11 @@ public class PhoneNumberEntry extends CustomField<PhoneNumber> {
     setLabel(label);
 
     final var callingCodeOptions = CallingCodeHelper.getCallingCodes();
-    var chValue = CallingCode.empty();
+    var chValue = callingCodeOptions.size() > 1 ? callingCodeOptions.getFirst() : CallingCode.empty();
     for (final var code : callingCodeOptions) {
       if (code.countryCode() == 41) {
         chValue = code;
+        break;
       }
     }
 

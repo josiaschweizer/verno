@@ -1,4 +1,4 @@
-package ch.verno.server;
+package ch.verno.ui;
 
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
