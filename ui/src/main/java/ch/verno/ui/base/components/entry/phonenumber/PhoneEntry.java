@@ -36,7 +36,7 @@ public class PhoneEntry extends CustomField<PhoneNumber> {
 
     phoneNumberField = new TextField();
     phoneNumberField.setAllowedCharPattern("[0-9 ]");
-    phoneNumberField.setPlaceholder("077 432 06 26");
+    phoneNumberField.setPlaceholder("77 432 06 26");
     phoneNumberField.setWidthFull();
 
     phoneNumberField.addValueChangeListener(event -> {
