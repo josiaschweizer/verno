@@ -36,23 +36,47 @@ public class PhoneEntry extends CustomField<PhoneNumber> {
 
     phoneNumberField = new TextField();
     phoneNumberField.setAllowedCharPattern("[0-9 ]");
-    phoneNumberField.setPlaceholder("Phone number");
+    phoneNumberField.setPlaceholder("077 432 06 26");
     phoneNumberField.setWidthFull();
 
     phoneNumberField.addValueChangeListener(event -> {
-      if (!event.isFromClient()) {
-        return;
-      }
-
       final var callingCode = callingCodes.getValue();
       if (callingCode == null) {
         return;
       }
 
-      final var raw = event.getValue().replaceAll("\\D", Publ.EMPTY_STRING);
-      final var region = callingCode.regionCode();
+      final var code = String.valueOf(callingCode.countryCode());
+      var digits = event.getValue().replaceAll("\\D", Publ.EMPTY_STRING);
 
-      phoneNumberField.setValue(PhoneNumberFormatter.formatNational(raw, region));
+      if (digits.isEmpty()) {
+        phoneNumberField.clear();
+        return;
+      }
+
+      final var zeroZeroPrefix = "00" + code;
+
+      if (digits.startsWith(zeroZeroPrefix)) {
+        digits = digits.substring(zeroZeroPrefix.length());
+      } else if (digits.startsWith(code) && digits.length() > code.length()) {
+        digits = digits.substring(code.length());
+      } else if (digits.startsWith("0")) {
+        digits = digits.substring(1);
+      }
+
+      if (digits.isEmpty()) {
+        phoneNumberField.clear();
+        return;
+      }
+
+      final var formatted = PhoneNumberFormatter.formatInternationalWithoutCallingCode(
+          digits,
+          callingCode.regionCode(),
+          callingCode.countryCode()
+      );
+
+      if (!formatted.equals(phoneNumberField.getValue())) {
+        phoneNumberField.setValue(formatted);
+      }
     });
 
     HorizontalLayout layout = new HorizontalLayout(callingCodes, phoneNumberField);
@@ -86,5 +110,10 @@ public class PhoneEntry extends CustomField<PhoneNumber> {
 
     callingCodes.setValue(value.callingCode());
     phoneNumberField.setValue(value.phoneNumber());
+  }
+
+  @Override
+  public void setValue(final PhoneNumber value) {
+    super.setValue(value);
   }
 }

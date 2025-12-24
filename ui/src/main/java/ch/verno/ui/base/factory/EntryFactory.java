@@ -3,6 +3,7 @@ package ch.verno.ui.base.factory;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
+import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.components.entry.twooption.TwoOptionEntry;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -29,7 +30,7 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
                                    @Nonnull final Binder<DTO> binder,
                                    @Nonnull final Optional<String> required,
                                    @Nonnull final String label) {
-    final var textField = new TextField(label);
+    final var textField = new VATextField(label);
     textField.setWidthFull();
     bindEntry(textField, valueProvider, valueSetter, binder, required);
     return textField;

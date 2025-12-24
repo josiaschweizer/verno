@@ -1,1 +1,11 @@
 @import "../../components/two-option-entry.css";
+
+.va-text-field[required]::part(label)::after,
+.va-text-field[required]::part(required-indicator)::after {
+    content: " *";
+    color: red;
+}
+
+.va-text-field::part(required-indicator) {
+    display: none;
+}

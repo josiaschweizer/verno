@@ -22,17 +22,21 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route("participants/detail")
 @PageTitle("Participants Detail View")
-public class ParticipantsDetail extends VerticalLayout {
+public class ParticipantsDetail extends VerticalLayout implements HasUrlParameter<Long> {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -44,8 +48,6 @@ public class ParticipantsDetail extends VerticalLayout {
   private final CourseService courseService;
   @Nonnull
   private final Binder<ParticipantDto> binder;
-  @Nonnull
-  private final ParticipantDto participant;
   @Nonnull
   private final EntryFactory<ParticipantDto, GenderDto> entryFactory;
 
@@ -59,21 +61,12 @@ public class ParticipantsDetail extends VerticalLayout {
     this.courseService = courseService;
 
     this.binder = new Binder<>(ParticipantDto.class);
-    this.participant = new ParticipantDto();
     this.entryFactory = new EntryFactory<>();
-
 
     init();
   }
 
   private void init() {
-    binder.setBean(participant);
-
-    final var saveButton = new Button("Save");
-    saveButton.addClickListener(event -> {
-      UI.getCurrent().navigate(Routes.PARTICIPANTS);
-    });
-
     final var participantLayout = new VerticalLayout();
     participantLayout.setWidthFull();
     participantLayout.add(createParticipantInfoLayout());
@@ -87,8 +80,19 @@ public class ParticipantsDetail extends VerticalLayout {
     setPadding(false);
     setSpacing(false);
 
-    add(new ViewToolbar("Participant Detail", saveButton));
+    add(new ViewToolbar("Participant Detail"));
     add(participantLayout, addressLayout, parentsLayout);
+
+    final var saveButton = new Button("Save");
+    saveButton.addClickListener(event -> {
+      UI.getCurrent().navigate(Routes.PARTICIPANTS);
+    });
+
+    final var saveLayout = new HorizontalLayout(saveButton);
+    saveLayout.setWidthFull();
+    saveLayout.setJustifyContentMode(JustifyContentMode.END);
+
+    add(new VerticalLayout(saveLayout));
   }
 
   @Nonnull
@@ -368,5 +372,17 @@ public class ParticipantsDetail extends VerticalLayout {
     }
 
     return layout;
+  }
+
+  @Override
+  public void setParameter(@Nonnull final BeforeEvent event,
+                           @OptionalParameter @Nullable final Long parameter) {
+    if (parameter == null) {
+      binder.setBean(new ParticipantDto());
+      return;
+    }
+
+    final var participant = participantService.getParticipantById(parameter);
+    binder.setBean(participant);
   }
 }

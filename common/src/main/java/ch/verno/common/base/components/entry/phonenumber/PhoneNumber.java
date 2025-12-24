@@ -11,24 +11,61 @@ public record PhoneNumber(
 
   @Nonnull
   public static PhoneNumber fromString(@Nonnull final String value) {
-    final String trimmed = value.trim();
+    final var trimmed = value.trim();
 
     if (trimmed.isEmpty()) {
       return empty();
     }
 
-    final int firstSpace = trimmed.indexOf(Publ.SPACE);
-    if (firstSpace < 0) {
+    final var normalized = trimmed.replaceAll("\\s+", "");
+
+    final String digits;
+    if (normalized.startsWith(Publ.PLUS)) {
+      digits = normalized.substring(1).replaceAll("\\D+", "");
+    } else if (normalized.startsWith("00")) {
+      digits = normalized.substring(2).replaceAll("\\D+", "");
+    } else {
+      final var nationalDigits = normalized.replaceAll("\\D+", "");
+      if (nationalDigits.isEmpty()) {
+        return empty();
+      }
+      final var national = nationalDigits.startsWith("0")
+          ? nationalDigits.substring(1)
+          : nationalDigits;
+
+      return national.isEmpty()
+          ? empty()
+          : new PhoneNumber(CallingCode.defaultSwiss(), national);
+    }
+
+    if (digits.isEmpty()) {
       return empty();
     }
 
-    final String codePart = trimmed.substring(0, firstSpace);
-    final String numberPart = trimmed.substring(firstSpace + 1).replaceAll("\\s+", "");
+    final var allCodesDesc = ch.verno.common.util.calling.CallingCodeHelper.getCallingCodes().stream()
+        .sorted((a, b) -> Integer.compare(b.countryCode(), a.countryCode()))
+        .toList();
 
-    return new PhoneNumber(
-        CallingCode.fromString(codePart),
-        numberPart
-    );
+    for (final var code : allCodesDesc) {
+      final var codeDigits = String.valueOf(code.countryCode());
+      if (digits.startsWith(codeDigits)) {
+        final var numberPart = digits.substring(codeDigits.length());
+        if (numberPart.isEmpty()) {
+          return empty();
+        }
+        return new PhoneNumber(code, numberPart);
+      }
+    }
+
+    final var chDigits = String.valueOf(CallingCode.defaultSwiss().countryCode());
+    if (digits.startsWith(chDigits)) {
+      final var numberPart = digits.substring(chDigits.length());
+      return numberPart.isEmpty()
+          ? empty()
+          : new PhoneNumber(CallingCode.defaultSwiss(), numberPart);
+    }
+
+    return empty();
   }
 
   public boolean isEmpty() {

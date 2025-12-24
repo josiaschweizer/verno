@@ -36,7 +36,7 @@ public class Routes {
       return Publ.EMPTY_STRING;
     }
 
-    return baseURL + VALUE_ACCESSOR_ID + id;
+    return baseURL + Publ.SLASH + id;
   }
 
   private static String getURL(final Class<?> currentClass) {
