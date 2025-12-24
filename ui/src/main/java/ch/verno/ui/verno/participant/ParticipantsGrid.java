@@ -1,12 +1,10 @@
 package ch.verno.ui.verno.participant;
 
 import ch.verno.common.db.dto.ParticipantDto;
-import ch.verno.server.service.GenderService;
 import ch.verno.server.service.ParticipantService;
-import ch.verno.ui.base.components.toolbar.ViewToolbar;
+import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
@@ -22,24 +20,17 @@ public class ParticipantsGrid extends VerticalLayout {
 
   @Nonnull
   private final ParticipantService participantService;
-  @Nonnull
-  private final GenderService genderService;
 
   private Grid<ParticipantDto> grid;
 
-  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
-                          @Nonnull final GenderService genderService) {
+  public ParticipantsGrid(@Nonnull final ParticipantService participantService) {
     this.participantService = participantService;
-    this.genderService = genderService;
 
     init();
   }
 
   private void init() {
-    final var createButton = new Button("Create Participant");
-    createButton.addClickListener(event -> {
-      UI.getCurrent().navigate("participants/detail");
-    });
+
 
     grid = new Grid<>();
     addColumn(ParticipantDto::getFirstName, "First Name");
@@ -61,7 +52,7 @@ public class ParticipantsGrid extends VerticalLayout {
     setPadding(false);
     setSpacing(false);
 
-    add(new ViewToolbar("Participants Grid", createButton));
+    add(ViewToolbarFactory.createGridToolbar("Participant"));
     add(grid);
   }
 

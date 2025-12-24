@@ -116,4 +116,18 @@ public class PhoneEntry extends CustomField<PhoneNumber> {
   public void setValue(final PhoneNumber value) {
     super.setValue(value);
   }
+
+  @Override
+  public void setEnabled(final boolean enabled) {
+    super.setEnabled(enabled);
+    callingCodes.setEnabled(enabled);
+    phoneNumberField.setEnabled(enabled);
+  }
+
+  @Override
+  public void setReadOnly(final boolean readOnly) {
+    super.setReadOnly(readOnly);
+    callingCodes.setReadOnly(readOnly);
+    phoneNumberField.setReadOnly(readOnly);
+  }
 }

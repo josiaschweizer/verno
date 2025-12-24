@@ -75,4 +75,16 @@ public class TwoOptionEntry<T> extends CustomField<T> {
     rightButton.getElement().getClassList().set("two-option-selected",
         value != null && value.equals(rightValue));
   }
+
+  @Override
+  public void setEnabled(final boolean enabled) {
+    rightButton.setEnabled(enabled);
+    leftButton.setEnabled(enabled);
+  }
+
+  @Override
+  public void setReadOnly(final boolean readOnly) {
+    rightButton.setEnabled(!readOnly);
+    leftButton.setEnabled(!readOnly);
+  }
 }

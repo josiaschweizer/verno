@@ -15,7 +15,7 @@ public class ParticipantDto {
   String firstName;
   @Nonnull
   String lastName;
-  @Nonnull
+  @Nullable
   LocalDate birthdate;
   @Nonnull
   GenderDto gender;
@@ -64,7 +64,7 @@ public class ParticipantDto {
     this.id = 0L;
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
-    this.birthdate = LocalDate.now();
+    this.birthdate = null;
     this.gender = GenderDto.empty();
     this.email = Publ.EMPTY_STRING;
     this.phone = PhoneNumber.empty();
@@ -73,7 +73,22 @@ public class ParticipantDto {
     this.address = AddressDto.empty();
     this.parentOne = ParentDto.empty();
     this.parentTwo = ParentDto.empty();
+  }
 
+  public boolean isEmpty() {
+    return this.getId() == null &&
+        this.getFirstName().isEmpty() &&
+        this.getLastName().isEmpty() &&
+        this.getBirthdate() != null &&
+        this.getBirthdate().toString().isEmpty() &&
+        this.getEmail().isEmpty() &&
+        this.getPhone().isEmpty() &&
+        this.getCourse() != null &&
+        this.getCourse().isEmpty() &&
+        this.getCourseLevel().isEmpty() &&
+        this.getAddress().isEmpty() &&
+        this.getParentOne().isEmpty() &&
+        this.getParentTwo().isEmpty();
   }
 
   @Nullable
@@ -103,12 +118,12 @@ public class ParticipantDto {
     this.lastName = lastName;
   }
 
-  @Nonnull
+  @Nullable
   public LocalDate getBirthdate() {
     return birthdate;
   }
 
-  public void setBirthdate(@Nonnull final LocalDate birthdate) {
+  public void setBirthdate(@Nullable final LocalDate birthdate) {
     this.birthdate = birthdate;
   }
 
