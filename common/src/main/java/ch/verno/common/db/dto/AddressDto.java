@@ -1,37 +1,118 @@
 package ch.verno.common.db.dto;
 
+import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record AddressDto(
-    @Nullable Long id,
-    @Nonnull String street,
-    @Nonnull String houseNumber,
-    @Nonnull String zipCode,
-    @Nonnull String city,
-    @Nonnull String country
-) {
+public class AddressDto {
+
+  @Nullable
+  private Long id;
+
+  @Nonnull
+  private String street;
+
+  @Nonnull
+  private String houseNumber;
+
+  @Nonnull
+  private String zipCode;
+
+  @Nonnull
+  private String city;
+
+  @Nonnull
+  private String country;
+
+  public AddressDto() {
+    this.id = 0L;
+    this.street = Publ.EMPTY_STRING;
+    this.houseNumber = Publ.EMPTY_STRING;
+    this.zipCode = Publ.EMPTY_STRING;
+    this.city = Publ.EMPTY_STRING;
+    this.country = Publ.EMPTY_STRING;
+  }
+
+  public AddressDto(@Nullable final Long id,
+                    @Nonnull final String street,
+                    @Nonnull final String houseNumber,
+                    @Nonnull final String zipCode,
+                    @Nonnull final String city,
+                    @Nonnull final String country) {
+    this.id = id;
+    this.street = street;
+    this.houseNumber = houseNumber;
+    this.zipCode = zipCode;
+    this.city = city;
+    this.country = country;
+  }
 
   @Nonnull
   public static AddressDto empty() {
-    return new AddressDto(
-        0L,
-        "",
-        "",
-        "",
-        "",
-        ""
-    );
+    return new AddressDto();
   }
 
   public boolean isEmpty() {
-    return this.id() != null
-        && this.id() == 0L
-        && this.street().isEmpty()
-        && this.houseNumber().isEmpty()
-        && this.zipCode().isEmpty()
-        && this.city().isEmpty()
-        && this.country().isEmpty();
+    return id != null
+        && id == 0L
+        && street.isEmpty()
+        && houseNumber.isEmpty()
+        && zipCode.isEmpty()
+        && city.isEmpty()
+        && country.isEmpty();
   }
 
+  @Nullable
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(@Nullable final Long id) {
+    this.id = id;
+  }
+
+  @Nonnull
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(@Nonnull final String street) {
+    this.street = street;
+  }
+
+  @Nonnull
+  public String getHouseNumber() {
+    return houseNumber;
+  }
+
+  public void setHouseNumber(@Nonnull final String houseNumber) {
+    this.houseNumber = houseNumber;
+  }
+
+  @Nonnull
+  public String getZipCode() {
+    return zipCode;
+  }
+
+  public void setZipCode(@Nonnull final String zipCode) {
+    this.zipCode = zipCode;
+  }
+
+  @Nonnull
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(@Nonnull final String city) {
+    this.city = city;
+  }
+
+  @Nonnull
+  public String getCountry() {
+    return country;
+  }
+
+  public void setCountry(@Nonnull final String country) {
+    this.country = country;
+  }
 }

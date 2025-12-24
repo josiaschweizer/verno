@@ -15,7 +15,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 
-@Route(Routes.PARTICIPANT)
+@Route(Routes.PARTICIPANTS)
 @PageTitle("Participants Overview")
 @Menu(order = 1, icon = "vaadin:users", title = "Participant Overview")
 public class ParticipantsGrid extends VerticalLayout {

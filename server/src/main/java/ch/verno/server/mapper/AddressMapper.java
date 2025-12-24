@@ -30,15 +30,15 @@ public final class AddressMapper {
     }
 
     final AddressEntity entity = new AddressEntity(
-        dto.street(),
-        dto.houseNumber(),
-        dto.zipCode(),
-        dto.city(),
-        dto.country()
+        dto.getStreet(),
+        dto.getHouseNumber(),
+        dto.getZipCode(),
+        dto.getCity(),
+        dto.getCountry()
     );
 
-    if (dto.id() != null) {
-      entity.setId(dto.id());
+    if (dto.getId() != null) {
+      entity.setId(dto.getId());
     }
 
     return entity;

@@ -11,12 +11,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import jakarta.annotation.Nonnull;
 
-public class PhoneNumberEntry extends CustomField<PhoneNumber> {
+public class PhoneEntry extends CustomField<PhoneNumber> {
 
   private final ComboBox<CallingCode> callingCodes;
   private final TextField phoneNumberField;
 
-  public PhoneNumberEntry(@Nonnull final String label) {
+  public PhoneEntry(@Nonnull final String label) {
     setLabel(label);
 
     final var callingCodeOptions = CallingCodeHelper.getCallingCodes();

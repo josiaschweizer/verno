@@ -2,7 +2,7 @@ package ch.verno.ui.base.factory;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
-import ch.verno.ui.base.components.entry.phonenumber.PhoneNumberEntry;
+import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.twooption.TwoOptionEntry;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -50,12 +50,12 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
   }
 
   @Nonnull
-  public PhoneNumberEntry createPhoneNumberEntry(@Nonnull final ValueProvider<DTO, PhoneNumber> valueProvider,
-                                                 @Nonnull final Setter<DTO, PhoneNumber> valueSetter,
-                                                 @Nonnull final Binder<DTO> binder,
-                                                 @Nonnull final Optional<String> required,
-                                                 @Nonnull final String label) {
-    final var phoneEntry = new PhoneNumberEntry(label);
+  public PhoneEntry createPhoneNumberEntry(@Nonnull final ValueProvider<DTO, PhoneNumber> valueProvider,
+                                           @Nonnull final Setter<DTO, PhoneNumber> valueSetter,
+                                           @Nonnull final Binder<DTO> binder,
+                                           @Nonnull final Optional<String> required,
+                                           @Nonnull final String label) {
+    final var phoneEntry = new PhoneEntry(label);
     phoneEntry.setWidthFull();
 
     final var binding = binder.forField(phoneEntry);
@@ -106,16 +106,16 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     return comboBox;
   }
 
-  public TwoOptionEntry<TWOSELECTIONDTO> createTwoOptionEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
-                                                              @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
-                                                              @Nonnull final Binder<DTO> binder,
-                                                              @Nonnull final List<TWOSELECTIONDTO> options,
-                                                              @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
-                                                              @Nonnull final Optional<String> required,
-                                                              @Nonnull final String label
-  ) {
+  public TwoOptionEntry<TWOSELECTIONDTO> createGenderEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
+                                                           @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
+                                                           @Nonnull final Binder<DTO> binder,
+                                                           @Nonnull final List<TWOSELECTIONDTO> options,
+                                                           @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
+                                                           @Nonnull final Optional<String> required,
+                                                           @Nonnull final String label) {
     final var entry = new TwoOptionEntry<>(label, options, optionLabelProvider);
     bindEntry(entry, valueProvider, valueSetter, binder, required);
+    entry.setWidthFull();
     return entry;
   }
 

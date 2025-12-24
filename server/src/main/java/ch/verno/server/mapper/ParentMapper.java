@@ -35,20 +35,20 @@ public final class ParentMapper {
     }
 
     final ParentEntity entity = new ParentEntity(
-        dto.firstName(),
-        dto.lastName(),
-        dto.email(),
-        dto.phoneNumber().isEmpty()
+        dto.getFirstName(),
+        dto.getLastName(),
+        dto.getEmail(),
+        dto.getPhoneNumber().isEmpty()
             ? Publ.EMPTY_STRING
-            : dto.phoneNumber().toString()
+            : dto.getPhoneNumber().toString()
     );
 
-    if (dto.id() != null) {
-      entity.setId(dto.id());
+    if (dto.getId() != null) {
+      entity.setId(dto.getId());
     }
 
-    entity.setGender(GenderMapper.toEntity(dto.gender()));
-    entity.setAddress(AddressMapper.toEntity(dto.address()));
+    entity.setGender(GenderMapper.toEntity(dto.getGender()));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
 
     return entity;
   }
