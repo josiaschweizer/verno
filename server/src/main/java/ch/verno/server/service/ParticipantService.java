@@ -20,15 +20,21 @@ public class ParticipantService implements IParticipantService {
     this.participantRepository = participantRepository;
   }
 
-  @Transactional
   @Override
+  @Transactional
   public void createParticipant(@Nonnull final ParticipantDto participantEntity) {
     participantRepository.save(ParticipantMapper.toEntity(participantEntity));
   }
 
-  @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional
+  public void updateParticipant(@Nonnull final ParticipantDto participantEntity) {
+    participantRepository.update(ParticipantMapper.toEntity(participantEntity));
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
   public ParticipantDto getParticipantById(@Nonnull final Long id) {
     final var foundById = participantRepository.findById(id);
     if (foundById.isEmpty()) {
@@ -39,8 +45,8 @@ public class ParticipantService implements IParticipantService {
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional(readOnly = true)
   public List<ParticipantDto> getAllParticipants() {
     return participantRepository.findAll().stream()
         .map(ParticipantMapper::toDto)

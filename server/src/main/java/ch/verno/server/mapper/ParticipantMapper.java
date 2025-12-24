@@ -45,11 +45,13 @@ public final class ParticipantMapper {
     final var entity = new ParticipantEntity(
         dto.getFirstName(),
         dto.getLastName(),
-        dto.getBirthdate(),
+        dto.getBirthdate() != null ?
+            dto.getBirthdate() :
+            LocalDate.now(),
         dto.getEmail(),
-        dto.getPhone().isEmpty()
-            ? Publ.EMPTY_STRING
-            : dto.getPhone().toString()
+        dto.getPhone().isEmpty() ?
+            Publ.EMPTY_STRING :
+            dto.getPhone().toString()
     );
 
     if (dto.getId() != null) {

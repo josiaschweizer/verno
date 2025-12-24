@@ -57,7 +57,8 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   @Nonnull
   private final EntryFactory<ParticipantDto, GenderDto> entryFactory;
   @Nonnull
-  private Button saveButton;
+  private final Button saveButton;
+  @Nonnull
   private ViewToolbarResult viewToolbar;
 
   public ParticipantsDetail(@Nonnull final ParticipantService participantService,
@@ -70,12 +71,52 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     this.courseService = courseService;
 
     this.binder = new Binder<>(ParticipantDto.class);
+    this.saveButton = new Button("Create Participant");
     this.entryFactory = new EntryFactory<>();
 
-    init();
+    initUI();
   }
 
-  private void init() {
+  @Override
+  public void setParameter(@Nonnull final BeforeEvent event,
+                           @OptionalParameter @Nullable final Long parameter) {
+    if (parameter == null) {
+      binder.setBean(new ParticipantDto());
+      return;
+    }
+
+    final var participant = participantService.getParticipantById(parameter);
+    binder.setBean(participant);
+
+    if (!isNewParticipant()) {
+      saveButton.setText("Update Participant");
+      applyFormMode(FormMode.EDIT);
+    }
+  }
+
+  private void applyFormMode(@Nonnull final FormMode mode) {
+    this.formMode = mode;
+
+    final boolean saveVisible = (mode == FormMode.CREATE || mode == FormMode.EDIT);
+    saveButton.setVisible(saveVisible);
+    saveButton.setEnabled(saveVisible);
+
+    if (mode == FormMode.CREATE) {
+      saveButton.setText("Create Participant");
+
+      if (viewToolbar.createButton() != null) {
+        viewToolbar.createButton().setVisible(false);
+      }
+    } else if (mode == FormMode.EDIT) {
+      saveButton.setText("Update Participant");
+    } else {
+      saveButton.setText("Save");
+    }
+
+    binder.getFields().forEach(f -> f.setReadOnly(mode == FormMode.VIEW));
+  }
+
+  private void initUI() {
     final var participantLayout = new VerticalLayout();
     participantLayout.setWidthFull();
     participantLayout.add(createParticipantInfoLayout());
@@ -93,10 +134,18 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     add(viewToolbar.toolbar());
     add(participantLayout, addressLayout, parentsLayout);
 
-    saveButton = new Button("Create Participant");
+    saveButton.setEnabled(false);
     saveButton.addClickListener(event -> {
-      UI.getCurrent().navigate(Routes.PARTICIPANTS);
+      save();
     });
+
+    binder.addStatusChangeListener(event -> {
+      final var valid = !event.hasValidationErrors();
+      final var allowSave = valid && (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
+
+      saveButton.setEnabled(allowSave);
+    });
+
     applyFormMode(FormMode.VIEW);
 
     final var saveLayout = new HorizontalLayout(saveButton);
@@ -106,6 +155,19 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     add(new VerticalLayout(saveLayout));
   }
 
+  private void save() {
+    if (formMode == FormMode.CREATE) {
+      participantService.createParticipant(binder.getBean());
+    } else if (formMode == FormMode.EDIT) {
+      participantService.updateParticipant(binder.getBean());
+    } else if (formMode == FormMode.VIEW) {
+      return;
+    }
+
+    UI.getCurrent().navigate(Routes.PARTICIPANTS);
+  }
+
+  @Nonnull
   private ViewToolbarResult getViewToolbar() {
     final var viewToolBar = ViewToolbarFactory.createDetailToolbar("Participant");
 
@@ -322,7 +384,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   }
 
   @Nonnull
-  private VerticalLayout createParentLayout(@Nonnull final String title,
+  private VerticalLayout createParentLayout(@Nonnull final String titleString,
                                             @Nonnull final ValueProvider<ParticipantDto, String> firstNameGetter,
                                             @Nonnull final Setter<ParticipantDto, String> firstNameSetter,
                                             @Nonnull final ValueProvider<ParticipantDto, String> lastNameGetter,
@@ -333,6 +395,9 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
                                             @Nonnull final Setter<ParticipantDto, String> emailSetter,
                                             @Nonnull final ValueProvider<ParticipantDto, PhoneNumber> phoneGetter,
                                             @Nonnull final Setter<ParticipantDto, PhoneNumber> phoneSetter) {
+    final var title = new H1(titleString);
+    title.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Margin.NONE, LumoUtility.FontWeight.LIGHT, LumoUtility.Border.BOTTOM);
+
     final var firstNameEntry = entryFactory.createTextEntry(
         firstNameGetter,
         firstNameSetter,
@@ -377,19 +442,12 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     );
 
     return new VerticalLayout(
-        createTitle(title),
+        title,
         nameLayout,
         genderEntry,
         emailEntry,
         phoneEntry
     );
-  }
-
-  @Nonnull
-  private H1 createTitle(@Nonnull final String titleString) {
-    final var title = new H1(titleString);
-    title.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Margin.NONE, LumoUtility.FontWeight.LIGHT, LumoUtility.Border.BOTTOM);
-    return title;
   }
 
   @Nonnull
@@ -402,45 +460,6 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     }
 
     return layout;
-  }
-
-  @Override
-  public void setParameter(@Nonnull final BeforeEvent event,
-                           @OptionalParameter @Nullable final Long parameter) {
-    if (parameter == null) {
-      binder.setBean(new ParticipantDto());
-      return;
-    }
-
-    final var participant = participantService.getParticipantById(parameter);
-    binder.setBean(participant);
-
-    if (!isNewParticipant()) {
-      saveButton.setText("Update Participant");
-      applyFormMode(FormMode.EDIT);
-    }
-  }
-
-  private void applyFormMode(@Nonnull final FormMode mode) {
-    this.formMode = mode;
-
-    final boolean saveVisible = (mode == FormMode.CREATE || mode == FormMode.EDIT);
-    saveButton.setVisible(saveVisible);
-    saveButton.setEnabled(saveVisible);
-
-    if (mode == FormMode.CREATE) {
-      saveButton.setText("Create Participant");
-
-      if (viewToolbar.createButton() != null) {
-        viewToolbar.createButton().setVisible(false);
-      }
-    } else if (mode == FormMode.EDIT) {
-      saveButton.setText("Update Participant");
-    } else {
-      saveButton.setText("Save");
-    }
-
-    binder.getFields().forEach(f -> f.setReadOnly(mode == FormMode.VIEW));
   }
 
   private boolean isNewParticipant() {

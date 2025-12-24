@@ -27,7 +27,25 @@ public class ParticipantRepository {
     return jpaRepository.findAll();
   }
 
-  public void save(@Nonnull final ParticipantEntity participant) {
-    jpaRepository.save(participant);
+  public ParticipantEntity save(@Nonnull final ParticipantEntity participant) {
+    return jpaRepository.save(participant);
+  }
+
+  public ParticipantEntity update(@Nonnull final ParticipantEntity participant) {
+    if (participant.getId() != null) {
+      return update(participant.getId(), participant);
+    }
+
+    return jpaRepository.save(participant);
+  }
+
+  public ParticipantEntity update(@Nonnull final Long id,
+                                  @Nonnull final ParticipantEntity participant) {
+    if (!jpaRepository.existsById(id)) {
+      throw new IllegalStateException("Participant not found: " + id);
+    }
+
+    participant.setId(id);
+    return jpaRepository.save(participant);
   }
 }
