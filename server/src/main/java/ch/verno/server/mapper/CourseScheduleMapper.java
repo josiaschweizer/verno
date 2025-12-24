@@ -33,8 +33,10 @@ public final class CourseScheduleMapper {
         dto.weekEnd()
     );
 
-    if (dto.id() != null) {
+    if (dto.id() != null && dto.id() != 0) {
       entity.setId(dto.id());
+    } else {
+      entity.setId(null);
     }
 
     return entity;

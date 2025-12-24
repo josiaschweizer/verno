@@ -2,6 +2,7 @@ package ch.verno.common.db.dto;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.util.Publ;
+import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -152,6 +153,11 @@ public class ParticipantDto {
 
   public void setPhone(@Nonnull final PhoneNumber phone) {
     this.phone = phone;
+  }
+
+  @Nonnull
+  public String getPhoneString() {
+    return PhoneNumberFormatter.formatPhoneNumber(phone);
   }
 
   @Nonnull

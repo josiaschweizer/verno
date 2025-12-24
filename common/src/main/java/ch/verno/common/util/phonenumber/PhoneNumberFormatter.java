@@ -1,7 +1,9 @@
 package ch.verno.common.util.phonenumber;
 
+import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import jakarta.annotation.Nonnull;
 
 public final class PhoneNumberFormatter {
 
@@ -10,7 +12,14 @@ public final class PhoneNumberFormatter {
   private PhoneNumberFormatter() {
   }
 
-  public static String formatNational(final String digits, final String region) {
+  @Nonnull
+  public static String formatPhoneNumber(@Nonnull final PhoneNumber phoneNumber) {
+    return formatNational(phoneNumber.phoneNumber(), phoneNumber.callingCode().regionCode());
+  }
+
+  @Nonnull
+  public static String formatNational(@Nonnull final String digits,
+                                      @Nonnull final String region) {
     try {
       final var number = UTIL.parse(digits, region);
       return UTIL.format(number, PhoneNumberFormat.NATIONAL);
@@ -19,8 +28,9 @@ public final class PhoneNumberFormatter {
     }
   }
 
-  public static String formatInternationalWithoutCallingCode(final String digits,
-                                                             final String region,
+  @Nonnull
+  public static String formatInternationalWithoutCallingCode(@Nonnull final String digits,
+                                                             @Nonnull final String region,
                                                              final int countryCode) {
     try {
       final var number = UTIL.parse(digits, region);

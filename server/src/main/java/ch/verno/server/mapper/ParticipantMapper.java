@@ -54,8 +54,10 @@ public final class ParticipantMapper {
             dto.getPhone().toString()
     );
 
-    if (dto.getId() != null) {
+    if (dto.getId() != null && dto.getId() != 0) {
       entity.setId(dto.getId());
+    } else {
+      entity.setId(null);
     }
 
     entity.setGender(GenderMapper.toEntity(dto.getGender()));

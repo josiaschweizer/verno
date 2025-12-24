@@ -2,6 +2,7 @@ package ch.verno.server.service;
 
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
+import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.ParticipantRepository;
 import jakarta.annotation.Nonnull;
@@ -29,7 +30,12 @@ public class ParticipantService implements IParticipantService {
   @Override
   @Transactional
   public void updateParticipant(@Nonnull final ParticipantDto participantEntity) {
-    participantRepository.update(ParticipantMapper.toEntity(participantEntity));
+    final var entity = ParticipantMapper.toEntity(participantEntity);
+    if (entity.getCourseLevel().getId() == null){
+
+    }
+
+    participantRepository.update(entity);
   }
 
   @Nonnull

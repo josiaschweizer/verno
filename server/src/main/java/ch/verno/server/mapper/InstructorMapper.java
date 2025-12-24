@@ -41,8 +41,10 @@ public final class InstructorMapper {
         dto.phone().isEmpty() ? Publ.EMPTY_STRING : dto.phone().toString()
     );
 
-    if (dto.id() != null) {
+    if (dto.id() != null && dto.id() != 0) {
       entity.setId(dto.id());
+    } else {
+      entity.setId(null);
     }
 
     entity.setGender(GenderMapper.toEntity(dto.gender()));

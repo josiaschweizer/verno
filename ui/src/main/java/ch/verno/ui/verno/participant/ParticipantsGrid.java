@@ -30,14 +30,12 @@ public class ParticipantsGrid extends VerticalLayout {
   }
 
   private void init() {
-
-
     grid = new Grid<>();
     addColumn(ParticipantDto::getFirstName, "First Name");
     addColumn(ParticipantDto::getLastName, "Last Name");
     addColumn(ParticipantDto::getBirthdate, "Age");
     addColumn(ParticipantDto::getEmail, "Email");
-    addColumn(ParticipantDto::getPhone, "Phone");
+    addColumn(ParticipantDto::getPhoneString, "Phone");
 
     final var participants = participantService.getAllParticipants();
 

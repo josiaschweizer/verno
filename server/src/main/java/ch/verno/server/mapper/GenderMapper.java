@@ -31,8 +31,10 @@ public final class GenderMapper {
 
     final GenderEntity entity = new GenderEntity(dto.name(), dto.description());
 
-    if (dto.id() != null) {
+    if (dto.id() != null && dto.id() != 0) {
       entity.setId(dto.id());
+    } else {
+      entity.setId(null);
     }
 
     return entity;

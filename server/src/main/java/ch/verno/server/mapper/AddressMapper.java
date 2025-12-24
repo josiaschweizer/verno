@@ -12,7 +12,10 @@ public final class AddressMapper {
 
   @Nonnull
   public static AddressDto toDto(@Nullable final AddressEntity entity) {
-    if (entity == null) return AddressDto.empty();
+    if (entity == null) {
+      return AddressDto.empty();
+    }
+
     return new AddressDto(
         entity.getId(),
         entity.getStreet() == null ? Publ.EMPTY_STRING : entity.getStreet(),
@@ -37,8 +40,10 @@ public final class AddressMapper {
         dto.getCountry()
     );
 
-    if (dto.getId() != null) {
+    if (dto.getId() != null && dto.getId() != 0) {
       entity.setId(dto.getId());
+    } else {
+      entity.setId(null);
     }
 
     return entity;

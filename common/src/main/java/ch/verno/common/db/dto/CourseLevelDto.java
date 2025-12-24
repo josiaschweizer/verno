@@ -4,13 +4,11 @@ import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record CourseLevelDto(
-    @Nullable Long id,
-    @Nonnull String code,
-    @Nonnull String name,
-    @Nonnull String description,
-    @Nullable Integer sortingOrder
-) {
+public record CourseLevelDto(@Nullable Long id,
+                             @Nonnull String code,
+                             @Nonnull String name,
+                             @Nonnull String description,
+                             @Nullable Integer sortingOrder) {
 
   public static CourseLevelDto empty() {
     return new CourseLevelDto(

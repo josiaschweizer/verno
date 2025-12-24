@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.participant.detail;
 
-
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
@@ -32,7 +31,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.springframework.web.servlet.View;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,15 +62,15 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   public ParticipantsDetail(@Nonnull final ParticipantService participantService,
                             @Nonnull final GenderService genderService,
                             @Nonnull final CourseLevelService courseLevelService,
-                            @Nonnull final CourseService courseService, final View view) {
+                            @Nonnull final CourseService courseService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
 
     this.binder = new Binder<>(ParticipantDto.class);
-    this.saveButton = new Button("Create Participant");
     this.entryFactory = new EntryFactory<>();
+    this.saveButton = new Button("Save");
 
     initUI();
   }
@@ -82,41 +80,23 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
                            @OptionalParameter @Nullable final Long parameter) {
     if (parameter == null) {
       binder.setBean(new ParticipantDto());
+      applyFormMode(FormMode.CREATE);
+      updateSaveButtonState();
       return;
     }
 
     final var participant = participantService.getParticipantById(parameter);
     binder.setBean(participant);
 
-    if (!isNewParticipant()) {
-      saveButton.setText("Update Participant");
-      applyFormMode(FormMode.EDIT);
-    }
-  }
-
-  private void applyFormMode(@Nonnull final FormMode mode) {
-    this.formMode = mode;
-
-    final boolean saveVisible = (mode == FormMode.CREATE || mode == FormMode.EDIT);
-    saveButton.setVisible(saveVisible);
-    saveButton.setEnabled(saveVisible);
-
-    if (mode == FormMode.CREATE) {
-      saveButton.setText("Create Participant");
-
-      if (viewToolbar.createButton() != null) {
-        viewToolbar.createButton().setVisible(false);
-      }
-    } else if (mode == FormMode.EDIT) {
-      saveButton.setText("Update Participant");
-    } else {
-      saveButton.setText("Save");
-    }
-
-    binder.getFields().forEach(f -> f.setReadOnly(mode == FormMode.VIEW));
+    applyFormMode(FormMode.EDIT);
+    updateSaveButtonState();
   }
 
   private void initUI() {
+    setSizeFull();
+    setPadding(false);
+    setSpacing(false);
+
     final var participantLayout = new VerticalLayout();
     participantLayout.setWidthFull();
     participantLayout.add(createParticipantInfoLayout());
@@ -126,33 +106,84 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     final var addressLayout = new VerticalLayout(createAddressLayout());
     final var parentsLayout = createParentsLayout();
 
-    setSizeFull();
-    setPadding(false);
-    setSpacing(false);
-
     viewToolbar = getViewToolbar();
     add(viewToolbar.toolbar());
     add(participantLayout, addressLayout, parentsLayout);
 
-    saveButton.setEnabled(false);
-    saveButton.addClickListener(event -> {
-      save();
-    });
+    saveButton.addClickListener(event -> save());
 
-    binder.addStatusChangeListener(event -> {
-      final var valid = !event.hasValidationErrors();
-      final var allowSave = valid && (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
-
-      saveButton.setEnabled(allowSave);
-    });
-
-    applyFormMode(FormMode.VIEW);
+    binder.addValueChangeListener(e -> updateSaveButtonState());
+    binder.addStatusChangeListener(e -> updateSaveButtonState());
 
     final var saveLayout = new HorizontalLayout(saveButton);
     saveLayout.setWidthFull();
     saveLayout.setJustifyContentMode(JustifyContentMode.END);
-
     add(new VerticalLayout(saveLayout));
+
+    applyFormMode(FormMode.VIEW);
+    updateSaveButtonState();
+  }
+
+  @Nonnull
+  private ViewToolbarResult getViewToolbar() {
+    final var result = ViewToolbarFactory.createDetailToolbar("Participant");
+
+    if (result.createButton() != null) {
+      result.createButton().addClickListener(event -> {
+        binder.setBean(new ParticipantDto());
+        applyFormMode(FormMode.CREATE);
+        updateSaveButtonState();
+      });
+    }
+
+    if (result.editButton() != null) {
+      result.editButton().addClickListener(event -> {
+        applyFormMode(FormMode.EDIT);
+        updateSaveButtonState();
+      });
+    }
+
+    return result;
+  }
+
+  private void applyFormMode(@Nonnull final FormMode mode) {
+    this.formMode = mode;
+
+    final boolean saveVisible = (mode == FormMode.CREATE || mode == FormMode.EDIT);
+    saveButton.setVisible(saveVisible);
+
+    if (mode == FormMode.CREATE) {
+      saveButton.setText("Create Participant");
+      if (viewToolbar.createButton() != null) {
+        viewToolbar.createButton().setVisible(false);
+      }
+    } else if (mode == FormMode.EDIT) {
+      saveButton.setText("Update Participant");
+    } else {
+      saveButton.setText("Save");
+      if (viewToolbar.createButton() != null) {
+        viewToolbar.createButton().setVisible(true);
+      }
+    }
+
+    binder.getFields().forEach(f -> f.setReadOnly(mode == FormMode.VIEW));
+  }
+
+  private void updateSaveButtonState() {
+    final boolean canSaveByMode = (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
+    if (!canSaveByMode) {
+      saveButton.setEnabled(false);
+      return;
+    }
+
+    final var bean = binder.getBean();
+    if (bean == null) {
+      saveButton.setEnabled(false);
+      return;
+    }
+
+    final boolean valid = binder.isValid();
+    saveButton.setEnabled(valid);
   }
 
   private void save() {
@@ -160,32 +191,12 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
       participantService.createParticipant(binder.getBean());
     } else if (formMode == FormMode.EDIT) {
       participantService.updateParticipant(binder.getBean());
-    } else if (formMode == FormMode.VIEW) {
+    } else {
       return;
     }
 
     UI.getCurrent().navigate(Routes.PARTICIPANTS);
   }
-
-  @Nonnull
-  private ViewToolbarResult getViewToolbar() {
-    final var viewToolBar = ViewToolbarFactory.createDetailToolbar("Participant");
-
-    if (viewToolBar.createButton() != null) {
-      viewToolBar.createButton().addClickListener(event -> {
-        applyFormMode(FormMode.CREATE);
-        binder.setBean(new ParticipantDto());
-      });
-    }
-    if (viewToolBar.editButton() != null) {
-      viewToolBar.editButton().addClickListener(event -> {
-        applyFormMode(FormMode.EDIT);
-      });
-    }
-
-    return viewToolBar;
-  }
-
 
   @Nonnull
   private HorizontalLayout createParticipantInfoLayout() {
@@ -210,7 +221,8 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         ParticipantDto::setBirthdate,
         binder,
         Optional.empty(),
-        "Birthdate");
+        "Birthdate"
+    );
     birthdateEntry.setWidthFull();
 
     final var genderEntry = entryFactory.createGenderEntry(
@@ -235,6 +247,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "Email address"
     );
+
     final var phoneEntry = entryFactory.createPhoneNumberEntry(
         ParticipantDto::getPhone,
         ParticipantDto::setPhone,
@@ -291,10 +304,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
           .toList();
 
       final var filteredCourseOptions = filteredCourses.stream()
-          .collect(Collectors.toMap(
-              CourseDto::id,
-              CourseDto::displayName
-          ));
+          .collect(Collectors.toMap(CourseDto::id, CourseDto::displayName));
 
       courseEntry.setItems(filteredCourseOptions.keySet());
 
@@ -319,6 +329,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "Street"
     );
+
     final var houseNumberEntry = entryFactory.createTextEntry(
         dto -> dto.getAddress().getHouseNumber(),
         (dto, houseNumber) -> dto.getAddress().setHouseNumber(houseNumber),
@@ -326,6 +337,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "House Number"
     );
+
     final var zipCodeEntry = entryFactory.createTextEntry(
         dto -> dto.getAddress().getZipCode(),
         (dto, zipCode) -> dto.getAddress().setZipCode(zipCode),
@@ -333,6 +345,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "ZIP Code"
     );
+
     final var cityEntry = entryFactory.createTextEntry(
         dto -> dto.getAddress().getCity(),
         (dto, city) -> dto.getAddress().setCity(city),
@@ -340,6 +353,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "City"
     );
+
     final var countryEntry = entryFactory.createTextEntry(
         dto -> dto.getAddress().getCountry(),
         (dto, country) -> dto.getAddress().setCountry(country),
@@ -379,7 +393,6 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhoneNumber(phoneNumber)
     );
 
-
     return createLayoutFromComponents(parentOneLayout, parentTwoLayout);
   }
 
@@ -396,7 +409,12 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
                                             @Nonnull final ValueProvider<ParticipantDto, PhoneNumber> phoneGetter,
                                             @Nonnull final Setter<ParticipantDto, PhoneNumber> phoneSetter) {
     final var title = new H1(titleString);
-    title.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Margin.NONE, LumoUtility.FontWeight.LIGHT, LumoUtility.Border.BOTTOM);
+    title.addClassNames(
+        LumoUtility.FontSize.XLARGE,
+        LumoUtility.Margin.NONE,
+        LumoUtility.FontWeight.LIGHT,
+        LumoUtility.Border.BOTTOM
+    );
 
     final var firstNameEntry = entryFactory.createTextEntry(
         firstNameGetter,
@@ -413,7 +431,6 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
         Optional.empty(),
         "Last Name"
     );
-    final var nameLayout = createLayoutFromComponents(firstNameEntry, lastNameEntry);
 
     final var genderEntry = entryFactory.createGenderEntry(
         genderGetter,
@@ -443,7 +460,7 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
 
     return new VerticalLayout(
         title,
-        nameLayout,
+        createLayoutFromComponents(firstNameEntry, lastNameEntry),
         genderEntry,
         emailEntry,
         phoneEntry
@@ -460,15 +477,5 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     }
 
     return layout;
-  }
-
-  private boolean isNewParticipant() {
-    final var bean = binder.getBean();
-
-    if (bean != null) {
-      return bean.isEmpty();
-    }
-
-    return true;
   }
 }
