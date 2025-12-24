@@ -4,10 +4,12 @@ import ch.verno.db.entity.ParentEntity;
 import ch.verno.db.jpa.SpringDataParentJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ParentRepository {
 
   @Nonnull
@@ -27,7 +29,8 @@ public class ParentRepository {
     return springDataParentJpaRepository.findAll();
   }
 
-  public void save(@NonNull final ParentEntity entity) {
-    springDataParentJpaRepository.save(entity);
+  @Nonnull
+  public ParentEntity save(@NonNull final ParentEntity entity) {
+    return springDataParentJpaRepository.save(entity);
   }
 }

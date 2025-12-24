@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IParticipantService {
 
-  void createParticipant(@Nonnull ParticipantDto participantEntity);
+  ParticipantDto createParticipant(@Nonnull ParticipantDto participantEntity);
 
-  void updateParticipant(@Nonnull ParticipantDto participantEntity);
+  ParticipantDto updateParticipant(@Nonnull ParticipantDto participantEntity);
 
   @Nonnull
   ParticipantDto getParticipantById(@Nonnull Long id);

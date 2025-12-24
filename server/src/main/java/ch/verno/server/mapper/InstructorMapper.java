@@ -34,7 +34,7 @@ public final class InstructorMapper {
       return null;
     }
 
-    final InstructorEntity entity = new InstructorEntity(
+    final var entity = new InstructorEntity(
         dto.firstName(),
         dto.lastName(),
         dto.email(),
@@ -47,7 +47,7 @@ public final class InstructorMapper {
       entity.setId(null);
     }
 
-    entity.setGender(GenderMapper.toEntity(dto.gender()));
+    entity.setGender(GenderMapper.toEntityRef(dto.gender()));
     entity.setAddress(AddressMapper.toEntity(dto.address()));
 
     return entity;

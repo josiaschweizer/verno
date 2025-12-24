@@ -21,7 +21,7 @@ public final class CourseLevelMapper {
         entity.getCode() == null ? Publ.EMPTY_STRING : entity.getCode(),
         entity.getName() == null ? Publ.EMPTY_STRING : entity.getName(),
         entity.getDescription() == null ? Publ.EMPTY_STRING : entity.getDescription(),
-        entity.getSortingOrder() == null ? 0 : entity.getSortingOrder()
+        entity.getSortingOrder()
     );
   }
 
@@ -45,5 +45,14 @@ public final class CourseLevelMapper {
     }
 
     return entity;
+  }
+
+  @Nullable
+  public static CourseLevelEntity toEntityRef(@Nullable final CourseLevelDto dto) {
+    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+      return null;
+    }
+
+    return CourseLevelEntity.ref(dto.id());
   }
 }

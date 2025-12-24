@@ -17,8 +17,8 @@ public final class CourseScheduleMapper {
 
     return new CourseScheduleDto(
         entity.getId(),
-        entity.getWeekStart() == null ? 0 : entity.getWeekStart(),
-        entity.getWeekEnd() == null ? 0 : entity.getWeekEnd()
+        entity.getWeekStart(),
+        entity.getWeekEnd()
     );
   }
 

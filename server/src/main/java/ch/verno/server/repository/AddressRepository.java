@@ -4,10 +4,12 @@ import ch.verno.db.entity.AddressEntity;
 import ch.verno.db.jpa.SpringDataAddressJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class AddressRepository {
 
   @Nonnull
@@ -28,7 +30,8 @@ public class AddressRepository {
     return springDataAddressJpaRepository.findAll();
   }
 
-  public void save(@Nonnull final AddressEntity entity) {
-    springDataAddressJpaRepository.save(entity);
+  @Nonnull
+  public AddressEntity save(@Nonnull final AddressEntity entity) {
+    return springDataAddressJpaRepository.save(entity);
   }
 }

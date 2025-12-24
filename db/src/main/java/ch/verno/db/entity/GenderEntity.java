@@ -1,6 +1,8 @@
 package ch.verno.db.entity;
 
-import jakarta.annotation.Nonnull;import jakarta.persistence.Column;
+import ch.verno.common.util.Publ;
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,10 +32,21 @@ public class GenderEntity {
   }
 
   public GenderEntity(@Nonnull final String name,
-                      final String description) {
+                      @Nonnull final String description) {
     this.createdAt = OffsetDateTime.now();
     this.name = name;
     this.description = description;
+  }
+
+  @Nonnull
+  public static GenderEntity ref(@Nonnull final Long id) {
+    final var entity = new GenderEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  public static GenderEntity empty() {
+    return new GenderEntity(Publ.EMPTY_STRING, Publ.EMPTY_STRING);
   }
 
   public void setId(Long id) {

@@ -34,13 +34,11 @@ public final class ParentMapper {
       return null;
     }
 
-    final ParentEntity entity = new ParentEntity(
+    final var entity = new ParentEntity(
         dto.getFirstName(),
         dto.getLastName(),
         dto.getEmail(),
-        dto.getPhoneNumber().isEmpty()
-            ? Publ.EMPTY_STRING
-            : dto.getPhoneNumber().toString()
+        dto.getPhoneNumber().isEmpty() ? Publ.EMPTY_STRING : dto.getPhoneNumber().toString()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {
@@ -49,7 +47,7 @@ public final class ParentMapper {
       entity.setId(null);
     }
 
-    entity.setGender(GenderMapper.toEntity(dto.getGender()));
+    entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
     entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
 
     return entity;

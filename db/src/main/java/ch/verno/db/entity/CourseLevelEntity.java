@@ -48,6 +48,14 @@ public class CourseLevelEntity {
     this.sortingOrder = sortingOrder;
   }
 
+  @Nonnull
+  public static CourseLevelEntity ref(@Nonnull final Long id) {
+    final var entity = new CourseLevelEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+
   public Long getId() {
     return id;
   }

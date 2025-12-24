@@ -87,6 +87,13 @@ public class CourseEntity {
     this.instructor = instructor;
   }
 
+  @Nonnull
+  public static CourseEntity ref(@Nonnull final Long id) {
+    final var entity = new CourseEntity();
+    entity.setId(id);
+    return entity;
+  }
+
   public Long getId() {
     return id;
   }

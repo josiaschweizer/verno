@@ -32,7 +32,7 @@ public final class AddressMapper {
       return null;
     }
 
-    final AddressEntity entity = new AddressEntity(
+    final var entity = new AddressEntity(
         dto.getStreet(),
         dto.getHouseNumber(),
         dto.getZipCode(),

@@ -37,6 +37,7 @@ public final class ParticipantMapper {
     );
   }
 
+  @Nullable
   public static ParticipantEntity toEntity(@Nullable final ParticipantDto dto) {
     if (dto == null) {
       return null;
@@ -45,13 +46,9 @@ public final class ParticipantMapper {
     final var entity = new ParticipantEntity(
         dto.getFirstName(),
         dto.getLastName(),
-        dto.getBirthdate() != null ?
-            dto.getBirthdate() :
-            LocalDate.now(),
+        dto.getBirthdate() != null ? dto.getBirthdate() : LocalDate.now(),
         dto.getEmail(),
-        dto.getPhone().isEmpty() ?
-            Publ.EMPTY_STRING :
-            dto.getPhone().toString()
+        !dto.getPhone().isEmpty() ? dto.getPhone().toString() : Publ.EMPTY_STRING
     );
 
     if (dto.getId() != null && dto.getId() != 0) {
@@ -60,14 +57,14 @@ public final class ParticipantMapper {
       entity.setId(null);
     }
 
-    entity.setGender(GenderMapper.toEntity(dto.getGender()));
-    entity.setCourseLevel(CourseLevelMapper.toEntity(dto.getCourseLevel()));
-    entity.setCourse(CourseMapper.toEntity(dto.getCourse()));
+    entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
+    entity.setCourseLevel(CourseLevelMapper.toEntityRef(dto.getCourseLevel()));
+    entity.setCourse(CourseMapper.toEntityRef(dto.getCourse()));
+
     entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
     entity.setParentOne(ParentMapper.toEntity(dto.getParentOne()));
     entity.setParentTwo(ParentMapper.toEntity(dto.getParentTwo()));
 
     return entity;
   }
-
 }

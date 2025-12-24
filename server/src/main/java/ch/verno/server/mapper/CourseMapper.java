@@ -43,7 +43,7 @@ public final class CourseMapper {
         dto.title(),
         dto.capacity(),
         dto.location(),
-        CourseLevelMapper.toEntity(dto.level()),
+        CourseLevelMapper.toEntityRef(dto.level()),
         CourseScheduleMapper.toEntity(dto.schedule()),
         dto.weekdays(),
         dto.duration(),
@@ -57,5 +57,14 @@ public final class CourseMapper {
     }
 
     return entity;
+  }
+
+  @Nullable
+  public static CourseEntity toEntityRef(@Nullable final CourseDto dto) {
+    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+      return null;
+    }
+
+    return CourseEntity.ref(dto.id());
   }
 }
