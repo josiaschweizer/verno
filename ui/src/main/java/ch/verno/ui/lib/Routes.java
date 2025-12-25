@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class Routes {
 
   public static final String PARTICIPANTS = "participants";
+  public static final String INSTRUCTORS = "instructors";
   public static final String DETAIL = "/detail";
 
   public static final String VALUE_ACCESSOR_ID = Publ.QUESTION_MARK + "id" + Publ.EQUALS;

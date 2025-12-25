@@ -5,15 +5,13 @@ import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record InstructorDto(
-    @Nullable Long id,
-    @Nonnull String firstName,
-    @Nonnull String lastName,
-    @Nonnull String email,
-    @Nonnull PhoneNumber phone,
-    @Nonnull GenderDto gender,
-    @Nonnull AddressDto address
-) {
+public record InstructorDto(@Nullable Long id,
+                            @Nonnull String firstName,
+                            @Nonnull String lastName,
+                            @Nonnull String email,
+                            @Nonnull PhoneNumber phone,
+                            @Nonnull GenderDto gender,
+                            @Nonnull AddressDto address) {
 
   public static InstructorDto empty() {
     return new InstructorDto(
@@ -36,7 +34,18 @@ public record InstructorDto(
         && this.phone().isEmpty();
   }
 
+  @Nonnull
   public String displayName() {
     return (firstName + " " + lastName).trim();
+  }
+
+  @Nonnull
+  public String phoneAsString() {
+    return phone.isEmpty() ? Publ.EMPTY_STRING : phone.toString();
+  }
+
+  @Nonnull
+  public String genderAsString(){
+    return gender.description();
   }
 }
