@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface IParticipantService {
 
+  @Nonnull
   ParticipantDto createParticipant(@Nonnull ParticipantDto participantEntity);
 
+  @Nonnull
   ParticipantDto updateParticipant(@Nonnull ParticipantDto participantEntity);
 
   @Nonnull

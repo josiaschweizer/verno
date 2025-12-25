@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Route(Routes.PARTICIPANTS)
 @PageTitle("Participants Overview")
-@Menu(order = 1, icon = "vaadin:users", title = "Participant Overview")
+@Menu(order = 1, icon = "vaadin:users", title = "Participants Overview")
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
 
   @Nonnull

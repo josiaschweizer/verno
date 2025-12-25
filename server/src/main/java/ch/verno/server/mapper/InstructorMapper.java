@@ -52,4 +52,16 @@ public final class InstructorMapper {
 
     return entity;
   }
+
+  @Nonnull
+  public static InstructorEntity updateEntity(@Nonnull final InstructorEntity entity,
+                                              @Nonnull final InstructorDto dto) {
+    entity.setFirstname(dto.firstName());
+    entity.setLastname(dto.lastName());
+    entity.setEmail(dto.email());
+    entity.setPhone(dto.phone().toString());
+    entity.setGender(GenderMapper.toEntity(dto.gender()));
+    entity.setAddress(AddressMapper.toEntity(dto.address()));
+    return entity;
+  }
 }

@@ -7,6 +7,8 @@ import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParentDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.exceptions.NotFoundException;
+import ch.verno.common.exceptions.NotFoundReason;
 import ch.verno.common.util.Publ;
 import ch.verno.db.entity.AddressEntity;
 import ch.verno.db.entity.CourseEntity;
@@ -23,6 +25,7 @@ import ch.verno.server.repository.ParentRepository;
 import ch.verno.server.repository.ParticipantRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +64,7 @@ public class ParticipantService implements IParticipantService {
 
   @Override
   @Transactional
-  public ParticipantDto createParticipant(@Nonnull final ParticipantDto participantDto) {
+  public @NonNull ParticipantDto createParticipant(@Nonnull final ParticipantDto participantDto) {
     final var entity = new ParticipantEntity(
         safeString(participantDto.getFirstName()),
         safeString(participantDto.getLastName()),
@@ -78,13 +81,13 @@ public class ParticipantService implements IParticipantService {
 
   @Override
   @Transactional
-  public ParticipantDto updateParticipant(@Nonnull final ParticipantDto participantDto) {
+  public @NonNull ParticipantDto updateParticipant(@Nonnull final ParticipantDto participantDto) {
     if (participantDto.getId() == null || participantDto.getId() == 0) {
       throw new IllegalArgumentException("Participant ID is required for update");
     }
 
     final var existing = participantRepository.findById(participantDto.getId())
-        .orElseThrow(() -> new IllegalArgumentException("Participant not found with id: " + participantDto.getId()));
+        .orElseThrow(() -> new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participantDto.getId()));
 
     existing.setFirstname(safeString(participantDto.getFirstName()));
     existing.setLastname(safeString(participantDto.getLastName()));
@@ -119,7 +122,7 @@ public class ParticipantService implements IParticipantService {
   public ParticipantDto getParticipantById(@Nonnull final Long id) {
     final var foundById = participantRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new IllegalArgumentException("Participant not found with id: " + id);
+      throw new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
     }
     return ParticipantMapper.toDto(foundById.get());
   }
@@ -142,7 +145,7 @@ public class ParticipantService implements IParticipantService {
     final AddressEntity entity;
     if (addressDto.getId() != null && addressDto.getId() != 0) {
       entity = addressRepository.findById(addressDto.getId())
-          .orElseThrow(() -> new IllegalArgumentException("Address not found with id: " + addressDto.getId()));
+          .orElseThrow(() -> new NotFoundException(NotFoundReason.ADDRESS_BY_ID_NOT_FOUND, addressDto.getId()));
 
       entity.setStreet(safeString(addressDto.getStreet()));
       entity.setHouseNumber(safeString(addressDto.getHouseNumber()));
@@ -150,14 +153,13 @@ public class ParticipantService implements IParticipantService {
       entity.setCity(safeString(addressDto.getCity()));
       entity.setCountry(safeString(addressDto.getCountry()));
     } else {
-      final var fresh = new AddressEntity(
+      entity = new AddressEntity(
           safeString(addressDto.getStreet()),
           safeString(addressDto.getHouseNumber()),
           safeString(addressDto.getZipCode()),
           safeString(addressDto.getCity()),
           safeString(addressDto.getCountry())
       );
-      entity = fresh;
     }
 
     return addressRepository.save(entity);
@@ -172,13 +174,13 @@ public class ParticipantService implements IParticipantService {
     final ParentEntity entity;
     if (parentDto.getId() != null && parentDto.getId() != 0) {
       entity = parentRepository.findById(parentDto.getId())
-          .orElseThrow(() -> new IllegalArgumentException("Parent not found with id: " + parentDto.getId()));
+          .orElseThrow(() -> new NotFoundException(NotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
     } else {
       entity = new ParentEntity(
           safeString(parentDto.getFirstName()),
           safeString(parentDto.getLastName()),
           safeString(parentDto.getEmail()),
-          parentDto.getPhoneNumber() != null && !parentDto.getPhoneNumber().isEmpty()
+          !parentDto.getPhoneNumber().isEmpty()
               ? parentDto.getPhoneNumber().toString()
               : Publ.EMPTY_STRING
       );
@@ -187,7 +189,7 @@ public class ParticipantService implements IParticipantService {
     entity.setFirstname(safeString(parentDto.getFirstName()));
     entity.setLastname(safeString(parentDto.getLastName()));
     entity.setEmail(safeString(parentDto.getEmail()));
-    entity.setPhone(parentDto.getPhoneNumber() != null && !parentDto.getPhoneNumber().isEmpty()
+    entity.setPhone(!parentDto.getPhoneNumber().isEmpty()
         ? parentDto.getPhoneNumber().toString()
         : Publ.EMPTY_STRING
     );
@@ -204,7 +206,7 @@ public class ParticipantService implements IParticipantService {
       return null;
     }
     return genderRepository.findById(genderDto.id())
-        .orElseThrow(() -> new IllegalArgumentException("Gender not found with id: " + genderDto.id()));
+        .orElseThrow(() -> new NotFoundException(NotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.id()));
   }
 
   @Nullable
@@ -213,7 +215,7 @@ public class ParticipantService implements IParticipantService {
       return null;
     }
     return courseLevelRepository.findById(dto.id())
-        .orElseThrow(() -> new IllegalArgumentException("CourseLevel not found with id: " + dto.id()));
+        .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.id()));
   }
 
   @Nullable
@@ -222,7 +224,7 @@ public class ParticipantService implements IParticipantService {
       return null;
     }
     return courseRepository.findById(dto.id())
-        .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + dto.id()));
+        .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.id()));
   }
 
   @Nonnull

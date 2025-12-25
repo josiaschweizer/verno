@@ -2,6 +2,8 @@ package ch.verno.server.service;
 
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.exceptions.NotFoundException;
+import ch.verno.common.exceptions.NotFoundReason;
 import ch.verno.server.mapper.CourseLevelMapper;
 import ch.verno.server.repository.CourseLevelRepository;
 import jakarta.annotation.Nonnull;
@@ -26,7 +28,7 @@ public class CourseLevelService implements ICourseLevelService {
   public CourseLevelDto getCourseLevelById(@Nonnull final Long id) {
     final var courseLevelOptional = courseLevelRepository.findById(id);
     if (courseLevelOptional.isEmpty()) {
-      throw new IllegalArgumentException("Course Level not found with id: " + id);
+      throw new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id);
     }
 
     return CourseLevelMapper.toDto(courseLevelOptional.get());
