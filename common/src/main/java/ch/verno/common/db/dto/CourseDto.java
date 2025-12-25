@@ -46,6 +46,7 @@ public record CourseDto(
         && (this.instructor() == null || this.instructor().isEmpty());
   }
 
+  @Nonnull
   public String displayName() {
     return title;
   }

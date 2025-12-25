@@ -115,4 +115,29 @@ public class AddressDto {
   public void setCountry(@Nonnull final String country) {
     this.country = country;
   }
+
+  @Nonnull
+  public String getFullAddressAsString() {
+    StringBuilder fullAddress = new StringBuilder();
+    if (!street.isEmpty()) {
+      fullAddress.append(street);
+      if (!houseNumber.isEmpty()) {
+        fullAddress.append(" ").append(houseNumber);
+      }
+      fullAddress.append(", ");
+    }
+    if (!zipCode.isEmpty()) {
+      fullAddress.append(zipCode).append(" ");
+    }
+    if (!city.isEmpty()) {
+      fullAddress.append(city);
+    }
+    if (!country.isEmpty()) {
+      if (!fullAddress.isEmpty()) {
+        fullAddress.append(", ");
+      }
+      fullAddress.append(country);
+    }
+    return fullAddress.toString().trim();
+  }
 }
