@@ -1,6 +1,7 @@
 package ch.verno.ui.base;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -26,15 +27,17 @@ public final class MainLayout extends AppLayout {
 
     private Component createHeader() {
         // TODO Replace with real application logo and name
-        var appLogo = VaadinIcon.CUBES.create();
+        final var appLogo = VaadinIcon.CUBES.create();
         appLogo.setSize("48px");
         appLogo.setColor("green");
 
-        var appName = new Span("My Application");
+        final var appName = new Span("My Application");
         appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
-        var header = new VerticalLayout(appLogo, appName);
+        final var header = new VerticalLayout(appLogo, appName);
         header.setAlignItems(FlexComponent.Alignment.CENTER);
+        header.getStyle().setCursor("pointer");
+        header.addClickListener(event -> UI.getCurrent().navigate(""));
         return header;
     }
 
