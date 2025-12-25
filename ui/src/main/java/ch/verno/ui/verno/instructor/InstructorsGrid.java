@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.instructor;
 
 import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
@@ -33,7 +34,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
   @Override
   protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<InstructorDto> event) {
     final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, event.getItem().id());
+    final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
     UI.getCurrent().navigate(redirectURL);
   }
 
@@ -46,17 +47,17 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return "Instructor";
+    return VernoConstants.INSTRUCTOR;
   }
 
   @Nonnull
   @Override
   protected Map<ValueProvider<InstructorDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<InstructorDto, Object>, String>();
-    columnsMap.put(InstructorDto::firstName, "First Name");
-    columnsMap.put(InstructorDto::lastName, "Last Name");
+    columnsMap.put(InstructorDto::getFirstName, "First Name");
+    columnsMap.put(InstructorDto::getLastName, "Last Name");
     columnsMap.put(InstructorDto::genderAsString, "Gender");
-    columnsMap.put(InstructorDto::email, "Email");
+    columnsMap.put(InstructorDto::getEmail, "Email");
     columnsMap.put(InstructorDto::phoneAsString, "Phone");
     return columnsMap;
   }

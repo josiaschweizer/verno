@@ -1,4 +1,150 @@
 package ch.verno.ui.verno.instructor.detail;
 
-public class InstructorsDetail {
+import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.util.VernoConstants;
+import ch.verno.server.service.GenderService;
+import ch.verno.server.service.InstructorService;
+import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Route;
+import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
+
+@Route(Routes.INSTRUCTORS + Routes.DETAIL)
+public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
+
+  @Nonnull
+  private final InstructorService instructorService;
+  @Nonnull
+  private final GenderService genderService;
+
+  public InstructorsDetail(@Nonnull final InstructorService instructorService,
+                           @Nonnull final GenderService genderService) {
+    this.instructorService = instructorService;
+    this.genderService = genderService;
+
+    init();
+  }
+
+  @Nonnull
+  @Override
+  protected String getDetailPageName() {
+    return VernoConstants.INSTRUCTOR;
+  }
+
+  @Nonnull
+  @Override
+  protected String getBasePageRoute() {
+    return Routes.INSTRUCTORS;
+  }
+
+  @Nonnull
+  @Override
+  protected Binder<InstructorDto> createBinder() {
+    return new Binder<>(InstructorDto.class);
+  }
+
+  @Nonnull
+  @Override
+  protected InstructorDto createBean(@Nonnull final InstructorDto bean) {
+    return instructorService.createInstructor(bean);
+  }
+
+  @Nonnull
+  @Override
+  protected InstructorDto updateBean(@Nonnull final InstructorDto bean) {
+    return instructorService.updateInstructor(bean);
+  }
+
+  @NonNull
+  @Override
+  protected FormMode getDefaultFormMode() {
+    return FormMode.EDIT;
+  }
+
+  @Nonnull
+  @Override
+  protected InstructorDto newBeanInstance() {
+    return new InstructorDto();
+  }
+
+  @Override
+  protected InstructorDto getBeanById(@NonNull final Long id) {
+    return instructorService.getInstructorById(id);
+  }
+
+  @Override
+  protected void initUI() {
+    final var instructorLayout = createInstructorLayout();
+    final var addressLayout = createAddressLayout();
+    add(instructorLayout, addressLayout);
+  }
+
+  private VerticalLayout createInstructorLayout() {
+    final var layout = new VerticalLayout();
+    layout.add(createInstructorInfoLayout());
+    layout.add(createInstructorContactLayout());
+    return layout;
+  }
+
+  @Nonnull
+  private HorizontalLayout createInstructorInfoLayout() {
+    final var firstname = fieldFactory.createFirstNameField(
+            InstructorDto::getFirstName,
+            InstructorDto::setFirstName,
+            binder);
+    final var lastname = fieldFactory.createLastNameField(
+            InstructorDto::getLastName,
+            InstructorDto::setLastName,
+            binder);
+    final var gender = fieldFactory.createGenderField(
+            InstructorDto::getGender,
+            InstructorDto::setGender,
+            binder,
+            genderService.getAllGenders());
+
+    return createLayoutFromComponents(firstname, lastname, gender);
+  }
+
+  @Nonnull
+  private HorizontalLayout createInstructorContactLayout() {
+    final var email = fieldFactory.createEmailField(
+            InstructorDto::getEmail,
+            InstructorDto::setEmail,
+            binder);
+    final var phone = fieldFactory.createPhoneNumberField(
+            InstructorDto::getPhone,
+            InstructorDto::setPhone,
+            binder);
+    return createLayoutFromComponents(email, phone);
+  }
+
+  private VerticalLayout createAddressLayout() {
+    final var street = fieldFactory.createStreetField(
+            instructorDto -> instructorDto.getAddress().getStreet(),
+            (dto, value) -> dto.getAddress().setStreet(value),
+            binder);
+    final var houseNumber = fieldFactory.createHouseNumberField(
+            instructorDto -> instructorDto.getAddress().getHouseNumber(),
+            (dto, value) -> dto.getAddress().setHouseNumber(value),
+            binder);
+    final var zipCode = fieldFactory.createZipCodeField(
+            instructorDto -> instructorDto.getAddress().getZipCode(),
+            (dto, value) -> dto.getAddress().setZipCode(value),
+            binder);
+    final var city = fieldFactory.createCityField(
+            instructorDto -> instructorDto.getAddress().getCity(),
+            (dto, value) -> dto.getAddress().setCity(value),
+            binder);
+    final var country = fieldFactory.createCountryField(
+            instructorDto -> instructorDto.getAddress().getCountry(),
+            (dto, value) -> dto.getAddress().setCountry(value),
+            binder);
+
+    return new VerticalLayout(createLayoutFromComponents(street, houseNumber, zipCode, city, country));
+  }
 }

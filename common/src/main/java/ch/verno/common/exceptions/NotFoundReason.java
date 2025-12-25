@@ -9,7 +9,7 @@ public enum NotFoundReason {
   PARENT_BY_ID_NOT_FOUND("Parent not found with id: "),
   GENDER_BY_ID_NOT_FOUND("Gender not found with id: "),
   COURSE_BY_ID_NOT_FOUND("Course not found with id: "),
-  COURSE_LEVEL_BY_ID_NOT_FOUND("Course not found with id: ")
+  COURSE_LEVEL_BY_ID_NOT_FOUND("Course not found with id: "),
 
   ;
 

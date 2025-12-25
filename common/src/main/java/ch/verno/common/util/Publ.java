@@ -10,4 +10,6 @@ public class Publ {
   public static final String EQUALS = "=";
   public static final String PLUS = "+";
 
+  public static final String S = "s";
+  public static final String ID = "id";
 }

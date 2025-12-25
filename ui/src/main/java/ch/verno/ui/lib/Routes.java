@@ -1,6 +1,7 @@
 package ch.verno.ui.lib;
 
 import ch.verno.common.util.Publ;
+import ch.verno.common.util.VernoConstants;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -13,7 +14,7 @@ public class Routes {
   public static final String INSTRUCTORS = "instructors";
   public static final String DETAIL = "/detail";
 
-  public static final String VALUE_ACCESSOR_ID = Publ.QUESTION_MARK + "id" + Publ.EQUALS;
+  public static final String VALUE_ACCESSOR_ID = Publ.QUESTION_MARK + Publ.ID + Publ.EQUALS;
 
   @Nonnull
   public static String getBaseURL(final Class<?> currentClass) {

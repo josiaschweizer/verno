@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import ch.verno.common.util.VernoConstants;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.function.ValueProvider;
@@ -46,7 +47,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return "Participant";
+    return VernoConstants.PARTICIPANT;
   }
 
   @Nonnull
