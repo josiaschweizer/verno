@@ -7,6 +7,7 @@ import ch.verno.common.exceptions.NotFoundReason;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.repository.CourseRepository;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,18 @@ public class CourseService implements ICourseService {
 
   public CourseService(@Nonnull final CourseRepository courseRepository) {
     this.courseRepository = courseRepository;
+  }
+
+  @NonNull
+  @Override
+  public CourseDto createCourse(@NonNull final CourseDto courseDto) {
+    return null;
+  }
+
+  @NonNull
+  @Override
+  public CourseDto updateCourse(@NonNull final CourseDto courseDto) {
+    return null;
   }
 
   @Nonnull

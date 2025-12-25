@@ -104,12 +104,12 @@ public class ServiceHelper {
   @Nullable
   public CourseEntity resolveCourse(@Nonnull final CourseRepository courseRepository,
                                     @Nullable final CourseDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null) {
       return null;
     }
 
-    return courseRepository.findById(dto.id())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.id()));
+    return courseRepository.findById(dto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.getId()));
   }
 
   @Nonnull

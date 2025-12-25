@@ -40,18 +40,18 @@ public final class CourseMapper {
     }
 
     final var entity = new CourseEntity(
-        dto.title(),
-        dto.capacity(),
-        dto.location(),
-        CourseLevelMapper.toEntityRef(dto.level()),
-        CourseScheduleMapper.toEntity(dto.schedule()),
-        dto.weekdays(),
-        dto.duration(),
-        InstructorMapper.toEntity(dto.instructor())
+        dto.getTitle(),
+        dto.getCapacity(),
+        dto.getLocation(),
+        CourseLevelMapper.toEntityRef(dto.getLevel()),
+        CourseScheduleMapper.toEntity(dto.getSchedule()),
+        dto.getWeekdays(),
+        dto.getDuration(),
+        InstructorMapper.toEntity(dto.getInstructor())
     );
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }
@@ -61,10 +61,10 @@ public final class CourseMapper {
 
   @Nullable
   public static CourseEntity toEntityRef(@Nullable final CourseDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
       return null;
     }
 
-    return CourseEntity.ref(dto.id());
+    return CourseEntity.ref(dto.getId());
   }
 }

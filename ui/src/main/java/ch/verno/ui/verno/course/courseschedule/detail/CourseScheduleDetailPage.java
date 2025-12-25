@@ -1,0 +1,72 @@
+package ch.verno.ui.verno.course.courseschedule.detail;
+
+import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.util.VernoConstants;
+import ch.verno.server.service.CourseScheduleService;
+import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
+
+@Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
+@PageTitle("Course Schedule Detail")
+@Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "Course Schedule Detail")
+public class CourseScheduleDetailPage extends BaseDetailPage<CourseScheduleDto> {
+
+  @Nonnull
+  private final CourseScheduleService courseScheduleService;
+
+  public CourseScheduleDetailPage(@Nonnull final CourseScheduleService courseScheduleService) {
+    this.courseScheduleService = courseScheduleService;
+  }
+
+  @Override
+  protected void initUI() {
+
+  }
+
+  @NonNull
+  @Override
+  protected String getDetailPageName() {
+    return VernoConstants.COURSESCHEDULE;
+  }
+
+  @NonNull
+  @Override
+  protected String getBasePageRoute() {
+    return Routes.COURSE_SCHEDULES;
+  }
+
+  @NonNull
+  @Override
+  protected Binder<CourseScheduleDto> createBinder() {
+    return new Binder<>(CourseScheduleDto.class);
+  }
+
+  @NonNull
+  @Override
+  protected CourseScheduleDto createBean(@NonNull final CourseScheduleDto bean) {
+    return courseScheduleService.createCourseSchedule(bean);
+  }
+
+  @NonNull
+  @Override
+  protected CourseScheduleDto updateBean(@NonNull final CourseScheduleDto bean) {
+    return courseScheduleService.updateCourseSchedule(bean);
+  }
+
+  @NonNull
+  @Override
+  protected CourseScheduleDto newBeanInstance() {
+    return new CourseScheduleDto();
+  }
+
+  @Override
+  protected CourseScheduleDto getBeanById(@NonNull final Long id) {
+    return courseScheduleService.getCourseScheduleById(id);
+  }
+}

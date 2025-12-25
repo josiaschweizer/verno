@@ -1,6 +1,7 @@
 package ch.verno.ui.base.grid;
 
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,7 +21,12 @@ public abstract class BaseOverviewGrid<T> extends VerticalLayout {
     // empty constructor
   }
 
-  protected void initGrid() {
+  @Override
+  protected void onAttach(final AttachEvent attachEvent) {
+    initGrid();
+  }
+
+  private void initGrid() {
     grid = new Grid<>();
 
     final var columns = getColumns();

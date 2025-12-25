@@ -29,12 +29,12 @@ public final class CourseScheduleMapper {
     }
 
     final var entity = new CourseScheduleEntity(
-        dto.weekStart(),
-        dto.weekEnd()
+        dto.getWeekStart(),
+        dto.getWeekEnd()
     );
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }

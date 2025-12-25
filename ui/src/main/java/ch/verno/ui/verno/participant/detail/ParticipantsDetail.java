@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
+@Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
 public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
 
   @Nonnull
@@ -49,8 +51,6 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
-
-    init();
   }
 
   @Nonnull
@@ -173,10 +173,10 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
 
     final var courses = courseService.getAllCourses();
     final var courseOptions = courses.stream()
-            .collect(Collectors.toMap(CourseDto::id, CourseDto::title));
+            .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
 
     final var courseEntry = entryFactory.createComboBoxEntry(
-            dto -> dto.getCourse() == null ? null : dto.getCourse().id(),
+            dto -> dto.getCourse() == null ? null : dto.getCourse().getId(),
             (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
             binder,
             Optional.empty(),
@@ -197,11 +197,11 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
       }
 
       final var filteredCourses = courses.stream()
-              .filter(c -> !c.level().isEmpty() && selectedLevelId.equals(c.level().id()))
+              .filter(c -> !c.getLevel().isEmpty() && selectedLevelId.equals(c.getLevel().id()))
               .toList();
 
       final var filteredCourseOptions = filteredCourses.stream()
-              .collect(Collectors.toMap(CourseDto::id, CourseDto::displayName));
+              .collect(Collectors.toMap(CourseDto::getId, CourseDto::displayName));
 
       courseEntry.setItems(filteredCourseOptions.keySet());
 

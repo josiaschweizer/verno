@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Route(Routes.INSTRUCTORS)
 @PageTitle("Instructors Overview")
-@Menu(order = 2, icon = "vaadin:academy-cap", title = "Instructors Overview")
+@Menu(order = 2, icon = "vaadin:institution", title = "Instructors Overview")
 public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
 
   @Nonnull
@@ -27,8 +27,6 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
 
   public InstructorsGrid(@Nonnull final InstructorService instructorService) {
     this.instructorService = instructorService;
-
-    initGrid();
   }
 
   @Override

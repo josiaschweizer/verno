@@ -8,6 +8,12 @@ import java.util.List;
 public interface ICourseService {
 
   @Nonnull
+  CourseDto createCourse(@Nonnull final CourseDto courseDto);
+
+  @Nonnull
+  CourseDto updateCourse(@Nonnull final CourseDto courseDto);
+
+  @Nonnull
   CourseDto getCourseById(@Nonnull Long id);
 
   @Nonnull

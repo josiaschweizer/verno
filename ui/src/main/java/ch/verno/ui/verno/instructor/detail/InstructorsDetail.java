@@ -10,11 +10,15 @@ import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
 
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
+@PageTitle("Participants Detail View")
+@Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")
 public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
 
   @Nonnull
@@ -26,8 +30,6 @@ public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
                            @Nonnull final GenderService genderService) {
     this.instructorService = instructorService;
     this.genderService = genderService;
-
-    init();
   }
 
   @Nonnull

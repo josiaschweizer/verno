@@ -28,8 +28,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
 
   public ParticipantsGrid(@Nonnull final ParticipantService participantService) {
     this.participantService = participantService;
-
-    initGrid();
   }
 
   @Override
