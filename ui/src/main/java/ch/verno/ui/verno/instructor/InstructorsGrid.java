@@ -59,6 +59,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
     columnsMap.put(InstructorDto::genderAsString, "Gender");
     columnsMap.put(InstructorDto::getEmail, "Email");
     columnsMap.put(InstructorDto::phoneAsString, "Phone");
+    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), "Address");
     return columnsMap;
   }
 }
