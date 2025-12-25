@@ -14,7 +14,7 @@ public final class InstructorMapper {
   @Nonnull
   public static InstructorDto toDto(@Nullable final InstructorEntity entity) {
     if (entity == null) {
-      return InstructorDto.empty();
+      return new InstructorDto();
     }
 
     return new InstructorDto(
@@ -35,21 +35,33 @@ public final class InstructorMapper {
     }
 
     final var entity = new InstructorEntity(
-        dto.firstName(),
-        dto.lastName(),
-        dto.email(),
-        dto.phone().isEmpty() ? Publ.EMPTY_STRING : dto.phone().toString()
+        dto.getFirstName(),
+        dto.getLastName(),
+        dto.getEmail(),
+        dto.getPhone().isEmpty() ? Publ.EMPTY_STRING : dto.getPhone().toString()
     );
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }
 
-    entity.setGender(GenderMapper.toEntityRef(dto.gender()));
-    entity.setAddress(AddressMapper.toEntity(dto.address()));
+    entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
 
+    return entity;
+  }
+
+  @Nonnull
+  public static InstructorEntity updateEntity(@Nonnull final InstructorEntity entity,
+                                              @Nonnull final InstructorDto dto) {
+    entity.setFirstname(dto.getFirstName());
+    entity.setLastname(dto.getLastName());
+    entity.setEmail(dto.getEmail());
+    entity.setPhone(dto.getPhone().toString());
+    entity.setGender(GenderMapper.toEntity(dto.getGender()));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
     return entity;
   }
 }

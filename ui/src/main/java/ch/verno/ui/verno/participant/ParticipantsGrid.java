@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import ch.verno.common.util.VernoConstants;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.function.ValueProvider;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 @Route(Routes.PARTICIPANTS)
 @PageTitle("Participants Overview")
-@Menu(order = 1, icon = "vaadin:users", title = "Participant Overview")
+@Menu(order = 1, icon = "vaadin:users", title = "Participants Overview")
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
 
   @Nonnull
@@ -46,7 +47,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return "Participant";
+    return VernoConstants.PARTICIPANT;
   }
 
   @Nonnull

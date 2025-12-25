@@ -5,42 +5,32 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.GenderService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
-import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
-import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.base.detail.BaseDetailPage;
 import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Route("participants/detail")
+@Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
-public class ParticipantsDetail extends VerticalLayout implements HasUrlParameter<Long> {
-
-  @Nonnull
-  private FormMode formMode = FormMode.VIEW;
+public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -50,14 +40,6 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   private final CourseLevelService courseLevelService;
   @Nonnull
   private final CourseService courseService;
-  @Nonnull
-  private final Binder<ParticipantDto> binder;
-  @Nonnull
-  private final EntryFactory<ParticipantDto, GenderDto> entryFactory;
-  @Nonnull
-  private final Button saveButton;
-  @Nonnull
-  private ViewToolbarResult viewToolbar;
 
   public ParticipantsDetail(@Nonnull final ParticipantService participantService,
                             @Nonnull final GenderService genderService,
@@ -68,55 +50,63 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
 
-    this.binder = new Binder<>(ParticipantDto.class);
-    this.entryFactory = new EntryFactory<>();
-    this.saveButton = new Button("Save");
+    init();
+  }
 
-    initUI();
+  @Nonnull
+  @Override
+  protected String getDetailPageName() {
+    return VernoConstants.PARTICIPANT;
+  }
+
+  @Nonnull
+  @Override
+  protected String getBasePageRoute() {
+    return Routes.PARTICIPANTS;
+  }
+
+  @Nonnull
+  @Override
+  protected Binder<ParticipantDto> createBinder() {
+    return new Binder<>(ParticipantDto.class);
+  }
+
+  @Nonnull
+  @Override
+  protected ParticipantDto createBean(@Nonnull final ParticipantDto bean) {
+    return participantService.createParticipant(bean);
+  }
+
+  @Nonnull
+  @Override
+  protected ParticipantDto updateBean(@Nonnull final ParticipantDto bean) {
+    return participantService.updateParticipant(bean);
+  }
+
+  @Nonnull
+  @Override
+  protected FormMode getDefaultFormMode() {
+    return FormMode.EDIT;
+  }
+
+  @Nonnull
+  @Override
+  protected ParticipantDto newBeanInstance() {
+    return new ParticipantDto();
   }
 
   @Override
-  public void setParameter(@Nonnull final BeforeEvent event,
-                           @OptionalParameter @Nullable final Long parameter) {
-    if (parameter == null) {
-      binder.setBean(new ParticipantDto());
-      applyFormMode(FormMode.CREATE);
-      updateSaveButtonState();
-      return;
-    }
-
-    final var participant = participantService.getParticipantById(parameter);
-    binder.setBean(participant);
-
-    applyFormMode(FormMode.EDIT);
-    updateSaveButtonState();
+  protected ParticipantDto getBeanById(@NonNull final Long id) {
+    return participantService.getParticipantById(id);
   }
 
-  private void initUI() {
-    setSizeFull();
-    setPadding(false);
-    setSpacing(false);
-
+  @Override
+  protected void initUI() {
     final var participantLayout = createParticipantLayout();
     final var addressLayout = createAddressLayout();
     final var parentsLayout = createParentsLayout();
 
-    viewToolbar = getViewToolbar();
-    add(viewToolbar.toolbar());
     add(participantLayout, addressLayout, parentsLayout);
-
-    saveButton.addClickListener(event -> save());
-
-    binder.addValueChangeListener(e -> updateSaveButtonState());
-    binder.addStatusChangeListener(e -> updateSaveButtonState());
-
-    final var saveLayout = new HorizontalLayout(saveButton);
-    saveLayout.setWidthFull();
-    saveLayout.setJustifyContentMode(JustifyContentMode.END);
-    add(new VerticalLayout(saveLayout));
-
-    applyFormMode(FormMode.VIEW);
-    updateSaveButtonState();
   }
 
   @Nonnull
@@ -130,136 +120,38 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   }
 
   @Nonnull
-  private ViewToolbarResult getViewToolbar() {
-    final var result = ViewToolbarFactory.createDetailToolbar("Participant");
-
-    if (result.createButton() != null) {
-      result.createButton().addClickListener(event -> {
-        binder.setBean(new ParticipantDto());
-        applyFormMode(FormMode.CREATE);
-        updateSaveButtonState();
-      });
-    }
-
-    if (result.editButton() != null) {
-      result.editButton().addClickListener(event -> {
-        applyFormMode(FormMode.EDIT);
-        updateSaveButtonState();
-      });
-    }
-
-    return result;
-  }
-
-  private void applyFormMode(@Nonnull final FormMode mode) {
-    this.formMode = mode;
-
-    final boolean saveVisible = (mode == FormMode.CREATE || mode == FormMode.EDIT);
-    saveButton.setVisible(saveVisible);
-
-    if (mode == FormMode.CREATE) {
-      saveButton.setText("Create Participant");
-      if (viewToolbar.createButton() != null) {
-        viewToolbar.createButton().setVisible(false);
-      }
-    } else if (mode == FormMode.EDIT) {
-      saveButton.setText("Update Participant");
-    } else {
-      saveButton.setText("Save");
-      if (viewToolbar.createButton() != null) {
-        viewToolbar.createButton().setVisible(true);
-      }
-    }
-
-    binder.getFields().forEach(f -> f.setReadOnly(mode == FormMode.VIEW));
-  }
-
-  private void updateSaveButtonState() {
-    final boolean canSaveByMode = (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
-    if (!canSaveByMode) {
-      saveButton.setEnabled(false);
-      return;
-    }
-
-    final var bean = binder.getBean();
-    if (bean == null) {
-      saveButton.setEnabled(false);
-      return;
-    }
-
-    final boolean valid = binder.isValid();
-    saveButton.setEnabled(valid);
-  }
-
-  private void save() {
-    if (formMode == FormMode.CREATE) {
-      participantService.createParticipant(binder.getBean());
-    } else if (formMode == FormMode.EDIT) {
-      participantService.updateParticipant(binder.getBean());
-    } else {
-      return;
-    }
-
-    UI.getCurrent().navigate(Routes.PARTICIPANTS);
-  }
-
-  @Nonnull
   private HorizontalLayout createParticipantInfoLayout() {
-    final var firstNameEntry = entryFactory.createTextEntry(
-        ParticipantDto::getFirstName,
-        ParticipantDto::setFirstName,
-        binder,
-        Optional.of("First Name is required"),
-        "First Name"
-    );
-
-    final var lastNameEntry = entryFactory.createTextEntry(
-        ParticipantDto::getLastName,
-        ParticipantDto::setLastName,
-        binder,
-        Optional.of("Last Name is required"),
-        "Last Name"
-    );
-
-    final var birthdateEntry = entryFactory.createDateEntry(
-        ParticipantDto::getBirthdate,
-        ParticipantDto::setBirthdate,
-        binder,
-        Optional.empty(),
-        "Birthdate"
-    );
-    birthdateEntry.setWidthFull();
-
-    final var genderEntry = entryFactory.createGenderEntry(
-        ParticipantDto::getGender,
-        ParticipantDto::setGender,
-        binder,
-        genderService.getAllGenders(),
-        GenderDto::name,
-        Optional.empty(),
-        "Gender"
-    );
+    final var firstNameEntry = fieldFactory.createFirstNameField(
+            ParticipantDto::getFirstName,
+            ParticipantDto::setFirstName,
+            binder);
+    final var lastNameEntry = fieldFactory.createLastNameField(
+            ParticipantDto::getLastName,
+            ParticipantDto::setLastName,
+            binder);
+    final var birthdateEntry = fieldFactory.createBirthDateField(
+            ParticipantDto::getBirthdate,
+            ParticipantDto::setBirthdate,
+            binder);
+    final var genderEntry = fieldFactory.createGenderField(
+            ParticipantDto::getGender,
+            ParticipantDto::setGender,
+            binder,
+            genderService.getAllGenders());
 
     return createLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
   }
 
   @Nonnull
   private HorizontalLayout createParticipantContactLayout() {
-    final var emailEntry = entryFactory.createEmailEntry(
-        ParticipantDto::getEmail,
-        ParticipantDto::setEmail,
-        binder,
-        Optional.empty(),
-        "Email address"
-    );
-
-    final var phoneEntry = entryFactory.createPhoneNumberEntry(
-        ParticipantDto::getPhone,
-        ParticipantDto::setPhone,
-        binder,
-        Optional.empty(),
-        "Phone number"
-    );
+    final var emailEntry = fieldFactory.createEmailField(
+            ParticipantDto::getEmail,
+            ParticipantDto::setEmail,
+            binder);
+    final var phoneEntry = fieldFactory.createPhoneNumberField(
+            ParticipantDto::getPhone,
+            ParticipantDto::setPhone,
+            binder);
 
     return createLayoutFromComponents(emailEntry, phoneEntry);
   }
@@ -268,28 +160,28 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   private HorizontalLayout createParticipantCourseLayout() {
     final var courseLevels = courseLevelService.getAllCourseLevels();
     final var courseLevelOptions = courseLevels.stream()
-        .collect(Collectors.toMap(CourseLevelDto::id, CourseLevelDto::name));
+            .collect(Collectors.toMap(CourseLevelDto::id, CourseLevelDto::name));
 
     final var courseLevelEntry = entryFactory.createComboBoxEntry(
-        dto -> dto.getCourseLevel().id(),
-        (dto, levelId) -> dto.setCourseLevel(levelId == null ? CourseLevelDto.empty() : courseLevelService.getCourseLevelById(levelId)),
-        binder,
-        Optional.empty(),
-        "Course Level",
-        courseLevelOptions
+            dto -> dto.getCourseLevel().id(),
+            (dto, levelId) -> dto.setCourseLevel(levelId == null ? CourseLevelDto.empty() : courseLevelService.getCourseLevelById(levelId)),
+            binder,
+            Optional.empty(),
+            "Course Level",
+            courseLevelOptions
     );
 
     final var courses = courseService.getAllCourses();
     final var courseOptions = courses.stream()
-        .collect(Collectors.toMap(CourseDto::id, CourseDto::title));
+            .collect(Collectors.toMap(CourseDto::id, CourseDto::title));
 
     final var courseEntry = entryFactory.createComboBoxEntry(
-        dto -> dto.getCourse() == null ? null : dto.getCourse().id(),
-        (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
-        binder,
-        Optional.empty(),
-        "Course",
-        courseOptions
+            dto -> dto.getCourse() == null ? null : dto.getCourse().id(),
+            (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
+            binder,
+            Optional.empty(),
+            "Course",
+            courseOptions
     );
 
     courseLevelEntry.addValueChangeListener(e -> {
@@ -305,11 +197,11 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
       }
 
       final var filteredCourses = courses.stream()
-          .filter(c -> !c.level().isEmpty() && selectedLevelId.equals(c.level().id()))
-          .toList();
+              .filter(c -> !c.level().isEmpty() && selectedLevelId.equals(c.level().id()))
+              .toList();
 
       final var filteredCourseOptions = filteredCourses.stream()
-          .collect(Collectors.toMap(CourseDto::id, CourseDto::displayName));
+              .collect(Collectors.toMap(CourseDto::id, CourseDto::displayName));
 
       courseEntry.setItems(filteredCourseOptions.keySet());
 
@@ -327,45 +219,26 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
 
   @Nonnull
   private VerticalLayout createAddressLayout() {
-    final var streetEntry = entryFactory.createTextEntry(
-        dto -> dto.getAddress().getStreet(),
-        (dto, street) -> dto.getAddress().setStreet(street),
-        binder,
-        Optional.empty(),
-        "Street"
-    );
-
-    final var houseNumberEntry = entryFactory.createTextEntry(
-        dto -> dto.getAddress().getHouseNumber(),
-        (dto, houseNumber) -> dto.getAddress().setHouseNumber(houseNumber),
-        binder,
-        Optional.empty(),
-        "House Number"
-    );
-
-    final var zipCodeEntry = entryFactory.createTextEntry(
-        dto -> dto.getAddress().getZipCode(),
-        (dto, zipCode) -> dto.getAddress().setZipCode(zipCode),
-        binder,
-        Optional.empty(),
-        "ZIP Code"
-    );
-
-    final var cityEntry = entryFactory.createTextEntry(
-        dto -> dto.getAddress().getCity(),
-        (dto, city) -> dto.getAddress().setCity(city),
-        binder,
-        Optional.empty(),
-        "City"
-    );
-
-    final var countryEntry = entryFactory.createTextEntry(
-        dto -> dto.getAddress().getCountry(),
-        (dto, country) -> dto.getAddress().setCountry(country),
-        binder,
-        Optional.empty(),
-        "Country"
-    );
+    final var streetEntry = fieldFactory.createStreetField(
+            dto -> dto.getAddress().getStreet(),
+            (dto, street) -> dto.getAddress().setStreet(street),
+            binder);
+    final var houseNumberEntry = fieldFactory.createHouseNumberField(
+            dto -> dto.getAddress().getHouseNumber(),
+            (dto, houseNumber) -> dto.getAddress().setHouseNumber(houseNumber),
+            binder);
+    final var zipCodeEntry = fieldFactory.createZipCodeField(
+            dto -> dto.getAddress().getZipCode(),
+            (dto, zipCode) -> dto.getAddress().setZipCode(zipCode),
+            binder);
+    final var cityEntry = fieldFactory.createCityField(
+            dto -> dto.getAddress().getCity(),
+            (dto, city) -> dto.getAddress().setCity(city),
+            binder);
+    final var countryEntry = fieldFactory.createCountryField(
+            dto -> dto.getAddress().getCountry(),
+            (dto, country) -> dto.getAddress().setCountry(country),
+            binder);
 
     return new VerticalLayout(createLayoutFromComponents(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
   }
@@ -373,29 +246,29 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
   @Nonnull
   private HorizontalLayout createParentsLayout() {
     final var parentOneLayout = createParentLayout("Parent One",
-        participantDto -> participantDto.getParentOne().getFirstName(),
-        (participantDto, firstname) -> participantDto.getParentOne().setFirstName(firstname),
-        participantDto -> participantDto.getParentOne().getLastName(),
-        (participantDto, lastName) -> participantDto.getParentOne().setLastName(lastName),
-        participantDto -> participantDto.getParentOne().getGender(),
-        (participantDto, gender) -> participantDto.getParentOne().setGender(gender),
-        participantDto -> participantDto.getParentOne().getEmail(),
-        (participantDto, email) -> participantDto.getParentOne().setEmail(email),
-        participantDto -> participantDto.getParentOne().getPhoneNumber(),
-        (participantDto, phoneNumber) -> participantDto.getParentOne().setPhoneNumber(phoneNumber)
+            participantDto -> participantDto.getParentOne().getFirstName(),
+            (participantDto, firstname) -> participantDto.getParentOne().setFirstName(firstname),
+            participantDto -> participantDto.getParentOne().getLastName(),
+            (participantDto, lastName) -> participantDto.getParentOne().setLastName(lastName),
+            participantDto -> participantDto.getParentOne().getGender(),
+            (participantDto, gender) -> participantDto.getParentOne().setGender(gender),
+            participantDto -> participantDto.getParentOne().getEmail(),
+            (participantDto, email) -> participantDto.getParentOne().setEmail(email),
+            participantDto -> participantDto.getParentOne().getPhoneNumber(),
+            (participantDto, phoneNumber) -> participantDto.getParentOne().setPhoneNumber(phoneNumber)
     );
 
     final var parentTwoLayout = createParentLayout("Parent Two",
-        participantDto -> participantDto.getParentTwo().getFirstName(),
-        (participantDto, firstname) -> participantDto.getParentTwo().setFirstName(firstname),
-        participantDto -> participantDto.getParentTwo().getLastName(),
-        (participantDto, lastName) -> participantDto.getParentTwo().setLastName(lastName),
-        participantDto -> participantDto.getParentTwo().getGender(),
-        (participantDto, gender) -> participantDto.getParentTwo().setGender(gender),
-        participantDto -> participantDto.getParentTwo().getEmail(),
-        (participantDto, email) -> participantDto.getParentTwo().setEmail(email),
-        participantDto -> participantDto.getParentTwo().getPhoneNumber(),
-        (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhoneNumber(phoneNumber)
+            participantDto -> participantDto.getParentTwo().getFirstName(),
+            (participantDto, firstname) -> participantDto.getParentTwo().setFirstName(firstname),
+            participantDto -> participantDto.getParentTwo().getLastName(),
+            (participantDto, lastName) -> participantDto.getParentTwo().setLastName(lastName),
+            participantDto -> participantDto.getParentTwo().getGender(),
+            (participantDto, gender) -> participantDto.getParentTwo().setGender(gender),
+            participantDto -> participantDto.getParentTwo().getEmail(),
+            (participantDto, email) -> participantDto.getParentTwo().setEmail(email),
+            participantDto -> participantDto.getParentTwo().getPhoneNumber(),
+            (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhoneNumber(phoneNumber)
     );
 
     return createLayoutFromComponents(parentOneLayout, parentTwoLayout);
@@ -415,72 +288,60 @@ public class ParticipantsDetail extends VerticalLayout implements HasUrlParamete
                                             @Nonnull final Setter<ParticipantDto, PhoneNumber> phoneSetter) {
     final var title = new H1(titleString);
     title.addClassNames(
-        LumoUtility.FontSize.XLARGE,
-        LumoUtility.Margin.NONE,
-        LumoUtility.FontWeight.LIGHT,
-        LumoUtility.Border.BOTTOM
+            LumoUtility.FontSize.XLARGE,
+            LumoUtility.Margin.NONE,
+            LumoUtility.FontWeight.LIGHT,
+            LumoUtility.Border.BOTTOM
     );
 
     final var firstNameEntry = entryFactory.createTextEntry(
-        firstNameGetter,
-        firstNameSetter,
-        binder,
-        Optional.empty(),
-        "First Name"
+            firstNameGetter,
+            firstNameSetter,
+            binder,
+            Optional.empty(),
+            "First Name"
     );
 
     final var lastNameEntry = entryFactory.createTextEntry(
-        lastNameGetter,
-        lastNameSetter,
-        binder,
-        Optional.empty(),
-        "Last Name"
+            lastNameGetter,
+            lastNameSetter,
+            binder,
+            Optional.empty(),
+            "Last Name"
     );
 
     final var genderEntry = entryFactory.createGenderEntry(
-        genderGetter,
-        genderSetter,
-        binder,
-        genderService.getAllGenders(),
-        GenderDto::name,
-        Optional.empty(),
-        "Gender"
+            genderGetter,
+            genderSetter,
+            binder,
+            genderService.getAllGenders(),
+            GenderDto::name,
+            Optional.empty(),
+            "Gender"
     );
 
     final var emailEntry = entryFactory.createEmailEntry(
-        emailGetter,
-        emailSetter,
-        binder,
-        Optional.empty(),
-        "Email address"
+            emailGetter,
+            emailSetter,
+            binder,
+            Optional.empty(),
+            "Email address"
     );
 
     final var phoneEntry = entryFactory.createPhoneNumberEntry(
-        phoneGetter,
-        phoneSetter,
-        binder,
-        Optional.empty(),
-        "Phone number"
+            phoneGetter,
+            phoneSetter,
+            binder,
+            Optional.empty(),
+            "Phone number"
     );
 
     return new VerticalLayout(
-        title,
-        createLayoutFromComponents(firstNameEntry, lastNameEntry),
-        genderEntry,
-        emailEntry,
-        phoneEntry
+            title,
+            createLayoutFromComponents(firstNameEntry, lastNameEntry),
+            genderEntry,
+            emailEntry,
+            phoneEntry
     );
-  }
-
-  @Nonnull
-  private HorizontalLayout createLayoutFromComponents(@Nonnull final Component... components) {
-    final var layout = new HorizontalLayout();
-    layout.setWidthFull();
-
-    for (final var component : components) {
-      layout.add(component);
-    }
-
-    return layout;
   }
 }
