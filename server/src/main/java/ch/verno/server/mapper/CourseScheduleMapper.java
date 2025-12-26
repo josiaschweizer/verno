@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public final class CourseScheduleMapper {
+
   private CourseScheduleMapper() {
   }
 
@@ -15,10 +16,13 @@ public final class CourseScheduleMapper {
       return CourseScheduleDto.empty();
     }
 
+    final var weeks = YearWeekMapper.mapWeeksToYearWeeks(entity.getWeeks());
+
     return new CourseScheduleDto(
-        entity.getId(),
-        entity.getWeekStart(),
-        entity.getWeekEnd()
+            entity.getId(),
+            entity.getCreatedAt(),
+            entity.getTitle(),
+            weeks
     );
   }
 
@@ -28,12 +32,14 @@ public final class CourseScheduleMapper {
       return null;
     }
 
+    final var weeks = YearWeekMapper.mapWeeksToStrings(dto.getWeeks());
+
     final var entity = new CourseScheduleEntity(
-        dto.getWeekStart(),
-        dto.getWeekEnd()
+            dto.getTitle(),
+            weeks
     );
 
-    if (dto.getId() != null && dto.getId() != 0) {
+    if (dto.getId() != null && dto.getId() != 0L) {
       entity.setId(dto.getId());
     } else {
       entity.setId(null);

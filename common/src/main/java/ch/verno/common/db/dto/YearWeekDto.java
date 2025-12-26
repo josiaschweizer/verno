@@ -1,9 +1,9 @@
-package ch.verno.ui.base.components.schedulepicker;
+package ch.verno.common.db.dto;
 
 import jakarta.annotation.Nonnull;
 
-public record YearWeek(int year,
-                       int week) {
+public record YearWeekDto(int year,
+                          int week) {
 
   @Nonnull
   @Override

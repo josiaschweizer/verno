@@ -28,8 +28,8 @@ public class CourseRepository {
     return springDataCourseJpaRepository.findAll();
   }
 
-
-  public void save(@Nonnull final CourseEntity course) {
-    springDataCourseJpaRepository.save(course);
+  @Nonnull
+  public CourseEntity save(@Nonnull final CourseEntity course) {
+    return springDataCourseJpaRepository.save(course);
   }
 }

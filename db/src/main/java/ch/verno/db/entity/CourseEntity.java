@@ -2,23 +2,12 @@ package ch.verno.db.entity;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -29,52 +18,59 @@ public class CourseEntity {
   private Long id;
 
   @Nonnull
-  @Column(name = "created_at", nullable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();
 
-  @Column(name = "title")
+  @Nonnull
+  @Column(name = "title", nullable = false)
   private String title;
 
+  @Nullable
   @Column(name = "capacity")
   private Integer capacity;
 
-  @Column(name = "location")
+  @Nonnull
+  @Column(name = "location", nullable = false)
   private String location;
 
+  @Nonnull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_level_id", nullable = false)
   private CourseLevelEntity level;
 
+  @Nonnull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_schedule_id", nullable = false)
   private CourseScheduleEntity schedule;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(
-      name = "course_weekday",
-      joinColumns = @JoinColumn(name = "course_id")
+          name = "course_weekday",
+          joinColumns = @JoinColumn(name = "course_id")
   )
   @Enumerated(EnumType.STRING)
-  @Column(name = "weekday")
-  private Set<DayOfWeek> weekdays;
+  @Column(name = "weekday", nullable = false)
+  @OrderColumn(name = "sort_index")
+  private List<DayOfWeek> weekdays = new ArrayList<>();
 
+  @Nullable
   @Column(name = "duration")
   private Integer duration;
 
+  @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "instructor")
+  @JoinColumn(name = "instructor_id")
   private InstructorEntity instructor;
 
   protected CourseEntity() {
-    // JPA
   }
 
   public CourseEntity(@Nonnull final String title,
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
-                      @Nullable final CourseLevelEntity level,
-                      @Nullable final CourseScheduleEntity schedule,
-                      @Nonnull final Set<DayOfWeek> weekdays,
+                      @Nonnull final CourseLevelEntity level,
+                      @Nonnull final CourseScheduleEntity schedule,
+                      @Nonnull final List<DayOfWeek> weekdays,
                       @Nullable final Integer duration,
                       @Nullable final InstructorEntity instructor) {
     this.title = title;
@@ -82,7 +78,8 @@ public class CourseEntity {
     this.location = location;
     this.level = level;
     this.schedule = schedule;
-    this.weekdays = weekdays;
+    this.weekdays.clear();
+    this.weekdays.addAll(weekdays);
     this.duration = duration;
     this.instructor = instructor;
   }
@@ -102,71 +99,81 @@ public class CourseEntity {
     this.id = id;
   }
 
+  @Nonnull
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
+  @Nonnull
   public String getTitle() {
     return title;
   }
 
-  public void setTitle(final String title) {
+  public void setTitle(@Nonnull final String title) {
     this.title = title;
   }
 
+  @Nullable
   public Integer getCapacity() {
     return capacity;
   }
 
-  public void setCapacity(final Integer capacity) {
+  public void setCapacity(@Nullable final Integer capacity) {
     this.capacity = capacity;
   }
 
+  @Nonnull
   public String getLocation() {
     return location;
   }
 
-  public void setLocation(final String location) {
+  public void setLocation(@Nonnull final String location) {
     this.location = location;
   }
 
+  @Nonnull
   public CourseLevelEntity getLevel() {
     return level;
   }
 
-  public void setLevel(final CourseLevelEntity level) {
+  public void setLevel(@Nonnull final CourseLevelEntity level) {
     this.level = level;
   }
 
+  @Nonnull
   public CourseScheduleEntity getSchedule() {
     return schedule;
   }
 
-  public void setSchedule(final CourseScheduleEntity schedule) {
+  public void setSchedule(@Nonnull final CourseScheduleEntity schedule) {
     this.schedule = schedule;
   }
 
-  public Set<DayOfWeek> getWeekdays() {
+  @Nonnull
+  public List<DayOfWeek> getWeekdays() {
     return weekdays;
   }
 
-  public void setWeekdays(final Set<DayOfWeek> weekdays) {
-    this.weekdays = weekdays;
+  public void setWeekdays(@Nonnull final List<DayOfWeek> weekdays) {
+    this.weekdays.clear();
+    this.weekdays.addAll(weekdays);
   }
 
+  @Nullable
   public Integer getDuration() {
     return duration;
   }
 
-  public void setDuration(final Integer duration) {
+  public void setDuration(@Nullable final Integer duration) {
     this.duration = duration;
   }
 
+  @Nullable
   public InstructorEntity getInstructor() {
     return instructor;
   }
 
-  public void setInstructor(final InstructorEntity instructor) {
+  public void setInstructor(@Nullable final InstructorEntity instructor) {
     this.instructor = instructor;
   }
 }

@@ -24,10 +24,10 @@ import jakarta.annotation.Nullable;
 public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
   @Nonnull
-  public FormMode formMode = FormMode.VIEW;
+  public FormMode formMode = getDefaultFormMode();
 
   @Nonnull
-  protected Binder<T> binder;
+  private final Binder<T> binder;
   @Nonnull
   protected EntryFactory<T, GenderDto> entryFactory;
   @Nonnull
@@ -212,5 +212,10 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
     binder.setBean(bean);
 
     updateSaveButtonState();
+  }
+
+  @Nonnull
+  protected Binder<T> getBinder() {
+    return binder;
   }
 }

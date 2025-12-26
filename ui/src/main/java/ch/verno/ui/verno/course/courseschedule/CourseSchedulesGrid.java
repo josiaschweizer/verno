@@ -5,31 +5,26 @@ import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Route(Routes.COURSE_SCHEDULES)
 @PageTitle("Course Schedules")
 @Menu(order = 3.2, icon = "vaadin:calendar", title = "Course Schedules ")
-public class CourseSchedulePage extends BaseOverviewGrid<CourseScheduleDto> {
+public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
 
-  public CourseSchedulePage(@Nonnull final CourseScheduleService courseScheduleService) {
+  public CourseSchedulesGrid(@Nonnull final CourseScheduleService courseScheduleService) {
     this.courseScheduleService = courseScheduleService;
-  }
-
-  @Override
-  protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<CourseScheduleDto> event) {
-
   }
 
   @Nonnull
@@ -47,6 +42,9 @@ public class CourseSchedulePage extends BaseOverviewGrid<CourseScheduleDto> {
   @Nonnull
   @Override
   protected Map<ValueProvider<CourseScheduleDto, Object>, String> getColumns() {
-    return Map.of();
+    final var columnsMap = new LinkedHashMap<ValueProvider<CourseScheduleDto, Object>, String>();
+    columnsMap.put(CourseScheduleDto::getTitle, "Title");
+    columnsMap.put(CourseScheduleDto::getWeeksAsString, "Weeks");
+    return columnsMap;
   }
 }

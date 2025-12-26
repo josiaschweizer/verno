@@ -30,13 +30,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
     this.participantService = participantService;
   }
 
-  @Override
-  protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<ParticipantDto> event) {
-    final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
-    UI.getCurrent().navigate(redirectURL);
-  }
-
   @Nonnull
   @Override
   protected List<ParticipantDto> fetchItems() {
@@ -58,7 +51,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
     columnsMap.put(ParticipantDto::getBirthdate, "Age");
     columnsMap.put(ParticipantDto::getEmail, "Email");
     columnsMap.put(ParticipantDto::getPhoneString, "Phone");
-    columnsMap.put(dto -> dto.getCourseLevel().name(), "Course Level");
+    columnsMap.put(dto -> dto.getCourseLevel().getName(), "Course Level");
     columnsMap.put(dto -> dto.getCourse() != null ? dto.getCourse().displayName() : Publ.EMPTY_STRING, "Course");
     columnsMap.put(dto -> dto.getParentOne().displayName(), "Parent One");
     columnsMap.put(dto -> dto.getParentTwo().displayName(), "Parent Two");

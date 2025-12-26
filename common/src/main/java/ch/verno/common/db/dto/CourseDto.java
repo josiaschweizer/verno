@@ -1,16 +1,14 @@
 package ch.verno.common.db.dto;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
-import java.util.Set;
+import java.util.List;
 
-public class CourseDto {
-
-  @Nullable
-  private Long id;
+public class CourseDto extends BaseDto {
 
   @Nonnull
   private String title;
@@ -22,13 +20,13 @@ public class CourseDto {
   private String location;
 
   @Nonnull
-  private CourseLevelDto level;
+  private CourseLevelDto courseLevel;
 
   @Nonnull
-  private CourseScheduleDto schedule;
+  private CourseScheduleDto courseSchedule;
 
   @Nonnull
-  private Set<DayOfWeek> weekdays;
+  private List<DayOfWeek> weekdays;
 
   @Nullable
   private Integer duration;
@@ -37,14 +35,13 @@ public class CourseDto {
   private InstructorDto instructor;
 
   public CourseDto() {
-    this(
-            0L,
+    this(0L,
             Publ.EMPTY_STRING,
             null,
             Publ.EMPTY_STRING,
             CourseLevelDto.empty(),
             CourseScheduleDto.empty(),
-            Set.of(),
+            List.of(),
             null,
             null
     );
@@ -54,17 +51,17 @@ public class CourseDto {
                    @Nonnull final String title,
                    @Nullable final Integer capacity,
                    @Nonnull final String location,
-                   @Nonnull final CourseLevelDto level,
-                   @Nonnull final CourseScheduleDto schedule,
-                   @Nonnull final Set<DayOfWeek> weekdays,
+                   @Nonnull final CourseLevelDto courseLevel,
+                   @Nonnull final CourseScheduleDto courseSchedule,
+                   @Nonnull final List<DayOfWeek> weekdays,
                    @Nullable final Integer duration,
                    @Nullable final InstructorDto instructor) {
-    this.id = id;
+    super.setId(id);
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-    this.level = level;
-    this.schedule = schedule;
+    this.courseLevel = courseLevel;
+    this.courseSchedule = courseSchedule;
     this.weekdays = weekdays;
     this.duration = duration;
     this.instructor = instructor;
@@ -75,30 +72,16 @@ public class CourseDto {
   }
 
   public boolean isEmpty() {
-    return this.id != null
-            && this.id == 0L
+    return this.getId() != null
+            && this.getId() == 0L
             && this.title.isEmpty()
             && (this.capacity == null || this.capacity == 0)
             && this.location.isEmpty()
-            && this.level.isEmpty()
-            && this.schedule.isEmpty()
+            && this.courseLevel.isEmpty()
+            && this.courseSchedule.isEmpty()
             && this.weekdays.isEmpty()
             && (this.duration == null || this.duration == 0)
             && (this.instructor == null || this.instructor.isEmpty());
-  }
-
-  @Nonnull
-  public String displayName() {
-    return title;
-  }
-
-  @Nullable
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(@Nullable final Long id) {
-    this.id = id;
   }
 
   @Nonnull
@@ -129,31 +112,63 @@ public class CourseDto {
   }
 
   @Nonnull
-  public CourseLevelDto getLevel() {
-    return level;
+  public CourseLevelDto getCourseLevel() {
+    return courseLevel;
   }
 
-  public void setLevel(@Nonnull final CourseLevelDto level) {
-    this.level = level;
-  }
-
-  @Nonnull
-  public CourseScheduleDto getSchedule() {
-    return schedule;
-  }
-
-  public void setSchedule(@Nonnull final CourseScheduleDto schedule) {
-    this.schedule = schedule;
+  public void setCourseLevel(@Nonnull final CourseLevelDto courseLevel) {
+    this.courseLevel = courseLevel;
   }
 
   @Nonnull
-  public Set<DayOfWeek> getWeekdays() {
+  public String getCourseLevelAsString() {
+    if (courseLevel.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+    return courseLevel.displayName();
+  }
+
+  @Nonnull
+  public CourseScheduleDto getCourseSchedule() {
+    return courseSchedule;
+  }
+
+  public void setCourseSchedule(@Nonnull final CourseScheduleDto courseSchedule) {
+    this.courseSchedule = courseSchedule;
+  }
+
+  @Nonnull
+  public String getCourseScheduleAsString() {
+    if (courseSchedule.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+    return courseSchedule.getDisplayTitle();
+  }
+
+  @Nonnull
+  public List<DayOfWeek> getWeekdays() {
     return weekdays;
   }
 
-  public void setWeekdays(@Nonnull final Set<DayOfWeek> weekdays) {
+  public void setWeekdays(@Nonnull final List<DayOfWeek> weekdays) {
     this.weekdays = weekdays;
   }
+
+  @Nonnull
+  public String getWeekdaysAsString() {
+    if (weekdays.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+
+    final var stringBuilder = new StringBuilder();
+    for (final DayOfWeek day : weekdays) {
+      stringBuilder.append(day.name(), 0, 3).append(Publ.COMMA + Publ.SPACE);
+    }
+
+    stringBuilder.setLength(stringBuilder.length() - 2);
+    return stringBuilder.toString();
+  }
+
 
   @Nullable
   public Integer getDuration() {
@@ -171,5 +186,18 @@ public class CourseDto {
 
   public void setInstructor(@Nullable final InstructorDto instructor) {
     this.instructor = instructor;
+  }
+
+  @Nonnull
+  public String getInstructorAsString() {
+    if (instructor == null || instructor.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+    return instructor.displayName();
+  }
+
+  @Nonnull
+  public String displayName() {
+    return title;
   }
 }

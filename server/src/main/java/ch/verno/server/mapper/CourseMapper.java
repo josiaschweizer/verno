@@ -6,9 +6,8 @@ import ch.verno.db.entity.CourseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.Set;
-
 public final class CourseMapper {
+
   private CourseMapper() {
   }
 
@@ -18,8 +17,6 @@ public final class CourseMapper {
       return CourseDto.empty();
     }
 
-    final var weekdays = entity.getWeekdays() == null ? Set.<java.time.DayOfWeek>of() : Set.copyOf(entity.getWeekdays());
-
     return new CourseDto(
         entity.getId(),
         entity.getTitle() == null ? Publ.EMPTY_STRING : entity.getTitle(),
@@ -27,7 +24,7 @@ public final class CourseMapper {
         entity.getLocation() == null ? Publ.EMPTY_STRING : entity.getLocation(),
         CourseLevelMapper.toDto(entity.getLevel()),
         CourseScheduleMapper.toDto(entity.getSchedule()),
-        weekdays,
+            entity.getWeekdays(),
         entity.getDuration() == null ? 0 : entity.getDuration(),
         InstructorMapper.toDto(entity.getInstructor())
     );
@@ -43,8 +40,8 @@ public final class CourseMapper {
         dto.getTitle(),
         dto.getCapacity(),
         dto.getLocation(),
-        CourseLevelMapper.toEntityRef(dto.getLevel()),
-        CourseScheduleMapper.toEntity(dto.getSchedule()),
+            CourseLevelMapper.toEntityRef(dto.getCourseLevel()),
+            CourseScheduleMapper.toEntity(dto.getCourseSchedule()),
         dto.getWeekdays(),
         dto.getDuration(),
         InstructorMapper.toEntity(dto.getInstructor())

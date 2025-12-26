@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import jakarta.annotation.Nonnull;
@@ -8,61 +9,43 @@ import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
 
-public class ParticipantDto {
+public class ParticipantDto extends BaseDto {
+
+  @Nonnull
+  private String firstName;
+
+  @Nonnull
+  private String lastName;
 
   @Nullable
-  Long id;
-  @Nonnull
-  String firstName;
-  @Nonnull
-  String lastName;
-  @Nullable
-  LocalDate birthdate;
-  @Nonnull
-  GenderDto gender;
-  @Nonnull
-  String email;
-  @Nonnull
-  PhoneNumber phone;
-  @Nonnull
-  CourseLevelDto courseLevel;
-  @Nullable
-  CourseDto course;
-  @Nonnull
-  AddressDto address;
-  @Nonnull
-  ParentDto parentOne;
-  @Nonnull
-  ParentDto parentTwo;
+  private LocalDate birthdate;
 
-  public ParticipantDto(@Nullable final Long id,
-                        @Nonnull final String firstName,
-                        @Nonnull final String lastName,
-                        @Nonnull final LocalDate birthdate,
-                        @Nonnull final GenderDto gender,
-                        @Nonnull final String email,
-                        @Nonnull final PhoneNumber phone,
-                        @Nonnull final CourseDto course,
-                        @Nonnull final CourseLevelDto courseLevel,
-                        @Nonnull final AddressDto address,
-                        @Nonnull final ParentDto parentOne,
-                        @Nonnull final ParentDto parentTwo) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birthdate = birthdate;
-    this.gender = gender;
-    this.email = email;
-    this.phone = phone;
-    this.course = course;
-    this.courseLevel = courseLevel;
-    this.address = address;
-    this.parentOne = parentOne;
-    this.parentTwo = parentTwo;
-  }
+  @Nonnull
+  private GenderDto gender;
+
+  @Nonnull
+  private String email;
+
+  @Nonnull
+  private PhoneNumber phone;
+
+  @Nonnull
+  private CourseLevelDto courseLevel;
+
+  @Nullable
+  private CourseDto course;
+
+  @Nonnull
+  private AddressDto address;
+
+  @Nonnull
+  private ParentDto parentOne;
+
+  @Nonnull
+  private ParentDto parentTwo;
 
   public ParticipantDto() {
-    this.id = 0L;
+    setId(0L);
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
     this.birthdate = null;
@@ -76,29 +59,46 @@ public class ParticipantDto {
     this.parentTwo = ParentDto.empty();
   }
 
+  public ParticipantDto(@Nullable final Long id,
+                        @Nonnull final String firstName,
+                        @Nonnull final String lastName,
+                        @Nullable final LocalDate birthdate,
+                        @Nonnull final GenderDto gender,
+                        @Nonnull final String email,
+                        @Nonnull final PhoneNumber phone,
+                        @Nullable final CourseDto course,
+                        @Nonnull final CourseLevelDto courseLevel,
+                        @Nonnull final AddressDto address,
+                        @Nonnull final ParentDto parentOne,
+                        @Nonnull final ParentDto parentTwo) {
+    setId(id);
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthdate = birthdate;
+    this.gender = gender;
+    this.email = email;
+    this.phone = phone;
+    this.course = course;
+    this.courseLevel = courseLevel;
+    this.address = address;
+    this.parentOne = parentOne;
+    this.parentTwo = parentTwo;
+  }
+
   public boolean isEmpty() {
-    return this.getId() == null &&
-        this.getFirstName().isEmpty() &&
-        this.getLastName().isEmpty() &&
-        this.getBirthdate() != null &&
-        this.getBirthdate().toString().isEmpty() &&
-        this.getEmail().isEmpty() &&
-        this.getPhone().isEmpty() &&
-        this.getCourse() != null &&
-        this.getCourse().isEmpty() &&
-        this.getCourseLevel().isEmpty() &&
-        this.getAddress().isEmpty() &&
-        this.getParentOne().isEmpty() &&
-        this.getParentTwo().isEmpty();
-  }
-
-  @Nullable
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(@Nullable final Long id) {
-    this.id = id;
+    return getId() != null
+            && getId() == 0L
+            && firstName.isEmpty()
+            && lastName.isEmpty()
+            && (birthdate == null)
+            && gender.isEmpty()
+            && email.isEmpty()
+            && phone.isEmpty()
+            && (course == null || course.isEmpty())
+            && courseLevel.isEmpty()
+            && address.isEmpty()
+            && parentOne.isEmpty()
+            && parentTwo.isEmpty();
   }
 
   @Nonnull
@@ -174,7 +174,7 @@ public class ParticipantDto {
     return course;
   }
 
-  public void setCourse(@Nonnull final CourseDto course) {
+  public void setCourse(@Nullable final CourseDto course) {
     this.course = course;
   }
 

@@ -32,14 +32,14 @@ public final class CourseLevelMapper {
     }
 
     final var entity = new CourseLevelEntity(
-        dto.code(),
-        dto.name(),
-        dto.description(),
-        dto.sortingOrder()
+        dto.getCode(),
+        dto.getName(),
+        dto.getDescription(),
+        dto.getSortingOrder()
     );
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }
@@ -49,10 +49,10 @@ public final class CourseLevelMapper {
 
   @Nullable
   public static CourseLevelEntity toEntityRef(@Nullable final CourseLevelDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
       return null;
     }
 
-    return CourseLevelEntity.ref(dto.id());
+    return CourseLevelEntity.ref(dto.getId());
   }
 }

@@ -1,7 +1,10 @@
 package ch.verno.ui.base.grid;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
+import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,7 +15,7 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BaseOverviewGrid<T> extends VerticalLayout {
+public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout {
 
   @Nullable
   private Grid<T> grid;
@@ -44,7 +47,11 @@ public abstract class BaseOverviewGrid<T> extends VerticalLayout {
     add(grid);
   }
 
-  protected abstract void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event);
+  private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {
+    final var url = Routes.getDetailURL(this.getClass());
+    final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
+    UI.getCurrent().navigate(redirectURL);
+  }
 
   private void addColumn(@Nonnull final ValueProvider<T, Object> valueProvider,
                          @Nonnull final String header) {

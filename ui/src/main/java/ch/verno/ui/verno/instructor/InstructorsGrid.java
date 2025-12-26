@@ -5,8 +5,6 @@ import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -27,13 +25,6 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
 
   public InstructorsGrid(@Nonnull final InstructorService instructorService) {
     this.instructorService = instructorService;
-  }
-
-  @Override
-  protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<InstructorDto> event) {
-    final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
-    UI.getCurrent().navigate(redirectURL);
   }
 
   @Nonnull

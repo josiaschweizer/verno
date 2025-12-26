@@ -1,34 +1,101 @@
 package ch.verno.common.db.dto;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record CourseLevelDto(@Nullable Long id,
-                             @Nonnull String code,
-                             @Nonnull String name,
-                             @Nonnull String description,
-                             @Nullable Integer sortingOrder) {
+public class CourseLevelDto extends BaseDto {
 
+  @Nonnull
+  private String code;
+
+  @Nonnull
+  private String name;
+
+  @Nonnull
+  private String description;
+
+  @Nullable
+  private Integer sortingOrder;
+
+  public CourseLevelDto() {
+    setId(0L);
+    this.code = Publ.EMPTY_STRING;
+    this.name = Publ.EMPTY_STRING;
+    this.description = Publ.EMPTY_STRING;
+    this.sortingOrder = null;
+  }
+
+  public CourseLevelDto(@Nullable final Long id,
+                        @Nonnull final String code,
+                        @Nonnull final String name,
+                        @Nonnull final String description,
+                        @Nullable final Integer sortingOrder) {
+    setId(id);
+    this.code = code;
+    this.name = name;
+    this.description = description;
+    this.sortingOrder = sortingOrder;
+  }
+
+  @Nonnull
   public static CourseLevelDto empty() {
     return new CourseLevelDto(
-        0L,
-        Publ.EMPTY_STRING,
-        Publ.EMPTY_STRING,
-        Publ.EMPTY_STRING,
-        null
+            0L,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            null
     );
   }
 
   public boolean isEmpty() {
-    return this.id() != null
-        && this.id() == 0L
-        && this.code().isEmpty()
-        && this.name().isEmpty()
-        && this.description().isEmpty()
-        && this.sortingOrder() == null;
+    return getId() != null
+            && getId() == 0L
+            && code.isEmpty()
+            && name.isEmpty()
+            && description.isEmpty()
+            && sortingOrder == null;
   }
 
+  @Nonnull
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(@Nonnull final String code) {
+    this.code = code;
+  }
+
+  @Nonnull
+  public String getName() {
+    return name;
+  }
+
+  public void setName(@Nonnull final String name) {
+    this.name = name;
+  }
+
+  @Nonnull
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(@Nonnull final String description) {
+    this.description = description;
+  }
+
+  @Nullable
+  public Integer getSortingOrder() {
+    return sortingOrder;
+  }
+
+  public void setSortingOrder(@Nullable final Integer sortingOrder) {
+    this.sortingOrder = sortingOrder;
+  }
+
+  @Nonnull
   public String displayName() {
     return name;
   }

@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.schedulepicker;
 
+import ch.verno.common.db.dto.YearWeekDto;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.customfield.CustomField;
@@ -16,16 +17,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class CourseScheduleWeekPicker extends CustomField<Set<YearWeek>> {
+public class CourseScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
 
   private final ComboBox<Integer> yearSelect = new ComboBox<>("Jahr");
   private final CheckboxGroup<Integer> weekSelect = new CheckboxGroup<>();
   private final Div selectionPreview = new Div();
-
-  private final ComboBox<Integer> fromYear = new ComboBox<>("Von Jahr");
-  private final IntegerField fromWeek = new IntegerField("Von KW");
-  private final ComboBox<Integer> toYear = new ComboBox<>("Bis Jahr");
-  private final IntegerField toWeek = new IntegerField("Bis KW");
 
   private final Map<Integer, Set<Integer>> selectedWeeksByYear = new HashMap<>();
   private Integer currentYear;
@@ -64,13 +60,17 @@ public class CourseScheduleWeekPicker extends CustomField<Set<YearWeek>> {
       setModelValue(generateModelValue(), true);
     });
 
+    final var fromYear = new ComboBox<Integer>("Von Jahr");
     fromYear.setItems(yearOptions);
+    final var toYear = new ComboBox<Integer>("Bis Jahr");
     toYear.setItems(yearOptions);
     fromYear.setValue(nowYear);
     toYear.setValue(nowYear);
 
+    final var fromWeek = new IntegerField("Von KW");
     fromWeek.setMin(1);
     fromWeek.setMax(53);
+    final var toWeek = new IntegerField("Bis KW");
     toWeek.setMin(1);
     toWeek.setMax(53);
 
@@ -84,24 +84,24 @@ public class CourseScheduleWeekPicker extends CustomField<Set<YearWeek>> {
 
   @Nonnull
   @Override
-  protected Set<YearWeek> generateModelValue() {
-    final var allWeeks = new ArrayList<YearWeek>();
+  protected Set<YearWeekDto> generateModelValue() {
+    final var allWeeks = new ArrayList<YearWeekDto>();
 
     selectedWeeksByYear.forEach((year, weeks) -> {
       for (Integer week : weeks) {
-        allWeeks.add(new YearWeek(year, week));
+        allWeeks.add(new YearWeekDto(year, week));
       }
     });
-    allWeeks.sort(Comparator.comparingInt(YearWeek::year).thenComparingInt(YearWeek::week));
+    allWeeks.sort(Comparator.comparingInt(YearWeekDto::year).thenComparingInt(YearWeekDto::week));
     return new LinkedHashSet<>(allWeeks);
   }
 
   @Override
-  protected void setPresentationValue(@Nullable final Set<YearWeek> value) {
+  protected void setPresentationValue(@Nullable final Set<YearWeekDto> value) {
     selectedWeeksByYear.clear();
 
     if (value != null) {
-      for (YearWeek yw : value) {
+      for (YearWeekDto yw : value) {
         selectedWeeksByYear.computeIfAbsent(yw.year(), k -> new HashSet<>()).add(yw.week());
       }
     }
@@ -125,7 +125,7 @@ public class CourseScheduleWeekPicker extends CustomField<Set<YearWeek>> {
     }
 
     final String text = sorted.stream()
-            .map(YearWeek::toString)
+            .map(YearWeekDto::toString)
             .collect(Collectors.joining(", "));
 
     selectionPreview.add(new Span("Auswahl: " + text));

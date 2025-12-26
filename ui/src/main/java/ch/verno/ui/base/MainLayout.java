@@ -28,6 +28,7 @@ public final class MainLayout extends AppLayout {
 
   MainLayout() {
     setPrimarySection(Section.DRAWER);
+    addClassNames("main-layout");
     addToDrawer(createHeader(), new Scroller(createSideNav()));
   }
 
@@ -37,7 +38,7 @@ public final class MainLayout extends AppLayout {
     appLogo.setSize("48px");
     appLogo.setColor("green");
 
-    final var appName = new Span("My Application");
+    final var appName = new Span("Verno");
     appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
     final var header = new VerticalLayout(appLogo, appName);
@@ -75,10 +76,15 @@ public final class MainLayout extends AppLayout {
 
   @Nonnull
   private SideNavItem createSideNavItem(@Nonnull final MenuEntry menuEntry) {
-    if (menuEntry.icon() != null) {
-      return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
-    } else {
-      return new SideNavItem(menuEntry.title(), menuEntry.path());
+    final SideNavItem item = (menuEntry.icon() != null)
+            ? new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()))
+            : new SideNavItem(menuEntry.title(), menuEntry.path());
+
+    // so that the grid items isn't highlighted if we are on the detail view
+    if (menuEntry.path() != null && menuEntry.path().contains("/detail")) {
+      item.setMatchNested(true);
     }
+
+    return item;
   }
 }

@@ -29,10 +29,10 @@ public final class GenderMapper {
       return null;
     }
 
-    final var entity = new GenderEntity(dto.name(), dto.description());
+    final var entity = new GenderEntity(dto.getName(), dto.getDescription());
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }
@@ -42,10 +42,10 @@ public final class GenderMapper {
 
   @Nullable
   public static GenderEntity toEntityRef(@Nullable final GenderDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
       return null;
     }
 
-    return GenderEntity.ref(dto.id());
+    return GenderEntity.ref(dto.getId());
   }
 }

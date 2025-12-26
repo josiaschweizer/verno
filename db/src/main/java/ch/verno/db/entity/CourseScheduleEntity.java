@@ -1,14 +1,10 @@
 package ch.verno.db.entity;
 
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "course_schedule")
@@ -22,20 +18,18 @@ public class CourseScheduleEntity {
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();
 
-  @Column(name = "week_start", nullable = false)
-  private Integer weekStart;
+  private String title;
 
-  @Column(name = "week_end", nullable = false)
-  private Integer weekEnd;
+  private List<String> weeks;
 
   protected CourseScheduleEntity() {
     // JPA
   }
 
-  public CourseScheduleEntity(@Nonnull final Integer weekStart,
-                              @Nonnull final Integer weekEnd) {
-    this.weekStart = weekStart;
-    this.weekEnd = weekEnd;
+  public CourseScheduleEntity(@Nonnull final String title,
+                              @Nonnull final List<String> weeks) {
+    this.title = title;
+    this.weeks = weeks;
   }
 
   public Long getId() {
@@ -46,23 +40,28 @@ public class CourseScheduleEntity {
     this.id = id;
   }
 
+  @Nonnull
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public Integer getWeekStart() {
-    return weekStart;
+  public void setCreatedAt(@Nonnull final OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
-  public void setWeekStart(final Integer weekStart) {
-    this.weekStart = weekStart;
+  public String getTitle() {
+    return title;
   }
 
-  public Integer getWeekEnd() {
-    return weekEnd;
+  public void setTitle(final String title) {
+    this.title = title;
   }
 
-  public void setWeekEnd(final Integer weekEnd) {
-    this.weekEnd = weekEnd;
+  public List<String> getWeeks() {
+    return weeks;
+  }
+
+  public void setWeeks(final List<String> weeks) {
+    this.weeks = weeks;
   }
 }
