@@ -43,6 +43,12 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto> {
 
   @Nonnull
   @Override
+  protected String getDetailPageRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
+  }
+
+  @Nonnull
+  @Override
   protected Map<ValueProvider<InstructorDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<InstructorDto, Object>, String>();
     columnsMap.put(InstructorDto::getFirstName, "First Name");

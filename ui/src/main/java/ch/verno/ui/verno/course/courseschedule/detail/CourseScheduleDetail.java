@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,7 +23,7 @@ import java.util.Set;
 @Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
 @PageTitle("Course Schedule Detail")
 @Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "Course Schedule Detail")
-public class CourseScheduleDetail extends BaseDetailPage<CourseScheduleDto> {
+public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
@@ -73,7 +73,7 @@ public class CourseScheduleDetail extends BaseDetailPage<CourseScheduleDto> {
   @NonNull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromBaseUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
+    return Routes.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
   }
 
   @NonNull

@@ -13,6 +13,7 @@ public class Routes {
   public static final String PARTICIPANTS = "participants";
   public static final String INSTRUCTORS = "instructors";
   public static final String COURSES = "courses";
+  public static final String COURSE_LEVELS = "course-levels";
   public static final String COURSE_SCHEDULES = COURSES + Publ.SLASH + "course-schedules";
   public static final String SETTINGS = "settings";
   public static final String USER_SETTINGS = SETTINGS + Publ.SLASH + "user";
@@ -23,7 +24,7 @@ public class Routes {
   public static final String VALUE_ACCESSOR_ID = Publ.QUESTION_MARK + Publ.ID + Publ.EQUALS;
 
   @Nonnull
-  public static String createUrlFromBaseUrlSegments(@Nonnull final String... urlSegments) {
+  public static String createUrlFromUrlSegments(@Nonnull final String... urlSegments) {
     final var stringBuilder = new StringBuilder();
 
     for (var segment : urlSegments) {

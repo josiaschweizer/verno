@@ -11,7 +11,7 @@ import ch.verno.server.service.CourseService;
 import ch.verno.server.service.GenderService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
-public class ParticipantDetail extends BaseDetailPage<ParticipantDto> {
+public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
 
   @Nonnull
   private final ParticipantService participantService;

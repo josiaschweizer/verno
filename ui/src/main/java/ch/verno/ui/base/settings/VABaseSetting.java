@@ -15,7 +15,7 @@ public abstract class VABaseSetting extends Div {
   @Nonnull
   private final Div headerWrapper;
   @Nullable
-  private Component contentComponent;
+  protected Component contentComponent;
   @Nullable
   private Span actionButtonSpan;
 
@@ -48,12 +48,17 @@ public abstract class VABaseSetting extends Div {
     super.onAttach(attachEvent);
 
     if (contentComponent == null) {
-      contentComponent = createContent();
+      setContent(createContent());
+    }
+  }
+
+  protected final void setContent(@Nonnull final Component newContent) {
+    if (contentComponent != null) {
+      remove(contentComponent);
     }
 
-    if (!contentComponent.isAttached()) {
-      add(contentComponent);
-    }
+    contentComponent = newContent;
+    add(contentComponent);
   }
 
   @Nonnull
