@@ -34,3 +34,8 @@
     display: inline-block;
     line-height: 1.2;
 }
+
+.setting-card-action-button {
+    margin-left: auto;
+    padding-bottom: var(--lumo-space-xs);
+}

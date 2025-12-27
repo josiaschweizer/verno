@@ -1,9 +1,10 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.ui.base.settings.VABaseSetting;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +18,18 @@ public class CourseLevelSetting extends VABaseSetting {
   public CourseLevelSetting(@Nonnull final CourseLevelsGrid courseLevelsGrid) {
     super("Course Levels");
     this.courseLevelsGrid = courseLevelsGrid;
+
+    setActionButton(getAddCourseLevelButton());
+  }
+
+  private Button getAddCourseLevelButton() {
+    final var button = new Button("Add Course Level");
+    button.addClickListener(this::addCourseLevelButtonClicked);
+    return button;
+  }
+
+  private void addCourseLevelButtonClicked(@Nonnull final ClickEvent<Button> clickEvent) {
+
   }
 
   @Nonnull
