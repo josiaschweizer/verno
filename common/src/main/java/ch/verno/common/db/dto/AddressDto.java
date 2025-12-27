@@ -1,13 +1,11 @@
 package ch.verno.common.db.dto;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class AddressDto {
-
-  @Nullable
-  private Long id;
+public class AddressDto extends BaseDto {
 
   @Nonnull
   private String street;
@@ -25,7 +23,7 @@ public class AddressDto {
   private String country;
 
   public AddressDto() {
-    this.id = 0L;
+    super.setId(null);
     this.street = Publ.EMPTY_STRING;
     this.houseNumber = Publ.EMPTY_STRING;
     this.zipCode = Publ.EMPTY_STRING;
@@ -39,7 +37,7 @@ public class AddressDto {
                     @Nonnull final String zipCode,
                     @Nonnull final String city,
                     @Nonnull final String country) {
-    this.id = id;
+    super.setId(id);
     this.street = street;
     this.houseNumber = houseNumber;
     this.zipCode = zipCode;
@@ -53,22 +51,13 @@ public class AddressDto {
   }
 
   public boolean isEmpty() {
-    return id != null
-        && id == 0L
-        && street.isEmpty()
-        && houseNumber.isEmpty()
-        && zipCode.isEmpty()
-        && city.isEmpty()
-        && country.isEmpty();
-  }
-
-  @Nullable
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(@Nullable final Long id) {
-    this.id = id;
+    return getId() != null
+            && getId() == 0L
+            && street.isEmpty()
+            && houseNumber.isEmpty()
+            && zipCode.isEmpty()
+            && city.isEmpty()
+            && country.isEmpty();
   }
 
   @Nonnull

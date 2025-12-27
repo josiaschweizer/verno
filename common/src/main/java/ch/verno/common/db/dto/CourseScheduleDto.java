@@ -1,30 +1,101 @@
 package ch.verno.common.db.dto;
 
+import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record CourseScheduleDto(
-    @Nullable Long id,
-    @Nonnull Integer weekStart,
-    @Nonnull Integer weekEnd
-) {
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+public class CourseScheduleDto extends BaseDto {
+
+  @Nonnull
+  private OffsetDateTime createdAt;
+
+  @Nonnull
+  private String title;
+
+  @Nonnull
+  private List<YearWeekDto> weeks;
+
+  public CourseScheduleDto() {
+    setId(null);
+    this.createdAt = OffsetDateTime.now();
+    this.title = Publ.EMPTY_STRING;
+    this.weeks = new ArrayList<>();
+  }
+
+  public CourseScheduleDto(@Nullable final Long id,
+                           @Nonnull final OffsetDateTime createdAt,
+                           @Nonnull final String title,
+                           @Nonnull final List<YearWeekDto> weeks) {
+    setId(id);
+    this.createdAt = createdAt;
+    this.title = title;
+    this.weeks = weeks;
+  }
+
+  @Nonnull
   public static CourseScheduleDto empty() {
-    return new CourseScheduleDto(
-        0L,
-        0,
-        0
-    );
+    return new CourseScheduleDto();
   }
 
   public boolean isEmpty() {
-    return this.id() != null
-        && this.id() == 0L
-        && this.weekStart() == 0
-        && this.weekEnd() == 0;
+    return getId() != null
+            && getId() == 0L
+            && title.isEmpty()
+            && weeks.isEmpty();
   }
 
-  public String displayName() {
-    return "KW " + weekStart + "–" + weekEnd;
+  @Nonnull
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(@Nonnull final OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  @Nonnull
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(@Nonnull final String title) {
+    this.title = title;
+  }
+
+  @Nonnull
+  public List<YearWeekDto> getWeeks() {
+    return weeks;
+  }
+
+  public void setWeeks(@Nonnull final List<YearWeekDto> weeks) {
+    this.weeks = weeks;
+  }
+
+  public String getDisplayTitle() {
+    if (title.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+
+    return title;
+  }
+
+  @Nonnull
+  public String getWeeksAsString() {
+    final var stringBuilder = new StringBuilder();
+
+    for (final var yearWeek : weeks) {
+      if (!stringBuilder.isEmpty()) {
+        stringBuilder.append(Publ.COMMA + Publ.SPACE);
+      }
+
+      stringBuilder.append(yearWeek.toString());
+    }
+
+    return stringBuilder.toString();
   }
 }

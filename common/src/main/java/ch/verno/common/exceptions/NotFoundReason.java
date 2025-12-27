@@ -10,7 +10,7 @@ public enum NotFoundReason {
   GENDER_BY_ID_NOT_FOUND("Gender not found with id: "),
   COURSE_BY_ID_NOT_FOUND("Course not found with id: "),
   COURSE_LEVEL_BY_ID_NOT_FOUND("Course not found with id: "),
-
+  COURSE_SCHEDULE_BY_ID_NOT_FOUND("Course schedule not found with id: ")
   ;
 
   @Nonnull

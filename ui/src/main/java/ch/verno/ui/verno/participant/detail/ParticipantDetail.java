@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -30,7 +31,8 @@ import java.util.stream.Collectors;
 
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
-public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
+@Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
+public class ParticipantDetail extends BaseDetailPage<ParticipantDto> {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -41,10 +43,10 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
   @Nonnull
   private final CourseService courseService;
 
-  public ParticipantsDetail(@Nonnull final ParticipantService participantService,
-                            @Nonnull final GenderService genderService,
-                            @Nonnull final CourseLevelService courseLevelService,
-                            @Nonnull final CourseService courseService) {
+  public ParticipantDetail(@Nonnull final ParticipantService participantService,
+                           @Nonnull final GenderService genderService,
+                           @Nonnull final CourseLevelService courseLevelService,
+                           @Nonnull final CourseService courseService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
@@ -124,19 +126,19 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var firstNameEntry = fieldFactory.createFirstNameField(
             ParticipantDto::getFirstName,
             ParticipantDto::setFirstName,
-            binder);
+            getBinder());
     final var lastNameEntry = fieldFactory.createLastNameField(
             ParticipantDto::getLastName,
             ParticipantDto::setLastName,
-            binder);
+            getBinder());
     final var birthdateEntry = fieldFactory.createBirthDateField(
             ParticipantDto::getBirthdate,
             ParticipantDto::setBirthdate,
-            binder);
+            getBinder());
     final var genderEntry = fieldFactory.createGenderField(
             ParticipantDto::getGender,
             ParticipantDto::setGender,
-            binder,
+            getBinder(),
             genderService.getAllGenders());
 
     return createLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
@@ -147,11 +149,11 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var emailEntry = fieldFactory.createEmailField(
             ParticipantDto::getEmail,
             ParticipantDto::setEmail,
-            binder);
+            getBinder());
     final var phoneEntry = fieldFactory.createPhoneNumberField(
             ParticipantDto::getPhone,
             ParticipantDto::setPhone,
-            binder);
+            getBinder());
 
     return createLayoutFromComponents(emailEntry, phoneEntry);
   }
@@ -160,25 +162,25 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
   private HorizontalLayout createParticipantCourseLayout() {
     final var courseLevels = courseLevelService.getAllCourseLevels();
     final var courseLevelOptions = courseLevels.stream()
-            .collect(Collectors.toMap(CourseLevelDto::id, CourseLevelDto::name));
+            .collect(Collectors.toMap(CourseLevelDto::getId, CourseLevelDto::getName));
 
-    final var courseLevelEntry = entryFactory.createComboBoxEntry(
-            dto -> dto.getCourseLevel().id(),
-            (dto, levelId) -> dto.setCourseLevel(levelId == null ? CourseLevelDto.empty() : courseLevelService.getCourseLevelById(levelId)),
-            binder,
-            Optional.empty(),
-            "Course Level",
+    final var courseLevelEntry = fieldFactory.createCourseLevelField(
+            dto -> dto.getCourseLevel().getId(),
+            (dto, value) -> dto.setCourseLevel(value == null ?
+                    CourseLevelDto.empty() :
+                    courseLevelService.getCourseLevelById(value)),
+            getBinder(),
             courseLevelOptions
     );
 
     final var courses = courseService.getAllCourses();
     final var courseOptions = courses.stream()
-            .collect(Collectors.toMap(CourseDto::id, CourseDto::title));
+            .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
 
     final var courseEntry = entryFactory.createComboBoxEntry(
-            dto -> dto.getCourse() == null ? null : dto.getCourse().id(),
+            dto -> dto.getCourse() == null ? null : dto.getCourse().getId(),
             (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
-            binder,
+            getBinder(),
             Optional.empty(),
             "Course",
             courseOptions
@@ -197,11 +199,11 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
       }
 
       final var filteredCourses = courses.stream()
-              .filter(c -> !c.level().isEmpty() && selectedLevelId.equals(c.level().id()))
+              .filter(c -> !c.getCourseLevel().isEmpty() && selectedLevelId.equals(c.getCourseLevel().getId()))
               .toList();
 
       final var filteredCourseOptions = filteredCourses.stream()
-              .collect(Collectors.toMap(CourseDto::id, CourseDto::displayName));
+              .collect(Collectors.toMap(CourseDto::getId, CourseDto::displayName));
 
       courseEntry.setItems(filteredCourseOptions.keySet());
 
@@ -222,23 +224,23 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var streetEntry = fieldFactory.createStreetField(
             dto -> dto.getAddress().getStreet(),
             (dto, street) -> dto.getAddress().setStreet(street),
-            binder);
+            getBinder());
     final var houseNumberEntry = fieldFactory.createHouseNumberField(
             dto -> dto.getAddress().getHouseNumber(),
             (dto, houseNumber) -> dto.getAddress().setHouseNumber(houseNumber),
-            binder);
+            getBinder());
     final var zipCodeEntry = fieldFactory.createZipCodeField(
             dto -> dto.getAddress().getZipCode(),
             (dto, zipCode) -> dto.getAddress().setZipCode(zipCode),
-            binder);
+            getBinder());
     final var cityEntry = fieldFactory.createCityField(
             dto -> dto.getAddress().getCity(),
             (dto, city) -> dto.getAddress().setCity(city),
-            binder);
+            getBinder());
     final var countryEntry = fieldFactory.createCountryField(
             dto -> dto.getAddress().getCountry(),
             (dto, country) -> dto.getAddress().setCountry(country),
-            binder);
+            getBinder());
 
     return new VerticalLayout(createLayoutFromComponents(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
   }
@@ -297,7 +299,7 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var firstNameEntry = entryFactory.createTextEntry(
             firstNameGetter,
             firstNameSetter,
-            binder,
+            getBinder(),
             Optional.empty(),
             "First Name"
     );
@@ -305,7 +307,7 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var lastNameEntry = entryFactory.createTextEntry(
             lastNameGetter,
             lastNameSetter,
-            binder,
+            getBinder(),
             Optional.empty(),
             "Last Name"
     );
@@ -313,9 +315,9 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var genderEntry = entryFactory.createGenderEntry(
             genderGetter,
             genderSetter,
-            binder,
+            getBinder(),
             genderService.getAllGenders(),
-            GenderDto::name,
+            GenderDto::getName,
             Optional.empty(),
             "Gender"
     );
@@ -323,7 +325,7 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var emailEntry = entryFactory.createEmailEntry(
             emailGetter,
             emailSetter,
-            binder,
+            getBinder(),
             Optional.empty(),
             "Email address"
     );
@@ -331,7 +333,7 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
     final var phoneEntry = entryFactory.createPhoneNumberEntry(
             phoneGetter,
             phoneSetter,
-            binder,
+            getBinder(),
             Optional.empty(),
             "Phone number"
     );

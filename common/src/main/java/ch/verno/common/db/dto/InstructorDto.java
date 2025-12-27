@@ -1,14 +1,12 @@
 package ch.verno.common.db.dto;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class InstructorDto {
-
-  @Nullable
-  private Long id;
+public class InstructorDto extends BaseDto {
 
   @Nonnull
   private String firstName;
@@ -29,7 +27,7 @@ public class InstructorDto {
   private AddressDto address;
 
   public InstructorDto() {
-    this.id = 0L;
+    setId(null);
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
     this.email = Publ.EMPTY_STRING;
@@ -45,7 +43,7 @@ public class InstructorDto {
                        @Nonnull final PhoneNumber phone,
                        @Nonnull final GenderDto gender,
                        @Nonnull final AddressDto address) {
-    this.id = id;
+    setId(id);
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -54,13 +52,13 @@ public class InstructorDto {
     this.address = address;
   }
 
-  @Nullable
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(@Nullable final Long id) {
-    this.id = id;
+  public boolean isEmpty() {
+    return getId() != null
+            && getId() == 0L
+            && firstName.isEmpty()
+            && lastName.isEmpty()
+            && email.isEmpty()
+            && phone.isEmpty();
   }
 
   @Nonnull
@@ -117,15 +115,6 @@ public class InstructorDto {
     this.address = address;
   }
 
-  public boolean isEmpty() {
-    return this.id != null
-            && this.id == 0L
-            && this.firstName.isEmpty()
-            && this.lastName.isEmpty()
-            && this.email.isEmpty()
-            && this.phone.isEmpty();
-  }
-
   @Nonnull
   public String displayName() {
     return (firstName + " " + lastName).trim();
@@ -138,6 +127,6 @@ public class InstructorDto {
 
   @Nonnull
   public String genderAsString() {
-    return gender.description();
+    return gender.getDescription();
   }
 }

@@ -1,14 +1,15 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.util.Publ;
 import ch.verno.db.entity.CourseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.Set;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 
 public final class CourseMapper {
+
   private CourseMapper() {
   }
 
@@ -18,18 +19,20 @@ public final class CourseMapper {
       return CourseDto.empty();
     }
 
-    final var weekdays = entity.getWeekdays() == null ? Set.<java.time.DayOfWeek>of() : Set.copyOf(entity.getWeekdays());
+    final var weekdays = entity.getWeekdays().isEmpty()
+            ? new ArrayList<DayOfWeek>()
+            : new ArrayList<>(entity.getWeekdays());
 
     return new CourseDto(
-        entity.getId(),
-        entity.getTitle() == null ? Publ.EMPTY_STRING : entity.getTitle(),
-        entity.getCapacity() == null ? 0 : entity.getCapacity(),
-        entity.getLocation() == null ? Publ.EMPTY_STRING : entity.getLocation(),
-        CourseLevelMapper.toDto(entity.getLevel()),
-        CourseScheduleMapper.toDto(entity.getSchedule()),
-        weekdays,
-        entity.getDuration() == null ? 0 : entity.getDuration(),
-        InstructorMapper.toDto(entity.getInstructor())
+            entity.getId(),
+            entity.getTitle(),
+            entity.getCapacity() == null ? 0 : entity.getCapacity(),
+            entity.getLocation(),
+            CourseLevelMapper.toDto(entity.getLevel()),
+            CourseScheduleMapper.toDto(entity.getSchedule()),
+            weekdays,
+            entity.getDuration() == null ? 0 : entity.getDuration(),
+            InstructorMapper.toDto(entity.getInstructor())
     );
   }
 
@@ -40,18 +43,18 @@ public final class CourseMapper {
     }
 
     final var entity = new CourseEntity(
-        dto.title(),
-        dto.capacity(),
-        dto.location(),
-        CourseLevelMapper.toEntityRef(dto.level()),
-        CourseScheduleMapper.toEntity(dto.schedule()),
-        dto.weekdays(),
-        dto.duration(),
-        InstructorMapper.toEntity(dto.instructor())
+            dto.getTitle(),
+            dto.getCapacity(),
+            dto.getLocation(),
+            CourseLevelMapper.toEntityRef(dto.getCourseLevel()),
+            CourseScheduleMapper.toEntity(dto.getCourseSchedule()),
+            dto.getWeekdays(),
+            dto.getDuration(),
+            InstructorMapper.toEntity(dto.getInstructor())
     );
 
-    if (dto.id() != null && dto.id() != 0) {
-      entity.setId(dto.id());
+    if (dto.getId() != null && dto.getId() != 0) {
+      entity.setId(dto.getId());
     } else {
       entity.setId(null);
     }
@@ -61,10 +64,10 @@ public final class CourseMapper {
 
   @Nullable
   public static CourseEntity toEntityRef(@Nullable final CourseDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null || dto.id() == 0) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
       return null;
     }
 
-    return CourseEntity.ref(dto.id());
+    return CourseEntity.ref(dto.getId());
   }
 }

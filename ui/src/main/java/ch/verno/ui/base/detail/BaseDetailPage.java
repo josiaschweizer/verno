@@ -1,11 +1,13 @@
 package ch.verno.ui.base.detail;
 
 import ch.verno.common.db.dto.GenderDto;
+import ch.verno.common.util.Publ;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.FieldFactory;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -23,10 +25,10 @@ import jakarta.annotation.Nullable;
 public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
   @Nonnull
-  public FormMode formMode = FormMode.VIEW;
+  public FormMode formMode = getDefaultFormMode();
 
   @Nonnull
-  protected Binder<T> binder;
+  private final Binder<T> binder;
   @Nonnull
   protected EntryFactory<T, GenderDto> entryFactory;
   @Nonnull
@@ -66,7 +68,7 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
 
   @Nonnull
   protected ViewToolbarResult createViewToolbar() {
-    final var result = ViewToolbarFactory.createDetailToolbar(getDetailPageName());
+    final var result = ViewToolbarFactory.createDetailToolbar(getDetailPageName(), getDetailRoute());
 
     if (result.createButton() != null) {
       result.createButton().addClickListener(this::onCreateButtonClick);
@@ -138,6 +140,11 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
   protected abstract String getDetailPageName();
 
   @Nonnull
+  protected String getDetailRoute() {
+    return Routes.createUrlFromBaseUrlSegments(getDetailPageName() + Publ.S, Routes.DETAIL);
+  }
+
+  @Nonnull
   protected abstract String getBasePageRoute();
 
   @Nonnull
@@ -206,5 +213,10 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
     binder.setBean(bean);
 
     updateSaveButtonState();
+  }
+
+  @Nonnull
+  protected Binder<T> getBinder() {
+    return binder;
   }
 }

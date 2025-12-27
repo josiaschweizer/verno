@@ -1,11 +1,24 @@
-@import "../../components/two-option-entry.css";
+@import "../../components/va-two-option-entry.css";
+
+vaadin-app-layout.main-layout::part(drawer) {
+    width: 350px;
+}
 
 .va-text-field[required]::part(label)::after,
-.va-text-field[required]::part(required-indicator)::after {
+.va-text-field[required]::part(required-indicator)::after,
+.va-number-field[required]::part(label)::after,
+.va-number-field[required]::part(required-indicator)::after,
+.va-combo-box[required]::part(label)::after,
+.va-combo-box[required]::part(required-indicator)::after,
+.va-week-option[required]::part(label)::after,
+.va-week-option[required]::part(required-indicator)::after {
     content: " *";
     color: red;
 }
 
-.va-text-field::part(required-indicator) {
+.va-text-field::part(required-indicator),
+.va-number-field::part(required-indicator),
+.va-combo-box::part(required-indicator),
+.va-week-option::part(required-indicator) {
     display: none;
 }

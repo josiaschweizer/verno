@@ -10,8 +10,8 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 
-@CssImport("./components/two-option-entry.css")
-public class TwoOptionEntry<T> extends CustomField<T> {
+@CssImport("./components/va-two-option-entry.css")
+public class VATwoOptionEntry<T> extends CustomField<T> {
 
   @Nonnull
   private final Button leftButton;
@@ -26,9 +26,9 @@ public class TwoOptionEntry<T> extends CustomField<T> {
   @Nullable
   private T currentValue;
 
-  public TwoOptionEntry(@Nonnull final String label,
-                        @Nonnull final List<T> options,
-                        @Nonnull final ValueProvider<T, String> itemLabelProvider) {
+  public VATwoOptionEntry(@Nonnull final String label,
+                          @Nonnull final List<T> options,
+                          @Nonnull final ValueProvider<T, String> itemLabelProvider) {
     if (options.size() != 2) {
       throw new IllegalArgumentException("TwoOptionEntry requires exactly 2 options, but got: " + options.size());
     }

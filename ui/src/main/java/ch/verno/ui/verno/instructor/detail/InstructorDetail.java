@@ -10,20 +10,24 @@ import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
 
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
-public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
+@PageTitle("Participants Detail View")
+@Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")
+public class InstructorDetail extends BaseDetailPage<InstructorDto> {
 
   @Nonnull
   private final InstructorService instructorService;
   @Nonnull
   private final GenderService genderService;
 
-  public InstructorsDetail(@Nonnull final InstructorService instructorService,
-                           @Nonnull final GenderService genderService) {
+  public InstructorDetail(@Nonnull final InstructorService instructorService,
+                          @Nonnull final GenderService genderService) {
     this.instructorService = instructorService;
     this.genderService = genderService;
 
@@ -96,15 +100,15 @@ public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
     final var firstname = fieldFactory.createFirstNameField(
             InstructorDto::getFirstName,
             InstructorDto::setFirstName,
-            binder);
+            getBinder());
     final var lastname = fieldFactory.createLastNameField(
             InstructorDto::getLastName,
             InstructorDto::setLastName,
-            binder);
+            getBinder());
     final var gender = fieldFactory.createGenderField(
             InstructorDto::getGender,
             InstructorDto::setGender,
-            binder,
+            getBinder(),
             genderService.getAllGenders());
 
     return createLayoutFromComponents(firstname, lastname, gender);
@@ -115,11 +119,11 @@ public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
     final var email = fieldFactory.createEmailField(
             InstructorDto::getEmail,
             InstructorDto::setEmail,
-            binder);
+            getBinder());
     final var phone = fieldFactory.createPhoneNumberField(
             InstructorDto::getPhone,
             InstructorDto::setPhone,
-            binder);
+            getBinder());
     return createLayoutFromComponents(email, phone);
   }
 
@@ -127,23 +131,23 @@ public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
     final var street = fieldFactory.createStreetField(
             instructorDto -> instructorDto.getAddress().getStreet(),
             (dto, value) -> dto.getAddress().setStreet(value),
-            binder);
+            getBinder());
     final var houseNumber = fieldFactory.createHouseNumberField(
             instructorDto -> instructorDto.getAddress().getHouseNumber(),
             (dto, value) -> dto.getAddress().setHouseNumber(value),
-            binder);
+            getBinder());
     final var zipCode = fieldFactory.createZipCodeField(
             instructorDto -> instructorDto.getAddress().getZipCode(),
             (dto, value) -> dto.getAddress().setZipCode(value),
-            binder);
+            getBinder());
     final var city = fieldFactory.createCityField(
             instructorDto -> instructorDto.getAddress().getCity(),
             (dto, value) -> dto.getAddress().setCity(value),
-            binder);
+            getBinder());
     final var country = fieldFactory.createCountryField(
             instructorDto -> instructorDto.getAddress().getCountry(),
             (dto, value) -> dto.getAddress().setCountry(value),
-            binder);
+            getBinder());
 
     return new VerticalLayout(createLayoutFromComponents(street, houseNumber, zipCode, city, country));
   }

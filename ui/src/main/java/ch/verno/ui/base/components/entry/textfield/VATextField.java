@@ -7,6 +7,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import jakarta.annotation.Nonnull;
 
 public class VATextField extends TextField {
+
   public VATextField() {
     super(Publ.EMPTY_STRING);
     addClassName("va-text-field");

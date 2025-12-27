@@ -3,7 +3,6 @@ package ch.verno.server.repository;
 import ch.verno.db.entity.ParentEntity;
 import ch.verno.db.jpa.SpringDataParentJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class ParentRepository {
   }
 
   @Nonnull
-  public Optional<ParentEntity> findById(@NonNull final Long id) {
+  public Optional<ParentEntity> findById(@Nonnull final Long id) {
     return springDataParentJpaRepository.findById(id);
   }
 
@@ -30,7 +29,7 @@ public class ParentRepository {
   }
 
   @Nonnull
-  public ParentEntity save(@NonNull final ParentEntity entity) {
+  public ParentEntity save(@Nonnull final ParentEntity entity) {
     return springDataParentJpaRepository.save(entity);
   }
 }

@@ -4,10 +4,12 @@ import ch.verno.db.entity.CourseScheduleEntity;
 import ch.verno.db.jpa.SpringDataCourseScheduleJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class CourseScheduleRepository {
 
   @Nonnull
@@ -27,7 +29,8 @@ public class CourseScheduleRepository {
     return springDataCourseScheduleJpaRepository.findAll();
   }
 
-  public void save(@NonNull final CourseScheduleEntity entity) {
-    springDataCourseScheduleJpaRepository.save(entity);
+  @Nonnull
+  public CourseScheduleEntity save(@NonNull final CourseScheduleEntity entity) {
+    return springDataCourseScheduleJpaRepository.save(entity);
   }
 }

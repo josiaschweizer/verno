@@ -1,5 +1,6 @@
 package ch.verno.ui.base;
 
+import ch.verno.ui.base.menu.MenuOrder;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -16,43 +17,74 @@ import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.Nonnull;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Objects;
 
 @Layout
 public final class MainLayout extends AppLayout {
 
-    MainLayout() {
-        setPrimarySection(Section.DRAWER);
-        addToDrawer(createHeader(), new Scroller(createSideNav()));
+  MainLayout() {
+    setPrimarySection(Section.DRAWER);
+    addClassNames("main-layout");
+    addToDrawer(createHeader(), new Scroller(createSideNav()));
+  }
+
+  private Component createHeader() {
+    // TODO Replace with real application logo and name
+    final var appLogo = VaadinIcon.CUBES.create();
+    appLogo.setSize("48px");
+    appLogo.setColor("green");
+
+    final var appName = new Span("Verno");
+    appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
+
+    final var header = new VerticalLayout(appLogo, appName);
+    header.setAlignItems(FlexComponent.Alignment.CENTER);
+    header.getStyle().setCursor("pointer");
+    header.addClickListener(event -> UI.getCurrent().navigate(""));
+    return header;
+  }
+
+  @Nonnull
+  private SideNav createSideNav() {
+    final var sideNav = new SideNav();
+    sideNav.addClassNames(LumoUtility.Margin.Horizontal.SMALL);
+
+    final var itemsByOrder = new HashMap<MenuOrder, SideNavItem>();
+
+    MenuConfiguration.getMenuEntries().stream()
+            .sorted(Comparator.comparing(e -> MenuOrder.of(e.order())))
+            .forEach(entry -> {
+              final var order = MenuOrder.of(entry.order());
+              final var item = createSideNavItem(entry);
+
+              if (order.depth() == 1) {
+                sideNav.addItem(item);
+              } else {
+                final var parent = itemsByOrder.get(order.parent());
+                Objects.requireNonNullElse(parent, sideNav).addItem(item);
+              }
+
+              itemsByOrder.put(order, item);
+            });
+
+    return sideNav;
+  }
+
+  @Nonnull
+  private SideNavItem createSideNavItem(@Nonnull final MenuEntry menuEntry) {
+    final SideNavItem item = (menuEntry.icon() != null)
+            ? new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()))
+            : new SideNavItem(menuEntry.title(), menuEntry.path());
+
+    // so that the grid items isn't highlighted if we are on the detail view
+    if (menuEntry.path() != null && menuEntry.path().contains("/detail")) {
+      item.setMatchNested(true);
     }
 
-    private Component createHeader() {
-        // TODO Replace with real application logo and name
-        final var appLogo = VaadinIcon.CUBES.create();
-        appLogo.setSize("48px");
-        appLogo.setColor("green");
-
-        final var appName = new Span("My Application");
-        appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
-
-        final var header = new VerticalLayout(appLogo, appName);
-        header.setAlignItems(FlexComponent.Alignment.CENTER);
-        header.getStyle().setCursor("pointer");
-        header.addClickListener(event -> UI.getCurrent().navigate(""));
-        return header;
-    }
-
-    private SideNav createSideNav() {
-        var nav = new SideNav();
-        nav.addClassNames(LumoUtility.Margin.Horizontal.MEDIUM);
-        MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
-        return nav;
-    }
-
-    private SideNavItem createSideNavItem(MenuEntry menuEntry) {
-        if (menuEntry.icon() != null) {
-            return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
-        } else {
-            return new SideNavItem(menuEntry.title(), menuEntry.path());
-        }
-    }
+    return item;
+  }
 }

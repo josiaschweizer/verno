@@ -9,6 +9,11 @@ import ch.verno.server.repository.*;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.time.DayOfWeek;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ServiceHelper {
 
   @Nullable
@@ -82,39 +87,68 @@ public class ServiceHelper {
   @Nullable
   public GenderEntity resolveGender(@Nonnull final GenderRepository genderRepository,
                                     @Nullable final GenderDto genderDto) {
-    if (genderDto == null || genderDto.isEmpty() || genderDto.id() == null) {
+    if (genderDto == null || genderDto.isEmpty() || genderDto.getId() == null) {
       return null;
     }
 
-    return genderRepository.findById(genderDto.id())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.id()));
+    return genderRepository.findById(genderDto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.getId()));
   }
 
   @Nullable
   public CourseLevelEntity resolveCourseLevel(@Nonnull final CourseLevelRepository courseLevelRepository,
                                               @Nullable final CourseLevelDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null) {
       return null;
     }
 
-    return courseLevelRepository.findById(dto.id())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.id()));
+    return courseLevelRepository.findById(dto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.getId()));
+  }
+
+  @Nullable
+  public CourseScheduleEntity resolveCourseSchedule(@Nonnull final CourseScheduleRepository courseScheduleRepository,
+                                                    @Nullable final CourseScheduleDto dto) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null) {
+      return null;
+    }
+
+    return courseScheduleRepository.findById(dto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND, dto.getId()));
+  }
+
+  @Nullable
+  public InstructorEntity resolveInstructor(@Nonnull final InstructorRepository instructorRepository,
+                                            @Nullable final InstructorDto dto) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null) {
+      return null;
+    }
+
+    return instructorRepository.findById(dto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, dto.getId()));
   }
 
   @Nullable
   public CourseEntity resolveCourse(@Nonnull final CourseRepository courseRepository,
                                     @Nullable final CourseDto dto) {
-    if (dto == null || dto.isEmpty() || dto.id() == null) {
+    if (dto == null || dto.isEmpty() || dto.getId() == null) {
       return null;
     }
 
-    return courseRepository.findById(dto.id())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.id()));
+    return courseRepository.findById(dto.getId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.getId()));
+  }
+
+  @Nonnull
+  public Set<DayOfWeek> safeWeekdays(@Nullable final Set<DayOfWeek> weekdays) {
+    if (weekdays == null || weekdays.isEmpty()) {
+      return Collections.emptySet();
+    }
+    return Set.copyOf(new HashSet<>(weekdays));
   }
 
   @Nonnull
   public static String safeString(@Nullable final String value) {
     return value == null ? Publ.EMPTY_STRING : value;
   }
-
 }
