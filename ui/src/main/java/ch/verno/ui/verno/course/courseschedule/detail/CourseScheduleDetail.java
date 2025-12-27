@@ -13,11 +13,13 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.Set;
 
+@PermitAll
 @Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
 @PageTitle("Course Schedule Detail")
 @Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "Course Schedule Detail")

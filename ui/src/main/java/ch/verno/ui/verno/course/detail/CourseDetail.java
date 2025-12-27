@@ -19,10 +19,12 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@PermitAll
 @Route(Routes.COURSES + Routes.DETAIL)
 @PageTitle("Courses")
 @Menu(order = 3.1, icon = "vaadin:mobile", title = "Course Detail")

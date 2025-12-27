@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class Routes {
 
+  public static final String LOGIN = "login";
   public static final String PARTICIPANTS = "participants";
   public static final String INSTRUCTORS = "instructors";
   public static final String COURSES = "courses";
