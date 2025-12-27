@@ -6,8 +6,6 @@ import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -42,6 +40,11 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
   @Override
   protected String getGridObjectName() {
     return VernoConstants.PARTICIPANT;
+  }
+
+  @Override
+  protected String getDetailPageRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Nonnull

@@ -22,7 +22,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrlParameter<Long> {
+public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
   @Nonnull
   public FormMode formMode = getDefaultFormMode();
@@ -39,7 +39,7 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
   @Nonnull
   protected ViewToolbarResult viewToolbar;
 
-  public BaseDetailPage() {
+  public BaseDetailView() {
     this.saveButton = new Button(VernoConstants.SAVE);
     this.viewToolbar = createViewToolbar();
     this.binder = createBinder();
@@ -48,17 +48,17 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
   }
 
   protected void init() {
-    this.setWidthFull();
-    this.setPadding(false);
-    this.setSpacing(false);
+    setWidthFull();
+    setPadding(false);
+    setSpacing(false);
 
     add(viewToolbar.toolbar());
 
     initUI();
 
-    this.saveButton.addClickListener(event -> save());
-    this.binder.addValueChangeListener(event -> updateSaveButtonState());
-    this.binder.addStatusChangeListener(event -> updateSaveButtonState());
+    saveButton.addClickListener(event -> save());
+    binder.addValueChangeListener(event -> updateSaveButtonState());
+    binder.addStatusChangeListener(event -> updateSaveButtonState());
 
     add(createSaveButtonLayout());
 
@@ -141,7 +141,7 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
 
   @Nonnull
   protected String getDetailRoute() {
-    return Routes.createUrlFromBaseUrlSegments(getDetailPageName() + Publ.S, Routes.DETAIL);
+    return Routes.createUrlFromUrlSegments(getDetailPageName() + Publ.S, Routes.DETAIL);
   }
 
   @Nonnull
@@ -182,7 +182,12 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
     final var layout = new HorizontalLayout();
     layout.setWidthFull();
 
+    layout.getStyle().set("flex-wrap", "wrap");
+    layout.setDefaultVerticalComponentAlignment(Alignment.START);
+
     for (final var component : components) {
+      component.getElement().getStyle().set("min-width", "260px");
+      component.getElement().getStyle().set("flex", "1 1 260px");
       layout.add(component);
     }
 
@@ -200,7 +205,7 @@ public abstract class BaseDetailPage<T> extends VerticalLayout implements HasUrl
   }
 
   @Override
-  public void setParameter(@Nonnull final BeforeEvent event,
+  public void setParameter(@Nullable final BeforeEvent event,
                            @OptionalParameter @Nullable final Long parameter) {
     if (parameter == null) {
       binder.setBean(newBeanInstance());

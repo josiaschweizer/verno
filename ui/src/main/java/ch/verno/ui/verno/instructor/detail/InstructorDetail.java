@@ -5,7 +5,7 @@ import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.GenderService;
 import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,7 +21,7 @@ import org.jspecify.annotations.NonNull;
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")
-public class InstructorDetail extends BaseDetailPage<InstructorDto> {
+public class InstructorDetail extends BaseDetailView<InstructorDto> {
 
   @Nonnull
   private final InstructorService instructorService;

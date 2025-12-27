@@ -10,7 +10,7 @@ import ch.verno.server.service.CourseScheduleService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailPage;
+import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Route(Routes.COURSES + Routes.DETAIL)
 @PageTitle("Courses")
 @Menu(order = 3.1, icon = "vaadin:mobile", title = "Course Detail")
-public class CourseDetail extends BaseDetailPage<CourseDto> {
+public class CourseDetail extends BaseDetailView<CourseDto> {
 
   @Nonnull
   private final CourseService courseService;
