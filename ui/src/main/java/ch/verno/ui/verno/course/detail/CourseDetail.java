@@ -3,10 +3,12 @@ package ch.verno.ui.verno.course.detail;
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.server.service.CourseService;
+import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailPage;
 import ch.verno.ui.lib.Routes;
@@ -24,18 +26,20 @@ import java.util.stream.Collectors;
 @Route(Routes.COURSES + Routes.DETAIL)
 @PageTitle("Courses")
 @Menu(order = 3.1, icon = "vaadin:mobile", title = "Course Detail")
-public class CourseDetailPage extends BaseDetailPage<CourseDto> {
+public class CourseDetail extends BaseDetailPage<CourseDto> {
 
   @Nonnull
   private final CourseService courseService;
   private final CourseLevelService courseLevelService;
   private final CourseScheduleService courseScheduleService;
+  private final InstructorService instructorService;
 
-  public CourseDetailPage(@Nonnull final CourseService courseService,
-                          @Nonnull final CourseLevelService courseLevelService, final CourseScheduleService courseScheduleService) {
+  public CourseDetail(@Nonnull final CourseService courseService,
+                      @Nonnull final CourseLevelService courseLevelService, final CourseScheduleService courseScheduleService, final InstructorService instructorService) {
     this.courseService = courseService;
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
+    this.instructorService = instructorService;
 
     init();
   }
@@ -91,7 +95,8 @@ public class CourseDetailPage extends BaseDetailPage<CourseDto> {
   protected void initUI() {
     final var infoPanel = createInfoLayout();
     final var coursePanel = createCourseLayout();
-    add(new VerticalLayout(infoPanel, coursePanel));
+    final var datePanel = createDateLayout();
+    add(new VerticalLayout(infoPanel, coursePanel, datePanel));
   }
 
   @Nonnull
@@ -161,6 +166,26 @@ public class CourseDetailPage extends BaseDetailPage<CourseDto> {
             courseLevelOptions
     );
 
+    final var instructors = instructorService.getAllInstructors();
+    final var instructorOptions = instructors.stream()
+            .collect(Collectors.toMap(InstructorDto::getId, InstructorDto::displayName));
+
+    final var instructorEntry = entryFactory.createComboBoxEntry(
+            dto -> dto.getInstructor() != null ? dto.getInstructor().getId() : null,
+            (dto, value) -> dto.setInstructor(value == null ?
+                    null :
+                    instructorService.getInstructorById(value)),
+            getBinder(),
+            Optional.empty(),
+            "Instructor",
+            instructorOptions
+    );
+
+    return createLayoutFromComponents(courseScheduleEntry, courseLevelEntry, instructorEntry);
+  }
+
+  @Nonnull
+  private HorizontalLayout createDateLayout() {
     final var weekOptions = entryFactory.createWeekOptionEntry(
             CourseDto::getWeekdays,
             CourseDto::setWeekdays,
@@ -169,6 +194,6 @@ public class CourseDetailPage extends BaseDetailPage<CourseDto> {
             "Weekdays"
     );
 
-    return createLayoutFromComponents(courseScheduleEntry, courseLevelEntry, weekOptions);
+    return createLayoutFromComponents(weekOptions);
   }
 }

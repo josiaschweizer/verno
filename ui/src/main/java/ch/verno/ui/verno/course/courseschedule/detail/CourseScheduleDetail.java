@@ -4,7 +4,6 @@ import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.components.schedulepicker.CourseScheduleWeekPicker;
 import ch.verno.ui.base.detail.BaseDetailPage;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,16 +16,17 @@ import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
 @PageTitle("Course Schedule Detail")
 @Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "Course Schedule Detail")
-public class CourseScheduleDetailPage extends BaseDetailPage<CourseScheduleDto> {
+public class CourseScheduleDetail extends BaseDetailPage<CourseScheduleDto> {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
 
-  public CourseScheduleDetailPage(@Nonnull final CourseScheduleService courseScheduleService) {
+  public CourseScheduleDetail(@Nonnull final CourseScheduleService courseScheduleService) {
     this.courseScheduleService = courseScheduleService;
 
     init();
@@ -51,7 +51,13 @@ public class CourseScheduleDetailPage extends BaseDetailPage<CourseScheduleDto> 
 
   @Nonnull
   private HorizontalLayout createSchedulePickerLayout() {
-    final var schedulePicker = new CourseScheduleWeekPicker();
+    final var schedulePicker = entryFactory.createScheduleWeekPickerEntry(
+            courseScheduleDto -> Set.copyOf(courseScheduleDto.getWeeks()),
+            (dto, value) -> dto.setWeeks(value.stream().toList()),
+            getBinder(),
+            Optional.of("Select at least one week"),
+            "Weeks"
+    );
 
     return createLayoutFromComponents(schedulePicker);
   }
@@ -60,6 +66,12 @@ public class CourseScheduleDetailPage extends BaseDetailPage<CourseScheduleDto> 
   @Override
   protected String getDetailPageName() {
     return VernoConstants.COURSESCHEDULE;
+  }
+
+  @NonNull
+  @Override
+  protected String getDetailRoute() {
+    return Routes.createUrlFromBaseUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
   }
 
   @NonNull

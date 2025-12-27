@@ -1,4 +1,4 @@
-@import "../../components/two-option-entry.css";
+@import "../../components/va-two-option-entry.css";
 
 vaadin-app-layout.main-layout::part(drawer) {
     width: 350px;

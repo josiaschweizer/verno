@@ -29,7 +29,8 @@ public class CourseScheduleRepository {
     return springDataCourseScheduleJpaRepository.findAll();
   }
 
-  public void save(@NonNull final CourseScheduleEntity entity) {
-    springDataCourseScheduleJpaRepository.save(entity);
+  @Nonnull
+  public CourseScheduleEntity save(@NonNull final CourseScheduleEntity entity) {
+    return springDataCourseScheduleJpaRepository.save(entity);
   }
 }

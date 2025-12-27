@@ -8,6 +8,7 @@ import ch.verno.server.mapper.CourseScheduleMapper;
 import ch.verno.server.repository.CourseScheduleRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,14 +24,42 @@ public class CourseScheduleService implements ICourseScheduleService {
 
   @Nonnull
   @Override
+  @Transactional
   public CourseScheduleDto createCourseSchedule(@Nonnull final CourseScheduleDto courseScheduleDto) {
-    return null;
+    final var entity = CourseScheduleMapper.toEntity(courseScheduleDto);
+    if (entity == null) {
+      throw new IllegalArgumentException("CourseScheduleDto is empty");
+    }
+
+    entity.setId(null);
+
+    final var saved = courseScheduleRepository.save(entity);
+    return CourseScheduleMapper.toDto(saved);
   }
 
   @Nonnull
   @Override
+  @Transactional
   public CourseScheduleDto updateCourseSchedule(@Nonnull final CourseScheduleDto courseScheduleDto) {
-    return null;
+    if (courseScheduleDto.getId() == null || courseScheduleDto.getId() == 0) {
+      throw new IllegalArgumentException("CourseSchedule ID is required for update");
+    }
+
+    final var existing = courseScheduleRepository.findById(courseScheduleDto.getId())
+            .orElseThrow(() -> new NotFoundException(
+                    NotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND,
+                    courseScheduleDto.getId()
+            ));
+
+    final var updated = CourseScheduleMapper.toEntity(courseScheduleDto);
+    if (updated == null) {
+      throw new IllegalArgumentException("CourseScheduleDto is empty");
+    }
+
+    updated.setId(existing.getId());
+
+    final var saved = courseScheduleRepository.save(updated);
+    return CourseScheduleMapper.toDto(saved);
   }
 
   @Nonnull

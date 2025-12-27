@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
-public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
+public class ParticipantDetail extends BaseDetailPage<ParticipantDto> {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -43,10 +43,10 @@ public class ParticipantsDetail extends BaseDetailPage<ParticipantDto> {
   @Nonnull
   private final CourseService courseService;
 
-  public ParticipantsDetail(@Nonnull final ParticipantService participantService,
-                            @Nonnull final GenderService genderService,
-                            @Nonnull final CourseLevelService courseLevelService,
-                            @Nonnull final CourseService courseService) {
+  public ParticipantDetail(@Nonnull final ParticipantService participantService,
+                           @Nonnull final GenderService genderService,
+                           @Nonnull final CourseLevelService courseLevelService,
+                           @Nonnull final CourseService courseService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;

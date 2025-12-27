@@ -1,10 +1,9 @@
 package ch.verno.ui.verno;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.GenderDto;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
-import ch.verno.ui.base.components.entry.twooption.TwoOptionEntry;
+import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -69,10 +68,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TwoOptionEntry<GenderDto> createGenderField(@Nonnull final ValueProvider<T, GenderDto> valueProvider,
-                                                     @Nonnull final Setter<T, GenderDto> valueSetter,
-                                                     @Nonnull final Binder<T> binder,
-                                                     @Nonnull final List<GenderDto> genderOptions) {
+  public VATwoOptionEntry<GenderDto> createGenderField(@Nonnull final ValueProvider<T, GenderDto> valueProvider,
+                                                       @Nonnull final Setter<T, GenderDto> valueSetter,
+                                                       @Nonnull final Binder<T> binder,
+                                                       @Nonnull final List<GenderDto> genderOptions) {
     return entryFactory.createGenderEntry(
             valueProvider,
             valueSetter,

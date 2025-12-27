@@ -19,15 +19,15 @@ import org.jspecify.annotations.NonNull;
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")
-public class InstructorsDetail extends BaseDetailPage<InstructorDto> {
+public class InstructorDetail extends BaseDetailPage<InstructorDto> {
 
   @Nonnull
   private final InstructorService instructorService;
   @Nonnull
   private final GenderService genderService;
 
-  public InstructorsDetail(@Nonnull final InstructorService instructorService,
-                           @Nonnull final GenderService genderService) {
+  public InstructorDetail(@Nonnull final InstructorService instructorService,
+                          @Nonnull final GenderService genderService) {
     this.instructorService = instructorService;
     this.genderService = genderService;
 

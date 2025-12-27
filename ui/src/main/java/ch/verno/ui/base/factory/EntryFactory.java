@@ -1,13 +1,15 @@
 package ch.verno.ui.base.factory;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.entry.numberfield.VANumberField;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
-import ch.verno.ui.base.components.entry.twooption.TwoOptionEntry;
+import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
+import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -20,10 +22,7 @@ import jakarta.annotation.Nonnull;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class EntryFactory<DTO, TWOSELECTIONDTO> {
 
@@ -127,14 +126,14 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
   }
 
   @Nonnull
-  public TwoOptionEntry<TWOSELECTIONDTO> createGenderEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
-                                                           @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
-                                                           @Nonnull final Binder<DTO> binder,
-                                                           @Nonnull final List<TWOSELECTIONDTO> options,
-                                                           @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
-                                                           @Nonnull final Optional<String> required,
-                                                           @Nonnull final String label) {
-    final var entry = new TwoOptionEntry<>(label, options, optionLabelProvider);
+  public VATwoOptionEntry<TWOSELECTIONDTO> createGenderEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
+                                                             @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
+                                                             @Nonnull final Binder<DTO> binder,
+                                                             @Nonnull final List<TWOSELECTIONDTO> options,
+                                                             @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
+                                                             @Nonnull final Optional<String> required,
+                                                             @Nonnull final String label) {
+    final var entry = new VATwoOptionEntry<>(label, options, optionLabelProvider);
     bindEntry(entry, valueProvider, valueSetter, binder, required);
     entry.setWidthFull();
     return entry;
@@ -167,6 +166,33 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     );
 
     return weekOption;
+  }
+
+  @Nonnull
+  public VAScheduleWeekPicker createScheduleWeekPickerEntry(@Nonnull final ValueProvider<DTO, Set<YearWeekDto>> valueProvider,
+                                                            @Nonnull final Setter<DTO, Set<YearWeekDto>> valueSetter,
+                                                            @Nonnull final Binder<DTO> binder,
+                                                            @Nonnull final Optional<String> required,
+                                                            @Nonnull final String label) {
+    final var scheduleWeekPicker = new VAScheduleWeekPicker(label);
+    scheduleWeekPicker.setWidthFull();
+
+    bindEntry(scheduleWeekPicker,
+            valueProvider,
+            valueSetter,
+            binder,
+            required,
+            (value, ctx) -> {
+              if (value == null || value.isEmpty()) {
+                return required.isEmpty()
+                        ? ValidationResult.ok()
+                        : ValidationResult.error(required.orElse("Select at least one week"));
+              }
+              return ValidationResult.ok();
+            }
+    );
+
+    return scheduleWeekPicker;
   }
 
   @Nonnull
