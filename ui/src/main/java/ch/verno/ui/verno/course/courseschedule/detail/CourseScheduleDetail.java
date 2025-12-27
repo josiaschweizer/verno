@@ -58,7 +58,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
             (dto, value) -> dto.setWeeks(value.stream().toList()),
             getBinder(),
             Optional.of("Select at least one week"),
-            "Weeks"
+            "Calendar-Week Schedule"
     );
 
     return createLayoutFromComponents(schedulePicker);

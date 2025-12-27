@@ -8,6 +8,7 @@ import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -29,6 +30,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private CheckboxGroup<Integer> weekSelect;
   @Nullable
   private ComboBox<Integer> yearSelect;
+
   @Nonnull
   private final Div previewText;
 
@@ -43,38 +45,49 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     this.selectedYearWeeksMap = new HashMap<>();
     this.previewText = new Div();
 
-    initUI(label);
+    setLabel(label);
+
+    initUI();
   }
 
-  private void initUI(@Nonnull final String label) {
+  private void initUI() {
     addClassName("schedule-week-picker");
-
-    //todo label
+    setWidthFull();
 
     yearSelect = createYearComboBox();
     weekSelect = createWeekSelect();
     final var previewLayout = createPreviewLayout();
 
-    add(yearSelect, weekSelect, previewLayout);
+    final var content = new VerticalLayout();
+    content.addClassName("schedule-week-picker-content");
+    content.setPadding(false);
+    content.setSpacing(false);
+    content.setWidthFull();
+
+    content.add(yearSelect, weekSelect, previewLayout);
+
+    add(content);
 
     updatePreview();
   }
 
   @Nonnull
   private ComboBox<Integer> createYearComboBox() {
-    final var combobox = new ComboBox<Integer>("Year");
+    final var combobox = new ComboBox<Integer>();
+    combobox.setPlaceholder("Year");
+    combobox.setWidthFull();
     combobox.addClassName("schedule-week-picker-year-combobox");
     combobox.addValueChangeListener(this::selectedYearChanged);
 
-    final var currentYear = LocalDate.now().getYear();
-    final List<Integer> yearOptions = IntStream.rangeClosed(currentYear - 1, currentYear + 2)
+    final var nowYear = LocalDate.now().getYear();
+    final List<Integer> yearOptions = IntStream.rangeClosed(nowYear - 1, nowYear + 2)
             .boxed()
             .toList();
 
     combobox.setItems(yearOptions);
-    combobox.setValue(currentYear);
+    combobox.setValue(nowYear);
 
-    this.currentYear = currentYear;
+    this.currentYear = nowYear;
 
     return combobox;
   }
@@ -84,6 +97,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
       return;
     }
 
+    selectedYearWeeksMap.put(currentYear, new HashSet<>(weekSelect.getSelectedItems()));
     selectedYearWeeksMap.put(currentYear, new HashSet<>(weekSelect.getSelectedItems()));
 
     final var newYear = event.getValue();
@@ -109,19 +123,24 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   @Nonnull
   private HorizontalLayout createPreviewLayout() {
     final var layout = new HorizontalLayout();
+    layout.addClassName("schedule-week-picker-preview");
     layout.setPadding(false);
     layout.setSpacing(false);
+    layout.setWidthFull();
 
-    layout.add(new Div(""));
+    previewText.addClassName("schedule-week-picker-preview-text");
+    previewText.setWidthFull();
+
     layout.add(previewText);
     return layout;
   }
 
   private CheckboxGroup<Integer> createWeekSelect() {
     final var checkboxGroup = new CheckboxGroup<Integer>();
+    checkboxGroup.setLabel("Week");
     checkboxGroup.setItems(weeksOfYear(currentYear));
+    checkboxGroup.addClassName("schedule-week-picker-week-select");
     checkboxGroup.addValueChangeListener(this::selectedWeeksChanged);
-
     return checkboxGroup;
   }
 
@@ -148,7 +167,9 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
       }
     });
 
-    allWeeks.sort(Comparator.comparingInt(YearWeekDto::year).thenComparingInt(YearWeekDto::week));
+    allWeeks.sort(Comparator.comparingInt(YearWeekDto::year)
+            .thenComparingInt(YearWeekDto::week));
+
     return new LinkedHashSet<>(allWeeks);
   }
 
@@ -164,11 +185,14 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
 
       if (value != null) {
         for (YearWeekDto yw : value) {
-          selectedYearWeeksMap.computeIfAbsent(yw.year(), k -> new HashSet<>()).add(yw.week());
+          selectedYearWeeksMap
+                  .computeIfAbsent(yw.year(), k -> new HashSet<>())
+                  .add(yw.week());
         }
       }
 
-      currentYear = yearSelect.getValue();
+      final var selectedYear = yearSelect.getValue();
+      currentYear = (selectedYear != null) ? selectedYear : LocalDate.now().getYear();
 
       weekSelect.setItems(weeksOfYear(currentYear));
       final var selectedForYear = selectedYearWeeksMap.getOrDefault(currentYear, Set.of());
