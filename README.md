@@ -69,9 +69,9 @@ verno/
 ### Running in Development Mode
 
 1. **Using Maven Wrapper** (recommended):
-   ```bash
-   ./mvnw
-   ```
+```bash
+./mvnw
+```
 
 2. **Using IDE**:
    - Import the project into your IDE

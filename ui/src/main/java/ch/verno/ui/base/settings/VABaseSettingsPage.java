@@ -4,25 +4,28 @@ import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public abstract class BaseSettingsPage extends VerticalLayout {
+import java.util.List;
 
-  public BaseSettingsPage() {
+public abstract class VABaseSettingsPage extends VerticalLayout {
+
+  public VABaseSettingsPage() {
   }
 
-  protected void init() {
+  protected void initUI() {
     setSizeFull();
-    setPadding(false);
-    setSpacing(false);
+//    setPadding(false);
+//    setSpacing(false);
 
     add(ViewToolbarFactory.createSimpleToolbar(getSettingsPageName()));
 
-    final var setting = createSetting();
-
-    add(setting);
+    final var settings = createSettings();
+    for (final var setting : settings) {
+      add(setting);
+    }
   }
 
   @Nonnull
-  protected abstract BaseSetting createSetting();
+  protected abstract List<VABaseSetting> createSettings();
 
   @Nonnull
   protected abstract String getSettingsPageName();

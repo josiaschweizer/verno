@@ -30,11 +30,27 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
   }
 
   @Override
-  protected void onAttach(final AttachEvent attachEvent) {
-    initGrid();
+  protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+    // Initialize UI only once. onAttach can be called multiple times when the
+    // component is re-attached; avoid re-adding the toolbar/grid repeatedly
+    // problem seen in the settings
+    if (grid == null) {
+      initUI();
+    }
   }
 
-  private void initGrid() {
+  protected void initUI() {
+    setSizeFull();
+    setPadding(false);
+    setSpacing(false);
+
+    initGrid();
+
+    add(ViewToolbarFactory.createGridToolbar(getGridObjectName()));
+    add(grid);
+  }
+
+  protected void initGrid() {
     grid = new Grid<>();
 
     final var columns = getColumns();
@@ -44,14 +60,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
     grid.setItems(items);
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
 
-    setSizeFull();
-    setPadding(false);
-    setSpacing(false);
-
     setDefaultSorting();
-
-    add(ViewToolbarFactory.createGridToolbar(getGridObjectName()));
-    add(grid);
   }
 
   private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {

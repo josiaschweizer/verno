@@ -7,19 +7,39 @@ import ch.verno.ui.base.grid.BaseOverviewGrid;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@SpringComponent
 public class CourseLevelsGrid extends BaseOverviewGrid<CourseLevelDto> {
 
   @Nonnull
-  private final CourseLevelService courseLevelService;
+  private CourseLevelService courseLevelService;
 
   public CourseLevelsGrid(@Nonnull final CourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
+  }
+
+  @Autowired
+  public void setCourseLevelService(@Nonnull final CourseLevelService courseLevelService) {
+    this.courseLevelService = courseLevelService;
+  }
+
+  @Override
+  protected void initUI() {
+    setSizeFull();
+    setPadding(false);
+    setMargin(false);
+
+    initGrid();
+
+    add(grid);
   }
 
   @Nonnull

@@ -1,29 +1,38 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.ui.base.settings.BaseSetting;
-import ch.verno.ui.base.settings.BaseSettingsPage;
+import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
+import ch.verno.ui.verno.settings.setting.courselevel.CourseLevelSetting;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.RolesAllowed;
-import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Route(Routes.MANDANT_SETTINGS)
 @PageTitle("Mandant Settings")
 @RolesAllowed({"ADMIN", "MANDANT_ADMIN"})
 @Menu(order = 98, icon = "vaadin:cog", title = "Mandant Overview")
-public class MandantSettings extends BaseSettingsPage {
+public class MandantSettings extends VABaseSettingsPage {
 
-  public MandantSettings() {
+  @Nonnull
+  private final CourseLevelSetting courseLevelSetting;
 
+  @Autowired
+  public MandantSettings(@Nonnull final CourseLevelSetting courseLevelSetting) {
+    this.courseLevelSetting = courseLevelSetting;
+
+    initUI();
   }
 
-  @NonNull
+  @Nonnull
   @Override
-  protected BaseSetting createSetting() {
-    return null;
+  protected List<VABaseSetting> createSettings() {
+    return List.of(courseLevelSetting);
   }
 
 
