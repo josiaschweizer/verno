@@ -1,6 +1,6 @@
 package ch.verno.server.repository;
 
-import ch.verno.db.entity.AppUserEntity;
+import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.db.jpa.SpringDataAppUserJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;

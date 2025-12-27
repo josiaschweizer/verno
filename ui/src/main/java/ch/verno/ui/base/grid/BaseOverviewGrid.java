@@ -12,15 +12,20 @@ import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout {
 
   @Nullable
-  private Grid<T> grid;
+  protected Grid<T> grid;
+
+  @Nonnull
+  protected final Map<String, Grid.Column<T>> columnsByKey;
 
   public BaseOverviewGrid() {
+    this.columnsByKey = new HashMap<>();
     // empty constructor
   }
 
@@ -33,7 +38,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
     grid = new Grid<>();
 
     final var columns = getColumns();
-    columns.forEach(this::addColumn);
+    columns.forEach((valueProvider, header) -> addColumn(header, valueProvider));
 
     final var items = fetchItems();
     grid.setItems(items);
@@ -42,6 +47,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
     setSizeFull();
     setPadding(false);
     setSpacing(false);
+
+    setDefaultSorting();
 
     add(ViewToolbarFactory.createGridToolbar(getGridObjectName()));
     add(grid);
@@ -53,16 +60,23 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
     UI.getCurrent().navigate(redirectURL);
   }
 
-  private void addColumn(@Nonnull final ValueProvider<T, Object> valueProvider,
-                         @Nonnull final String header) {
+  private void addColumn(@Nonnull final String header,
+                         @Nonnull final ValueProvider<T, Object> valueProvider) {
     if (grid == null) {
       throw new IllegalStateException("Grid has not been initialized. Call initGrid() first.");
     }
 
     grid.addColumn(valueProvider)
-        .setHeader(header)
-        .setResizable(true)
-        .setAutoWidth(true);
+            .setHeader(header)
+            .setSortable(true)
+            .setResizable(true)
+            .setAutoWidth(true);
+
+    this.columnsByKey.put(header, grid.getColumnByKey(header));
+  }
+
+  protected void setDefaultSorting() {
+    // Default implementation does nothing - override in subclasses if needed
   }
 
   @Nonnull

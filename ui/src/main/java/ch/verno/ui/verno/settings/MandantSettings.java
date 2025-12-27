@@ -14,6 +14,14 @@ import jakarta.annotation.security.RolesAllowed;
 @Menu(order = 98, icon = "vaadin:cog", title = "Mandant Overview")
 public class MandantSettings extends BaseSettingsPage {
 
+  public MandantSettings() {
+
+  }
+
+  @Override
+  protected void initUI() {
+
+  }
 
   @Nonnull
   @Override

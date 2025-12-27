@@ -14,6 +14,8 @@ public abstract class BaseSettingsPage extends VerticalLayout {
     add(ViewToolbarFactory.createSimpleToolbar(getSettingsPageName()));
   }
 
+  protected abstract void initUI();
+
   @Nonnull
   protected abstract String getSettingsPageName();
 }

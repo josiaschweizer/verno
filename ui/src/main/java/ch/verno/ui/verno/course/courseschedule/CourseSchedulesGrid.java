@@ -38,7 +38,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.COURSESCHEDULE;
+    return VernoConstants.COURSE_SCHEDULE;
   }
 
   @Nonnull

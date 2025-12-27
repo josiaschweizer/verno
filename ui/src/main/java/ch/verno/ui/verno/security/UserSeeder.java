@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.security;
 
 import ch.verno.common.util.Publ;
-import ch.verno.db.entity.AppUserEntity;
+import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.CommandLineRunner;

@@ -67,7 +67,7 @@ public class CourseScheduleDetail extends BaseDetailPage<CourseScheduleDto> {
   @NonNull
   @Override
   protected String getDetailPageName() {
-    return VernoConstants.COURSESCHEDULE;
+    return VernoConstants.COURSE_SCHEDULE;
   }
 
   @NonNull
