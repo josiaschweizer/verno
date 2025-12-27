@@ -18,12 +18,14 @@ import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Objects;
 
 @Layout
+@PermitAll
 public final class MainLayout extends AppLayout {
 
   MainLayout() {
