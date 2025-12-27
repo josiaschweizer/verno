@@ -24,11 +24,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@PermitAll
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
