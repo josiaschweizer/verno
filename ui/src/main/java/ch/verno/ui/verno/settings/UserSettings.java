@@ -20,11 +20,11 @@ import java.util.List;
 public class UserSettings extends VABaseSettingsPage {
 
   @Nonnull
-  private final CourseLevelSetting courseLevelSetting;
+  private final CourseLevelSetting courseLevelGridSetting;
 
   @Autowired
-  public UserSettings(@Nonnull final CourseLevelSetting courseLevelSetting) { //TODO delete course level setting from user setting and replace it with user specific settings (course setting is mandant specific)
-    this.courseLevelSetting = courseLevelSetting;
+  public UserSettings(@Nonnull final CourseLevelSetting courseLevelGridSetting) { //TODO delete course level setting from user setting and replace it with user specific settings (course setting is mandant specific)
+    this.courseLevelGridSetting = courseLevelGridSetting;
 
     initUI();
   }

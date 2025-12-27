@@ -20,11 +20,11 @@ import java.util.List;
 public class MandantSettings extends VABaseSettingsPage {
 
   @Nonnull
-  private final CourseLevelSetting courseLevelSetting;
+  private final CourseLevelSetting courseLevelGridSetting;
 
   @Autowired
-  public MandantSettings(@Nonnull final CourseLevelSetting courseLevelSetting) {
-    this.courseLevelSetting = courseLevelSetting;
+  public MandantSettings(@Nonnull final CourseLevelSetting courseLevelGridSetting) {
+    this.courseLevelGridSetting = courseLevelGridSetting;
 
     initUI();
   }
@@ -32,7 +32,7 @@ public class MandantSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected List<VABaseSetting> createSettings() {
-    return List.of(courseLevelSetting);
+    return List.of(courseLevelGridSetting);
   }
 
 

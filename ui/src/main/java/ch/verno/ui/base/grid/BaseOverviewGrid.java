@@ -31,12 +31,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
 
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
-    // Initialize UI only once. onAttach can be called multiple times when the
-    // component is re-attached; avoid re-adding the toolbar/grid repeatedly
-    // problem seen in the settings
-    if (grid == null) {
       initUI();
-    }
   }
 
   protected void initUI() {
@@ -46,7 +41,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
 
     initGrid();
 
-    add(ViewToolbarFactory.createGridToolbar(getGridObjectName()));
+    add(ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute()));
     add(grid);
   }
 
@@ -93,6 +88,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto> extends VerticalLayout
 
   @Nonnull
   protected abstract String getGridObjectName();
+
+  protected abstract String getDetailPageRoute();
 
   @Nonnull
   protected abstract Map<ValueProvider<T, Object>, String> getColumns();

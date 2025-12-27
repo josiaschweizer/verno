@@ -43,6 +43,12 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
 
   @Nonnull
   @Override
+  protected String getDetailPageRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
+  }
+
+  @Nonnull
+  @Override
   protected Map<ValueProvider<CourseScheduleDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<CourseScheduleDto, Object>, String>();
     columnsMap.put(CourseScheduleDto::getTitle, "Title");
