@@ -32,6 +32,8 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   @Nonnull
   private final Div previewText;
 
+  private boolean internalUpdate = false;
+
   public VAScheduleWeekPicker() {
     this(Publ.EMPTY_STRING);
   }
@@ -72,7 +74,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     combobox.setItems(yearOptions);
     combobox.setValue(currentYear);
 
-    this.currentYear = currentYear; //cannot be in an overridden methode of combobox bc oldValue is firstly needed in the value change listener
+    this.currentYear = currentYear;
 
     return combobox;
   }
@@ -85,10 +87,21 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     selectedYearWeeksMap.put(currentYear, new HashSet<>(weekSelect.getSelectedItems()));
 
     final var newYear = event.getValue();
-    currentYear = newYear;
+    if (newYear == null) {
+      return;
+    }
 
-    weekSelect.setItems(weeksOfYear(newYear));
-    weekSelect.setValue(selectedYearWeeksMap.getOrDefault(newYear, Set.of()));
+    final var selectedForNewYear = new HashSet<>(selectedYearWeeksMap.getOrDefault(newYear, Set.of()));
+
+    internalUpdate = true;
+    try {
+      currentYear = newYear;
+
+      weekSelect.setItems(weeksOfYear(newYear));
+      weekSelect.setValue(selectedForNewYear);
+    } finally {
+      internalUpdate = false;
+    }
 
     updatePreview();
   }
@@ -104,7 +117,6 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     return layout;
   }
 
-
   private CheckboxGroup<Integer> createWeekSelect() {
     final var checkboxGroup = new CheckboxGroup<Integer>();
     checkboxGroup.setItems(weeksOfYear(currentYear));
@@ -114,12 +126,17 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   }
 
   private void selectedWeeksChanged(@Nonnull final ValueChangeEvent<Set<Integer>> event) {
+    if (internalUpdate) {
+      return;
+    }
+
     selectedYearWeeksMap.put(currentYear, new HashSet<>(event.getValue()));
 
     setModelValue(generateModelValue(), true);
 
     updatePreview();
   }
+
   @Nonnull
   @Override
   protected Set<YearWeekDto> generateModelValue() {
@@ -141,20 +158,24 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
       return;
     }
 
-    selectedYearWeeksMap.clear();
+    internalUpdate = true;
+    try {
+      selectedYearWeeksMap.clear();
 
-    if (value != null) {
-      for (YearWeekDto yw : value) {
-        selectedYearWeeksMap.computeIfAbsent(yw.year(), k -> new HashSet<>()).add(yw.week());
+      if (value != null) {
+        for (YearWeekDto yw : value) {
+          selectedYearWeeksMap.computeIfAbsent(yw.year(), k -> new HashSet<>()).add(yw.week());
+        }
       }
+
+      currentYear = yearSelect.getValue();
+
+      weekSelect.setItems(weeksOfYear(currentYear));
+      final var selectedForYear = selectedYearWeeksMap.getOrDefault(currentYear, Set.of());
+      weekSelect.setValue(new HashSet<>(selectedForYear));
+    } finally {
+      internalUpdate = false;
     }
-
-    currentYear = yearSelect.getValue();
-
-    weekSelect.setItems(weeksOfYear(currentYear));
-    final var selectedForYear = selectedYearWeeksMap.getOrDefault(currentYear, Set.of());
-    weekSelect.deselectAll();
-    selectedForYear.forEach(weekSelect::select);
 
     updatePreview();
   }
