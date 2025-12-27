@@ -20,7 +20,7 @@ public class DashboardPage extends VerticalLayout {
     this.setSpacing(false);
 
     add(createViewToolBar());
-    add(new H1("Welcome to the Dashboard"));
+
     setSizeFull();
     setAlignItems(Alignment.CENTER);
   }
