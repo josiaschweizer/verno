@@ -14,8 +14,10 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
+@PermitAll
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
 @PageTitle("Participants Detail View")
 @Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")

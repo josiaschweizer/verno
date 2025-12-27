@@ -13,11 +13,13 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@PermitAll
 @Route(Routes.PARTICIPANTS)
 @PageTitle("Participants Overview")
 @Menu(order = 1, icon = "vaadin:users", title = "Participants Overview")
