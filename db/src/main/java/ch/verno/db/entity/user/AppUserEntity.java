@@ -1,4 +1,4 @@
-package ch.verno.db.entity;
+package ch.verno.db.entity.user;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;

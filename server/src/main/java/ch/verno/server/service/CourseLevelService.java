@@ -23,8 +23,48 @@ public class CourseLevelService implements ICourseLevelService {
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional
+  public CourseLevelDto createCourseLevel(@Nonnull final CourseLevelDto courseLevelDto) {
+    final var entity = CourseLevelMapper.toEntity(courseLevelDto);
+    if (entity == null) {
+      throw new IllegalArgumentException("CourseLevelDto is empty");
+    }
+
+    entity.setId(null);
+
+    final var saved = courseLevelRepository.save(entity);
+    return CourseLevelMapper.toDto(saved);
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public CourseLevelDto updateCourseLevel(@Nonnull final CourseLevelDto courseLevelDto) {
+    if (courseLevelDto.getId() == null || courseLevelDto.getId() == 0) {
+      throw new IllegalArgumentException("CourseLevel ID is required for update");
+    }
+
+    final var existing = courseLevelRepository.findById(courseLevelDto.getId())
+            .orElseThrow(() -> new NotFoundException(
+                    NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND,
+                    courseLevelDto.getId()
+            ));
+
+    final var updated = CourseLevelMapper.toEntity(courseLevelDto);
+    if (updated == null) {
+      throw new IllegalArgumentException("CourseLevelDto is empty");
+    }
+
+    updated.setId(existing.getId());
+
+    final var saved = courseLevelRepository.save(updated);
+    return CourseLevelMapper.toDto(saved);
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
   public CourseLevelDto getCourseLevelById(@Nonnull final Long id) {
     final var courseLevelOptional = courseLevelRepository.findById(id);
     if (courseLevelOptional.isEmpty()) {
@@ -35,8 +75,8 @@ public class CourseLevelService implements ICourseLevelService {
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional(readOnly = true)
   public List<CourseLevelDto> getAllCourseLevels() {
     return courseLevelRepository.findAll().stream().map(CourseLevelMapper::toDto).toList();
   }

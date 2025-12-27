@@ -100,8 +100,7 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     final var numberField = new VANumberField(label);
     numberField.setWidthFull();
 
-    bindEntry(numberField, valueProvider, valueSetter, binder, required, getDoubleValidator(required, required.isEmpty())
-    );
+    bindEntry(numberField, valueProvider, valueSetter, binder, required, getDoubleValidator(required, required.isEmpty()));
 
     return numberField;
   }

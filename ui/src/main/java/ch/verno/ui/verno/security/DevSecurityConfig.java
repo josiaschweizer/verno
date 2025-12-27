@@ -1,31 +1,30 @@
 package ch.verno.ui.verno.security;
 
-import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Profile("!dev")
 @Configuration
+@Profile("dev")
 @EnableWebSecurity
-public class SecurityConfig {
+public class DevSecurityConfig {
 
   @Bean
-  @Nonnull
-  SecurityFilterChain securityFilterChain(@Nonnull final HttpSecurity http) {
-    return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-      configurer.loginView(LoginView.class);
-    }).build();
+  SecurityFilterChain devSecurityFilterChain(@Nonnull final HttpSecurity http) throws Exception {
+    return http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .build();
   }
 
   @Bean
-  @Nonnull
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }

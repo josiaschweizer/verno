@@ -28,7 +28,7 @@ public class CourseLevelRepository {
     return springDataCourseLevelJpaRepository.findAll();
   }
 
-  public void save(@Nonnull final CourseLevelEntity courseLevel) {
-    springDataCourseLevelJpaRepository.save(courseLevel);
+  public CourseLevelEntity save(@Nonnull final CourseLevelEntity courseLevel) {
+    return springDataCourseLevelJpaRepository.save(courseLevel);
   }
 }

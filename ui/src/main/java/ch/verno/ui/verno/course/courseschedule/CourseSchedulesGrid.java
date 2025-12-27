@@ -38,7 +38,13 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.COURSESCHEDULE;
+    return VernoConstants.COURSE_SCHEDULE;
+  }
+
+  @Nonnull
+  @Override
+  protected String getDetailPageRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
   }
 
   @Nonnull

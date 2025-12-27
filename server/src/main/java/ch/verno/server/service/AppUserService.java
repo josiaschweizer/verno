@@ -3,12 +3,14 @@ package ch.verno.server.service;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("!dev")
 public class AppUserService implements IAppUserService {
 
   @Nonnull
