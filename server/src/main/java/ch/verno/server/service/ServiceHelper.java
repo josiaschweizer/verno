@@ -10,9 +10,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ServiceHelper {
 
@@ -104,6 +102,35 @@ public class ServiceHelper {
 
     return courseLevelRepository.findById(dto.getId())
             .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.getId()));
+  }
+
+  @Nonnull
+  public List<CourseLevelEntity> resolveCourseLevels(@Nonnull final CourseLevelRepository courseLevelRepository,
+                                                     @Nullable final List<CourseLevelDto> dtos) {
+    if (dtos == null || dtos.isEmpty()) {
+      return List.of();
+    }
+
+    final Map<Long, CourseLevelDto> uniqueByIdInOrder = new LinkedHashMap<>();
+    for (final var dto : dtos) {
+      if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
+        continue;
+      }
+      uniqueByIdInOrder.put(dto.getId(), dto);
+    }
+
+    if (uniqueByIdInOrder.isEmpty()) {
+      return List.of();
+    }
+
+    final List<CourseLevelEntity> result = new ArrayList<>();
+    for (final var id : uniqueByIdInOrder.keySet()) {
+      final var entity = courseLevelRepository.findById(id)
+              .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id));
+      result.add(entity);
+    }
+
+    return result;
   }
 
   @Nullable

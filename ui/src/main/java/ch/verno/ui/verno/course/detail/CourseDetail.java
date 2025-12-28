@@ -155,17 +155,14 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
     );
 
 
-    final var courseLevels = courseLevelService.getAllCourseLevels();
-    final var courseLevelOptions = courseLevels.stream()
-            .collect(Collectors.toMap(CourseLevelDto::getId, CourseLevelDto::getName));
-
-    final var courseLevelEntry = fieldFactory.createCourseLevelField(
-            dto -> dto.getCourseLevel() != null ? dto.getCourseLevel().getId() : null,
-            (dto, value) -> dto.setCourseLevel(value == null ?
-                    null :
-                    courseLevelService.getCourseLevelById(value)),
+    final var courseLevelEntry = entryFactory.createMultiSelectComboBoxEntry(
+            CourseDto::getCourseLevels,
+            CourseDto::setCourseLevels,
             getBinder(),
-            courseLevelOptions
+            Optional.of("At least one course level is required"),
+            "Course Levels",
+            courseLevelService.getAllCourseLevels(),
+            CourseLevelDto::displayName
     );
 
     final var instructors = instructorService.getAllInstructors();

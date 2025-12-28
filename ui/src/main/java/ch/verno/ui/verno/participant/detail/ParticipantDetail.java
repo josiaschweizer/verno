@@ -201,7 +201,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
       }
 
       final var filteredCourses = courses.stream()
-              .filter(c -> !c.getCourseLevel().isEmpty() && selectedLevelId.equals(c.getCourseLevel().getId()))
+              .filter(c -> c.getCourseLevels().stream()
+                      .anyMatch(level -> selectedLevelId.equals(level.getId())))
               .toList();
 
       final var filteredCourseOptions = filteredCourses.stream()

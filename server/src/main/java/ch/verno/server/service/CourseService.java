@@ -47,9 +47,9 @@ public class CourseService implements ICourseService {
   @Override
   @Transactional
   public CourseDto createCourse(@Nonnull final CourseDto courseDto) {
-    final var level = serviceHelper.resolveCourseLevel(courseLevelRepository, courseDto.getCourseLevel());
-    if (level == null) {
-      throw new IllegalArgumentException("Course level is required");
+    final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
+    if (levels.isEmpty()) {
+      throw new IllegalArgumentException("At least one course level is required");
     }
 
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
@@ -61,7 +61,7 @@ public class CourseService implements ICourseService {
             ServiceHelper.safeString(courseDto.getTitle()),
             courseDto.getCapacity(),
             ServiceHelper.safeString(courseDto.getLocation()),
-            level,
+            levels,
             schedule,
             courseDto.getWeekdays(),
             courseDto.getDuration(),
@@ -90,9 +90,9 @@ public class CourseService implements ICourseService {
     existing.setLocation(ServiceHelper.safeString(courseDto.getLocation()));
     existing.setDuration(courseDto.getDuration());
 
-    final var level = serviceHelper.resolveCourseLevel(courseLevelRepository, courseDto.getCourseLevel());
-    if (level == null) {
-      throw new IllegalArgumentException("Course level is required");
+    final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
+    if (levels.isEmpty()) {
+      throw new IllegalArgumentException("At least one course level is required");
     }
 
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
@@ -100,7 +100,7 @@ public class CourseService implements ICourseService {
       throw new IllegalArgumentException("Course schedule is required");
     }
 
-    existing.setLevel(level);
+    existing.setCourseLevels(levels);
     existing.setSchedule(schedule);
     existing.setWeekdays(courseDto.getWeekdays());
     existing.setInstructor(serviceHelper.resolveInstructor(instructorRepository, courseDto.getInstructor()));

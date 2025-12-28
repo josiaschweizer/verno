@@ -19,8 +19,8 @@ public class CourseDto extends BaseDto {
   @Nonnull
   private String location;
 
-  @Nullable
-  private CourseLevelDto courseLevel;
+  @Nonnull
+  private List<CourseLevelDto> courseLevels;
 
   @Nullable
   private CourseScheduleDto courseSchedule;
@@ -39,7 +39,7 @@ public class CourseDto extends BaseDto {
             Publ.EMPTY_STRING,
             null,
             Publ.EMPTY_STRING,
-            CourseLevelDto.empty(),
+            List.of(),
             CourseScheduleDto.empty(),
             List.of(),
             null,
@@ -51,7 +51,7 @@ public class CourseDto extends BaseDto {
                    @Nonnull final String title,
                    @Nullable final Integer capacity,
                    @Nonnull final String location,
-                   @Nonnull final CourseLevelDto courseLevel,
+                   @Nonnull final List<CourseLevelDto> courseLevels,
                    @Nonnull final CourseScheduleDto courseSchedule,
                    @Nonnull final List<DayOfWeek> weekdays,
                    @Nullable final Integer duration,
@@ -60,7 +60,7 @@ public class CourseDto extends BaseDto {
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-    this.courseLevel = courseLevel;
+    this.courseLevels = courseLevels;
     this.courseSchedule = courseSchedule;
     this.weekdays = weekdays;
     this.duration = duration;
@@ -77,7 +77,8 @@ public class CourseDto extends BaseDto {
             && this.title.isEmpty()
             && (this.capacity == null || this.capacity == 0)
             && this.location.isEmpty()
-            && this.courseLevel.isEmpty()
+            && this.courseLevels.isEmpty()
+            && this.courseSchedule != null
             && this.courseSchedule.isEmpty()
             && this.weekdays.isEmpty()
             && (this.duration == null || this.duration == 0)
@@ -111,21 +112,28 @@ public class CourseDto extends BaseDto {
     this.location = location;
   }
 
-  @Nullable
-  public CourseLevelDto getCourseLevel() {
-    return courseLevel;
+  @Nonnull
+  public List<CourseLevelDto> getCourseLevels() {
+    return courseLevels;
   }
 
-  public void setCourseLevel(@Nullable final CourseLevelDto courseLevel) {
-    this.courseLevel = courseLevel;
+  public void setCourseLevels(@Nonnull final List<CourseLevelDto> courseLevels) {
+    this.courseLevels = courseLevels;
   }
 
   @Nonnull
   public String getCourseLevelAsString() {
-    if (courseLevel == null || courseLevel.isEmpty()) {
-      return Publ.EMPTY_STRING;
+    final var stringBuilder = new StringBuilder();
+
+    for (final CourseLevelDto level : courseLevels) {
+      if (!stringBuilder.isEmpty()) {
+        stringBuilder.append(Publ.COMMA + Publ.SPACE);
+      }
+
+      stringBuilder.append(level.displayName());
     }
-    return courseLevel.displayName();
+
+    return stringBuilder.toString();
   }
 
   @Nullable

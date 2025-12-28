@@ -6,6 +6,8 @@ import ch.verno.db.entity.CourseLevelEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.List;
+
 public final class CourseLevelMapper {
   private CourseLevelMapper() {
   }
@@ -17,12 +19,24 @@ public final class CourseLevelMapper {
     }
 
     return new CourseLevelDto(
-        entity.getId(),
-        entity.getCode() == null ? Publ.EMPTY_STRING : entity.getCode(),
-        entity.getName() == null ? Publ.EMPTY_STRING : entity.getName(),
-        entity.getDescription() == null ? Publ.EMPTY_STRING : entity.getDescription(),
-        entity.getSortingOrder()
+            entity.getId(),
+            entity.getCode() == null ? Publ.EMPTY_STRING : entity.getCode(),
+            entity.getName() == null ? Publ.EMPTY_STRING : entity.getName(),
+            entity.getDescription() == null ? Publ.EMPTY_STRING : entity.getDescription(),
+            entity.getSortingOrder()
     );
+  }
+
+  @Nonnull
+  public static List<CourseLevelDto> toDtos(@Nullable final List<CourseLevelEntity> entities) {
+    if (entities == null || entities.isEmpty()) {
+      return List.of();
+    }
+
+    return entities.stream()
+            .map(CourseLevelMapper::toDto)
+            .filter(dto -> dto != null && !dto.isEmpty())
+            .toList();
   }
 
   @Nullable
@@ -32,10 +46,10 @@ public final class CourseLevelMapper {
     }
 
     final var entity = new CourseLevelEntity(
-        dto.getCode(),
-        dto.getName(),
-        dto.getDescription(),
-        dto.getSortingOrder()
+            dto.getCode(),
+            dto.getName(),
+            dto.getDescription(),
+            dto.getSortingOrder()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {
@@ -45,6 +59,18 @@ public final class CourseLevelMapper {
     }
 
     return entity;
+  }
+
+  @Nonnull
+  public static List<CourseLevelEntity> toEntityRefs(@Nullable final List<CourseLevelDto> dtos) {
+    if (dtos == null || dtos.isEmpty()) {
+      return List.of();
+    }
+
+    return dtos.stream()
+            .map(CourseLevelMapper::toEntityRef)
+            .filter(e -> e != null && e.getId() != null && e.getId() != 0)
+            .toList();
   }
 
   @Nullable
