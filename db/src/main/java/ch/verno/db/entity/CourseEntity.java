@@ -34,9 +34,14 @@ public class CourseEntity {
   private String location;
 
   @Nonnull
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "course_level_id", nullable = false)
-  private CourseLevelEntity level;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "course_course_level",
+          joinColumns = @JoinColumn(name = "course_id"),
+          inverseJoinColumns = @JoinColumn(name = "course_level_id")
+  )
+  @OrderColumn(name = "sort_index")
+  private List<CourseLevelEntity> courseLevels = new ArrayList<>();
 
   @Nonnull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -68,7 +73,7 @@ public class CourseEntity {
   public CourseEntity(@Nonnull final String title,
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
-                      @Nonnull final CourseLevelEntity level,
+                      @Nullable final List<CourseLevelEntity> courseLevels,
                       @Nonnull final CourseScheduleEntity schedule,
                       @Nonnull final List<DayOfWeek> weekdays,
                       @Nullable final Integer duration,
@@ -76,10 +81,14 @@ public class CourseEntity {
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-    this.level = level;
+
+    this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
+
     this.schedule = schedule;
+
     this.weekdays.clear();
     this.weekdays.addAll(weekdays);
+
     this.duration = duration;
     this.instructor = instructor;
   }
@@ -132,12 +141,13 @@ public class CourseEntity {
   }
 
   @Nonnull
-  public CourseLevelEntity getLevel() {
-    return level;
+  public List<CourseLevelEntity> getCourseLevels() {
+    return courseLevels;
   }
 
-  public void setLevel(@Nonnull final CourseLevelEntity level) {
-    this.level = level;
+  public void setCourseLevels(@Nonnull final List<CourseLevelEntity> courseLevels) {
+    this.courseLevels.clear();
+    this.courseLevels.addAll(courseLevels);
   }
 
   @Nonnull

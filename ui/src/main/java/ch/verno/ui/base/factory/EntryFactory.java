@@ -11,6 +11,7 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.data.binder.Binder;
@@ -119,7 +120,43 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     comboBox.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
     comboBox.setClearButtonVisible(true);
 
-    bindEntry(comboBox, valueProvider, valueSetter, binder, required/*, getLongValidator(required, required.isEmpty())*/);
+    bindEntry(comboBox, valueProvider, valueSetter, binder, required);
+
+    return comboBox;
+  }
+
+  @Nonnull
+  public <T> MultiSelectComboBox<T> createMultiSelectComboBoxEntry(@Nonnull final ValueProvider<DTO, List<T>> valueProvider,
+                                                                   @Nonnull final Setter<DTO, List<T>> valueSetter,
+                                                                   @Nonnull final Binder<DTO> binder,
+                                                                   @Nonnull final Optional<String> required,
+                                                                   @Nonnull final String label,
+                                                                   @Nonnull final Collection<T> options,
+                                                                   @Nonnull final ValueProvider<T, String> optionLabelProvider) {
+    final var comboBox = new MultiSelectComboBox<T>(label);
+    comboBox.setWidthFull();
+
+    comboBox.setItems(options);
+    comboBox.setItemLabelGenerator(optionLabelProvider::apply);
+    comboBox.setClearButtonVisible(true);
+
+    final boolean allowEmpty = required.isEmpty();
+
+    bindEntry(
+            comboBox,
+            dto -> new LinkedHashSet<>(valueProvider.apply(dto)),
+            (dto, selectedSet) -> valueSetter.accept(dto, new ArrayList<>(selectedSet)),
+            binder,
+            required,
+            (value, ctx) -> {
+              if (value == null || value.isEmpty()) {
+                return allowEmpty
+                        ? ValidationResult.ok()
+                        : ValidationResult.error(required.orElse("Select at least one item"));
+              }
+              return ValidationResult.ok();
+            }
+    );
 
     return comboBox;
   }
