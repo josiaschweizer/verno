@@ -4,27 +4,24 @@ import ch.verno.common.db.dto.MandantSettingDto;
 import ch.verno.server.service.MandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Optional;
+
 public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   private final MandantSettingService mandantSettingService;
-  @Nonnull
-  private final Button saveButton;
+
 
   public QuantitySetting(@Nonnull MandantSettingService mandantSettingService) {
-    super("Quantity Settings");
+    super("Quantity Settings", true);
+
     this.mandantSettingService = mandantSettingService;
     this.dto = mandantSettingService.getSingleMandantSetting();
-
-    saveButton = new Button("Save", e -> save());
-    saveButton.setEnabled(false);
-    setActionButton(saveButton);
   }
 
   @Nonnull
@@ -32,12 +29,14 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
   protected Component createContent() {
     final var courseScheduleQuantity = settingEntryFactory.createQuantitySetting(
             "Quantity of Course Days in one Course Schedule",
+            Optional.of("Defines the maximum number of course days allowed within a single course schedule."),
             binder,
             MandantSettingDto::getCourseDaysPerSchedule,
             MandantSettingDto::setCourseDaysPerSchedule
     );
     final var courseQuantity = settingEntryFactory.createQuantitySetting(
             "Quantity of Participants in one Course",
+            Optional.of("Defines the maximum number of participants allowed per course."),
             binder,
             MandantSettingDto::getMaxParticipantsPerCourse,
             MandantSettingDto::setMaxParticipantsPerCourse
@@ -46,14 +45,11 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
     final var content = new VerticalLayout(courseScheduleQuantity, courseQuantity);
     content.setPadding(false);
 
-    binder.readBean(dto);
-    binder.addStatusChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
-    binder.addValueChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
-
     return content;
   }
 
-  private void save() {
+  @Override
+  protected void save() {
     if (binder.writeBeanIfValid(dto)) {
       mandantSettingService.saveSingleMandantSetting(dto);
     }

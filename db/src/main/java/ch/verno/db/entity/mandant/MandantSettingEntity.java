@@ -17,14 +17,19 @@ public class MandantSettingEntity {
   @Column(name = "max_participants_per_course")
   private Integer maxParticipantsPerCourse;
 
+  @Column(name = "enforce_quantity_settings")
+  private boolean enforceQuantitySettings;
+
   protected MandantSettingEntity() {
     // JPA
   }
 
   public MandantSettingEntity(@Nonnull final Integer courseDaysPerSchedule,
-                              @Nonnull final Integer maxParticipantsPerCourse) {
+                              @Nonnull final Integer maxParticipantsPerCourse,
+                              final boolean enforceQuantitySettings) {
     this.courseDaysPerSchedule = courseDaysPerSchedule;
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
+    this.enforceQuantitySettings = enforceQuantitySettings;
   }
 
   public Long getId() {
@@ -49,5 +54,13 @@ public class MandantSettingEntity {
 
   public void setMaxParticipantsPerCourse(final Integer maxParticipantsPerCourse) {
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
+  }
+
+  public boolean isEnforceQuantitySettings() {
+    return enforceQuantitySettings;
+  }
+
+  public void setEnforceQuantitySettings(final boolean enforceQuantitySettings) {
+    this.enforceQuantitySettings = enforceQuantitySettings;
   }
 }

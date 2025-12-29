@@ -42,7 +42,8 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
 
   @Override
   protected void initUI() {
-    add(new VerticalLayout(createInfoLayout(), createSchedulePickerLayout(mandantSettingService.getSingleMandantSetting().getCourseDaysPerSchedule())));
+    final var singleMandantSetting = mandantSettingService.getSingleMandantSetting();
+    add(new VerticalLayout(createInfoLayout(), createSchedulePickerLayout(singleMandantSetting.getCourseDaysPerSchedule(), singleMandantSetting.isEnforceQuantitySettings())));
   }
 
   @Nonnull
@@ -58,7 +59,8 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
   }
 
   @Nonnull
-  private HorizontalLayout createSchedulePickerLayout(@Nullable final Integer quantityProposalCourseDays) {
+  private HorizontalLayout createSchedulePickerLayout(@Nullable final Integer quantityProposalCourseDays,
+                                                      final boolean enforceQuantitySetting) {
     final var schedulePicker = entryFactory.createScheduleWeekPickerEntry(
             courseScheduleDto -> Set.copyOf(courseScheduleDto.getWeeks()),
             (dto, value) -> dto.setWeeks(value.stream().toList()),
@@ -67,6 +69,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
             "Calendar-Week Schedule"
     );
     schedulePicker.setQuantityProposalCourseDays(quantityProposalCourseDays);
+    schedulePicker.setEnforceQuantitySetting(enforceQuantitySetting);
 
     return createLayoutFromComponents(schedulePicker);
   }

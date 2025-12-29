@@ -403,6 +403,5 @@ SELECT CURRENT_TIMESTAMP,
   (SELECT id FROM parent WHERE email = 'andrina.schmidt@example.com' ORDER BY id DESC LIMIT 1)
 WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'noah.kunz@example.com');
 
-INSERT INTO mandant_settings (course_weeks_per_schedule, max_participants_per_course)
-SELECT 8,
-       12 WHERE NOT EXISTS (SELECT 1 FROM mandant_settings);
+INSERT INTO mandant_settings (course_weeks_per_schedule, max_participants_per_course, enforce_quantity_settings)
+SELECT 8, 12, false WHERE NOT EXISTS (SELECT 1 FROM mandant_settings);

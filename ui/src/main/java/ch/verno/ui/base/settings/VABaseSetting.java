@@ -16,6 +16,11 @@ import jakarta.annotation.Nullable;
 public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   @Nonnull
+  protected final Binder<T> binder;
+  @Nonnull
+  protected T dto;
+
+  @Nonnull
   private final Div headerWrapper;
   @Nonnull
   private final Div contentWrapper;
@@ -23,16 +28,14 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   protected Component contentComponent;
   @Nullable
   private Span actionButtonSpan;
-
   @Nonnull
-  protected final Binder<T> binder;
-  @Nonnull
-  protected T dto;
+  protected Button saveButton;
 
   @Nonnull
   public final SettingEntryFactory<T> settingEntryFactory;
 
-  protected VABaseSetting(@Nonnull final String title) {
+  protected VABaseSetting(@Nonnull final String title,
+                          final boolean showSaveButton) {
     settingEntryFactory = new SettingEntryFactory<>();
     dto = createNewBeanInstance();
     binder = createBinder();
@@ -50,6 +53,17 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
     contentWrapper = new Div();
     add(contentWrapper);
+
+    createSaveButton(showSaveButton);
+  }
+
+  private void createSaveButton(final boolean showSaveButton) {
+    saveButton = new Button("Save", e -> save());
+    saveButton.setEnabled(false);
+
+    if (showSaveButton) {
+      setActionButton(saveButton);
+    }
   }
 
   protected final void setActionButton(@Nonnull final Button actionButton) {
@@ -69,6 +83,10 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
     if (contentComponent == null) {
       setContent(createContent());
+
+      binder.readBean(dto);
+      binder.addStatusChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
+      binder.addValueChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
     }
   }
 
@@ -93,4 +111,8 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   @Nonnull
   protected abstract T createNewBeanInstance();
+
+  protected void save() {
+    // Default implementation does nothing
+  }
 }

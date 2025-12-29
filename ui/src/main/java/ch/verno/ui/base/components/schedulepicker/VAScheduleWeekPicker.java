@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.schedulepicker;
 
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.util.Publ;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.customfield.CustomField;
@@ -27,6 +28,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
   @Nullable
   private Integer quantityProposalCourseDays;
+  private boolean enforceQuantitySetting;
 
   @Nullable
   private ComboBox<Integer> yearSelect;
@@ -151,10 +153,35 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
       return;
     }
 
-    selectedYearWeeksMap.put(currentYear, new HashSet<>(event.getValue()));
+    final Set<Integer> newValue = new HashSet<>(event.getValue());
+    final Set<Integer> oldValue = new HashSet<>(event.getOldValue());
 
+    final var added = new HashSet<>(newValue);
+    added.removeAll(oldValue);
+    final var isAdding = !added.isEmpty();
+
+    final int totalSelectedBefore = getWeekOverAllYears().size();
+    final int limit = (quantityProposalCourseDays != null) ? quantityProposalCourseDays : Integer.MAX_VALUE;
+
+    if (enforceQuantitySetting && quantityProposalCourseDays != null) {
+      if (isAdding && totalSelectedBefore >= limit) {
+        internalUpdate = true;
+        try {
+          event.getHasValue().setValue(oldValue);
+        } finally {
+          internalUpdate = false;
+        }
+
+        NotificationFactory.showWarningNotification("You have reached the maximum number of allowed weeks (" + limit + ").");
+        return;
+      }
+    }
+
+    setInvalid(false);
+    setErrorMessage(null);
+
+    selectedYearWeeksMap.put(currentYear, newValue);
     setModelValue(generateModelValue(), true);
-
     updatePreview();
   }
 
@@ -207,17 +234,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   }
 
   private void updatePreview() {
-    final var parts = new ArrayList<String>();
-
-    selectedYearWeeksMap.forEach((year, weeks) -> {
-      if (weeks == null) {
-        return;
-      }
-
-      weeks.stream()
-              .sorted()
-              .forEach(week -> parts.add("KW-" + week + "-" + year));
-    });
+    final var parts = getWeekOverAllYears();
 
     final var previewTitle = getPreviewTitle(parts);
     final var weeksString = String.join(", ", parts);
@@ -249,6 +266,10 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     this.quantityProposalCourseDays = quantityProposalCourseDays;
   }
 
+  public void setEnforceQuantitySetting(final boolean enforceQuantitySetting) {
+    this.enforceQuantitySetting = enforceQuantitySetting;
+  }
+
   @Nonnull
   private List<Integer> weeksOfYear(final int year) {
     final int max = maxIsoWeekOfYear(year);
@@ -258,5 +279,20 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private static int maxIsoWeekOfYear(final int year) {
     final var wf = WeekFields.ISO;
     return LocalDate.of(year, 12, 28).get(wf.weekOfWeekBasedYear());
+  }
+
+  @Nonnull
+  private ArrayList<String> getWeekOverAllYears() {
+    final var parts = new ArrayList<String>();
+    selectedYearWeeksMap.forEach((year, weeks) -> {
+      if (weeks == null) {
+        return;
+      }
+
+      weeks.stream()
+              .sorted()
+              .forEach(week -> parts.add("KW-" + week + "-" + year));
+    });
+    return parts;
   }
 }

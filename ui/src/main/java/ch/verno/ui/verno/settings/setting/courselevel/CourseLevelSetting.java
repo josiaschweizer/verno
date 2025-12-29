@@ -20,7 +20,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
   private final CourseLevelDetail courseLevelDetail;
 
   public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
-    super("Course Levels");
+    super("Course Levels", false);
     setCardDefaultHeight();
 
     this.courseLevelGrid = createGrid(courseLevelService);

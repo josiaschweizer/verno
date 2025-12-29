@@ -1,0 +1,28 @@
+vaadin-notification-overlay[position="bottom-end"] {
+    bottom: 0 !important;
+    right: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+vaadin-notification-card {
+    min-width: 300px;
+    border-radius: var(--lumo-border-radius-m);
+    box-shadow: var(--lumo-box-shadow-m);
+    margin: 4px !important;
+}
+
+.notification-content {
+    padding: var(--lumo-space-m) var(--lumo-space-l);
+    gap: var(--lumo-space-m);
+}
+
+.notification-content vaadin-icon {
+    color: inherit;
+}
+
+.notification-content span {
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
