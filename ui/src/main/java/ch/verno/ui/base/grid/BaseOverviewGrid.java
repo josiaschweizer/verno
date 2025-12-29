@@ -1,7 +1,7 @@
 package ch.verno.ui.base.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.ui.base.components.filter.VASearchFilter;
+import ch.verno.ui.base.components.filter.VAFilterBar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
@@ -17,7 +17,6 @@ import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
@@ -30,7 +29,6 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
   @Nonnull
   private F filter;
-  private VASearchFilter searchFilter;
 
   protected BaseOverviewGrid(@Nonnull final F initialFilter) {
     this.columnsByKey = new HashMap<>();
@@ -56,16 +54,17 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   protected void initUI() {
     initGrid();
-    searchFilter = createSearchFilter();
-    add(ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute(), searchFilter));
-    add(grid);
+    add(ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute()));
+    final var filterBar = createFilterBar();
+    add(filterBar, grid);
   }
 
   @Nonnull
-  private VASearchFilter createSearchFilter() {
-    final var searchFilter = new VASearchFilter();
-    searchFilter.addValueChangeListener(listener -> setFilter(withSearchText(listener.getValue() != null ? listener.getValue().trim() : "")));
-    return searchFilter;
+  private VerticalLayout createFilterBar() {
+    final var filterBar = new VAFilterBar();
+    filterBar.setSearchHandler(searchText -> setFilter(withSearchText(searchText)));
+    filterBar.setOnFiltersChanged(dataProvider::refreshAll);
+    return new VerticalLayout(filterBar);
   }
 
   protected void initGrid() {
@@ -124,12 +123,6 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   protected F withSearchText(@Nonnull final String searchText) {
     return getFilter(); // default: no search text applied
-  }
-
-  public void setSearchFilterVisible(final boolean visible) {
-    if (searchFilter != null) {
-      searchFilter.setVisible(visible);
-    }
   }
 
   @Nonnull

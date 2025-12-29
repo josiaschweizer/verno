@@ -22,9 +22,19 @@ public class ViewToolbarFactory {
 
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final String gridObjectName,
+                                              @Nonnull final String url) {
+    return createGridToolbar(gridObjectName, url, null);
+  }
+
+  @Nonnull
+  public static ViewToolbar createGridToolbar(@Nonnull final String gridObjectName,
                                               @Nonnull final String url,
                                               @Nullable final VASearchFilter filter) {
-    return new ViewToolbar(gridObjectName + " Grid", filter, createNewButton(gridObjectName, url));
+    if (filter != null) {
+      return new ViewToolbar(gridObjectName + " Grid", filter, createNewButton(gridObjectName, url));
+    }
+
+    return new ViewToolbar(gridObjectName + " Grid", createNewButton(gridObjectName, url));
   }
 
   @Nonnull
@@ -38,9 +48,9 @@ public class ViewToolbarFactory {
     final var newButton = createNewButton(objectName, url);
 
     return new ViewToolbarResult(
-        new ViewToolbar(objectName + " Detail", newButton),
-        newButton,
-        null
+            new ViewToolbar(objectName + " Detail", newButton),
+            newButton,
+            null
     );
   }
 
