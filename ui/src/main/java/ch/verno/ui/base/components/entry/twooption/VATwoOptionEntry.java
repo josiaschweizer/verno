@@ -29,10 +29,6 @@ public class VATwoOptionEntry<T> extends CustomField<T> {
   public VATwoOptionEntry(@Nonnull final String label,
                           @Nonnull final List<T> options,
                           @Nonnull final ValueProvider<T, String> itemLabelProvider) {
-    if (options.size() != 2) {
-      throw new IllegalArgumentException("TwoOptionEntry requires exactly 2 options, but got: " + options.size());
-    }
-
     this.leftValue = options.get(0);
     this.rightValue = options.get(1);
 

@@ -83,7 +83,7 @@ public class MandantSettingService implements IMandantSettingService {
     return mandantSettingRepository.findAll().stream()
             .findFirst()
             .map(MandantSettingMapper::toDto)
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, -1L));
+            .orElse(saveSingleMandantSetting(new MandantSettingDto(1L, 8, 12)));
   }
 
   @Nonnull
