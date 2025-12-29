@@ -56,6 +56,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto> {
     columnsMap.put(ParticipantDto::getBirthdate, "Age");
     columnsMap.put(ParticipantDto::getEmail, "Email");
     columnsMap.put(ParticipantDto::getPhoneString, "Phone");
+    columnsMap.put(ParticipantDto::getNote, "Note");
     columnsMap.put(dto -> dto.getCourseLevel().getName(), "Course Level");
     columnsMap.put(dto -> dto.getCourse() != null ? dto.getCourse().displayName() : Publ.EMPTY_STRING, "Course");
     columnsMap.put(dto -> dto.getParentOne().displayName(), "Parent One");

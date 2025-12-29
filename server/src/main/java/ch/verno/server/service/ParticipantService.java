@@ -1,21 +1,14 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
 import ch.verno.common.util.Publ;
-import ch.verno.db.entity.CourseEntity;
-import ch.verno.db.entity.CourseLevelEntity;
-import ch.verno.db.entity.GenderEntity;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,11 +57,12 @@ public class ParticipantService implements IParticipantService {
     final var entity = new ParticipantEntity(
             ServiceHelper.safeString(participantDto.getFirstName()),
             ServiceHelper.safeString(participantDto.getLastName()),
-        participantDto.getBirthdate() != null ? participantDto.getBirthdate() : LocalDate.now(),
+            participantDto.getBirthdate() != null ? participantDto.getBirthdate() : LocalDate.now(),
             ServiceHelper.safeString(participantDto.getEmail()),
-        !participantDto.getPhone().isEmpty()
-            ? participantDto.getPhone().toString()
-            : Publ.EMPTY_STRING
+            !participantDto.getPhone().isEmpty()
+                    ? participantDto.getPhone().toString()
+                    : Publ.EMPTY_STRING,
+            ServiceHelper.safeString(participantDto.getNote())
     );
 
     final var savedParticipant = saveParticipant(participantDto, entity);
@@ -84,16 +78,17 @@ public class ParticipantService implements IParticipantService {
     }
 
     final var existing = participantRepository.findById(participantDto.getId())
-        .orElseThrow(() -> new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participantDto.getId()));
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participantDto.getId()));
 
     existing.setFirstname(ServiceHelper.safeString(participantDto.getFirstName()));
     existing.setLastname(ServiceHelper.safeString(participantDto.getLastName()));
     existing.setBirthdate(participantDto.getBirthdate() != null ? participantDto.getBirthdate() : LocalDate.now());
     existing.setEmail(ServiceHelper.safeString(participantDto.getEmail()));
     existing.setPhone(!participantDto.getPhone().isEmpty()
-        ? participantDto.getPhone().toString()
-        : Publ.EMPTY_STRING
+            ? participantDto.getPhone().toString()
+            : Publ.EMPTY_STRING
     );
+    existing.setNote(ServiceHelper.safeString(participantDto.getNote()));
 
     final var savedParticipant = saveParticipant(participantDto, existing);
     return ParticipantMapper.toDto(savedParticipant);
@@ -129,7 +124,7 @@ public class ParticipantService implements IParticipantService {
   @Transactional(readOnly = true)
   public List<ParticipantDto> getAllParticipants() {
     return participantRepository.findAll().stream()
-        .map(ParticipantMapper::toDto)
-        .toList();
+            .map(ParticipantMapper::toDto)
+            .toList();
   }
 }

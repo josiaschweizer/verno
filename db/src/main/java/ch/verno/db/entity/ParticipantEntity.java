@@ -49,6 +49,10 @@ public class ParticipantEntity {
   @Column(name = "phone")
   private String phone;
 
+  @Lob
+  @Column(name = "note")
+  private String note;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_one")
   private ParentEntity parentOne;
@@ -65,12 +69,14 @@ public class ParticipantEntity {
                            @Nonnull final String lastname,
                            @Nonnull final LocalDate birthdate,
                            @Nonnull final String email,
-                           @Nonnull final String phone) {
+                           @Nonnull final String phone,
+                           @Nonnull final String note) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.birthdate = birthdate;
     this.email = email;
     this.phone = phone;
+    this.note = note;
   }
 
   public Long getId() {
@@ -155,6 +161,15 @@ public class ParticipantEntity {
 
   public void setPhone(final String phone) {
     this.phone = phone;
+  }
+
+
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(final String note) {
+    this.note = note;
   }
 
   public ParentEntity getParentOne() {

@@ -30,6 +30,9 @@ public class ParticipantDto extends BaseDto {
   private PhoneNumber phone;
 
   @Nonnull
+  private String note;
+
+  @Nonnull
   private CourseLevelDto courseLevel;
 
   @Nullable
@@ -52,6 +55,7 @@ public class ParticipantDto extends BaseDto {
     this.gender = GenderDto.empty();
     this.email = Publ.EMPTY_STRING;
     this.phone = PhoneNumber.empty();
+    this.note = Publ.EMPTY_STRING;
     this.course = CourseDto.empty();
     this.courseLevel = CourseLevelDto.empty();
     this.address = AddressDto.empty();
@@ -66,6 +70,7 @@ public class ParticipantDto extends BaseDto {
                         @Nonnull final GenderDto gender,
                         @Nonnull final String email,
                         @Nonnull final PhoneNumber phone,
+                        @Nonnull final String note,
                         @Nullable final CourseDto course,
                         @Nonnull final CourseLevelDto courseLevel,
                         @Nonnull final AddressDto address,
@@ -78,6 +83,7 @@ public class ParticipantDto extends BaseDto {
     this.gender = gender;
     this.email = email;
     this.phone = phone;
+    this.note = note;
     this.course = course;
     this.courseLevel = courseLevel;
     this.address = address;
@@ -94,6 +100,7 @@ public class ParticipantDto extends BaseDto {
             && gender.isEmpty()
             && email.isEmpty()
             && phone.isEmpty()
+            && note.isEmpty()
             && (course == null || course.isEmpty())
             && courseLevel.isEmpty()
             && address.isEmpty()
@@ -158,6 +165,15 @@ public class ParticipantDto extends BaseDto {
   @Nonnull
   public String getPhoneString() {
     return PhoneNumberFormatter.formatPhoneNumber(phone);
+  }
+
+  @Nonnull
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(@Nonnull final String note) {
+    this.note = note;
   }
 
   @Nonnull

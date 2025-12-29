@@ -129,6 +129,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> {
     return createLayoutFromComponents(email, phone);
   }
 
+  @Nonnull
   private VerticalLayout createAddressLayout() {
     final var street = fieldFactory.createStreetField(
             instructorDto -> instructorDto.getAddress().getStreet(),

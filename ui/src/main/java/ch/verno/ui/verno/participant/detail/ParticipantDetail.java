@@ -120,6 +120,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
     participantLayout.add(createParticipantInfoLayout());
     participantLayout.add(createParticipantContactLayout());
     participantLayout.add(createParticipantCourseLayout());
+    participantLayout.add(createParticipantNoteLayout());
     return participantLayout;
   }
 
@@ -220,6 +221,19 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
     }
 
     return createLayoutFromComponents(courseLevelEntry, courseEntry);
+  }
+
+  @Nonnull
+  private HorizontalLayout createParticipantNoteLayout() {
+    final var note = entryFactory.createTextAreaEntry(
+            ParticipantDto::getNote,
+            ParticipantDto::setNote,
+            getBinder(),
+            Optional.empty(),
+            "Note"
+    );
+
+    return createLayoutFromComponents(note);
   }
 
   @Nonnull

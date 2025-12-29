@@ -22,18 +22,19 @@ public final class ParticipantMapper {
     final var birthdate = entity.getBirthdate() == null ? LocalDate.now() : entity.getBirthdate();
 
     return new ParticipantDto(
-        entity.getId(),
-        entity.getFirstname() == null ? Publ.EMPTY_STRING : entity.getFirstname(),
-        entity.getLastname() == null ? Publ.EMPTY_STRING : entity.getLastname(),
-        birthdate,
-        GenderMapper.toDto(entity.getGender()),
-        entity.getEmail() == null ? Publ.EMPTY_STRING : entity.getEmail(),
-        entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
-        CourseMapper.toDto(entity.getCourse()),
-        CourseLevelMapper.toDto(entity.getCourseLevel()),
-        AddressMapper.toDto(entity.getAddress()),
-        ParentMapper.toDto(entity.getParentOne()),
-        ParentMapper.toDto(entity.getParentTwo())
+            entity.getId(),
+            entity.getFirstname() == null ? Publ.EMPTY_STRING : entity.getFirstname(),
+            entity.getLastname() == null ? Publ.EMPTY_STRING : entity.getLastname(),
+            birthdate,
+            GenderMapper.toDto(entity.getGender()),
+            entity.getEmail() == null ? Publ.EMPTY_STRING : entity.getEmail(),
+            entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
+            entity.getNote() == null ? Publ.EMPTY_STRING : entity.getNote(),
+            CourseMapper.toDto(entity.getCourse()),
+            CourseLevelMapper.toDto(entity.getCourseLevel()),
+            AddressMapper.toDto(entity.getAddress()),
+            ParentMapper.toDto(entity.getParentOne()),
+            ParentMapper.toDto(entity.getParentTwo())
     );
   }
 
@@ -44,11 +45,12 @@ public final class ParticipantMapper {
     }
 
     final var entity = new ParticipantEntity(
-        dto.getFirstName(),
-        dto.getLastName(),
-        dto.getBirthdate() != null ? dto.getBirthdate() : LocalDate.now(),
-        dto.getEmail(),
-        !dto.getPhone().isEmpty() ? dto.getPhone().toString() : Publ.EMPTY_STRING
+            dto.getFirstName(),
+            dto.getLastName(),
+            dto.getBirthdate() != null ? dto.getBirthdate() : LocalDate.now(),
+            dto.getEmail(),
+            !dto.getPhone().isEmpty() ? dto.getPhone().toString() : Publ.EMPTY_STRING,
+            dto.getNote()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {

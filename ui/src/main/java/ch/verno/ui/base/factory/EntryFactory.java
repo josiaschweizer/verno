@@ -14,6 +14,7 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -38,6 +39,18 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     textField.setWidthFull();
     bindEntry(textField, valueProvider, valueSetter, binder, required);
     return textField;
+  }
+
+  @Nonnull
+  public TextArea createTextAreaEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                      @Nonnull final Setter<DTO, String> valueSetter,
+                                      @Nonnull final Binder<DTO> binder,
+                                      @Nonnull final Optional<String> required,
+                                      @Nonnull final String label) {
+    final var textArea = new TextArea(label);
+    textArea.setWidthFull();
+    bindEntry(textArea, valueProvider, valueSetter, binder, required);
+    return textArea;
   }
 
   @Nonnull
