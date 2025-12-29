@@ -61,7 +61,7 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
     return new Binder<>(MandantSettingDto.class);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected MandantSettingDto createNewBeanInstance() {
     return new MandantSettingDto();

@@ -1,11 +1,15 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
 import ch.verno.server.mapper.CourseScheduleMapper;
 import ch.verno.server.repository.CourseScheduleRepository;
+import ch.verno.server.spec.CourseScheduleSpec;
+import ch.verno.server.spec.PageHelper;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +21,13 @@ public class CourseScheduleService implements ICourseScheduleService {
 
   @Nonnull
   private final CourseScheduleRepository courseScheduleRepository;
+  @Nonnull
+  private final CourseScheduleSpec courseScheduleSpec;
 
   public CourseScheduleService(@Nonnull final CourseScheduleRepository courseScheduleRepository) {
     this.courseScheduleRepository = courseScheduleRepository;
+
+    this.courseScheduleSpec = new CourseScheduleSpec();
   }
 
   @Nonnull
@@ -82,5 +90,24 @@ public class CourseScheduleService implements ICourseScheduleService {
             .stream()
             .map(CourseScheduleMapper::toDto)
             .toList();
+  }
+
+  @Nonnull
+  @Transactional(readOnly = true)
+  public List<CourseScheduleDto> findCourseSchedules(@Nonnull final CourseScheduleFilter filter,
+                                                     final int offset,
+                                                     final int limit,
+                                                     @Nonnull final List<QuerySortOrder> sortOrders) {
+    final var pageable = PageHelper.createPageRequest(offset, limit, sortOrders);
+    final var spec = courseScheduleSpec.courseScheduleSpec(filter);
+
+    return courseScheduleRepository.findAll(spec, pageable).stream()
+            .map(CourseScheduleMapper::toDto)
+            .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public int countCourses(@Nonnull final CourseScheduleFilter filter) {
+    return Math.toIntExact(courseScheduleRepository.count(courseScheduleSpec.courseScheduleSpec( filter)));
   }
 }

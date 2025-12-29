@@ -1,7 +1,6 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseLevelService;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.Grid;

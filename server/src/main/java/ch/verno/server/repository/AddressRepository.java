@@ -21,7 +21,7 @@ public class AddressRepository {
 
 
   @Nonnull
-  public Optional<AddressEntity> findById(@NonNull final Long id) {
+  public Optional<AddressEntity> findById(@Nonnull final Long id) {
     return springDataAddressJpaRepository.findById(id);
   }
 

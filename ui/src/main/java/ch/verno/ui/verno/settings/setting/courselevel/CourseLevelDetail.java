@@ -144,7 +144,7 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
     return courseLevelService.updateCourseLevel(bean);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected FormMode getDefaultFormMode() {
     return FormMode.EDIT;
