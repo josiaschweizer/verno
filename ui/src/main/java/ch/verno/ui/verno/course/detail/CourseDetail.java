@@ -117,7 +117,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
                     0.0,
             (dto, value) -> dto.setCapacity(value.intValue()),
             getBinder(),
-            Optional.of("Capacity is required"),
+            Optional.empty(),
             "max Capacity");
     final var location = entryFactory.createTextEntry(
             CourseDto::getLocation,
@@ -125,17 +125,21 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
             getBinder(),
             Optional.empty(),
             "Location");
-    //todo default value from user settings
-    final var duration = entryFactory.createNumberEntry(
-            courseDto -> courseDto.getDuration() != null ?
-                    courseDto.getDuration().doubleValue() :
-                    0.0,
-            (dto, value) -> dto.setDuration(value.intValue()),
-            getBinder(),
-            Optional.of("Duration is required"),
-            "Duration (minutes)");
 
-    return createLayoutFromComponents(titleEntry, capacityEntry, location, duration);
+    final var startTime = entryFactory.createTimeEntry(
+            CourseDto::getStartTime,
+            CourseDto::setStartTime,
+            getBinder(),
+            Optional.empty(),
+            "Start Time");
+    final var endTime = entryFactory.createTimeEntry(
+            CourseDto::getEndTime,
+            CourseDto::setEndTime,
+            getBinder(),
+            Optional.empty(),
+            "End Time");
+
+    return createLayoutFromComponents(titleEntry, capacityEntry, location, startTime, endTime);
   }
 
   private HorizontalLayout createCourseLayout() {

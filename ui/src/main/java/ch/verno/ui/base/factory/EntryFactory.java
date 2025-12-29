@@ -15,6 +15,7 @@ import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
@@ -23,7 +24,9 @@ import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class EntryFactory<DTO, TWOSELECTIONDTO> {
@@ -136,6 +139,23 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
     bindEntry(comboBox, valueProvider, valueSetter, binder, required);
 
     return comboBox;
+  }
+
+  @Nonnull
+  public TimePicker createTimeEntry(@Nonnull final ValueProvider<DTO, LocalTime> valueProvider,
+                                    @Nonnull final Setter<DTO, LocalTime> valueSetter,
+                                    @Nonnull final Binder<DTO> binder,
+                                    @Nonnull final Optional<String> required,
+                                    @Nonnull final String label) {
+    final var timePicker = new TimePicker(label);
+    timePicker.setWidthFull();
+    timePicker.setLocale(Locale.GERMAN);
+    timePicker.setClearButtonVisible(true);
+
+    timePicker.setStep(Duration.ofMinutes(5));
+
+    bindEntry(timePicker, valueProvider, valueSetter, binder, required);
+    return timePicker;
   }
 
   @Nonnull

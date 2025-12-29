@@ -39,7 +39,8 @@ public final class CourseMapper {
             courseLevels,
             CourseScheduleMapper.toDto(entity.getSchedule()),
             weekdays,
-            entity.getDuration(),
+            entity.getStartTime(),
+            entity.getEndTime(),
             InstructorMapper.toDto(entity.getInstructor())
     );
   }
@@ -57,7 +58,8 @@ public final class CourseMapper {
             CourseLevelMapper.toEntityRefs(dto.getCourseLevels()),
             CourseScheduleMapper.toEntity(dto.getCourseSchedule()),
             dto.getWeekdays(),
-            dto.getDuration(),
+            dto.getStartTime(),
+            dto.getEndTime(),
             InstructorMapper.toEntity(dto.getInstructor())
     );
 

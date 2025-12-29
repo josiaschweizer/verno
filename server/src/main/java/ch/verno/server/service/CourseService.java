@@ -64,7 +64,8 @@ public class CourseService implements ICourseService {
             levels,
             schedule,
             courseDto.getWeekdays(),
-            courseDto.getDuration(),
+            courseDto.getStartTime(),
+            courseDto.getEndTime(),
             serviceHelper.resolveInstructor(instructorRepository, courseDto.getInstructor())
     );
 
@@ -88,7 +89,8 @@ public class CourseService implements ICourseService {
     existing.setTitle(ServiceHelper.safeString(courseDto.getTitle()));
     existing.setCapacity(courseDto.getCapacity());
     existing.setLocation(ServiceHelper.safeString(courseDto.getLocation()));
-    existing.setDuration(courseDto.getDuration());
+    existing.setStartTime(courseDto.getStartTime());
+    existing.setEndTime(courseDto.getEndTime());
 
     final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
     if (levels.isEmpty()) {

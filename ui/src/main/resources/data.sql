@@ -29,10 +29,10 @@ VALUES (CURRENT_TIMESTAMP, 'Peter', 'Schmidt', 'peter.schmidt@example.com', '+41
        (CURRENT_TIMESTAMP, 'Nina', 'Frei', 'nina.frei@example.com', '+41791239999', 2, 2),
        (CURRENT_TIMESTAMP, 'Thomas', 'Frei', 'thomas.frei@example.com', '+41791238888', 1, 2);
 
-INSERT INTO course (created_at, title, capacity, location, course_schedule_id, duration, instructor_id)
-VALUES (CURRENT_TIMESTAMP, 'Grundkurs', 20, 'Schulzimmer 1', 1, 60, 1),
-       (CURRENT_TIMESTAMP, 'Frühlingskurs', 12, 'Schulzimmer 2', 2, 75, 2),
-       (CURRENT_TIMESTAMP, 'Sommerkurs', 16, 'Turnhalle', 3, 90, 3);
+INSERT INTO course (created_at, title, capacity, location, course_schedule_id, start_time, end_time, instructor_id)
+VALUES (CURRENT_TIMESTAMP, 'Grundkurs', 20, 'Schulzimmer 1', 1, TIME '14:00', TIME '15:00', 1),
+       (CURRENT_TIMESTAMP, 'Frühlingskurs', 12, 'Schulzimmer 2', 2, TIME '15:30', TIME '16:45', 2),
+       (CURRENT_TIMESTAMP, 'Sommerkurs', 16, 'Turnhalle', 3, TIME '17:00', TIME '18:30', 3);
 
 INSERT INTO course_course_level (course_id, course_level_id, sort_index)
 VALUES (1, 1, 0),
