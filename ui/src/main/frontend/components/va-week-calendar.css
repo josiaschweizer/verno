@@ -1,0 +1,118 @@
+.va-week-calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    gap: var(--lumo-space-s);
+}
+
+.va-week-calendar-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--lumo-space-s);
+    flex-shrink: 0;
+}
+
+.va-week-calendar-title {
+    font-weight: 600;
+    margin-left: var(--lumo-space-s);
+}
+
+.va-week-calendar-stack {
+    position: relative;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+}
+
+.va-week-calendar {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    grid-template-rows: 44px repeat(24, minmax(60px, 1fr));
+    grid-template-columns: 72px repeat(7, minmax(0, 1fr));
+    border-top: 1px solid var(--lumo-contrast-10pct);
+    border-left: 1px solid var(--lumo-contrast-10pct);
+}
+
+.va-week-calendar-events {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: 44px repeat(24, minmax(60px, 1fr));
+    grid-template-columns: 72px repeat(7, minmax(0, 1fr));
+    pointer-events: none;
+}
+
+.va-week-calendar-corner {
+    background: var(--lumo-base-color);
+    border-right: 1px solid var(--lumo-contrast-10pct);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 4;
+}
+
+.va-week-calendar-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--lumo-font-size-s);
+    background: var(--lumo-base-color);
+    border-right: 1px solid var(--lumo-contrast-10pct);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+.va-week-calendar-hour {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: var(--lumo-space-xs);
+    font-size: var(--lumo-font-size-xs);
+    color: var(--lumo-secondary-text-color);
+    background: var(--lumo-base-color);
+    border-right: 1px solid var(--lumo-contrast-10pct);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+    position: sticky;
+    left: 0;
+    z-index: 2;
+}
+
+.va-week-calendar-cell {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    background: var(--lumo-base-color);
+    border-right: 1px solid var(--lumo-contrast-10pct);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+.va-week-calendar-cell:hover {
+    background: var(--lumo-contrast-5pct);
+}
+
+.va-week-calendar-course {
+    background: var(--lumo-primary-color-10pct);
+    color: var(--lumo-primary-text-color);
+    border-left: 4px solid var(--lumo-primary-color);
+    border-radius: var(--lumo-border-radius-s);
+    padding: var(--lumo-space-xs);
+    font-size: var(--lumo-font-size-xs);
+    overflow: hidden;
+    margin: 4px;
+    min-width: 0;
+    min-height: 0;
+    z-index: 1;
+    pointer-events: auto;
+}

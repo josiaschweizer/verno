@@ -12,9 +12,10 @@ public class Routes {
   public static final String LOGIN = "login";
   public static final String PARTICIPANTS = "participants";
   public static final String INSTRUCTORS = "instructors";
-  public static final String COURSES = "courses";
+  public static final String COURSE = "course";
+  public static final String COURSES = COURSE + Publ.SLASH + "courses";
   public static final String COURSE_LEVELS = "course-levels";
-  public static final String COURSE_SCHEDULES = COURSES + Publ.SLASH + "course-schedules";
+  public static final String COURSE_SCHEDULES = COURSE + Publ.SLASH + "course-schedules";
   public static final String SETTINGS = "settings";
   public static final String USER_SETTINGS = SETTINGS + Publ.SLASH + "user";
   public static final String MANDANT_SETTINGS = SETTINGS + Publ.SLASH + "mandant";

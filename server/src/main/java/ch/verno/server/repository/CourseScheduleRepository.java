@@ -3,7 +3,6 @@ package ch.verno.server.repository;
 import ch.verno.db.entity.CourseScheduleEntity;
 import ch.verno.db.jpa.SpringDataCourseScheduleJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +24,11 @@ public class CourseScheduleRepository {
   @Nonnull
   public Optional<CourseScheduleEntity> findById(@Nonnull final Long id) {
     return jpaRepository.findById(id);
+  }
+
+  @Nonnull
+  public List<CourseScheduleEntity> findByWeek(@Nonnull final String week) {
+    return jpaRepository.findByWeeksContains(week);
   }
 
   @Nonnull

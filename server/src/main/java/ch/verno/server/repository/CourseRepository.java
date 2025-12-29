@@ -27,6 +27,11 @@ public class CourseRepository {
   }
 
   @Nonnull
+  public List<CourseEntity> findByCourseLevelId(@Nonnull final Long courseLevelId) {
+    return jpaRepository.findByCourseLevels_Id(courseLevelId);
+  }
+
+  @Nonnull
   public List<CourseEntity> findAll() {
     return jpaRepository.findAll();
   }

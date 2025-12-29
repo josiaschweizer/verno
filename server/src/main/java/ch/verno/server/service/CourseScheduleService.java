@@ -5,6 +5,7 @@ import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.util.WeekKey;
 import ch.verno.server.mapper.CourseScheduleMapper;
 import ch.verno.server.repository.CourseScheduleRepository;
 import ch.verno.server.spec.CourseScheduleSpec;
@@ -14,6 +15,7 @@ import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -80,6 +82,17 @@ public class CourseScheduleService implements ICourseScheduleService {
     }
 
     return CourseScheduleMapper.toDto(foundById.get());
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public List<CourseScheduleDto> getCourseScheduleByWeek(@Nonnull final LocalDate weekDate){
+    final var week = WeekKey.from(weekDate);
+    return courseScheduleRepository.findByWeek(week)
+            .stream()
+            .map(CourseScheduleMapper::toDto)
+            .toList();
   }
 
   @Nonnull
