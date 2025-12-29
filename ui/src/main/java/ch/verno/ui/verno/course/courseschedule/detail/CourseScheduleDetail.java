@@ -74,56 +74,56 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
     return createLayoutFromComponents(schedulePicker);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected String getDetailPageName() {
     return VernoConstants.COURSE_SCHEDULE;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected String getDetailRoute() {
     return Routes.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected String getBasePageRoute() {
     return Routes.COURSE_SCHEDULES;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected Binder<CourseScheduleDto> createBinder() {
     return new Binder<>(CourseScheduleDto.class);
   }
 
-  @NonNull
+  @Nonnull
   @Override
-  protected CourseScheduleDto createBean(@NonNull final CourseScheduleDto bean) {
+  protected CourseScheduleDto createBean(@Nonnull final CourseScheduleDto bean) {
     return courseScheduleService.createCourseSchedule(bean);
   }
 
-  @NonNull
+  @Nonnull
   @Override
-  protected CourseScheduleDto updateBean(@NonNull final CourseScheduleDto bean) {
+  protected CourseScheduleDto updateBean(@Nonnull final CourseScheduleDto bean) {
     return courseScheduleService.updateCourseSchedule(bean);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected FormMode getDefaultFormMode() {
     return FormMode.EDIT;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected CourseScheduleDto newBeanInstance() {
     return new CourseScheduleDto();
   }
 
   @Override
-  protected CourseScheduleDto getBeanById(@NonNull final Long id) {
+  protected CourseScheduleDto getBeanById(@Nonnull final Long id) {
     return courseScheduleService.getCourseScheduleById(id);
   }
 }

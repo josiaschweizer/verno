@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "gender", schema = "public")
 public class GenderEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

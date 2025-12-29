@@ -3,6 +3,9 @@ package ch.verno.server.repository;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.db.jpa.SpringDataParticipantJpaRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,6 +29,26 @@ public class ParticipantRepository {
   public List<ParticipantEntity> findAll() {
     return jpaRepository.findAll();
   }
+
+  @Nonnull
+  public Page<ParticipantEntity> findAll(@Nonnull final Pageable pageable) {
+    return jpaRepository.findAll(pageable);
+  }
+
+  @Nonnull
+  public Page<ParticipantEntity> findAll(@Nonnull final Specification<ParticipantEntity> spec,
+                                         @Nonnull final Pageable pageable) {
+    return jpaRepository.findAll(spec, pageable);
+  }
+
+  public long count() {
+    return jpaRepository.count();
+  }
+
+  public long count(@Nonnull final Specification<ParticipantEntity> spec) {
+    return jpaRepository.count(spec);
+  }
+
 
   public ParticipantEntity save(@Nonnull final ParticipantEntity participant) {
     return jpaRepository.save(participant);

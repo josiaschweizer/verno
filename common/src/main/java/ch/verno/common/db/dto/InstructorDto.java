@@ -3,6 +3,7 @@ package ch.verno.common.db.dto;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.util.Publ;
+import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -122,7 +123,7 @@ public class InstructorDto extends BaseDto {
 
   @Nonnull
   public String phoneAsString() {
-    return phone.isEmpty() ? Publ.EMPTY_STRING : phone.toString();
+    return PhoneNumberFormatter.formatPhoneNumber(phone);
   }
 
   @Nonnull

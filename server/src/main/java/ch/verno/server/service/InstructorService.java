@@ -1,6 +1,7 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
@@ -10,7 +11,12 @@ import ch.verno.server.mapper.InstructorMapper;
 import ch.verno.server.repository.AddressRepository;
 import ch.verno.server.repository.GenderRepository;
 import ch.verno.server.repository.InstructorRepository;
+import ch.verno.server.spec.InstructorSpec;
+import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
 import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +34,8 @@ public class InstructorService implements IInstructorService {
 
   @Nonnull
   private final ServiceHelper serviceHelper;
+  @Nonnull
+  private final InstructorSpec instructorSpec;
 
   public InstructorService(@Nonnull final InstructorRepository instructorRepository,
                            @Nonnull final AddressRepository addressRepository,
@@ -37,6 +45,7 @@ public class InstructorService implements IInstructorService {
     this.genderRepository = genderRepository;
 
     this.serviceHelper = new ServiceHelper();
+    this.instructorSpec = new InstructorSpec();
   }
 
   @Nonnull
@@ -107,5 +116,39 @@ public class InstructorService implements IInstructorService {
     return instructorRepository.findAll().stream()
             .map(InstructorMapper::toDto)
             .toList();
+  }
+
+  @Nonnull
+  @Transactional(readOnly = true)
+  public List<InstructorDto> findInstructors(@Nonnull final InstructorFilter filter,
+                                             final int offset,
+                                             final int limit,
+                                             @Nonnull final List<QuerySortOrder> sortOrders) {
+    final int page = offset / limit;
+
+    final var sort = sortOrders.isEmpty()
+            ? Sort.unsorted()
+            : Sort.by(
+            sortOrders.stream()
+                    .map(order -> new Sort.Order(
+                            order.getDirection() == SortDirection.ASCENDING
+                                    ? Sort.Direction.ASC
+                                    : Sort.Direction.DESC,
+                            order.getSorted()
+                    ))
+                    .toList()
+    );
+
+    final var pageable = PageRequest.of(page, limit, sort);
+    final var spec = instructorSpec.instructorSpec(filter);
+
+    return instructorRepository.findAll(spec, pageable).stream()
+            .map(InstructorMapper::toDto)
+            .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public int countCourses(@Nonnull final InstructorFilter filter) {
+    return Math.toIntExact(instructorRepository.count(instructorSpec.instructorSpec(filter)));
   }
 }

@@ -1,10 +1,12 @@
 package ch.verno.ui.verno.course;
 
 import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -13,26 +15,37 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES)
 @PageTitle("Courses")
 @Menu(order = 3, icon = "vaadin:desktop", title = "Courses")
-public class CoursesGrid extends BaseOverviewGrid<CourseDto> {
+public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
 
   @Nonnull
   private final CourseService courseService;
 
   public CoursesGrid(@Nonnull final CourseService courseService) {
+    super(CourseFilter.empty());
     this.courseService = courseService;
   }
 
   @Nonnull
   @Override
-  protected List<CourseDto> fetchItems() {
-    return courseService.getAllCourses();
+  protected Stream<CourseDto> fetch(@Nonnull final Query<CourseDto, CourseFilter> query, @Nonnull final CourseFilter filter) {
+    final var offset = query.getOffset();
+    final var limit = query.getLimit();
+    final var sortOrders = query.getSortOrders();
+
+    return courseService.findCourses(filter, offset, limit, sortOrders).stream();
+  }
+
+  @Override
+  protected int count(@Nonnull final Query<CourseDto, CourseFilter> query,
+                      @Nonnull final CourseFilter filter) {
+    return courseService.countCourses(filter);
   }
 
   @Nonnull
@@ -60,5 +73,11 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto> {
     columnsMap.put(CourseDto::getStartTime, "Start time");
     columnsMap.put(CourseDto::getEndTime, "End time");
     return columnsMap;
+  }
+
+  @Nonnull
+  @Override
+  protected CourseFilter withSearchText(@Nonnull final String searchText) {
+    return CourseFilter.fromSearchText(searchText);
   }
 }
