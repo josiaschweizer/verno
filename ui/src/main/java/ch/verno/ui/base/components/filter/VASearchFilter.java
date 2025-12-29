@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.filter;
 
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import com.vaadin.flow.component.customfield.CustomField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -26,6 +27,7 @@ public class VASearchFilter extends CustomField<String> {
     setWidthFull();
 
     textField = new VATextField();
+    textField.setValueChangeMode(ValueChangeMode.EAGER);
     textField.setWidthFull();
 
     if (label != null) {
