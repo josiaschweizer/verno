@@ -1,14 +1,18 @@
 package ch.verno.ui.base.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.ui.base.components.filter.FilterEntryFactory;
 import ch.verno.ui.base.components.filter.VAFilterBar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
@@ -16,6 +20,7 @@ import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -29,11 +34,17 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
   @Nonnull
   private F filter;
+  @Nonnull
+  protected final FilterEntryFactory<F> filterEntryFactory;
+  @Nonnull
+  protected final Binder<F> filterBinder;
 
   protected BaseOverviewGrid(@Nonnull final F initialFilter) {
     this.columnsByKey = new HashMap<>();
     this.filter = initialFilter;
     this.grid = new Grid<>();
+    this.filterEntryFactory = new FilterEntryFactory<>();
+    this.filterBinder = new Binder<>();
 
     final var callbackProvider = DataProvider.fromFilteringCallbacks(this::fetchFromBackend, this::countFromBackend);
     this.dataProvider = callbackProvider.withConfigurableFilter();
@@ -63,8 +74,19 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   private VerticalLayout createFilterBar() {
     final var filterBar = new VAFilterBar();
+    getFilterComponents().forEach(filterBar::addFilterComponent);
     filterBar.setSearchHandler(searchText -> setFilter(withSearchText(searchText)));
-    filterBar.setOnFiltersChanged(dataProvider::refreshAll);
+    filterBar.setOnFiltersChanged(() -> {
+      try {
+        filterBinder.writeBean(filter);
+      } catch (ValidationException e) {
+        // Ignore validation errors for filters
+      }
+      dataProvider.setFilter(filter);
+      dataProvider.refreshAll();
+    });
+
+    filterBinder.readBean(filter);
 
     final var filterBarLayout = new VerticalLayout(filterBar);
     filterBarLayout.setPadding(false);
@@ -84,6 +106,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   public void setFilter(@Nonnull final F newFilter) {
     this.filter = newFilter;
+    // Update binder with new filter values
+    filterBinder.readBean(this.filter);
     dataProvider.setFilter(this.filter);
     dataProvider.refreshAll();
   }
@@ -91,6 +115,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   public F getFilter() {
     return filter;
+  }
+
+  @Nonnull
+  public List<MultiSelectComboBox<Long>> getFilterComponents() {
+    return List.of();
   }
 
   @Nonnull

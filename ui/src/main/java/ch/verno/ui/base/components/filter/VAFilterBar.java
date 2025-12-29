@@ -1,8 +1,8 @@
 package ch.verno.ui.base.components.filter;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -52,7 +52,7 @@ public class VAFilterBar extends VerticalLayout {
     topBar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
 
     topBar.setFlexGrow(1, searchFilter);
-    toggleFiltersButton.addClassNames(LumoUtility.Margin.Left.SMALL);
+    toggleFiltersButton.addClassNames(LumoUtility.Margin.Right.SMALL);
 
     advancedFiltersRow = new HorizontalLayout();
     advancedFiltersRow.setWidthFull();
@@ -61,7 +61,6 @@ public class VAFilterBar extends VerticalLayout {
     advancedFiltersRow.setVisible(false);
 
     addClassName(LumoUtility.Gap.MEDIUM);
-    advancedFiltersRow.addClassNames(LumoUtility.Gap.MEDIUM);
 
     add(topBar, advancedFiltersRow);
 
@@ -83,8 +82,15 @@ public class VAFilterBar extends VerticalLayout {
     this.onFiltersChanged = onFiltersChanged;
   }
 
-  public void addFilterComponent(@Nonnull Component component) {
-    advancedFiltersRow.add(component);
+  public void addFilterComponent(@Nonnull final MultiSelectComboBox<Long> comboBox) {
+    advancedFiltersRow.add(comboBox);
+    toggleFiltersButton.setVisible(true);
+
+    comboBox.addValueChangeListener(e -> {
+      if (onFiltersChanged != null) {
+        onFiltersChanged.run();
+      }
+    });
   }
 
   public void clearFilterComponents() {
