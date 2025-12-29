@@ -11,15 +11,20 @@ public class MandantSettingEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "quantity_of_courses_per_schedule")
-  private Integer quantityOfCoursesPerSchedule;
+  @Column(name = "course_weeks_per_schedule")
+  private Integer courseDaysPerSchedule;
+
+  @Column(name = "max_participants_per_course")
+  private Integer maxParticipantsPerCourse;
 
   protected MandantSettingEntity() {
     // JPA
   }
 
-  public MandantSettingEntity(@Nonnull final Integer quantityOfCoursesPerSchedule) {
-    this.quantityOfCoursesPerSchedule = quantityOfCoursesPerSchedule;
+  public MandantSettingEntity(@Nonnull final Integer courseDaysPerSchedule,
+                              @Nonnull final Integer maxParticipantsPerCourse) {
+    this.courseDaysPerSchedule = courseDaysPerSchedule;
+    this.maxParticipantsPerCourse = maxParticipantsPerCourse;
   }
 
   public Long getId() {
@@ -30,11 +35,19 @@ public class MandantSettingEntity {
     this.id = id;
   }
 
-  public Integer getQuantityOfCoursesPerSchedule() {
-    return quantityOfCoursesPerSchedule;
+  public Integer getCourseDaysPerSchedule() {
+    return courseDaysPerSchedule;
   }
 
-  public void setQuantityOfCoursesPerSchedule(final Integer quantityOfCoursesPerSchedule) {
-    this.quantityOfCoursesPerSchedule = quantityOfCoursesPerSchedule;
+  public void setCourseDaysPerSchedule(final Integer quantityOfCoursesPerSchedule) {
+    this.courseDaysPerSchedule = quantityOfCoursesPerSchedule;
+  }
+
+  public Integer getMaxParticipantsPerCourse() {
+    return maxParticipantsPerCourse;
+  }
+
+  public void setMaxParticipantsPerCourse(final Integer maxParticipantsPerCourse) {
+    this.maxParticipantsPerCourse = maxParticipantsPerCourse;
   }
 }

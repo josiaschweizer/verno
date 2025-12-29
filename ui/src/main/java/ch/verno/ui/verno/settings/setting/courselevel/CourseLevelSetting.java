@@ -1,16 +1,18 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.common.db.dto.MandantSettingDto;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class CourseLevelSetting extends VABaseSetting {
+public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   private final CourseLevelGrid courseLevelGrid;
@@ -19,6 +21,8 @@ public class CourseLevelSetting extends VABaseSetting {
 
   public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
     super("Course Levels");
+    setCardDefaultHeight();
+
     this.courseLevelGrid = createGrid(courseLevelService);
     this.courseLevelDetail = createDetailView(courseLevelService);
 
@@ -72,5 +76,17 @@ public class CourseLevelSetting extends VABaseSetting {
   @Override
   protected Component createContent() {
     return courseLevelGrid;
+  }
+
+  @Nonnull
+  @Override
+  protected Binder<MandantSettingDto> createBinder() {
+    return new Binder<>(MandantSettingDto.class);
+  }
+
+  @Nonnull
+  @Override
+  protected MandantSettingDto createNewBeanInstance() {
+    return new MandantSettingDto();
   }
 }

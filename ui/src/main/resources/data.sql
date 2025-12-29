@@ -13,10 +13,17 @@ VALUES (CURRENT_TIMESTAMP, 'A1', 'Anfänger', 'Anfängerniveau', 1),
        (CURRENT_TIMESTAMP, 'A2', 'Fortgeschritten', 'Fortgeschrittenesniveau', 2),
        (CURRENT_TIMESTAMP, 'B1', 'Mittelstufe', 'Solide Grundlagen', 3);
 
-INSERT INTO course_schedule (created_at, title, weeks)
-VALUES (CURRENT_TIMESTAMP, 'Ganzes Jahr', '["KW01-2026","KW02-2026","KW03-2026","KW04-2026"]'),
-       (CURRENT_TIMESTAMP, 'Frühling Block', '["KW10-2026","KW11-2026","KW12-2026","KW13-2026"]'),
-       (CURRENT_TIMESTAMP, 'Sommer Block', '["KW26-2026","KW27-2026","KW28-2026","KW29-2026"]');
+INSERT INTO course_schedule (created_at, title)
+VALUES
+    (CURRENT_TIMESTAMP, 'Ganzes Jahr'),
+    (CURRENT_TIMESTAMP, 'Frühling Block'),
+    (CURRENT_TIMESTAMP, 'Sommer Block');
+
+INSERT INTO course_schedule_week (course_schedule_id, sort_index, week)
+VALUES
+    (1, 0, 'KW01-2026'), (1, 1, 'KW02-2026'), (1, 2, 'KW03-2026'), (1, 3, 'KW04-2026'),
+    (2, 0, 'KW10-2026'), (2, 1, 'KW11-2026'), (2, 2, 'KW12-2026'), (2, 3, 'KW13-2026'),
+    (3, 0, 'KW26-2026'), (3, 1, 'KW27-2026'), (3, 2, 'KW28-2026'), (3, 3, 'KW29-2026');
 
 INSERT INTO instructor (created_at, firstname, lastname, email, phone, gender, address)
 VALUES (CURRENT_TIMESTAMP, 'Hans', 'Müller', 'hans.mueller@example.com', '+41791234567', 1, 1),
@@ -51,3 +58,6 @@ INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, cou
 VALUES (CURRENT_TIMESTAMP, 'Max', 'Muster', DATE '2010-05-12', 1, 1, 1, 1, 'max.muster@example.com', '+41791111111', 1, 2),
        (CURRENT_TIMESTAMP, 'Lea', 'Frei', DATE '2011-02-03', 2, 2, 2, 2, 'lea.frei@example.com', '+41792222222', 3, 4),
        (CURRENT_TIMESTAMP, 'Noah', 'Kunz', DATE '2009-11-20', 1, 3, 3, 3, 'noah.kunz@example.com', '+41793333333', 1, 2);
+
+INSERT INTO mandant_settings (course_weeks_per_schedule, max_participants_per_course)
+VALUES (3, 12);

@@ -12,19 +12,21 @@ public class MandantSettingMapper {
   public static MandantSettingDto toDto(@Nonnull final MandantSettingEntity entity) {
     return new MandantSettingDto(
             entity.getId(),
-            entity.getQuantityOfCoursesPerSchedule()
+            entity.getCourseDaysPerSchedule(),
+            entity.getMaxParticipantsPerCourse()
     );
   }
 
   @Nonnull
   public static MandantSettingEntity toEntity(@Nonnull final MandantSettingDto dto) {
-    final var entity = new MandantSettingEntity(dto.getQuantityOfCoursesPerSchedule());
+    final var entity = new MandantSettingEntity(dto.getCourseDaysPerSchedule(), dto.getMaxParticipantsPerCourse());
     entity.setId(dto.getId());
     return entity;
   }
 
   public static void updateEntity(@Nonnull final MandantSettingDto dto,
                                   @Nonnull final MandantSettingEntity entity) {
-    entity.setQuantityOfCoursesPerSchedule(dto.getQuantityOfCoursesPerSchedule());
+    entity.setCourseDaysPerSchedule(dto.getCourseDaysPerSchedule());
+    entity.setMaxParticipantsPerCourse(dto.getMaxParticipantsPerCourse());
   }
 }

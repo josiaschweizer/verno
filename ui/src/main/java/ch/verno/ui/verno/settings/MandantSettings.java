@@ -23,9 +23,9 @@ import java.util.List;
 public class MandantSettings extends VABaseSettingsPage {
 
   @Nonnull
-  private final CourseLevelSetting courseLevelGridSetting;
-  @Nonnull
   private final QuantitySetting quantitySetting;
+  @Nonnull
+  private final CourseLevelSetting courseLevelGridSetting;
 
   @Autowired
   public MandantSettings(@Nonnull final MandantSettingService mandantSettingService,
@@ -39,7 +39,7 @@ public class MandantSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected List<VABaseSetting> createSettings() {
-    return List.of(courseLevelGridSetting, quantitySetting);
+    return List.of(quantitySetting, courseLevelGridSetting);
   }
 
 

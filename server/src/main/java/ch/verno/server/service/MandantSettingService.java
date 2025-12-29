@@ -16,6 +16,8 @@ import java.util.List;
 @Service
 public class MandantSettingService implements IMandantSettingService {
 
+  //TODO DIFFERENT MANDANTS MANAGEMENT - currently only one mandant is supported
+
   @Nonnull
   private final MandantSettingRepository mandantSettingRepository;
 
@@ -44,7 +46,7 @@ public class MandantSettingService implements IMandantSettingService {
 
     final var existing = mandantSettingRepository.findById(id);
     if (existing.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
+      throw new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
     }
 
     final var entity = existing.get();
@@ -60,7 +62,7 @@ public class MandantSettingService implements IMandantSettingService {
   public MandantSettingDto getMandantSettingById(@Nonnull final Long id) {
     final var foundById = mandantSettingRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
+      throw new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
     }
 
     return MandantSettingMapper.toDto(foundById.get());
@@ -73,5 +75,30 @@ public class MandantSettingService implements IMandantSettingService {
     return mandantSettingRepository.findAll().stream()
             .map(MandantSettingMapper::toDto)
             .toList();
+  }
+
+  @Nonnull
+  @Transactional(readOnly = true)
+  public MandantSettingDto getSingleMandantSetting() {
+    return mandantSettingRepository.findAll().stream()
+            .findFirst()
+            .map(MandantSettingMapper::toDto)
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, -1L));
+  }
+
+  @Nonnull
+  @Transactional
+  public MandantSettingDto getOrCreateSingleMandantSetting(@Nonnull final MandantSettingDto defaultDto) {
+    final var existing = mandantSettingRepository.findAll().stream().findFirst();
+    return existing.map(MandantSettingMapper::toDto).orElseGet(() -> createMandanSetting(defaultDto));
+  }
+
+  @Nonnull
+  @Transactional
+  public MandantSettingDto saveSingleMandantSetting(@Nonnull final MandantSettingDto dto) {
+    if (dto.getId() == null) {
+      return createMandanSetting(dto);
+    }
+    return updateMandantSetting(dto);
   }
 }
