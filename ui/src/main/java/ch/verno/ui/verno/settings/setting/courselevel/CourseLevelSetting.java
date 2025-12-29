@@ -1,44 +1,38 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.server.service.CourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 
-@UIScope
-@SpringComponent
 public class CourseLevelSetting extends VABaseSetting {
 
   @Nonnull
-  private final CourseLevelGrid courseLevelGrid;
+  private CourseLevelGrid courseLevelGrid;
   @Nonnull
-  private final CourseLevelDetail courseLevelDetail;
+  private CourseLevelDetail courseLevelDetail;
 
-  @Autowired
-  public CourseLevelSetting(@Nonnull final CourseLevelGrid courseLevelGrid,
-                            @Nonnull final CourseLevelDetail courseLevelDetail) {
+  public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
     super("Course Levels");
-    this.courseLevelGrid = courseLevelGrid;
-    configureGrid();
-    this.courseLevelDetail = courseLevelDetail;
-    configureDetailView();
+    configureGrid(courseLevelService);
+    configureDetailView(courseLevelService);
 
     setActionButton(getAddCourseLevelButton());
   }
 
-  private void configureGrid() {
+  private void configureGrid(@Nonnull final CourseLevelService courseLevelService) {
+    this.courseLevelGrid = new CourseLevelGrid(courseLevelService);
     this.courseLevelGrid.initUI();
     this.courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
   }
 
-  private void configureDetailView() {
+  private void configureDetailView(@Nonnull final CourseLevelService courseLevelService) {
+    this.courseLevelDetail = new CourseLevelDetail(courseLevelService);
     this.courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
   }
 
