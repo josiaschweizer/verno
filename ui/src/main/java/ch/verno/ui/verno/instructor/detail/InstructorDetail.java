@@ -66,7 +66,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> {
     return instructorService.updateInstructor(bean);
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected FormMode getDefaultFormMode() {
     return FormMode.EDIT;
@@ -79,7 +79,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> {
   }
 
   @Override
-  protected InstructorDto getBeanById(@NonNull final Long id) {
+  protected InstructorDto getBeanById(@Nonnull final Long id) {
     return instructorService.getInstructorById(id);
   }
 

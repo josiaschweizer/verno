@@ -100,7 +100,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
   }
 
   @Override
-  protected ParticipantDto getBeanById(@NonNull final Long id) {
+  protected ParticipantDto getBeanById(@Nonnull final Long id) {
     return participantService.getParticipantById(id);
   }
 

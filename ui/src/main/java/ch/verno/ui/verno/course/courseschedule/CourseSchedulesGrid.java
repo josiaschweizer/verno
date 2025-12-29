@@ -1,10 +1,12 @@
 package ch.verno.ui.verno.course.courseschedule;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -13,26 +15,39 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSE_SCHEDULES)
 @PageTitle("Course Schedules")
 @Menu(order = 3.2, icon = "vaadin:calendar", title = "Course Schedules ")
-public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
+public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, CourseScheduleFilter> {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
 
   public CourseSchedulesGrid(@Nonnull final CourseScheduleService courseScheduleService) {
+    super(CourseScheduleFilter.empty());
     this.courseScheduleService = courseScheduleService;
   }
 
+
   @Nonnull
   @Override
-  protected List<CourseScheduleDto> fetchItems() {
-    return courseScheduleService.getAllCourseSchedules();
+  protected Stream<CourseScheduleDto> fetch(@Nonnull final Query<CourseScheduleDto, CourseScheduleFilter> query,
+                                            @Nonnull final CourseScheduleFilter filter) {
+    final var offset = query.getOffset();
+    final var limit = query.getLimit();
+    final var sortOrders = query.getSortOrders();
+
+    return courseScheduleService.findCourseSchedules(filter, offset, limit, sortOrders).stream();
+  }
+
+  @Override
+  protected int count(@Nonnull final Query<CourseScheduleDto, CourseScheduleFilter> query,
+                      @Nonnull final CourseScheduleFilter filter) {
+    return courseScheduleService.countCourses(filter);
   }
 
   @Nonnull
@@ -54,5 +69,11 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto> {
     columnsMap.put(CourseScheduleDto::getTitle, "Title");
     columnsMap.put(CourseScheduleDto::getWeeksAsString, "Weeks");
     return columnsMap;
+  }
+
+  @Nonnull
+  @Override
+  protected CourseScheduleFilter withSearchText(@Nonnull final String searchText) {
+    return CourseScheduleFilter.fromSearchText(searchText);
   }
 }

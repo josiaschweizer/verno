@@ -1,6 +1,7 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
@@ -8,6 +9,9 @@ import ch.verno.common.util.Publ;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
+import ch.verno.server.spec.PageHelper;
+import ch.verno.server.spec.ParticipantSpec;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +37,8 @@ public class ParticipantService implements IParticipantService {
 
   @Nonnull
   private final ServiceHelper serviceHelper;
+  @Nonnull
+  private final ParticipantSpec participantSpec;
 
   public ParticipantService(@Nonnull final ParticipantRepository participantRepository,
                             @Nonnull final AddressRepository addressRepository,
@@ -48,6 +54,7 @@ public class ParticipantService implements IParticipantService {
     this.courseRepository = courseRepository;
 
     this.serviceHelper = new ServiceHelper();
+    this.participantSpec = new ParticipantSpec();
   }
 
   @Nonnull
@@ -126,5 +133,24 @@ public class ParticipantService implements IParticipantService {
     return participantRepository.findAll().stream()
             .map(ParticipantMapper::toDto)
             .toList();
+  }
+
+  @Nonnull
+  @Transactional(readOnly = true)
+  public List<ParticipantDto> findParticipants(@Nonnull final ParticipantFilter filter,
+                                               final int offset,
+                                               final int limit,
+                                               @Nonnull final List<QuerySortOrder> sortOrders) {
+    final var pageable = PageHelper.createPageRequest(offset, limit, sortOrders);
+    final var spec = participantSpec.participantSpec(filter);
+
+    return participantRepository.findAll(spec, pageable).stream()
+            .map(ParticipantMapper::toDto)
+            .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public int countParticipants(@Nonnull final ParticipantFilter filter) {
+    return Math.toIntExact(participantRepository.count(participantSpec.participantSpec(filter)));
   }
 }
