@@ -30,7 +30,7 @@ public class ParticipantSpec {
         final var lastName = cb.like(cb.lower(root.get("lastname")), pattern);
         final var email = cb.like(cb.lower(root.get("email")), pattern);
         final var phone = cb.like(cb.lower(root.get("phone")), pattern);
-        final var note = cb.like(root.get("note"), rawPattern);
+//        final var note = cb.like(root.get("note"), rawPattern);
 
         final var genderJoin = root.join("gender", JoinType.LEFT);
         final var courseJoin = root.join("course", JoinType.LEFT);
