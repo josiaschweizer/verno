@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class CourseEntity {
   @OrderColumn(name = "sort_index")
   private List<CourseLevelEntity> courseLevels = new ArrayList<>();
 
-  @Nonnull
+  @Nullable
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_schedule_id", nullable = false)
   private CourseScheduleEntity schedule;
@@ -59,8 +60,12 @@ public class CourseEntity {
   private List<DayOfWeek> weekdays = new ArrayList<>();
 
   @Nullable
-  @Column(name = "duration")
-  private Integer duration;
+  @Column(name = "start_time")
+  private LocalTime startTime;
+
+  @Nullable
+  @Column(name = "end_time")
+  private LocalTime endTime;
 
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY)
@@ -74,22 +79,21 @@ public class CourseEntity {
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
-                      @Nonnull final CourseScheduleEntity schedule,
+                      @Nullable final CourseScheduleEntity schedule,
                       @Nonnull final List<DayOfWeek> weekdays,
-                      @Nullable final Integer duration,
+                      @Nullable final LocalTime startTime,
+                      @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor) {
     this.title = title;
     this.capacity = capacity;
     this.location = location;
 
     this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
-
     this.schedule = schedule;
 
-    this.weekdays.clear();
-    this.weekdays.addAll(weekdays);
-
-    this.duration = duration;
+    this.weekdays = weekdays;
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.instructor = instructor;
   }
 
@@ -150,12 +154,12 @@ public class CourseEntity {
     this.courseLevels.addAll(courseLevels);
   }
 
-  @Nonnull
+  @Nullable
   public CourseScheduleEntity getSchedule() {
     return schedule;
   }
 
-  public void setSchedule(@Nonnull final CourseScheduleEntity schedule) {
+  public void setSchedule(@Nullable final CourseScheduleEntity schedule) {
     this.schedule = schedule;
   }
 
@@ -170,12 +174,21 @@ public class CourseEntity {
   }
 
   @Nullable
-  public Integer getDuration() {
-    return duration;
+  public LocalTime getStartTime() {
+    return startTime;
   }
 
-  public void setDuration(@Nullable final Integer duration) {
-    this.duration = duration;
+  public void setStartTime(@Nullable final LocalTime startTime) {
+    this.startTime = startTime;
+  }
+
+  @Nullable
+  public LocalTime getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(@Nullable final LocalTime endTime) {
+    this.endTime = endTime;
   }
 
   @Nullable

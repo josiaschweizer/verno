@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 public class CourseDto extends BaseDto {
@@ -29,19 +30,24 @@ public class CourseDto extends BaseDto {
   private List<DayOfWeek> weekdays;
 
   @Nullable
-  private Integer duration;
+  private LocalTime startTime;
+
+  @Nullable
+  private LocalTime endTime;
 
   @Nullable
   private InstructorDto instructor;
 
   public CourseDto() {
-    this(null,
+    this(
+            null,
             Publ.EMPTY_STRING,
             null,
             Publ.EMPTY_STRING,
             List.of(),
             CourseScheduleDto.empty(),
             List.of(),
+            null,
             null,
             null
     );
@@ -54,7 +60,8 @@ public class CourseDto extends BaseDto {
                    @Nonnull final List<CourseLevelDto> courseLevels,
                    @Nonnull final CourseScheduleDto courseSchedule,
                    @Nonnull final List<DayOfWeek> weekdays,
-                   @Nullable final Integer duration,
+                   @Nullable final LocalTime startTime,
+                   @Nullable final LocalTime endTime,
                    @Nullable final InstructorDto instructor) {
     super.setId(id);
     this.title = title;
@@ -63,7 +70,8 @@ public class CourseDto extends BaseDto {
     this.courseLevels = courseLevels;
     this.courseSchedule = courseSchedule;
     this.weekdays = weekdays;
-    this.duration = duration;
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.instructor = instructor;
   }
 
@@ -81,7 +89,8 @@ public class CourseDto extends BaseDto {
             && this.courseSchedule != null
             && this.courseSchedule.isEmpty()
             && this.weekdays.isEmpty()
-            && (this.duration == null || this.duration == 0)
+            && this.startTime == null
+            && this.endTime == null
             && (this.instructor == null || this.instructor.isEmpty());
   }
 
@@ -127,7 +136,7 @@ public class CourseDto extends BaseDto {
 
     for (final CourseLevelDto level : courseLevels) {
       if (!stringBuilder.isEmpty()) {
-        stringBuilder.append(Publ.COMMA + Publ.SPACE);
+        stringBuilder.append(Publ.COMMA).append(Publ.SPACE);
       }
 
       stringBuilder.append(level.displayName());
@@ -147,7 +156,7 @@ public class CourseDto extends BaseDto {
 
   @Nonnull
   public String getCourseScheduleAsString() {
-    if (courseSchedule.isEmpty()) {
+    if (courseSchedule == null || courseSchedule.isEmpty()) {
       return Publ.EMPTY_STRING;
     }
     return courseSchedule.getDisplayTitle();
@@ -170,21 +179,29 @@ public class CourseDto extends BaseDto {
 
     final var stringBuilder = new StringBuilder();
     for (final DayOfWeek day : weekdays) {
-      stringBuilder.append(day.name(), 0, 3).append(Publ.COMMA + Publ.SPACE);
+      stringBuilder.append(day.name(), 0, 3).append(Publ.COMMA).append(Publ.SPACE);
     }
 
     stringBuilder.setLength(stringBuilder.length() - 2);
     return stringBuilder.toString();
   }
 
-
   @Nullable
-  public Integer getDuration() {
-    return duration;
+  public LocalTime getStartTime() {
+    return startTime;
   }
 
-  public void setDuration(@Nullable final Integer duration) {
-    this.duration = duration;
+  public void setStartTime(@Nullable final LocalTime startTime) {
+    this.startTime = startTime;
+  }
+
+  @Nullable
+  public LocalTime getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(@Nullable final LocalTime endTime) {
+    this.endTime = endTime;
   }
 
   @Nullable

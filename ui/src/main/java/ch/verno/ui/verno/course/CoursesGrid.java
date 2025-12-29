@@ -57,7 +57,8 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto> {
     columnsMap.put(CourseDto::getInstructorAsString, "Instructor");
     columnsMap.put(CourseDto::getCourseScheduleAsString, "Schedule");
     columnsMap.put(CourseDto::getCourseLevelAsString, "Level");
-    columnsMap.put(CourseDto::getDuration, "Duration [min]");
+    columnsMap.put(CourseDto::getStartTime, "Start time");
+    columnsMap.put(CourseDto::getEndTime, "End time");
     return columnsMap;
   }
 }

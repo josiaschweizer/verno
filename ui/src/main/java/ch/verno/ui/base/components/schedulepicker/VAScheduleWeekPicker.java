@@ -27,9 +27,9 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
 
   @Nullable
-  private CheckboxGroup<Integer> weekSelect;
-  @Nullable
   private ComboBox<Integer> yearSelect;
+  @Nullable
+  private CheckboxGroup<Integer> weekSelect;
 
   @Nonnull
   private final Div previewText;
@@ -217,7 +217,13 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
               .forEach(week -> parts.add("KW-" + week + "-" + year));
     });
 
-    previewText.setText(String.join(", ", parts));
+    final var previewTitle = "Weeks (" + parts.size() + "): ";
+    final var weeksString = String.join(", ", parts);
+    if (parts.isEmpty()) {
+      previewText.setText(previewTitle + "none");
+    } else {
+      previewText.setText(previewTitle + weeksString);
+    }
   }
 
   @Nonnull
