@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.settings;
 
+import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.MandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
@@ -28,8 +29,8 @@ public class MandantSettings extends VABaseSettingsPage {
 
   @Autowired
   public MandantSettings(@Nonnull final MandantSettingService mandantSettingService,
-                         @Nonnull final CourseLevelSetting courseLevelGridSetting) {
-    this.courseLevelGridSetting = courseLevelGridSetting;
+                         @Nonnull final CourseLevelService courseLevelService) {
+    this.courseLevelGridSetting = new CourseLevelSetting(courseLevelService);
     this.quantitySetting = new QuantitySetting(mandantSettingService);
 
     initUI();
