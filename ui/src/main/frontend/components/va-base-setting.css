@@ -39,3 +39,7 @@
     margin-left: auto;
     padding-bottom: var(--lumo-space-xs);
 }
+
+.setting-card-content {
+    min-height: 400px;
+}

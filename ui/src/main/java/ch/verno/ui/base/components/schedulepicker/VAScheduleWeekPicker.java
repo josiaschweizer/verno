@@ -25,6 +25,8 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private Integer currentYear;
   @Nonnull
   private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
+  @Nullable
+  private Integer quantityProposalCourseDays;
 
   @Nullable
   private ComboBox<Integer> yearSelect;
@@ -217,13 +219,34 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
               .forEach(week -> parts.add("KW-" + week + "-" + year));
     });
 
-    final var previewTitle = "Weeks (" + parts.size() + "): ";
+    final var previewTitle = getPreviewTitle(parts);
     final var weeksString = String.join(", ", parts);
     if (parts.isEmpty()) {
       previewText.setText(previewTitle + "none");
     } else {
       previewText.setText(previewTitle + weeksString);
+
+      getPreviewTitle(parts);
     }
+  }
+
+  @Nonnull
+  private String getPreviewTitle(@Nonnull final ArrayList<String> parts) {
+    if (quantityProposalCourseDays != null) {
+      if (parts.size() > quantityProposalCourseDays) {
+        previewText.addClassName("schedule-week-picker-preview-text-red");
+      } else {
+        previewText.removeClassName("schedule-week-picker-preview-text-red");
+        previewText.addClassName("schedule-week-picker-preview-text-normal");
+      }
+      return "Weeks (" + parts.size() + " / " + quantityProposalCourseDays + "): ";
+    }
+
+    return "Weeks (" + parts.size() + "): ";
+  }
+
+  public void setQuantityProposalCourseDays(@Nullable final Integer quantityProposalCourseDays) {
+    this.quantityProposalCourseDays = quantityProposalCourseDays;
   }
 
   @Nonnull

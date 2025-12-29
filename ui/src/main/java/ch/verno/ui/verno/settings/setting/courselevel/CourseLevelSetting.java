@@ -1,45 +1,45 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.server.service.CourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 
-@UIScope
-@SpringComponent
-public class CourseLevelSetting extends VABaseSetting {
+public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   private final CourseLevelGrid courseLevelGrid;
   @Nonnull
   private final CourseLevelDetail courseLevelDetail;
 
-  @Autowired
-  public CourseLevelSetting(@Nonnull final CourseLevelGrid courseLevelGrid,
-                            @Nonnull final CourseLevelDetail courseLevelDetail) {
+  public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
     super("Course Levels");
-    this.courseLevelGrid = courseLevelGrid;
-    configureGrid();
-    this.courseLevelDetail = courseLevelDetail;
-    configureDetailView();
+    setCardDefaultHeight();
+
+    this.courseLevelGrid = createGrid(courseLevelService);
+    this.courseLevelDetail = createDetailView(courseLevelService);
 
     setActionButton(getAddCourseLevelButton());
   }
 
-  private void configureGrid() {
-    this.courseLevelGrid.initUI();
-    this.courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+  private CourseLevelGrid createGrid(@Nonnull final CourseLevelService courseLevelService) {
+    final var courseLevelGrid = new CourseLevelGrid(courseLevelService);
+    courseLevelGrid.initUI();
+    courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+    return courseLevelGrid;
   }
 
-  private void configureDetailView() {
-    this.courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
+  private CourseLevelDetail createDetailView(@Nonnull final CourseLevelService courseLevelService) {
+    final var courseLevelDetail = new CourseLevelDetail(courseLevelService);
+    courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
+    return courseLevelDetail;
   }
 
   @Nonnull
@@ -76,5 +76,17 @@ public class CourseLevelSetting extends VABaseSetting {
   @Override
   protected Component createContent() {
     return courseLevelGrid;
+  }
+
+  @Nonnull
+  @Override
+  protected Binder<MandantSettingDto> createBinder() {
+    return new Binder<>(MandantSettingDto.class);
+  }
+
+  @Nonnull
+  @Override
+  protected MandantSettingDto createNewBeanInstance() {
+    return new MandantSettingDto();
   }
 }
