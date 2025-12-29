@@ -54,9 +54,10 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   protected void initUI() {
     initGrid();
-    add(ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute()));
+    final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
     final var filterBar = createFilterBar();
-    add(filterBar, grid);
+
+    add(gridToolbar, filterBar, grid);
   }
 
   @Nonnull
@@ -64,7 +65,12 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     final var filterBar = new VAFilterBar();
     filterBar.setSearchHandler(searchText -> setFilter(withSearchText(searchText)));
     filterBar.setOnFiltersChanged(dataProvider::refreshAll);
-    return new VerticalLayout(filterBar);
+
+    final var filterBarLayout = new VerticalLayout(filterBar);
+    filterBarLayout.setPadding(false);
+    filterBarLayout.getStyle().setPaddingLeft("5px");
+    filterBarLayout.getStyle().setPaddingRight("5px");
+    return filterBarLayout;
   }
 
   protected void initGrid() {
