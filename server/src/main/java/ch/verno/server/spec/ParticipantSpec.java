@@ -18,12 +18,12 @@ public class ParticipantSpec {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
-      final var searchText = normalize(filter.searchText());
+      final var searchText = normalize(filter.getSearchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
 
         final var pattern = "%" + searchText + "%";
-        final var raw = filter.searchText() == null ? Publ.EMPTY_STRING : filter.searchText().trim();
+        final var raw = filter.getSearchText() == null ? Publ.EMPTY_STRING : filter.getSearchText().trim();
         final var rawPattern = "%" + raw + "%";
 
         final var firstName = cb.like(cb.lower(root.get("firstname")), pattern);
@@ -67,24 +67,24 @@ public class ParticipantSpec {
         );
       }
 
-      if (filter.genderId() != null) {
-        predicates.add(cb.equal(root.get("gender").get("id"), filter.genderId()));
+      if (filter.getGenderIds() != null && !filter.getGenderIds().isEmpty()) {
+        predicates.add(root.get("gender").get("id").in(filter.getGenderIds()));
       }
 
-      if (filter.courseId() != null) {
-        predicates.add(cb.equal(root.get("course").get("id"), filter.courseId()));
+      if (filter.getCourseIds() != null && !filter.getCourseIds().isEmpty()) {
+        predicates.add(root.get("course").get("id").in(filter.getCourseIds()));
       }
 
-      if (filter.courseLevelId() != null) {
-        predicates.add(cb.equal(root.get("courseLevel").get("id"), filter.courseLevelId()));
+      if (filter.getCourseLevelIds() != null && !filter.getCourseLevelIds().isEmpty()) {
+        predicates.add(root.get("courseLevel").get("id").in(filter.getCourseLevelIds()));
       }
 
-      if (filter.birthDateFrom() != null) {
-        predicates.add(cb.greaterThanOrEqualTo(root.get("birthdate"), filter.birthDateFrom()));
+      if (filter.getBirthDateFrom() != null) {
+        predicates.add(cb.greaterThanOrEqualTo(root.get("birthdate"), filter.getBirthDateFrom()));
       }
 
-      if (filter.birthDateTo() != null) {
-        predicates.add(cb.lessThanOrEqualTo(root.get("birthdate"), filter.birthDateTo()));
+      if (filter.getBirthDateTo() != null) {
+        predicates.add(cb.lessThanOrEqualTo(root.get("birthdate"), filter.getBirthDateTo()));
       }
 
       return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));

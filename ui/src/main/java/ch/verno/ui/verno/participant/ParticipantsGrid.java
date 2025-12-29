@@ -1,12 +1,18 @@
 package ch.verno.ui.verno.participant;
 
+import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.util.Publ;
 import ch.verno.common.util.VernoConstants;
+import ch.verno.server.service.CourseLevelService;
+import ch.verno.server.service.CourseService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.Menu;
@@ -16,7 +22,9 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @PermitAll
@@ -27,10 +35,19 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Nonnull
   private final ParticipantService participantService;
+  @Nonnull
+  private final CourseService courseService;
+  @Nonnull
+  private final CourseLevelService courseLevelService;
 
-  public ParticipantsGrid(@Nonnull final ParticipantService participantService) {
+  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
+                          @Nonnull final CourseService courseService,
+                          @Nonnull final CourseLevelService courseLevelService) {
     super(ParticipantFilter.empty());
+
     this.participantService = participantService;
+    this.courseService = courseService;
+    this.courseLevelService = courseLevelService;
   }
 
   @Nonnull
@@ -77,6 +94,31 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columnsMap.put(dto -> dto.getParentTwo().displayName(), "Parent Two");
     columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), "Address");
     return columnsMap;
+  }
+
+  @Nonnull
+  @Override
+  public List<MultiSelectComboBox<Long>> getFilterComponents() {
+    final var courses = courseService.getAllCourses().stream()
+            .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
+
+    final var courseFilter = filterEntryFactory.createComboboxFilter(
+            ParticipantFilter::getCourseIds,
+            ParticipantFilter::setCourseIds,
+            courses,
+            filterBinder,
+            "Course Filter");
+
+    final var courseLevels = courseLevelService.getAllCourseLevels().stream()
+            .collect(Collectors.toMap(BaseDto::getId, CourseLevelDto::getName));
+    final var courseLevelFilter = filterEntryFactory.createComboboxFilter(
+            ParticipantFilter::getCourseLevelIds,
+            ParticipantFilter::setCourseLevelIds,
+            courseLevels,
+            filterBinder,
+            "Course Level Filter");
+
+    return List.of(courseFilter, courseLevelFilter);
   }
 
   @Nonnull
