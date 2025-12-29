@@ -17,5 +17,8 @@ public interface ICourseService {
   CourseDto getCourseById(@Nonnull Long id);
 
   @Nonnull
+  List<CourseDto> getCoursesByCourseScheduleId(@Nonnull Long courseScheduleId);
+
+  @Nonnull
   List<CourseDto> getAllCourses();
 }
