@@ -1,9 +1,11 @@
 package ch.verno.ui.verno.settings;
 
+import ch.verno.server.service.MandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.settings.setting.courselevel.CourseLevelSetting;
+import ch.verno.ui.verno.settings.setting.quantity.QuantitySetting;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -21,10 +23,14 @@ public class MandantSettings extends VABaseSettingsPage {
 
   @Nonnull
   private final CourseLevelSetting courseLevelGridSetting;
+  @Nonnull
+  private final QuantitySetting quantitySetting;
 
   @Autowired
-  public MandantSettings(@Nonnull final CourseLevelSetting courseLevelGridSetting) {
+  public MandantSettings(@Nonnull final MandantSettingService mandantSettingService,
+                         @Nonnull final CourseLevelSetting courseLevelGridSetting) {
     this.courseLevelGridSetting = courseLevelGridSetting;
+    this.quantitySetting = new QuantitySetting(mandantSettingService);
 
     initUI();
   }
@@ -32,7 +38,7 @@ public class MandantSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected List<VABaseSetting> createSettings() {
-    return List.of(courseLevelGridSetting);
+    return List.of(courseLevelGridSetting, quantitySetting);
   }
 
 
