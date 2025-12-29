@@ -231,34 +231,61 @@ SELECT CURRENT_TIMESTAMP,
      ORDER BY id DESC LIMIT 1)
 WHERE NOT EXISTS (SELECT 1 FROM parent WHERE email = 'thomas.frei@example.com');
 
-INSERT INTO course (created_at, title, capacity, location, course_schedule_id, start_time, end_time, instructor_id)
+INSERT INTO course (created_at,
+                    title,
+                    capacity,
+                    location,
+                    course_schedule_id,
+                    course_level_id,
+                    start_time,
+                    end_time,
+                    instructor_id)
 SELECT CURRENT_TIMESTAMP,
        'Grundkurs',
        20,
        'Schulzimmer 1',
        (SELECT id FROM course_schedule WHERE title = 'Ganzes Jahr' ORDER BY id DESC LIMIT 1),
+  (SELECT id FROM course_level WHERE code = 'A1' ORDER BY id DESC LIMIT 1),
   TIME '14:00',
   TIME '15:00',
   (SELECT id FROM instructor WHERE email = 'hans.mueller@example.com' ORDER BY id DESC LIMIT 1)
 WHERE NOT EXISTS (SELECT 1 FROM course WHERE title = 'Grundkurs');
 
-INSERT INTO course (created_at, title, capacity, location, course_schedule_id, start_time, end_time, instructor_id)
+INSERT INTO course (created_at,
+                    title,
+                    capacity,
+                    location,
+                    course_schedule_id,
+                    course_level_id,
+                    start_time,
+                    end_time,
+                    instructor_id)
 SELECT CURRENT_TIMESTAMP,
        'Frühlingskurs',
        12,
        'Schulzimmer 2',
        (SELECT id FROM course_schedule WHERE title = 'Frühling Block' ORDER BY id DESC LIMIT 1),
+  (SELECT id FROM course_level WHERE code = 'A2' ORDER BY id DESC LIMIT 1),
   TIME '15:30',
   TIME '16:45',
   (SELECT id FROM instructor WHERE email = 'laura.keller@example.com' ORDER BY id DESC LIMIT 1)
 WHERE NOT EXISTS (SELECT 1 FROM course WHERE title = 'Frühlingskurs');
 
-INSERT INTO course (created_at, title, capacity, location, course_schedule_id, start_time, end_time, instructor_id)
+INSERT INTO course (created_at,
+                    title,
+                    capacity,
+                    location,
+                    course_schedule_id,
+                    course_level_id,
+                    start_time,
+                    end_time,
+                    instructor_id)
 SELECT CURRENT_TIMESTAMP,
        'Sommerkurs',
        16,
        'Turnhalle',
        (SELECT id FROM course_schedule WHERE title = 'Sommer Block' ORDER BY id DESC LIMIT 1),
+  (SELECT id FROM course_level WHERE code = 'B1' ORDER BY id DESC LIMIT 1),
   TIME '17:00',
   TIME '18:30',
   (SELECT id FROM instructor WHERE email = 'marco.meier@example.com' ORDER BY id DESC LIMIT 1)
