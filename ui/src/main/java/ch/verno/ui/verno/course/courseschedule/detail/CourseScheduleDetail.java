@@ -3,6 +3,7 @@ package ch.verno.ui.verno.course.courseschedule.detail;
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
+import ch.verno.server.service.MandantSettingService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -13,6 +14,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
@@ -27,16 +29,20 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
+  @Nonnull
+  private final MandantSettingService mandantSettingService;
 
-  public CourseScheduleDetail(@Nonnull final CourseScheduleService courseScheduleService) {
+  public CourseScheduleDetail(@Nonnull final CourseScheduleService courseScheduleService,
+                              @Nonnull final MandantSettingService mandantSettingService) {
     this.courseScheduleService = courseScheduleService;
+    this.mandantSettingService = mandantSettingService;
 
     init();
   }
 
   @Override
   protected void initUI() {
-    add(new VerticalLayout(createInfoLayout(), createSchedulePickerLayout()));
+    add(new VerticalLayout(createInfoLayout(), createSchedulePickerLayout(mandantSettingService.getSingleMandantSetting().getCourseDaysPerSchedule())));
   }
 
   @Nonnull
@@ -52,7 +58,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
   }
 
   @Nonnull
-  private HorizontalLayout createSchedulePickerLayout() {
+  private HorizontalLayout createSchedulePickerLayout(@Nullable final Integer quantityProposalCourseDays) {
     final var schedulePicker = entryFactory.createScheduleWeekPickerEntry(
             courseScheduleDto -> Set.copyOf(courseScheduleDto.getWeeks()),
             (dto, value) -> dto.setWeeks(value.stream().toList()),
@@ -60,6 +66,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
             Optional.of("Select at least one week"),
             "Calendar-Week Schedule"
     );
+    schedulePicker.setQuantityProposalCourseDays(quantityProposalCourseDays);
 
     return createLayoutFromComponents(schedulePicker);
   }

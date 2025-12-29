@@ -64,6 +64,7 @@ public class CourseScheduleService implements ICourseScheduleService {
 
   @Nonnull
   @Override
+  @Transactional(readOnly = true)
   public CourseScheduleDto getCourseScheduleById(@Nonnull final Long id) {
     final var foundById = courseScheduleRepository.findById(id);
     if (foundById.isEmpty()) {
@@ -75,6 +76,7 @@ public class CourseScheduleService implements ICourseScheduleService {
 
   @Nonnull
   @Override
+  @Transactional(readOnly = true)
   public List<CourseScheduleDto> getAllCourseSchedules() {
     return courseScheduleRepository.findAll()
             .stream()

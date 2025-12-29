@@ -40,3 +40,11 @@
     white-space: normal;
     word-break: break-word;
 }
+
+.schedule-week-picker-preview-text-normal {
+    color: var(--lumo-secondary-text-color);
+}
+
+.schedule-week-picker-preview-text-red {
+    color: var(--lumo-error-color);
+}
