@@ -6,6 +6,7 @@ import ch.verno.server.service.CourseLevelService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -53,6 +54,10 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
     getBinder().addValueChangeListener(event -> updateSaveButtonState());
     getBinder().addStatusChangeListener(event -> updateSaveButtonState());
 
+    final var spacer = new Div();
+    spacer.getStyle().set("flex-grow", "1");
+
+    add(spacer);
     add(createSaveButtonLayout());
 
     applyFormMode(getDefaultFormMode());
