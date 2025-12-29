@@ -14,6 +14,8 @@ public abstract class VABaseSetting extends Div {
 
   @Nonnull
   private final Div headerWrapper;
+  @Nonnull
+  private final Div contentWrapper;
   @Nullable
   protected Component contentComponent;
   @Nullable
@@ -30,6 +32,10 @@ public abstract class VABaseSetting extends Div {
 
     headerWrapper.add(titleSpan);
     add(headerWrapper);
+
+    contentWrapper = new Div();
+    contentWrapper.addClassName("setting-card-content");
+    add(contentWrapper);
   }
 
   protected final void setActionButton(@Nonnull final Button actionButton) {
@@ -54,11 +60,11 @@ public abstract class VABaseSetting extends Div {
 
   protected final void setContent(@Nonnull final Component newContent) {
     if (contentComponent != null) {
-      remove(contentComponent);
+      contentWrapper.remove(contentComponent);
     }
 
     contentComponent = newContent;
-    add(contentComponent);
+    contentWrapper.add(contentComponent);
   }
 
   @Nonnull

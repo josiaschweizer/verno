@@ -12,7 +12,7 @@ public class QuantitySetting extends VABaseSetting {
   private MandantSettingService mandantSettingService;
 
   public QuantitySetting(@Nonnull final MandantSettingService mandantSettingService) {
-    super("Quantity of Courses per Schedule");
+    super("Quantity Settings");
     this.mandantSettingService = mandantSettingService;
   }
 

@@ -13,27 +13,29 @@ import jakarta.annotation.Nullable;
 public class CourseLevelSetting extends VABaseSetting {
 
   @Nonnull
-  private CourseLevelGrid courseLevelGrid;
+  private final CourseLevelGrid courseLevelGrid;
   @Nonnull
-  private CourseLevelDetail courseLevelDetail;
+  private final CourseLevelDetail courseLevelDetail;
 
   public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
     super("Course Levels");
-    configureGrid(courseLevelService);
-    configureDetailView(courseLevelService);
+    this.courseLevelGrid = createGrid(courseLevelService);
+    this.courseLevelDetail = createDetailView(courseLevelService);
 
     setActionButton(getAddCourseLevelButton());
   }
 
-  private void configureGrid(@Nonnull final CourseLevelService courseLevelService) {
-    this.courseLevelGrid = new CourseLevelGrid(courseLevelService);
-    this.courseLevelGrid.initUI();
-    this.courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+  private CourseLevelGrid createGrid(@Nonnull final CourseLevelService courseLevelService) {
+    final var courseLevelGrid = new CourseLevelGrid(courseLevelService);
+    courseLevelGrid.initUI();
+    courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+    return courseLevelGrid;
   }
 
-  private void configureDetailView(@Nonnull final CourseLevelService courseLevelService) {
-    this.courseLevelDetail = new CourseLevelDetail(courseLevelService);
-    this.courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
+  private CourseLevelDetail createDetailView(@Nonnull final CourseLevelService courseLevelService) {
+    final var courseLevelDetail = new CourseLevelDetail(courseLevelService);
+    courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
+    return courseLevelDetail;
   }
 
   @Nonnull
