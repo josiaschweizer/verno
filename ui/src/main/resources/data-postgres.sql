@@ -1,3 +1,19 @@
+-- data-postgres.sql
+TRUNCATE TABLE
+    participant,
+  course_weekday,
+  course_course_level,
+  course,
+  parent,
+  instructor,
+  course_schedule_week,
+  course_schedule,
+  course_level,
+  address,
+  gender,
+  mandant_settings
+RESTART IDENTITY CASCADE;
+
 INSERT INTO gender (created_at, name, description)
 SELECT CURRENT_TIMESTAMP,
        'Male',
@@ -252,34 +268,19 @@ INSERT INTO course_course_level (course_id, course_level_id, sort_index)
 SELECT (SELECT id FROM course WHERE title = 'Grundkurs' ORDER BY id DESC LIMIT 1),
   (SELECT id FROM course_level WHERE code = 'A1' ORDER BY id DESC LIMIT 1),
   0
-WHERE NOT EXISTS (
-    SELECT 1 FROM course_course_level
-    WHERE course_id = (SELECT id FROM course WHERE title = 'Grundkurs' ORDER BY id DESC LIMIT 1)
-  AND course_level_id = (SELECT id FROM course_level WHERE code = 'A1' ORDER BY id DESC LIMIT 1)
-  AND sort_index = 0
-    );
+ON CONFLICT DO NOTHING;
 
 INSERT INTO course_course_level (course_id, course_level_id, sort_index)
 SELECT (SELECT id FROM course WHERE title = 'Frühlingskurs' ORDER BY id DESC LIMIT 1),
   (SELECT id FROM course_level WHERE code = 'A2' ORDER BY id DESC LIMIT 1),
   0
-WHERE NOT EXISTS (
-    SELECT 1 FROM course_course_level
-    WHERE course_id = (SELECT id FROM course WHERE title = 'Frühlingskurs' ORDER BY id DESC LIMIT 1)
-  AND course_level_id = (SELECT id FROM course_level WHERE code = 'A2' ORDER BY id DESC LIMIT 1)
-  AND sort_index = 0
-    );
+ON CONFLICT DO NOTHING;
 
 INSERT INTO course_course_level (course_id, course_level_id, sort_index)
 SELECT (SELECT id FROM course WHERE title = 'Sommerkurs' ORDER BY id DESC LIMIT 1),
   (SELECT id FROM course_level WHERE code = 'B1' ORDER BY id DESC LIMIT 1),
   0
-WHERE NOT EXISTS (
-    SELECT 1 FROM course_course_level
-    WHERE course_id = (SELECT id FROM course WHERE title = 'Sommerkurs' ORDER BY id DESC LIMIT 1)
-  AND course_level_id = (SELECT id FROM course_level WHERE code = 'B1' ORDER BY id DESC LIMIT 1)
-  AND sort_index = 0
-    );
+ON CONFLICT DO NOTHING;
 
 INSERT INTO course_weekday (course_id, sort_index, weekday)
 SELECT (SELECT id FROM course WHERE title = 'Grundkurs' ORDER BY id DESC LIMIT 1), 0, 'MONDAY'
@@ -376,5 +377,5 @@ SELECT CURRENT_TIMESTAMP,
 WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'noah.kunz@example.com');
 
 INSERT INTO mandant_settings (course_weeks_per_schedule, max_participants_per_course)
-SELECT 3,
+SELECT 8,
        12 WHERE NOT EXISTS (SELECT 1 FROM mandant_settings);
