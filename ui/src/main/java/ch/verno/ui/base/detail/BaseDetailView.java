@@ -211,13 +211,12 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       binder.setBean(newBeanInstance());
       applyFormMode(FormMode.CREATE);
       updateSaveButtonState();
-      return;
+    } else {
+      final var bean = getBeanById(parameter);
+      binder.setBean(bean);
+      applyFormMode(FormMode.EDIT);
+      updateSaveButtonState();
     }
-
-    final var bean = getBeanById(parameter);
-    binder.setBean(bean);
-
-    updateSaveButtonState();
   }
 
   @Nonnull

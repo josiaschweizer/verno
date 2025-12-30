@@ -30,6 +30,7 @@ public final class ParticipantMapper {
             entity.getEmail() == null ? Publ.EMPTY_STRING : entity.getEmail(),
             entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
             entity.getNote() == null ? Publ.EMPTY_STRING : entity.getNote(),
+            entity.isActive(),
             CourseMapper.toDto(entity.getCourse()),
             CourseLevelMapper.toDto(entity.getCourseLevel()),
             AddressMapper.toDto(entity.getAddress()),
@@ -50,7 +51,8 @@ public final class ParticipantMapper {
             dto.getBirthdate() != null ? dto.getBirthdate() : LocalDate.now(),
             dto.getEmail(),
             !dto.getPhone().isEmpty() ? dto.getPhone().toString() : Publ.EMPTY_STRING,
-            dto.getNote()
+            dto.getNote(),
+            dto.isActive()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {

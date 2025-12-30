@@ -1,0 +1,10 @@
+// get into sql editor for verno db instance
+// asks for pw: [hFA2Dyy=<A>Km|]
+gcloud beta sql connect verno \
+  --user=verno_app \
+  --database=verno \
+  --project=keen-jigsaw-482516-e6
+
+
+
+

@@ -81,6 +81,14 @@ public record PhoneNumber(
   }
 
   @Nonnull
+  public static PhoneNumber swissEmpty() {
+    return new PhoneNumber(
+            CallingCode.defaultSwiss(),
+            Publ.EMPTY_STRING
+    );
+  }
+
+  @Nonnull
   @Override
   public String toString() {
     if (callingCode.countryCode() == 0 || phoneNumber.isEmpty()) {
