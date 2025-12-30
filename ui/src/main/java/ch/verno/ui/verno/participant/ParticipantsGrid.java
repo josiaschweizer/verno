@@ -93,6 +93,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columnsMap.put(dto -> dto.getParentOne().displayName(), "Parent One");
     columnsMap.put(dto -> dto.getParentTwo().displayName(), "Parent Two");
     columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), "Address");
+    columnsMap.put(dto -> dto.isActive() ? "Yes" : "No", "Active");
     return columnsMap;
   }
 
@@ -117,6 +118,13 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             courseLevels,
             filterBinder,
             "Course Level Filter");
+
+    //todo create active filter
+//    final var activeFilter = filterEntryFactory.createBooleanFilter(
+//            ParticipantFilter::getActive,
+//            ParticipantFilter::setActive,
+//            filterBinder,
+//            "Active Filter");
 
     return List.of(courseFilter, courseLevelFilter);
   }
