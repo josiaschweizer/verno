@@ -38,7 +38,7 @@ public final class ParentMapper {
         dto.getFirstName(),
         dto.getLastName(),
         dto.getEmail(),
-        dto.getPhoneNumber().isEmpty() ? Publ.EMPTY_STRING : dto.getPhoneNumber().toString()
+        dto.getPhone().isEmpty() ? Publ.EMPTY_STRING : dto.getPhone().toString()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {

@@ -112,10 +112,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
 
     //todo default value from user settings
     final var capacityEntry = entryFactory.createNumberEntry(
-            courseDto -> courseDto.getCapacity() != null ?
-                    courseDto.getCapacity().doubleValue() :
-                    0.0,
-            (dto, value) -> dto.setCapacity(value.intValue()),
+            courseDto -> courseDto.getCapacity() != null ? courseDto.getCapacity().doubleValue() : null,
+            (dto, value) -> dto.setCapacity(value == null ? null : value.intValue()),
             getBinder(),
             Optional.empty(),
             "max Capacity");

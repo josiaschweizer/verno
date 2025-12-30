@@ -8,6 +8,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class ParticipantDto extends BaseDto {
 
@@ -31,6 +32,8 @@ public class ParticipantDto extends BaseDto {
 
   @Nonnull
   private String note;
+
+  private boolean active;
 
   @Nonnull
   private CourseLevelDto courseLevel;
@@ -56,6 +59,7 @@ public class ParticipantDto extends BaseDto {
     this.email = Publ.EMPTY_STRING;
     this.phone = PhoneNumber.empty();
     this.note = Publ.EMPTY_STRING;
+    this.active = true;
     this.course = CourseDto.empty();
     this.courseLevel = CourseLevelDto.empty();
     this.address = AddressDto.empty();
@@ -71,6 +75,7 @@ public class ParticipantDto extends BaseDto {
                         @Nonnull final String email,
                         @Nonnull final PhoneNumber phone,
                         @Nonnull final String note,
+                        final boolean active,
                         @Nullable final CourseDto course,
                         @Nonnull final CourseLevelDto courseLevel,
                         @Nonnull final AddressDto address,
@@ -84,6 +89,7 @@ public class ParticipantDto extends BaseDto {
     this.email = email;
     this.phone = phone;
     this.note = note;
+    this.active = active;
     this.course = course;
     this.courseLevel = courseLevel;
     this.address = address;
@@ -159,7 +165,7 @@ public class ParticipantDto extends BaseDto {
   }
 
   public void setPhone(@Nonnull final PhoneNumber phone) {
-    this.phone = phone;
+    this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
   }
 
   @Nonnull
@@ -170,6 +176,14 @@ public class ParticipantDto extends BaseDto {
   @Nonnull
   public String getNote() {
     return note;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(final boolean active) {
+    this.active = active;
   }
 
   public void setNote(@Nonnull final String note) {
