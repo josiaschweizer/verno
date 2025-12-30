@@ -8,6 +8,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class ParticipantDto extends BaseDto {
 
@@ -164,7 +165,7 @@ public class ParticipantDto extends BaseDto {
   }
 
   public void setPhone(@Nonnull final PhoneNumber phone) {
-    this.phone = phone;
+    this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
   }
 
   @Nonnull

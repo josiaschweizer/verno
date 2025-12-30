@@ -25,7 +25,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -273,8 +272,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             (participantDto, gender) -> participantDto.getParentOne().setGender(gender),
             participantDto -> participantDto.getParentOne().getEmail(),
             (participantDto, email) -> participantDto.getParentOne().setEmail(email),
-            participantDto -> participantDto.getParentOne().getPhoneNumber(),
-            (participantDto, phoneNumber) -> participantDto.getParentOne().setPhoneNumber(phoneNumber)
+            participantDto -> participantDto.getParentOne().getPhone(),
+            (participantDto, phoneNumber) -> participantDto.getParentOne().setPhone(phoneNumber)
     );
 
     final var parentTwoLayout = createParentLayout("Parent Two",
@@ -286,8 +285,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             (participantDto, gender) -> participantDto.getParentTwo().setGender(gender),
             participantDto -> participantDto.getParentTwo().getEmail(),
             (participantDto, email) -> participantDto.getParentTwo().setEmail(email),
-            participantDto -> participantDto.getParentTwo().getPhoneNumber(),
-            (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhoneNumber(phoneNumber)
+            participantDto -> participantDto.getParentTwo().getPhone(),
+            (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhone(phoneNumber)
     );
 
     return createLayoutFromComponents(parentOneLayout, parentTwoLayout);

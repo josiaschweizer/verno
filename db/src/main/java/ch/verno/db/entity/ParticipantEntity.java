@@ -49,8 +49,7 @@ public class ParticipantEntity {
   @Column(name = "phone")
   private String phone;
 
-  @Lob
-  @Column(name = "note")
+  @Column(name = "note", columnDefinition = "text")
   private String note;
 
   @Column(name = "active", nullable = false)

@@ -17,7 +17,23 @@ public class ServiceHelper {
   @Nullable
   public AddressEntity saveOrUpdateAddress(@Nonnull final AddressRepository addressRepository,
                                            @Nullable final AddressDto addressDto) {
-    if (addressDto == null || addressDto.isEmpty()) {
+    if (addressDto == null) {
+      return null;
+    }
+
+    final var street = safeString(addressDto.getStreet()).trim();
+    final var houseNumber = safeString(addressDto.getHouseNumber()).trim();
+    final var zipCode = safeString(addressDto.getZipCode()).trim();
+    final var city = safeString(addressDto.getCity()).trim();
+    final var country = safeString(addressDto.getCountry()).trim();
+
+    final boolean allBlank = street.isEmpty()
+            && houseNumber.isEmpty()
+            && zipCode.isEmpty()
+            && city.isEmpty()
+            && country.isEmpty();
+
+    if (allBlank) {
       return null;
     }
 
@@ -26,19 +42,13 @@ public class ServiceHelper {
       entity = addressRepository.findById(addressDto.getId())
               .orElseThrow(() -> new NotFoundException(NotFoundReason.ADDRESS_BY_ID_NOT_FOUND, addressDto.getId()));
 
-      entity.setStreet(safeString(addressDto.getStreet()));
-      entity.setHouseNumber(safeString(addressDto.getHouseNumber()));
-      entity.setZipCode(safeString(addressDto.getZipCode()));
-      entity.setCity(safeString(addressDto.getCity()));
-      entity.setCountry(safeString(addressDto.getCountry()));
+      entity.setStreet(street);
+      entity.setHouseNumber(houseNumber);
+      entity.setZipCode(zipCode);
+      entity.setCity(city);
+      entity.setCountry(country);
     } else {
-      entity = new AddressEntity(
-              safeString(addressDto.getStreet()),
-              safeString(addressDto.getHouseNumber()),
-              safeString(addressDto.getZipCode()),
-              safeString(addressDto.getCity()),
-              safeString(addressDto.getCountry())
-      );
+      entity = new AddressEntity(street, houseNumber, zipCode, city, country);
     }
 
     return addressRepository.save(entity);
@@ -49,32 +59,50 @@ public class ServiceHelper {
                                          @Nonnull final GenderRepository genderRepository,
                                          @Nonnull final AddressRepository addressRepository,
                                          @Nullable final ParentDto parentDto) {
-    if (parentDto == null || parentDto.isEmpty()) {
+    if (parentDto == null) {
+      return null;
+    }
+
+    final var firstName = safeString(parentDto.getFirstName()).trim();
+    final var lastName = safeString(parentDto.getLastName()).trim();
+    final var email = safeTrimToNull(parentDto.getEmail());
+    final var phone = safeTrimToNull(parentDto.getPhone() != null && !parentDto.getPhone().isEmpty()
+            ? parentDto.getPhone().toString()
+            : null);
+
+    final boolean noTextFields = firstName.isEmpty()
+            && lastName.isEmpty()
+            && email == null
+            && phone == null;
+
+    final boolean hasGender = parentDto.getGender() != null
+            && !parentDto.getGender().isEmpty()
+            && parentDto.getGender().getId() != null
+            && parentDto.getGender().getId() != 0;
+
+    final boolean hasAddress = hasAddressContent(parentDto.getAddress());
+
+    if (noTextFields && !hasGender && !hasAddress) {
       return null;
     }
 
     final ParentEntity entity;
-    if (parentDto.getId() != null && parentDto.getId() != 0) {
+    if (parentDto.getId() != null && parentDto.getId() != 0L) {
       entity = parentRepository.findById(parentDto.getId())
               .orElseThrow(() -> new NotFoundException(NotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
     } else {
       entity = new ParentEntity(
-              safeString(parentDto.getFirstName()),
-              safeString(parentDto.getLastName()),
-              safeString(parentDto.getEmail()),
-              !parentDto.getPhoneNumber().isEmpty()
-                      ? parentDto.getPhoneNumber().toString()
-                      : Publ.EMPTY_STRING
+              firstName,
+              lastName,
+              email,
+              phone == null ? Publ.EMPTY_STRING : phone
       );
     }
 
-    entity.setFirstname(safeString(parentDto.getFirstName()));
-    entity.setLastname(safeString(parentDto.getLastName()));
-    entity.setEmail(safeString(parentDto.getEmail()));
-    entity.setPhone(!parentDto.getPhoneNumber().isEmpty()
-            ? parentDto.getPhoneNumber().toString()
-            : Publ.EMPTY_STRING
-    );
+    entity.setFirstname(firstName);
+    entity.setLastname(lastName);
+    entity.setEmail(email);
+    entity.setPhone(phone == null ? Publ.EMPTY_STRING : phone);
 
     entity.setGender(resolveGender(genderRepository, parentDto.getGender()));
     entity.setAddress(saveOrUpdateAddress(addressRepository, parentDto.getAddress()));
@@ -177,5 +205,25 @@ public class ServiceHelper {
   @Nonnull
   public static String safeString(@Nullable final String value) {
     return value == null ? Publ.EMPTY_STRING : value;
+  }
+
+  @Nullable
+  private static String safeTrimToNull(@Nullable final String value) {
+    if (value == null) {
+      return null;
+    }
+    final var trimmed = value.trim();
+    return trimmed.isEmpty() ? null : trimmed;
+  }
+
+  private static boolean hasAddressContent(@Nullable final AddressDto addressDto) {
+    if (addressDto == null) {
+      return false;
+    }
+    return safeTrimToNull(addressDto.getStreet()) != null
+            || safeTrimToNull(addressDto.getHouseNumber()) != null
+            || safeTrimToNull(addressDto.getZipCode()) != null
+            || safeTrimToNull(addressDto.getCity()) != null
+            || safeTrimToNull(addressDto.getCountry()) != null;
   }
 }

@@ -91,7 +91,7 @@ public class FieldFactory<T> {
             valueProvider,
             valueSetter,
             binder,
-            Optional.empty(),
+            Optional.of("Email is required"),
             "Email address"
     );
   }

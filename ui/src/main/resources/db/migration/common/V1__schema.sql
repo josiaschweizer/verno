@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS course_weekday
 (
     course_id  BIGINT      NOT NULL,
     sort_index INT         NOT NULL,
-    weekday    VARCHAR(16) NOT NULL, -- 'MONDAY', 'TUESDAY', ...
+    weekday    VARCHAR(16) NOT NULL,
     CONSTRAINT pk_course_weekday PRIMARY KEY (course_id, sort_index),
     CONSTRAINT uq_course_weekday UNIQUE (course_id, weekday),
     CONSTRAINT fk_course_weekday_course FOREIGN KEY (course_id) REFERENCES course (id)

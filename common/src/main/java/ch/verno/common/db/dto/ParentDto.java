@@ -6,6 +6,8 @@ import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
+
 public class ParentDto extends BaseDto {
 
   @Nonnull
@@ -18,7 +20,7 @@ public class ParentDto extends BaseDto {
   private String email;
 
   @Nonnull
-  private PhoneNumber phoneNumber;
+  private PhoneNumber phone;
 
   @Nonnull
   private GenderDto gender;
@@ -31,7 +33,7 @@ public class ParentDto extends BaseDto {
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
     this.email = Publ.EMPTY_STRING;
-    this.phoneNumber = PhoneNumber.empty();
+    this.phone = PhoneNumber.empty();
     this.gender = GenderDto.empty();
     this.address = AddressDto.empty();
   }
@@ -40,14 +42,14 @@ public class ParentDto extends BaseDto {
                    @Nonnull final String firstName,
                    @Nonnull final String lastName,
                    @Nonnull final String email,
-                   @Nonnull final PhoneNumber phoneNumber,
+                   @Nonnull final PhoneNumber phone,
                    @Nonnull final GenderDto gender,
                    @Nonnull final AddressDto address) {
     setId(id);
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.phoneNumber = phoneNumber;
+    this.phone = phone;
     this.gender = gender;
     this.address = address;
   }
@@ -63,7 +65,7 @@ public class ParentDto extends BaseDto {
             && firstName.isEmpty()
             && lastName.isEmpty()
             && email.isEmpty()
-            && phoneNumber.isEmpty();
+            && phone.isEmpty();
   }
 
   @Nonnull
@@ -99,12 +101,12 @@ public class ParentDto extends BaseDto {
   }
 
   @Nonnull
-  public PhoneNumber getPhoneNumber() {
-    return phoneNumber;
+  public PhoneNumber getPhone() {
+    return phone;
   }
 
-  public void setPhoneNumber(@Nonnull final PhoneNumber phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public void setPhone(@Nonnull final PhoneNumber phone) {
+    this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
   }
 
   @Nonnull
