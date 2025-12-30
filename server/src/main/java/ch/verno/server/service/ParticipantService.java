@@ -69,7 +69,8 @@ public class ParticipantService implements IParticipantService {
             !participantDto.getPhone().isEmpty()
                     ? participantDto.getPhone().toString()
                     : Publ.EMPTY_STRING,
-            ServiceHelper.safeString(participantDto.getNote())
+            ServiceHelper.safeString(participantDto.getNote()),
+            participantDto.isActive()
     );
 
     final var savedParticipant = saveParticipant(participantDto, entity);

@@ -7,6 +7,8 @@ import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
+
 public class InstructorDto extends BaseDto {
 
   @Nonnull
@@ -94,8 +96,8 @@ public class InstructorDto extends BaseDto {
     return phone;
   }
 
-  public void setPhone(@Nonnull final PhoneNumber phone) {
-    this.phone = phone;
+  public void setPhone(@Nullable final PhoneNumber phone) {
+    this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
   }
 
   @Nonnull
