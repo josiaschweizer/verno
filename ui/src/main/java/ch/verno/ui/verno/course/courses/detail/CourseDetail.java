@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.course.detail;
+package ch.verno.ui.verno.course.courses.detail;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @PermitAll
 @Route(Routes.COURSES + Routes.DETAIL)
 @PageTitle("Courses")
-@Menu(order = 3.1, icon = "vaadin:mobile", title = "Course Detail")
+@Menu(order = 3.11, icon = "vaadin:mobile", title = "Course Detail")
 public class CourseDetail extends BaseDetailView<CourseDto> {
 
   @Nonnull

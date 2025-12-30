@@ -132,6 +132,15 @@ public class CourseService implements ICourseService {
 
   @Nonnull
   @Override
+  @Transactional
+  public List<CourseDto> getCoursesByCourseScheduleId(@Nonnull final Long courseScheduleId) {
+    return courseRepository.findByCourseLevelId(courseScheduleId).stream()
+            .map(CourseMapper::toDto)
+            .toList();
+  }
+
+  @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public List<CourseDto> getAllCourses() {
     return courseRepository.findAll().stream().map(CourseMapper::toDto).toList();

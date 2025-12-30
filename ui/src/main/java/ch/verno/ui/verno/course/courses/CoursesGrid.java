@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.course;
+package ch.verno.ui.verno.course.courses;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.filter.CourseFilter;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @PermitAll
 @Route(Routes.COURSES)
 @PageTitle("Courses")
-@Menu(order = 3, icon = "vaadin:desktop", title = "Courses")
+@Menu(order = 3.1, icon = "vaadin:desktop", title = "Courses")
 public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
 
   @Nonnull
