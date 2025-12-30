@@ -11,6 +11,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 
 import java.time.DayOfWeek;
@@ -20,6 +21,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
+@PermitAll
 @Route(Routes.COURSE)
 @PageTitle("Course")
 @Menu(order = 3, icon = "vaadin:calendar", title = "Course")
