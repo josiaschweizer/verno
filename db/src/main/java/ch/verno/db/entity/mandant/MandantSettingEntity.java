@@ -23,6 +23,9 @@ public class MandantSettingEntity {
   @Column(name = "enforce_course_level_settings")
   private boolean enforceCourseLevelSettings;
 
+  @Column(name = "is_parent_one_main_parent")
+  private boolean isParentOneMainParent;
+
   protected MandantSettingEntity() {
     // JPA
   }
@@ -30,11 +33,13 @@ public class MandantSettingEntity {
   public MandantSettingEntity(@Nonnull final Integer courseDaysPerSchedule,
                               @Nonnull final Integer maxParticipantsPerCourse,
                               final boolean enforceQuantitySettings,
-                              final boolean enforceCourseLevelSettings) {
+                              final boolean enforceCourseLevelSettings,
+                              final boolean isParentOneMainParent) {
     this.courseDaysPerSchedule = courseDaysPerSchedule;
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
     this.enforceQuantitySettings = enforceQuantitySettings;
     this.enforceCourseLevelSettings = enforceCourseLevelSettings;
+    this.isParentOneMainParent = isParentOneMainParent;
   }
 
   public Long getId() {
@@ -75,5 +80,13 @@ public class MandantSettingEntity {
 
   public void setEnforceCourseLevelSettings(final boolean enforceCourseLevelSettings) {
     this.enforceCourseLevelSettings = enforceCourseLevelSettings;
+  }
+
+  public boolean isParentOneMainParent() {
+    return isParentOneMainParent;
+  }
+
+  public void setParentOneMainParent(final boolean parentOneMainParent) {
+    isParentOneMainParent = parentOneMainParent;
   }
 }

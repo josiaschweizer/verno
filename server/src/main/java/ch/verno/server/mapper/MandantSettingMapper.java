@@ -15,7 +15,8 @@ public class MandantSettingMapper {
             entity.getCourseDaysPerSchedule(),
             entity.getMaxParticipantsPerCourse(),
             entity.isEnforceQuantitySettings(),
-            entity.isEnforceCourseLevelSettings()
+            entity.isEnforceCourseLevelSettings(),
+            entity.isParentOneMainParent()
     );
   }
 
@@ -25,7 +26,9 @@ public class MandantSettingMapper {
             dto.getCourseDaysPerSchedule(),
             dto.getMaxParticipantsPerCourse(),
             dto.isEnforceQuantitySettings(),
-            dto.isEnforceCourseLevelSettings());
+            dto.isEnforceCourseLevelSettings(),
+            dto.isParentOneMainParent()
+    );
     entity.setId(dto.getId());
     return entity;
   }
@@ -36,5 +39,6 @@ public class MandantSettingMapper {
     entity.setMaxParticipantsPerCourse(dto.getMaxParticipantsPerCourse());
     entity.setEnforceQuantitySettings(dto.isEnforceQuantitySettings());
     entity.setEnforceCourseLevelSettings(dto.isEnforceCourseLevelSettings());
+    entity.setParentOneMainParent(dto.isParentOneMainParent());
   }
 }
