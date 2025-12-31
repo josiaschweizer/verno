@@ -3,12 +3,10 @@ package ch.verno.ui.verno.settings.setting.theme;
 import ch.verno.common.db.dto.AppUserDto;
 import ch.verno.common.db.dto.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserService;
 import ch.verno.server.service.AppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
@@ -26,6 +24,8 @@ public class ThemeSetting extends VABaseSetting<ThemeSettingDto> {
   private final AppUserSettingService appUserSettingService;
   @Nullable
   private final AppUserDto currentUser;
+  @Nullable
+  private AppUserSettingDto currentSetting;
 
   public ThemeSetting(@Nonnull final IAppUserService appUserService,
                       @Nonnull final AppUserSettingService appUserSettingService) {
@@ -41,24 +41,22 @@ public class ThemeSetting extends VABaseSetting<ThemeSettingDto> {
 
     currentUser = appUserService.findByUserName(currentSecurityContextUser.getUsername());
 
-    final var darkModeToggle = new Checkbox("Dark");
-    darkModeToggle.getElement().setAttribute("aria-label", "Toggle dark mode");
-    darkModeToggle.addValueChangeListener(ev -> {
-      if (ev.getValue()) {
-        // set Lumo dark theme
-        UI.getCurrent().getPage().executeJs("document.documentElement.setAttribute('theme','dark'); localStorage.setItem('v-theme','dark');");
-      } else {
-        UI.getCurrent().getPage().executeJs("document.documentElement.removeAttribute('theme'); localStorage.setItem('v-theme','light');");
-      }
-    });
+    loadCurrentSetting();
+  }
 
-    // Sync initial checkbox state from localStorage (if set to 'dark').
-    UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
-            .then(String.class, value -> {
-              if ("dark".equals(value)) {
-                darkModeToggle.setValue(true);
-              }
-            });
+  private void loadCurrentSetting() {
+    if (currentUser == null || currentUser.getId() == null) {
+      return;
+    }
+
+    try {
+      currentSetting = appUserSettingService.getAppUserSettingByUserId(currentUser.getId());
+      dto.setDarkModeEnabled("dark".equals(currentSetting.getTheme()));
+      binder.readBean(dto);
+    } catch (Exception e) {
+      dto.setDarkModeEnabled(false);
+      binder.readBean(dto);
+    }
   }
 
   @Nonnull
@@ -74,7 +72,7 @@ public class ThemeSetting extends VABaseSetting<ThemeSettingDto> {
             ThemeSettingDto::setDarkModeEnabled
     );
 
-    final var content = new VerticalLayout();
+    final var content = new VerticalLayout(themeToggle);
     content.setPadding(false);
 
     return content;
@@ -83,7 +81,7 @@ public class ThemeSetting extends VABaseSetting<ThemeSettingDto> {
   @Nullable
   private User getCurrentUser() {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null) {
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
       return (User) authentication.getPrincipal();
     }
     return null;
@@ -91,8 +89,40 @@ public class ThemeSetting extends VABaseSetting<ThemeSettingDto> {
 
   @Override
   protected void save() {
-    if (binder.writeBeanIfValid(dto)) {
-      appUserSettingService.saveAppUserSetting(new AppUserSettingDto(null, dto.isDarkModeEnabled() ? "dark" : "light"));
+    if (!binder.writeBeanIfValid(dto) || currentUser == null || currentUser.getId() == null) {
+      return;
+    }
+
+    final var theme = dto.isDarkModeEnabled() ? "dark" : "light";
+
+    if (currentSetting != null) {
+      currentSetting.setTheme(theme);
+      appUserSettingService.saveAppUserSetting(currentSetting);
+    } else {
+      final var newSetting = new AppUserSettingDto(currentUser.getId(), theme);
+      currentSetting = appUserSettingService.saveAppUserSetting(newSetting);
+    }
+
+    applyTheme(dto.isDarkModeEnabled());
+  }
+
+  /**
+   * Applies the theme to the current UI.
+   */
+  public static void applyTheme(final boolean darkMode) {
+    final var ui = UI.getCurrent();
+    if (ui == null) {
+      return;
+    }
+
+    if (darkMode) {
+      ui.getPage().executeJs(
+              "document.documentElement.setAttribute('theme','dark'); localStorage.setItem('v-theme','dark');"
+      );
+    } else {
+      ui.getPage().executeJs(
+              "document.documentElement.removeAttribute('theme'); localStorage.setItem('v-theme','light');"
+      );
     }
   }
 

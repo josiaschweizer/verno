@@ -15,6 +15,11 @@
     cursor: pointer;
     font-size: var(--lumo-font-size-s);
     color: var(--lumo-secondary-text-color);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.va-toggle__option:hover:not(.is-active) {
+    background: var(--lumo-contrast-10pct);
 }
 
 .va-toggle__option.is-active {
@@ -22,4 +27,15 @@
     color: var(--lumo-body-text-color);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
     border: 1px solid var(--lumo-contrast-10pct);
+}
+
+:root[theme='dark'] .va-toggle {
+    background: var(--lumo-contrast-10pct);
+    border-color: var(--lumo-contrast-30pct);
+}
+
+:root[theme='dark'] .va-toggle__option.is-active {
+    background: var(--app-card-background, hsl(220, 15%, 20%));
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    border-color: var(--lumo-contrast-30pct);
 }

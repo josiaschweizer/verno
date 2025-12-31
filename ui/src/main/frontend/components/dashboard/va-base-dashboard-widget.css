@@ -15,6 +15,11 @@
     overflow: hidden;
 }
 
+:root[theme='dark'] .va-dashboard-widget {
+    background: var(--app-card-background, hsl(220, 15%, 15%));
+    border-color: var(--app-card-border, hsl(220, 15%, 30%));
+}
+
 .va-dashboard-widget__header {
     display: flex;
     align-items: start;
@@ -23,6 +28,10 @@
 
     padding: 12px 14px;
     border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+:root[theme='dark'] .va-dashboard-widget__header {
+    border-bottom-color: var(--lumo-contrast-20pct);
 }
 
 .va-dashboard-widget__header-left {

@@ -1,6 +1,8 @@
 package ch.verno.ui.base;
 
 import ch.verno.ui.base.menu.MenuOrder;
+import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -32,6 +34,18 @@ public final class MainLayout extends AppLayout {
     setPrimarySection(Section.DRAWER);
     addClassNames("main-layout");
     addToDrawer(createHeader(), new Scroller(createSideNav()));
+  }
+
+  @Override
+  protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+    super.onAttach(attachEvent);
+    // Load theme from localStorage on attach
+    UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
+            .then(String.class, theme -> {
+              if ("dark".equals(theme)) {
+                ThemeSetting.applyTheme(true);
+              }
+            });
   }
 
   private Component createHeader() {

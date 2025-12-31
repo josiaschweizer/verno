@@ -23,6 +23,11 @@ public class AppUserRepository {
   }
 
   @Nonnull
+  public Optional<AppUserEntity> findById(@Nonnull final Long id) {
+    return springDataAppUserJpaRepository.findById(id);
+  }
+
+  @Nonnull
   public AppUserEntity save(@Nonnull final AppUserEntity user) {
     return springDataAppUserJpaRepository.save(user);
   }
