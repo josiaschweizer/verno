@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.dashboard;
 
 import ch.verno.server.service.CourseService;
+import ch.verno.server.service.MandantSettingService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
@@ -17,13 +18,14 @@ import jakarta.annotation.security.PermitAll;
 public class DashboardView extends VerticalLayout {
 
   public DashboardView(@Nonnull final CourseService courseService,
-                       @Nonnull final ParticipantService participantService) {
+                       @Nonnull final ParticipantService participantService,
+                       @Nonnull final MandantSettingService mandantSettingService) {
     this.setWidthFull();
     this.setPadding(false);
     this.setSpacing(false);
 
     add(createViewToolBar());
-    final var dashboard = new VADashboard(courseService, participantService);
+    final var dashboard = new VADashboard(courseService, participantService, mandantSettingService);
     dashboard.addClassNames(LumoUtility.Padding.SMALL, LumoUtility.Margin.SMALL);
     add(dashboard);
 
