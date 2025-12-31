@@ -39,8 +39,17 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
             MandantSettingDto::isEnforceCourseLevelSettings,
             MandantSettingDto::setEnforceCourseLevelSettings
     );
+    final var mainParentSetting = settingEntryFactory.createToggleSetting(
+            "Which Parent is the 'main' Parent?",
+            "Parent One",
+            "Parent Two",
+            Optional.of("Defines which parent is considered the main contact for a participant."),
+            binder,
+            MandantSettingDto::isParentOneMainParent,
+            MandantSettingDto::setParentOneMainParent
+    );
 
-    final var content = new VerticalLayout(enforceQuantityLimits, enforceCourseLevel);
+    final var content = new VerticalLayout(enforceQuantityLimits, enforceCourseLevel, mainParentSetting);
     content.setPadding(false);
 
     return content;
