@@ -35,7 +35,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   private F filter;
   @Nonnull
-  protected final FilterEntryFactory<F> filterEntryFactory;
+  protected final FilterEntryFactory<F, T> filterEntryFactory;
   @Nonnull
   protected final Binder<F> filterBinder;
 

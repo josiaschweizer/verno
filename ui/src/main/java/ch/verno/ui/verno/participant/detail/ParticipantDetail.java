@@ -209,10 +209,6 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
               .collect(Collectors.toMap(CourseDto::getId, CourseDto::displayName));
 
       courseEntry.setItems(filteredCourseOptions.keySet());
-
-      if (!filteredCourseOptions.isEmpty()) {
-        courseEntry.setValue(filteredCourseOptions.keySet().iterator().next());
-      }
     });
 
     if (!courseLevelOptions.isEmpty()) {

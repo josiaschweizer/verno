@@ -32,8 +32,15 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
             MandantSettingDto::isEnforceQuantitySettings,
             MandantSettingDto::setEnforceQuantitySettings
     );
+    final var enforceCourseLevel = settingEntryFactory.createBooleanSetting(
+            "Enforce Course Level on Participant Assignment",
+            Optional.of("When enabled, participants can only be assigned to courses that match their course level."),
+            binder,
+            MandantSettingDto::isEnforceCourseLevelSettings,
+            MandantSettingDto::setEnforceCourseLevelSettings
+    );
 
-    final var content = new VerticalLayout(enforceQuantityLimits);
+    final var content = new VerticalLayout(enforceQuantityLimits, enforceCourseLevel);
     content.setPadding(false);
 
     return content;

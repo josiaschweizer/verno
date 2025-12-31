@@ -12,6 +12,7 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -22,6 +23,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
@@ -141,25 +143,6 @@ public class EntryFactory<DTO> {
     bindEntry(comboBox, valueProvider, valueSetter, binder, required);
 
     return comboBox;
-  }
-
-  @Nonnull
-  public CheckboxGroup<Long> createCheckboxGroupEntry(@Nonnull final ValueProvider<DTO, Set<Long>> valueProvider,
-                                                     @Nonnull final Setter<DTO, Set<Long>> valueSetter,
-                                                     @Nonnull final Binder<DTO> binder,
-                                                     @Nonnull final Optional<String> required,
-                                                     @Nonnull final String label,
-                                                     @Nonnull final Map<Long, String> options) {
-    final var checkboxGroup = new CheckboxGroup<Long>();
-    checkboxGroup.setLabel(label);
-    checkboxGroup.setWidthFull();
-
-    checkboxGroup.setItems(options.keySet());
-    checkboxGroup.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
-
-    bindEntry(checkboxGroup, valueProvider, valueSetter, binder, required);
-
-    return checkboxGroup;
   }
 
   @Nonnull

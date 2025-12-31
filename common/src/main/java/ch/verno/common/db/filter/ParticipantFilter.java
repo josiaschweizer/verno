@@ -29,6 +29,9 @@ public class ParticipantFilter {
   @Nullable
   private LocalDate birthDateTo;
 
+  @Nullable
+  private Boolean active;
+
   public ParticipantFilter() {
     // default constructor
   }
@@ -39,7 +42,8 @@ public class ParticipantFilter {
                            @Nullable final Set<Long> instructorIds,
                            @Nullable final Set<Long> courseIds,
                            @Nullable final LocalDate birthDateFrom,
-                           @Nullable final LocalDate birthDateTo) {
+                           @Nullable final LocalDate birthDateTo,
+                           @Nullable final Boolean active) {
     this.searchText = searchText;
     this.genderIds = genderIds;
     this.courseLevelIds = courseLevelIds;
@@ -47,16 +51,27 @@ public class ParticipantFilter {
     this.courseIds = courseIds;
     this.birthDateFrom = birthDateFrom;
     this.birthDateTo = birthDateTo;
+    this.active = active;
   }
 
   @Nonnull
   public static ParticipantFilter fromSearchText(@Nullable final String searchText) {
-    return new ParticipantFilter(searchText, null, null, null, null, null, null);
+    return fromSearchTextAndActive(searchText, null);
+  }
+
+  @Nonnull
+  public static ParticipantFilter fromSearchTextAndActive(@Nullable final String searchText,
+                                                          @Nullable final Boolean active) {
+    return new ParticipantFilter(searchText, null, null, null, null, null, null, active);
   }
 
   @Nonnull
   public static ParticipantFilter empty() {
-    return new ParticipantFilter(null, null, null, null, null, null, null);
+    return new ParticipantFilter(null, null, null, null, null, null, null, null);
+  }
+
+  public static ParticipantFilter emptyActive() {
+    return new ParticipantFilter(null, null, null, null, null, null, null, true);
   }
 
   @Nullable
@@ -120,5 +135,14 @@ public class ParticipantFilter {
 
   public void setBirthDateTo(@Nullable final LocalDate birthDateTo) {
     this.birthDateTo = birthDateTo;
+  }
+
+  @Nullable
+  public Boolean isActive() {
+    return active;
+  }
+
+  public void setActive(@Nullable final Boolean active) {
+    this.active = active;
   }
 }

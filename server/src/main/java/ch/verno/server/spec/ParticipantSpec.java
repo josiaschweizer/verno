@@ -87,6 +87,10 @@ public class ParticipantSpec {
         predicates.add(cb.lessThanOrEqualTo(root.get("birthdate"), filter.getBirthDateTo()));
       }
 
+      if (filter.isActive() != null) {
+        predicates.add(root.get("active").in(filter.isActive()));
+      }
+
       return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
     };
   }
