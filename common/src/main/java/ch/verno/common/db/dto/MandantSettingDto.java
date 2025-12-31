@@ -12,19 +12,22 @@ public class MandantSettingDto extends BaseDto {
   @Nonnull
   private Integer maxParticipantsPerCourse;
   private boolean enforceQuantitySettings;
+  private boolean enforceCourseLevelSettings;
 
   public MandantSettingDto() {
-    this(null, Publ.ZERO, Publ.ZERO, false);
+    this(null, Publ.ZERO, Publ.ZERO, false, false);
   }
 
   public MandantSettingDto(@Nullable final Long id,
                            @Nonnull final Integer courseDaysPerSchedule,
                            @Nonnull final Integer maxParticipantsPerCourse,
-                           final boolean enforceQuantitySettings) {
+                           final boolean enforceQuantitySettings,
+                           final boolean enforceCourseLevelSettings) {
     setId(id);
     this.courseDaysPerSchedule = courseDaysPerSchedule;
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
     this.enforceQuantitySettings = enforceQuantitySettings;
+    this.enforceCourseLevelSettings = enforceCourseLevelSettings;
   }
 
   @Nonnull
@@ -51,5 +54,13 @@ public class MandantSettingDto extends BaseDto {
 
   public void setEnforceQuantitySettings(final boolean enforceQuantitySettings) {
     this.enforceQuantitySettings = enforceQuantitySettings;
+  }
+
+  public boolean isEnforceCourseLevelSettings() {
+    return enforceCourseLevelSettings;
+  }
+
+  public void setEnforceCourseLevelSettings(final boolean enforceCourseLevelSettings) {
+    this.enforceCourseLevelSettings = enforceCourseLevelSettings;
   }
 }

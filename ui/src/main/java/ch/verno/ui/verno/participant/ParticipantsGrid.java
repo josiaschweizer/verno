@@ -20,6 +20,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,8 +43,20 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   public ParticipantsGrid(@Nonnull final ParticipantService participantService,
                           @Nonnull final CourseService courseService,
+                          @Nonnull final CourseLevelService courseLevelService,
+                          final boolean showGridToolbar) {
+    super(ParticipantFilter.empty(), showGridToolbar);
+
+    this.participantService = participantService;
+    this.courseService = courseService;
+    this.courseLevelService = courseLevelService;
+  }
+
+  @Autowired
+  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
+                          @Nonnull final CourseService courseService,
                           @Nonnull final CourseLevelService courseLevelService) {
-    super(ParticipantFilter.empty());
+    super(ParticipantFilter.empty(), true);
 
     this.participantService = participantService;
     this.courseService = courseService;

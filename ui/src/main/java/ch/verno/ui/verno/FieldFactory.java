@@ -21,9 +21,9 @@ import java.util.Optional;
 public class FieldFactory<T> {
 
   @Nonnull
-  private final EntryFactory<T, GenderDto> entryFactory;
+  private final EntryFactory<T> entryFactory;
 
-  public FieldFactory(@Nonnull final EntryFactory<T, GenderDto> entryFactory) {
+  public FieldFactory(@Nonnull final EntryFactory<T> entryFactory) {
     this.entryFactory = entryFactory;
   }
 

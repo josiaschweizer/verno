@@ -459,3 +459,140 @@ WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'noah.kunz@example.com
 INSERT INTO mandant_settings (course_weeks_per_schedule, max_participants_per_course, enforce_quantity_settings)
 SELECT 8, 12, true
 WHERE NOT EXISTS (SELECT 1 FROM mandant_settings);
+
+
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Luca',
+       'Weber',
+       DATE '2010-08-14',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'luca.weber@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'luca.weber@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Mia',
+       'Keller',
+       DATE '2011-03-22',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'mia.keller@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'mia.keller@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Jonas',
+       'Brunner',
+       DATE '2009-12-02',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'jonas.brunner@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'jonas.brunner@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Lina',
+       'Schneider',
+       DATE '2010-01-19',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'lina.schneider@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'lina.schneider@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Finn',
+       'Huber',
+       DATE '2011-09-07',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'finn.huber@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'finn.huber@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Emma',
+       'Baumann',
+       DATE '2012-06-11',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'emma.baumann@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'emma.baumann@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Leon',
+       'Fischer',
+       DATE '2009-04-28',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'leon.fischer@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'leon.fischer@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Sofia',
+       'Meier',
+       DATE '2011-11-30',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'sofia.meier@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'sofia.meier@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Nico',
+       'Roth',
+       DATE '2010-10-05',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'nico.roth@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'nico.roth@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Elena',
+       'Graf',
+       DATE '2012-02-17',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'elena.graf@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'elena.graf@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Tim',
+       'Bachmann',
+       DATE '2009-07-13',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'tim.bachmann@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'tim.bachmann@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Alina',
+       'Hug',
+       DATE '2010-09-21',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'alina.hug@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'alina.hug@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Samuel',
+       'Zimmermann',
+       DATE '2011-05-03',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'samuel.zimmermann@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'samuel.zimmermann@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'Chiara',
+       'Egli',
+       DATE '2012-08-26',
+       (SELECT id FROM gender WHERE name = 'Female' ORDER BY id DESC LIMIT 1),
+       'chiara.egli@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'chiara.egli@example.com');
+
+INSERT INTO participant (created_at, firstname, lastname, birthdate, gender, email)
+SELECT CURRENT_TIMESTAMP,
+       'David',
+       'Suter',
+       DATE '2009-01-08',
+       (SELECT id FROM gender WHERE name = 'Male' ORDER BY id DESC LIMIT 1),
+       'david.suter@example.com'
+WHERE NOT EXISTS (SELECT 1 FROM participant WHERE email = 'david.suter@example.com');
