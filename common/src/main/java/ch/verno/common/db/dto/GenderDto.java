@@ -5,6 +5,8 @@ import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
+
 public class GenderDto extends BaseDto {
 
   @Nonnull
@@ -59,5 +61,17 @@ public class GenderDto extends BaseDto {
 
   public void setDescription(@Nonnull final String description) {
     this.description = description;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GenderDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
   }
 }

@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CourseScheduleDto extends BaseDto {
 
@@ -97,5 +98,17 @@ public class CourseScheduleDto extends BaseDto {
     }
 
     return stringBuilder.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof CourseScheduleDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
   }
 }

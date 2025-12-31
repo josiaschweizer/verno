@@ -179,6 +179,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   protected abstract String getGridObjectName();
 
+  @Nonnull
   protected abstract String getDetailPageRoute();
 
   @Nonnull

@@ -5,6 +5,8 @@ import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
+
 public class AddressDto extends BaseDto {
 
   @Nonnull
@@ -128,5 +130,17 @@ public class AddressDto extends BaseDto {
       fullAddress.append(country);
     }
     return fullAddress.toString().trim();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof AddressDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
   }
 }

@@ -126,4 +126,16 @@ public class ParentDto extends BaseDto {
   public void setAddress(@Nonnull final AddressDto address) {
     this.address = address;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ParentDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
+  }
 }

@@ -239,4 +239,16 @@ public class ParticipantDto extends BaseDto {
   public void setParentTwo(@Nonnull final ParentDto parentTwo) {
     this.parentTwo = parentTwo;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ParticipantDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
+  }
 }

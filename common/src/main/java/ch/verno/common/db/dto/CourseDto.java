@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 public class CourseDto extends BaseDto {
 
@@ -224,5 +225,17 @@ public class CourseDto extends BaseDto {
   @Nonnull
   public String displayName() {
     return title;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof CourseDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
   }
 }

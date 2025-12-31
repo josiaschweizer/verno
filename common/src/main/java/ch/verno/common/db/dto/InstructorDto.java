@@ -132,4 +132,16 @@ public class InstructorDto extends BaseDto {
   public String genderAsString() {
     return gender.getDescription();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof InstructorDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
+  }
 }

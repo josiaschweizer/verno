@@ -86,6 +86,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     return VernoConstants.PARTICIPANT;
   }
 
+  @Nonnull
   @Override
   protected String getDetailPageRoute() {
     return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
