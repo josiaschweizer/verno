@@ -133,9 +133,15 @@ public class CourseDto extends BaseDto {
 
   @Nonnull
   public String getCourseLevelAsString() {
-    final var stringBuilder = new StringBuilder();
+    if (courseLevels.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
 
+    final var stringBuilder = new StringBuilder();
     for (final CourseLevelDto level : courseLevels) {
+      if (level == null) {
+        continue;
+      }
       if (!stringBuilder.isEmpty()) {
         stringBuilder.append(Publ.COMMA).append(Publ.SPACE);
       }
@@ -180,10 +186,15 @@ public class CourseDto extends BaseDto {
 
     final var stringBuilder = new StringBuilder();
     for (final DayOfWeek day : weekdays) {
-      stringBuilder.append(day.name(), 0, 3).append(Publ.COMMA).append(Publ.SPACE);
+      if (day == null) {
+        continue;
+      }
+      if (!stringBuilder.isEmpty()) {
+        stringBuilder.append(Publ.COMMA).append(Publ.SPACE);
+      }
+      stringBuilder.append(day.name(), 0, 3);
     }
 
-    stringBuilder.setLength(stringBuilder.length() - 2);
     return stringBuilder.toString();
   }
 
