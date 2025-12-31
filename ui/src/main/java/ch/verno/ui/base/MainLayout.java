@@ -1,5 +1,8 @@
 package ch.verno.ui.base;
 
+import ch.verno.common.db.dto.AppUserDto;
+import ch.verno.common.db.service.IAppUserService;
+import ch.verno.server.service.AppUserSettingService;
 import ch.verno.ui.base.menu.MenuOrder;
 import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
 import com.vaadin.flow.component.AttachEvent;
@@ -20,7 +23,10 @@ import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,7 +36,16 @@ import java.util.Objects;
 @PermitAll
 public final class MainLayout extends AppLayout {
 
-  MainLayout() {
+  @Nonnull
+  private final IAppUserService appUserService;
+  @Nonnull
+  private final AppUserSettingService appUserSettingService;
+
+  MainLayout(@Nonnull final IAppUserService appUserService,
+             @Nonnull final AppUserSettingService appUserSettingService) {
+    this.appUserService = appUserService;
+    this.appUserSettingService = appUserSettingService;
+
     setPrimarySection(Section.DRAWER);
     addClassNames("main-layout");
     addToDrawer(createHeader(), new Scroller(createSideNav()));
@@ -39,13 +54,41 @@ public final class MainLayout extends AppLayout {
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
-    // Load theme from localStorage on attach
-    UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
-            .then(String.class, theme -> {
-              if ("dark".equals(theme)) {
-                ThemeSetting.applyTheme(true);
-              }
-            });
+    loadAndApplyThemeFromDatabase();
+  }
+
+  private void loadAndApplyThemeFromDatabase() {
+    final var currentUser = getCurrentUser();
+    if (currentUser == null) {
+      return;
+    }
+
+    final var appUser = appUserService.findByUserName(currentUser.getUsername());
+    if (appUser.getId() == null) {
+      return;
+    }
+
+    try {
+      final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
+      final boolean isDarkMode = "dark".equals(userSetting.getTheme());
+      ThemeSetting.applyTheme(isDarkMode);
+    } catch (Exception e) {
+      UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
+              .then(String.class, theme -> {
+                if ("dark".equals(theme)) {
+                  ThemeSetting.applyTheme(true);
+                }
+              });
+    }
+  }
+
+  @Nullable
+  private User getCurrentUser() {
+    final var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
+      return (User) authentication.getPrincipal();
+    }
+    return null;
   }
 
   private Component createHeader() {
