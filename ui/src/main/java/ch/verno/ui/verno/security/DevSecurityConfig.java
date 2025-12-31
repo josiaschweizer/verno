@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.security;
 
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +19,9 @@ public class DevSecurityConfig {
 
   @Bean
   SecurityFilterChain devSecurityFilterChain(@Nonnull final HttpSecurity http) throws Exception {
-    return http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-            .build();
+    return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
+      configurer.loginView(LoginView.class);
+    }).build();
   }
 
   @Bean
