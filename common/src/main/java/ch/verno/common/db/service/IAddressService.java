@@ -17,6 +17,6 @@ public interface IAddressService {
   AddressDto getAddressById(@Nonnull final Long id);
 
   @Nonnull
-  List<AddressDto> getAlAddress();
+  List<AddressDto> getAddresses();
 
 }

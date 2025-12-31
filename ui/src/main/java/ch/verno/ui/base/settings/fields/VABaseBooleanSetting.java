@@ -6,12 +6,12 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
-public class BaseBooleanSetting<T> extends BaseSettingRow {
+public class VABaseBooleanSetting<T> extends VABaseSettingRow {
 
-  public BaseBooleanSetting(@Nonnull final String title,
-                            @Nonnull final Binder<T> binder,
-                            @Nonnull final ValueProvider<T, Boolean> getter,
-                            @Nonnull final Setter<T, Boolean> setter) {
+  public VABaseBooleanSetting(@Nonnull final String title,
+                              @Nonnull final Binder<T> binder,
+                              @Nonnull final ValueProvider<T, Boolean> getter,
+                              @Nonnull final Setter<T, Boolean> setter) {
     super(title, new Checkbox());
     final var field = (Checkbox) getComponentAt(1);
 

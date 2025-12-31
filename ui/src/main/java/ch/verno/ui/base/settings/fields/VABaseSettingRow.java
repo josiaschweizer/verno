@@ -5,10 +5,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 
-public abstract class BaseSettingRow extends HorizontalLayout {
+public abstract class VABaseSettingRow extends HorizontalLayout {
 
-  protected BaseSettingRow(@Nonnull final String title,
-                           @Nonnull final Component field) {
+  protected VABaseSettingRow(@Nonnull final String title,
+                             @Nonnull final Component field) {
     setWidthFull();
     setAlignItems(Alignment.CENTER);
     setPadding(false);

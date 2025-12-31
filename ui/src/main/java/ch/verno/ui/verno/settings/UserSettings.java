@@ -1,15 +1,17 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.server.service.MandantSettingService;
+import ch.verno.common.db.service.IAppUserService;
+import ch.verno.server.service.AppUserService;
+import ch.verno.server.service.AppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
+import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -20,18 +22,22 @@ import java.util.List;
 public class UserSettings extends VABaseSettingsPage {
 
   @Nonnull
-  private final MandantSettingService mandantSettingService;
+  private final IAppUserService appUserService;
+  @Nonnull
+  private final AppUserSettingService appUserSettingService;
 
-  @Autowired
-  public UserSettings(@Nonnull final MandantSettingService mandantSettingService) { //TODO delete course level setting from user setting and replace it with user specific settings (course setting is mandant specific)
-    this.mandantSettingService = mandantSettingService;
+  public UserSettings(@Nonnull final IAppUserService appUserService,
+                      @Nonnull final AppUserSettingService appUserSettingService) {
+    this.appUserService = appUserService;
+    this.appUserSettingService = appUserSettingService;
+
     initUI();
   }
 
   @Nonnull
   @Override
   protected List<VABaseSetting<?>> createSettings() {
-    return List.of();
+    return List.of(new ThemeSetting(appUserService, appUserSettingService));
   }
 
   @Nonnull

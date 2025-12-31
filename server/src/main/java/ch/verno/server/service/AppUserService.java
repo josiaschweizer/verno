@@ -1,8 +1,12 @@
 package ch.verno.server.service;
 
+import ch.verno.common.db.dto.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
+import ch.verno.db.entity.user.AppUserEntity;
+import ch.verno.server.mapper.AppUserMapper;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +34,17 @@ public class AppUserService implements IAppUserService {
             .password(user.getPasswordHash())
             .roles(user.getRole())
             .build();
+  }
+
+  @Nonnull
+  @Override
+  public AppUserDto findByUserName(@Nonnull final String username) {
+    return AppUserMapper.toDto(findEntityByUserName(username));
+  }
+
+  private AppUserEntity findEntityByUserName(final @NonNull String username) {
+    return appUserRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
   }
 }
 

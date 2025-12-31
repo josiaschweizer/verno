@@ -6,9 +6,9 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
-public class BaseQuantitySetting<T> extends BaseSettingRow {
+public class VABaseQuantitySetting<T> extends VABaseSettingRow {
 
-  public BaseQuantitySetting(
+  public VABaseQuantitySetting(
           @Nonnull final String title,
           @Nonnull final Binder<T> binder,
           @Nonnull final ValueProvider<T, Integer> getter,

@@ -5,6 +5,12 @@ html, body {
     --lumo-required-field-indicator-color: red;
 }
 
+:root[theme='dark'] {
+    --lumo-base-color: #0b0b0d;
+    --lumo-body-text-color: #e6e6e6;
+    --app-surface: #121212;
+}
+
 vaadin-app-layout.main-layout::part(drawer) {
     width: 350px;
 }

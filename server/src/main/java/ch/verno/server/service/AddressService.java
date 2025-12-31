@@ -56,7 +56,7 @@ public class AddressService implements IAddressService {
 
   @Nonnull
   @Override
-  public List<AddressDto> getAlAddress() {
+  public List<AddressDto> getAddresses() {
     return addressRepository.findAll()
             .stream()
             .map(AddressMapper::toDto)
