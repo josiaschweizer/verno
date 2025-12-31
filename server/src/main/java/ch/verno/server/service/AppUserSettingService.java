@@ -4,7 +4,9 @@ import ch.verno.common.db.dto.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.common.exceptions.NotFoundException;
 import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.db.entity.user.AppUserSettingEntity;
 import ch.verno.server.mapper.AppUserSettingMapper;
+import ch.verno.server.repository.AppUserRepository;
 import ch.verno.server.repository.AppUserSettingRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
@@ -17,23 +19,37 @@ public class AppUserSettingService implements IAppUserSettingService {
 
   @Nonnull
   private final AppUserSettingRepository repository;
+  @Nonnull
+  private final AppUserRepository appUserRepository;
 
-  public AppUserSettingService(@Nonnull final AppUserSettingRepository repository) {
+  public AppUserSettingService(@Nonnull final AppUserSettingRepository repository,
+                               @Nonnull final AppUserRepository appUserRepository) {
     this.repository = repository;
+    this.appUserRepository = appUserRepository;
   }
 
   @Nonnull
   @Override
   @Transactional
-  public AppUserSettingDto updateAppUserSetting(@Nonnull final AppUserSettingDto appUserSettingDto) {
-    throw new RuntimeException("not implemented");
+  public AppUserSettingDto updateAppUserSetting(@Nonnull final AppUserSettingDto dto) {
+    final var existingSetting = repository.findByUserId(dto.getUserId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.USER_SETTING_BY_USER_ID_NOT_FOUND));
+
+    existingSetting.setTheme(dto.getTheme());
+    final var savedEntity = repository.save(existingSetting);
+    return AppUserSettingMapper.toDto(savedEntity);
   }
 
   @Nonnull
   @Override
   @Transactional
-  public AppUserSettingDto createAppUserSetting(@Nonnull final AppUserSettingDto appUserSettingDto) {
-    throw new RuntimeException("not implemented");
+  public AppUserSettingDto createAppUserSetting(@Nonnull final AppUserSettingDto dto) {
+    final var user = appUserRepository.findById(dto.getUserId())
+            .orElseThrow(() -> new NotFoundException(NotFoundReason.APP_USER_NOT_FOUND));
+
+    final var entity = new AppUserSettingEntity(user, dto.getTheme());
+    final var savedEntity = repository.save(entity);
+    return AppUserSettingMapper.toDto(savedEntity);
   }
 
   @Nonnull

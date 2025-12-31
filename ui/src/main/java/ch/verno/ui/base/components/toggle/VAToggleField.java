@@ -2,11 +2,13 @@ package ch.verno.ui.base.components.toggle;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import jakarta.annotation.Nonnull;
 
+@Tag("va-toggle-field")
 @CssImport("./components/toggle/va-toggle-field.css")
 public class VAToggleField extends AbstractField<VAToggleField, Boolean> implements HasSize {
 

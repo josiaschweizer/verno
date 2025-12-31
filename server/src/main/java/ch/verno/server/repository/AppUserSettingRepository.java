@@ -37,4 +37,9 @@ public class AppUserSettingRepository {
     return jpaRepository.findByUser(user.get());
   }
 
+  @Nonnull
+  public AppUserSettingEntity save(@Nonnull final AppUserSettingEntity entity) {
+    return jpaRepository.save(entity);
+  }
+
 }

@@ -14,6 +14,7 @@ public enum NotFoundReason {
   MANDANT_SETTINGS_BY_ID_NOT_FOUND("Mandant settings not found with id: "),
   USER_SETTING_BY_ID_NOT_FOUND("User settings not found with id: "),
   USER_SETTING_BY_USER_ID_NOT_FOUND("User settings not found for user id: "),
+  APP_USER_NOT_FOUND("App user not found with id: "),
   ;
 
   @Nonnull
