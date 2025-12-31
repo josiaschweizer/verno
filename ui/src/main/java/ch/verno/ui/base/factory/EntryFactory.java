@@ -1,6 +1,7 @@
 package ch.verno.ui.base.factory;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
@@ -11,6 +12,8 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.ItemLabelGenerator;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -20,6 +23,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
@@ -29,7 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-public class EntryFactory<DTO, TWOSELECTIONDTO> {
+public class EntryFactory<DTO> {
 
 
   @Nonnull
@@ -195,11 +199,11 @@ public class EntryFactory<DTO, TWOSELECTIONDTO> {
   }
 
   @Nonnull
-  public VATwoOptionEntry<TWOSELECTIONDTO> createGenderEntry(@Nonnull final ValueProvider<DTO, TWOSELECTIONDTO> valueProvider,
-                                                             @Nonnull final Setter<DTO, TWOSELECTIONDTO> valueSetter,
+  public VATwoOptionEntry<GenderDto> createGenderEntry(@Nonnull final ValueProvider<DTO, GenderDto> valueProvider,
+                                                       @Nonnull final Setter<DTO, GenderDto> valueSetter,
                                                              @Nonnull final Binder<DTO> binder,
-                                                             @Nonnull final List<TWOSELECTIONDTO> options,
-                                                             @Nonnull final ValueProvider<TWOSELECTIONDTO, String> optionLabelProvider,
+                                                       @Nonnull final List<GenderDto> options,
+                                                       @Nonnull final ValueProvider<GenderDto, String> optionLabelProvider,
                                                              @Nonnull final Optional<String> required,
                                                              @Nonnull final String label) {
     final var entry = new VATwoOptionEntry<>(label, options, optionLabelProvider);

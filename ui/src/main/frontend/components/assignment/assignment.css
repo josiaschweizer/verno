@@ -1,0 +1,17 @@
+.va-required::after {
+    content: " *";
+    color: red;
+    margin-left: 0.25em;
+}
+
+.participants-group::part(group-field) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    column-gap: var(--lumo-space-l);
+    row-gap: var(--lumo-space-s);
+    align-items: start;
+}
+
+.participants-group vaadin-checkbox {
+    margin: 0;
+}

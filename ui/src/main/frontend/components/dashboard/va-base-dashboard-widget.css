@@ -1,0 +1,57 @@
+.va-dashboard-widget {
+    --va-widget-min-w: 280px;
+    --va-widget-max-w: 1fr;
+    --va-widget-min-h: 160px;
+
+    display: flex;
+    flex-direction: column;
+    min-height: var(--va-widget-min-h);
+
+    border: 1px solid var(--lumo-contrast-10pct);
+    border-radius: var(--lumo-border-radius-l);
+    background: var(--lumo-base-color);
+    box-shadow: var(--lumo-box-shadow-s);
+
+    overflow: hidden;
+}
+
+.va-dashboard-widget__header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+.va-dashboard-widget__header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.va-dashboard-widget__title {
+    margin: 0;
+    font-size: var(--lumo-font-size-l);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.va-dashboard-widget__subtitle {
+    font-size: var(--lumo-font-size-s);
+    color: var(--lumo-secondary-text-color);
+}
+
+.va-dashboard-widget__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.va-dashboard-widget__content {
+    padding: 12px 14px;
+    flex: 1 1 auto;
+    min-height: 0;
+}

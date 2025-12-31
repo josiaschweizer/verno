@@ -12,7 +12,7 @@ import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-@CssImport("./components/va-base-setting.css")
+@CssImport("./components/setting/va-base-setting.css")
 public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   @Nonnull

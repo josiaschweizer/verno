@@ -5,13 +5,11 @@ import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.util.VernoConstants;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseScheduleService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.InstructorService;
+import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
+import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -32,16 +30,21 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
 
   @Nonnull
   private final CourseService courseService;
-  private final CourseLevelService courseLevelService;
-  private final CourseScheduleService courseScheduleService;
+  @Nonnull
   private final InstructorService instructorService;
+  @Nonnull
+  private final CourseLevelService courseLevelService;
+  @Nonnull
+  private final CourseScheduleService courseScheduleService;
 
   public CourseDetail(@Nonnull final CourseService courseService,
-                      @Nonnull final CourseLevelService courseLevelService, final CourseScheduleService courseScheduleService, final InstructorService instructorService) {
+                      @Nonnull final InstructorService instructorService,
+                      @Nonnull final CourseLevelService courseLevelService,
+                      @Nonnull final CourseScheduleService courseScheduleService) {
     this.courseService = courseService;
+    this.instructorService = instructorService;
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
-    this.instructorService = instructorService;
 
     init();
   }

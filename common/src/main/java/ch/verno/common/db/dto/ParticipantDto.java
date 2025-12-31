@@ -132,6 +132,11 @@ public class ParticipantDto extends BaseDto {
     this.lastName = lastName;
   }
 
+  @Nonnull
+  public String getFullName() {
+    return firstName + Publ.SPACE + lastName;
+  }
+
   @Nullable
   public LocalDate getBirthdate() {
     return birthdate;

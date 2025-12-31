@@ -16,6 +16,9 @@ public class Publ {
   public static final String COMMA = ",";
   public static final String EQUALS = "=";
   public static final String PLUS = "+";
+  public static final String SIMPLE_QUOTE = "'";
+  public static final String DOT = ".";
+  public static final String UNDERSCORE = "_";
 
   public static final String S = "s";
   public static final String ID = "id";

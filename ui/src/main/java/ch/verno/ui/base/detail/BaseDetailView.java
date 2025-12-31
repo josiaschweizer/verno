@@ -1,6 +1,5 @@
 package ch.verno.ui.base.detail;
 
-import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.util.Publ;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.ui.base.components.form.FormMode;
@@ -30,7 +29,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull
   private final Binder<T> binder;
   @Nonnull
-  protected EntryFactory<T, GenderDto> entryFactory;
+  protected EntryFactory<T> entryFactory;
   @Nonnull
   protected FieldFactory<T> fieldFactory;
 

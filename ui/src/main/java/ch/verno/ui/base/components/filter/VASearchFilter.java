@@ -55,6 +55,11 @@ public class VASearchFilter extends CustomField<String> {
     add(textField);
   }
 
+  @Override
+  public void setLabel(final String label) {
+    textField.setLabel(label);
+  }
+
   public void setFilterWidth(@Nonnull final String width) {
     textField.setWidth(width);
   }

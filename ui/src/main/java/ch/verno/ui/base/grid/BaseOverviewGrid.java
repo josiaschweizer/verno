@@ -39,6 +39,13 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   protected final Binder<F> filterBinder;
 
+  protected boolean showGridToolbar = true;
+
+  protected BaseOverviewGrid(@Nonnull final F initialFilter, final boolean showGridToolbar) {
+    this(initialFilter);
+    this.showGridToolbar = showGridToolbar;
+  }
+
   protected BaseOverviewGrid(@Nonnull final F initialFilter) {
     this.columnsByKey = new HashMap<>();
     this.filter = initialFilter;
@@ -60,15 +67,19 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
-    initUI();
+    initUI(showGridToolbar);
   }
 
-  protected void initUI() {
+  protected void initUI(final boolean showGridToolbar) {
     initGrid();
     final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
     final var filterBar = createFilterBar();
 
-    add(gridToolbar, filterBar, grid);
+    if (showGridToolbar) {
+      add(gridToolbar, filterBar, grid);
+    } else {
+      add(filterBar, grid);
+    }
   }
 
   @Nonnull
