@@ -28,17 +28,15 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
   @Nullable
   private Integer quantityProposalCourseDays;
-  private boolean enforceQuantitySetting;
-
   @Nullable
   private ComboBox<Integer> yearSelect;
   @Nullable
   private CheckboxGroup<Integer> weekSelect;
-
   @Nonnull
   private final Div previewText;
 
   private boolean internalUpdate = false;
+  private boolean enforceQuantitySetting;
 
   public VAScheduleWeekPicker() {
     this(Publ.EMPTY_STRING);
@@ -78,7 +76,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   @Nonnull
   private ComboBox<Integer> createYearComboBox() {
     final var combobox = new ComboBox<Integer>();
-    combobox.setPlaceholder("Year");
+    combobox.setPlaceholder(getTranslation("base.year"));
     combobox.setWidthFull();
     combobox.addClassName("schedule-week-picker-year-combobox");
     combobox.addValueChangeListener(this::selectedYearChanged);
@@ -141,7 +139,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
 
   private CheckboxGroup<Integer> createWeekSelect() {
     final var checkboxGroup = new CheckboxGroup<Integer>();
-    checkboxGroup.setLabel("Week");
+    checkboxGroup.setLabel(getTranslation("base.week"));
     checkboxGroup.setItems(weeksOfYear(currentYear));
     checkboxGroup.addClassName("schedule-week-picker-week-select");
     checkboxGroup.addValueChangeListener(this::selectedWeeksChanged);
@@ -172,7 +170,9 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
           internalUpdate = false;
         }
 
-        NotificationFactory.showWarningNotification("You have reached the maximum number of allowed weeks (" + limit + ").");
+        NotificationFactory.showWarningNotification(
+                getTranslation("base.you.have.reached.the.maximum.number.of.allowed.weeks") +
+                        Publ.SPACE + Publ.LEFT_PARENTHESIS + limit + Publ.RIGHT_PARENTHESIS + Publ.DOT);
         return;
       }
     }
@@ -237,9 +237,9 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     final var parts = getWeekOverAllYears();
 
     final var previewTitle = getPreviewTitle(parts);
-    final var weeksString = String.join(", ", parts);
+    final var weeksString = String.join(Publ.COMMA + Publ.SPACE, parts);
     if (parts.isEmpty()) {
-      previewText.setText(previewTitle + "none");
+      previewText.setText(previewTitle + getTranslation("base.none"));
     } else {
       previewText.setText(previewTitle + weeksString);
 
@@ -256,10 +256,13 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
         previewText.removeClassName("schedule-week-picker-preview-text-red");
         previewText.addClassName("schedule-week-picker-preview-text-normal");
       }
-      return "Weeks (" + parts.size() + " / " + quantityProposalCourseDays + "): ";
+      return getTranslation("base.weeks") + Publ.SPACE + Publ.LEFT_PARENTHESIS + parts.size() +
+              Publ.SPACE + Publ.SLASH + Publ.SPACE +
+              quantityProposalCourseDays + Publ.RIGHT_PARENTHESIS + Publ.COLON + Publ.SPACE;
     }
 
-    return "Weeks (" + parts.size() + "): ";
+    return getTranslation("base.weeks") + Publ.SPACE + Publ.LEFT_PARENTHESIS + parts.size() +
+            Publ.RIGHT_PARENTHESIS + Publ.COLON + Publ.SPACE;
   }
 
   public void setQuantityProposalCourseDays(@Nullable final Integer quantityProposalCourseDays) {
@@ -291,7 +294,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
 
       weeks.stream()
               .sorted()
-              .forEach(week -> parts.add("KW-" + week + "-" + year));
+              .forEach(week -> parts.add("KW" + Publ.MINUS + week + Publ.MINUS + year));
     });
     return parts;
   }
