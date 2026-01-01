@@ -1,6 +1,8 @@
 package ch.verno.ui.base.components.calendar;
 
+import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -40,7 +42,7 @@ public class VAWeekCalendar extends Composite<Div> {
   private final Div eventsLayer;
 
   @Nonnull
-  private List<WeekCalendarEvent> events;
+  private List<WeekCalendarEventDto> events;
 
   @Nullable
   private WeekStartChangeListener weekStartChangeListener;
@@ -102,12 +104,12 @@ public class VAWeekCalendar extends Composite<Div> {
     grid.removeAll();
     eventsLayer.removeAll();
 
-    LocalDate weekEnd = weekStart.plusDays(6);
+    final var weekEnd = weekStart.plusDays(6);
     title.setText(HEADER_DATE_FORMATTER.format(weekStart) + " – " + HEADER_DATE_FORMATTER.format(weekEnd));
 
     grid.add(createCorner());
     for (int i = 0; i < 7; i++) {
-      LocalDate date = weekStart.plusDays(i);
+      final var date = weekStart.plusDays(i);
       grid.add(createDayHeader(date));
     }
 
@@ -142,7 +144,7 @@ public class VAWeekCalendar extends Composite<Div> {
 
   @Nonnull
   private Div createHourLabel(final int hour) {
-    Div label = new Div();
+    final var label = new Div();
     label.addClassName("va-week-calendar-hour");
     label.setText(String.format("%02d:00", hour));
     return label;
@@ -150,7 +152,7 @@ public class VAWeekCalendar extends Composite<Div> {
 
   @Nonnull
   private Div createCell(final int hour, final int dayIndex) {
-    Div cell = new Div();
+    final var cell = new Div();
     cell.addClassName("va-week-calendar-cell");
     cell.getElement().setAttribute("data-hour", String.valueOf(hour));
     cell.getElement().setAttribute("data-day-index", String.valueOf(dayIndex));
@@ -158,7 +160,7 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   private void renderEvents() {
-    for (WeekCalendarEvent event : events) {
+    for (WeekCalendarEventDto event : events) {
       if (!isInCurrentWeek(event)) {
         continue;
       }
@@ -166,10 +168,10 @@ public class VAWeekCalendar extends Composite<Div> {
     }
   }
 
-  private boolean isInCurrentWeek(@Nonnull final WeekCalendarEvent event) {
-    LocalDate startDate = event.start().toLocalDate();
-    LocalDate endDate = event.end().toLocalDate();
-    LocalDate weekEnd = weekStart.plusDays(6);
+  private boolean isInCurrentWeek(@Nonnull final WeekCalendarEventDto event) {
+    final var startDate = event.start().toLocalDate();
+    final var endDate = event.end().toLocalDate();
+    final var weekEnd = weekStart.plusDays(6);
 
     boolean startsBeforeWeekEnds = !startDate.isAfter(weekEnd);
     boolean endsAfterWeekStarts = !endDate.isBefore(weekStart);
@@ -178,14 +180,19 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   @Nonnull
-  private Div createEventBlock(@Nonnull final WeekCalendarEvent event) {
-    Div block = new Div();
+  private Div createEventBlock(@Nonnull final WeekCalendarEventDto event) {
+    final var block = new Div();
     block.addClassName("va-week-calendar-course");
     block.setText(event.title());
+    if (event.courseId() != null) {
+      block.getStyle().setCursor("pointer");
+      block.addClickListener(e -> UI.getCurrent().navigate(
+              Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId()))));
+    }
 
-    int col = 2 + dayIndexFromMonday(event.start().getDayOfWeek());
+    final int col = 2 + dayIndexFromMonday(event.start().getDayOfWeek());
 
-    int startHour = clamp(event.start().getHour(), 0, 23);
+    final int startHour = clamp(event.start().getHour(), 0, 23);
     int endHour = clamp(event.end().getHour(), 0, 23);
 
     if (event.end().toLocalTime().equals(LocalTime.MIDNIGHT) && event.end().isAfter(event.start())) {
@@ -220,7 +227,7 @@ public class VAWeekCalendar extends Composite<Div> {
     return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
   }
 
-  public void setEvents(@Nonnull final List<WeekCalendarEvent> events) {
+  public void setEvents(@Nonnull final List<WeekCalendarEventDto> events) {
     this.events = events;
     render();
   }
