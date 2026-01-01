@@ -49,8 +49,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     this.saveButton = new Button(VernoConstants.SAVE);
     this.viewToolbar = createViewToolbar();
     this.binder = createBinder();
-    this.entryFactory = new EntryFactory<>();
     this.i18nProvider = getI18NProvider();
+    this.entryFactory = new EntryFactory<>(i18nProvider);
     this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
   }
 

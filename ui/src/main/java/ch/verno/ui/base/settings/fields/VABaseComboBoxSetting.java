@@ -1,5 +1,6 @@
 package ch.verno.ui.base.settings.fields;
 
+import ch.verno.common.util.Publ;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import jakarta.annotation.Nonnull;
@@ -36,7 +37,7 @@ public class VABaseComboBoxSetting<T> extends VABaseSettingRow {
 
   public void setItemLabelGenerator(@Nonnull final Function<T, String> labelGenerator) {
     comboBox.setItemLabelGenerator(item ->
-            Objects.requireNonNullElse(labelGenerator.apply(item), "")
+            Objects.requireNonNullElse(labelGenerator.apply(item), Publ.EMPTY_STRING)
     );
   }
 
