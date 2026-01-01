@@ -40,7 +40,7 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  protected String getTranslation(@Nonnull final String key) {
+  private String getTranslation(@Nonnull final String key) {
     if (i18nProvider != null) {
       final Locale locale = UI.getCurrent() != null ? UI.getCurrent().getLocale() : Locale.getDefault();
       return i18nProvider.getTranslation(key, locale);

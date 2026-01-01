@@ -3,20 +3,17 @@ package ch.verno.ui.verno.course.courses.detail;
 import ch.verno.common.db.dto.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.util.VernoConstants;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseScheduleService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.InstructorService;
+import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -30,9 +27,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES + Routes.DETAIL)
-@PageTitle("Courses")
-@Menu(order = 3.11, icon = "vaadin:mobile", title = "Course Detail")
-public class CourseDetail extends BaseDetailView<CourseDto> {
+@Menu(order = 3.11, icon = "vaadin:mobile", title = "course.course.detail")
+public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
   @Nonnull
   private final CourseService courseService;
@@ -62,7 +58,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
   @Nonnull
   @Override
   protected String getDetailPageName() {
-    return VernoConstants.COURSE;
+    return getTranslation("course.course");
   }
 
   @Nonnull
@@ -191,7 +187,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
                     instructorService.getInstructorById(value)),
             getBinder(),
             Optional.empty(),
-            "Instructor",
+            getTranslation("shared.instructor"),
             instructorOptions
     );
 
@@ -213,7 +209,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
 
   @Override
   protected void initAdditionalInfoUIBelowSaveButton() {
-    final var title = new Span("Participants in this Course");
+    final var title = new Span(getTranslation("course.participants.in.this.course"));
     title.getStyle().setFontWeight("bold");
 
     final var participantsGrid = new ParticipantsGrid(participantService, courseService, courseLevelService, false, false) {
@@ -234,5 +230,10 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
     addOnLayout.setHeightFull();
 
     add(addOnLayout);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("course.course.detail");
   }
 }

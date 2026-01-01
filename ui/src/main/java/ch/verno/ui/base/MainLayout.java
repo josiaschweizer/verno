@@ -135,9 +135,11 @@ public final class MainLayout extends AppLayout {
 
   @Nonnull
   private SideNavItem createSideNavItem(@Nonnull final MenuEntry menuEntry) {
+    final var title = getTranslation(menuEntry.title());
+
     final SideNavItem item = (menuEntry.icon() != null)
-            ? new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()))
-            : new SideNavItem(menuEntry.title(), menuEntry.path());
+            ? new SideNavItem(title, menuEntry.path(), new Icon(menuEntry.icon()))
+            : new SideNavItem(title, menuEntry.path());
 
     // so that the grid items isn't highlighted if we are on the detail view
     if (menuEntry.path() != null && menuEntry.path().contains("/detail")) {

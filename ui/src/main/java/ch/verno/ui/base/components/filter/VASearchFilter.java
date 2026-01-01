@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.filter;
 
+import ch.verno.common.util.Publ;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -37,7 +38,7 @@ public class VASearchFilter extends CustomField<String> {
     if (placeholder != null) {
       textField.setPlaceholder(placeholder);
     } else {
-      textField.setPlaceholder("Search...");
+      textField.setPlaceholder(getTranslation("base.search"));
     }
 
     textField.setClearButtonVisible(true);
@@ -92,7 +93,7 @@ public class VASearchFilter extends CustomField<String> {
   protected void setPresentationValue(@Nullable final String value) {
     currentValue = value;
     if (value == null || value.isEmpty()) {
-      textField.setValue("");
+      textField.setValue(Publ.EMPTY_STRING);
     } else {
       textField.setValue(value);
     }

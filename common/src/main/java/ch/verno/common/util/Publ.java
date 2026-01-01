@@ -18,7 +18,15 @@ public class Publ {
   public static final String PLUS = "+";
   public static final String SIMPLE_QUOTE = "'";
   public static final String DOT = ".";
+  public static final String COLON = ":";
   public static final String UNDERSCORE = "_";
+  public static final String AT = "@";
+  public static final String HASH = "#";
+  public static final String LEFT_PARENTHESIS = "(";
+  public static final String RIGHT_PARENTHESIS = ")";
+  public static final String MINUS = "−";
+  public static final String LEFT_SINGLE_ANGLE_QUOTATION_MARK = "‹";
+  public static final String RIGHT_SINGLE_ANGLE_QUOTATION_MARK = "›";
 
   public static final String S = "s";
   public static final String ID = "id";
