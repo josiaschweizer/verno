@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.calendar;
 
+import ch.verno.common.util.Publ;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
@@ -57,9 +58,9 @@ public class VAWeekCalendar extends Composite<Div> {
     final var toolbar = new HorizontalLayout();
     toolbar.addClassName("va-week-calendar-toolbar");
 
-    final var prev = new Button("‹");
-    final var today = new Button("Today");
-    final var next = new Button("›");
+    final var prev = new Button(Publ.LEFT_SINGLE_ANGLE_QUOTATION_MARK);
+    final var today = new Button(getTranslation("base.today"));
+    final var next = new Button(Publ.RIGHT_SINGLE_ANGLE_QUOTATION_MARK);
 
     title = new Span();
     title.addClassName("va-week-calendar-title");
@@ -105,7 +106,9 @@ public class VAWeekCalendar extends Composite<Div> {
     eventsLayer.removeAll();
 
     final var weekEnd = weekStart.plusDays(6);
-    title.setText(HEADER_DATE_FORMATTER.format(weekStart) + " – " + HEADER_DATE_FORMATTER.format(weekEnd));
+    title.setText(HEADER_DATE_FORMATTER.format(weekStart) +
+            Publ.SPACE + Publ.MINUS + Publ.SPACE +
+            HEADER_DATE_FORMATTER.format(weekEnd));
 
     grid.add(createCorner());
     for (int i = 0; i < 7; i++) {
@@ -213,7 +216,7 @@ public class VAWeekCalendar extends Composite<Div> {
     }
 
     block.getStyle().set("grid-column", String.valueOf(col));
-    block.getStyle().set("grid-row", rowStart + " / " + rowEnd);
+    block.getStyle().set("grid-row", rowStart + Publ.SPACE + Publ.SLASH + Publ.SPACE + rowEnd);
 
     return block;
   }
