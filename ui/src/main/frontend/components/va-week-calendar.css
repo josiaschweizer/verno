@@ -124,3 +124,7 @@
     z-index: 1;
     pointer-events: auto;
 }
+
+.va-week-calendar-course:hover {
+    background: var(--lumo-primary-color-20pct);
+}

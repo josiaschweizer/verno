@@ -39,6 +39,8 @@ html, body {
 
     --lumo-primary-color: hsl(210, 90%, 55%);
     --lumo-primary-color-50pct: hsla(210, 90%, 55%, 0.5);
+    --lumo-primary-color-30pct: hsla(210, 90%, 55%, 0.3);
+    --lumo-primary-color-20pct: hsla(210, 90%, 55%, 0.3);
     --lumo-primary-color-10pct: hsla(210, 90%, 55%, 0.1);
     --lumo-primary-text-color: hsl(210, 90%, 65%);
     --lumo-primary-contrast-color: hsl(220, 20%, 95%);

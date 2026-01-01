@@ -6,8 +6,8 @@ import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 
 public record WeekCalendarEventDto(@Nonnull String title,
-                                   @Nonnull LocalDateTime start,
-                                   @Nonnull LocalDateTime end,
+                                   @Nullable LocalDateTime start,
+                                   @Nullable LocalDateTime end,
                                    @Nullable Long courseId
 ) {
 }
