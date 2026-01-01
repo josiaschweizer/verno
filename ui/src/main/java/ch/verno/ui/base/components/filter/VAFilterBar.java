@@ -37,10 +37,10 @@ public class VAFilterBar extends VerticalLayout {
     setSpacing(false);
     setWidthFull();
 
-    searchFilter = new VASearchFilter(null, "Search...");
+    searchFilter = new VASearchFilter(null, getTranslation("base.search"));
     searchFilter.setWidthFull();
 
-    toggleFiltersButton = new Button("Filter", VaadinIcon.FILTER.create());
+    toggleFiltersButton = new Button(getTranslation("base.filter"), VaadinIcon.FILTER.create());
     toggleFiltersButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     toggleFiltersButton.addClickListener(e -> setFiltersVisible(!filtersVisible));
     toggleFiltersButton.setVisible(false);

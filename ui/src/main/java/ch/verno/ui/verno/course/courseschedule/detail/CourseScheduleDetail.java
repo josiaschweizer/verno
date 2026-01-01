@@ -10,8 +10,8 @@ import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -22,9 +22,8 @@ import java.util.Set;
 
 @PermitAll
 @Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
-@PageTitle("Course Schedule Detail")
-@Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "Course Schedule Detail")
-public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
+@Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "courseSchedule.course.schedule.detail")
+public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> implements HasDynamicTitle {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
@@ -76,7 +75,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
   @Nonnull
   @Override
   protected String getDetailPageName() {
-    return VernoConstants.COURSE_SCHEDULE;
+    return getTranslation("courseSchedule.course.schedule");
   }
 
   @Nonnull
@@ -124,5 +123,10 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
   @Override
   protected CourseScheduleDto getBeanById(@Nonnull final Long id) {
     return courseScheduleService.getCourseScheduleById(id);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("courseSchedule.course.schedule.detail");
   }
 }

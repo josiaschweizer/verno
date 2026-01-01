@@ -21,7 +21,7 @@ public class VABaseQuantitySetting<T> extends VABaseSettingRow {
             .withConverter(
                     v -> v == null ? null : v.intValue(),
                     i -> i == null ? null : i.doubleValue(),
-                    "Ungültige Zahl"
+                    getTranslation("base.invalid.number")
             )
             .bind(getter, setter);
   }

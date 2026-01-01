@@ -12,8 +12,7 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.ItemLabelGenerator;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -23,9 +22,10 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -35,6 +35,21 @@ import java.util.*;
 
 public class EntryFactory<DTO> {
 
+  @Nullable
+  private final I18NProvider i18nProvider;
+
+  public EntryFactory(@Nullable final I18NProvider i18nProvider) {
+    this.i18nProvider = i18nProvider;
+  }
+
+  @Nonnull
+  private String getTranslation(@Nonnull final String key) {
+    if (i18nProvider != null) {
+      final Locale locale = UI.getCurrent() != null ? UI.getCurrent().getLocale() : Locale.getDefault();
+      return i18nProvider.getTranslation(key, locale);
+    }
+    return key;
+  }
 
   @Nonnull
   public VATextField createTextEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
@@ -69,7 +84,7 @@ public class EntryFactory<DTO> {
     final var emailField = new EmailField(label);
     emailField.setClearButtonVisible(true);
     emailField.setWidthFull();
-    emailField.setErrorMessage("Please enter a valid email address.");
+    emailField.setErrorMessage(getTranslation("base.please.enter.a.valid.email.address"));
     bindEntry(emailField, valueProvider, valueSetter, binder, required);
     return emailField;
   }
@@ -92,7 +107,7 @@ public class EntryFactory<DTO> {
                     pn.phoneNumber(),
                     pn.callingCode().regionCode()
             ),
-            "Invalid phone number"
+            getTranslation("base.invalid.phone.number")
     );
     binding.bind(valueProvider, valueSetter);
 
@@ -189,7 +204,7 @@ public class EntryFactory<DTO> {
               if (value == null || value.isEmpty()) {
                 return allowEmpty
                         ? ValidationResult.ok()
-                        : ValidationResult.error(required.orElse("Select at least one item"));
+                        : ValidationResult.error(required.orElse(getTranslation("base.select.at.least.one.item")));
               }
               return ValidationResult.ok();
             }
@@ -232,7 +247,7 @@ public class EntryFactory<DTO> {
             (value, valueContext) -> {
               if (value == null || value.isEmpty()) {
                 return allowEmpty ? ValidationResult.ok()
-                        : ValidationResult.error(required.orElse("Select at least one day"));
+                        : ValidationResult.error(required.orElse(getTranslation("base.select.at.least.one.day")));
               }
               return ValidationResult.ok();
             }
@@ -259,7 +274,7 @@ public class EntryFactory<DTO> {
               if (value == null || value.isEmpty()) {
                 return required.isEmpty()
                         ? ValidationResult.ok()
-                        : ValidationResult.error(required.orElse("Select at least one week"));
+                        : ValidationResult.error(required.orElse(getTranslation("base.select.at.least.one.week")));
               }
               return ValidationResult.ok();
             }
@@ -274,11 +289,11 @@ public class EntryFactory<DTO> {
     return (value, valueContext) -> {
       if (value == null) {
         return allowNull ? ValidationResult.ok()
-                : ValidationResult.error(required.orElse("Required"));
+                : ValidationResult.error(required.orElse(getTranslation("common.required")));
       }
       return value > 0
               ? ValidationResult.ok()
-              : ValidationResult.error("Value must be greater than 0");
+              : ValidationResult.error(getTranslation("base.value.must.be.greater.than.0"));
     };
   }
 
@@ -288,11 +303,11 @@ public class EntryFactory<DTO> {
     return (value, valueContext) -> {
       if (value == null) {
         return allowNull ? ValidationResult.ok()
-                : ValidationResult.error(required.orElse("Required"));
+                : ValidationResult.error(required.orElse(getTranslation("common.required")));
       }
       return value > 0
               ? ValidationResult.ok()
-              : ValidationResult.error("Value must be greater than 0");
+              : ValidationResult.error(getTranslation("base.value.must.be.greater.than.0"));
     };
   }
 
