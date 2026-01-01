@@ -8,8 +8,8 @@ import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -20,9 +20,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES)
-@PageTitle("Courses")
-@Menu(order = 3.1, icon = "vaadin:desktop", title = "Courses")
-public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
+@Menu(order = 3.1, icon = "vaadin:desktop", title = "course.course")
+public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> implements HasDynamicTitle {
 
   @Nonnull
   private final CourseService courseService;
@@ -51,7 +50,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.COURSE;
+    return getTranslation("course.course");
   }
 
   @Nonnull
@@ -79,5 +78,10 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
   @Override
   protected CourseFilter withSearchText(@Nonnull final String searchText) {
     return CourseFilter.fromSearchText(searchText);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("course.course");
   }
 }

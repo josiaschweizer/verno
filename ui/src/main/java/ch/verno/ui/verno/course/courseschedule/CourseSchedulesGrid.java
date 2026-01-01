@@ -8,8 +8,8 @@ import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -20,9 +20,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSE_SCHEDULES)
-@PageTitle("Course Schedules")
-@Menu(order = 3.2, icon = "vaadin:calendar", title = "Course Schedules ")
-public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, CourseScheduleFilter> {
+@Menu(order = 3.2, icon = "vaadin:calendar", title = "courseSchedule.course.schedules")
+public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, CourseScheduleFilter> implements HasDynamicTitle {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
@@ -53,7 +52,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.COURSE_SCHEDULE;
+    return getTranslation("courseSchedule.course.schedule");
   }
 
   @Nonnull
@@ -75,5 +74,10 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Override
   protected CourseScheduleFilter withSearchText(@Nonnull final String searchText) {
     return CourseScheduleFilter.fromSearchText(searchText);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("courseSchedule.course.schedules");
   }
 }

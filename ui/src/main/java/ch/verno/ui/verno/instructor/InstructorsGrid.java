@@ -8,6 +8,7 @@ import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -20,9 +21,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.INSTRUCTORS)
-@PageTitle("Instructors Overview")
-@Menu(order = 2, icon = "vaadin:institution", title = "Instructors Overview")
-public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorFilter> {
+@Menu(order = 2, icon = "vaadin:institution", title = "shared.instructors.overview")
+public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorFilter> implements HasDynamicTitle {
 
   @Nonnull
   private final InstructorService instructorService;
@@ -51,7 +51,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.INSTRUCTOR;
+    return getTranslation("shared.instructor");
   }
 
   @Nonnull
@@ -77,5 +77,10 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Override
   protected InstructorFilter withSearchText(@Nonnull final String searchText) {
     return InstructorFilter.ofSearchText(searchText);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("shared.instructors.overview");
   }
 }

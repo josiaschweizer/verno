@@ -7,8 +7,8 @@ import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -22,9 +22,8 @@ import java.util.List;
 
 @PermitAll
 @Route(Routes.COURSE)
-@PageTitle("Course")
-@Menu(order = 3, icon = "vaadin:calendar", title = "Course")
-public class CourseOverview extends VerticalLayout {
+@Menu(order = 3, icon = "vaadin:calendar", title = "course.course")
+public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
   @Nonnull
   private final CourseScheduleService courseScheduleService;
@@ -102,4 +101,8 @@ public class CourseOverview extends VerticalLayout {
     return events;
   }
 
+  @Override
+  public String getPageTitle() {
+    return getTranslation("course.course");
+  }
 }
