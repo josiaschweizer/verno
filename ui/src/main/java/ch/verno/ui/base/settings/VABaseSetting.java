@@ -58,7 +58,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   }
 
   private void createSaveButton(final boolean showSaveButton) {
-    saveButton = new Button(getTranslation(getTranslation("save")), e -> save());
+    saveButton = new Button(getTranslation("common.save"), e -> save());
     saveButton.setEnabled(false);
 
     if (showSaveButton) {
