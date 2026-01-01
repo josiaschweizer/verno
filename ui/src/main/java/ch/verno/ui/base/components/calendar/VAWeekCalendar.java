@@ -160,7 +160,10 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   private void renderEvents() {
-    for (WeekCalendarEventDto event : events) {
+    for (final var event : events) {
+      if (event.start() == null || event.end() == null) {
+        continue;
+      }
       if (!isInCurrentWeek(event)) {
         continue;
       }
@@ -184,11 +187,14 @@ public class VAWeekCalendar extends Composite<Div> {
     final var block = new Div();
     block.addClassName("va-week-calendar-course");
     block.setText(event.title());
-    if (event.courseId() != null) {
-      block.getStyle().setCursor("pointer");
-      block.addClickListener(e -> UI.getCurrent().navigate(
-              Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId()))));
-    }
+
+    block.getStyle().setCursor("pointer");
+    block.addClickListener(e -> {
+      if (event.courseId() != null) {
+        UI.getCurrent().navigate(
+                Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId())));
+      }
+    });
 
     final int col = 2 + dayIndexFromMonday(event.start().getDayOfWeek());
 
