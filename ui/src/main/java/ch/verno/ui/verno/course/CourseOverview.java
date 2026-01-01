@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.server.service.CourseService;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
-import ch.verno.ui.base.components.calendar.WeekCalendarEvent;
+import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
@@ -58,7 +58,7 @@ public class CourseOverview extends VerticalLayout {
   }
 
   @Nonnull
-  private List<WeekCalendarEvent> getEventsForWeek(@Nonnull final LocalDate weekStart) {
+  private List<WeekCalendarEventDto> getEventsForWeek(@Nonnull final LocalDate weekStart) {
     final var monday = weekStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
     final var courseScheduleByWeek = courseScheduleService.getCourseScheduleByWeek(monday);
@@ -74,9 +74,9 @@ public class CourseOverview extends VerticalLayout {
   }
 
   @NonNull
-  private ArrayList<WeekCalendarEvent> getEventsFromCourse(@Nonnull final List<CourseDto> courses,
-                                                           @Nonnull final LocalDate monday) {
-    final var events = new ArrayList<WeekCalendarEvent>();
+  private ArrayList<WeekCalendarEventDto> getEventsFromCourse(@Nonnull final List<CourseDto> courses,
+                                                              @Nonnull final LocalDate monday) {
+    final var events = new ArrayList<WeekCalendarEventDto>();
     for (final var course : courses) {
       final var startTime = course.getStartTime();
       final var endTime = course.getEndTime();
@@ -95,9 +95,8 @@ public class CourseOverview extends VerticalLayout {
         final var start = LocalDateTime.of(date, startTime);
         final var end = LocalDateTime.of(date, endTime);
 
-        events.add(new WeekCalendarEvent(course.getTitle(),
-                start,
-                end
+        events.add(new WeekCalendarEventDto(course.getTitle(),
+                start, end, course.getId()
         ));
       }
     }
