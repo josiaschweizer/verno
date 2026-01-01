@@ -144,9 +144,14 @@ public class UISetting extends VABaseSetting<UISettingDto> {
       return;
     }
 
+    final var currentLocale = ui.getLocale();
+    if (locale.equals(currentLocale)) {
+      return;
+    }
+
     ui.setLocale(locale);
     ui.getSession().setLocale(locale);
-    UI.getCurrent().refreshCurrentRoute(false);
+    ui.getPage().reload();
   }
 
   @Nonnull
