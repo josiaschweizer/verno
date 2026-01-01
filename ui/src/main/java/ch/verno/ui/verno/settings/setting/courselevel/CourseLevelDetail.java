@@ -84,29 +84,29 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
             CourseLevelDto::getCode,
             CourseLevelDto::setCode,
             getBinder(),
-            Optional.of("Code required"),
-            "Code"
+            Optional.of(getTranslation("setting.code.required")),
+            getTranslation("setting.code")
     );
     final var nameEntry = entryFactory.createTextEntry(
             CourseLevelDto::getName,
             CourseLevelDto::setName,
             getBinder(),
-            Optional.of("Name required"),
-            "Name"
+            Optional.of(getTranslation("setting.name.required")),
+            getTranslation("setting.name")
     );
     final var descriptionEntry = entryFactory.createTextEntry(
             CourseLevelDto::getDescription,
             CourseLevelDto::setDescription,
             getBinder(),
             Optional.empty(),
-            "Description"
+            getTranslation("setting.description")
     );
     final var sortingOrderEntry = entryFactory.createNumberEntry(
             courseLevelDto -> courseLevelDto.getSortingOrder() != null ? courseLevelDto.getSortingOrder().doubleValue() : 0,
             (courseLevelDto1, sortingOrder) -> courseLevelDto1.setSortingOrder(sortingOrder.intValue()),
             getBinder(),
-            Optional.of("Sorting Order required"),
-            "Sorting Order"
+            Optional.of(getTranslation("setting.sorting.order.required")),
+            getTranslation("setting.sorting.order")
     );
 
     add(createLayoutFromComponents(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));

@@ -184,7 +184,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
             getBinder(),
             Optional.empty(),
-            "Course",
+            getTranslation("course.course"),
             courseOptions
     );
 
@@ -225,7 +225,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             ParticipantDto::setNote,
             getBinder(),
             Optional.empty(),
-            "Note"
+            getTranslation("participants.note")
     );
 
     return createLayoutFromComponents(note);
@@ -259,7 +259,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
 
   @Nonnull
   private HorizontalLayout createParentsLayout() {
-    final var parentOneLayout = createParentLayout("Parent One",
+    final var parentOneLayout = createParentLayout(getTranslation("participant.parent_one"),
             participantDto -> participantDto.getParentOne().getFirstName(),
             (participantDto, firstname) -> participantDto.getParentOne().setFirstName(firstname),
             participantDto -> participantDto.getParentOne().getLastName(),
@@ -272,7 +272,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             (participantDto, phoneNumber) -> participantDto.getParentOne().setPhone(phoneNumber)
     );
 
-    final var parentTwoLayout = createParentLayout("Parent Two",
+    final var parentTwoLayout = createParentLayout(getTranslation("participant.parent_two"),
             participantDto -> participantDto.getParentTwo().getFirstName(),
             (participantDto, firstname) -> participantDto.getParentTwo().setFirstName(firstname),
             participantDto -> participantDto.getParentTwo().getLastName(),
@@ -313,7 +313,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             firstNameSetter,
             getBinder(),
             Optional.empty(),
-            "First Name"
+            getTranslation("participant.firstName")
     );
 
     final var lastNameEntry = entryFactory.createTextEntry(
@@ -321,7 +321,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             lastNameSetter,
             getBinder(),
             Optional.empty(),
-            "Last Name"
+            getTranslation("participant.lastName")
     );
 
     final var genderEntry = entryFactory.createGenderEntry(
@@ -331,7 +331,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             genderService.getAllGenders(),
             GenderDto::getName,
             Optional.empty(),
-            "Gender"
+            getTranslation("gender")
     );
 
     final var emailEntry = entryFactory.createEmailEntry(
@@ -339,7 +339,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             emailSetter,
             getBinder(),
             Optional.empty(),
-            "Email address"
+            getTranslation("shared.email")
     );
 
     final var phoneEntry = entryFactory.createPhoneNumberEntry(
@@ -347,7 +347,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             phoneSetter,
             getBinder(),
             Optional.empty(),
-            "Phone number"
+            getTranslation("participant.phone_number")
     );
 
     return new VerticalLayout(

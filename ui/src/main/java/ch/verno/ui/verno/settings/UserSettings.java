@@ -1,12 +1,11 @@
 package ch.verno.ui.verno.settings;
 
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserService;
 import ch.verno.server.service.AppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
-import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
+import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -37,12 +36,12 @@ public class UserSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected List<VABaseSetting<?>> createSettings() {
-    return List.of(new ThemeSetting(appUserService, appUserSettingService));
+    return List.of(new UISetting(appUserService, appUserSettingService));
   }
 
   @Nonnull
   @Override
   protected String getSettingsPageName() {
-    return "User Settings";
+    return getTranslation("setting.user_settings");
   }
 }

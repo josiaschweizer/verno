@@ -14,13 +14,14 @@ import jakarta.annotation.Nullable;
 
 public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
+  public static final String TITLE_KEY = "courseLevel.course_levels";
   @Nonnull
   private final CourseLevelGrid courseLevelGrid;
   @Nonnull
   private final CourseLevelDetail courseLevelDetail;
 
   public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
-    super("Course Levels", false);
+    super(TITLE_KEY, false);
     setCardDefaultHeight();
 
     this.courseLevelGrid = createGrid(courseLevelService);
@@ -44,7 +45,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   private Button getAddCourseLevelButton() {
-    final var button = new Button("Add Course Level", VaadinIcon.PLUS.create());
+    final var button = new Button(getTranslation("setting.add.course.level"), VaadinIcon.PLUS.create());
     button.addClickListener(clickEvent -> displayCourseLevelDetail(null));
     return button;
   }
@@ -57,7 +58,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   private Button createBackToGridButton() {
-    final var button = new Button("Back to Course Level", VaadinIcon.ARROW_BACKWARD.create());
+    final var button = new Button(getTranslation("setting.back.to.course.level"), VaadinIcon.ARROW_BACKWARD.create());
     button.addClickListener(event -> displayCourseLevelGrid());
     return button;
   }

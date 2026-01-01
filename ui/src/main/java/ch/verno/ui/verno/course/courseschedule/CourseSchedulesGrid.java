@@ -66,8 +66,8 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Override
   protected Map<ValueProvider<CourseScheduleDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<CourseScheduleDto, Object>, String>();
-    columnsMap.put(CourseScheduleDto::getTitle, "Title");
-    columnsMap.put(CourseScheduleDto::getWeeksAsString, "Weeks");
+    columnsMap.put(CourseScheduleDto::getTitle, getTranslation("shared.title"));
+    columnsMap.put(CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"));
     return columnsMap;
   }
 

@@ -6,7 +6,6 @@ import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.mapper.AppUserMapper;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,7 +39,7 @@ public class AppUserService implements IAppUserService {
     return AppUserMapper.toDto(findEntityByUserName(username));
   }
 
-  private AppUserEntity findEntityByUserName(final @NonNull String username) {
+  private AppUserEntity findEntityByUserName(@Nonnull final String username) {
     return appUserRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
   }

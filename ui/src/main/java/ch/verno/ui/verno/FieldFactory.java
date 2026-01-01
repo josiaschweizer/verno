@@ -5,6 +5,7 @@ import ch.verno.common.db.dto.GenderDto;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.factory.EntryFactory;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -12,19 +13,39 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class FieldFactory<T> {
 
   @Nonnull
   private final EntryFactory<T> entryFactory;
+  @Nullable
+  private final I18NProvider i18nProvider;
 
   public FieldFactory(@Nonnull final EntryFactory<T> entryFactory) {
+    this(entryFactory, null);
+  }
+
+  public FieldFactory(@Nonnull final EntryFactory<T> entryFactory,
+                      @Nullable final I18NProvider i18nProvider) {
     this.entryFactory = entryFactory;
+    this.i18nProvider = i18nProvider;
+  }
+
+  @Nonnull
+  protected String getTranslation(@Nonnull final String key) {
+    if (i18nProvider != null) {
+      final Locale locale = UI.getCurrent() != null ? UI.getCurrent().getLocale() : Locale.getDefault();
+      return i18nProvider.getTranslation(key, locale);
+    }
+    return key;
   }
 
   @Nonnull
@@ -35,8 +56,8 @@ public class FieldFactory<T> {
             valueProvider,
             valueSetter,
             binder,
-            Optional.of("First name is required"),
-            "First Name");
+            Optional.of(getTranslation("shared.first.name.is.required")),
+            getTranslation("shared.first.name"));
   }
 
   @Nonnull
@@ -47,8 +68,8 @@ public class FieldFactory<T> {
             valueProvider,
             valueSetter,
             binder,
-            Optional.of("Last Name is required"),
-            "Last Name"
+            Optional.of(getTranslation("shared.last.name.is.required")),
+            getTranslation("shared.last.name")
     );
   }
 
@@ -61,7 +82,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "Birthdate"
+            getTranslation("shared.birthdate")
     );
     entry.setWidthFull();
     return entry;
@@ -79,7 +100,7 @@ public class FieldFactory<T> {
             genderOptions,
             GenderDto::getName,
             Optional.empty(),
-            "Gender"
+            getTranslation("gender")
     );
   }
 
@@ -91,8 +112,8 @@ public class FieldFactory<T> {
             valueProvider,
             valueSetter,
             binder,
-            Optional.of("Email is required"),
-            "Email address"
+            Optional.of(getTranslation("shared.email.is.required")),
+            getTranslation("shared.e.mail")
     );
   }
 
@@ -105,7 +126,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "Phone number"
+            getTranslation("shared.phone")
     );
   }
 
@@ -118,7 +139,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "Street"
+            getTranslation("shared.street")
     );
   }
 
@@ -131,7 +152,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "House Number"
+            getTranslation("shared.house.number")
     );
   }
 
@@ -144,7 +165,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "ZIP Code"
+            getTranslation("shared.zip.code")
     );
   }
 
@@ -157,7 +178,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "City"
+            getTranslation("shared.city")
     );
   }
 
@@ -170,7 +191,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "Country"
+            getTranslation("shared.country")
     );
   }
 
@@ -184,7 +205,7 @@ public class FieldFactory<T> {
             valueSetter,
             binder,
             Optional.empty(),
-            "Course Level",
+            getTranslation("courseLevel.course_level"),
             courseLevelOptions
     );
   }

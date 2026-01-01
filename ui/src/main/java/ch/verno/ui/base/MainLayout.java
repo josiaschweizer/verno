@@ -1,10 +1,9 @@
 package ch.verno.ui.base;
 
-import ch.verno.common.db.dto.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.server.service.AppUserSettingService;
 import ch.verno.ui.base.menu.MenuOrder;
-import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
+import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -54,10 +53,10 @@ public final class MainLayout extends AppLayout {
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
-    loadAndApplyThemeFromDatabase();
+    loadAndApplyUserSettingsFromDatabase();
   }
 
-  private void loadAndApplyThemeFromDatabase() {
+  private void loadAndApplyUserSettingsFromDatabase() {
     final var currentUser = getCurrentUser();
     if (currentUser == null) {
       return;
@@ -70,13 +69,14 @@ public final class MainLayout extends AppLayout {
 
     try {
       final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
-      final boolean isDarkMode = "dark".equals(userSetting.getTheme());
-      ThemeSetting.applyTheme(isDarkMode);
+      final boolean isDarkMode = "setting.dark".equals(userSetting.getTheme());
+      UISetting.applyTheme(isDarkMode);
+      UISetting.applyLanguage(userSetting.getLanguage());
     } catch (Exception e) {
       UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
               .then(String.class, theme -> {
-                if ("dark".equals(theme)) {
-                  ThemeSetting.applyTheme(true);
+                if ("setting.dark".equals(theme)) {
+                  UISetting.applyTheme(true);
                 }
               });
     }

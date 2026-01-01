@@ -64,14 +64,14 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> {
   @Override
   protected Map<ValueProvider<CourseDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<CourseDto, Object>, String>();
-    columnsMap.put(CourseDto::getTitle, "Title");
-    columnsMap.put(CourseDto::getCapacity, "max Capacity");
-    columnsMap.put(CourseDto::getWeekdaysAsString, "Weekdays");
-    columnsMap.put(CourseDto::getInstructorAsString, "Instructor");
-    columnsMap.put(CourseDto::getCourseScheduleAsString, "Schedule");
-    columnsMap.put(CourseDto::getCourseLevelAsString, "Level");
-    columnsMap.put(CourseDto::getStartTime, "Start time");
-    columnsMap.put(CourseDto::getEndTime, "End time");
+    columnsMap.put(CourseDto::getTitle, getTranslation("shared.title"));
+    columnsMap.put(CourseDto::getCapacity, getTranslation("course.max.capacity"));
+    columnsMap.put(CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"));
+    columnsMap.put(CourseDto::getInstructorAsString, getTranslation("shared.instructor"));
+    columnsMap.put(CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"));
+    columnsMap.put(CourseDto::getCourseLevelAsString, getTranslation("course.level"));
+    columnsMap.put(CourseDto::getStartTime, getTranslation("course.start.time"));
+    columnsMap.put(CourseDto::getEndTime, getTranslation("course.end.time"));
     return columnsMap;
   }
 

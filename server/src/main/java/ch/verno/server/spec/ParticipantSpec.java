@@ -36,10 +36,10 @@ public class ParticipantSpec {
         final var courseJoin = root.join("course", JoinType.LEFT);
         final var levelJoin = root.join("courseLevel", JoinType.LEFT);
 
-        final var genderName = cb.like(cb.lower(genderJoin.get("name")), pattern);
+        final var genderName = cb.like(cb.lower(genderJoin.get("setting.name")), pattern);
         final var courseTitle = cb.like(cb.lower(courseJoin.get("title")), pattern);
-        final var levelName = cb.like(cb.lower(levelJoin.get("name")), pattern);
-        final var levelCode = cb.like(cb.lower(levelJoin.get("code")), pattern);
+        final var levelName = cb.like(cb.lower(levelJoin.get("setting.name")), pattern);
+        final var levelCode = cb.like(cb.lower(levelJoin.get("setting.code")), pattern);
 
         var instructorPredicate = cb.conjunction();
         try {

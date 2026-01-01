@@ -37,8 +37,8 @@ public class CourseSpec {
         final var instrLast = cb.like(cb.lower(instructorJoin.get("lastname")), pattern);
 
         final var levelJoin = root.join("courseLevels", JoinType.LEFT);
-        final var levelName = cb.like(cb.lower(levelJoin.get("name")), pattern);
-        final var levelCode = cb.like(cb.lower(levelJoin.get("code")), pattern);
+        final var levelName = cb.like(cb.lower(levelJoin.get("setting.name")), pattern);
+        final var levelCode = cb.like(cb.lower(levelJoin.get("setting.code")), pattern);
 
         predicates.add(cb.or(title, location, scheduleName, instrFirst, instrLast, levelName, levelCode));
       }

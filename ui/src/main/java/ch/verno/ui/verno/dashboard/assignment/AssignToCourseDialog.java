@@ -35,8 +35,6 @@ import java.util.stream.Collectors;
 public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
-  private final EntryFactory<AssignParticipantsToCourseDto> entryFactory;
-  @Nonnull
   private final CourseService courseService;
   @Nonnull
   private final ParticipantService participantService;
@@ -64,7 +62,6 @@ public class AssignToCourseDialog extends Dialog {
     this.courseService = courseService;
     this.participantService = participantService;
     this.mandantSettingService = mandantSettingService;
-    this.entryFactory = new EntryFactory<>();
 
     this.selectedParticipantIds = new LinkedHashSet<>();
     this.participantItems = new LinkedHashMap<>();

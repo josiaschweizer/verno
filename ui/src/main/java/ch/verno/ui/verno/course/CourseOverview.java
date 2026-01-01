@@ -12,7 +12,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.jspecify.annotations.NonNull;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -73,7 +72,7 @@ public class CourseOverview extends VerticalLayout {
     return getEventsFromCourse(courses, monday);
   }
 
-  @NonNull
+  @Nonnull
   private ArrayList<WeekCalendarEventDto> getEventsFromCourse(@Nonnull final List<CourseDto> courses,
                                                               @Nonnull final LocalDate monday) {
     final var events = new ArrayList<WeekCalendarEventDto>();

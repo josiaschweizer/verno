@@ -64,12 +64,12 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Override
   protected Map<ValueProvider<InstructorDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<InstructorDto, Object>, String>();
-    columnsMap.put(InstructorDto::getFirstName, "First Name");
-    columnsMap.put(InstructorDto::getLastName, "Last Name");
-    columnsMap.put(InstructorDto::genderAsString, "Gender");
-    columnsMap.put(InstructorDto::getEmail, "Email");
-    columnsMap.put(InstructorDto::phoneAsString, "Phone");
-    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), "Address");
+    columnsMap.put(InstructorDto::getFirstName, getTranslation("shared.first.name"));
+    columnsMap.put(InstructorDto::getLastName, getTranslation("shared.last.name"));
+    columnsMap.put(InstructorDto::genderAsString, getTranslation("gender"));
+    columnsMap.put(InstructorDto::getEmail, getTranslation("shared.e.mail"));
+    columnsMap.put(InstructorDto::phoneAsString, getTranslation("shared.phone"));
+    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
     return columnsMap;
   }
 

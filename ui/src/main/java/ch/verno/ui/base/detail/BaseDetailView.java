@@ -15,9 +15,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.server.VaadinService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -32,6 +34,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   protected EntryFactory<T> entryFactory;
   @Nonnull
   protected FieldFactory<T> fieldFactory;
+  @Nullable
+  protected I18NProvider i18nProvider;
 
   @Nonnull
   protected Button saveButton;
@@ -46,7 +50,17 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     this.viewToolbar = createViewToolbar();
     this.binder = createBinder();
     this.entryFactory = new EntryFactory<>();
-    this.fieldFactory = new FieldFactory<>(entryFactory);
+    this.i18nProvider = getI18NProvider();
+    this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
+  }
+
+  @Nullable
+  protected I18NProvider getI18NProvider() {
+    final var service = VaadinService.getCurrent();
+    if (service != null && service.getInstantiator() != null) {
+      return service.getInstantiator().getI18NProvider();
+    }
+    return null;
   }
 
   protected void init() {
