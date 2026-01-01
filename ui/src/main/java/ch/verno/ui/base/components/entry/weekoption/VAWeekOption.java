@@ -55,6 +55,13 @@ public class VAWeekOption extends CustomField<List<DayOfWeek>> {
       group.setValue(EnumSet.noneOf(DayOfWeek.class));
       return;
     }
-    group.setValue(EnumSet.copyOf(value));
+
+    final var filteredValue = value.stream().filter(Objects::nonNull).toList();
+    if (filteredValue.isEmpty()) {
+      group.setValue(EnumSet.noneOf(DayOfWeek.class));
+      return;
+    }
+
+    group.setValue(EnumSet.copyOf(filteredValue));
   }
 }
