@@ -6,7 +6,6 @@ import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.util.Publ;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.ParticipantService;
@@ -15,8 +14,8 @@ import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -30,9 +29,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.PARTICIPANTS)
-@PageTitle("Participants Overview")
-@Menu(order = 1, icon = "vaadin:users", title = "Participants Overview")
-public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> {
+@Menu(order = 1, icon = "vaadin:users", title = "participant.participants.overview")
+public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -84,7 +82,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull
   @Override
   protected String getGridObjectName() {
-    return VernoConstants.PARTICIPANT;
+    return getTranslation("participant.participant");
   }
 
   @Nonnull
@@ -148,5 +146,10 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected ParticipantFilter withSearchText(@Nonnull final String searchText) {
     return ParticipantFilter.fromSearchText(searchText);
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("participant.participants.overview");
   }
 }

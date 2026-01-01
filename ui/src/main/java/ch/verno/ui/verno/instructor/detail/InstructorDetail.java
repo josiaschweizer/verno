@@ -10,17 +10,16 @@ import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 @PermitAll
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
-@PageTitle("Participants Detail View")
-@Menu(order = 2.1, icon = "vaadin:academy-cap", title = "Instructor Detail")
-public class InstructorDetail extends BaseDetailView<InstructorDto> {
+@Menu(order = 2.1, icon = "vaadin:academy-cap", title = "shared.instructor.detail")
+public class InstructorDetail extends BaseDetailView<InstructorDto> implements HasDynamicTitle {
 
   @Nonnull
   private final InstructorService instructorService;
@@ -38,7 +37,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> {
   @Nonnull
   @Override
   protected String getDetailPageName() {
-    return VernoConstants.INSTRUCTOR;
+    return getTranslation("shared.instructor");
   }
 
   @Nonnull
@@ -152,5 +151,10 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> {
             getBinder());
 
     return new VerticalLayout(createLayoutFromComponents(street, houseNumber, zipCode, city, country));
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("shared.instructor.detail");
   }
 }

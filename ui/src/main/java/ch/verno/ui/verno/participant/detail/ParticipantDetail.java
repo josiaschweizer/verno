@@ -5,7 +5,6 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParticipantDto;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.GenderService;
@@ -19,8 +18,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
@@ -31,9 +30,8 @@ import java.util.stream.Collectors;
 
 @PermitAll
 @Route(Routes.PARTICIPANTS + Routes.DETAIL)
-@PageTitle("Participants Detail View")
-@Menu(order = 1.1, icon = "vaadin:user", title = "Participant Detail")
-public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
+@Menu(order = 1.1, icon = "vaadin:user", title = "participant.participant.detail")
+public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements HasDynamicTitle {
 
   @Nonnull
   private final ParticipantService participantService;
@@ -59,7 +57,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
   @Nonnull
   @Override
   protected String getDetailPageName() {
-    return VernoConstants.PARTICIPANT;
+    return getTranslation("participant.participant");
   }
 
   @Nonnull
@@ -357,5 +355,10 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> {
             emailEntry,
             phoneEntry
     );
+  }
+
+  @Override
+  public String getPageTitle() {
+    return getTranslation("participant.participants.detail.view");
   }
 }
