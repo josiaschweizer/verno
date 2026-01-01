@@ -2,7 +2,7 @@ package ch.verno.ui.base.settings.fields;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.data.provider.ListDataProvider;
-import org.jspecify.annotations.NonNull;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -10,31 +10,31 @@ import java.util.function.Function;
 
 public class VABaseComboBoxSetting<T> extends VABaseSettingRow {
 
-  @NonNull
+  @Nonnull
   private final ComboBox<T> comboBox;
 
-  public VABaseComboBoxSetting(@NonNull final String title) {
+  public VABaseComboBoxSetting(@Nonnull final String title) {
     this(title, new ComboBox<>());
   }
 
-  public VABaseComboBoxSetting(@NonNull final String title,
-                               @NonNull final ComboBox<T> comboBox) {
+  public VABaseComboBoxSetting(@Nonnull final String title,
+                               @Nonnull final ComboBox<T> comboBox) {
     super(title, comboBox);
     this.comboBox = comboBox;
 
     this.comboBox.setWidthFull();
   }
 
-  @NonNull
+  @Nonnull
   public ComboBox<T> getComboBox() {
     return comboBox;
   }
 
-  public void setItems(@NonNull final Collection<T> items) {
+  public void setItems(@Nonnull final Collection<T> items) {
     comboBox.setItems(new ListDataProvider<>(items));
   }
 
-  public void setItemLabelGenerator(@NonNull final Function<T, String> labelGenerator) {
+  public void setItemLabelGenerator(@Nonnull final Function<T, String> labelGenerator) {
     comboBox.setItemLabelGenerator(item ->
             Objects.requireNonNullElse(labelGenerator.apply(item), "")
     );
