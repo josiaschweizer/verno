@@ -38,6 +38,9 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull
   protected ViewToolbarResult viewToolbar;
 
+  @Nullable
+  protected VerticalLayout addOnLayout;
+
   public BaseDetailView() {
     this.saveButton = new Button(VernoConstants.SAVE);
     this.viewToolbar = createViewToolbar();
@@ -48,6 +51,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   protected void init() {
     setWidthFull();
+    setHeightFull();
     setPadding(false);
     setSpacing(false);
 
@@ -60,6 +64,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     binder.addStatusChangeListener(event -> updateSaveButtonState());
 
     add(createSaveButtonLayout());
+    initAdditionalInfoUIBelowSaveButton();
 
     applyFormMode(getDefaultFormMode());
     updateSaveButtonState();
@@ -108,17 +113,26 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       if (viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(false);
       }
+      setAddOnVisible(false);
     } else if (formMode == FormMode.EDIT) {
       saveButton.setText(VernoConstants.UPDATE + getDetailPageName());
+      setAddOnVisible(true);
     } else {
       saveButton.setText(VernoConstants.SAVE);
 
       if (viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(true);
       }
+      setAddOnVisible(true);
     }
 
     binder.getFields().forEach(f -> f.setReadOnly(formMode == FormMode.VIEW));
+  }
+
+  private void setAddOnVisible(final boolean visible) {
+    if (addOnLayout != null) {
+      addOnLayout.setVisible(visible);
+    }
   }
 
   protected void save() {
@@ -134,6 +148,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   }
 
   protected abstract void initUI();
+
+  protected void initAdditionalInfoUIBelowSaveButton() {
+    // Can be overridden by subclasses to add additional UI components
+  }
 
   @Nonnull
   protected abstract String getDetailPageName();

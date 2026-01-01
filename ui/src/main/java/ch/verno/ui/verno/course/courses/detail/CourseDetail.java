@@ -1,18 +1,19 @@
 package ch.verno.ui.verno.course.courses.detail;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.common.db.dto.CourseScheduleDto;
-import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.db.dto.*;
+import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -20,7 +21,9 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES + Routes.DETAIL)
@@ -36,15 +39,19 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
   private final CourseLevelService courseLevelService;
   @Nonnull
   private final CourseScheduleService courseScheduleService;
+  @Nonnull
+  private final ParticipantService participantService;
 
   public CourseDetail(@Nonnull final CourseService courseService,
                       @Nonnull final InstructorService instructorService,
                       @Nonnull final CourseLevelService courseLevelService,
-                      @Nonnull final CourseScheduleService courseScheduleService) {
+                      @Nonnull final CourseScheduleService courseScheduleService,
+                      @Nonnull final ParticipantService participantService) {
     this.courseService = courseService;
     this.instructorService = instructorService;
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
+    this.participantService = participantService;
 
     init();
   }
@@ -199,5 +206,30 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
     );
 
     return createLayoutFromComponents(weekOptions);
+  }
+
+  @Override
+  protected void initAdditionalInfoUIBelowSaveButton() {
+    final var title = new Span("Participants in this Course");
+    title.getStyle().setFontWeight("bold");
+
+    final var participantsGrid = new ParticipantsGrid(participantService, courseService, courseLevelService, false, false) {
+
+      @Nonnull
+      @Override
+      protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
+                                             @Nonnull final ParticipantFilter filter) {
+        if (getBinder().getBean() != null && getBinder().getBean().getId() != null) {
+          filter.setCourseIds(Set.of(getBinder().getBean().getId()));
+        }
+        return super.fetch(query, filter);
+      }
+    };
+
+    addOnLayout = new VerticalLayout(title, participantsGrid);
+    addOnLayout.setWidthFull();
+    addOnLayout.setHeightFull();
+
+    add(addOnLayout);
   }
 }

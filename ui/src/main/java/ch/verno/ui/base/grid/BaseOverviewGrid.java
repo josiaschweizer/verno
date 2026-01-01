@@ -6,6 +6,7 @@ import ch.verno.ui.base.components.filter.VAFilterBar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -19,6 +20,7 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +42,14 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected final Binder<F> filterBinder;
 
   protected boolean showGridToolbar = true;
+  protected boolean showFilterToolbar = true;
 
-  protected BaseOverviewGrid(@Nonnull final F initialFilter, final boolean showGridToolbar) {
+  protected BaseOverviewGrid(@Nonnull final F initialFilter,
+                             final boolean showGridToolbar,
+                             final boolean showFilterToolbar) {
     this(initialFilter);
     this.showGridToolbar = showGridToolbar;
+    this.showFilterToolbar = showFilterToolbar;
   }
 
   protected BaseOverviewGrid(@Nonnull final F initialFilter) {
@@ -75,11 +81,15 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
     final var filterBar = createFilterBar();
 
+    final var componentsToAdd = new ArrayList<Component>();
     if (showGridToolbar) {
-      add(gridToolbar, filterBar, grid);
-    } else {
-      add(filterBar, grid);
+      componentsToAdd.add(gridToolbar);
     }
+    if (showFilterToolbar) {
+      componentsToAdd.add(filterBar);
+    }
+    componentsToAdd.add(grid);
+    add(componentsToAdd);
   }
 
   @Nonnull
