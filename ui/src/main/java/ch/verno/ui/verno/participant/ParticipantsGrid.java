@@ -44,8 +44,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   public ParticipantsGrid(@Nonnull final ParticipantService participantService,
                           @Nonnull final CourseService courseService,
                           @Nonnull final CourseLevelService courseLevelService,
-                          final boolean showGridToolbar) {
-    super(ParticipantFilter.empty(), showGridToolbar);
+                          final boolean showGridToolbar,
+                          final boolean showFilterToolbar) {
+    super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
     this.participantService = participantService;
     this.courseService = courseService;
@@ -56,7 +57,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   public ParticipantsGrid(@Nonnull final ParticipantService participantService,
                           @Nonnull final CourseService courseService,
                           @Nonnull final CourseLevelService courseLevelService) {
-    super(ParticipantFilter.empty(), true);
+    super(ParticipantFilter.empty(), true, true);
 
     this.participantService = participantService;
     this.courseService = courseService;
