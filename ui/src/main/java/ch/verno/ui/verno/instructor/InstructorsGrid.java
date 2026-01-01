@@ -69,7 +69,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
     columnsMap.put(InstructorDto::genderAsString, getTranslation("gender"));
     columnsMap.put(InstructorDto::getEmail, getTranslation("shared.e.mail"));
     columnsMap.put(InstructorDto::phoneAsString, getTranslation("shared.phone"));
-    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), "Address");
+    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
     return columnsMap;
   }
 

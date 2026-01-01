@@ -16,7 +16,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
-import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.Set;
@@ -52,8 +51,8 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
             CourseScheduleDto::getTitle,
             CourseScheduleDto::setTitle,
             getBinder(),
-            Optional.of("Title is required"),
-            "Title"
+            Optional.of(getTranslation("shared.title.is.required")),
+            getTranslation("shared.title")
     );
     return createLayoutFromComponents(title);
   }
@@ -65,8 +64,8 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> {
             courseScheduleDto -> Set.copyOf(courseScheduleDto.getWeeks()),
             (dto, value) -> dto.setWeeks(value.stream().toList()),
             getBinder(),
-            Optional.of("Select at least one week"),
-            "Calendar-Week Schedule"
+            Optional.of(getTranslation("courseSchedule.select.at.least.one.week")),
+            getTranslation("courseSchedule.calendar.week.schedule")
     );
     schedulePicker.setQuantityProposalCourseDays(quantityProposalCourseDays);
     schedulePicker.setEnforceQuantitySetting(enforceQuantitySetting);

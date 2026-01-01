@@ -9,8 +9,10 @@ import java.util.Optional;
 public enum I18nBundles {
 
   PARTICIPANT("participant", "i18n.participant"),
+  INSTRUCTOR("instructor", "i18n.instructor"),
   COURSE("course", "i18n.course"),
   COURSE_LEVEL("courseLevel", "i18n.courseLevel"),
+  COURSE_SCHEDULE("courseSchedule", "i18n.courseSchedule"),
 
   BASE("base", "i18n.base"),
 

@@ -3,7 +3,6 @@ package ch.verno.server.repository;
 import ch.verno.db.entity.AddressEntity;
 import ch.verno.db.jpa.SpringDataAddressJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

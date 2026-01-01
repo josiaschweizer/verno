@@ -5,11 +5,13 @@ import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.util.VernoConstants;
-import ch.verno.server.service.*;
+import ch.verno.server.service.CourseLevelService;
+import ch.verno.server.service.CourseScheduleService;
+import ch.verno.server.service.CourseService;
+import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
-import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -110,8 +112,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
             CourseDto::getTitle,
             CourseDto::setTitle,
             getBinder(),
-            Optional.of("Title is required"),
-            "Title");
+            Optional.of(getTranslation("shared.title.is.required")),
+            getTranslation("shared.title"));
 
     //todo default value from user settings
     final var capacityEntry = entryFactory.createNumberEntry(
@@ -119,26 +121,26 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
             (dto, value) -> dto.setCapacity(value == null ? null : value.intValue()),
             getBinder(),
             Optional.empty(),
-            "max Capacity");
+            getTranslation("course.max.capacity"));
     final var location = entryFactory.createTextEntry(
             CourseDto::getLocation,
             CourseDto::setLocation,
             getBinder(),
             Optional.empty(),
-            "Location");
+            getTranslation("course.location"));
 
     final var startTime = entryFactory.createTimeEntry(
             CourseDto::getStartTime,
             CourseDto::setStartTime,
             getBinder(),
             Optional.empty(),
-            "Start Time");
+            getTranslation("course.start.time"));
     final var endTime = entryFactory.createTimeEntry(
             CourseDto::getEndTime,
             CourseDto::setEndTime,
             getBinder(),
             Optional.empty(),
-            "End Time");
+            getTranslation("course.end.time"));
 
     return createLayoutFromComponents(titleEntry, capacityEntry, location, startTime, endTime);
   }
@@ -154,8 +156,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
                     null :
                     courseScheduleService.getCourseScheduleById(value)),
             getBinder(),
-            Optional.of("Course Schedule is required"),
-            "Course Schedule",
+            Optional.of(getTranslation("courseSchedule.course.schedule.is.required")),
+            getTranslation("courseSchedule.course.schedule"),
             courseScheduleOptions
     );
 
@@ -164,8 +166,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
             CourseDto::getCourseLevels,
             CourseDto::setCourseLevels,
             getBinder(),
-            Optional.of("At least one course level is required"),
-            "Course Levels",
+            Optional.of(getTranslation("courseLevel.at.least.one.course.level.is.required")),
+            getTranslation("courseLevel.course_levels"),
             courseLevelService.getAllCourseLevels(),
             CourseLevelDto::displayName
     );
@@ -194,8 +196,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> {
             CourseDto::getWeekdays,
             CourseDto::setWeekdays,
             getBinder(),
-            Optional.of("At least one weekday is required"),
-            "Weekdays"
+            Optional.of(getTranslation("course.at.least.one.weekday.is.required")),
+            getTranslation("course.weekdays")
     );
 
     return createLayoutFromComponents(weekOptions);

@@ -14,7 +14,7 @@ import jakarta.annotation.Nullable;
 
 public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
-  public static final String TITLE_KEY = "setting.course_levels";
+  public static final String TITLE_KEY = "courseLevel.course_levels";
   @Nonnull
   private final CourseLevelGrid courseLevelGrid;
   @Nonnull
