@@ -34,7 +34,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   @Nonnull
   public final SettingEntryFactory<T> settingEntryFactory;
 
-  protected VABaseSetting(@Nonnull final String title,
+  protected VABaseSetting(@Nonnull final String titleKey,
                           final boolean showSaveButton) {
     settingEntryFactory = new SettingEntryFactory<>();
     dto = createNewBeanInstance();
@@ -45,7 +45,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     headerWrapper = new Div();
     headerWrapper.addClassName("setting-card-header");
 
-    final var titleSpan = new Span(title);
+    final var titleSpan = new Span(getTranslation(titleKey));
     titleSpan.addClassName("setting-card-title");
 
     headerWrapper.add(titleSpan);
@@ -58,7 +58,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   }
 
   private void createSaveButton(final boolean showSaveButton) {
-    saveButton = new Button("Save", e -> save());
+    saveButton = new Button(getTranslation("Save"), e -> save());
     saveButton.setEnabled(false);
 
     if (showSaveButton) {

@@ -12,11 +12,12 @@ import java.util.Optional;
 
 public class SharedSettings extends VABaseSetting<MandantSettingDto> {
 
+  public static final String TITLE_KEY = "setting.shared_settings";
   @Nonnull
   private final MandantSettingService mandantSettingService;
 
   public SharedSettings(@Nonnull final MandantSettingService mandantSettingService) {
-    super("Shared Settings", true);
+    super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;
     this.dto = mandantSettingService.getSingleMandantSetting();
@@ -26,24 +27,24 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
   @Override
   protected Component createContent() {
     final var enforceQuantityLimits = settingEntryFactory.createBooleanSetting(
-            "Enforce Quantity Settings",
-            Optional.of("When enabled, quantity limits cannot be exceeded."),
+            getTranslation("setting.enforce.quantity.settings"),
+            Optional.of(getTranslation("setting.when.enabled.quantity.limits.cannot.be.exceeded")),
             binder,
             MandantSettingDto::isEnforceQuantitySettings,
             MandantSettingDto::setEnforceQuantitySettings
     );
     final var enforceCourseLevel = settingEntryFactory.createBooleanSetting(
-            "Enforce Course Level on Participant Assignment",
-            Optional.of("When enabled, participants can only be assigned to courses that match their course level."),
+            getTranslation("setting.enforce.course.level.on.participant.assignment"),
+            Optional.of(getTranslation("setting.when.enabled.participants.can.only.be.assigned.to.courses.that.match.their.course.level")),
             binder,
             MandantSettingDto::isEnforceCourseLevelSettings,
             MandantSettingDto::setEnforceCourseLevelSettings
     );
     final var mainParentSetting = settingEntryFactory.createToggleSetting(
-            "Which Parent is the 'main' Parent?",
-            "Parent One",
-            "Parent Two",
-            Optional.of("Defines which parent is considered the main contact for a participant."),
+            getTranslation("setting.which.parent.is.the.main.parent"),
+            getTranslation("participant.parent_one"),
+            getTranslation("participant.parent_two"),
+            Optional.of(getTranslation("setting.defines.which.parent.is.considered.the.main.contact.for.a.participant")),
             binder,
             MandantSettingDto::isParentOneMainParent,
             MandantSettingDto::setParentOneMainParent

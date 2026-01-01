@@ -50,6 +50,6 @@ public class MandantSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected String getSettingsPageName() {
-    return "Mandant Settings";
+    return getTranslation("setting.mandant_settings");
   }
 }

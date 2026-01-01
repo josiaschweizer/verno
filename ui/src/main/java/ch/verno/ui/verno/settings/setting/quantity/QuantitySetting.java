@@ -7,18 +7,17 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
 public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
 
+  public static final String TITLE_KEY = "setting.quantity_settings";
   @Nonnull
   private final MandantSettingService mandantSettingService;
 
-
   public QuantitySetting(@Nonnull MandantSettingService mandantSettingService) {
-    super("Quantity Settings", true);
+    super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;
     this.dto = mandantSettingService.getSingleMandantSetting();
@@ -28,15 +27,15 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
   @Override
   protected Component createContent() {
     final var courseScheduleQuantity = settingEntryFactory.createQuantitySetting(
-            "Quantity of Course Days in one Course Schedule",
-            Optional.of("Defines the maximum number of course days allowed within a single course schedule."),
+            getTranslation("setting.quantity.of.course.days.in.one.course.schedule"),
+            Optional.of(getTranslation("setting.defines.the.maximum.number.of.course.days.allowed.within.a.single.course.schedule")),
             binder,
             MandantSettingDto::getCourseDaysPerSchedule,
             MandantSettingDto::setCourseDaysPerSchedule
     );
     final var courseQuantity = settingEntryFactory.createQuantitySetting(
-            "Quantity of Participants in one Course",
-            Optional.of("Defines the maximum number of participants allowed per course."),
+            getTranslation("setting.quantity.of.participants.in.one.course"),
+            Optional.of(getTranslation("setting.defines.the.maximum.number.of.participants.allowed.per.course")),
             binder,
             MandantSettingDto::getMaxParticipantsPerCourse,
             MandantSettingDto::setMaxParticipantsPerCourse
