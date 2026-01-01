@@ -20,9 +20,9 @@ public class CourseLevelSpec {
       final var searchText = normalize(filter.searchText());
       if (!searchText.isEmpty()) {
         final var pattern = "%" + searchText + "%";
-        final var code = cb.like(cb.lower(root.get("code")), pattern);
-        final var name = cb.like(cb.lower(root.get("name")), pattern);
-        final var description = cb.like(cb.lower(root.get("description")), pattern);
+        final var code = cb.like(cb.lower(root.get("setting.code")), pattern);
+        final var name = cb.like(cb.lower(root.get("setting.name")), pattern);
+        final var description = cb.like(cb.lower(root.get("setting.description")), pattern);
         predicates.add(cb.or(code, name, description));
       }
 

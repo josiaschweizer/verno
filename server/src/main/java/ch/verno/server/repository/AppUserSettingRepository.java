@@ -28,6 +28,10 @@ public class AppUserSettingRepository {
     return jpaRepository.findAll();
   }
 
+  public Optional<AppUserSettingEntity> findById(@Nonnull final Long id) {
+    return jpaRepository.findById(id);
+  }
+
   @Nonnull
   public Optional<AppUserSettingEntity> findByUserId(@Nonnull final Long userId) {
     final var user = appUserJpaRepository.findById(userId);

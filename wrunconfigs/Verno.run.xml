@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Verno" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="ui" />
-    <option name="PROGRAM_PARAMETERS" value="--server.address=0.0.0.0 --server.port=8080 --auto-login.username=admin --auto-login.password=admin1234" />
+    <option name="PROGRAM_PARAMETERS" value="--server.address=0.0.0.0 --server.port=8080" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.ui.Application" />
     <method v="2">
       <option name="Make" enabled="true" />

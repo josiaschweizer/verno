@@ -9,6 +9,7 @@ import ch.verno.server.mapper.AppUserSettingMapper;
 import ch.verno.server.repository.AppUserRepository;
 import ch.verno.server.repository.AppUserSettingRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,7 @@ public class AppUserSettingService implements IAppUserSettingService {
     final var existingSetting = repository.findByUserId(dto.getUserId())
             .orElseThrow(() -> new NotFoundException(NotFoundReason.USER_SETTING_BY_USER_ID_NOT_FOUND));
 
-    existingSetting.setTheme(dto.getTheme());
+    AppUserSettingMapper.updateEntity(existingSetting, dto);
     final var savedEntity = repository.save(existingSetting);
     return AppUserSettingMapper.toDto(savedEntity);
   }
@@ -47,16 +48,29 @@ public class AppUserSettingService implements IAppUserSettingService {
     final var user = appUserRepository.findById(dto.getUserId())
             .orElseThrow(() -> new NotFoundException(NotFoundReason.APP_USER_NOT_FOUND));
 
-    final var entity = new AppUserSettingEntity(user, dto.getTheme());
-    final var savedEntity = repository.save(entity);
-    return AppUserSettingMapper.toDto(savedEntity);
+    try {
+      final var entity = new AppUserSettingEntity(user, dto.getTheme(), dto.getLanguageTag());
+      final var savedEntity = repository.save(entity);
+      return AppUserSettingMapper.toDto(savedEntity);
+    } catch (DataIntegrityViolationException ex) {
+      final var existing = repository.findByUserId(dto.getUserId());
+      if (existing.isPresent()) {
+        return updateAppUserSetting(dto);
+      }
+
+      throw ex;
+    }
   }
 
   @Nonnull
   @Override
   @Transactional(readOnly = true)
   public AppUserSettingDto getAppUserSettingById(@Nonnull final Long id) {
-    throw new RuntimeException("not implemented");
+    final var foundById = repository.findById(id);
+    if (foundById.isEmpty()) {
+      throw new NotFoundException(NotFoundReason.USER_SETTING_BY_ID_NOT_FOUND);
+    }
+    return AppUserSettingMapper.toDto(foundById.get());
   }
 
   @Nonnull

@@ -96,18 +96,18 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected Map<ValueProvider<ParticipantDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<ParticipantDto, Object>, String>();
-    columnsMap.put(ParticipantDto::getFirstName, "First Name");
-    columnsMap.put(ParticipantDto::getLastName, "Last Name");
-    columnsMap.put(ParticipantDto::getBirthdate, "Age");
-    columnsMap.put(ParticipantDto::getEmail, "Email");
-    columnsMap.put(ParticipantDto::getPhoneString, "Phone");
-    columnsMap.put(ParticipantDto::getNote, "Note");
-    columnsMap.put(dto -> dto.getCourseLevel().getName(), "Course Level");
-    columnsMap.put(dto -> dto.getCourse() != null ? dto.getCourse().displayName() : Publ.EMPTY_STRING, "Course");
-    columnsMap.put(dto -> dto.getParentOne().displayName(), "Parent One");
-    columnsMap.put(dto -> dto.getParentTwo().displayName(), "Parent Two");
-    columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), "Address");
-    columnsMap.put(dto -> dto.isActive() ? "Yes" : "No", "Active");
+    columnsMap.put(ParticipantDto::getFirstName, getTranslation("shared.first.name"));
+    columnsMap.put(ParticipantDto::getLastName, getTranslation("shared.last.name"));
+    columnsMap.put(ParticipantDto::getBirthdate, getTranslation("shared.age"));
+    columnsMap.put(ParticipantDto::getEmail, getTranslation("shared.e.mail"));
+    columnsMap.put(ParticipantDto::getPhoneString, getTranslation("shared.phone"));
+    columnsMap.put(ParticipantDto::getNote, getTranslation("participant.note"));
+    columnsMap.put(dto -> dto.getCourseLevel().getName(), getTranslation("courseLevel.course_level"));
+    columnsMap.put(dto -> dto.getCourse() != null ? dto.getCourse().displayName() : Publ.EMPTY_STRING, getTranslation("course.course"));
+    columnsMap.put(dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"));
+    columnsMap.put(dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"));
+    columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
+    columnsMap.put(dto -> dto.isActive() ? getTranslation("common.yes") : getTranslation("common.no"), getTranslation("common.active"));
     return columnsMap;
   }
 
@@ -122,7 +122,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             ParticipantFilter::setCourseIds,
             courses,
             filterBinder,
-            "Course Filter");
+            getTranslation("filter.course_filter"));
 
     final var courseLevels = courseLevelService.getAllCourseLevels().stream()
             .collect(Collectors.toMap(BaseDto::getId, CourseLevelDto::getName));
@@ -131,7 +131,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             ParticipantFilter::setCourseLevelIds,
             courseLevels,
             filterBinder,
-            "Course Level Filter");
+            getTranslation("filter.course_level_filter"));
 
     //todo create active filter
 //    final var activeFilter = filterEntryFactory.createBooleanFilter(

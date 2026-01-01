@@ -87,7 +87,7 @@ public class CourseLevelGrid extends VerticalLayout {
   }
 
   protected void setDefaultSorting() {
-    Grid.Column<CourseLevelDto> column = columnsByKey.get("Sorting Order");
+    Grid.Column<CourseLevelDto> column = columnsByKey.get(getTranslation("setting.sorting.order"));
 
     if (column != null && grid != null) {
       grid.sort(GridSortOrder.asc(column).build());
@@ -97,10 +97,10 @@ public class CourseLevelGrid extends VerticalLayout {
   @Nonnull
   protected Map<ValueProvider<CourseLevelDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<CourseLevelDto, Object>, String>();
-    columnsMap.put(CourseLevelDto::displayName, "Name");
-    columnsMap.put(CourseLevelDto::getCode, "Code");
-    columnsMap.put(CourseLevelDto::getDescription, "Description");
-    columnsMap.put(CourseLevelDto::getSortingOrder, "Sorting Order");
+    columnsMap.put(CourseLevelDto::displayName, getTranslation("setting.name"));
+    columnsMap.put(CourseLevelDto::getCode, getTranslation("setting.code"));
+    columnsMap.put(CourseLevelDto::getDescription, getTranslation("setting.description"));
+    columnsMap.put(CourseLevelDto::getSortingOrder, getTranslation("setting.sorting.order"));
     return columnsMap;
   }
 
