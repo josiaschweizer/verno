@@ -100,7 +100,7 @@ public class FieldFactory<T> {
             genderOptions,
             GenderDto::getName,
             Optional.empty(),
-            getTranslation("gender")
+            getTranslation("shared.gender")
     );
   }
 

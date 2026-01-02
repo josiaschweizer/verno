@@ -1,17 +1,16 @@
 package ch.verno.ui.base.detail;
 
-import ch.verno.common.util.Publ;
 import ch.verno.common.util.VernoConstants;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.FieldFactory;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -243,9 +242,15 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     } else {
       final var bean = getBeanById(parameter);
       binder.setBean(bean);
-      applyFormMode(FormMode.EDIT);
+      applyFormMode(getFormModeByBean(bean));
       updateSaveButtonState();
     }
+  }
+
+  @Nonnull
+  public FormMode getFormModeByBean(@Nonnull final T bean) {
+    // Default to EDIT mode when a bean is loaded; can be customized by subclasses
+    return FormMode.EDIT;
   }
 
   @Nonnull
