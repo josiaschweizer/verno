@@ -1,5 +1,6 @@
 package ch.verno.db.entity;
 
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -20,6 +21,10 @@ public class CourseScheduleEntity {
 
   private String title;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false, length = 16)
+  private CourseScheduleStatus status = CourseScheduleStatus.PLANNED;
+
   @ElementCollection
   @CollectionTable(
           name = "course_schedule_week",
@@ -34,8 +39,10 @@ public class CourseScheduleEntity {
   }
 
   public CourseScheduleEntity(@Nonnull final String title,
+                              @Nonnull final CourseScheduleStatus status,
                               @Nonnull final List<String> weeks) {
     this.title = title;
+    this.status = status;
     this.weeks = weeks;
   }
 
@@ -62,6 +69,14 @@ public class CourseScheduleEntity {
 
   public void setTitle(final String title) {
     this.title = title;
+  }
+
+  public CourseScheduleStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(final CourseScheduleStatus status) {
+    this.status = status;
   }
 
   public List<String> getWeeks() {

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
-import ch.verno.common.util.VernoConstants;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.server.service.MandantSettingService;
 import ch.verno.ui.base.components.form.FormMode;
@@ -53,7 +53,17 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             Optional.of(getTranslation("shared.title.is.required")),
             getTranslation("shared.title")
     );
-    return createLayoutFromComponents(title);
+    final var status = entryFactory.createEnumComboBoxEntry(
+            CourseScheduleDto::getStatus,
+            CourseScheduleDto::setStatus,
+            getBinder(),
+            CourseScheduleStatus.values(),
+            Optional.empty(),
+            getTranslation(getTranslation("courseSchedule.course.schedule.status")),
+            t -> getTranslation(t.getDisplayNameKey())
+    );
+
+    return createLayoutFromComponents(title, status);
   }
 
   @Nonnull
