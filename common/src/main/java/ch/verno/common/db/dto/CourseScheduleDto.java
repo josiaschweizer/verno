@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.util.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -17,13 +18,15 @@ public class CourseScheduleDto extends BaseDto {
 
   @Nonnull
   private String title;
-
+  @Nonnull
+  private CourseScheduleStatus status;
   @Nonnull
   private List<YearWeekDto> weeks;
 
   public CourseScheduleDto() {
     setId(null);
     this.createdAt = OffsetDateTime.now();
+    this.status = CourseScheduleStatus.PLANNED;
     this.title = Publ.EMPTY_STRING;
     this.weeks = new ArrayList<>();
   }
@@ -31,10 +34,12 @@ public class CourseScheduleDto extends BaseDto {
   public CourseScheduleDto(@Nullable final Long id,
                            @Nonnull final OffsetDateTime createdAt,
                            @Nonnull final String title,
+                           @Nonnull final CourseScheduleStatus status,
                            @Nonnull final List<YearWeekDto> weeks) {
     setId(id);
     this.createdAt = createdAt;
     this.title = title;
+    this.status = status;
     this.weeks = weeks;
   }
 
@@ -47,6 +52,7 @@ public class CourseScheduleDto extends BaseDto {
     return getId() != null
             && getId() == 0L
             && title.isEmpty()
+            && status == CourseScheduleStatus.PLANNED
             && weeks.isEmpty();
   }
 
@@ -66,6 +72,15 @@ public class CourseScheduleDto extends BaseDto {
 
   public void setTitle(@Nonnull final String title) {
     this.title = title;
+  }
+
+  @Nonnull
+  public CourseScheduleStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(@Nonnull final CourseScheduleStatus status) {
+    this.status = status;
   }
 
   @Nonnull

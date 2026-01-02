@@ -72,11 +72,11 @@ public class ParticipantSpec {
       }
 
       if (filter.getCourseIds() != null && !filter.getCourseIds().isEmpty()) {
-        predicates.add(root.get("course").get("id").in(filter.getCourseIds()));
+        predicates.add(root.get("courses").get("id").in(filter.getCourseIds()));
       }
 
       if (filter.getCourseLevelIds() != null && !filter.getCourseLevelIds().isEmpty()) {
-        predicates.add(root.get("courseLevel").get("id").in(filter.getCourseLevelIds()));
+        predicates.add(root.get("courseLevels").get("id").in(filter.getCourseLevelIds()));
       }
 
       if (filter.getBirthDateFrom() != null) {
@@ -91,7 +91,7 @@ public class ParticipantSpec {
         predicates.add(root.get("active").in(filter.isActive()));
       }
 
-      return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+      return cb.and(predicates.toArray(new Predicate[0]));
     };
   }
 

@@ -170,6 +170,14 @@ public class CourseDto extends BaseDto {
   }
 
   @Nonnull
+  public String getCourseScheduleStatusKey(){
+    if (courseSchedule == null || courseSchedule.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+    return courseSchedule.getStatus().getDisplayNameKey();
+  }
+
+  @Nonnull
   public List<DayOfWeek> getWeekdays() {
     return weekdays;
   }
