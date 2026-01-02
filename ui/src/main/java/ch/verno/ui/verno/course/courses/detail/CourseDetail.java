@@ -19,6 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.Set;
@@ -59,6 +60,12 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Override
   protected String getDetailPageName() {
     return getTranslation("course.course");
+  }
+
+  @NonNull
+  @Override
+  protected String getDetailRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
   }
 
   @Nonnull

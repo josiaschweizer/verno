@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.dashboard.assignment;
 
 import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.util.Publ;
 import ch.verno.server.service.CourseService;
@@ -9,7 +10,6 @@ import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -167,8 +167,8 @@ public class AssignToCourseDialog extends Dialog {
 
       for (final var courseLevel : course.getCourseLevels()) {
         if (courseLevel.getId() != null &&
-                participant.getCourseLevel().getId() != null &&
-                courseLevel.getId().equals(participant.getCourseLevel().getId())) {
+                !participant.getCourseLevels().isEmpty() &&
+                participant.getCourseLevels().stream().map(CourseLevelDto::getId).toList().contains(courseLevel.getId())) {
           return true;
         }
       }
@@ -205,7 +205,7 @@ public class AssignToCourseDialog extends Dialog {
     final var course = courseService.getCourseById(courseComboBox.getValue());
     selectedParticipantIds.forEach(participantId -> {
       final var participant = participantService.getParticipantById(participantId);
-      participant.setCourse(course);
+      participant.addCourse(course);
       participantService.updateParticipant(participant);
     });
 

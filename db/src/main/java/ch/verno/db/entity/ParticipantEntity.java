@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "participant", schema = "public")
@@ -31,13 +33,21 @@ public class ParticipantEntity {
   @JoinColumn(name = "gender")
   private GenderEntity gender;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "course_level")
-  private CourseLevelEntity courseLevel;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "participant_course_level",
+          joinColumns = @JoinColumn(name = "participant_id"),
+          inverseJoinColumns = @JoinColumn(name = "course_level_id")
+  )
+  private List<CourseLevelEntity> courseLevels = new ArrayList<>();
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "course")
-  private CourseEntity course;
+  @ManyToMany
+  @JoinTable(
+          name = "participant_course",
+          joinColumns = @JoinColumn(name = "participant_id"),
+          inverseJoinColumns = @JoinColumn(name = "course_id")
+  )
+  private List<CourseEntity> courses;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "address")
@@ -126,20 +136,20 @@ public class ParticipantEntity {
     this.gender = gender;
   }
 
-  public CourseLevelEntity getCourseLevel() {
-    return courseLevel;
+  public List<CourseLevelEntity> getCourseLevels() {
+    return courseLevels;
   }
 
-  public void setCourseLevel(final CourseLevelEntity courseLevel) {
-    this.courseLevel = courseLevel;
+  public void setCourseLevels(final List<CourseLevelEntity> courseLevels) {
+    this.courseLevels = courseLevels;
   }
 
-  public CourseEntity getCourse() {
-    return course;
+  public List<CourseEntity> getCourses() {
+    return courses;
   }
 
-  public void setCourse(final CourseEntity course) {
-    this.course = course;
+  public void setCourses(final List<CourseEntity> courses) {
+    this.courses = courses;
   }
 
   public AddressEntity getAddress() {

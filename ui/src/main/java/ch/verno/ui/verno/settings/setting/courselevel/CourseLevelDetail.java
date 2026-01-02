@@ -121,6 +121,12 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
 
   @Nonnull
   @Override
+  protected String getDetailRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.COURSE_LEVELS, Routes.DETAIL);
+  }
+
+  @Nonnull
+  @Override
   protected String getBasePageRoute() {
     return Routes.COURSE_LEVELS;
   }

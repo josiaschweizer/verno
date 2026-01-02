@@ -183,15 +183,33 @@ public class ServiceHelper {
             .orElseThrow(() -> new NotFoundException(NotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, dto.getId()));
   }
 
-  @Nullable
-  public CourseEntity resolveCourse(@Nonnull final CourseRepository courseRepository,
-                                    @Nullable final CourseDto dto) {
-    if (dto == null || dto.isEmpty() || dto.getId() == null) {
-      return null;
+  @Nonnull
+  public List<CourseEntity> resolveCourses(@Nonnull final CourseRepository courseRepository,
+                                           @Nullable final List<CourseDto> dtos) {
+    if (dtos == null || dtos.isEmpty()) {
+      return List.of();
     }
 
-    return courseRepository.findById(dto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, dto.getId()));
+    final Map<Long, CourseDto> uniqueByIdInOrder = new LinkedHashMap<>();
+    for (final var dto : dtos) {
+      if (dto == null || dto.isEmpty() || dto.getId() == null || dto.getId() == 0) {
+        continue;
+      }
+      uniqueByIdInOrder.put(dto.getId(), dto);
+    }
+
+    if (uniqueByIdInOrder.isEmpty()) {
+      return List.of();
+    }
+
+    final List<CourseEntity> result = new ArrayList<>();
+    for (final var id : uniqueByIdInOrder.keySet()) {
+      final var entity = courseRepository.findById(id)
+              .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, id));
+      result.add(entity);
+    }
+
+    return result;
   }
 
   @Nonnull

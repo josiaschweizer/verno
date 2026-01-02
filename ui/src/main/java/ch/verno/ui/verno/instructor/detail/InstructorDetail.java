@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.jspecify.annotations.NonNull;
 
 @PermitAll
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
@@ -38,6 +39,12 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
   @Override
   protected String getDetailPageName() {
     return getTranslation("shared.instructor");
+  }
+
+  @NonNull
+  @Override
+  protected String getDetailRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
   }
 
   @Nonnull

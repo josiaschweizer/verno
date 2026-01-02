@@ -171,9 +171,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   protected abstract String getDetailPageName();
 
   @Nonnull
-  protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(getDetailPageName() + Publ.S, Routes.DETAIL);
-  }
+  protected abstract String getDetailRoute();
 
   @Nonnull
   protected abstract String getBasePageRoute();

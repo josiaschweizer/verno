@@ -5,10 +5,7 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParticipantDto;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.GenderService;
-import ch.verno.server.service.ParticipantService;
+import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -41,23 +38,31 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   private final CourseLevelService courseLevelService;
   @Nonnull
   private final CourseService courseService;
+  private final MandantSettingService mandantSettingService;
 
   public ParticipantDetail(@Nonnull final ParticipantService participantService,
                            @Nonnull final GenderService genderService,
                            @Nonnull final CourseLevelService courseLevelService,
-                           @Nonnull final CourseService courseService) {
+                           @Nonnull final CourseService courseService, final MandantSettingService mandantSettingService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
 
     init();
+    this.mandantSettingService = mandantSettingService;
   }
 
   @Nonnull
   @Override
   protected String getDetailPageName() {
     return getTranslation("participant.participant");
+  }
+
+  @Nonnull
+  @Override
+  protected String getDetailRoute() {
+    return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Nonnull
@@ -161,59 +166,45 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   private HorizontalLayout createParticipantCourseLayout() {
     final var courseLevels = courseLevelService.getAllCourseLevels();
-    final var courseLevelOptions = courseLevels.stream()
-            .collect(Collectors.toMap(CourseLevelDto::getId, CourseLevelDto::getName));
-
-    final var courseLevelEntry = fieldFactory.createCourseLevelField(
-            dto -> dto.getCourseLevel().getId(),
-            (dto, value) -> dto.setCourseLevel(value == null ?
-                    CourseLevelDto.empty() :
-                    courseLevelService.getCourseLevelById(value)),
+    final var courseLevelsEntry = entryFactory.createMultiSelectComboBoxEntry(
+            ParticipantDto::getCourseLevels,
+            ParticipantDto::setCourseLevels,
             getBinder(),
-            courseLevelOptions
+            Optional.empty(),
+            getTranslation("courseLevel.course_levels"),
+            courseLevels,
+            CourseLevelDto::displayName
     );
 
     final var courses = courseService.getAllCourses();
-    final var courseOptions = courses.stream()
-            .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
-
-    final var courseEntry = entryFactory.createComboBoxEntry(
-            dto -> dto.getCourse() == null ? null : dto.getCourse().getId(),
-            (dto, courseId) -> dto.setCourse(courseId == null ? CourseDto.empty() : courseService.getCourseById(courseId)),
+    final var coursesEntry = entryFactory.createMultiSelectComboBoxEntry(
+            ParticipantDto::getCourses,
+            ParticipantDto::setCourses,
             getBinder(),
             Optional.empty(),
-            getTranslation("course.course"),
-            courseOptions
+            getTranslation(getTranslation("course.courses")),
+            courseService.getAllCourses(),
+            CourseDto::displayName
     );
 
-    courseLevelEntry.addValueChangeListener(e -> {
-      final var selectedLevelId = e.getValue();
+    courseLevelsEntry.addValueChangeListener(e -> {
+      if (mandantSettingService.getSingleMandantSetting().isEnforceCourseLevelSettings()) {
+        final var selectedLevels = e.getValue();
+        final var selectedCourse = coursesEntry.getValue();
 
-      final var currentValue = courseEntry.getValue();
-      courseEntry.clear();
+        final var filteredCourses = courses.stream()
+                .filter(course -> course.getCourseLevels().stream().anyMatch(selectedLevels::contains))
+                .collect(Collectors.toSet());
+        coursesEntry.setItems(filteredCourses);
 
-      if (selectedLevelId == null) {
-        courseEntry.setItems(courseOptions.keySet());
-        courseEntry.setValue(currentValue);
-        return;
+        final var updatedSelectedCourses = selectedCourse.stream()
+                .filter(filteredCourses::contains)
+                .collect(Collectors.toSet());
+        coursesEntry.setValue(updatedSelectedCourses);
       }
-
-      final var filteredCourses = courses.stream()
-              .filter(c -> c.getCourseLevels().stream()
-                      .anyMatch(level -> selectedLevelId.equals(level.getId())))
-              .toList();
-
-      final var filteredCourseOptions = filteredCourses.stream()
-              .collect(Collectors.toMap(CourseDto::getId, CourseDto::displayName));
-
-      courseEntry.setItems(filteredCourseOptions.keySet());
     });
 
-    if (!courseLevelOptions.isEmpty()) {
-      courseLevelEntry.setValue(courseLevelOptions.keySet().iterator().next());
-    }
-
-    return createLayoutFromComponents(courseLevelEntry, courseEntry);
+    return createLayoutFromComponents(courseLevelsEntry, coursesEntry);
   }
 
   @Nonnull

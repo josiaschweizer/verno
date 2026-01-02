@@ -8,6 +8,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class ParticipantDto extends BaseDto {
@@ -36,10 +37,10 @@ public class ParticipantDto extends BaseDto {
   private boolean active;
 
   @Nonnull
-  private CourseLevelDto courseLevel;
+  private List<CourseLevelDto> courseLevels;
 
-  @Nullable
-  private CourseDto course;
+  @Nonnull
+  private List<CourseDto> courses;
 
   @Nonnull
   private AddressDto address;
@@ -60,8 +61,8 @@ public class ParticipantDto extends BaseDto {
     this.phone = PhoneNumber.empty();
     this.note = Publ.EMPTY_STRING;
     this.active = true;
-    this.course = CourseDto.empty();
-    this.courseLevel = CourseLevelDto.empty();
+    this.courses = List.of();
+    this.courseLevels = List.of();
     this.address = AddressDto.empty();
     this.parentOne = ParentDto.empty();
     this.parentTwo = ParentDto.empty();
@@ -76,8 +77,8 @@ public class ParticipantDto extends BaseDto {
                         @Nonnull final PhoneNumber phone,
                         @Nonnull final String note,
                         final boolean active,
-                        @Nullable final CourseDto course,
-                        @Nonnull final CourseLevelDto courseLevel,
+                        @Nonnull final List<CourseDto> courses,
+                        @Nonnull final List<CourseLevelDto> courseLevel,
                         @Nonnull final AddressDto address,
                         @Nonnull final ParentDto parentOne,
                         @Nonnull final ParentDto parentTwo) {
@@ -90,8 +91,8 @@ public class ParticipantDto extends BaseDto {
     this.phone = phone;
     this.note = note;
     this.active = active;
-    this.course = course;
-    this.courseLevel = courseLevel;
+    this.courses = courses;
+    this.courseLevels = courseLevel;
     this.address = address;
     this.parentOne = parentOne;
     this.parentTwo = parentTwo;
@@ -107,8 +108,8 @@ public class ParticipantDto extends BaseDto {
             && email.isEmpty()
             && phone.isEmpty()
             && note.isEmpty()
-            && (course == null || course.isEmpty())
-            && courseLevel.isEmpty()
+            && courses.isEmpty()
+            && courseLevels.isEmpty()
             && address.isEmpty()
             && parentOne.isEmpty()
             && parentTwo.isEmpty();
@@ -196,21 +197,27 @@ public class ParticipantDto extends BaseDto {
   }
 
   @Nonnull
-  public CourseLevelDto getCourseLevel() {
-    return courseLevel;
+  public List<CourseLevelDto> getCourseLevels() {
+    return courseLevels;
   }
 
-  public void setCourseLevel(@Nonnull final CourseLevelDto courseLevel) {
-    this.courseLevel = courseLevel;
+  public void setCourseLevels(@Nonnull final List<CourseLevelDto> courseLevels) {
+    this.courseLevels = courseLevels;
   }
 
-  @Nullable
-  public CourseDto getCourse() {
-    return course;
+  @Nonnull
+  public List<CourseDto> getCourses() {
+    return courses;
   }
 
-  public void setCourse(@Nullable final CourseDto course) {
-    this.course = course;
+  public void setCourses(@Nonnull final List<CourseDto> courses) {
+    this.courses = courses;
+  }
+
+  public void addCourse(@Nonnull final CourseDto course) {
+    if (!this.courses.contains(course)) {
+      this.courses.add(course);
+    }
   }
 
   @Nonnull
