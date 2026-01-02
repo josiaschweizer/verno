@@ -11,6 +11,7 @@ import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+@CssImport("./components/dashboard/course-widget.css")
 public class CourseWidget extends AccordionPanel {
 
   @Nonnull
@@ -61,6 +63,7 @@ public class CourseWidget extends AccordionPanel {
 
   private void initSummary() {
     final var header = new HorizontalLayout();
+    header.addClassName("course-widget-header");
     header.setAlignItems(FlexComponent.Alignment.CENTER);
     header.setPadding(false);
     header.setSpacing(true);
@@ -70,13 +73,16 @@ public class CourseWidget extends AccordionPanel {
     title.addClassName(LumoUtility.FontWeight.SEMIBOLD);
 
     final var titleButton = new Button(getTranslation("participant.edit.participant"), VaadinIcon.COG.create());
+    titleButton.addClassName("course-widget-header__button");
+
     titleButton.getElement()
             .addEventListener("click", e -> {
             })
             .addEventData("event.stopPropagation()");
 
     titleButton.addClickListener(event -> {
-      final var dialog = new AssignToCourseDialog(courseService,
+      final var dialog = new AssignToCourseDialog(
+              courseService,
               participantService,
               mandantSettingService,
               selectedCourse.getId(),
