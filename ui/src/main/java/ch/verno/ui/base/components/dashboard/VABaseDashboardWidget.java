@@ -46,6 +46,7 @@ public class VABaseDashboardWidget extends Div implements HasSize {
     headerLeft.addClassName("va-dashboard-widget__header-left");
 
     header.add(headerLeft, actions);
+    header.addClassName("va-dashboard-widget__header-wrapper");
     add(header, content);
 
     getStyle().set("--va-widget-min-w", "280px");
