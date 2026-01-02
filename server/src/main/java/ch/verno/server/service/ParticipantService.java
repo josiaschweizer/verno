@@ -97,6 +97,7 @@ public class ParticipantService implements IParticipantService {
             : Publ.EMPTY_STRING
     );
     existing.setNote(ServiceHelper.safeString(participantDto.getNote()));
+    existing.setActive(participantDto.isActive());
 
     final var savedParticipant = saveParticipant(participantDto, existing);
     return ParticipantMapper.toDto(savedParticipant);

@@ -78,6 +78,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   protected void initUI(final boolean showGridToolbar) {
     initGrid();
+    createContextMenu();
+
     final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
     final var filterBar = createFilterBar();
 
@@ -119,6 +121,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected void initGrid() {
     final var columns = getColumns();
     columns.forEach((valueProvider, header) -> addColumn(header, valueProvider));
+    final var componentColumns = getComponentColumns();
+    componentColumns.forEach((valueProvider, header) -> addComponentColumn(header, valueProvider));
 
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
     setDefaultSorting();
@@ -172,6 +176,18 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     this.columnsByKey.put(header, col);
   }
 
+  private void addComponentColumn(@Nonnull final String header,
+                                  @Nonnull final ValueProvider<T, Component> valueProvider) {
+    final var col = grid.addComponentColumn(valueProvider)
+            .setHeader(header)
+            .setKey(header)
+            .setSortable(false)
+            .setResizable(true)
+            .setAutoWidth(true);
+
+    this.columnsByKey.put(header, col);
+  }
+
   protected void setDefaultSorting() {
     // override optional
   }
@@ -184,6 +200,10 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   public Grid<T> getGrid() {
     return grid;
+  }
+
+  public void createContextMenu() {
+    // Default implementation returns an empty context menu -> to be implemented by subclasses if needed
   }
 
   @Nonnull
@@ -199,4 +219,10 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   @Nonnull
   protected abstract Map<ValueProvider<T, Object>, String> getColumns();
+
+  @Nonnull
+  protected Map<ValueProvider<T, Component>, String> getComponentColumns() {
+    // Default implementation returns no component columns -> to be implemented by subclasses if needed
+    return Map.of();
+  }
 }

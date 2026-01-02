@@ -21,6 +21,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -92,6 +93,15 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   @Override
   protected FormMode getDefaultFormMode() {
+    return FormMode.EDIT;
+  }
+
+  @NonNull
+  @Override
+  public FormMode getFormModeByBean(@NonNull final ParticipantDto bean) {
+    if (!bean.isActive()) {
+      return FormMode.VIEW;
+    }
     return FormMode.EDIT;
   }
 
@@ -313,14 +323,11 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getTranslation("participant.lastName")
     );
 
-    final var genderEntry = entryFactory.createGenderEntry(
+    final var genderEntry = fieldFactory.createGenderField(
             genderGetter,
             genderSetter,
             getBinder(),
-            genderService.getAllGenders(),
-            GenderDto::getName,
-            Optional.empty(),
-            getTranslation("gender")
+            genderService.getAllGenders()
     );
 
     final var emailEntry = entryFactory.createEmailEntry(
