@@ -2,6 +2,7 @@ package ch.verno.ui.verno.dashboard;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.server.service.*;
+import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -41,9 +42,25 @@ public class Dashboard extends VerticalLayout {
     final var tabSheet = new TabSheet();
     tabSheet.setSizeFull();
 
-    tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), new CourseWidgetGroup(CourseScheduleStatus.PLANNED, courseService, participantService, courseLevelService, mandantSettingService));
-    tabSheet.add(getTranslation(CourseScheduleStatus.ACTIVE.getDisplayNameKey()), new CourseWidgetGroup(CourseScheduleStatus.ACTIVE, courseService, participantService, courseLevelService, mandantSettingService));
-    tabSheet.add("Course Schedules Lifecycle", new CourseScheduleLifecycleWidgetGroup(courseScheduleService));
+    final var plannedTab = new CourseWidgetGroup(CourseScheduleStatus.PLANNED, courseService, participantService, courseLevelService, mandantSettingService);
+    final var activeTab = new CourseWidgetGroup(CourseScheduleStatus.ACTIVE, courseService, participantService, courseLevelService, mandantSettingService);
+    final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(courseScheduleService);
+
+    tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), plannedTab);
+    tabSheet.add(getTranslation(CourseScheduleStatus.ACTIVE.getDisplayNameKey()), activeTab);
+    tabSheet.add(getTranslation("courseSchedule.course.schedules.lifecycle"), lifecycleTab);
+
+    tabSheet.addSelectedChangeListener(event -> {
+      final var selectedTab = event.getSelectedTab();
+
+      if (selectedTab != null) {
+        final var content = tabSheet.getComponent(selectedTab);
+
+        if (content instanceof Refreshable refreshable) {
+          refreshable.refresh();
+        }
+      }
+    });
 
     return tabSheet;
   }

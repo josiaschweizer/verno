@@ -92,7 +92,7 @@ public class CourseScheduleDto extends BaseDto {
     this.weeks = weeks;
   }
 
-  public String getDisplayTitle() {
+  public String displayName() {
     if (title.isEmpty()) {
       return Publ.EMPTY_STRING;
     }
