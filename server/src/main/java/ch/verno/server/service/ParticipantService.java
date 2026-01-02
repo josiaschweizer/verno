@@ -106,8 +106,8 @@ public class ParticipantService implements IParticipantService {
   private ParticipantEntity saveParticipant(@Nonnull final ParticipantDto participantDto,
                                             @Nonnull final ParticipantEntity existing) {
     existing.setGender(serviceHelper.resolveGender(genderRepository, participantDto.getGender()));
-    existing.setCourseLevel(serviceHelper.resolveCourseLevel(courseLevelRepository, participantDto.getCourseLevel()));
-    existing.setCourse(serviceHelper.resolveCourse(courseRepository, participantDto.getCourse()));
+    existing.setCourseLevels(serviceHelper.resolveCourseLevels(courseLevelRepository, participantDto.getCourseLevels()));
+    existing.setCourses(serviceHelper.resolveCourses(courseRepository, participantDto.getCourses()));
 
     existing.setAddress(serviceHelper.saveOrUpdateAddress(addressRepository, participantDto.getAddress()));
     existing.setParentOne(serviceHelper.saveOrUpdateParent(parentRepository, genderRepository, addressRepository, participantDto.getParentOne()));

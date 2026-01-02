@@ -31,8 +31,8 @@ public final class ParticipantMapper {
             entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
             entity.getNote() == null ? Publ.EMPTY_STRING : entity.getNote(),
             entity.isActive(),
-            CourseMapper.toDto(entity.getCourse()),
-            CourseLevelMapper.toDto(entity.getCourseLevel()),
+            entity.getCourses().stream().map(CourseMapper::toDto).toList(),
+            entity.getCourseLevels().stream().map(CourseLevelMapper::toDto).toList(),
             AddressMapper.toDto(entity.getAddress()),
             ParentMapper.toDto(entity.getParentOne()),
             ParentMapper.toDto(entity.getParentTwo())
@@ -62,8 +62,8 @@ public final class ParticipantMapper {
     }
 
     entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
-    entity.setCourseLevel(CourseLevelMapper.toEntityRef(dto.getCourseLevel()));
-    entity.setCourse(CourseMapper.toEntityRef(dto.getCourse()));
+    entity.setCourseLevels(dto.getCourseLevels().stream().map(CourseLevelMapper::toEntityRef).toList());
+    entity.setCourses(dto.getCourses().stream().map(CourseMapper::toEntityRef).toList());
 
     entity.setAddress(AddressMapper.toEntity(dto.getAddress()));
     entity.setParentOne(ParentMapper.toEntity(dto.getParentOne()));

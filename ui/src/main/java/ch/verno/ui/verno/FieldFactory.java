@@ -6,7 +6,7 @@ import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -192,21 +192,6 @@ public class FieldFactory<T> {
             binder,
             Optional.empty(),
             getTranslation("shared.country")
-    );
-  }
-
-  @Nonnull
-  public ComboBox<Long> createCourseLevelField(@Nonnull final ValueProvider<T, Long> valueProvider,
-                                             @Nonnull final Setter<T, Long> valueSetter,
-                                             @Nonnull final Binder<T> binder,
-                                             @Nonnull final  java.util.Map<Long, String> courseLevelOptions) {
-    return entryFactory.createComboBoxEntry(
-            valueProvider,
-            valueSetter,
-            binder,
-            Optional.empty(),
-            getTranslation("courseLevel.course_level"),
-            courseLevelOptions
     );
   }
 }
