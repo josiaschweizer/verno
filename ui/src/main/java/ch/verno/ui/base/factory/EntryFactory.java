@@ -32,6 +32,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
 
 public class EntryFactory<DTO> {
 
@@ -153,6 +154,26 @@ public class EntryFactory<DTO> {
 
     comboBox.setItems(options.keySet());
     comboBox.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
+    comboBox.setClearButtonVisible(true);
+
+    bindEntry(comboBox, valueProvider, valueSetter, binder, required);
+
+    return comboBox;
+  }
+
+  @Nonnull
+  public <E extends Enum<E>> VAComboBox<E> createEnumComboBoxEntry(@Nonnull final ValueProvider<DTO, E> valueProvider,
+                                                                   @Nonnull final Setter<DTO, E> valueSetter,
+                                                                   @Nonnull final Binder<DTO> binder,
+                                                                   @Nonnull final E[] values,
+                                                                   @Nonnull final Optional<String> required,
+                                                                   @Nonnull final String label,
+                                                                   @Nonnull final Function<E, String> labelProvider) {
+    final var comboBox = new VAComboBox<E>(label);
+    comboBox.setWidthFull();
+
+    comboBox.setItems(values);
+    comboBox.setItemLabelGenerator(labelProvider::apply);
     comboBox.setClearButtonVisible(true);
 
     bindEntry(comboBox, valueProvider, valueSetter, binder, required);

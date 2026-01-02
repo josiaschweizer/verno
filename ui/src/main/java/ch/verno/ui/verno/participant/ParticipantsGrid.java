@@ -110,7 +110,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columnsMap.put(dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"));
     columnsMap.put(dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"));
     columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
-    columnsMap.put(dto -> dto.isActive() ? getTranslation("common.yes") : getTranslation("common.no"), getTranslation("common.active"));
+    columnsMap.put(dto -> dto.isActive() ? getTranslation("shared.active") : getTranslation("shared.inactive"), getTranslation("shared.status"));
     return columnsMap;
   }
 

@@ -2,7 +2,6 @@ package ch.verno.ui.verno.course.courseschedule;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.filter.CourseScheduleFilter;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
@@ -66,7 +65,10 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   protected Map<ValueProvider<CourseScheduleDto, Object>, String> getColumns() {
     final var columnsMap = new LinkedHashMap<ValueProvider<CourseScheduleDto, Object>, String>();
     columnsMap.put(CourseScheduleDto::getTitle, getTranslation("shared.title"));
+    columnsMap.put(dto -> dto.getWeeks().getFirst(), getTranslation("courseSchedule.first.week"));
+    columnsMap.put(dto -> dto.getWeeks().getLast(), getTranslation("courseSchedule.last.week"));
     columnsMap.put(CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"));
+    columnsMap.put(dto -> getTranslation(dto.getStatus().getDisplayNameKey()), getTranslation("shared.status"));
     return columnsMap;
   }
 

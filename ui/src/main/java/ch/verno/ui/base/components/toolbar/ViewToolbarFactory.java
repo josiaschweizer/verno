@@ -18,7 +18,7 @@ public class ViewToolbarFactory {
 
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final String gridObjectName) {
-    final var url = gridObjectName + "s";
+    final var url = gridObjectName + Publ.S;
 
     return createGridToolbar(gridObjectName, url, null);
   }

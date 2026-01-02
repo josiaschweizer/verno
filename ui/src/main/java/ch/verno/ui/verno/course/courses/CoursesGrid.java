@@ -2,7 +2,6 @@ package ch.verno.ui.verno.course.courses;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.filter.CourseFilter;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.CourseService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
@@ -71,6 +70,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     columnsMap.put(CourseDto::getCourseLevelAsString, getTranslation("course.level"));
     columnsMap.put(CourseDto::getStartTime, getTranslation("course.start.time"));
     columnsMap.put(CourseDto::getEndTime, getTranslation("course.end.time"));
+    columnsMap.put(dto -> getTranslation(dto.getCourseScheduleStatusKey()), getTranslation("shared.status"));
     return columnsMap;
   }
 
