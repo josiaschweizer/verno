@@ -5,6 +5,7 @@ import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.util.Publ;
 import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.ParticipantService;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,13 +103,30 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columnsMap.put(ParticipantDto::getEmail, getTranslation("shared.e.mail"));
     columnsMap.put(ParticipantDto::getPhoneString, getTranslation("shared.phone"));
     columnsMap.put(ParticipantDto::getNote, getTranslation("participant.note"));
-    columnsMap.put(dto -> dto.getCourseLevels().stream().map(CourseLevelDto::displayName), getTranslation("courseLevel.course_level"));
-    columnsMap.put(dto -> dto.getCourses().stream().map(CourseDto::displayName), getTranslation("course.course"));
+    columnsMap.put(dto -> joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
+            getTranslation("courseLevel.course_level"));
+    columnsMap.put(dto -> joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
+            getTranslation("course.course"));
     columnsMap.put(dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"));
     columnsMap.put(dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"));
     columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
     columnsMap.put(dto -> dto.isActive() ? getTranslation("common.yes") : getTranslation("common.no"), getTranslation("common.active"));
     return columnsMap;
+  }
+
+  @Nonnull
+  private <T> String joinDisplayNamesFromList(@Nonnull final List<T> list,
+                                              @Nonnull final Function<T, String> mapper) {
+    if (list.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    }
+
+    return list.stream()
+            .filter(Objects::nonNull)
+            .map(mapper)
+            .filter(s -> s != null && !s.isBlank())
+            .distinct()
+            .collect(Collectors.joining(", "));
   }
 
   @Nonnull
