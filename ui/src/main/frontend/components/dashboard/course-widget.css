@@ -1,0 +1,16 @@
+.course-widget-header {
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .course-widget-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .course-widget-header__button {
+        width: 100%;
+        justify-content: center;
+    }
+}
