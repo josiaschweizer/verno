@@ -1,6 +1,7 @@
 package ch.verno.common.db.service;
 
 import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface ICourseService {
 
   @Nonnull
   List<CourseDto> getCoursesByCourseScheduleId(@Nonnull Long courseScheduleId);
+
+  @Nonnull
+  List<CourseDto> getCoursesByCourseScheduleStatus(@Nonnull CourseScheduleStatus status);
 
   @Nonnull
   List<CourseDto> getAllCourses();

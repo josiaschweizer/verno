@@ -8,6 +8,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,8 +62,8 @@ public class ParticipantDto extends BaseDto {
     this.phone = PhoneNumber.empty();
     this.note = Publ.EMPTY_STRING;
     this.active = true;
-    this.courses = List.of();
-    this.courseLevels = List.of();
+    this.courses = new ArrayList<>();
+    this.courseLevels = new ArrayList<>();
     this.address = AddressDto.empty();
     this.parentOne = ParentDto.empty();
     this.parentTwo = ParentDto.empty();
@@ -91,8 +92,8 @@ public class ParticipantDto extends BaseDto {
     this.phone = phone;
     this.note = note;
     this.active = active;
-    this.courses = courses;
-    this.courseLevels = courseLevel;
+    this.courses = new ArrayList<>(courses);
+    this.courseLevels = new ArrayList<>(courseLevel);
     this.address = address;
     this.parentOne = parentOne;
     this.parentTwo = parentTwo;
@@ -202,7 +203,7 @@ public class ParticipantDto extends BaseDto {
   }
 
   public void setCourseLevels(@Nonnull final List<CourseLevelDto> courseLevels) {
-    this.courseLevels = courseLevels;
+    this.courseLevels = new ArrayList<>(courseLevels);
   }
 
   @Nonnull
@@ -211,7 +212,7 @@ public class ParticipantDto extends BaseDto {
   }
 
   public void setCourses(@Nonnull final List<CourseDto> courses) {
-    this.courses = courses;
+    this.courses = new ArrayList<>(courses);
   }
 
   public void addCourse(@Nonnull final CourseDto course) {

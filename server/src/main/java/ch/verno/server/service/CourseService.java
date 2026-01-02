@@ -1,6 +1,7 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.exceptions.NotFoundException;
@@ -136,6 +137,17 @@ public class CourseService implements ICourseService {
   public List<CourseDto> getCoursesByCourseScheduleId(@Nonnull final Long courseScheduleId) {
     return courseRepository.findByCourseLevelId(courseScheduleId).stream()
             .map(CourseMapper::toDto)
+            .toList();
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public List<CourseDto> getCoursesByCourseScheduleStatus(@Nonnull final CourseScheduleStatus status) {
+    final var courseSchedules = courseScheduleRepository.findByStatus(status);
+
+    return courseSchedules.stream()
+            .flatMap(schedule -> getCoursesByCourseScheduleId(schedule.getId()).stream())
             .toList();
   }
 

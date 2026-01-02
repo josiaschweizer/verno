@@ -47,7 +47,7 @@ public class ParticipantEntity {
           joinColumns = @JoinColumn(name = "participant_id"),
           inverseJoinColumns = @JoinColumn(name = "course_id")
   )
-  private List<CourseEntity> courses;
+  private List<CourseEntity> courses = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "address")
@@ -141,7 +141,10 @@ public class ParticipantEntity {
   }
 
   public void setCourseLevels(final List<CourseLevelEntity> courseLevels) {
-    this.courseLevels = courseLevels;
+    this.courseLevels.clear();
+    if (courseLevels != null) {
+      this.courseLevels.addAll(courseLevels);
+    }
   }
 
   public List<CourseEntity> getCourses() {
@@ -149,7 +152,10 @@ public class ParticipantEntity {
   }
 
   public void setCourses(final List<CourseEntity> courses) {
-    this.courses = courses;
+    this.courses.clear();
+    if (courses != null) {
+      this.courses.addAll(courses);
+    }
   }
 
   public AddressEntity getAddress() {

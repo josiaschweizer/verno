@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.dashboard;
 
+import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.MandantSettingService;
 import ch.verno.server.service.ParticipantService;
@@ -19,23 +20,24 @@ public class DashboardView extends VerticalLayout {
 
   public DashboardView(@Nonnull final CourseService courseService,
                        @Nonnull final ParticipantService participantService,
+                       @Nonnull final CourseLevelService courseLevelService,
                        @Nonnull final MandantSettingService mandantSettingService) {
-    this.setWidthFull();
-    this.setPadding(false);
-    this.setSpacing(false);
+    setSizeFull();
+    setPadding(false);
+    setSpacing(false);
+    setAlignItems(Alignment.STRETCH);
+    getStyle().set("overflow", "hidden");
+
+    final var dashboard = new Dashboard(courseService, participantService, courseLevelService, mandantSettingService);
+    dashboard.addClassNames(LumoUtility.Padding.SMALL, LumoUtility.Margin.SMALL);
 
     add(createViewToolBar());
-    final var dashboard = new VADashboard(courseService, participantService, mandantSettingService);
-    dashboard.addClassNames(LumoUtility.Padding.SMALL, LumoUtility.Margin.SMALL);
     add(dashboard);
-
-    setSizeFull();
-    setAlignItems(Alignment.STRETCH);
   }
 
   @Nonnull
   private ViewToolbar createViewToolBar() {
-    return ViewToolbarFactory.createSimpleToolbar("Dashboard");
+    return ViewToolbarFactory.createSimpleToolbar(getTranslation("shared.dashboard"));
   }
 
 }
