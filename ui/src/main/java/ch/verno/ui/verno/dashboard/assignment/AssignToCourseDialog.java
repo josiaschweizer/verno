@@ -25,10 +25,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CssImport("/components/assignment/assignment.css")
@@ -42,6 +39,9 @@ public class AssignToCourseDialog extends Dialog {
   private final MandantSettingService mandantSettingService;
 
   @Nullable
+  private final Long preSelectedCourseId;
+
+  @Nullable
   private CheckboxGroup<Long> participantsGroup;
   @Nullable
   private VAComboBox<Long> courseComboBox;
@@ -52,6 +52,8 @@ public class AssignToCourseDialog extends Dialog {
   @Nonnull
   private LinkedHashSet<Long> selectedParticipantIds;
   @Nonnull
+  private final LinkedHashSet<Long> unselectedParticipantIds;
+  @Nonnull
   private final Map<Long, String> participantItems;
 
   private boolean suppressSelectionSync;
@@ -59,19 +61,32 @@ public class AssignToCourseDialog extends Dialog {
   public AssignToCourseDialog(@Nonnull final CourseService courseService,
                               @Nonnull final ParticipantService participantService,
                               @Nonnull final MandantSettingService mandantSettingService) {
+    this(courseService, participantService, mandantSettingService, null, List.of());
+  }
+
+  public AssignToCourseDialog(@Nonnull final CourseService courseService,
+                              @Nonnull final ParticipantService participantService,
+                              @Nonnull final MandantSettingService mandantSettingService,
+                              @Nullable final Long preSelectedCourseId,
+                              @Nonnull final List<Long> preSelectedParticipantIds) {
     this.courseService = courseService;
     this.participantService = participantService;
     this.mandantSettingService = mandantSettingService;
+    this.preSelectedCourseId = preSelectedCourseId;
 
-    this.selectedParticipantIds = new LinkedHashSet<>();
+    this.selectedParticipantIds = new LinkedHashSet<>(preSelectedParticipantIds);
+    this.unselectedParticipantIds = new LinkedHashSet<>();
     this.participantItems = new LinkedHashMap<>();
 
-    setHeight("60vh");
+    setHeight("80vh");
+    setWidth("min(1500px, 95vw)");
+    setMaxWidth("1500px");
+    setMinWidth("320px");
 
     saveButton = createSaveButton();
     final var cancelButton = createCancelButton();
 
-    setHeaderTitle("Assign Participants to Course");
+    setHeaderTitle(getTranslation("participant.assign.participants.to.course"));
     add(createContent());
     getFooter().add(cancelButton);
     getFooter().add(saveButton);
@@ -80,13 +95,18 @@ public class AssignToCourseDialog extends Dialog {
   @Nonnull
   private HorizontalLayout createContent() {
     final var left = createCourseLayout();
+    left.getElement().getStyle().set("min-width", "260px");
+    left.getElement().getStyle().set("flex", "1 1 260px");
     final var right = createParticipantLayout();
+    right.getElement().getStyle().set("min-width", "260px");
+    right.getElement().getStyle().set("flex", "1 1 260px");
 
     final var layout = new HorizontalLayout(left, right);
     layout.setWidthFull();
     layout.setHeightFull();
     layout.setAlignItems(FlexComponent.Alignment.STRETCH);
     layout.addClassNames(LumoUtility.Gap.XLARGE);
+    layout.getStyle().set("flex-wrap", "wrap");
 
     right.setHeightFull();
     layout.setFlexGrow(1, left, right);
@@ -96,7 +116,7 @@ public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
   private VerticalLayout createCourseLayout() {
-    final var title = createTitleSpan("Course");
+    final var title = createTitleSpan(getTranslation("course.course"));
     courseComboBox = createCourseComboBox();
 
     return createLayoutFromComponents(title, courseComboBox);
@@ -104,8 +124,8 @@ public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
   private VerticalLayout createParticipantLayout() {
-    final var title = createTitleSpan("Participants");
-    final var searchBar = new VASearchFilter("Search participants…");
+    final var title = createTitleSpan(getTranslation("participant.participants"));
+    final var searchBar = new VASearchFilter(getTranslation("participant.search.participants"));
     searchBar.addValueChangeListener(e -> searchChanged(e.getValue()));
     final var participants = createParticipantsCheckboxGroup();
 
@@ -132,9 +152,7 @@ public class AssignToCourseDialog extends Dialog {
       return;
     }
 
-    final var searchString = searchTerm == null ?
-            Publ.EMPTY_STRING :
-            searchTerm.toLowerCase(Locale.ROOT);
+    final var searchString = searchTerm == null ? Publ.EMPTY_STRING : searchTerm.toLowerCase(Locale.ROOT);
 
     final var filtered = participantItems.entrySet().stream()
             .filter(e -> searchString.isEmpty() || e.getValue().toLowerCase(Locale.ROOT).contains(searchString))
@@ -179,7 +197,7 @@ public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
   private Button createSaveButton() {
-    final var saveButton = new Button("Save");
+    final var saveButton = new Button(getTranslation("common.save"));
     saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     saveButton.setEnabled(false);
     saveButton.addClickListener(event -> save());
@@ -203,14 +221,22 @@ public class AssignToCourseDialog extends Dialog {
     }
 
     final var course = courseService.getCourseById(courseComboBox.getValue());
-    selectedParticipantIds.forEach(participantId -> {
-      final var participant = participantService.getParticipantById(participantId);
+    selectedParticipantIds.forEach(id -> {
+      final var participant = participantService.getParticipantById(id);
       participant.addCourse(course);
       participantService.updateParticipant(participant);
     });
+    unselectedParticipantIds.forEach(id -> {
+      final var participant = participantService.getParticipantById(id);
+      participant.getCourses().removeIf(c -> Objects.equals(c.getId(), course.getId()));
+      participantService.updateParticipant(participant);
+    });
 
-    NotificationFactory.showSuccessNotification("Assigned " + selectedParticipantIds.size()
-            + " participants to course '"
+    NotificationFactory.showSuccessNotification(getTranslation("shared.assigned") + Publ.SPACE + selectedParticipantIds.size()
+            + Publ.SPACE
+            + getTranslation("shared.participants.to.course")
+            + Publ.SPACE
+            + Publ.SIMPLE_QUOTE
             + course.getTitle()
             + Publ.SIMPLE_QUOTE
             + Publ.DOT);
@@ -219,7 +245,7 @@ public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
   private Button createCancelButton() {
-    final var button = new Button("Cancel");
+    final var button = new Button(getTranslation("shared.cancel"));
     button.addClickListener(event -> close());
     return button;
   }
@@ -243,12 +269,13 @@ public class AssignToCourseDialog extends Dialog {
     courseComboBox.setItems(options.keySet());
     courseComboBox.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
     courseComboBox.setClearButtonVisible(true);
+    courseComboBox.setValue(preSelectedCourseId);
 
-    this.courseComboBox.addValueChangeListener(e -> {
+    courseComboBox.addValueChangeListener(e -> {
       applyParticipantFilterToUi();
       updateSaveEnabled();
     });
-    return this.courseComboBox;
+    return courseComboBox;
   }
 
   @Nonnull
@@ -261,7 +288,7 @@ public class AssignToCourseDialog extends Dialog {
             );
 
     participantsGroup = new CheckboxGroup<>();
-    participantsGroup.setItemLabelGenerator(id -> participantItems.getOrDefault(id, "Participant #" + id));
+    participantsGroup.setItemLabelGenerator(id -> participantItems.getOrDefault(id, getTranslation("participant.participant") + Publ.SPACE + Publ.HASH + id));
     participantsGroup.addClassName("participants-group");
     participantsGroup.setWidthFull();
 
@@ -269,7 +296,22 @@ public class AssignToCourseDialog extends Dialog {
       if (suppressSelectionSync) {
         return;
       }
-      selectedParticipantIds = new LinkedHashSet<>(e.getValue());
+
+      final var oldSelected = new LinkedHashSet<>(selectedParticipantIds);
+      final var newSelected = new LinkedHashSet<>(e.getValue());
+
+      final var deselected = oldSelected.stream()
+              .filter(id -> !newSelected.contains(id))
+              .toList();
+
+      final var selectedAgain = newSelected.stream()
+              .filter(id -> !oldSelected.contains(id))
+              .toList();
+
+      selectedParticipantIds = newSelected;
+      unselectedParticipantIds.addAll(deselected);
+      selectedAgain.forEach(unselectedParticipantIds::remove);
+
       updateSaveEnabled();
     });
 

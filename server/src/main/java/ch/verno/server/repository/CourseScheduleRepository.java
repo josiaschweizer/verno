@@ -1,5 +1,6 @@
 package ch.verno.server.repository;
 
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.db.entity.CourseScheduleEntity;
 import ch.verno.db.jpa.SpringDataCourseScheduleJpaRepository;
 import jakarta.annotation.Nonnull;
@@ -29,6 +30,11 @@ public class CourseScheduleRepository {
   @Nonnull
   public List<CourseScheduleEntity> findByWeek(@Nonnull final String week) {
     return jpaRepository.findByWeeksContains(week);
+  }
+
+  @Nonnull
+  public List<CourseScheduleEntity> findByStatus(@Nonnull final CourseScheduleStatus status) {
+    return jpaRepository.findByStatus(status);
   }
 
   @Nonnull
