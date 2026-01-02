@@ -11,7 +11,9 @@ import ch.verno.server.service.CourseService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -93,6 +95,45 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
+  @Override
+  public void createContextMenu() {
+    final var menu = grid.addContextMenu();
+
+    menu.setDynamicContentHandler(dto -> {
+      menu.removeAll();
+
+      if (dto == null) {
+        return false;
+      }
+
+      if (dto.isActive()) {
+        menu.addItem(
+                getTranslation(getTranslation("participant.disable.participant")),
+                e -> disableItem(dto)
+        );
+      } else {
+        menu.addItem(
+                getTranslation(getTranslation("participant.enable.participant")),
+                e -> enableItem(dto)
+        );
+      }
+
+      return true;
+    });
+  }
+
+  private void disableItem(@Nonnull final ParticipantDto dto) {
+    dto.setActive(false);
+    participantService.updateParticipant(dto);
+    grid.getDataProvider().refreshAll();
+  }
+
+  private void enableItem(@Nonnull final ParticipantDto dto) {
+    dto.setActive(true);
+    participantService.updateParticipant(dto);
+    grid.getDataProvider().refreshAll();
+  }
+
   @Nonnull
   @Override
   protected Map<ValueProvider<ParticipantDto, Object>, String> getColumns() {
@@ -110,8 +151,23 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columnsMap.put(dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"));
     columnsMap.put(dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"));
     columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
-    columnsMap.put(dto -> dto.isActive() ? getTranslation("shared.active") : getTranslation("shared.inactive"), getTranslation("shared.status"));
     return columnsMap;
+  }
+
+  @Nonnull
+  @Override
+  protected Map<ValueProvider<ParticipantDto, Component>, String> getComponentColumns() {
+    final var componentsMap = new LinkedHashMap<ValueProvider<ParticipantDto, Component>, String>();
+    componentsMap.put(this::getStatusBadge, getTranslation("shared.status"));
+    return componentsMap;
+  }
+
+  @Nonnull
+  private Span getStatusBadge(@Nonnull final ParticipantDto dto) {
+    final var string = dto.isActive() ? getTranslation("shared.active") : getTranslation("shared.inactive");
+    final var statusSpan = new Span(string);
+    statusSpan.getElement().getThemeList().add(dto.isActive() ? "badge success" : "badge error");
+    return statusSpan;
   }
 
   @Nonnull
