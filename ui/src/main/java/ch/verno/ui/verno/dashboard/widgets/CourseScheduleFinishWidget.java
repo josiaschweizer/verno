@@ -27,7 +27,7 @@ public class CourseScheduleFinishWidget extends VASimpleBaseDashboardWidget {
     if (courseSchedules.isEmpty()) {
       NotificationFactory.showInfoNotification(getTranslation("courseSchedule.no.active.course.schedules.available.to.finish"));
     } else {
-      final var dialog = new CourseScheduleDialog(courseScheduleService, COURSE_SCHEDULE_STATUS);
+      final var dialog = new CourseScheduleDialog(courseScheduleService, COURSE_SCHEDULE_STATUS, true);
       dialog.open();
     }
   }

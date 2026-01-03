@@ -7,9 +7,12 @@ import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
+import java.util.Set;
 
 public class CourseScheduleDialog extends Dialog {
 
@@ -18,14 +21,19 @@ public class CourseScheduleDialog extends Dialog {
   @Nonnull
   private final CourseScheduleStatus status;
 
+  private final boolean showConfirmDialogOnClose;
+
   @Nullable
   private CheckboxGroup<CourseScheduleDto> courseScheduleGroup;
+  @Nullable
   private Button saveButton;
 
   public CourseScheduleDialog(@Nonnull final CourseScheduleService courseScheduleService,
-                              @Nonnull final CourseScheduleStatus status) {
+                              @Nonnull final CourseScheduleStatus status,
+                              final boolean showConfirmDialogOnClose) {
     this.courseScheduleService = courseScheduleService;
     this.status = status;
+    this.showConfirmDialogOnClose = showConfirmDialogOnClose;
 
     initUI();
   }
@@ -39,9 +47,9 @@ public class CourseScheduleDialog extends Dialog {
       saveButton.setEnabled(!e.getValue().isEmpty());
     });
 
-    setHeight("60vh");
-    setWidth("min(1500px, 70vw)");
-    setMaxWidth("1500px");
+    setHeight("40vh");
+    setWidth("min(1000px, 50vw)");
+    setMaxWidth("1000px");
     setMinWidth("320px");
 
     if (status == CourseScheduleStatus.PLANNED) {
@@ -51,7 +59,7 @@ public class CourseScheduleDialog extends Dialog {
     }
 
     final var cancelButton = new Button(getTranslation("shared.cancel"), event1 -> close());
-    saveButton = new Button(getTranslation("common.save"), event -> save());
+    saveButton = new Button(getTranslation("common.save"), event -> preSave());
     saveButton.setEnabled(false);
     saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
@@ -61,13 +69,31 @@ public class CourseScheduleDialog extends Dialog {
     getFooter().add(saveButton);
   }
 
-  private void save() {
+  private void preSave() {
     if (courseScheduleGroup == null) {
       return;
     }
 
     final var selectedItems = courseScheduleGroup.getSelectedItems();
 
+    if (selectedItems.isEmpty()) {
+      NotificationFactory.showInfoNotification(getTranslation("courseSchedule.no.course.schedules.selected.no.changes.were.made"));
+      return;
+    } else if (showConfirmDialogOnClose) {
+      final var confirmDialog = new ConfirmDialog(
+              "Confirm action",
+              "This action cannot be undone. Do you want to continue?",
+              "Confirm", confirm -> confirmDialog(confirm, selectedItems),
+              "Cancel",
+              cancel -> { /* no action */ }
+      );
+      confirmDialog.open();
+    } else {
+      save(selectedItems);
+    }
+  }
+
+  private void save(@Nonnull final Set<CourseScheduleDto> selectedItems) {
     selectedItems.forEach(course -> {
       if (course.getId() != null) {
         course.setStatus(
@@ -79,12 +105,17 @@ public class CourseScheduleDialog extends Dialog {
       }
     });
 
-    if (selectedItems.isEmpty()) {
-      NotificationFactory.showInfoNotification(getTranslation("courseSchedule.no.course.schedules.selected.no.changes.were.made"));
-    } else {
-      NotificationFactory.showSuccessNotification(getTranslation("courseSchedule.course.schedules.updated.successfully"));
-    }
 
+    NotificationFactory.showSuccessNotification(getTranslation(getTranslation("courseSchedule.course.schedules.updated.successfully.0.course.schedules.were.updated", selectedItems.size())));
     close();
   }
+
+  private void confirmDialog(@Nonnull final ConfirmDialog.ConfirmEvent confirmListener,
+                             @Nonnull final Set<CourseScheduleDto> selectedItems) {
+    if (confirmListener.getSource() != null) {
+      confirmListener.getSource().close();
+      save(selectedItems);
+    }
+  }
+
 }

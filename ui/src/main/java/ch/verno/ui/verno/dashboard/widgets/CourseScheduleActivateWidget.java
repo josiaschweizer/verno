@@ -26,7 +26,7 @@ public class CourseScheduleActivateWidget extends VASimpleBaseDashboardWidget {
       final var notificationMessage = getTranslation("courseSchedule.no.planned.course.schedules.available.there.are.currently.no.course.schedules.that.can.be.activated");
       NotificationFactory.showInfoNotification(notificationMessage);
     } else {
-      final var dialog = new CourseScheduleDialog(courseScheduleService, COURSE_SCHEDULE_STATUS);
+      final var dialog = new CourseScheduleDialog(courseScheduleService, COURSE_SCHEDULE_STATUS, false);
       dialog.open();
     }
   }
