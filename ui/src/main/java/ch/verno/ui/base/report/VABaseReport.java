@@ -11,6 +11,8 @@ import java.util.Objects;
 
 public abstract class VABaseReport<T> extends BaseReport<T> {
 
+  private static final String PDF_FONT = "SansSerif";
+
   public enum ReportHorizontalAlignment {
     LEFT(HorizontalAlign.LEFT),
     CENTER(HorizontalAlign.CENTER),
@@ -63,6 +65,8 @@ public abstract class VABaseReport<T> extends BaseReport<T> {
     reportBuilder.addColumn(column);
   }
 
+  private static final String PDF_FONT_HELVETICA = "Helvetica";
+
   protected void applyDefaultReportStyles() {
     reportBuilder.setPageSizeAndOrientation(Page.Page_A4_Landscape());
     reportBuilder.setMargins(20, 20, 20, 20);
@@ -71,20 +75,24 @@ public abstract class VABaseReport<T> extends BaseReport<T> {
     reportBuilder.setTitle(title);
     reportBuilder.setSubtitle(subtitle);
 
-    Style titleStyle = new Style();
-    titleStyle.setFont(new Font(14, Font._FONT_VERDANA, true));
+    final var titleStyle = new Style();
+    final var titleFont = new Font(14, PDF_FONT, PDF_FONT, null, false);
+    titleFont.setBold(true);
+    titleStyle.setFont(titleFont);
     titleStyle.setHorizontalAlign(titleAlignment.dj);
 
-    Style subtitleStyle = new Style();
-    subtitleStyle.setFont(new Font(10, Font._FONT_VERDANA, false));
+    final var subtitleStyle = new Style();
+    subtitleStyle.setFont(new Font(10, PDF_FONT, PDF_FONT, null, false));
     subtitleStyle.setHorizontalAlign(subtitleAlignment.dj);
 
-    Style headerStyle = new Style();
-    headerStyle.setFont(new Font(10, Font._FONT_VERDANA, true));
+    final var headerStyle = new Style();
+    final var headerFont = new Font(10, PDF_FONT, PDF_FONT, null, false);
+    headerFont.setBold(true);
+    headerStyle.setFont(headerFont);
     headerStyle.setHorizontalAlign(HorizontalAlign.LEFT);
 
-    Style detailStyle = new Style();
-    detailStyle.setFont(new Font(9, Font._FONT_VERDANA, false));
+    final var detailStyle = new Style();
+    detailStyle.setFont(new Font(9, PDF_FONT, PDF_FONT, null, false));
     detailStyle.setHorizontalAlign(HorizontalAlign.LEFT);
 
     reportBuilder.setDefaultStyles(titleStyle, subtitleStyle, headerStyle, detailStyle);
