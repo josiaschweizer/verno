@@ -4,7 +4,6 @@ import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleActivateWidget;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleFinishWidget;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
@@ -17,7 +16,6 @@ public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implement
     this.courseScheduleService = courseScheduleService;
 
     setWidthFull();
-    setHeightFull();
 
     init();
   }
