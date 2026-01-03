@@ -1,6 +1,7 @@
 package ch.verno.common.db.service;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import jakarta.annotation.Nonnull;
 
 import java.time.LocalDate;
@@ -19,6 +20,9 @@ public interface ICourseScheduleService {
 
   @Nonnull
   List<CourseScheduleDto> getCourseScheduleByWeek(@Nonnull LocalDate weekDate);
+
+  @Nonnull
+  List<CourseScheduleDto> getCourseSchedulesByStatus(@Nonnull CourseScheduleStatus status);
 
   @Nonnull
   List<CourseScheduleDto> getAllCourseSchedules();

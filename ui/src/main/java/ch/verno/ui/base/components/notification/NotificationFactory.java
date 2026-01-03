@@ -6,6 +6,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
 
 public class NotificationFactory {
@@ -39,14 +40,14 @@ public class NotificationFactory {
 
     final var iconComponent = icon.create();
     iconComponent.getStyle()
-            .set("flex-shrink", "0")
-            .set("margin-right", "var(--lumo-space-m)");
+            .setFlexShrink("0")
+            .setMarginRight("var(--lumo-space-m)");
 
     final var messageSpan = new Span(message);
     messageSpan.getStyle()
-            .set("display", "flex")
-            .set("align-items", "center")
-            .set("flex-grow", "1");
+            .setDisplay(Style.Display.FLEX)
+            .setAlignItems(Style.AlignItems.CENTER)
+            .setFlexGrow("1");
 
     final var layout = new HorizontalLayout(iconComponent, messageSpan);
     layout.setSpacing(false);

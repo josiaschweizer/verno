@@ -166,7 +166,7 @@ public class CourseDto extends BaseDto {
     if (courseSchedule == null || courseSchedule.isEmpty()) {
       return Publ.EMPTY_STRING;
     }
-    return courseSchedule.getDisplayTitle();
+    return courseSchedule.displayName();
   }
 
   @Nonnull

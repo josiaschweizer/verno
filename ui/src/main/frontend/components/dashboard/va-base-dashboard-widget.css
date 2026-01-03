@@ -41,6 +41,10 @@
     min-width: 0;
 }
 
+.va-dashboard-widget__header-wrapper {
+    align-items: center;
+}
+
 .va-dashboard-widget__title {
     margin: 0;
     font-size: var(--lumo-font-size-l);

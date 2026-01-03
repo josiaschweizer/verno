@@ -21,6 +21,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,7 +47,7 @@ public class AssignToCourseDialog extends Dialog {
   @Nullable
   private VAComboBox<Long> courseComboBox;
   @Nullable
-  private final Button saveButton;
+  private Button saveButton;
   @Nullable
   private String searchTerm;
   @Nonnull
@@ -78,13 +79,17 @@ public class AssignToCourseDialog extends Dialog {
     this.unselectedParticipantIds = new LinkedHashSet<>();
     this.participantItems = new LinkedHashMap<>();
 
+    initUI();
+  }
+
+  private void initUI() {
+    saveButton = createSaveButton();
+    final var cancelButton = createCancelButton();
+
     setHeight("80vh");
     setWidth("min(1500px, 95vw)");
     setMaxWidth("1500px");
     setMinWidth("320px");
-
-    saveButton = createSaveButton();
-    final var cancelButton = createCancelButton();
 
     setHeaderTitle(getTranslation("participant.assign.participants.to.course"));
     add(createContent());
@@ -95,10 +100,10 @@ public class AssignToCourseDialog extends Dialog {
   @Nonnull
   private HorizontalLayout createContent() {
     final var left = createCourseLayout();
-    left.getElement().getStyle().set("min-width", "260px");
+    left.getElement().getStyle().setMinWidth("260px");
     left.getElement().getStyle().set("flex", "1 1 260px");
     final var right = createParticipantLayout();
-    right.getElement().getStyle().set("min-width", "260px");
+    right.getElement().getStyle().setMinWidth("260px");
     right.getElement().getStyle().set("flex", "1 1 260px");
 
     final var layout = new HorizontalLayout(left, right);
@@ -106,7 +111,7 @@ public class AssignToCourseDialog extends Dialog {
     layout.setHeightFull();
     layout.setAlignItems(FlexComponent.Alignment.STRETCH);
     layout.addClassNames(LumoUtility.Gap.XLARGE);
-    layout.getStyle().set("flex-wrap", "wrap");
+    layout.getStyle().setFlexWrap(Style.FlexWrap.WRAP);
 
     right.setHeightFull();
     layout.setFlexGrow(1, left, right);
@@ -210,7 +215,7 @@ public class AssignToCourseDialog extends Dialog {
     }
 
     final var courseOk = courseComboBox.getValue() != null;
-    final var participantsOk = !participantsGroup.getValue().isEmpty();
+    final var participantsOk = !participantsGroup.getValue().isEmpty() || !unselectedParticipantIds.isEmpty();
 
     saveButton.setEnabled(courseOk && participantsOk);
   }

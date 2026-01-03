@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class CourseWidget extends AccordionPanel {
 
   @Nonnull
-  private final CourseDto selectedCourse;
+  private final CourseDto currentCourse;
   @Nonnull
   private final CourseService courseService;
   @Nonnull
@@ -42,9 +42,9 @@ public class CourseWidget extends AccordionPanel {
   @Nullable
   private ParticipantsGrid participantsGrid;
   @Nullable
-  private List<ParticipantDto> selectedParticipants;
+  private List<ParticipantDto> participantsInCurrentCourse;
 
-  public CourseWidget(@Nonnull final Long selectedCourseId,
+  public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final CourseService courseService,
                       @Nonnull final ParticipantService participantService,
                       @Nonnull final CourseLevelService courseLevelService,
@@ -53,7 +53,7 @@ public class CourseWidget extends AccordionPanel {
     this.participantService = participantService;
     this.courseLevelService = courseLevelService;
     this.mandantSettingService = mandantSettingService;
-    this.selectedCourse = courseService.getCourseById(selectedCourseId);
+    this.currentCourse = courseService.getCourseById(currentCourseId);
 
     setWidthFull();
 
@@ -85,9 +85,9 @@ public class CourseWidget extends AccordionPanel {
               courseService,
               participantService,
               mandantSettingService,
-              selectedCourse.getId(),
-              selectedParticipants != null ?
-                      selectedParticipants.stream().map(ParticipantDto::getId).toList() :
+              currentCourse.getId(),
+              participantsInCurrentCourse != null ?
+                      participantsInCurrentCourse.stream().map(ParticipantDto::getId).toList() :
                       List.of());
 
       dialog.addClosedListener(e -> refreshGrid());
@@ -109,12 +109,12 @@ public class CourseWidget extends AccordionPanel {
       @Override
       protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
                                              @Nonnull final ParticipantFilter filter) {
-        if (selectedCourse.getId() != null) {
-          filter.setCourseIds(Set.of(selectedCourse.getId()));
+        if (currentCourse.getId() != null) {
+          filter.setCourseIds(Set.of(currentCourse.getId()));
         }
 
         final var participants = super.fetch(query, filter).toList();
-        CourseWidget.this.selectedParticipants = participants;
+        CourseWidget.this.participantsInCurrentCourse = participants;
         return participants.stream();
       }
     };
@@ -132,10 +132,11 @@ public class CourseWidget extends AccordionPanel {
     participantsGrid.getGrid()
             .getDataProvider()
             .refreshAll();
+    participantsInCurrentCourse = participantsGrid.getGrid().getSelectedItems().stream().toList();
   }
 
   @Nonnull
   public String getTitle() {
-    return selectedCourse.getTitle();
+    return currentCourse.getTitle();
   }
 }
