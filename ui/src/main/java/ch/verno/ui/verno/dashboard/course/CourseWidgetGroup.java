@@ -36,7 +36,7 @@ public class CourseWidgetGroup extends VerticalLayout implements Refreshable {
     setPadding(false);
     setMargin(false);
     setSpacing(false);
-    setSizeFull();
+    setWidthFull();
 
     init();
   }
