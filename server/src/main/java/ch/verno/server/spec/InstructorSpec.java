@@ -4,8 +4,7 @@ import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.util.Publ;
 import ch.verno.db.entity.InstructorEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -18,29 +17,54 @@ public class InstructorSpec {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
+      Join<?, ?> addressJoin;
+      Join<?, ?> genderJoin = null;
+
       final var searchText = normalize(filter.searchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
 
         final var pattern = "%" + searchText + "%";
-        final var firstName = cb.like(cb.lower(root.get("firstname")), pattern);
-        final var lastName = cb.like(cb.lower(root.get("lastname")), pattern);
-        final var email = cb.like(cb.lower(root.get("email")), pattern);
-        final var phone = cb.like(cb.lower(root.get("phone")), pattern);
 
-        final var addressJoin = root.join("address", JoinType.LEFT);
-        final var city = cb.like(cb.lower(addressJoin.get("city")), pattern);
-        final var street = cb.like(cb.lower(addressJoin.get("street")), pattern);
+        addressJoin = root.join("address", JoinType.LEFT);
+        genderJoin = root.join("gender", JoinType.LEFT);
 
-        predicates.add(cb.or(firstName, lastName, email, phone, city, street));
+        predicates.add(
+                cb.or(
+                        likeLower(cb, root.get("firstname"), pattern),
+                        likeLower(cb, root.get("lastname"), pattern),
+                        likeLower(cb, root.get("email"), pattern),
+                        likeLower(cb, root.get("phone"), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("id"))), pattern),
+
+                        likeLower(cb, genderJoin.get("name"), pattern),
+                        likeLower(cb, genderJoin.get("description"), pattern),
+
+                        likeLower(cb, addressJoin.get("street"), pattern),
+                        likeLower(cb, addressJoin.get("houseNumber"), pattern),
+                        likeLower(cb, addressJoin.get("zipCode"), pattern),
+                        likeLower(cb, addressJoin.get("city"), pattern),
+                        likeLower(cb, addressJoin.get("country"), pattern)
+                )
+        );
       }
 
       if (filter.genderId() != null) {
-        predicates.add(cb.equal(root.get("gender").get("id"), filter.genderId()));
+        if (genderJoin == null) {
+          genderJoin = root.join("gender", JoinType.LEFT);
+        }
+        predicates.add(cb.equal(genderJoin.get("id"), filter.genderId()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
+  }
+
+  @Nonnull
+  private static Predicate likeLower(final CriteriaBuilder cb,
+                                     final Expression<?> path,
+                                     final String pattern) {
+    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
   }
 
   @Nonnull

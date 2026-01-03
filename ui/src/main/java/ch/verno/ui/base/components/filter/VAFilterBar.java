@@ -3,6 +3,7 @@ package ch.verno.ui.base.components.filter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -13,6 +14,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+@CssImport("./components/filter/va-filter-bar.css")
 public class VAFilterBar extends VerticalLayout {
 
   @Nonnull
@@ -35,13 +37,14 @@ public class VAFilterBar extends VerticalLayout {
   public VAFilterBar() {
     setPadding(false);
     setSpacing(false);
+    getStyle().setGap("0");
     setWidthFull();
 
     searchFilter = new VASearchFilter(null, getTranslation("base.search"));
     searchFilter.setWidthFull();
 
     toggleFiltersButton = new Button(getTranslation("base.filter"), VaadinIcon.FILTER.create());
-    toggleFiltersButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+    toggleFiltersButton.addClassName("va-toggle-filters");
     toggleFiltersButton.addClickListener(e -> setFiltersVisible(!filtersVisible));
     toggleFiltersButton.setVisible(false);
 

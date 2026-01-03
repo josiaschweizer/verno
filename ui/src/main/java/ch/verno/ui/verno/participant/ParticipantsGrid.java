@@ -140,7 +140,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     final var columnsMap = new LinkedHashMap<ValueProvider<ParticipantDto, Object>, String>();
     columnsMap.put(ParticipantDto::getFirstName, getTranslation("shared.first.name"));
     columnsMap.put(ParticipantDto::getLastName, getTranslation("shared.last.name"));
-    columnsMap.put(ParticipantDto::getBirthdate, getTranslation("shared.age"));
+    columnsMap.put(ParticipantDto::getAgeFromBirthday, getTranslation("shared.age"));
     columnsMap.put(ParticipantDto::getEmail, getTranslation("shared.e.mail"));
     columnsMap.put(ParticipantDto::getPhoneString, getTranslation("shared.phone"));
     columnsMap.put(ParticipantDto::getNote, getTranslation("participant.note"));

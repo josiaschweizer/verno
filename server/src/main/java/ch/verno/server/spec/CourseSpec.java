@@ -4,57 +4,88 @@ import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.util.Publ;
 import ch.verno.db.entity.CourseEntity;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class CourseSpec {
-
-  //TODO noch mit allen möglichen filter optionen erweitern
 
   @Nonnull
   public Specification<CourseEntity> courseSpec(@Nonnull final CourseFilter filter) {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
+      Join<?, ?> scheduleJoin = null;
+      Join<?, ?> instructorJoin = null;
+      Join<?, ?> levelJoin = null;
+      Join<CourseEntity, DayOfWeek> weekdayJoin = null;
+
       final var searchText = normalize(filter.searchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
-
         final var pattern = "%" + searchText + "%";
 
-        final var title = cb.like(cb.lower(root.get("title")), pattern);
-        final var location = cb.like(cb.lower(root.get("location")), pattern);
+        scheduleJoin = root.join("schedule", JoinType.LEFT);
+        instructorJoin = root.join("instructor", JoinType.LEFT);
+        levelJoin = root.join("courseLevels", JoinType.LEFT);
+        weekdayJoin = root.join("weekdays", JoinType.LEFT);
 
-        final var scheduleJoin = root.join("schedule", JoinType.LEFT);
-        final var scheduleName = cb.like(cb.lower(scheduleJoin.get("title")), pattern);
+        predicates.add(
+                cb.or(
+                        likeLower(cb, root.get("title"), pattern),
+                        likeLower(cb, root.get("location"), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("id"))), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("capacity"))), pattern),
 
-        final var instructorJoin = root.join("instructor", JoinType.LEFT);
-        final var instrFirst = cb.like(cb.lower(instructorJoin.get("firstname")), pattern);
-        final var instrLast = cb.like(cb.lower(instructorJoin.get("lastname")), pattern);
+                        cb.like(cb.lower(cb.toString(root.get("startTime"))), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("endTime"))), pattern),
 
-        final var levelJoin = root.join("courseLevels", JoinType.LEFT);
-        final var levelName = cb.like(cb.lower(levelJoin.get("setting.name")), pattern);
-        final var levelCode = cb.like(cb.lower(levelJoin.get("setting.code")), pattern);
+                        likeLower(cb, scheduleJoin.get("title"), pattern),
+                        cb.like(cb.lower(cb.toString(scheduleJoin.get("status"))), pattern),
 
-        predicates.add(cb.or(title, location, scheduleName, instrFirst, instrLast, levelName, levelCode));
+                        likeLower(cb, instructorJoin.get("firstname"), pattern),
+                        likeLower(cb, instructorJoin.get("lastname"), pattern),
+                        likeLower(cb, instructorJoin.get("email"), pattern),
+                        likeLower(cb, instructorJoin.get("phone"), pattern),
+
+                        likeLower(cb, levelJoin.get("code"), pattern),
+                        likeLower(cb, levelJoin.get("name"), pattern),
+                        likeLower(cb, levelJoin.get("description"), pattern),
+                        cb.like(cb.lower(cb.toString(levelJoin.get("sortingOrder"))), pattern),
+
+                        cb.like(cb.lower(weekdayJoin.as(String.class)), pattern)
+                )
+        );
       }
 
       if (filter.instructorId() != null) {
-        predicates.add(cb.equal(root.get("instructor").get("id"), filter.instructorId()));
+        if (instructorJoin == null) {
+          instructorJoin = root.join("instructor", JoinType.LEFT);
+        }
+        predicates.add(cb.equal(instructorJoin.get("id"), filter.instructorId()));
       }
 
       if (filter.courseScheduleId() != null) {
-        predicates.add(cb.equal(root.get("schedule").get("id"), filter.courseScheduleId()));
+        if (scheduleJoin == null) {
+          scheduleJoin = root.join("schedule", JoinType.LEFT);
+        }
+        predicates.add(cb.equal(scheduleJoin.get("id"), filter.courseScheduleId()));
       }
 
       if (filter.courseLevelId() != null) {
-        final var levelJoin = root.join("courseLevels", JoinType.INNER);
-        predicates.add(cb.equal(levelJoin.get("id"), filter.courseLevelId()));
         query.distinct(true);
+        if (levelJoin == null) {
+          levelJoin = root.join("courseLevels", JoinType.LEFT);
+        }
+        predicates.add(cb.equal(levelJoin.get("id"), filter.courseLevelId()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
@@ -62,7 +93,14 @@ public class CourseSpec {
   }
 
   @Nonnull
-  private static String normalize(final String s) {
+  private static Predicate likeLower(@Nonnull final CriteriaBuilder cb,
+                                     @Nonnull final Expression<?> path,
+                                     @Nonnull final String pattern) {
+    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
+  }
+
+  @Nonnull
+  private static String normalize(@Nullable final String s) {
     if (s == null) {
       return Publ.EMPTY_STRING;
     }

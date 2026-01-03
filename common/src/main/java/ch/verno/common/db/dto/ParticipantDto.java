@@ -8,6 +8,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -142,6 +143,14 @@ public class ParticipantDto extends BaseDto {
   @Nullable
   public LocalDate getBirthdate() {
     return birthdate;
+  }
+
+  @Nullable
+  public Integer getAgeFromBirthday() {
+    if (birthdate == null || birthdate.equals(LocalDate.now())) {
+      return null;
+    }
+    return Period.between(birthdate, LocalDate.now()).getYears();
   }
 
   public void setBirthdate(@Nullable final LocalDate birthdate) {
