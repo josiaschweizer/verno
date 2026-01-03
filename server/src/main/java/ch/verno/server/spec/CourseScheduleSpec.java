@@ -4,8 +4,8 @@ import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.util.Publ;
 import ch.verno.db.entity.CourseScheduleEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -18,28 +18,33 @@ public class CourseScheduleSpec {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
+      Join<CourseScheduleEntity, String> weeksJoin = null;
+
       final var searchText = normalize(filter.searchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
         final var pattern = "%" + searchText + "%";
 
-        final var name = cb.like(cb.lower(root.get("title")), pattern);
+        weeksJoin = root.join("weeks", JoinType.LEFT);
 
-        var weeksPredicate = cb.conjunction();
-        try {
-          final var weekJoin = root.join("weeks", JoinType.LEFT);
-          weeksPredicate = cb.like(cb.lower(weekJoin.as(String.class)), pattern);
-        } catch (IllegalArgumentException ignored) {
-          // illegal argument exception gets ignored rn
-        }
-
-        predicates.add(cb.or(name, weeksPredicate));
+        predicates.add(
+                cb.or(
+                        likeLower(cb, root.get("title"), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("id"))), pattern),
+                        cb.like(cb.lower(cb.toString(root.get("status"))), pattern),
+                        likeLower(cb, weeksJoin, pattern)
+                )
+        );
       }
 
       if (filter.week() != null) {
-        final var weekJoin = root.join("weeks", JoinType.INNER);
-        predicates.add(cb.equal(weekJoin, filter.week()));
         query.distinct(true);
+        if (weeksJoin == null) {
+          weeksJoin = root.join("weeks", JoinType.INNER);
+        }
+
+        final var weekAsString = String.valueOf(filter.week());
+        predicates.add(cb.equal(weeksJoin, weekAsString));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
@@ -47,7 +52,14 @@ public class CourseScheduleSpec {
   }
 
   @Nonnull
-  private static String normalize(final String s) {
+  private static Predicate likeLower(@Nonnull final CriteriaBuilder cb,
+                                     @Nonnull final Expression<?> path,
+                                     @Nonnull final String pattern) {
+    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
+  }
+
+  @Nonnull
+  private static String normalize(@Nullable final String s) {
     if (s == null) {
       return Publ.EMPTY_STRING;
     }
