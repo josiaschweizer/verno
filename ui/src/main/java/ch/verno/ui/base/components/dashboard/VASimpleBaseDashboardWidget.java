@@ -8,14 +8,20 @@ import jakarta.annotation.Nonnull;
 
 public class VASimpleBaseDashboardWidget extends VABaseDashboardWidget {
 
+  private final Button actionButton;
+
   public VASimpleBaseDashboardWidget(@Nonnull final String title,
                                      @Nonnull final String content,
-                                     @Nonnull final String buttonCaption,
-                                     @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
+                                     @Nonnull final String buttonCaption) {
     super();
-    setHeader(title);
-    setContent(new Span(content));
-    setActions(new Button(buttonCaption, listener));
+    setHeader(getTranslation(title));
+    setContent(new Span(getTranslation(content)));
+    actionButton = new Button(getTranslation(buttonCaption));
+    setActions(actionButton);
+  }
+
+  public void addActionButtonClickListener(@Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
+    actionButton.addClickListener(listener);
   }
 
 }

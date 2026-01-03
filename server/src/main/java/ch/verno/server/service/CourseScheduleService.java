@@ -1,6 +1,7 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.exceptions.NotFoundException;
@@ -90,6 +91,16 @@ public class CourseScheduleService implements ICourseScheduleService {
   public List<CourseScheduleDto> getCourseScheduleByWeek(@Nonnull final LocalDate weekDate){
     final var week = WeekKey.from(weekDate);
     return courseScheduleRepository.findByWeek(week)
+            .stream()
+            .map(CourseScheduleMapper::toDto)
+            .toList();
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public List<CourseScheduleDto> getCourseSchedulesByStatus(@Nonnull final CourseScheduleStatus status) {
+    return courseScheduleRepository.findByStatus(status)
             .stream()
             .map(CourseScheduleMapper::toDto)
             .toList();

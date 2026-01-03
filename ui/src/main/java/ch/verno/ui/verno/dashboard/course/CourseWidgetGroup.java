@@ -5,10 +5,11 @@ import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.MandantSettingService;
 import ch.verno.server.service.ParticipantService;
+import ch.verno.ui.base.Refreshable;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
-public class CourseWidgetGroup extends VerticalLayout {
+public class CourseWidgetGroup extends VerticalLayout implements Refreshable {
 
   @Nonnull
   private final CourseScheduleStatus status;
@@ -48,5 +49,11 @@ public class CourseWidgetGroup extends VerticalLayout {
         add(new CourseWidget(course.getId(), courseService, participantService, courseLevelService, mandantSettingService));
       }
     }
+  }
+
+  @Override
+  public void refresh() {
+    removeAll();
+    init();
   }
 }
