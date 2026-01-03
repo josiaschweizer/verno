@@ -1,0 +1,11 @@
+button.va-toggle-filters::part(base):hover {
+    background-color: var(--lumo-contrast-5pct);
+}
+
+button.va-toggle-filters::part(base):active {
+    background-color: var(--lumo-contrast-10pct);
+}
+
+button.va-toggle-filters::part(base) {
+    transition: background-color 120ms;
+}
