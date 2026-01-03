@@ -5,6 +5,7 @@ import ch.verno.server.service.*;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
+import ch.verno.ui.verno.dashboard.report.ParticipantReport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
 import jakarta.annotation.Nonnull;
@@ -34,21 +35,25 @@ public class Dashboard extends VerticalLayout {
     this.mandantSettingService = mandantSettingService;
 
     setSizeFull();
+    setPadding(false);
+    setSpacing(false);
     add(createCourseTabView());
   }
 
   @Nonnull
   private TabSheet createCourseTabView() {
     final var tabSheet = new TabSheet();
-    tabSheet.setSizeFull();
+    tabSheet.setWidthFull();
 
     final var plannedTab = new CourseWidgetGroup(CourseScheduleStatus.PLANNED, courseService, participantService, courseLevelService, mandantSettingService);
     final var activeTab = new CourseWidgetGroup(CourseScheduleStatus.ACTIVE, courseService, participantService, courseLevelService, mandantSettingService);
     final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(courseScheduleService);
+    final var reportTab = new ParticipantReport(participantService);
 
     tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), plannedTab);
     tabSheet.add(getTranslation(CourseScheduleStatus.ACTIVE.getDisplayNameKey()), activeTab);
     tabSheet.add(getTranslation("courseSchedule.course.schedules.lifecycle"), lifecycleTab);
+    tabSheet.add("Reports", reportTab);
 
     tabSheet.addSelectedChangeListener(event -> {
       final var selectedTab = event.getSelectedTab();
