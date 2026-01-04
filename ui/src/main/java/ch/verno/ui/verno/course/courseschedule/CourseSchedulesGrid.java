@@ -47,7 +47,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Override
   protected int count(@Nonnull final Query<CourseScheduleDto, CourseScheduleFilter> query,
                       @Nonnull final CourseScheduleFilter filter) {
-    return courseScheduleService.countCourses(filter);
+    return courseScheduleService.countCourseSchedules(filter);
   }
 
   @Nonnull

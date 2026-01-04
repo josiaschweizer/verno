@@ -15,7 +15,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +70,17 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     columns.add(new ObjectGridColumn<>("weekdays", CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), false));
     columns.add(new ObjectGridColumn<>("instructor", CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
     columns.add(new ObjectGridColumn<>("courseSchedule", CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
-    columns.add(new ObjectGridColumn<>("courseLevels", CourseDto::getCourseLevelAsString, getTranslation("course.level"), false));
+    columns.add(new ObjectGridColumn<>("courseLevels", CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
     columns.add(new ObjectGridColumn<>("startTime", CourseDto::getStartTime, getTranslation("course.start.time"), true));
     columns.add(new ObjectGridColumn<>("endTime", CourseDto::getEndTime, getTranslation("course.end.time"), true));
     return columns;
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected List<ComponentGridColumn<CourseDto>> getComponentColumns() {
     final var componentColumns = new ArrayList<ComponentGridColumn<CourseDto>>();
-    componentColumns.add(new ComponentGridColumn<>("course-schedule-status", this::getStatusBadge, getTranslation("shared.status"), false));
+    componentColumns.add(new ComponentGridColumn<>("courseSchedule.status", this::getStatusBadge, getTranslation("shared.status"), true));
     return componentColumns;
   }
 

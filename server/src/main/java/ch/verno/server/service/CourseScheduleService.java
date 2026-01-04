@@ -131,7 +131,7 @@ public class CourseScheduleService implements ICourseScheduleService {
   }
 
   @Transactional(readOnly = true)
-  public int countCourses(@Nonnull final CourseScheduleFilter filter) {
+  public int countCourseSchedules(@Nonnull final CourseScheduleFilter filter) {
     return Math.toIntExact(courseScheduleRepository.count(courseScheduleSpec.courseScheduleSpec( filter)));
   }
 }

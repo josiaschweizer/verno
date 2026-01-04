@@ -144,11 +144,11 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     columns.add(new ObjectGridColumn<>("phone", ParticipantDto::getPhoneString, getTranslation("shared.phone"), true));
     columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote, getTranslation("participant.note"), true));
     columns.add(new ObjectGridColumn<>("courseLevels", dto -> joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
-            getTranslation("courseLevel.course_level"), false));
+            getTranslation("courseLevel.course_level"), true));
     columns.add(new ObjectGridColumn<>("courses", dto -> joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
-            getTranslation("course.course"), false));
-    columns.add(new ObjectGridColumn<>("parent one", dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"), false));
-    columns.add(new ObjectGridColumn<>("parent two", dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), false));
+            getTranslation("course.course"), true));
+    columns.add(new ObjectGridColumn<>("parentOne", dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"), true));
+    columns.add(new ObjectGridColumn<>("parentTwo", dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), true));
     columns.add(new ObjectGridColumn<>("address", dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
     return columns;
   }
@@ -157,7 +157,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ComponentGridColumn<ParticipantDto>> getComponentColumns() {
     final var components = new ArrayList<ComponentGridColumn<ParticipantDto>>();
-    components.add(new ComponentGridColumn<>("status", this::getStatusBadge, getTranslation("shared.status"), false));
+    components.add(new ComponentGridColumn<>("active", this::getStatusBadge, getTranslation("shared.status"), true));
     return components;
   }
 
