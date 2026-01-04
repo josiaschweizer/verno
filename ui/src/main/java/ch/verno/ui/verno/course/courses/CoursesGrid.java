@@ -71,7 +71,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     columns.add(new ObjectGridColumn<>("weekdays", CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), false));
     columns.add(new ObjectGridColumn<>("instructor", CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
     columns.add(new ObjectGridColumn<>("courseSchedule", CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
-    columns.add(new ObjectGridColumn<>("courseLevels", CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
+    columns.add(new ObjectGridColumn<>("courseLevels", CourseDto::getCourseLevelAsString, getTranslation("course.level"), false));
     columns.add(new ObjectGridColumn<>("startTime", CourseDto::getStartTime, getTranslation("course.start.time"), true));
     columns.add(new ObjectGridColumn<>("endTime", CourseDto::getEndTime, getTranslation("course.end.time"), true));
     return columns;
