@@ -111,7 +111,7 @@ public class CourseService implements ICourseService {
     }
 
     existing.setCourseLevels(levels);
-    existing.setSchedule(schedule);
+    existing.setCourseSchedule(schedule);
     existing.setWeekdays(courseDto.getWeekdays());
     existing.setInstructor(serviceHelper.resolveInstructor(instructorRepository, courseDto.getInstructor()));
 

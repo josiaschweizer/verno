@@ -120,11 +120,14 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   protected void initGrid() {
     final var columns = getColumns();
-    columns.forEach((valueProvider, header) -> addColumn(header, valueProvider));
+    columns.forEach(this::addColumn);
     final var componentColumns = getComponentColumns();
-    componentColumns.forEach((valueProvider, header) -> addComponentColumn(header, valueProvider));
+    componentColumns.forEach(this::addComponentColumn);
 
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+    grid.addSortListener(sort -> {
+      System.out.println("Sort event: " + sort.getSortOrder());
+    });
     setDefaultSorting();
     dataProvider.setFilter(filter);
   }
@@ -164,28 +167,26 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     UI.getCurrent().navigate(redirectURL);
   }
 
-  private void addColumn(@Nonnull final String header,
-                         @Nonnull final ValueProvider<T, Object> valueProvider) {
-    final var col = grid.addColumn(valueProvider)
-            .setHeader(header)
-            .setKey(header)
-            .setSortable(true)
+  private void addColumn(@Nonnull final ObjectGridColumn<T> gridColumn) {
+    final var col = grid.addColumn(gridColumn.valueProvider())
+            .setHeader(gridColumn.header())
+            .setKey(gridColumn.key())
+            .setSortable(gridColumn.sortable())
             .setResizable(true)
             .setAutoWidth(true);
 
-    this.columnsByKey.put(header, col);
+    this.columnsByKey.put(gridColumn.key(), col);
   }
 
-  private void addComponentColumn(@Nonnull final String header,
-                                  @Nonnull final ValueProvider<T, Component> valueProvider) {
-    final var col = grid.addComponentColumn(valueProvider)
-            .setHeader(header)
-            .setKey(header)
-            .setSortable(false)
+  private void addComponentColumn(@Nonnull final ComponentGridColumn<T> gridColumn) {
+    final var col = grid.addComponentColumn(gridColumn.component())
+            .setHeader(gridColumn.header())
+            .setKey(gridColumn.key())
+            .setSortable(gridColumn.sortable())
             .setResizable(true)
             .setAutoWidth(true);
 
-    this.columnsByKey.put(header, col);
+    this.columnsByKey.put(gridColumn.key(), col);
   }
 
   protected void setDefaultSorting() {
@@ -218,11 +219,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected abstract String getDetailPageRoute();
 
   @Nonnull
-  protected abstract Map<ValueProvider<T, Object>, String> getColumns();
+  protected abstract List<ObjectGridColumn<T>> getColumns();
 
   @Nonnull
-  protected Map<ValueProvider<T, Component>, String> getComponentColumns() {
+  protected List<ComponentGridColumn<T>> getComponentColumns() {
     // Default implementation returns no component columns -> to be implemented by subclasses if needed
-    return Map.of();
+    return new ArrayList<>();
   }
 }

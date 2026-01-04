@@ -2,21 +2,19 @@ package ch.verno.ui.verno.instructor;
 
 import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
-import ch.verno.common.util.VernoConstants;
 import ch.verno.server.service.InstructorService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
+import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @PermitAll
@@ -62,15 +60,15 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
 
   @Nonnull
   @Override
-  protected Map<ValueProvider<InstructorDto, Object>, String> getColumns() {
-    final var columnsMap = new LinkedHashMap<ValueProvider<InstructorDto, Object>, String>();
-    columnsMap.put(InstructorDto::getFirstName, getTranslation("shared.first.name"));
-    columnsMap.put(InstructorDto::getLastName, getTranslation("shared.last.name"));
-    columnsMap.put(InstructorDto::genderAsString, getTranslation("shared.gender"));
-    columnsMap.put(InstructorDto::getEmail, getTranslation("shared.e.mail"));
-    columnsMap.put(InstructorDto::phoneAsString, getTranslation("shared.phone"));
-    columnsMap.put((dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
-    return columnsMap;
+  protected List<ObjectGridColumn<InstructorDto>> getColumns() {
+    final var columns = new ArrayList<ObjectGridColumn<InstructorDto>>();
+    columns.add(new ObjectGridColumn<>("firstname", InstructorDto::getFirstName, getTranslation("shared.first.name"), true));
+    columns.add(new ObjectGridColumn<>("lastname", InstructorDto::getLastName, getTranslation("shared.last.name"), true));
+    columns.add(new ObjectGridColumn<>("gender", InstructorDto::genderAsString, getTranslation("shared.gender"), true));
+    columns.add(new ObjectGridColumn<>("email", InstructorDto::getEmail, getTranslation("shared.e.mail"), true));
+    columns.add(new ObjectGridColumn<>("phone", InstructorDto::phoneAsString, getTranslation("shared.phone"), true));
+    columns.add(new ObjectGridColumn<>("address", (dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
+    return columns;
   }
 
   @Nonnull

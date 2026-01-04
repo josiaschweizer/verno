@@ -37,7 +37,7 @@ public final class CourseMapper {
             entity.getCapacity(),
             entity.getLocation(),
             courseLevels,
-            CourseScheduleMapper.toDto(entity.getSchedule()),
+            CourseScheduleMapper.toDto(entity.getCourseSchedule()),
             weekdays,
             entity.getStartTime(),
             entity.getEndTime(),

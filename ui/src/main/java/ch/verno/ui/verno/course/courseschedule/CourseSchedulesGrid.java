@@ -4,17 +4,19 @@ import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.server.service.CourseScheduleService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
+import ch.verno.ui.base.grid.ComponentGridColumn;
+import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @PermitAll
@@ -62,15 +64,31 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
 
   @Nonnull
   @Override
-  protected Map<ValueProvider<CourseScheduleDto, Object>, String> getColumns() {
-    final var columnsMap = new LinkedHashMap<ValueProvider<CourseScheduleDto, Object>, String>();
-    columnsMap.put(CourseScheduleDto::getTitle, getTranslation("shared.title"));
-    columnsMap.put(dto -> dto.getWeeks().getFirst(), getTranslation("courseSchedule.first.week"));
-    columnsMap.put(dto -> dto.getWeeks().getLast(), getTranslation("courseSchedule.last.week"));
-    columnsMap.put(CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"));
-    columnsMap.put(dto -> getTranslation(dto.getStatus().getDisplayNameKey()), getTranslation("shared.status"));
-    return columnsMap;
+  protected List<ObjectGridColumn<CourseScheduleDto>> getColumns() {
+    final var columns = new ArrayList<ObjectGridColumn<CourseScheduleDto>>();
+    columns.add(new ObjectGridColumn<>("title", CourseScheduleDto::getTitle, getTranslation("shared.title"), true));
+    columns.add(new ObjectGridColumn<>("first-week", dto -> dto.getWeeks().getFirst(), getTranslation("courseSchedule.first.week"), false));
+    columns.add(new ObjectGridColumn<>("last-week", dto -> dto.getWeeks().getLast(), getTranslation("courseSchedule.last.week"), false));
+    columns.add(new ObjectGridColumn<>("weeks", CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"), false));
+    return columns;
   }
+
+  @Nonnull
+  @Override
+  protected List<ComponentGridColumn<CourseScheduleDto>> getComponentColumns() {
+    final var componentColumns = new ArrayList<ComponentGridColumn<CourseScheduleDto>>();
+    componentColumns.add(new ComponentGridColumn<>("status", this::getStatusBadge, getTranslation("shared.status"), true));
+    return componentColumns;
+  }
+
+  @Nonnull
+  private Span getStatusBadge(@Nonnull final CourseScheduleDto dto) {
+    final var status = dto.getStatus();
+    final var statusSpan = new Span(getTranslation(status.getDisplayNameKey()));
+    statusSpan.getElement().getThemeList().add(status.getBadgeLabelClassName());
+    return statusSpan;
+  }
+
 
   @Nonnull
   @Override

@@ -47,7 +47,7 @@ public class CourseEntity {
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_schedule_id", nullable = false)
-  private CourseScheduleEntity schedule;
+  private CourseScheduleEntity courseSchedule;
 
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(
@@ -79,7 +79,7 @@ public class CourseEntity {
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
-                      @Nullable final CourseScheduleEntity schedule,
+                      @Nullable final CourseScheduleEntity courseSchedule,
                       @Nonnull final List<DayOfWeek> weekdays,
                       @Nullable final LocalTime startTime,
                       @Nullable final LocalTime endTime,
@@ -89,7 +89,7 @@ public class CourseEntity {
     this.location = location;
 
     this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
-    this.schedule = schedule;
+    this.courseSchedule = courseSchedule;
 
     this.weekdays = weekdays;
     this.startTime = startTime;
@@ -155,12 +155,12 @@ public class CourseEntity {
   }
 
   @Nullable
-  public CourseScheduleEntity getSchedule() {
-    return schedule;
+  public CourseScheduleEntity getCourseSchedule() {
+    return courseSchedule;
   }
 
-  public void setSchedule(@Nullable final CourseScheduleEntity schedule) {
-    this.schedule = schedule;
+  public void setCourseSchedule(@Nullable final CourseScheduleEntity schedule) {
+    this.courseSchedule = schedule;
   }
 
   @Nonnull

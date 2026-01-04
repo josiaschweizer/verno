@@ -10,12 +10,12 @@ import ch.verno.server.service.CourseLevelService;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
+import ch.verno.ui.base.grid.ComponentGridColumn;
+import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -23,9 +23,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -136,30 +135,30 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Nonnull
   @Override
-  protected Map<ValueProvider<ParticipantDto, Object>, String> getColumns() {
-    final var columnsMap = new LinkedHashMap<ValueProvider<ParticipantDto, Object>, String>();
-    columnsMap.put(ParticipantDto::getFirstName, getTranslation("shared.first.name"));
-    columnsMap.put(ParticipantDto::getLastName, getTranslation("shared.last.name"));
-    columnsMap.put(ParticipantDto::getAgeFromBirthday, getTranslation("shared.age"));
-    columnsMap.put(ParticipantDto::getEmail, getTranslation("shared.e.mail"));
-    columnsMap.put(ParticipantDto::getPhoneString, getTranslation("shared.phone"));
-    columnsMap.put(ParticipantDto::getNote, getTranslation("participant.note"));
-    columnsMap.put(dto -> joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
-            getTranslation("courseLevel.course_level"));
-    columnsMap.put(dto -> joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
-            getTranslation("course.course"));
-    columnsMap.put(dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"));
-    columnsMap.put(dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"));
-    columnsMap.put(dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"));
-    return columnsMap;
+  protected List<ObjectGridColumn<ParticipantDto>> getColumns() {
+    final var columns = new ArrayList<ObjectGridColumn<ParticipantDto>>();
+    columns.add(new ObjectGridColumn<>("firstname", ParticipantDto::getFirstName, getTranslation("shared.first.name"), true));
+    columns.add(new ObjectGridColumn<>("lastname", ParticipantDto::getLastName, getTranslation("shared.last.name"), true));
+    columns.add(new ObjectGridColumn<>("birthdate", ParticipantDto::getAgeFromBirthday, getTranslation("shared.age"), true));
+    columns.add(new ObjectGridColumn<>("email", ParticipantDto::getEmail, getTranslation("shared.e.mail"), true));
+    columns.add(new ObjectGridColumn<>("phone", ParticipantDto::getPhoneString, getTranslation("shared.phone"), true));
+    columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote, getTranslation("participant.note"), true));
+    columns.add(new ObjectGridColumn<>("courseLevels", dto -> joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
+            getTranslation("courseLevel.course_level"), true));
+    columns.add(new ObjectGridColumn<>("courses", dto -> joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
+            getTranslation("course.course"), true));
+    columns.add(new ObjectGridColumn<>("parent one", dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"), false));
+    columns.add(new ObjectGridColumn<>("parent two", dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), false));
+    columns.add(new ObjectGridColumn<>("address", dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
+    return columns;
   }
 
   @Nonnull
   @Override
-  protected Map<ValueProvider<ParticipantDto, Component>, String> getComponentColumns() {
-    final var componentsMap = new LinkedHashMap<ValueProvider<ParticipantDto, Component>, String>();
-    componentsMap.put(this::getStatusBadge, getTranslation("shared.status"));
-    return componentsMap;
+  protected List<ComponentGridColumn<ParticipantDto>> getComponentColumns() {
+    final var components = new ArrayList<ComponentGridColumn<ParticipantDto>>();
+    components.add(new ComponentGridColumn<>("status", this::getStatusBadge, getTranslation("shared.status"), false));
+    return components;
   }
 
   @Nonnull

@@ -4,17 +4,21 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.server.service.CourseService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
+import ch.verno.ui.base.grid.ComponentGridColumn;
+import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
+import org.jspecify.annotations.NonNull;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @PermitAll
@@ -60,18 +64,37 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
 
   @Nonnull
   @Override
-  protected Map<ValueProvider<CourseDto, Object>, String> getColumns() {
-    final var columnsMap = new LinkedHashMap<ValueProvider<CourseDto, Object>, String>();
-    columnsMap.put(CourseDto::getTitle, getTranslation("shared.title"));
-    columnsMap.put(CourseDto::getCapacity, getTranslation("course.max.capacity"));
-    columnsMap.put(CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"));
-    columnsMap.put(CourseDto::getInstructorAsString, getTranslation("shared.instructor"));
-    columnsMap.put(CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"));
-    columnsMap.put(CourseDto::getCourseLevelAsString, getTranslation("course.level"));
-    columnsMap.put(CourseDto::getStartTime, getTranslation("course.start.time"));
-    columnsMap.put(CourseDto::getEndTime, getTranslation("course.end.time"));
-    columnsMap.put(dto -> getTranslation(dto.getCourseScheduleStatusKey()), getTranslation("shared.status"));
-    return columnsMap;
+  protected List<ObjectGridColumn<CourseDto>> getColumns() {
+    final var columns = new ArrayList<ObjectGridColumn<CourseDto>>();
+    columns.add(new ObjectGridColumn<>("title", CourseDto::getTitle, getTranslation("shared.title"), true));
+    columns.add(new ObjectGridColumn<>("capacity", CourseDto::getCapacity, getTranslation("course.max.capacity"), true));
+    columns.add(new ObjectGridColumn<>("weekdays", CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), false));
+    columns.add(new ObjectGridColumn<>("instructor", CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
+    columns.add(new ObjectGridColumn<>("courseSchedule", CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
+    columns.add(new ObjectGridColumn<>("courseLevels", CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
+    columns.add(new ObjectGridColumn<>("startTime", CourseDto::getStartTime, getTranslation("course.start.time"), true));
+    columns.add(new ObjectGridColumn<>("endTime", CourseDto::getEndTime, getTranslation("course.end.time"), true));
+    return columns;
+  }
+
+  @NonNull
+  @Override
+  protected List<ComponentGridColumn<CourseDto>> getComponentColumns() {
+    final var componentColumns = new ArrayList<ComponentGridColumn<CourseDto>>();
+    componentColumns.add(new ComponentGridColumn<>("course-schedule-status", this::getStatusBadge, getTranslation("shared.status"), false));
+    return componentColumns;
+  }
+
+  @Nullable
+  private Span getStatusBadge(@Nonnull final CourseDto dto) {
+    if (dto.getCourseSchedule() == null) {
+      return null;
+    }
+
+    final var status = dto.getCourseSchedule().getStatus();
+    final var statusSpan = new Span(getTranslation(status.getDisplayNameKey()));
+    statusSpan.getElement().getThemeList().add(status.getBadgeLabelClassName());
+    return statusSpan;
   }
 
   @Nonnull
