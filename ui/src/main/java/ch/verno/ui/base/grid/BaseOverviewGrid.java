@@ -17,13 +17,9 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
@@ -44,6 +40,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected boolean showGridToolbar = true;
   protected boolean showFilterToolbar = true;
 
+  private List<T> cachedData = new ArrayList<>();
+  private F cachedFilter = null;
+  private List<?> cachedSortOrders = null;
+  private final Object cacheLock = new Object();
+
   protected BaseOverviewGrid(@Nonnull final F initialFilter,
                              final boolean showGridToolbar,
                              final boolean showFilterToolbar) {
@@ -59,8 +60,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     this.filterEntryFactory = new FilterEntryFactory<>();
     this.filterBinder = new Binder<>();
 
-    final var callbackProvider = DataProvider.fromFilteringCallbacks(this::fetchFromBackend, this::countFromBackend);
-    this.dataProvider = callbackProvider.withConfigurableFilter();
+    final var backendProvider = DataProvider.fromFilteringCallbacks(
+            this::fetchFromBackend,
+            this::countFromBackend
+    );
+    this.dataProvider = backendProvider.withConfigurableFilter();
 
     setSizeFull();
     setPadding(false);
@@ -105,6 +109,10 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
       } catch (ValidationException e) {
         // Ignore validation errors for filters
       }
+      synchronized (cacheLock) {
+        cachedFilter = null;
+        cachedData = new ArrayList<>();
+      }
       dataProvider.setFilter(filter);
       dataProvider.refreshAll();
     });
@@ -134,7 +142,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   public void setFilter(@Nonnull final F newFilter) {
     this.filter = newFilter;
-    // Update binder with new filter values
+    // Invalidate cache when filter changes
+    synchronized (cacheLock) {
+      cachedFilter = null;
+      cachedData = new ArrayList<>();
+    }
     filterBinder.readBean(this.filter);
     dataProvider.setFilter(this.filter);
     dataProvider.refreshAll();
@@ -152,13 +164,43 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   @Nonnull
   private Stream<T> fetchFromBackend(@Nonnull final Query<T, F> query) {
-    final var effectiveFilter = query.getFilter().orElse(filter);
-    return fetch(query, effectiveFilter);
+    synchronized (cacheLock) {
+      final var effectiveFilter = query.getFilter().orElse(filter);
+      final var sortOrders = query.getSortOrders();
+      final int offset = query.getOffset();
+      final int limit = query.getLimit();
+
+      if (!Objects.equals(cachedFilter, effectiveFilter) || !Objects.equals(cachedSortOrders, sortOrders)) {
+        refreshCache(query, effectiveFilter);
+      }
+
+      if (offset >= cachedData.size()) {
+        return Stream.empty();
+      }
+
+      final int endIndex = Math.min(offset + limit, cachedData.size());
+      return cachedData.subList(offset, endIndex).stream();
+    }
   }
 
   private int countFromBackend(@Nonnull final Query<T, F> query) {
-    final var effectiveFilter = query.getFilter().orElse(filter);
-    return count(query, effectiveFilter);
+    synchronized (cacheLock) {
+      final var effectiveFilter = query.getFilter().orElse(filter);
+      final var sortOrders = query.getSortOrders();
+
+      if (!Objects.equals(cachedFilter, effectiveFilter) || !Objects.equals(cachedSortOrders, sortOrders)) {
+        refreshCache(query, effectiveFilter);
+      }
+
+      return cachedData.size();
+    }
+  }
+
+  private void refreshCache(@Nonnull final Query<T, F> query, @Nonnull final F effectiveFilter) {
+    final var allDataQuery = new Query<T, F>(0, Integer.MAX_VALUE, query.getSortOrders(), null, effectiveFilter);
+    cachedData = fetch(allDataQuery, effectiveFilter).toList();
+    cachedFilter = effectiveFilter;
+    cachedSortOrders = new ArrayList<>(query.getSortOrders());
   }
 
   private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {
