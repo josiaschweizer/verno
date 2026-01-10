@@ -46,8 +46,6 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
-
-    init();
     this.mandantSettingService = mandantSettingService;
   }
 

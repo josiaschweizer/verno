@@ -3,11 +3,9 @@ package ch.verno.ui.verno.dashboard.course;
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.common.db.service.ICourseLevelService;
-import ch.verno.common.db.service.ICourseService;
-import ch.verno.common.db.service.IMandantSettingService;
-import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.db.service.*;
 import ch.verno.common.report.IReportServerGate;
+import ch.verno.publ.Publ;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
@@ -34,9 +32,11 @@ public class CourseWidget extends AccordionPanel {
 
   @Nonnull private final CourseDto currentCourse;
   @Nonnull private final ICourseService courseService;
+  @Nonnull private final IInstructorService instructorService;
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final IMandantSettingService mandantSettingService;
+  @Nonnull private final ICourseScheduleService courseScheduleService;
   @Nonnull private final IReportServerGate reportServerGate;
 
   @Nullable
@@ -46,14 +46,18 @@ public class CourseWidget extends AccordionPanel {
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final ICourseService courseService,
+                      @Nonnull final IInstructorService instructorService,
                       @Nonnull final IParticipantService participantService,
                       @Nonnull final ICourseLevelService courseLevelService,
                       @Nonnull final IMandantSettingService mandantSettingService,
+                      @Nonnull final ICourseScheduleService courseScheduleService,
                       @Nonnull final IReportServerGate reportServerGate) {
     this.courseService = courseService;
+    this.instructorService = instructorService;
     this.participantService = participantService;
     this.courseLevelService = courseLevelService;
     this.mandantSettingService = mandantSettingService;
+    this.courseScheduleService = courseScheduleService;
     this.currentCourse = courseService.getCourseById(currentCourseId);
     this.reportServerGate = reportServerGate;
 
@@ -93,8 +97,19 @@ public class CourseWidget extends AccordionPanel {
 
       dialog.open();
     });
+    final var courseDetailButton = createHeaderButton(Publ.EMPTY_STRING, VaadinIcon.EXTERNAL_LINK, event -> {
+      final var courseDetailDialog = new CourseDetailDialog(
+              courseService,
+              instructorService,
+              courseLevelService,
+              courseScheduleService,
+              participantService,
+              currentCourse
+      );
+      courseDetailDialog.open();
+    });
 
-    header.add(title, reporButton, titleButton);
+    header.add(title, reporButton, titleButton, courseDetailButton);
     header.setFlexGrow(1, title);
 
     setSummary(header);

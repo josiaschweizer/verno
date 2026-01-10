@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 import java.util.Set;
@@ -29,17 +30,28 @@ import java.util.stream.Stream;
 @Menu(order = 3.11, icon = "vaadin:mobile", title = "course.course.detail")
 public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
-  @Nonnull
-  private final ICourseService courseService;
-  @Nonnull
-  private final IInstructorService instructorService;
-  @Nonnull
-  private final ICourseLevelService courseLevelService;
-  @Nonnull
-  private final ICourseScheduleService courseScheduleService;
-  @Nonnull
-  private final IParticipantService participantService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IInstructorService instructorService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final IParticipantService participantService;
 
+  private boolean showPaddingAroundDetail;
+
+  public CourseDetail(@Nonnull final ICourseService courseService,
+                      @Nonnull final IInstructorService instructorService,
+                      @Nonnull final ICourseLevelService courseLevelService,
+                      @Nonnull final ICourseScheduleService courseScheduleService,
+                      @Nonnull final IParticipantService participantService,
+                      final boolean showHeaderToolbar,
+                      final boolean showPaddingAroundDetail) {
+    this(courseService, instructorService, courseLevelService, courseScheduleService, participantService);
+    super.setShowHeaderToolbar(showHeaderToolbar);
+
+    this.showPaddingAroundDetail = showPaddingAroundDetail;
+  }
+
+  @Autowired
   public CourseDetail(@Nonnull final ICourseService courseService,
                       @Nonnull final IInstructorService instructorService,
                       @Nonnull final ICourseLevelService courseLevelService,
@@ -50,8 +62,6 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
     this.participantService = participantService;
-
-    init();
   }
 
   @Nonnull
@@ -112,7 +122,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var infoPanel = createInfoLayout();
     final var coursePanel = createCourseLayout();
     final var datePanel = createDateLayout();
-    add(new VerticalLayout(infoPanel, coursePanel, datePanel));
+    final var verticalLayout = new VerticalLayout(infoPanel, coursePanel, datePanel);
+
+    if (!showPaddingAroundDetail){
+      verticalLayout.setPadding(false);
+    }
+
+    add(verticalLayout);
   }
 
   @Nonnull

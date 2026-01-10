@@ -12,6 +12,7 @@ import jakarta.annotation.Nonnull;
 
 public class Dashboard extends VerticalLayout {
 
+  @Nonnull private final IInstructorService instructorService;
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final ICourseService courseService;
   @Nonnull private final ICourseLevelService courseLevelService;
@@ -20,11 +21,13 @@ public class Dashboard extends VerticalLayout {
   @Nonnull private final IReportServerGate reportServerGate;
 
   public Dashboard(@Nonnull final ICourseService courseService,
+                   @Nonnull final IInstructorService instructorService,
                    @Nonnull final IParticipantService participantService,
                    @Nonnull final ICourseLevelService courseLevelService,
                    @Nonnull final ICourseScheduleService courseScheduleService,
                    @Nonnull final IMandantSettingService mandantSettingService,
                    @Nonnull final IReportServerGate reportServerGate) {
+    this.instructorService = instructorService;
     this.participantService = participantService;
     this.courseService = courseService;
     this.courseLevelService = courseLevelService;
@@ -43,8 +46,24 @@ public class Dashboard extends VerticalLayout {
     final var tabSheet = new TabSheet();
     tabSheet.setWidthFull();
 
-    final var plannedTab = new CourseWidgetGroup(CourseScheduleStatus.PLANNED, courseService, participantService, courseLevelService, mandantSettingService,  reportServerGate);
-    final var activeTab = new CourseWidgetGroup(CourseScheduleStatus.ACTIVE, courseService, participantService, courseLevelService, mandantSettingService, reportServerGate);
+    final var plannedTab = new CourseWidgetGroup(
+            CourseScheduleStatus.PLANNED,
+            courseService,
+            instructorService,
+            participantService,
+            courseLevelService,
+            courseScheduleService,
+            mandantSettingService,
+            reportServerGate);
+    final var activeTab = new CourseWidgetGroup(
+            CourseScheduleStatus.ACTIVE,
+            courseService,
+            instructorService,
+            participantService,
+            courseLevelService,
+            courseScheduleService,
+            mandantSettingService,
+            reportServerGate);
     final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(courseScheduleService);
 
     tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), plannedTab);

@@ -8,8 +8,4 @@ public class VernoConstants {
   public static final String COURSE_LEVEL = "Course-Level";
   public static final String COURSE_SCHEDULE = "Course-Schedule";
 
-  public static final String CREATE = "Create ";
-  public static final String UPDATE = "Update ";
-  public static final String SAVE = "Save";
-
 }

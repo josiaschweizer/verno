@@ -1,15 +1,17 @@
 package ch.verno.ui.base.detail;
 
-import ch.verno.publ.VernoConstants;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.verno.FieldFactory;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -23,33 +25,38 @@ import jakarta.annotation.Nullable;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
-  @Nonnull
-  public FormMode formMode = getDefaultFormMode();
+  @Nonnull public FormMode formMode;
 
-  @Nonnull
-  private final Binder<T> binder;
-  @Nonnull
-  protected EntryFactory<T> entryFactory;
-  @Nonnull
-  protected FieldFactory<T> fieldFactory;
-  @Nullable
-  protected I18NProvider i18nProvider;
+  @Nonnull private final Binder<T> binder;
+  @Nonnull protected EntryFactory<T> entryFactory;
+  @Nonnull protected FieldFactory<T> fieldFactory;
+  @Nullable protected I18NProvider i18nProvider;
 
-  @Nonnull
-  protected Button saveButton;
-  @Nonnull
-  protected ViewToolbarResult viewToolbar;
+  @Nonnull protected Button saveButton;
+  @Nonnull protected Runnable afterSave;
 
-  @Nullable
-  protected VerticalLayout addOnLayout;
+  @Nonnull protected ViewToolbarResult viewToolbar;
+  @Nullable protected VerticalLayout addOnLayout;
+
+  private boolean showHeaderToolbar;
 
   public BaseDetailView() {
-    this.saveButton = new Button(VernoConstants.SAVE);
-    this.viewToolbar = createViewToolbar();
+    this(true);
+  }
+
+  public BaseDetailView(final boolean showHeaderToolbar) {
+    this.showHeaderToolbar = showHeaderToolbar;
+
+    this.saveButton = new Button(getTranslation("common.dsave"));
+    this.saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    this.afterSave = () -> UI.getCurrent().navigate(getBasePageRoute());
+
+    this.formMode = getDefaultFormMode();
     this.binder = createBinder();
     this.i18nProvider = getI18NProvider();
     this.entryFactory = new EntryFactory<>(i18nProvider);
     this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
+    this.viewToolbar = createViewToolbar();
   }
 
   @Nullable
@@ -61,13 +68,21 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     return null;
   }
 
+  @Override
+  protected void onAttach(final AttachEvent attachEvent) {
+    super.onAttach(attachEvent);
+    init();
+  }
+
   protected void init() {
     setWidthFull();
     setHeightFull();
     setPadding(false);
     setSpacing(false);
 
-    add(viewToolbar.toolbar());
+    if (showHeaderToolbar) {
+      add(viewToolbar.toolbar());
+    }
 
     initUI();
 
@@ -75,7 +90,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     binder.addValueChangeListener(event -> updateSaveButtonState());
     binder.addStatusChangeListener(event -> updateSaveButtonState());
 
-    add(createSaveButtonLayout());
+    add(createActionButtonLayout());
     initAdditionalInfoUIBelowSaveButton();
 
     applyFormMode(getDefaultFormMode());
@@ -120,17 +135,17 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     saveButton.setVisible(saveVisible);
 
     if (formMode == FormMode.CREATE) {
-      saveButton.setText(VernoConstants.CREATE + getDetailPageName());
+      saveButton.setText(getTranslation("shared.create") + Publ.SPACE + getDetailPageName());
 
       if (viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(false);
       }
       setAddOnVisible(false);
     } else if (formMode == FormMode.EDIT) {
-      saveButton.setText(VernoConstants.UPDATE + getDetailPageName());
+      saveButton.setText(getTranslation("shared.update") + Publ.SPACE + getDetailPageName());
       setAddOnVisible(true);
     } else {
-      saveButton.setText(VernoConstants.SAVE);
+      saveButton.setText(getTranslation("common.save"));
 
       if (viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(true);
@@ -147,6 +162,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     }
   }
 
+  protected void setShowHeaderToolbar(final boolean showHeaderToolbar) {
+    this.showHeaderToolbar = showHeaderToolbar;
+  }
+
   protected void save() {
     if (formMode == FormMode.CREATE) {
       createBean(binder.getBean());
@@ -156,7 +175,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       return;
     }
 
-    UI.getCurrent().navigate(getBasePageRoute());
+    afterSave.run();
   }
 
   protected abstract void initUI();
@@ -222,11 +241,14 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   }
 
   @Nonnull
-  protected VerticalLayout createSaveButtonLayout() {
+  protected VerticalLayout createActionButtonLayout() {
+    final var cancel = new Button(getTranslation("shared.cancel"));
+    cancel.addClickListener(event -> afterSave.run());
+
     final var saveLayout = new HorizontalLayout();
     saveLayout.setWidthFull();
     saveLayout.setJustifyContentMode(JustifyContentMode.END);
-    saveLayout.add(saveButton);
+    saveLayout.add(cancel, saveButton);
 
     return new VerticalLayout(saveLayout);
   }
@@ -255,5 +277,9 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull
   protected Binder<T> getBinder() {
     return binder;
+  }
+
+  public void setAfterSave(@Nonnull final Runnable afterSave) {
+    this.afterSave = afterSave;
   }
 }

@@ -15,10 +15,9 @@ import jakarta.annotation.Nullable;
 public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   public static final String TITLE_KEY = "courseLevel.course_levels";
-  @Nonnull
-  private final CourseLevelGrid courseLevelGrid;
-  @Nonnull
-  private final CourseLevelDetail courseLevelDetail;
+
+  @Nonnull private final CourseLevelGrid courseLevelGrid;
+  @Nonnull private final CourseLevelDetail courseLevelDetail;
 
   public CourseLevelSetting(@Nonnull final ICourseLevelService courseLevelService) {
     super(TITLE_KEY, false);
@@ -30,6 +29,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
     setActionButton(getAddCourseLevelButton());
   }
 
+  @Nonnull
   private CourseLevelGrid createGrid(@Nonnull final ICourseLevelService courseLevelService) {
     final var courseLevelGrid = new CourseLevelGrid(courseLevelService);
     courseLevelGrid.initUI();
@@ -37,6 +37,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
     return courseLevelGrid;
   }
 
+  @Nonnull
   private CourseLevelDetail createDetailView(@Nonnull final ICourseLevelService courseLevelService) {
     final var courseLevelDetail = new CourseLevelDetail(courseLevelService);
     courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);

@@ -16,6 +16,7 @@ import jakarta.annotation.security.PermitAll;
 public class DashboardView extends VerticalLayout {
 
   public DashboardView(@Nonnull final ICourseService courseService,
+                       @Nonnull final IInstructorService instructorService,
                        @Nonnull final IParticipantService participantService,
                        @Nonnull final ICourseLevelService courseLevelService,
                        @Nonnull final ICourseScheduleService courseScheduleService,
@@ -26,7 +27,7 @@ public class DashboardView extends VerticalLayout {
     setSpacing(false);
     setAlignItems(Alignment.STRETCH);
 
-    final var dashboard = new Dashboard(courseService, participantService, courseLevelService, courseScheduleService, mandantSettingService, reportServerGate);
+    final var dashboard = new Dashboard(courseService, instructorService, participantService, courseLevelService, courseScheduleService, mandantSettingService, reportServerGate);
 
     add(createViewToolBar());
     add(dashboard);

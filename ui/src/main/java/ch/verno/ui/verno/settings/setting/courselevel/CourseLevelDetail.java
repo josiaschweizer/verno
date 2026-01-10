@@ -6,12 +6,12 @@ import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -22,8 +22,6 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
 
   @Nonnull
   private ICourseLevelService courseLevelService;
-  @Nullable
-  private Runnable afterSave;
 
   public CourseLevelDetail(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
@@ -31,13 +29,15 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
     init();
   }
 
+  @Override
+  protected void onAttach(final AttachEvent attachEvent) {
+    // we have to override the attach so that init does not get called every time the detail view gets attached
+    // and so the form data always grows (because of the add() calls in init)
+  }
+
   @Autowired
   public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
-  }
-
-  public void setAfterSave(@Nonnull final Runnable afterSave) {
-    this.afterSave = afterSave;
   }
 
   @Override
@@ -57,7 +57,7 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
     spacer.getStyle().set("flex-grow", "1");
 
     add(spacer);
-    add(createSaveButtonLayout());
+    add(createActionButtonLayout());
 
     applyFormMode(getDefaultFormMode());
     updateSaveButtonState();
@@ -73,9 +73,7 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
       return;
     }
 
-    if (afterSave != null) {
-      afterSave.run();
-    }
+    afterSave.run();
   }
 
   @Override
