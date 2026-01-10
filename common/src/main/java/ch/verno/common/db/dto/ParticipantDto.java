@@ -2,8 +2,8 @@ package ch.verno.common.db.dto;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.publ.Publ;
 import ch.verno.common.util.phonenumber.PhoneNumberFormatter;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -166,6 +166,10 @@ public class ParticipantDto extends BaseDto {
     this.gender = gender;
   }
 
+  public String getGenderAsString() {
+    return gender.getName();
+  }
+
   @Nonnull
   public String getEmail() {
     return email;
@@ -213,6 +217,17 @@ public class ParticipantDto extends BaseDto {
 
   public void setCourseLevels(@Nonnull final List<CourseLevelDto> courseLevels) {
     this.courseLevels = new ArrayList<>(courseLevels);
+  }
+
+  @Nonnull
+  public String getCourseLevelsAsString() {
+    final var names = new ArrayList<String>();
+
+    for (final var level : courseLevels) {
+      names.add(level.getName());
+    }
+
+    return String.join(Publ.COMMA + Publ.SPACE, names);
   }
 
   @Nonnull

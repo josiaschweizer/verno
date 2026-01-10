@@ -1,8 +1,8 @@
 package ch.verno.server.service;
 
 import ch.verno.common.db.dto.*;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.publ.Publ;
 import ch.verno.db.entity.*;
 import ch.verno.server.repository.*;
@@ -40,7 +40,7 @@ public class ServiceHelper {
     final AddressEntity entity;
     if (addressDto.getId() != null && addressDto.getId() != 0L) {
       entity = addressRepository.findById(addressDto.getId())
-              .orElseThrow(() -> new NotFoundException(NotFoundReason.ADDRESS_BY_ID_NOT_FOUND, addressDto.getId()));
+              .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.ADDRESS_BY_ID_NOT_FOUND, addressDto.getId()));
 
       entity.setStreet(street);
       entity.setHouseNumber(houseNumber);
@@ -89,7 +89,7 @@ public class ServiceHelper {
     final ParentEntity entity;
     if (parentDto.getId() != null && parentDto.getId() != 0L) {
       entity = parentRepository.findById(parentDto.getId())
-              .orElseThrow(() -> new NotFoundException(NotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
+              .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
     } else {
       entity = new ParentEntity(
               firstName,
@@ -118,7 +118,7 @@ public class ServiceHelper {
     }
 
     return genderRepository.findById(genderDto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.getId()));
   }
 
   @Nullable
@@ -129,7 +129,7 @@ public class ServiceHelper {
     }
 
     return courseLevelRepository.findById(dto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, dto.getId()));
   }
 
   @Nonnull
@@ -154,7 +154,7 @@ public class ServiceHelper {
     final List<CourseLevelEntity> result = new ArrayList<>();
     for (final var id : uniqueByIdInOrder.keySet()) {
       final var entity = courseLevelRepository.findById(id)
-              .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id));
+              .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id));
       result.add(entity);
     }
 
@@ -169,7 +169,7 @@ public class ServiceHelper {
     }
 
     return courseScheduleRepository.findById(dto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND, dto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND, dto.getId()));
   }
 
   @Nullable
@@ -180,7 +180,7 @@ public class ServiceHelper {
     }
 
     return instructorRepository.findById(dto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, dto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, dto.getId()));
   }
 
   @Nonnull
@@ -205,7 +205,7 @@ public class ServiceHelper {
     final List<CourseEntity> result = new ArrayList<>();
     for (final var id : uniqueByIdInOrder.keySet()) {
       final var entity = courseRepository.findById(id)
-              .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, id));
+              .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.COURSE_BY_ID_NOT_FOUND, id));
       result.add(entity);
     }
 

@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.db.service.ICourseScheduleService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.util.WeekKey;
 import ch.verno.server.mapper.CourseScheduleMapper;
 import ch.verno.server.repository.CourseScheduleRepository;
@@ -57,8 +57,8 @@ public class CourseScheduleService implements ICourseScheduleService {
     }
 
     final var existing = courseScheduleRepository.findById(courseScheduleDto.getId())
-            .orElseThrow(() -> new NotFoundException(
-                    NotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND,
+            .orElseThrow(() -> new DBNotFoundException(
+                    DBNotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND,
                     courseScheduleDto.getId()
             ));
 
@@ -79,7 +79,7 @@ public class CourseScheduleService implements ICourseScheduleService {
   public CourseScheduleDto getCourseScheduleById(@Nonnull final Long id) {
     final var foundById = courseScheduleRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.COURSE_SCHEDULE_BY_ID_NOT_FOUND, id);
     }
 
     return CourseScheduleMapper.toDto(foundById.get());

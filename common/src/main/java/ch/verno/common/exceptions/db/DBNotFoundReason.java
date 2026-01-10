@@ -1,8 +1,8 @@
-package ch.verno.common.exceptions;
+package ch.verno.common.exceptions.db;
 
 import jakarta.annotation.Nonnull;
 
-public enum NotFoundReason {
+public enum DBNotFoundReason {
   INSTRUCTOR_BY_ID_NOT_FOUND("Instructor not found with id: "),
   PARTICIPANT_BY_ID_NOT_FOUND("Participant not found with id: "),
   ADDRESS_BY_ID_NOT_FOUND("Address not found with id: "),
@@ -20,7 +20,7 @@ public enum NotFoundReason {
   @Nonnull
   private final String message;
 
-  NotFoundReason(@Nonnull final String message) {
+  DBNotFoundReason(@Nonnull final String message) {
     this.message = message;
   }
 

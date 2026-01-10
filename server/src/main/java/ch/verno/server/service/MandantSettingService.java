@@ -2,8 +2,8 @@ package ch.verno.server.service;
 
 import ch.verno.common.db.dto.MandantSettingDto;
 import ch.verno.common.db.service.IMandantSettingService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.server.mapper.MandantSettingMapper;
 import ch.verno.server.repository.MandantSettingRepository;
 import jakarta.annotation.Nonnull;
@@ -46,7 +46,7 @@ public class MandantSettingService implements IMandantSettingService {
 
     final var existing = mandantSettingRepository.findById(id);
     if (existing.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
     }
 
     final var entity = existing.get();
@@ -62,7 +62,7 @@ public class MandantSettingService implements IMandantSettingService {
   public MandantSettingDto getMandantSettingById(@Nonnull final Long id) {
     final var foundById = mandantSettingRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
     }
 
     return MandantSettingMapper.toDto(foundById.get());

@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.db.service.ICourseService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.CourseEntity;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.repository.CourseLevelRepository;
@@ -92,7 +92,7 @@ public class CourseService implements ICourseService {
     }
 
     final var existing = courseRepository.findById(courseDto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, courseDto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.COURSE_BY_ID_NOT_FOUND, courseDto.getId()));
 
     existing.setTitle(ServiceHelper.safeString(courseDto.getTitle()));
     existing.setCapacity(courseDto.getCapacity());
@@ -125,7 +125,7 @@ public class CourseService implements ICourseService {
   public CourseDto getCourseById(@Nonnull final Long id) {
     final var foundById = courseRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.COURSE_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.COURSE_BY_ID_NOT_FOUND, id);
     }
 
     return CourseMapper.toDto(foundById.get());

@@ -3,8 +3,8 @@ package ch.verno.server.service;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.filter.CourseLevelFilter;
 import ch.verno.common.db.service.ICourseLevelService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.server.mapper.CourseLevelMapper;
 import ch.verno.server.repository.CourseLevelRepository;
 import ch.verno.server.spec.CourseLevelSpec;
@@ -56,8 +56,8 @@ public class CourseLevelService implements ICourseLevelService {
     }
 
     final var existing = courseLevelRepository.findById(courseLevelDto.getId())
-            .orElseThrow(() -> new NotFoundException(
-                    NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND,
+            .orElseThrow(() -> new DBNotFoundException(
+                    DBNotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND,
                     courseLevelDto.getId()
             ));
 
@@ -78,7 +78,7 @@ public class CourseLevelService implements ICourseLevelService {
   public CourseLevelDto getCourseLevelById(@Nonnull final Long id) {
     final var courseLevelOptional = courseLevelRepository.findById(id);
     if (courseLevelOptional.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.COURSE_LEVEL_BY_ID_NOT_FOUND, id);
     }
 
     return CourseLevelMapper.toDto(courseLevelOptional.get());

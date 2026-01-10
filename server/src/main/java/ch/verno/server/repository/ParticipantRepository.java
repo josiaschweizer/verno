@@ -1,5 +1,6 @@
 package ch.verno.server.repository;
 
+import ch.verno.db.entity.CourseEntity;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.db.jpa.SpringDataParticipantJpaRepository;
 import jakarta.annotation.Nonnull;
@@ -28,6 +29,11 @@ public class ParticipantRepository {
   @Nonnull
   public List<ParticipantEntity> findAll() {
     return jpaRepository.findAll();
+  }
+
+  @Nonnull
+  public List<ParticipantEntity> findByCourse(@Nonnull final CourseEntity course) {
+    return jpaRepository.findByCoursesAndActiveTrue(course);
   }
 
   @Nonnull

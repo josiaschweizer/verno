@@ -3,8 +3,8 @@ package ch.verno.server.service;
 import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.publ.Publ;
 import ch.verno.db.entity.InstructorEntity;
 import ch.verno.server.mapper.InstructorMapper;
@@ -74,7 +74,7 @@ public class InstructorService implements IInstructorService {
     }
 
     final var existing = instructorRepository.findById(instructorDto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, instructorDto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, instructorDto.getId()));
 
     existing.setFirstname(ServiceHelper.safeString(instructorDto.getFirstName()));
     existing.setLastname(ServiceHelper.safeString(instructorDto.getLastName()));
@@ -102,7 +102,7 @@ public class InstructorService implements IInstructorService {
   public InstructorDto getInstructorById(@Nonnull final Long id) {
     final var foundById = instructorRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, id);
     }
     return InstructorMapper.toDto(foundById.get());
   }

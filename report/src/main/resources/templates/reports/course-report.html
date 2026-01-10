@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${course.title}">Course Report</title>
+
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #000;
+        }
+
+        h1 {
+            margin-bottom: 8mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.info td {
+            padding: 4px 6px;
+            white-space: nowrap;
+        }
+
+        .spacer {
+            height: 6mm;
+        }
+
+        table.data th,
+        table.data td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        table.data th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        table.data tr:nth-child(even) {
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+<h1 th:text="${course.title}">Kurstitel</h1>
+
+<table class="info">
+    <tr>
+        <td><strong>Kapazität</strong></td>
+        <td th:text="${course.capacity}">0</td>
+
+        <td><strong>Level</strong></td>
+        <td th:text="${course.courseLevels}">-</td>
+
+        <td><strong>Rhythmus</strong></td>
+        <td th:text="${course.courseSchedule}">-</td>
+
+        <td><strong>Zeit</strong></td>
+        <td th:text="${course.startTime} + ' – ' + ${course.endTime}">-</td>
+    </tr>
+</table>
+
+<div class="spacer"></div>
+
+<table class="data">
+    <thead>
+    <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Geburtsdatum</th>
+        <th>Geschlecht</th>
+        <th>Elternteil 1</th>
+        <th>Elternteil 2</th>
+        <th>Adresse</th>
+        <th>Email</th>
+        <th>Telefon</th>
+        <th>Level</th>
+        <th>Notiz</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="p : ${course.participants}">
+        <td th:text="${p.firstname}">-</td>
+        <td th:text="${p.lastname}">-</td>
+        <td th:text="${p.birthdate}">-</td>
+        <td th:text="${p.gender}">-</td>
+        <td th:text="${p.parentOne}">-</td>
+        <td th:text="${p.parentTwo}">-</td>
+        <td th:text="${p.address}">-</td>
+        <td th:text="${p.email}">-</td>
+        <td th:text="${p.phone}">-</td>
+        <td th:text="${p.courseLevels}">-</td>
+        <td th:text="${p.note}">-</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -16,10 +16,6 @@
   <dependencies>
     <dependency>
       <groupId>ch.verno</groupId>
-      <artifactId>report</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.verno</groupId>
       <artifactId>publ</artifactId>
     </dependency>
 
@@ -35,6 +31,10 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>flow-data</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -2,8 +2,8 @@ package ch.verno.server.service;
 
 import ch.verno.common.db.dto.AddressDto;
 import ch.verno.common.db.service.IAddressService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.AddressEntity;
 import ch.verno.server.mapper.AddressMapper;
 import ch.verno.server.repository.AddressRepository;
@@ -48,7 +48,7 @@ public class AddressService implements IAddressService {
   public AddressDto getAddressById(@Nonnull final Long id) {
     final var foundById = addressRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.ADDRESS_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.ADDRESS_BY_ID_NOT_FOUND, id);
     }
 
     return AddressMapper.toDto(foundById.get());

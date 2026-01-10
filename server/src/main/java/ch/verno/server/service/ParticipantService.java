@@ -1,12 +1,14 @@
 package ch.verno.server.service;
 
+import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.exceptions.NotFoundException;
-import ch.verno.common.exceptions.NotFoundReason;
-import ch.verno.publ.Publ;
+import ch.verno.common.exceptions.db.DBNotFoundException;
+import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParticipantEntity;
+import ch.verno.publ.Publ;
+import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
 import ch.verno.server.spec.PageHelper;
@@ -86,7 +88,7 @@ public class ParticipantService implements IParticipantService {
     }
 
     final var existing = participantRepository.findById(participantDto.getId())
-            .orElseThrow(() -> new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participantDto.getId()));
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participantDto.getId()));
 
     existing.setFirstname(ServiceHelper.safeString(participantDto.getFirstName()));
     existing.setLastname(ServiceHelper.safeString(participantDto.getLastName()));
@@ -123,7 +125,7 @@ public class ParticipantService implements IParticipantService {
   public ParticipantDto getParticipantById(@Nonnull final Long id) {
     final var foundById = participantRepository.findById(id);
     if (foundById.isEmpty()) {
-      throw new NotFoundException(NotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
+      throw new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
     }
     return ParticipantMapper.toDto(foundById.get());
   }
@@ -138,6 +140,7 @@ public class ParticipantService implements IParticipantService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public List<ParticipantDto> findParticipants(@Nonnull final ParticipantFilter filter,
                                                final int offset,
@@ -151,8 +154,25 @@ public class ParticipantService implements IParticipantService {
             .toList();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public int countParticipants(@Nonnull final ParticipantFilter filter) {
     return Math.toIntExact(participantRepository.count(participantSpec.participantSpec(filter)));
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public List<ParticipantDto> findParticipantsByCourse(@Nonnull final CourseDto course) {
+    final var courseEntity = CourseMapper.toEntity(course);
+
+    if (courseEntity == null) {
+      return List.of();
+    }
+
+    return participantRepository.findByCourse(courseEntity)
+            .stream()
+            .map(ParticipantMapper::toDto)
+            .toList();
   }
 }

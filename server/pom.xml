@@ -18,10 +18,13 @@
       <groupId>ch.verno</groupId>
       <artifactId>common</artifactId>
     </dependency>
-
     <dependency>
       <groupId>ch.verno</groupId>
       <artifactId>db</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.verno</groupId>
+      <artifactId>report</artifactId>
     </dependency>
 
     <dependency>
