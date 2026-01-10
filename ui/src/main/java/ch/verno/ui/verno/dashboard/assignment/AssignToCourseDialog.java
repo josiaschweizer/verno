@@ -3,10 +3,10 @@ package ch.verno.ui.verno.dashboard.assignment;
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.publ.Publ;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.MandantSettingService;
-import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
@@ -33,11 +33,11 @@ import java.util.stream.Collectors;
 public class AssignToCourseDialog extends Dialog {
 
   @Nonnull
-  private final CourseService courseService;
+  private final ICourseService courseService;
   @Nonnull
-  private final ParticipantService participantService;
+  private final IParticipantService participantService;
   @Nonnull
-  private final MandantSettingService mandantSettingService;
+  private final IMandantSettingService mandantSettingService;
 
   @Nullable
   private final Long preSelectedCourseId;
@@ -59,15 +59,15 @@ public class AssignToCourseDialog extends Dialog {
 
   private boolean suppressSelectionSync;
 
-  public AssignToCourseDialog(@Nonnull final CourseService courseService,
-                              @Nonnull final ParticipantService participantService,
-                              @Nonnull final MandantSettingService mandantSettingService) {
+  public AssignToCourseDialog(@Nonnull final ICourseService courseService,
+                              @Nonnull final IParticipantService participantService,
+                              @Nonnull final IMandantSettingService mandantSettingService) {
     this(courseService, participantService, mandantSettingService, null, List.of());
   }
 
-  public AssignToCourseDialog(@Nonnull final CourseService courseService,
-                              @Nonnull final ParticipantService participantService,
-                              @Nonnull final MandantSettingService mandantSettingService,
+  public AssignToCourseDialog(@Nonnull final ICourseService courseService,
+                              @Nonnull final IParticipantService participantService,
+                              @Nonnull final IMandantSettingService mandantSettingService,
                               @Nullable final Long preSelectedCourseId,
                               @Nonnull final List<Long> preSelectedParticipantIds) {
     this.courseService = courseService;

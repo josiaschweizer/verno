@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
-import ch.verno.server.service.CourseScheduleService;
+import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleActivateWidget;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleFinishWidget;
@@ -10,9 +10,9 @@ import jakarta.annotation.Nonnull;
 public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implements Refreshable {
 
   @Nonnull
-  private final CourseScheduleService courseScheduleService;
+  private final ICourseScheduleService courseScheduleService;
 
-  public CourseScheduleLifecycleWidgetGroup(@Nonnull final CourseScheduleService courseScheduleService) {
+  public CourseScheduleLifecycleWidgetGroup(@Nonnull final ICourseScheduleService courseScheduleService) {
     this.courseScheduleService = courseScheduleService;
 
     setWidthFull();

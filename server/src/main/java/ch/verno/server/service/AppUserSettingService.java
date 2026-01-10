@@ -74,6 +74,7 @@ public class AppUserSettingService implements IAppUserSettingService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public AppUserSettingDto getAppUserSettingByUserId(@Nonnull final Long id) {
     final var foundByUserId = repository.findByUserId(id);

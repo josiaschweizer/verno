@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings;
 
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserSettingService;
+import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
@@ -23,10 +23,10 @@ public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle 
   @Nonnull
   private final IAppUserService appUserService;
   @Nonnull
-  private final AppUserSettingService appUserSettingService;
+  private final IAppUserSettingService appUserSettingService;
 
   public UserSettings(@Nonnull final IAppUserService appUserService,
-                      @Nonnull final AppUserSettingService appUserSettingService) {
+                      @Nonnull final IAppUserSettingService appUserSettingService) {
     this.appUserService = appUserService;
     this.appUserSettingService = appUserSettingService;
 

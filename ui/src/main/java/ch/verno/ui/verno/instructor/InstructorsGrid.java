@@ -2,7 +2,7 @@ package ch.verno.ui.verno.instructor;
 
 import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
-import ch.verno.server.service.InstructorService;
+import ch.verno.common.db.service.IInstructorService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
@@ -23,9 +23,9 @@ import java.util.stream.Stream;
 public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorFilter> implements HasDynamicTitle {
 
   @Nonnull
-  private final InstructorService instructorService;
+  private final IInstructorService instructorService;
 
-  public InstructorsGrid(@Nonnull final InstructorService instructorService) {
+  public InstructorsGrid(@Nonnull final IInstructorService instructorService) {
     super(InstructorFilter.empty());
     this.instructorService = instructorService;
   }

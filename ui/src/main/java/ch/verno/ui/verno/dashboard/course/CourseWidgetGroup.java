@@ -1,11 +1,11 @@
 package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.report.IReportServerGate;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.MandantSettingService;
-import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.Refreshable;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
@@ -13,17 +13,17 @@ import jakarta.annotation.Nonnull;
 public class CourseWidgetGroup extends VerticalLayout implements Refreshable {
 
   @Nonnull private final CourseScheduleStatus status;
-  @Nonnull private final CourseService courseService;
-  @Nonnull private final ParticipantService participantService;
-  @Nonnull private final CourseLevelService courseLevelService;
-  @Nonnull private final MandantSettingService mandantSettingService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final IMandantSettingService mandantSettingService;
   @Nonnull private final IReportServerGate reportServerGate;
 
   public CourseWidgetGroup(@Nonnull final CourseScheduleStatus status,
-                           @Nonnull final CourseService courseService,
-                           @Nonnull final ParticipantService participantService,
-                           @Nonnull final CourseLevelService courseLevelService,
-                           @Nonnull final MandantSettingService mandantSettingService,
+                           @Nonnull final ICourseService courseService,
+                           @Nonnull final IParticipantService participantService,
+                           @Nonnull final ICourseLevelService courseLevelService,
+                           @Nonnull final IMandantSettingService mandantSettingService,
                            @Nonnull final IReportServerGate reportServerGate) {
     this.status = status;
     this.courseService = courseService;

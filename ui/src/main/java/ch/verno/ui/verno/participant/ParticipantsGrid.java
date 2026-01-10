@@ -5,10 +5,10 @@ import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.publ.Publ;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.base.grid.ComponentGridColumn;
 import ch.verno.ui.base.grid.ObjectGridColumn;
@@ -36,15 +36,15 @@ import java.util.stream.Stream;
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 
   @Nonnull
-  private final ParticipantService participantService;
+  private final IParticipantService participantService;
   @Nonnull
-  private final CourseService courseService;
+  private final ICourseService courseService;
   @Nonnull
-  private final CourseLevelService courseLevelService;
+  private final ICourseLevelService courseLevelService;
 
-  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
-                          @Nonnull final CourseService courseService,
-                          @Nonnull final CourseLevelService courseLevelService,
+  public ParticipantsGrid(@Nonnull final IParticipantService participantService,
+                          @Nonnull final ICourseService courseService,
+                          @Nonnull final ICourseLevelService courseLevelService,
                           final boolean showGridToolbar,
                           final boolean showFilterToolbar) {
     super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
@@ -55,9 +55,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   }
 
   @Autowired
-  public ParticipantsGrid(@Nonnull final ParticipantService participantService,
-                          @Nonnull final CourseService courseService,
-                          @Nonnull final CourseLevelService courseLevelService) {
+  public ParticipantsGrid(@Nonnull final IParticipantService participantService,
+                          @Nonnull final ICourseService courseService,
+                          @Nonnull final ICourseLevelService courseLevelService) {
     super(ParticipantFilter.empty(), true, true);
 
     this.participantService = participantService;

@@ -1,31 +1,28 @@
 package ch.verno.ui.i18n;
 
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserSettingService;
+import ch.verno.common.db.service.IAppUserSettingService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.annotation.Nonnull;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Component
 public final class VernoServiceInitListener implements VaadinServiceInitListener {
 
-  @Nonnull
-  private final IAppUserService appUserService;
+  private final ApplicationContext applicationContext;
 
-  @Nonnull
-  private final AppUserSettingService appUserSettingService;
-
-  public VernoServiceInitListener(@Nonnull final IAppUserService appUserService,
-                                  @Nonnull final AppUserSettingService appUserSettingService) {
-    this.appUserService = appUserService;
-    this.appUserSettingService = appUserSettingService;
+  // Use ApplicationContext so we don't require the IAppUserService/IAppUserSettingService
+  // beans to be present at construction time (avoids hard dependency on server module).
+  public VernoServiceInitListener(final ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
   }
 
   @Override
@@ -46,15 +43,23 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
     }
 
     try {
-      final var appUser = appUserService.findByUserName(currentUser.getUsername());
-      if (appUser == null || appUser.getId() == null) {
+      final var appUserService = applicationContext.getBeanProvider(IAppUserService.class).getIfAvailable();
+      final var appUserSettingService = applicationContext.getBeanProvider(IAppUserSettingService.class).getIfAvailable();
+
+      // If either service implementation is not available, fallback to default locale
+      if (appUserService == null || appUserSettingService == null) {
         return Locale.GERMAN;
       }
 
-      final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
-      if (userSetting != null && userSetting.getLanguage() != null) {
-        return userSetting.getLanguage();
+      final var appUserOptional = appUserService.findByUserName(currentUser.getUsername());
+      if (appUserOptional.isEmpty() || appUserOptional.get().getId() == null) {
+        return Locale.GERMAN;
       }
+
+      final var appUser = appUserOptional.get();
+
+      final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
+      return userSetting.getLanguage();
     } catch (Exception ignored) {
       // Fallback to default
     }

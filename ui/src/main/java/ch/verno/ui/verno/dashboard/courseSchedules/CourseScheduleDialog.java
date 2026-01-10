@@ -2,7 +2,7 @@ package ch.verno.ui.verno.dashboard.courseSchedules;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.server.service.CourseScheduleService;
+import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -17,7 +17,7 @@ import java.util.Set;
 public class CourseScheduleDialog extends Dialog {
 
   @Nonnull
-  private final CourseScheduleService courseScheduleService;
+  private final ICourseScheduleService courseScheduleService;
   @Nonnull
   private final CourseScheduleStatus status;
 
@@ -28,7 +28,7 @@ public class CourseScheduleDialog extends Dialog {
   @Nullable
   private Button saveButton;
 
-  public CourseScheduleDialog(@Nonnull final CourseScheduleService courseScheduleService,
+  public CourseScheduleDialog(@Nonnull final ICourseScheduleService courseScheduleService,
                               @Nonnull final CourseScheduleStatus status,
                               final boolean showConfirmDialogOnClose) {
     this.courseScheduleService = courseScheduleService;

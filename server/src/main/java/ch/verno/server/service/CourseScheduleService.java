@@ -117,6 +117,7 @@ public class CourseScheduleService implements ICourseScheduleService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public List<CourseScheduleDto> findCourseSchedules(@Nonnull final CourseScheduleFilter filter,
                                                      final int offset,
@@ -130,6 +131,7 @@ public class CourseScheduleService implements ICourseScheduleService {
             .toList();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public int countCourseSchedules(@Nonnull final CourseScheduleFilter filter) {
     return Math.toIntExact(courseScheduleRepository.count(courseScheduleSpec.courseScheduleSpec( filter)));

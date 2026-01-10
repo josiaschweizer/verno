@@ -1,7 +1,6 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.AppUserDto;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.annotation.Nonnull;
 
@@ -15,6 +14,7 @@ public final class AppUserMapper {
     return new AppUserDto(
             entity.getId(),
             entity.getUsername(),
+            entity.getPasswordHash(),
             entity.getRole()
     );
   }
@@ -23,7 +23,7 @@ public final class AppUserMapper {
   public static AppUserEntity toEntity(@Nonnull final AppUserDto dto) {
     final var entity = new AppUserEntity(
             dto.getUsername(),
-            Publ.EMPTY_STRING, // passwordHash bewusst NICHT im DTO → wird separat gesetzt
+            dto.getPasswordHash(),
             dto.getRole()
     );
 

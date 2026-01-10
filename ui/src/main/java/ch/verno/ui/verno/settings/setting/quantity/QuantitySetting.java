@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.quantity;
 
 import ch.verno.common.db.dto.MandantSettingDto;
-import ch.verno.server.service.MandantSettingService;
+import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,9 +14,9 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
 
   public static final String TITLE_KEY = "setting.quantity_settings";
   @Nonnull
-  private final MandantSettingService mandantSettingService;
+  private final IMandantSettingService mandantSettingService;
 
-  public QuantitySetting(@Nonnull MandantSettingService mandantSettingService) {
+  public QuantitySetting(@Nonnull IMandantSettingService mandantSettingService) {
     super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;

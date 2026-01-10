@@ -2,8 +2,8 @@ package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.server.service.CourseScheduleService;
-import ch.verno.server.service.MandantSettingService;
+import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -26,12 +26,12 @@ import java.util.Set;
 public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> implements HasDynamicTitle {
 
   @Nonnull
-  private final CourseScheduleService courseScheduleService;
+  private final ICourseScheduleService courseScheduleService;
   @Nonnull
-  private final MandantSettingService mandantSettingService;
+  private final IMandantSettingService mandantSettingService;
 
-  public CourseScheduleDetail(@Nonnull final CourseScheduleService courseScheduleService,
-                              @Nonnull final MandantSettingService mandantSettingService) {
+  public CourseScheduleDetail(@Nonnull final ICourseScheduleService courseScheduleService,
+                              @Nonnull final IMandantSettingService mandantSettingService) {
     this.courseScheduleService = courseScheduleService;
     this.mandantSettingService = mandantSettingService;
 

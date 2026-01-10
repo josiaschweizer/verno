@@ -17,6 +17,9 @@ public interface IAppUserSettingService {
   AppUserSettingDto getAppUserSettingById(@Nonnull final Long id);
 
   @Nonnull
+  AppUserSettingDto getAppUserSettingByUserId(@Nonnull Long id);
+
+  @Nonnull
   List<AppUserSettingDto> getAppUserSettings();
 
   @Nonnull

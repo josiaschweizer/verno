@@ -5,26 +5,28 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class AppUserDto extends BaseDto {
-  @Nonnull
-  private String username;
 
-  @Nonnull
-  private String role;
+  @Nonnull private String username;
+  @Nonnull private final String passwordHash;
+  @Nonnull private String role;
 
-  protected AppUserDto() {
-    // JPA
-  }
+//  protected AppUserDto() {
+//    // JPA
+//  }
 
   public AppUserDto(@Nonnull final String username,
+                    @Nonnull final String passwordHash,
                     @Nonnull final String role) {
-    this(null, username, role);
+    this(null, username, passwordHash, role);
   }
 
   public AppUserDto(@Nullable final Long id,
                     @Nonnull final String username,
+                    @Nonnull final String passwordHash,
                     @Nonnull final String role) {
     setId(id);
     this.username = username;
+    this.passwordHash = passwordHash;
     this.role = role;
   }
 
@@ -35,6 +37,11 @@ public class AppUserDto extends BaseDto {
 
   public void setUsername(@Nonnull final String username) {
     this.username = username;
+  }
+
+  @Nonnull
+  public String getPasswordHash() {
+    return passwordHash;
   }
 
   @Nonnull

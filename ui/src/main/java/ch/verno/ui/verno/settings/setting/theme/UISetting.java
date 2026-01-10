@@ -3,7 +3,7 @@ package ch.verno.ui.verno.settings.setting.theme;
 import ch.verno.common.db.dto.AppUserDto;
 import ch.verno.common.db.dto.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserSettingService;
+import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -22,14 +22,14 @@ public class UISetting extends VABaseSetting<UISettingDto> {
 
   public static final String TITLE_KEY = "setting.ui_settings";
   @Nonnull
-  private final AppUserSettingService appUserSettingService;
+  private final IAppUserSettingService appUserSettingService;
   @Nullable
-  private final AppUserDto currentUser;
+  private AppUserDto currentUser;
   @Nullable
   private AppUserSettingDto currentSetting;
 
   public UISetting(@Nonnull final IAppUserService userService,
-                   @Nonnull final AppUserSettingService appUserSettingService) {
+                   @Nonnull final IAppUserSettingService appUserSettingService) {
     super(TITLE_KEY, true);
 
     this.appUserSettingService = appUserSettingService;
@@ -39,7 +39,8 @@ public class UISetting extends VABaseSetting<UISettingDto> {
       throw new IllegalStateException("No authenticated user found.");
     }
 
-    currentUser = userService.findByUserName(currentSecurityContextUser.getUsername());
+    final var currentUser = userService.findByUserName(currentSecurityContextUser.getUsername());
+    currentUser.ifPresent(appUserOptional -> this.currentUser = appUserOptional);
 
     loadCurrentSetting();
   }

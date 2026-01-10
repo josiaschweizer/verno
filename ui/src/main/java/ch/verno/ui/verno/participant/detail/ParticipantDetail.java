@@ -5,7 +5,7 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.GenderDto;
 import ch.verno.common.db.dto.ParticipantDto;
-import ch.verno.server.service.*;
+import ch.verno.common.db.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -31,20 +31,17 @@ import java.util.stream.Collectors;
 @Menu(order = 1.1, icon = "vaadin:user", title = "participant.participant.detail")
 public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements HasDynamicTitle {
 
-  @Nonnull
-  private final ParticipantService participantService;
-  @Nonnull
-  private final GenderService genderService;
-  @Nonnull
-  private final CourseLevelService courseLevelService;
-  @Nonnull
-  private final CourseService courseService;
-  private final MandantSettingService mandantSettingService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final IGenderService genderService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IMandantSettingService mandantSettingService;
 
-  public ParticipantDetail(@Nonnull final ParticipantService participantService,
-                           @Nonnull final GenderService genderService,
-                           @Nonnull final CourseLevelService courseLevelService,
-                           @Nonnull final CourseService courseService, final MandantSettingService mandantSettingService) {
+  public ParticipantDetail(@Nonnull final IParticipantService participantService,
+                           @Nonnull final IGenderService genderService,
+                           @Nonnull final ICourseLevelService courseLevelService,
+                           @Nonnull final ICourseService courseService,
+                           @Nonnull final IMandantSettingService mandantSettingService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;

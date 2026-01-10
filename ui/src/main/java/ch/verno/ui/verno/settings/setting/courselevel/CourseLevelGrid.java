@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.server.service.CourseLevelService;
+import ch.verno.common.db.service.ICourseLevelService;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
@@ -27,15 +27,15 @@ public class CourseLevelGrid extends VerticalLayout {
   @Nonnull
   protected final Map<String, Grid.Column<CourseLevelDto>> columnsByKey;
   @Nonnull
-  private CourseLevelService courseLevelService;
+  private ICourseLevelService courseLevelService;
 
-  public CourseLevelGrid(@Nonnull final CourseLevelService courseLevelService) {
+  public CourseLevelGrid(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
     this.columnsByKey = new LinkedHashMap<>();
   }
 
   @Autowired
-  public void setCourseLevelService(@Nonnull final CourseLevelService courseLevelService) {
+  public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
   }
 

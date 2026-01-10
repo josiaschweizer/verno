@@ -1,7 +1,7 @@
 package ch.verno.ui.base;
 
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.server.service.AppUserSettingService;
+import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.menu.MenuOrder;
 import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.component.AttachEvent;
@@ -35,13 +35,11 @@ import java.util.Objects;
 @PermitAll
 public final class MainLayout extends AppLayout {
 
-  @Nonnull
-  private final IAppUserService appUserService;
-  @Nonnull
-  private final AppUserSettingService appUserSettingService;
+  @Nonnull private final IAppUserService appUserService;
+  @Nonnull private final IAppUserSettingService appUserSettingService;
 
   MainLayout(@Nonnull final IAppUserService appUserService,
-             @Nonnull final AppUserSettingService appUserSettingService) {
+             @Nonnull final IAppUserSettingService appUserSettingService) {
     this.appUserService = appUserService;
     this.appUserSettingService = appUserSettingService;
 
@@ -62,10 +60,12 @@ public final class MainLayout extends AppLayout {
       return;
     }
 
-    final var appUser = appUserService.findByUserName(currentUser.getUsername());
-    if (appUser.getId() == null) {
+    final var appUserOptional = appUserService.findByUserName(currentUser.getUsername());
+    if (appUserOptional.isEmpty() || appUserOptional.get().getId() == null) {
       return;
     }
+
+    final var appUser = appUserOptional.get();
 
     try {
       final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());

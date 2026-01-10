@@ -117,6 +117,7 @@ public class InstructorService implements IInstructorService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public List<InstructorDto> findInstructors(@Nonnull final InstructorFilter filter,
                                              final int offset,
@@ -130,6 +131,7 @@ public class InstructorService implements IInstructorService {
             .toList();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public int countCourses(@Nonnull final InstructorFilter filter) {
     return Math.toIntExact(instructorRepository.count(instructorSpec.instructorSpec(filter)));

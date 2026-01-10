@@ -3,11 +3,11 @@ package ch.verno.ui.verno.dashboard.course;
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.report.IReportServerGate;
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.CourseService;
-import ch.verno.server.service.MandantSettingService;
-import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
@@ -33,10 +33,10 @@ import java.util.stream.Stream;
 public class CourseWidget extends AccordionPanel {
 
   @Nonnull private final CourseDto currentCourse;
-  @Nonnull private final CourseService courseService;
-  @Nonnull private final ParticipantService participantService;
-  @Nonnull private final CourseLevelService courseLevelService;
-  @Nonnull private final MandantSettingService mandantSettingService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final IMandantSettingService mandantSettingService;
   @Nonnull private final IReportServerGate reportServerGate;
 
   @Nullable
@@ -45,10 +45,10 @@ public class CourseWidget extends AccordionPanel {
   private List<ParticipantDto> participantsInCurrentCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
-                      @Nonnull final CourseService courseService,
-                      @Nonnull final ParticipantService participantService,
-                      @Nonnull final CourseLevelService courseLevelService,
-                      @Nonnull final MandantSettingService mandantSettingService,
+                      @Nonnull final ICourseService courseService,
+                      @Nonnull final IParticipantService participantService,
+                      @Nonnull final ICourseLevelService courseLevelService,
+                      @Nonnull final IMandantSettingService mandantSettingService,
                       @Nonnull final IReportServerGate reportServerGate) {
     this.courseService = courseService;
     this.participantService = participantService;

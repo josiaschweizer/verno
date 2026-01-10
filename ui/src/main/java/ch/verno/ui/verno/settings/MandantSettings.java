@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.server.service.CourseLevelService;
-import ch.verno.server.service.MandantSettingService;
+import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
@@ -20,7 +20,7 @@ import java.util.List;
 @Route(Routes.MANDANT_SETTINGS)
 @PageTitle("Mandant Settings")
 @RolesAllowed({"ADMIN", "MANDANT_ADMIN"})
-@Menu(order = 98, icon = "vaadin:cog", title = "Mandant Overview")
+@Menu(order = 98, icon = "vaadin:cog", title = "setting.mandant_settings")
 public class MandantSettings extends VABaseSettingsPage {
 
   @Nonnull
@@ -31,8 +31,8 @@ public class MandantSettings extends VABaseSettingsPage {
   private final CourseLevelSetting courseLevelGridSetting;
 
   @Autowired
-  public MandantSettings(@Nonnull final MandantSettingService mandantSettingService,
-                         @Nonnull final CourseLevelService courseLevelService) {
+  public MandantSettings(@Nonnull final IMandantSettingService mandantSettingService,
+                         @Nonnull final ICourseLevelService courseLevelService) {
     this.sharedSetting = new SharedSettings(mandantSettingService);
     this.quantitySetting = new QuantitySetting(mandantSettingService);
     this.courseLevelGridSetting = new CourseLevelSetting(courseLevelService);

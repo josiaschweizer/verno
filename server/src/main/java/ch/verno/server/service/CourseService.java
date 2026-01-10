@@ -120,8 +120,8 @@ public class CourseService implements ICourseService {
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional(readOnly = true)
   public CourseDto getCourseById(@Nonnull final Long id) {
     final var foundById = courseRepository.findById(id);
     if (foundById.isEmpty()) {
@@ -159,6 +159,7 @@ public class CourseService implements ICourseService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public List<CourseDto> findCourses(@Nonnull final CourseFilter filter,
                                      final int offset,
@@ -172,6 +173,7 @@ public class CourseService implements ICourseService {
             .toList();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public int countCourses(@Nonnull final CourseFilter filter) {
     return Math.toIntExact(courseRepository.count(courseSpec.courseSpec(filter)));

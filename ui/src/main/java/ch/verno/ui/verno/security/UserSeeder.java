@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.security;
 
+import ch.verno.common.db.dto.AppUserDto;
+import ch.verno.common.db.service.IAppUserService;
 import ch.verno.publ.Publ;
-import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSeeder implements CommandLineRunner {
 
-  private final AppUserRepository repository;
-  private final PasswordEncoder encoder;
+  @Nonnull private final IAppUserService appUserService;
+  @Nonnull private final PasswordEncoder encoder;
 
-  public UserSeeder(@Nonnull final AppUserRepository repository,
+  public UserSeeder(@Nonnull final IAppUserService appUserService,
                     @Nonnull final PasswordEncoder encoder) {
-    this.repository = repository;
+    this.appUserService = appUserService;
     this.encoder = encoder;
   }
 
@@ -29,17 +29,17 @@ public class UserSeeder implements CommandLineRunner {
   private void seedUserIfMissing(@Nonnull final String username,
                                  @Nonnull final String rawPassword,
                                  @Nonnull final String role) {
-    if (repository.findByUsername(username).isPresent()) {
+    if (appUserService.findByUserName(username).isPresent()) {
       return;
     }
 
     final var encodedPassword = encoder.encode(rawPassword);
-    var user = new AppUserEntity(
+    var user = new AppUserDto(
             username,
             encodedPassword != null ? encodedPassword : Publ.EMPTY_STRING,
             role
     );
 
-    repository.save(user);
+    appUserService.save(user);
   }
 }

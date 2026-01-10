@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.instructor.detail;
 
 import ch.verno.common.db.dto.InstructorDto;
-import ch.verno.server.service.GenderService;
-import ch.verno.server.service.InstructorService;
+import ch.verno.common.db.service.IGenderService;
+import ch.verno.common.db.service.IInstructorService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -22,12 +22,12 @@ import org.jspecify.annotations.NonNull;
 public class InstructorDetail extends BaseDetailView<InstructorDto> implements HasDynamicTitle {
 
   @Nonnull
-  private final InstructorService instructorService;
+  private final IInstructorService instructorService;
   @Nonnull
-  private final GenderService genderService;
+  private final IGenderService genderService;
 
-  public InstructorDetail(@Nonnull final InstructorService instructorService,
-                          @Nonnull final GenderService genderService) {
+  public InstructorDetail(@Nonnull final IInstructorService instructorService,
+                          @Nonnull final IGenderService genderService) {
     this.instructorService = instructorService;
     this.genderService = genderService;
 

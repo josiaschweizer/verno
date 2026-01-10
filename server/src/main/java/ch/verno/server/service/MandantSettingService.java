@@ -78,6 +78,7 @@ public class MandantSettingService implements IMandantSettingService {
   }
 
   @Nonnull
+  @Override
   @Transactional(readOnly = true)
   public MandantSettingDto getSingleMandantSetting() {
     return mandantSettingRepository.findAll().stream()
@@ -87,6 +88,7 @@ public class MandantSettingService implements IMandantSettingService {
   }
 
   @Nonnull
+  @Override
   @Transactional
   public MandantSettingDto getOrCreateSingleMandantSetting(@Nonnull final MandantSettingDto defaultDto) {
     final var existing = mandantSettingRepository.findAll().stream().findFirst();
@@ -94,6 +96,7 @@ public class MandantSettingService implements IMandantSettingService {
   }
 
   @Nonnull
+  @Override
   @Transactional
   public MandantSettingDto saveSingleMandantSetting(@Nonnull final MandantSettingDto dto) {
     if (dto.getId() == null) {

@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.dashboard;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.service.*;
 import ch.verno.common.report.IReportServerGate;
-import ch.verno.server.service.*;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
@@ -12,18 +12,18 @@ import jakarta.annotation.Nonnull;
 
 public class Dashboard extends VerticalLayout {
 
-  @Nonnull private final ParticipantService participantService;
-  @Nonnull private final CourseService courseService;
-  @Nonnull private final CourseLevelService courseLevelService;
-  @Nonnull private final CourseScheduleService courseScheduleService;
-  @Nonnull private final MandantSettingService mandantSettingService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final IMandantSettingService mandantSettingService;
   @Nonnull private final IReportServerGate reportServerGate;
 
-  public Dashboard(@Nonnull final CourseService courseService,
-                   @Nonnull final ParticipantService participantService,
-                   @Nonnull final CourseLevelService courseLevelService,
-                   @Nonnull final CourseScheduleService courseScheduleService,
-                   @Nonnull final MandantSettingService mandantSettingService,
+  public Dashboard(@Nonnull final ICourseService courseService,
+                   @Nonnull final IParticipantService participantService,
+                   @Nonnull final ICourseLevelService courseLevelService,
+                   @Nonnull final ICourseScheduleService courseScheduleService,
+                   @Nonnull final IMandantSettingService mandantSettingService,
                    @Nonnull final IReportServerGate reportServerGate) {
     this.participantService = participantService;
     this.courseService = courseService;

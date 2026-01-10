@@ -2,7 +2,7 @@ package ch.verno.ui.verno.course.courses.detail;
 
 import ch.verno.common.db.dto.*;
 import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.server.service.*;
+import ch.verno.common.db.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -30,21 +30,21 @@ import java.util.stream.Stream;
 public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
   @Nonnull
-  private final CourseService courseService;
+  private final ICourseService courseService;
   @Nonnull
-  private final InstructorService instructorService;
+  private final IInstructorService instructorService;
   @Nonnull
-  private final CourseLevelService courseLevelService;
+  private final ICourseLevelService courseLevelService;
   @Nonnull
-  private final CourseScheduleService courseScheduleService;
+  private final ICourseScheduleService courseScheduleService;
   @Nonnull
-  private final ParticipantService participantService;
+  private final IParticipantService participantService;
 
-  public CourseDetail(@Nonnull final CourseService courseService,
-                      @Nonnull final InstructorService instructorService,
-                      @Nonnull final CourseLevelService courseLevelService,
-                      @Nonnull final CourseScheduleService courseScheduleService,
-                      @Nonnull final ParticipantService participantService) {
+  public CourseDetail(@Nonnull final ICourseService courseService,
+                      @Nonnull final IInstructorService instructorService,
+                      @Nonnull final ICourseLevelService courseLevelService,
+                      @Nonnull final ICourseScheduleService courseScheduleService,
+                      @Nonnull final IParticipantService participantService) {
     this.courseService = courseService;
     this.instructorService = instructorService;
     this.courseLevelService = courseLevelService;

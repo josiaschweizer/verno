@@ -2,6 +2,8 @@ package ch.verno.common.db.service;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.filter.CourseFilter;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -25,4 +27,12 @@ public interface ICourseService {
 
   @Nonnull
   List<CourseDto> getAllCourses();
+
+  @Nonnull
+  List<CourseDto> findCourses(@Nonnull CourseFilter filter,
+                              int offset,
+                              int limit,
+                              @Nonnull List<QuerySortOrder> sortOrders);
+
+  int countCourses(@Nonnull CourseFilter filter);
 }

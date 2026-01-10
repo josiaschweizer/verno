@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AppUserService implements IAppUserService {
 
@@ -35,13 +37,20 @@ public class AppUserService implements IAppUserService {
 
   @Nonnull
   @Override
-  public AppUserDto findByUserName(@Nonnull final String username) {
-    return AppUserMapper.toDto(findEntityByUserName(username));
+  public AppUserDto save(@Nonnull final AppUserDto user) {
+    final var save = appUserRepository.save(AppUserMapper.toEntity(user));
+    return AppUserMapper.toDto(save);
   }
 
-  private AppUserEntity findEntityByUserName(@Nonnull final String username) {
-    return appUserRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+  @Nonnull
+  @Override
+  public Optional<AppUserDto> findByUserName(@Nonnull final String username) {
+    final var entityByUserName = findEntityByUserName(username);
+    return entityByUserName.map(AppUserMapper::toDto);
+  }
+
+  private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
+    return appUserRepository.findByUsername(username);
   }
 }
 

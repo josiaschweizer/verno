@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.shared;
 
 import ch.verno.common.db.dto.MandantSettingDto;
-import ch.verno.server.service.MandantSettingService;
+import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,9 +14,9 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
 
   public static final String TITLE_KEY = "setting.shared_settings";
   @Nonnull
-  private final MandantSettingService mandantSettingService;
+  private final IMandantSettingService mandantSettingService;
 
-  public SharedSettings(@Nonnull final MandantSettingService mandantSettingService) {
+  public SharedSettings(@Nonnull final IMandantSettingService mandantSettingService) {
     super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;

@@ -2,6 +2,8 @@ package ch.verno.common.db.service;
 
 import ch.verno.common.db.dto.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.filter.CourseScheduleFilter;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 
 import java.time.LocalDate;
@@ -27,4 +29,11 @@ public interface ICourseScheduleService {
   @Nonnull
   List<CourseScheduleDto> getAllCourseSchedules();
 
+  @Nonnull
+  List<CourseScheduleDto> findCourseSchedules(@Nonnull CourseScheduleFilter filter,
+                                              int offset,
+                                              int limit,
+                                              @Nonnull List<QuerySortOrder> sortOrders);
+
+  int countCourseSchedules(@Nonnull CourseScheduleFilter filter);
 }

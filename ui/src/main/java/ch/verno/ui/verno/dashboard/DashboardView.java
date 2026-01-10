@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.dashboard;
 
-import ch.verno.server.service.*;
+import ch.verno.common.db.service.*;
+import ch.verno.common.report.IReportServerGate;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
-import ch.verno.common.report.IReportServerGate;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -15,11 +15,11 @@ import jakarta.annotation.security.PermitAll;
 @PageTitle("Dashboard")
 public class DashboardView extends VerticalLayout {
 
-  public DashboardView(@Nonnull final CourseService courseService,
-                       @Nonnull final ParticipantService participantService,
-                       @Nonnull final CourseLevelService courseLevelService,
-                       @Nonnull final CourseScheduleService courseScheduleService,
-                       @Nonnull final MandantSettingService mandantSettingService,
+  public DashboardView(@Nonnull final ICourseService courseService,
+                       @Nonnull final IParticipantService participantService,
+                       @Nonnull final ICourseLevelService courseLevelService,
+                       @Nonnull final ICourseScheduleService courseScheduleService,
+                       @Nonnull final IMandantSettingService mandantSettingService,
                        @Nonnull final IReportServerGate reportServerGate) {
     setSizeFull();
     setPadding(false);

@@ -4,9 +4,14 @@ import ch.verno.common.db.dto.AppUserDto;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Optional;
+
 public interface IAppUserService extends UserDetailsService {
 
   @Nonnull
-  AppUserDto findByUserName(@Nonnull String username);
+  AppUserDto save(@Nonnull AppUserDto user);
+
+  @Nonnull
+  Optional<AppUserDto> findByUserName(@Nonnull String username);
 
 }

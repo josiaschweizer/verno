@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.course;
 
 import ch.verno.common.db.dto.CourseDto;
-import ch.verno.server.service.CourseScheduleService;
-import ch.verno.server.service.CourseService;
+import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.db.service.ICourseService;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
 import ch.verno.ui.lib.Routes;
@@ -26,12 +26,12 @@ import java.util.List;
 public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
   @Nonnull
-  private final CourseScheduleService courseScheduleService;
+  private final ICourseScheduleService courseScheduleService;
   @Nonnull
-  private final CourseService courseService;
+  private final ICourseService courseService;
 
-  public CourseOverview(@Nonnull final CourseService courseService,
-                        @Nonnull final CourseScheduleService courseScheduleService) {
+  public CourseOverview(@Nonnull final ICourseService courseService,
+                        @Nonnull final ICourseScheduleService courseScheduleService) {
     this.courseScheduleService = courseScheduleService;
     this.courseService = courseService;
 

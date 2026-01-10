@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.publ.VernoConstants;
-import ch.verno.server.service.CourseLevelService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -21,18 +21,18 @@ import java.util.Optional;
 public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
 
   @Nonnull
-  private CourseLevelService courseLevelService;
+  private ICourseLevelService courseLevelService;
   @Nullable
   private Runnable afterSave;
 
-  public CourseLevelDetail(@Nonnull final CourseLevelService courseLevelService) {
+  public CourseLevelDetail(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
 
     init();
   }
 
   @Autowired
-  public void setCourseLevelService(@Nonnull final CourseLevelService courseLevelService) {
+  public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
   }
 

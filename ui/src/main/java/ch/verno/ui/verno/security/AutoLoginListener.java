@@ -68,10 +68,7 @@ public class AutoLoginListener implements VaadinServiceInitListener {
       securityContext.setAuthentication(authentication);
       SecurityContextHolder.setContext(securityContext);
 
-      ui.getSession().getSession().setAttribute(
-              HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-              securityContext
-      );
+      ui.getSession().getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
       LOG.info("Auto-Login erfolgreich für Benutzer: {}", username);
 

@@ -19,4 +19,12 @@ public interface IMandantSettingService {
   @Nonnull
   List<MandantSettingDto> getAllMandantSettings();
 
+  @Nonnull
+  MandantSettingDto getSingleMandantSetting();
+
+  @Nonnull
+  MandantSettingDto getOrCreateSingleMandantSetting(@Nonnull MandantSettingDto defaultDto);
+
+  @Nonnull
+  MandantSettingDto saveSingleMandantSetting(@Nonnull MandantSettingDto dto);
 }

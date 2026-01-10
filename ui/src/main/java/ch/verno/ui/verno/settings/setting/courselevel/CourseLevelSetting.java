@@ -2,7 +2,7 @@ package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.CourseLevelDto;
 import ch.verno.common.db.dto.MandantSettingDto;
-import ch.verno.server.service.CourseLevelService;
+import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -20,7 +20,7 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
   @Nonnull
   private final CourseLevelDetail courseLevelDetail;
 
-  public CourseLevelSetting(@Nonnull final CourseLevelService courseLevelService) {
+  public CourseLevelSetting(@Nonnull final ICourseLevelService courseLevelService) {
     super(TITLE_KEY, false);
     setCardDefaultHeight();
 
@@ -30,14 +30,14 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
     setActionButton(getAddCourseLevelButton());
   }
 
-  private CourseLevelGrid createGrid(@Nonnull final CourseLevelService courseLevelService) {
+  private CourseLevelGrid createGrid(@Nonnull final ICourseLevelService courseLevelService) {
     final var courseLevelGrid = new CourseLevelGrid(courseLevelService);
     courseLevelGrid.initUI();
     courseLevelGrid.addItemDoubleClickListener(this::onGridItemDoubleClick);
     return courseLevelGrid;
   }
 
-  private CourseLevelDetail createDetailView(@Nonnull final CourseLevelService courseLevelService) {
+  private CourseLevelDetail createDetailView(@Nonnull final ICourseLevelService courseLevelService) {
     final var courseLevelDetail = new CourseLevelDetail(courseLevelService);
     courseLevelDetail.setAfterSave(this::displayCourseLevelGrid);
     return courseLevelDetail;
