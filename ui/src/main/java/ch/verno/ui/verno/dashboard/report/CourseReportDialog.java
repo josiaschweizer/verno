@@ -133,7 +133,6 @@ public class CourseReportDialog extends Dialog {
 
     final var downloadButton = new Button("Download");
     downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    downloadButton.addClassName("download-button");
     downloadButton.addClickListener(event -> {
       hidden.getElement().callJsFunction("click");
       close();

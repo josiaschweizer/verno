@@ -107,3 +107,7 @@ vaadin-app-layout.main-layout::part(drawer) {
 .va-week-option::part(required-indicator) {
     display: none;
 }
+
+vaadin-button {
+    cursor: pointer;
+}
