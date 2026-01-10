@@ -36,7 +36,6 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Nonnull private final ICourseScheduleService courseScheduleService;
   @Nonnull private final IParticipantService participantService;
 
-  private boolean showPaddingAroundDetail;
 
   public CourseDetail(@Nonnull final ICourseService courseService,
                       @Nonnull final IInstructorService instructorService,
@@ -46,9 +45,9 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
                       final boolean showHeaderToolbar,
                       final boolean showPaddingAroundDetail) {
     this(courseService, instructorService, courseLevelService, courseScheduleService, participantService);
-    super.setShowHeaderToolbar(showHeaderToolbar);
 
-    this.showPaddingAroundDetail = showPaddingAroundDetail;
+    super.setShowHeaderToolbar(showHeaderToolbar);
+    this.setShowPaddingAroundDetail(showPaddingAroundDetail);
   }
 
   @Autowired
@@ -249,6 +248,10 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     addOnLayout = new VerticalLayout(title, participantsGrid);
     addOnLayout.setWidthFull();
     addOnLayout.setHeightFull();
+
+    if (!showPaddingAroundDetail) {
+      addOnLayout.setPadding(false);
+    }
 
     add(addOnLayout);
   }

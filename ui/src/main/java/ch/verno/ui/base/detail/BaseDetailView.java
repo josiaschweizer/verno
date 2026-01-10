@@ -38,7 +38,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull protected ViewToolbarResult viewToolbar;
   @Nullable protected VerticalLayout addOnLayout;
 
-  private boolean showHeaderToolbar;
+  protected boolean showHeaderToolbar;
+  protected boolean showPaddingAroundDetail;
 
   public BaseDetailView() {
     this(true);
@@ -166,6 +167,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     this.showHeaderToolbar = showHeaderToolbar;
   }
 
+  protected void setShowPaddingAroundDetail(final boolean showPaddingAroundDetail) {
+    this.showPaddingAroundDetail = showPaddingAroundDetail;
+  }
+
   protected void save() {
     if (formMode == FormMode.CREATE) {
       createBean(binder.getBean());
@@ -250,7 +255,11 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     saveLayout.setJustifyContentMode(JustifyContentMode.END);
     saveLayout.add(cancel, saveButton);
 
-    return new VerticalLayout(saveLayout);
+    final var saveWrapperLayout = new VerticalLayout(saveLayout);
+    if (!showPaddingAroundDetail) {
+      saveWrapperLayout.setPadding(false);
+    }
+    return saveWrapperLayout;
   }
 
   @Override
