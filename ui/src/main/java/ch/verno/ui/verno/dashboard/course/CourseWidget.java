@@ -160,7 +160,11 @@ public class CourseWidget extends AccordionPanel {
     participantsGrid.getGrid()
             .getDataProvider()
             .refreshAll();
-    participantsInCurrentCourse = participantsGrid.getGrid().getSelectedItems().stream().toList();
+
+    participantsInCurrentCourse = participantsGrid.getGrid()
+            .getDataProvider()
+            .fetch(new Query<>())
+            .toList();
   }
 
   @Nonnull
