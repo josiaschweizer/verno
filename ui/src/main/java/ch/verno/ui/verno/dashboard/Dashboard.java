@@ -2,7 +2,7 @@ package ch.verno.ui.verno.dashboard;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.*;
-import ch.verno.common.report.IReportServerGate;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
@@ -18,7 +18,7 @@ public class Dashboard extends VerticalLayout {
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ICourseScheduleService courseScheduleService;
   @Nonnull private final IMandantSettingService mandantSettingService;
-  @Nonnull private final IReportServerGate reportServerGate;
+  @Nonnull private final ReportServerGate reportServerGate;
 
   public Dashboard(@Nonnull final ICourseService courseService,
                    @Nonnull final IInstructorService instructorService,
@@ -26,7 +26,7 @@ public class Dashboard extends VerticalLayout {
                    @Nonnull final ICourseLevelService courseLevelService,
                    @Nonnull final ICourseScheduleService courseScheduleService,
                    @Nonnull final IMandantSettingService mandantSettingService,
-                   @Nonnull final IReportServerGate reportServerGate) {
+                   @Nonnull final ReportServerGate reportServerGate) {
     this.instructorService = instructorService;
     this.participantService = participantService;
     this.courseService = courseService;

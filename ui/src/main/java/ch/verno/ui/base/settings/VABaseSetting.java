@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.apache.commons.lang3.NotImplementedException;
 
 @CssImport("./components/setting/va-base-setting.css")
 public abstract class VABaseSetting<T extends BaseDto> extends Div {
@@ -113,6 +114,6 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   protected abstract T createNewBeanInstance();
 
   protected void save() {
-    // Default implementation does nothing
+    throw new NotImplementedException("Save method not implemented");
   }
 }

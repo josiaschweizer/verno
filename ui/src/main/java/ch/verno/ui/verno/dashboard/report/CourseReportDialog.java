@@ -2,12 +2,13 @@ package ch.verno.ui.verno.dashboard.report;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
-import ch.verno.common.report.IReportServerGate;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.common.report.ReportDto;
+import ch.verno.publ.Publ;
+import ch.verno.ui.base.dialog.VADialog;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.IFrame;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,17 +18,18 @@ import com.vaadin.flow.server.streams.DownloadResponse;
 import jakarta.annotation.Nonnull;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 import java.util.List;
 
-public class CourseReportDialog extends Dialog {
+public class CourseReportDialog extends VADialog {
 
-  @Nonnull private final IReportServerGate reportServerGate;
+  @Nonnull private final ReportServerGate reportServerGate;
   @Nonnull private final CourseDto currentCourse;
   @Nonnull private final List<ParticipantDto> participantsInCourse;
 
   @Nonnull private ReportDto pdfDto;
 
-  public CourseReportDialog(@Nonnull final IReportServerGate reportServerGate,
+  public CourseReportDialog(@Nonnull final ReportServerGate reportServerGate,
                             @Nonnull final CourseDto currentCourse,
                             @Nonnull final List<ParticipantDto> participantsInCourse) {
     this.reportServerGate = reportServerGate;
@@ -35,34 +37,21 @@ public class CourseReportDialog extends Dialog {
     this.participantsInCourse = participantsInCourse;
 
     generatePdf();
-    initUI();
+    initUI(getTranslation("shared.generate.report"));
 
     addDetachListener(e -> revokeBlobUrl());
     addDialogCloseActionListener(e -> revokeBlobUrl());
   }
 
-  private void initUI() {
-    final var cancelButton = new Button("Cancel", event -> close());
-    final var downloadButton = createDownloadButton(pdfDto.pdfBytes());
-
-    setHeight("90vh");
-    setWidth("min(1500px, 95vw)");
-    setMaxWidth("1500px");
-    setMinWidth("320px");
-
-    setHeaderTitle("Course Report");
-    add(createContent());
-    getFooter().add(cancelButton, downloadButton);
-  }
-
   @Nonnull
-  private HorizontalLayout createContent() {
+  @Override
+  protected HorizontalLayout createContent() {
     final byte[] pdfBytes = pdfDto.pdfBytes();
 
     final var previewFetchHandler = DownloadHandler
             .fromInputStream(event -> new DownloadResponse(
                     new ByteArrayInputStream(pdfBytes),
-                    "course-report.pdf",
+                    pdfDto.filename(),
                     "application/pdf",
                     pdfBytes.length
             ))
@@ -71,7 +60,7 @@ public class CourseReportDialog extends Dialog {
     final var preview = new IFrame();
     preview.setSizeFull();
 
-    final var hidden = new Anchor(previewFetchHandler, "");
+    final var hidden = new Anchor(previewFetchHandler, Publ.EMPTY_STRING);
     hidden.getStyle().set("display", "none");
     add(hidden);
 
@@ -112,26 +101,34 @@ public class CourseReportDialog extends Dialog {
     return layout;
   }
 
+  @Nonnull
+  @Override
+  protected Collection<Button> createActionButtons() {
+    final var cancelButton = new Button("Cancel", event -> close());
+    final var downloadButton = createDownloadButton(pdfDto);
+    return List.of(cancelButton, downloadButton);
+  }
+
   private void generatePdf() {
     pdfDto = reportServerGate.generateCourseReportPdf(currentCourse, participantsInCourse);
   }
 
   @Nonnull
-  private Button createDownloadButton(@Nonnull final byte[] pdfBytes) {
+  private Button createDownloadButton(@Nonnull final ReportDto reportDto) {
     final var downloadHandler = DownloadHandler
             .fromInputStream(event -> new DownloadResponse(
-                    new ByteArrayInputStream(pdfBytes),
-                    "course-report.pdf",
+                    new ByteArrayInputStream(reportDto.pdfBytes()),
+                    reportDto.filename(),
                     "application/pdf",
-                    pdfBytes.length
+                    reportDto.pdfBytes().length
             ));
 
-    final var hidden = new Anchor(downloadHandler, "Download");
+    final var hidden = new Anchor(downloadHandler, getTranslation("shared.download"));
     hidden.getElement().setAttribute("download", true);
     hidden.getStyle().setDisplay(Style.Display.NONE);
     add(hidden);
 
-    final var downloadButton = new Button("Download");
+    final var downloadButton = new Button(getTranslation("shared.download"));
     downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     downloadButton.addClickListener(event -> {
       hidden.getElement().callJsFunction("click");

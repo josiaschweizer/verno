@@ -10,12 +10,11 @@ import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import com.vaadin.flow.component.Component;
+import ch.verno.ui.base.dialog.VADialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -25,12 +24,13 @@ import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @CssImport("/components/assignment/assignment.css")
-public class AssignToCourseDialog extends Dialog {
+public class AssignToCourseDialog extends VADialog {
 
   @Nonnull
   private final ICourseService courseService;
@@ -79,26 +79,12 @@ public class AssignToCourseDialog extends Dialog {
     this.unselectedParticipantIds = new LinkedHashSet<>();
     this.participantItems = new LinkedHashMap<>();
 
-    initUI();
-  }
-
-  private void initUI() {
-    saveButton = createSaveButton();
-    final var cancelButton = createCancelButton();
-
-    setHeight("80vh");
-    setWidth("min(1500px, 95vw)");
-    setMaxWidth("1500px");
-    setMinWidth("320px");
-
-    setHeaderTitle(getTranslation("participant.assign.participants.to.course"));
-    add(createContent());
-    getFooter().add(cancelButton);
-    getFooter().add(saveButton);
+    initUI(getTranslation("participant.assign.participants.to.course"));
   }
 
   @Nonnull
-  private HorizontalLayout createContent() {
+  @Override
+  protected HorizontalLayout createContent() {
     final var left = createCourseLayout();
     left.getElement().getStyle().setMinWidth("260px");
     left.getElement().getStyle().set("flex", "1 1 260px");
@@ -117,6 +103,13 @@ public class AssignToCourseDialog extends Dialog {
     layout.setFlexGrow(1, left, right);
 
     return layout;
+  }
+
+  @Override
+  protected @NonNull Collection<Button> createActionButtons() {
+    saveButton = createSaveButton();
+    final var cancelButton = createCancelButton();
+    return List.of(cancelButton, saveButton);
   }
 
   @Nonnull
@@ -209,6 +202,13 @@ public class AssignToCourseDialog extends Dialog {
     return saveButton;
   }
 
+  @Nonnull
+  private Button createCancelButton() {
+    final var button = new Button(getTranslation("shared.cancel"));
+    button.addClickListener(event -> close());
+    return button;
+  }
+
   private void updateSaveEnabled() {
     if (saveButton == null || courseComboBox == null || participantsGroup == null) {
       return;
@@ -246,21 +246,6 @@ public class AssignToCourseDialog extends Dialog {
             + Publ.SIMPLE_QUOTE
             + Publ.DOT);
     close();
-  }
-
-  @Nonnull
-  private Button createCancelButton() {
-    final var button = new Button(getTranslation("shared.cancel"));
-    button.addClickListener(event -> close());
-    return button;
-  }
-
-  @Nonnull
-  private VerticalLayout createLayoutFromComponents(@Nonnull final Component... components) {
-    final var layout = new VerticalLayout(components);
-    layout.setPadding(false);
-    layout.setSpacing(false);
-    return layout;
   }
 
   @Nonnull

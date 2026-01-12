@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -8,14 +9,9 @@ import java.util.Locale;
 
 public class AppUserSettingDto extends BaseDto {
 
-  @Nonnull
-  private Long userId;
-
-  @Nullable
-  private String theme;
-
-  @Nonnull
-  private Locale language;
+  @Nonnull private Long userId;
+  @Nullable private String theme;
+  @Nonnull private Locale language;
 
   public AppUserSettingDto() {
     this.userId = 0L;

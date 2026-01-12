@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard;
 
 import ch.verno.common.db.service.*;
-import ch.verno.common.report.IReportServerGate;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,7 +21,7 @@ public class DashboardView extends VerticalLayout {
                        @Nonnull final ICourseLevelService courseLevelService,
                        @Nonnull final ICourseScheduleService courseScheduleService,
                        @Nonnull final IMandantSettingService mandantSettingService,
-                       @Nonnull final IReportServerGate reportServerGate) {
+                       @Nonnull final ReportServerGate reportServerGate) {
     setSizeFull();
     setPadding(false);
     setSpacing(false);

@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.AppUserDto;
 import ch.verno.common.db.dto.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -114,7 +115,10 @@ public class UISetting extends VABaseSetting<UISettingDto> {
       currentSetting.setLanguage(dto.getLanguage());
       currentSetting = appUserSettingService.saveAppUserSetting(currentSetting);
     } else {
-      final var newSetting = new AppUserSettingDto(currentUser.getId(), theme, dto.getLanguage());
+      final var newSetting = new AppUserSettingDto(
+              currentUser.getId(),
+              theme,
+              dto.getLanguage());
       currentSetting = appUserSettingService.saveAppUserSetting(newSetting);
     }
 

@@ -6,7 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public interface IReportServerGate {
+public interface ReportServerGate {
 
   @Nonnull
   ReportDto generateCourseReportPdf(@Nonnull CourseDto course);

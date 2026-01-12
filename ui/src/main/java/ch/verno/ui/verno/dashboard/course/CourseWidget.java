@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
-import ch.verno.common.report.IReportServerGate;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.Publ;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
@@ -37,7 +37,7 @@ public class CourseWidget extends AccordionPanel {
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final IMandantSettingService mandantSettingService;
   @Nonnull private final ICourseScheduleService courseScheduleService;
-  @Nonnull private final IReportServerGate reportServerGate;
+  @Nonnull private final ReportServerGate reportServerGate;
 
   @Nullable
   private ParticipantsGrid participantsGrid;
@@ -51,7 +51,7 @@ public class CourseWidget extends AccordionPanel {
                       @Nonnull final ICourseLevelService courseLevelService,
                       @Nonnull final IMandantSettingService mandantSettingService,
                       @Nonnull final ICourseScheduleService courseScheduleService,
-                      @Nonnull final IReportServerGate reportServerGate) {
+                      @Nonnull final ReportServerGate reportServerGate) {
     this.courseService = courseService;
     this.instructorService = instructorService;
     this.participantService = participantService;

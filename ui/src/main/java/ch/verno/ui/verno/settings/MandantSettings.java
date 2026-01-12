@@ -7,6 +7,7 @@ import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.settings.setting.courselevel.CourseLevelSetting;
 import ch.verno.ui.verno.settings.setting.quantity.QuantitySetting;
+import ch.verno.ui.verno.settings.setting.report.ReportSetting;
 import ch.verno.ui.verno.settings.setting.shared.SharedSettings;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -23,18 +24,17 @@ import java.util.List;
 @Menu(order = 98, icon = "vaadin:cog", title = "setting.mandant_settings")
 public class MandantSettings extends VABaseSettingsPage {
 
-  @Nonnull
-  private final QuantitySetting quantitySetting;
-  @Nonnull
-  private final SharedSettings sharedSetting;
-  @Nonnull
-  private final CourseLevelSetting courseLevelGridSetting;
+  @Nonnull private final SharedSettings sharedSetting;
+  @Nonnull private final QuantitySetting quantitySetting;
+  @Nonnull private final ReportSetting reportSetting;
+  @Nonnull private final CourseLevelSetting courseLevelGridSetting;
 
   @Autowired
   public MandantSettings(@Nonnull final IMandantSettingService mandantSettingService,
                          @Nonnull final ICourseLevelService courseLevelService) {
     this.sharedSetting = new SharedSettings(mandantSettingService);
     this.quantitySetting = new QuantitySetting(mandantSettingService);
+    this.reportSetting = new ReportSetting(mandantSettingService);
     this.courseLevelGridSetting = new CourseLevelSetting(courseLevelService);
 
     initUI();
@@ -43,7 +43,7 @@ public class MandantSettings extends VABaseSettingsPage {
   @Nonnull
   @Override
   protected List<VABaseSetting<?>> createSettings() {
-    return List.of(quantitySetting, sharedSetting, courseLevelGridSetting);
+    return List.of(quantitySetting, sharedSetting, reportSetting, courseLevelGridSetting);
   }
 
 

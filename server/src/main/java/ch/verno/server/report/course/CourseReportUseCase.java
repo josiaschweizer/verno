@@ -2,8 +2,9 @@ package ch.verno.server.report.course;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.report.ReportDto;
-import ch.verno.server.service.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,15 @@ import java.util.List;
 @Service
 public class CourseReportUseCase {
 
-  private final ParticipantService participantService;
-  private final CourseReportRenderer courseReportRenderer;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final IMandantSettingService mandantSettingService;
+  @Nonnull private final CourseReportRenderer courseReportRenderer;
 
-  public CourseReportUseCase(@Nonnull final ParticipantService participantService,
+  public CourseReportUseCase(@Nonnull final IParticipantService participantService,
+                             @Nonnull final IMandantSettingService mandantSettingService,
                              @Nonnull final CourseReportRenderer courseReportRenderer) {
     this.participantService = participantService;
+    this.mandantSettingService = mandantSettingService;
     this.courseReportRenderer = courseReportRenderer;
   }
 
@@ -36,7 +40,8 @@ public class CourseReportUseCase {
     final var reportData = CourseReportMapper.map(course, participants, courseDates);
 
 
-    final var filename = "course-report-" + course.getTitle() + ".pdfBytes"; //todo change filename - maybe proposal form user setting & user input?
+    final var prefix = mandantSettingService.getSingleMandantSetting().getCourseReportName();
+    final var filename = prefix + course.getTitle() + ".pdf";
     final var pdfBytes = courseReportRenderer.renderReportPdf(reportData);
     return new ReportDto(filename, pdfBytes);
   }

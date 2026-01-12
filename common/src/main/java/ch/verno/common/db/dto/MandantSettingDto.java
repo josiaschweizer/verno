@@ -7,16 +7,15 @@ import jakarta.annotation.Nullable;
 
 public class MandantSettingDto extends BaseDto {
 
-  @Nonnull
-  private Integer courseDaysPerSchedule;
-  @Nonnull
-  private Integer maxParticipantsPerCourse;
+  @Nonnull private Integer courseDaysPerSchedule;
+  @Nonnull private Integer maxParticipantsPerCourse;
   private boolean enforceQuantitySettings;
   private boolean enforceCourseLevelSettings;
   private boolean isParentOneMainParent;
+  @Nonnull private String courseReportName;
 
   public MandantSettingDto() {
-    this(null, Publ.ZERO, Publ.ZERO, false, false, true);
+    this(null, Publ.ZERO, Publ.ZERO, false, false, true, Publ.EMPTY_STRING);
   }
 
   public MandantSettingDto(@Nullable final Long id,
@@ -24,13 +23,15 @@ public class MandantSettingDto extends BaseDto {
                            @Nonnull final Integer maxParticipantsPerCourse,
                            final boolean enforceQuantitySettings,
                            final boolean enforceCourseLevelSettings,
-                           final boolean isParentOneMainParent) {
+                           final boolean isParentOneMainParent,
+                           @Nonnull final String courseReportName) {
     setId(id);
     this.courseDaysPerSchedule = courseDaysPerSchedule;
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
     this.enforceQuantitySettings = enforceQuantitySettings;
     this.enforceCourseLevelSettings = enforceCourseLevelSettings;
     this.isParentOneMainParent = isParentOneMainParent;
+    this.courseReportName = courseReportName;
   }
 
   @Nonnull
@@ -73,5 +74,14 @@ public class MandantSettingDto extends BaseDto {
 
   public void setParentOneMainParent(final boolean parentOneMainParent) {
     isParentOneMainParent = parentOneMainParent;
+  }
+
+  @Nonnull
+  public String getCourseReportName() {
+    return courseReportName;
+  }
+
+  public void setCourseReportName(@Nonnull final String courseReportName) {
+    this.courseReportName = courseReportName;
   }
 }
