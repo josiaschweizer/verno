@@ -46,7 +46,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
                       final boolean showPaddingAroundDetail) {
     this(courseService, instructorService, courseLevelService, courseScheduleService, participantService);
 
-    super.setShowHeaderToolbar(showHeaderToolbar);
+    this.setShowHeaderToolbar(showHeaderToolbar);
     this.setShowPaddingAroundDetail(showPaddingAroundDetail);
   }
 
@@ -61,6 +61,9 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
     this.participantService = participantService;
+
+    this.setShowHeaderToolbar(true);
+    this.setShowPaddingAroundDetail(true);
   }
 
   @Nonnull

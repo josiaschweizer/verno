@@ -30,6 +30,8 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
                           @Nonnull final IGenderService genderService) {
     this.instructorService = instructorService;
     this.genderService = genderService;
+
+    super.setShowPaddingAroundDetail(true);
   }
 
   @Nonnull

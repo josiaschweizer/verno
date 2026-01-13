@@ -47,6 +47,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
     this.mandantSettingService = mandantSettingService;
+
+    super.setShowPaddingAroundDetail(true);
   }
 
   @Nonnull

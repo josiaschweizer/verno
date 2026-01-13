@@ -34,6 +34,8 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
                               @Nonnull final IMandantSettingService mandantSettingService) {
     this.courseScheduleService = courseScheduleService;
     this.mandantSettingService = mandantSettingService;
+
+    this.setShowPaddingAroundDetail(true);
   }
 
   @Override

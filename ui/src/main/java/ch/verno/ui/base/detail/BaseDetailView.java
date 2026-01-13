@@ -20,6 +20,7 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -256,9 +257,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     saveLayout.add(cancel, saveButton);
 
     final var saveWrapperLayout = new VerticalLayout(saveLayout);
-    if (!showPaddingAroundDetail) {
-      saveWrapperLayout.setPadding(false);
-    }
+    saveWrapperLayout.setPadding(showPaddingAroundDetail);
     return saveWrapperLayout;
   }
 
