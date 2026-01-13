@@ -56,9 +56,6 @@ public class CourseService implements ICourseService {
   @Transactional
   public CourseDto createCourse(@Nonnull final CourseDto courseDto) {
     final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
-    if (levels.isEmpty()) {
-      throw new IllegalArgumentException("At least one course level is required");
-    }
 
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
     if (schedule == null) {

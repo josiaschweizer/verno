@@ -204,7 +204,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             CourseDto::getCourseLevels,
             CourseDto::setCourseLevels,
             getBinder(),
-            Optional.of(getTranslation("courseLevel.at.least.one.course.level.is.required")),
+            Optional.empty(),
             getTranslation("courseLevel.course_levels"),
             courseLevelService.getAllCourseLevels(),
             CourseLevelDto::displayName
@@ -248,7 +248,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             CourseDto::getWeekdays,
             CourseDto::setWeekdays,
             getBinder(),
-            Optional.of(getTranslation("course.at.least.one.weekday.is.required")),
+            Optional.empty(),
             getTranslation("course.weekdays")
     );
 
