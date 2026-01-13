@@ -3,6 +3,7 @@ package ch.verno.ui.base.grid;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
 import ch.verno.ui.base.components.filter.VAFilterBar;
+import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
@@ -84,7 +85,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     initGrid();
     createContextMenu();
 
-    final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
+    final var gridToolbar = createGridToolbar();
     final var filterBar = createFilterBar();
 
     final var componentsToAdd = new ArrayList<Component>();
@@ -96,6 +97,11 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     }
     componentsToAdd.add(grid);
     add(componentsToAdd);
+  }
+
+  @Nonnull
+  protected ViewToolbar createGridToolbar() {
+    return ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
   }
 
   @Nonnull

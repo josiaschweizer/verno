@@ -3,6 +3,7 @@ package ch.verno.ui.verno.course.courses.detail;
 import ch.verno.common.db.dto.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
@@ -35,6 +36,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ICourseScheduleService courseScheduleService;
   @Nonnull private final IParticipantService participantService;
+  @Nonnull private ReportServerGate reportServerGate;
 
 
   public CourseDetail(@Nonnull final ICourseService courseService,
@@ -42,9 +44,15 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
                       @Nonnull final ICourseLevelService courseLevelService,
                       @Nonnull final ICourseScheduleService courseScheduleService,
                       @Nonnull final IParticipantService participantService,
+                      @Nonnull final ReportServerGate reportServerGate,
                       final boolean showHeaderToolbar,
                       final boolean showPaddingAroundDetail) {
-    this(courseService, instructorService, courseLevelService, courseScheduleService, participantService);
+    this(courseService,
+            instructorService,
+            courseLevelService,
+            courseScheduleService,
+            participantService,
+            reportServerGate);
 
     this.setShowHeaderToolbar(showHeaderToolbar);
     this.setShowPaddingAroundDetail(showPaddingAroundDetail);
@@ -55,7 +63,8 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
                       @Nonnull final IInstructorService instructorService,
                       @Nonnull final ICourseLevelService courseLevelService,
                       @Nonnull final ICourseScheduleService courseScheduleService,
-                      @Nonnull final IParticipantService participantService) {
+                      @Nonnull final IParticipantService participantService,
+                      @Nonnull final ReportServerGate reportServerGate) {
     this.courseService = courseService;
     this.instructorService = instructorService;
     this.courseLevelService = courseLevelService;
@@ -64,6 +73,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
     this.setShowHeaderToolbar(true);
     this.setShowPaddingAroundDetail(true);
+    this.reportServerGate = reportServerGate;
   }
 
   @Nonnull
@@ -126,7 +136,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var datePanel = createDateLayout();
     final var verticalLayout = new VerticalLayout(infoPanel, coursePanel, datePanel);
 
-    if (!showPaddingAroundDetail){
+    if (!showPaddingAroundDetail) {
       verticalLayout.setPadding(false);
     }
 
@@ -235,7 +245,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var title = new Span(getTranslation("course.participants.in.this.course"));
     title.getStyle().setFontWeight("bold");
 
-    final var participantsGrid = new ParticipantsGrid(participantService, courseService, courseLevelService, false, false) {
+    final var participantsGrid = new ParticipantsGrid(participantService, courseService, courseLevelService, reportServerGate, false, false) {
 
       @Nonnull
       @Override

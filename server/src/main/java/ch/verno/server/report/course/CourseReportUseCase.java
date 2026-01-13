@@ -39,7 +39,6 @@ public class CourseReportUseCase {
     final var courseDates = new ArrayList<LocalDate>(); //todo liste ergänzen -> auflösen nach course & course schedule
     final var reportData = CourseReportMapper.map(course, participants, courseDates);
 
-
     final var prefix = mandantSettingService.getSingleMandantSetting().getCourseReportName();
     final var filename = prefix.toLowerCase() + course.getTitle().toLowerCase() + ".pdf";
     final var pdfBytes = courseReportRenderer.renderReportPdf(reportData);

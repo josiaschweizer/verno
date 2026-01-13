@@ -2,6 +2,7 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.CourseDto;
 import ch.verno.common.db.service.*;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.ui.verno.course.courses.detail.CourseDetail;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,6 +15,7 @@ public class CourseDetailDialog extends Dialog {
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ICourseScheduleService courseScheduleService;
   @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ReportServerGate reportServerGate;
   @Nonnull private final CourseDto currentCourse;
 
   public CourseDetailDialog(@Nonnull final ICourseService courseService,
@@ -21,12 +23,14 @@ public class CourseDetailDialog extends Dialog {
                             @Nonnull final ICourseLevelService courseLevelService,
                             @Nonnull final ICourseScheduleService courseScheduleService,
                             @Nonnull final IParticipantService participantService,
+                            @Nonnull final ReportServerGate reportServerGate,
                             @Nonnull final CourseDto currentCourse) {
     this.courseService = courseService;
     this.instructorService = instructorService;
     this.courseLevelService = courseLevelService;
     this.courseScheduleService = courseScheduleService;
     this.participantService = participantService;
+    this.reportServerGate = reportServerGate;
     this.currentCourse = currentCourse;
 
     initUI();
@@ -52,6 +56,7 @@ public class CourseDetailDialog extends Dialog {
             courseLevelService,
             courseScheduleService,
             participantService,
+            reportServerGate,
             false,
             false);
     courseDetail.setParameter(null, currentCourse.getId());

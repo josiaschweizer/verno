@@ -1,7 +1,5 @@
 package ch.verno.ui.verno.dashboard.report;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.ParticipantDto;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
@@ -17,21 +15,14 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class CourseReportDialog extends VADialog {
-
+public class ParticipantsReportDialog extends VADialog {
 
   @Nonnull private final ReportServerGate reportServerGate;
-  @Nonnull private final CourseDto currentCourse;
-  @Nonnull private final List<ParticipantDto> participantsInCourse;
 
   @Nonnull private String reportToken;
 
-  public CourseReportDialog(@Nonnull final ReportServerGate reportServerGate,
-                            @Nonnull final CourseDto currentCourse,
-                            @Nonnull final List<ParticipantDto> participantsInCourse) {
+  public ParticipantsReportDialog(@Nonnull final ReportServerGate reportServerGate) {
     this.reportServerGate = reportServerGate;
-    this.currentCourse = currentCourse;
-    this.participantsInCourse = participantsInCourse;
 
     generateReport();
     initUI(getTranslation("shared.generate.report"));
@@ -75,7 +66,7 @@ public class CourseReportDialog extends VADialog {
   }
 
   private void generateReport() {
-    reportToken = reportServerGate.generateCourseReport(currentCourse, participantsInCourse);
+    reportToken = reportServerGate.generateParticipantsReport();
   }
 
   @Nonnull

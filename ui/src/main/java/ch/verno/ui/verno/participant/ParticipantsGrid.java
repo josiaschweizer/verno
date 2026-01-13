@@ -8,13 +8,19 @@ import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.Publ;
+import ch.verno.ui.base.components.toolbar.ViewToolbar;
+import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.base.grid.ComponentGridColumn;
 import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
+import ch.verno.ui.verno.dashboard.report.ParticipantsReportDialog;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -35,16 +41,15 @@ import java.util.stream.Stream;
 @Menu(order = 1, icon = "vaadin:users", title = "participant.participants.overview")
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 
-  @Nonnull
-  private final IParticipantService participantService;
-  @Nonnull
-  private final ICourseService courseService;
-  @Nonnull
-  private final ICourseLevelService courseLevelService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private ReportServerGate reportServerGate;
 
   public ParticipantsGrid(@Nonnull final IParticipantService participantService,
                           @Nonnull final ICourseService courseService,
                           @Nonnull final ICourseLevelService courseLevelService,
+                          @Nonnull final ReportServerGate reportServerGate,
                           final boolean showGridToolbar,
                           final boolean showFilterToolbar) {
     super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
@@ -57,12 +62,14 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Autowired
   public ParticipantsGrid(@Nonnull final IParticipantService participantService,
                           @Nonnull final ICourseService courseService,
-                          @Nonnull final ICourseLevelService courseLevelService) {
+                          @Nonnull final ICourseLevelService courseLevelService,
+                          @Nonnull final ReportServerGate reportServerGate) {
     super(ParticipantFilter.empty(), true, true);
 
     this.participantService = participantService;
     this.courseService = courseService;
     this.courseLevelService = courseLevelService;
+    this.reportServerGate = reportServerGate;
   }
 
   @Nonnull
@@ -214,6 +221,21 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 //            "Active Filter");
 
     return List.of(courseFilter, courseLevelFilter);
+  }
+
+  @Nonnull
+  @Override
+  protected ViewToolbar createGridToolbar() {
+    final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
+    final var participantReportDialogButton = new Button("Report", VaadinIcon.FILE_TEXT.create());
+    participantReportDialogButton.addClickListener(e -> createDialogButtonClick());
+    gridToolbar.addActionButton(participantReportDialogButton, true);
+    return gridToolbar;
+  }
+
+  private void createDialogButtonClick() {
+    final var reportDialog = new ParticipantsReportDialog(reportServerGate);
+    reportDialog.open();
   }
 
   @Nonnull

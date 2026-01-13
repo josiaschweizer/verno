@@ -7,38 +7,77 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.Nullable;
 
 public final class ViewToolbar extends Composite<HorizontalLayout> {
 
-    public ViewToolbar(@Nullable String viewTitle, Component... components) {
-        var layout = getContent();
-        layout.setPadding(true);
-        layout.setWrap(true);
-        layout.setWidthFull();
-        layout.addClassName(LumoUtility.Border.BOTTOM);
+  @Nonnull
+  private final HorizontalLayout actions;
 
-        var drawerToggle = new DrawerToggle();
-        drawerToggle.addClassNames(LumoUtility.Margin.NONE);
+  public ViewToolbar(@Nullable final String viewTitle, @Nonnull final Component... initialActions) {
+    final var layout = getContent();
+    layout.setPadding(true);
+    layout.setWrap(true);
+    layout.setWidthFull();
+    layout.addClassName(LumoUtility.Border.BOTTOM);
+    layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
-        var title = new H1(viewTitle);
-        title.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Margin.NONE, LumoUtility.FontWeight.LIGHT);
+    final var drawerToggle = new DrawerToggle();
+    drawerToggle.addClassNames(LumoUtility.Margin.NONE);
 
-        var toggleAndTitle = new HorizontalLayout(drawerToggle, title);
-        toggleAndTitle.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-        layout.add(toggleAndTitle);
-        layout.setFlexGrow(1, toggleAndTitle);
+    final var title = new H1(viewTitle == null ? "" : viewTitle);
+    title.addClassNames(
+            LumoUtility.FontSize.XLARGE,
+            LumoUtility.Margin.NONE,
+            LumoUtility.FontWeight.LIGHT
+    );
 
-        if (components.length > 0) {
-            var actions = new HorizontalLayout(components);
-            actions.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-            layout.add(actions);
-        }
+    final var toggleAndTitle = new HorizontalLayout(drawerToggle, title);
+    toggleAndTitle.setPadding(false);
+    toggleAndTitle.setSpacing(true);
+    toggleAndTitle.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+    actions = new HorizontalLayout();
+    actions.setPadding(false);
+    actions.setSpacing(true);
+    actions.setWrap(true);
+    actions.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+    layout.add(toggleAndTitle, actions);
+    layout.setFlexGrow(1, toggleAndTitle);
+
+    if (initialActions.length > 0) {
+      addActions(initialActions);
     }
+  }
 
-    public static Component group(Component... components) {
-        var group = new HorizontalLayout(components);
-        group.setWrap(true);
-        return group;
+  @Nonnull
+  public ViewToolbar addAction(@Nonnull final Component component) {
+    actions.add(component);
+    return this;
+  }
+
+  @Nonnull
+  public ViewToolbar addActions(@Nonnull final Component... components) {
+    actions.add(components);
+    return this;
+  }
+
+  @Nonnull
+  public ViewToolbar addActionButton(@Nonnull final Component button,
+                                     final boolean asFirst) {
+    if (asFirst) {
+      actions.addComponentAsFirst(button);
+    } else {
+      actions.add(button);
     }
+    return this;
+  }
+
+  public static Component group(@Nonnull final Component... components) {
+    final var group = new HorizontalLayout(components);
+    group.setWrap(true);
+    return group;
+  }
 }

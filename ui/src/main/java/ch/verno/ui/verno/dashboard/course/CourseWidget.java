@@ -104,6 +104,7 @@ public class CourseWidget extends AccordionPanel {
               courseLevelService,
               courseScheduleService,
               participantService,
+              reportServerGate,
               currentCourse
       );
       courseDetailDialog.open();
@@ -131,7 +132,12 @@ public class CourseWidget extends AccordionPanel {
   }
 
   private void initContent() {
-    this.participantsGrid = new ParticipantsGrid(participantService, courseService, courseLevelService, false, false) {
+    this.participantsGrid = new ParticipantsGrid(participantService,
+            courseService,
+            courseLevelService,
+            reportServerGate,
+            false,
+            false) {
 
       @Nonnull
       @Override
