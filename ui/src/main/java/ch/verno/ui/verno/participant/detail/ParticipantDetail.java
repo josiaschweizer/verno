@@ -354,6 +354,6 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
   @Override
   public String getPageTitle() {
-    return getTranslation("participant.participants.detail.view");
+    return getTranslation("participant.participant.detail");
   }
 }

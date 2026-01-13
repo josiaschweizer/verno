@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES)
-@Menu(order = 3.1, icon = "vaadin:desktop", title = "course.course")
+@Menu(order = 3.1, icon = "vaadin:desktop", title = "course.course.overview")
 public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> implements HasDynamicTitle {
 
   @Nonnull

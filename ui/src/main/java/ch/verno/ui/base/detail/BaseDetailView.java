@@ -49,7 +49,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   public BaseDetailView(final boolean showHeaderToolbar) {
     this.showHeaderToolbar = showHeaderToolbar;
 
-    this.saveButton = new Button(getTranslation("common.dsave"));
+    this.saveButton = new Button(getTranslation("common.save"));
     this.saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     this.afterSave = () -> UI.getCurrent().navigate(getBasePageRoute());
 
