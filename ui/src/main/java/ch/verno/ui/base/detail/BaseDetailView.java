@@ -20,33 +20,46 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.List;
+
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
-  @Nonnull public FormMode formMode;
+  @Nonnull
+  public FormMode formMode;
 
-  @Nonnull private final Binder<T> binder;
-  @Nonnull protected EntryFactory<T> entryFactory;
-  @Nonnull protected FieldFactory<T> fieldFactory;
-  @Nullable protected I18NProvider i18nProvider;
+  @Nonnull
+  private final Binder<T> binder;
+  @Nonnull
+  protected EntryFactory<T> entryFactory;
+  @Nonnull
+  protected FieldFactory<T> fieldFactory;
+  @Nullable
+  protected I18NProvider i18nProvider;
 
-  @Nonnull protected Button saveButton;
-  @Nonnull protected Runnable afterSave;
+  @Nonnull
+  protected Button saveButton;
+  @Nonnull
+  protected Runnable afterSave;
 
-  @Nonnull protected ViewToolbarResult viewToolbar;
-  @Nullable protected VerticalLayout addOnLayout;
+  @Nonnull
+  protected ViewToolbarResult viewToolbar;
+  @Nullable
+  protected VerticalLayout addOnLayout;
 
   protected boolean showHeaderToolbar;
   protected boolean showPaddingAroundDetail;
 
-  public BaseDetailView() {
+  @Nullable
+  private FormMode pendingFormMode;
+
+  protected BaseDetailView() {
     this(true);
   }
 
-  public BaseDetailView(final boolean showHeaderToolbar) {
+  protected BaseDetailView(final boolean showHeaderToolbar) {
     this.showHeaderToolbar = showHeaderToolbar;
 
     this.saveButton = new Button(getTranslation("common.save"));
@@ -59,15 +72,6 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     this.entryFactory = new EntryFactory<>(i18nProvider);
     this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
     this.viewToolbar = createViewToolbar();
-  }
-
-  @Nullable
-  protected I18NProvider getI18NProvider() {
-    final var service = VaadinService.getCurrent();
-    if (service != null && service.getInstantiator() != null) {
-      return service.getInstantiator().getI18NProvider();
-    }
-    return null;
   }
 
   @Override
@@ -95,7 +99,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     add(createActionButtonLayout());
     initAdditionalInfoUIBelowSaveButton();
 
-    applyFormMode(getDefaultFormMode());
+    applyFormMode(resolveInitialFormMode());
     updateSaveButtonState();
   }
 
@@ -264,16 +268,60 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Override
   public void setParameter(@Nullable final BeforeEvent event,
                            @OptionalParameter @Nullable final Long parameter) {
+    final var forcedFormMode = parseForcedMode(event);
+
     if (parameter == null) {
       binder.setBean(newBeanInstance());
-      applyFormMode(FormMode.CREATE);
+      pendingFormMode = forcedFormMode != null ? forcedFormMode : FormMode.CREATE;
       updateSaveButtonState();
-    } else {
-      final var bean = getBeanById(parameter);
-      binder.setBean(bean);
-      applyFormMode(getFormModeByBean(bean));
-      updateSaveButtonState();
+      return;
     }
+
+    final var bean = getBeanById(parameter);
+    binder.setBean(bean);
+
+    if (forcedFormMode != null) {
+      pendingFormMode = forcedFormMode;
+    } else {
+      pendingFormMode = getFormModeByBean(bean);
+    }
+
+    updateSaveButtonState();
+  }
+
+  @Nullable
+  private FormMode parseForcedMode(@Nullable final BeforeEvent event) {
+    if (event == null) {
+      return null;
+    }
+
+    final var params = event.getLocation().getQueryParameters().getParameters();
+    final List<String> values = params.getOrDefault("mode", List.of());
+    if (values.isEmpty()) {
+      return null;
+    }
+
+    final var raw = values.getFirst();
+    if (raw == null) {
+      return null;
+    }
+
+    if ("view".equalsIgnoreCase(raw)) {
+      return FormMode.VIEW;
+    }
+    if ("edit".equalsIgnoreCase(raw)) {
+      return FormMode.EDIT;
+    }
+    if ("create".equalsIgnoreCase(raw)) {
+      return FormMode.CREATE;
+    }
+
+    return null;
+  }
+
+  @Nonnull
+  protected FormMode resolveInitialFormMode() {
+    return pendingFormMode != null ? pendingFormMode : getDefaultFormMode();
   }
 
   @Nonnull
@@ -289,5 +337,14 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   public void setAfterSave(@Nonnull final Runnable afterSave) {
     this.afterSave = afterSave;
+  }
+
+  @Nullable
+  protected I18NProvider getI18NProvider() {
+    final var service = VaadinService.getCurrent();
+    if (service != null && service.getInstantiator() != null) {
+      return service.getInstantiator().getI18NProvider();
+    }
+    return null;
   }
 }
