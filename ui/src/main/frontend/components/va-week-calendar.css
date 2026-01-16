@@ -111,9 +111,12 @@
 }
 
 .va-week-calendar-course {
-    background: var(--lumo-primary-color-10pct);
-    color: var(--lumo-primary-text-color);
-    border-left: 4px solid var(--lumo-primary-color);
+    --va-event-color: #55A6F6;
+
+    background: color-mix(in srgb, var(--va-event-color) 30%, var(--lumo-base-color));
+    color: var(--va-event-color);
+    border-left: 4px solid var(--va-event-color);
+
     border-radius: var(--lumo-border-radius-s);
     padding: var(--lumo-space-xs);
     font-size: var(--lumo-font-size-xs);
@@ -127,5 +130,5 @@
 }
 
 .va-week-calendar-course:hover {
-    background: var(--lumo-primary-color-20pct);
+    background: color-mix(in srgb, var(--va-event-color) 45%, var(--lumo-base-color));
 }

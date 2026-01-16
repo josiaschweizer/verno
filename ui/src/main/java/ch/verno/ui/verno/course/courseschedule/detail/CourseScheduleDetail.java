@@ -67,7 +67,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             CourseScheduleDto::setColor,
             getBinder(),
             Optional.empty(),
-            getTranslation("Color")
+            getTranslation("shared.color")
     );
 
 

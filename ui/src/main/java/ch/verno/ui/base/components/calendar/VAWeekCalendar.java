@@ -192,6 +192,10 @@ public class VAWeekCalendar extends Composite<Div> {
                                final int laneCount) {
     final var block = new Div();
     block.addClassName("va-week-calendar-course");
+
+    final var hex = event.color();
+    block.getStyle().set("--va-event-color", hex);
+
     block.setText(event.title());
 
     block.getStyle().setCursor("pointer");
@@ -334,7 +338,7 @@ public class VAWeekCalendar extends Composite<Div> {
       for (int i = active.size() - 1; i >= 0; i--) {
         final var a = active.get(i);
         final var aInt = clampToDay(a, dayStart, dayEndExclusive);
-        if (!aInt.end.isAfter(interval.start)) { // a.end <= e.start
+        if (!aInt.end.isAfter(interval.start)) {
           final int lane = laneByEvent.getOrDefault(a, -1);
           if (lane >= 0) {
             usedLanes.clear(lane);

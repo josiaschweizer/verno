@@ -22,6 +22,7 @@ public final class CourseScheduleMapper {
             entity.getId(),
             entity.getCreatedAt(),
             entity.getTitle(),
+            entity.getColor(),
             entity.getStatus(),
             weeks
     );
@@ -37,6 +38,7 @@ public final class CourseScheduleMapper {
 
     final var entity = new CourseScheduleEntity(
             dto.getTitle(),
+            dto.getColor(),
             dto.getStatus(),
             weeks
     );

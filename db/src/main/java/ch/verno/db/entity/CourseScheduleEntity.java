@@ -1,5 +1,6 @@
 package ch.verno.db.entity;
 
+import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -19,7 +20,11 @@ public class CourseScheduleEntity {
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();
 
+  @Column(name = "title", nullable = false)
   private String title;
+
+  @Column(name = "color", nullable = false, length = 16)
+  private String color = Colors.PRIMARY_COLOR;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "status", nullable = false, length = 16)
@@ -39,9 +44,11 @@ public class CourseScheduleEntity {
   }
 
   public CourseScheduleEntity(@Nonnull final String title,
+                              @Nonnull final String color,
                               @Nonnull final CourseScheduleStatus status,
                               @Nonnull final List<String> weeks) {
     this.title = title;
+    this.color = color;
     this.status = status;
     this.weeks = weeks;
   }
@@ -69,6 +76,14 @@ public class CourseScheduleEntity {
 
   public void setTitle(final String title) {
     this.title = title;
+  }
+
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(final String color) {
+    this.color = color;
   }
 
   public CourseScheduleStatus getStatus() {

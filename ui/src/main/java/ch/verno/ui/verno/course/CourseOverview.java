@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.course;
 
+import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
@@ -92,9 +93,16 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
         final var start = LocalDateTime.of(date, startTime);
         final var end = LocalDateTime.of(date, endTime);
+        final var color = course.getCourseSchedule() != null ?
+                course.getCourseSchedule().getColor() :
+                Colors.PRIMARY_COLOR;
 
-        events.add(new WeekCalendarEventDto(course.getTitle(),
-                start, end, course.getId()
+        events.add(new WeekCalendarEventDto(
+                course.getTitle(),
+                start,
+                end,
+                course.getId(),
+                color
         ));
       }
     }
