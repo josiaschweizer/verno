@@ -82,6 +82,29 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     return getTranslation("course.course");
   }
 
+  @Override
+  protected void init() {
+    setWidthFull();
+    setPadding(false);
+    setSpacing(false);
+
+    if (showHeaderToolbar) {
+      add(viewToolbar.toolbar());
+    }
+
+    initUI();
+
+    saveButton.addClickListener(event -> save());
+    getBinder().addValueChangeListener(event -> updateSaveButtonState());
+    getBinder().addStatusChangeListener(event -> updateSaveButtonState());
+
+    add(createActionButtonLayout());
+    initAdditionalInfoUIBelowSaveButton();
+
+    applyFormMode(resolveInitialFormMode());
+    updateSaveButtonState();
+  }
+
   @NonNull
   @Override
   protected String getDetailRoute() {
@@ -273,9 +296,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
       }
     };
 
+    participantsGrid.setHeight(null);
+    participantsGrid.getGrid().setHeight(null);
+    participantsGrid.getGrid().setAllRowsVisible(true);
+
     addOnLayout = new VerticalLayout(title, participantsGrid);
     addOnLayout.setWidthFull();
-    addOnLayout.setHeightFull();
+    addOnLayout.setHeight(null);
 
     if (!showPaddingAroundDetail) {
       addOnLayout.setPadding(false);
