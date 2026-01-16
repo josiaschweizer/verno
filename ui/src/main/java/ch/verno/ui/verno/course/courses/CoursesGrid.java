@@ -144,7 +144,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     final var response = courseService.delete(dto);
 
     if (response.success()) {
-      setFilter(getFilter()); //refresh grid by re setting filter
+      setFilter(getFilter()); // refresh grid by re setting filter
     } else if (response.message() != null && !response.message().isBlank()) {
       NotificationFactory.showErrorNotification(response.message());
     }
