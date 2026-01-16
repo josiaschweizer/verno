@@ -1,6 +1,7 @@
 package ch.verno.ui.base.components.entry.numberfield;
 
 import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
 
 public class VANumberField extends NumberField {
@@ -37,6 +38,10 @@ public class VANumberField extends NumberField {
                        @Nonnull final ValueChangeListener<? super ComponentValueChangeEvent<NumberField, Double>> listener) {
     super(label, initialValue, listener);
     addClassName("va-number-field");
+  }
+
+  public void setValueChangeMode(@Nonnull final ValueChangeMode valueChangeMode) {
+    super.setValueChangeMode(valueChangeMode);
   }
 
 }

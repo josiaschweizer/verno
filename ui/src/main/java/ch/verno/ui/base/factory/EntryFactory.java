@@ -23,6 +23,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
@@ -72,6 +73,7 @@ public class EntryFactory<DTO> {
     final var textField = new VATextField(label);
     textField.setWidthFull();
     textField.setClearButtonVisible(showClearButton);
+    textField.setValueChangeMode(ValueChangeMode.EAGER);
     bindEntry(textField, valueProvider, valueSetter, binder, required);
     return textField;
   }
@@ -84,6 +86,7 @@ public class EntryFactory<DTO> {
                                       @Nonnull final String label) {
     final var textArea = new TextArea(label);
     textArea.setWidthFull();
+    textArea.setValueChangeMode(ValueChangeMode.EAGER);
     bindEntry(textArea, valueProvider, valueSetter, binder, required);
     return textArea;
   }
@@ -97,8 +100,30 @@ public class EntryFactory<DTO> {
     final var emailField = new EmailField(label);
     emailField.setClearButtonVisible(true);
     emailField.setWidthFull();
-    emailField.setErrorMessage(getTranslation("base.please.enter.a.valid.email.address"));
-    bindEntry(emailField, valueProvider, valueSetter, binder, required);
+    emailField.setValueChangeMode(ValueChangeMode.EAGER);
+
+    emailField.setPattern(null);
+
+    final boolean allowEmpty = required.isEmpty();
+    bindEntry(
+            emailField,
+            valueProvider,
+            valueSetter,
+            binder,
+            required,
+            (value, ctx) -> {
+              if (value == null || value.isBlank()) {
+                return allowEmpty
+                        ? ValidationResult.ok()
+                        : ValidationResult.error(required.orElse(getTranslation("common.required")));
+              }
+              if (!value.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+                return ValidationResult.error(getTranslation("base.please.enter.a.valid.email.address"));
+              }
+              return ValidationResult.ok();
+            }
+    );
+
     return emailField;
   }
 
@@ -147,6 +172,7 @@ public class EntryFactory<DTO> {
                                          @Nonnull final Optional<String> required,
                                          @Nonnull final String label) {
     final var numberField = new VANumberField(label);
+    numberField.setValueChangeMode(ValueChangeMode.EAGER);
     numberField.setWidthFull();
 
     bindEntry(numberField, valueProvider, valueSetter, binder, required, getDoubleValidator(required, required.isEmpty()));
