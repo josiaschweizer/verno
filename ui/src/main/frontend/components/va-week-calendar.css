@@ -123,6 +123,7 @@
     min-height: 0;
     z-index: 1;
     pointer-events: auto;
+    box-sizing: border-box;
 }
 
 .va-week-calendar-course:hover {

@@ -13,6 +13,7 @@ import ch.verno.server.repository.*;
 import ch.verno.server.service.helper.ServiceHelper;
 import ch.verno.server.spec.CourseSpec;
 import ch.verno.server.spec.PageHelper;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
@@ -96,9 +97,9 @@ public class CourseService implements ICourseService {
     existing.setNote(courseDto.getNote());
 
     final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
-    if (levels.isEmpty()) {
-      throw new IllegalArgumentException("At least one course level is required");
-    }
+//    if (levels.isEmpty()) {
+//      throw new IllegalArgumentException("At least one course level is required");
+//    }
 
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
     if (schedule == null) {
@@ -130,9 +131,16 @@ public class CourseService implements ICourseService {
   @Override
   @Transactional
   public List<CourseDto> getCoursesByCourseScheduleId(@Nonnull final Long courseScheduleId) {
-    return courseRepository.findByCourseLevelId(courseScheduleId).stream()
+    final var courses = courseRepository.findAll().stream()
+            .filter(dto -> dto.getCourseSchedule() != null)
+            .filter(dto -> dto.getCourseSchedule().getId().equals(courseScheduleId))
             .map(CourseMapper::toDto)
             .toList();
+//    return courseRepository.findByCourseScheduleId(courseScheduleId).stream()
+//            .map(CourseMapper::toDto)
+//            .toList();
+
+    return courses;
   }
 
   @Nonnull

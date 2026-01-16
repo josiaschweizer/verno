@@ -14,11 +14,12 @@ import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @CssImport("./components/va-week-calendar.css")
 public class VAWeekCalendar extends Composite<Div> {
@@ -128,7 +129,7 @@ public class VAWeekCalendar extends Composite<Div> {
 
   @Nonnull
   private Div createCorner() {
-    Div corner = new Div();
+    final var corner = new Div();
     corner.addClassName("va-week-calendar-corner");
     return corner;
   }
@@ -138,10 +139,9 @@ public class VAWeekCalendar extends Composite<Div> {
     final var header = new Div();
     header.addClassName("va-week-calendar-day-header");
 
-    String dayName =
-            date.getDayOfWeek().getDisplayName(java.time.format.TextStyle.SHORT, Locale.GERMAN);
+    final String dayName = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.GERMAN);
 
-    header.add(new Span(dayName + " " + CELL_DATE_FORMATTER.format(date)));
+    header.add(new Span(dayName + Publ.SPACE + CELL_DATE_FORMATTER.format(date)));
     return header;
   }
 
@@ -163,18 +163,19 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   private void renderEvents() {
-    for (final var event : events) {
-      if (event.start() == null || event.end() == null) {
+    for (final var layout : buildLayoutsForCurrentWeek()) {
+      if (layout.event().start() == null || layout.event().end() == null) {
         continue;
       }
-      if (!isInCurrentWeek(event)) {
-        continue;
-      }
-      eventsLayer.add(createEventBlock(event));
+      eventsLayer.add(createEventBlock(layout.event(), layout.laneIndex(), layout.laneCount()));
     }
   }
 
   private boolean isInCurrentWeek(@Nonnull final WeekCalendarEventDto event) {
+    if (event.start() == null || event.end() == null) {
+      return false;
+    }
+
     final var startDate = event.start().toLocalDate();
     final var endDate = event.end().toLocalDate();
     final var weekEnd = weekStart.plusDays(6);
@@ -186,7 +187,9 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   @Nonnull
-  private Div createEventBlock(@Nonnull final WeekCalendarEventDto event) {
+  private Div createEventBlock(@Nonnull final WeekCalendarEventDto event,
+                               final int laneIndex,
+                               final int laneCount) {
     final var block = new Div();
     block.addClassName("va-week-calendar-course");
     block.setText(event.title());
@@ -218,6 +221,13 @@ public class VAWeekCalendar extends Composite<Div> {
     block.getStyle().set("grid-column", String.valueOf(col));
     block.getStyle().set("grid-row", rowStart + Publ.SPACE + Publ.SLASH + Publ.SPACE + rowEnd);
 
+    final int safeLaneCount = Math.max(1, laneCount);
+    final int safeLaneIndex = Math.max(0, Math.min(laneIndex, safeLaneCount - 1));
+
+    block.getStyle().set("width", "calc((100% / " + safeLaneCount + ") - 8px)");
+    block.getStyle().set("margin-left", "calc((100% / " + safeLaneCount + ") * " + safeLaneIndex + ")");
+    block.getStyle().set("z-index", String.valueOf(10 + safeLaneIndex));
+
     return block;
   }
 
@@ -225,9 +235,7 @@ public class VAWeekCalendar extends Composite<Div> {
     return dayOfWeek.getValue() - DayOfWeek.MONDAY.getValue();
   }
 
-  private int clamp(final int value,
-                    final int min,
-                    final int max) {
+  private int clamp(final int value, final int min, final int max) {
     return Math.max(min, Math.min(max, value));
   }
 
@@ -254,5 +262,145 @@ public class VAWeekCalendar extends Composite<Div> {
   @FunctionalInterface
   public interface WeekStartChangeListener {
     void onWeekStartChanged(@Nonnull final LocalDate newWeekStart);
+  }
+
+  private record EventLayout(@Nonnull WeekCalendarEventDto event, int laneIndex, int laneCount) {
+  }
+
+  private record Interval(@Nonnull LocalDateTime start, @Nonnull LocalDateTime end) {
+
+    @Nonnull
+    public static Interval empty() {
+      return new Interval(LocalDateTime.MIN, LocalDateTime.MIN);
+    }
+
+  }
+
+  @Nonnull
+  private List<EventLayout> buildLayoutsForCurrentWeek() {
+    final var inWeek = events.stream()
+            .filter(e -> e.start() != null && e.end() != null)
+            .filter(this::isInCurrentWeek)
+            .toList();
+
+    final var result = new ArrayList<EventLayout>();
+
+    for (int day = 0; day < 7; day++) {
+      final LocalDate date = weekStart.plusDays(day);
+
+      final var dayEvents = inWeek.stream()
+              .filter(e -> intersectsDate(e, date))
+              .filter(e -> e.start() != null && e.end() != null)
+              .sorted(Comparator.comparing(WeekCalendarEventDto::start))
+              .toList();
+
+      result.addAll(layoutDay(date, dayEvents));
+    }
+
+    return result;
+  }
+
+  private boolean intersectsDate(@Nonnull WeekCalendarEventDto e, @Nonnull LocalDate date) {
+    if (e.start() == null || e.end() == null) {
+      return false;
+    }
+
+    final var s = e.start().toLocalDate();
+    final var en = e.end().toLocalDate();
+    return !date.isBefore(s) && !date.isAfter(en);
+  }
+
+  @Nonnull
+  private List<EventLayout> layoutDay(@Nonnull LocalDate day, @Nonnull List<WeekCalendarEventDto> dayEvents) {
+    final var layouts = new ArrayList<EventLayout>();
+    if (dayEvents.isEmpty()) {
+      return layouts;
+    }
+
+    final LocalDateTime dayStart = day.atStartOfDay();
+    final LocalDateTime dayEndExclusive = day.plusDays(1).atStartOfDay();
+
+    final var active = new ArrayList<WeekCalendarEventDto>();
+    final var laneByEvent = new HashMap<WeekCalendarEventDto, Integer>();
+    final var usedLanes = new BitSet();
+
+    final var currentCluster = new ArrayList<WeekCalendarEventDto>();
+    int currentClusterPeak = 0;
+    LocalDateTime currentClusterEnd = null;
+
+    for (final var e : dayEvents) {
+      final var interval = clampToDay(e, dayStart, dayEndExclusive);
+
+      for (int i = active.size() - 1; i >= 0; i--) {
+        final var a = active.get(i);
+        final var aInt = clampToDay(a, dayStart, dayEndExclusive);
+        if (!aInt.end.isAfter(interval.start)) { // a.end <= e.start
+          final int lane = laneByEvent.getOrDefault(a, -1);
+          if (lane >= 0) {
+            usedLanes.clear(lane);
+          }
+          active.remove(i);
+        }
+      }
+
+      if (currentClusterEnd == null || !currentClusterEnd.isAfter(interval.start)) {
+        if (!currentCluster.isEmpty()) {
+          final int laneCount = Math.max(1, currentClusterPeak);
+          for (final var ce : currentCluster) {
+            layouts.add(new EventLayout(ce, laneByEvent.get(ce), laneCount));
+          }
+        }
+        currentCluster.clear();
+        currentClusterPeak = 0;
+        currentClusterEnd = interval.end;
+      } else {
+        if (interval.end.isAfter(currentClusterEnd)) {
+          currentClusterEnd = interval.end;
+        }
+      }
+
+      int lane = usedLanes.nextClearBit(0);
+      usedLanes.set(lane);
+      laneByEvent.put(e, lane);
+
+      active.add(e);
+      currentCluster.add(e);
+
+      currentClusterPeak = Math.max(currentClusterPeak, active.size());
+    }
+
+    if (!currentCluster.isEmpty()) {
+      final int laneCount = Math.max(1, currentClusterPeak);
+      for (final var ce : currentCluster) {
+        layouts.add(new EventLayout(ce, laneByEvent.get(ce), laneCount));
+      }
+    }
+
+    return layouts;
+  }
+
+  @Nonnull
+  private Interval clampToDay(@Nonnull WeekCalendarEventDto e,
+                              @Nonnull LocalDateTime dayStart,
+                              @Nonnull LocalDateTime dayEndExclusive) {
+    LocalDateTime start = e.start();
+    LocalDateTime end = e.end();
+
+    if (start == null || end == null) {
+      return Interval.empty();
+    }
+
+    if (start.isBefore(dayStart)) {
+      start = dayStart;
+    }
+    if (end.isAfter(dayEndExclusive)) {
+      end = dayEndExclusive;
+    }
+
+    if (!end.isAfter(start)) {
+      end = start.plusMinutes(1);
+    }
+
+    return new Interval(start, end);
   }
 }

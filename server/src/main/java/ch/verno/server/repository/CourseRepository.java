@@ -27,8 +27,8 @@ public class CourseRepository {
   }
 
   @Nonnull
-  public List<CourseEntity> findByCourseLevelId(@Nonnull final Long courseLevelId) {
-    return jpaRepository.findByCourseLevels_Id(courseLevelId);
+  public List<CourseEntity> findByCourseScheduleId(@Nonnull final Long courseLevelId) {
+    return jpaRepository.findByCourseSchedule_Id(courseLevelId);
   }
 
   @Nonnull

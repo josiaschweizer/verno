@@ -47,6 +47,8 @@ public final class CourseScheduleMapper {
       entity.setId(null);
     }
 
+    entity.setCreatedAt(dto.getCreatedAt());
+
     return entity;
   }
 }
