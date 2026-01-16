@@ -1,7 +1,7 @@
 package ch.verno.server.mapper;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.CourseLevelDto;
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

@@ -36,6 +36,10 @@ public class ParticipantRepository {
     return jpaRepository.findByCoursesAndActiveTrue(course);
   }
 
+  public boolean existsByCourseId(@Nonnull final Long courseId) {
+    return jpaRepository.existsByCourses_Id(courseId);
+  }
+
   @Nonnull
   public Page<ParticipantEntity> findAll(@Nonnull final Pageable pageable) {
     return jpaRepository.findAll(pageable);

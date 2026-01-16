@@ -1,6 +1,6 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.AppUserDto;
+import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.mapper.AppUserMapper;

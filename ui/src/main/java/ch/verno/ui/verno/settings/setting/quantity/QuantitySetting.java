@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.settings.setting.quantity;
 
-import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;

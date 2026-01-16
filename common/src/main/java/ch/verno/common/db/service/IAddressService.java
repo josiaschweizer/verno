@@ -1,6 +1,6 @@
 package ch.verno.common.db.service;
 
-import ch.verno.common.db.dto.AddressDto;
+import ch.verno.common.db.dto.table.AddressDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package ch.verno.server.service;
+package ch.verno.server.service.helper;
 
-import ch.verno.common.db.dto.*;
+import ch.verno.common.db.dto.table.*;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.publ.Publ;

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.course.courses.detail;
 
-import ch.verno.common.db.dto.*;
+import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
 import ch.verno.common.report.ReportServerGate;

@@ -1,7 +1,7 @@
 package ch.verno.server.report.course;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.report.dto.CourseReportDto;
 import ch.verno.server.report.participant.ParticipantReportMapper;
 import jakarta.annotation.Nonnull;

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
-import ch.verno.common.db.dto.CourseScheduleDto;
+import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.ui.base.components.notification.NotificationFactory;

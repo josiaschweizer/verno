@@ -1,6 +1,6 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.AppUserSettingDto;
+import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;

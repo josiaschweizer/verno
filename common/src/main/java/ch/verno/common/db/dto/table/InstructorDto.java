@@ -1,14 +1,15 @@
-package ch.verno.common.db.dto;
+package ch.verno.common.db.dto.table;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.publ.Publ;
+import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class ParentDto extends BaseDto {
+public class InstructorDto extends BaseDto {
 
   @Nonnull
   private String firstName;
@@ -28,7 +29,7 @@ public class ParentDto extends BaseDto {
   @Nonnull
   private AddressDto address;
 
-  public ParentDto() {
+  public InstructorDto() {
     setId(null);
     this.firstName = Publ.EMPTY_STRING;
     this.lastName = Publ.EMPTY_STRING;
@@ -38,13 +39,13 @@ public class ParentDto extends BaseDto {
     this.address = AddressDto.empty();
   }
 
-  public ParentDto(@Nullable final Long id,
-                   @Nonnull final String firstName,
-                   @Nonnull final String lastName,
-                   @Nonnull final String email,
-                   @Nonnull final PhoneNumber phone,
-                   @Nonnull final GenderDto gender,
-                   @Nonnull final AddressDto address) {
+  public InstructorDto(@Nullable final Long id,
+                       @Nonnull final String firstName,
+                       @Nonnull final String lastName,
+                       @Nonnull final String email,
+                       @Nonnull final PhoneNumber phone,
+                       @Nonnull final GenderDto gender,
+                       @Nonnull final AddressDto address) {
     setId(id);
     this.firstName = firstName;
     this.lastName = lastName;
@@ -54,11 +55,6 @@ public class ParentDto extends BaseDto {
     this.address = address;
   }
 
-  @Nonnull
-  public static ParentDto empty() {
-    return new ParentDto();
-  }
-
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L
@@ -66,11 +62,6 @@ public class ParentDto extends BaseDto {
             && lastName.isEmpty()
             && email.isEmpty()
             && phone.isEmpty();
-  }
-
-  @Nonnull
-  public String displayName() {
-    return (firstName + Publ.SPACE + lastName).trim();
   }
 
   @Nonnull
@@ -105,7 +96,7 @@ public class ParentDto extends BaseDto {
     return phone;
   }
 
-  public void setPhone(@Nonnull final PhoneNumber phone) {
+  public void setPhone(@Nullable final PhoneNumber phone) {
     this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
   }
 
@@ -127,10 +118,25 @@ public class ParentDto extends BaseDto {
     this.address = address;
   }
 
+  @Nonnull
+  public String displayName() {
+    return (firstName + " " + lastName).trim();
+  }
+
+  @Nonnull
+  public String phoneAsString() {
+    return PhoneNumberFormatter.formatPhoneNumber(phone);
+  }
+
+  @Nonnull
+  public String genderAsString() {
+    return gender.getDescription();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof ParentDto other)) return false;
+    if (!(o instanceof InstructorDto other)) return false;
     return getId() != null && getId().equals(other.getId());
   }
 

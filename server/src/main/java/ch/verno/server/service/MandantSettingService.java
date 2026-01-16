@@ -1,6 +1,6 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;

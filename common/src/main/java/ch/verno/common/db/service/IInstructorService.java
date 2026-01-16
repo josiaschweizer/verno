@@ -1,6 +1,6 @@
 package ch.verno.common.db.service;
 
-import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;

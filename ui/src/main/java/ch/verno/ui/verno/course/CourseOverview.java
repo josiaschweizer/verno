@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.course;
 
-import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;

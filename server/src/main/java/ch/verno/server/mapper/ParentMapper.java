@@ -1,7 +1,7 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.common.db.dto.ParentDto;
+import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.publ.Publ;
 import ch.verno.db.entity.ParentEntity;
 import jakarta.annotation.Nonnull;

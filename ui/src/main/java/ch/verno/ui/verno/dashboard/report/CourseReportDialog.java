@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.report;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;

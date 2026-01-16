@@ -1,4 +1,4 @@
-package ch.verno.common.db.dto;
+package ch.verno.common.db.dto.table;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
