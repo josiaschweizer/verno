@@ -1,6 +1,7 @@
 package ch.verno.common.db.service;
 
-import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.dto.response.DeleteResponseDto;
+import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseFilter;
 import com.vaadin.flow.data.provider.QuerySortOrder;
@@ -29,10 +30,15 @@ public interface ICourseService {
   List<CourseDto> getAllCourses();
 
   @Nonnull
+  DeleteResponseDto delete(@Nonnull CourseDto course);
+
+  @Nonnull
   List<CourseDto> findCourses(@Nonnull CourseFilter filter,
                               int offset,
                               int limit,
                               @Nonnull List<QuerySortOrder> sortOrders);
 
   int countCourses(@Nonnull CourseFilter filter);
+
+  boolean canDelete(@Nonnull CourseDto course);
 }

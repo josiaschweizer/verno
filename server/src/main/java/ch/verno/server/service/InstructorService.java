@@ -1,6 +1,6 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
@@ -11,6 +11,7 @@ import ch.verno.server.mapper.InstructorMapper;
 import ch.verno.server.repository.AddressRepository;
 import ch.verno.server.repository.GenderRepository;
 import ch.verno.server.repository.InstructorRepository;
+import ch.verno.server.service.helper.ServiceHelper;
 import ch.verno.server.spec.InstructorSpec;
 import ch.verno.server.spec.PageHelper;
 import com.vaadin.flow.data.provider.QuerySortOrder;

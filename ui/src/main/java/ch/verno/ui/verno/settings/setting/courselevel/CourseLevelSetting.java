@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
-import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.common.db.dto.table.CourseLevelDto;
+import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;

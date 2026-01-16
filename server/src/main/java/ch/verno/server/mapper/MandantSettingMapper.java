@@ -1,6 +1,6 @@
 package ch.verno.server.mapper;
 
-import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.db.entity.mandant.MandantSettingEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;

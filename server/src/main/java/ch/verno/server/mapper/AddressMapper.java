@@ -1,6 +1,6 @@
 package ch.verno.server.mapper;
 
-import ch.verno.common.db.dto.AddressDto;
+import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.publ.Publ;
 import ch.verno.db.entity.AddressEntity;
 import jakarta.annotation.Nonnull;

@@ -1,14 +1,18 @@
 package ch.verno.ui.verno.course.courses;
 
-import ch.verno.common.db.dto.CourseDto;
+import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.db.service.ICourseService;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
 import ch.verno.ui.base.grid.ComponentGridColumn;
 import ch.verno.ui.base.grid.ObjectGridColumn;
 import ch.verno.ui.lib.Routes;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -25,8 +29,7 @@ import java.util.stream.Stream;
 @Menu(order = 3.1, icon = "vaadin:desktop", title = "course.course.overview")
 public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> implements HasDynamicTitle {
 
-  @Nonnull
-  private final ICourseService courseService;
+  @Nonnull private final ICourseService courseService;
 
   public CoursesGrid(@Nonnull final ICourseService courseService) {
     super(CourseFilter.empty());
@@ -99,5 +102,51 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
   @Override
   public String getPageTitle() {
     return getTranslation("course.course");
+  }
+
+  @Override
+  public void createContextMenu() {
+    final var menu = grid.addContextMenu();
+
+    menu.setDynamicContentHandler(dto -> {
+      menu.removeAll();
+
+      if (dto == null) {
+        return false;
+      }
+
+      final var deleteItem = menu.addItem(createDeleteContextMenuItem(), e -> delete(dto));
+      deleteItem.setEnabled(canDelete(dto));
+
+      return true;
+    });
+  }
+
+  @Nonnull
+  private Component createDeleteContextMenuItem() {
+    final var icon = VaadinIcon.TRASH.create();
+    final var textSpan = new Span(getTranslation("shared.delete"));
+
+    final var wrapper = new Span(icon, textSpan);
+    wrapper.getStyle()
+            .setDisplay(Style.Display.FLEX)
+            .setAlignItems(Style.AlignItems.CENTER)
+            .setGap("var(--lumo-space-s)");
+
+    return wrapper;
+  }
+
+  private boolean canDelete(@Nonnull final CourseDto dto) {
+    return courseService.canDelete(dto);
+  }
+
+  private void delete(@Nonnull final CourseDto dto) {
+    final var response = courseService.delete(dto);
+
+    if (response.success()) {
+      setFilter(getFilter()); // refresh grid by re setting filter
+    } else if (response.message() != null && !response.message().isBlank()) {
+      NotificationFactory.showErrorNotification(response.message());
+    }
   }
 }

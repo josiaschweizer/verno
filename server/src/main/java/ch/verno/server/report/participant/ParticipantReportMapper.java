@@ -1,6 +1,6 @@
 package ch.verno.server.report.participant;
 
-import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.report.dto.ParticipantReportDto;
 import jakarta.annotation.Nonnull;
 

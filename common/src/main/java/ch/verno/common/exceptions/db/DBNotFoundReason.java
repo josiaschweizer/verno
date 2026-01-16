@@ -15,6 +15,8 @@ public enum DBNotFoundReason {
   USER_SETTING_BY_ID_NOT_FOUND("User settings not found with id: "),
   USER_SETTING_BY_USER_ID_NOT_FOUND("User settings not found for user id: "),
   APP_USER_NOT_FOUND("App user not found with id: "),
+
+  NOT_ABLE_TO_DELETE_ENTITY("Not able to delete entity with")
   ;
 
   @Nonnull

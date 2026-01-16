@@ -16,4 +16,7 @@ public interface SpringDataParticipantJpaRepository extends
 
   List<ParticipantEntity> findByCoursesAndActiveTrue(@Nonnull CourseEntity course);
 
+  boolean existsByCourses_Id(@Nonnull Long courseId);
+
+  long countByCourses_Id(@Nonnull Long courseId);
 }

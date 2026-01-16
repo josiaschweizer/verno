@@ -68,7 +68,12 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Override
   protected void onAttach(final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
+    preInit();
     init();
+  }
+
+  protected void preInit() {
+    this.viewToolbar = createViewToolbar();
   }
 
   protected void init() {
@@ -76,8 +81,6 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     setHeightFull();
     setPadding(false);
     setSpacing(false);
-
-    this.viewToolbar = createViewToolbar();
 
     if (showHeaderToolbar) {
       final var toolbar = viewToolbar.toolbar();

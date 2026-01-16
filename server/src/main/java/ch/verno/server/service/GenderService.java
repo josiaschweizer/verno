@@ -1,6 +1,6 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.GenderDto;
+import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.service.IGenderService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;

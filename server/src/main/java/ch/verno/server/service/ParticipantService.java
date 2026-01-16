@@ -1,7 +1,7 @@
 package ch.verno.server.service;
 
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
@@ -11,6 +11,7 @@ import ch.verno.publ.Publ;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
+import ch.verno.server.service.helper.ServiceHelper;
 import ch.verno.server.spec.PageHelper;
 import ch.verno.server.spec.ParticipantSpec;
 import com.vaadin.flow.data.provider.QuerySortOrder;

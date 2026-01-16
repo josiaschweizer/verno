@@ -1,10 +1,9 @@
 package ch.verno.ui.verno.settings.setting.theme;
 
-import ch.verno.common.db.dto.AppUserDto;
-import ch.verno.common.db.dto.AppUserSettingDto;
+import ch.verno.common.db.dto.table.AppUserDto;
+import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
-import ch.verno.publ.Publ;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;

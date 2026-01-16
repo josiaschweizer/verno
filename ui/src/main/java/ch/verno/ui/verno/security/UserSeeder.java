@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.common.db.dto.AppUserDto;
+import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;

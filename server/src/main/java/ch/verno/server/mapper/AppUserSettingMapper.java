@@ -1,6 +1,6 @@
 package ch.verno.server.mapper;
 
-import ch.verno.common.db.dto.AppUserSettingDto;
+import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.db.entity.user.AppUserSettingEntity;
 import jakarta.annotation.Nonnull;

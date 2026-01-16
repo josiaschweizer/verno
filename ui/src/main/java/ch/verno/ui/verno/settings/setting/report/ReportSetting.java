@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.settings.setting.report;
 
-import ch.verno.common.db.dto.MandantSettingDto;
+import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.ui.base.factory.EntryFactory;

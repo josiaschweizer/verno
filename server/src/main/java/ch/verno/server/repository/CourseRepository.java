@@ -36,6 +36,14 @@ public class CourseRepository {
     return jpaRepository.findAll();
   }
 
+  public void delete(@Nonnull final Long courseId) {
+    jpaRepository.deleteById(courseId);
+  }
+
+  public void delete(@Nonnull final CourseEntity course) {
+    jpaRepository.delete(course);
+  }
+
   @Nonnull
   public Page<CourseEntity> findAll(@Nonnull final Specification<CourseEntity> spec,
                                     @Nonnull final Pageable pageable) {

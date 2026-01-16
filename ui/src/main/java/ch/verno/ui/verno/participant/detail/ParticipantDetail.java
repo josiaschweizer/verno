@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.participant.detail;
 
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.common.db.dto.CourseDto;
-import ch.verno.common.db.dto.CourseLevelDto;
-import ch.verno.common.db.dto.GenderDto;
-import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.CourseLevelDto;
+import ch.verno.common.db.dto.table.GenderDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.*;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;

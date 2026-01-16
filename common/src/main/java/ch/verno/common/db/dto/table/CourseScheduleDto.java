@@ -1,5 +1,6 @@
-package ch.verno.common.db.dto;
+package ch.verno.common.db.dto.table;
 
+import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.publ.Publ;

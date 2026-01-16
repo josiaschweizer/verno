@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.instructor;
 
-import ch.verno.common.db.dto.InstructorDto;
+import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.ui.base.grid.BaseOverviewGrid;
