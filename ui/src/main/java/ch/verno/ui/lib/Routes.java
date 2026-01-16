@@ -16,6 +16,7 @@ public class Routes {
   public static final String COURSES = COURSE + Publ.SLASH + "courses";
   public static final String COURSE_LEVELS = "course-levels";
   public static final String COURSE_SCHEDULES = COURSE + Publ.SLASH + "course-schedules";
+  public static final String PROFILE = "profile";
   public static final String SETTINGS = "settings";
   public static final String USER_SETTINGS = SETTINGS + Publ.SLASH + "user";
   public static final String MANDANT_SETTINGS = SETTINGS + Publ.SLASH + "mandant";

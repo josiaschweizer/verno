@@ -45,7 +45,11 @@ public final class MainLayout extends AppLayout {
 
     setPrimarySection(Section.DRAWER);
     addClassNames("main-layout");
-    addToDrawer(createHeader(), new Scroller(createSideNav()));
+
+    addToDrawer(
+            createHeader(),
+            new Scroller(createSideNav()),
+            createDrawerFooter());
   }
 
   @Override
@@ -147,5 +151,19 @@ public final class MainLayout extends AppLayout {
     }
 
     return item;
+  }
+
+  @Nonnull
+  public Component createDrawerFooter() {
+    final var version = new Span("Version 0.0.1");
+    version.getStyle().setFontSize("0.8em");
+    version.getStyle().setColor("gray");
+
+    final var footerLayout = new VerticalLayout();
+    footerLayout.setPadding(false);
+    footerLayout.setSpacing(false);
+    footerLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+    footerLayout.add(version);
+    return footerLayout;
   }
 }

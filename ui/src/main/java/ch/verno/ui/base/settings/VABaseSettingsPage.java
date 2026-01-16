@@ -10,13 +10,15 @@ import java.util.List;
 public abstract class VABaseSettingsPage extends VerticalLayout {
 
   protected void initUI() {
+    setPadding(false);
+    setSpacing(false);
     setSizeFull();
 
     add(ViewToolbarFactory.createSimpleToolbar(getSettingsPageName()));
 
     final var settingsRow = new HorizontalLayout();
     settingsRow.setWidthFull();
-    settingsRow.setPadding(false);
+    settingsRow.setPadding(true);
     settingsRow.setSpacing(true);
     settingsRow.setWrap(true);
 

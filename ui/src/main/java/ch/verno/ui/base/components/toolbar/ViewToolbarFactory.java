@@ -2,18 +2,25 @@ package ch.verno.ui.base.components.toolbar;
 
 import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.publ.Publ;
+import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.filter.VASearchFilter;
+import ch.verno.ui.lib.Routes;
+import ch.verno.ui.lib.helper.LogoutHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 public class ViewToolbarFactory {
 
   @Nonnull
   public static ViewToolbar createSimpleToolbar(@Nonnull final String title) {
-    return new ViewToolbar(title);
+    final var viewToolbar = new ViewToolbar(title);
+    applyUserBadgeToToolbar(viewToolbar);
+    return viewToolbar;
   }
 
   @Nonnull
@@ -43,12 +50,9 @@ public class ViewToolbarFactory {
       );
     }
 
-    return new ViewToolbar(gridObjectName + Publ.SPACE + translation, createNewButton(gridObjectName, url));
-  }
-
-  @Nonnull
-  public static ViewToolbarResult createDetailToolbar(@Nonnull final String objectName) {
-    return createDetailToolbar(objectName, objectName + Publ.S);
+    final var viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation, createNewButton(gridObjectName, url));
+    applyUserBadgeToToolbar(viewToolbar);
+    return viewToolbar;
   }
 
   @Nonnull
@@ -58,8 +62,11 @@ public class ViewToolbarFactory {
 
     final var translation = TranslationHelper.getTranslation("base.detail", UI.getCurrent().getLocale());
 
+    final var viewToolbar = new ViewToolbar(objectName + Publ.SPACE + translation, newButton);
+    applyUserBadgeToToolbar(viewToolbar);
+
     return new ViewToolbarResult(
-            new ViewToolbar(objectName + Publ.SPACE + translation, newButton),
+            viewToolbar,
             newButton,
             null
     );
@@ -75,7 +82,28 @@ public class ViewToolbarFactory {
     return createButton;
   }
 
+  private static void applyUserBadgeToToolbar(@Nonnull final ViewToolbar toolbar) {
+    final var currentUser = getCurrentUser();
+    if (currentUser == null) {
+      return;
+    }
 
+    final var ui = UI.getCurrent();
+    final var userBadge = new UserActionBadge(currentUser.getUsername())
+//            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
+            .addItem(VaadinIcon.SLIDER, "Einstellungen", () -> ui.navigate(Routes.USER_SETTINGS))
+            .addItem(VaadinIcon.SIGN_OUT, "Logout", LogoutHelper::logout);
 
+    toolbar.addUserAction(userBadge);
+  }
+
+  @Nullable
+  private static User getCurrentUser() {
+    final var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+      return (User) authentication.getPrincipal();
+    }
+    return null;
+  }
 
 }
