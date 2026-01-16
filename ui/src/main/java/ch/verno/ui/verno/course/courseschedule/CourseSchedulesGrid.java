@@ -61,8 +61,8 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   protected List<ObjectGridColumn<CourseScheduleDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<CourseScheduleDto>>();
     columns.add(new ObjectGridColumn<>("title", CourseScheduleDto::getTitle, getTranslation("shared.title"), true));
-    columns.add(new ObjectGridColumn<>("first-week", dto -> dto.getWeeks().getFirst(), getTranslation("courseSchedule.first.week"), false));
-    columns.add(new ObjectGridColumn<>("last-week", dto -> dto.getWeeks().getLast(), getTranslation("courseSchedule.last.week"), false));
+    columns.add(new ObjectGridColumn<>("first-week", dto -> !dto.getWeeks().isEmpty() ? dto.getWeeks().getFirst() : null, getTranslation("courseSchedule.first.week"), false));
+    columns.add(new ObjectGridColumn<>("last-week", dto -> !dto.getWeeks().isEmpty() ? dto.getWeeks().getLast() : null, getTranslation("courseSchedule.last.week"), false));
     columns.add(new ObjectGridColumn<>("weeks", CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"), true));
     return columns;
   }
