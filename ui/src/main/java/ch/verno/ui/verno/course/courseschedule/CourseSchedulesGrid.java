@@ -71,6 +71,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Override
   protected List<ComponentGridColumn<CourseScheduleDto>> getComponentColumns() {
     final var componentColumns = new ArrayList<ComponentGridColumn<CourseScheduleDto>>();
+    componentColumns.add(new ComponentGridColumn<>("color", this::getColorSpan, getTranslation("shared.color"), false));
     componentColumns.add(new ComponentGridColumn<>("status", this::getStatusBadge, getTranslation("shared.status"), true));
     return componentColumns;
   }
@@ -83,7 +84,20 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
     return statusSpan;
   }
 
+  @Nonnull
+  private Span getColorSpan(@Nonnull final CourseScheduleDto dto) {
+    final var hexColor = dto.getColor();
 
+    final var span = new Span();
+    span.getStyle()
+            .set("background-color", hexColor)
+            .set("width", "1rem")
+            .set("height", "1rem")
+            .set("border-radius", "50%")
+            .set("display", "inline-block");
+
+    return span;
+  }
   @Nonnull
   @Override
   protected CourseScheduleFilter withSearchText(@Nonnull final String searchText) {

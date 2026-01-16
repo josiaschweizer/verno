@@ -62,8 +62,16 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             getTranslation(getTranslation("courseSchedule.course.schedule.status")),
             t -> getTranslation(t.getDisplayNameKey())
     );
+    final var colorPicker = entryFactory.createColorPickerEntry(
+            CourseScheduleDto::getColor,
+            CourseScheduleDto::setColor,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("shared.color")
+    );
 
-    return createLayoutFromComponents(title, status);
+
+    return createLayoutFromComponents(title, status, colorPicker);
   }
 
   @Nonnull

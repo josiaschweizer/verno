@@ -1,9 +1,12 @@
 package ch.verno.ui.base.factory;
 
+import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.YearWeekDto;
+import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
+import ch.verno.ui.base.components.colorpicker.ColorPresets;
+import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.entry.numberfield.VANumberField;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
@@ -13,6 +16,7 @@ import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.charts.model.style.Color;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -28,6 +32,7 @@ import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.vaadin.addons.tatu.ColorPicker;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -295,6 +300,19 @@ public class EntryFactory<DTO> {
     bindEntry(entry, valueProvider, valueSetter, binder, required);
     entry.setWidthFull();
     return entry;
+  }
+
+  @Nonnull
+  public VAColorPicker createColorPickerEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                              @Nonnull final Setter<DTO, String> valueSetter,
+                                              @Nonnull final Binder<DTO> binder,
+                                              @Nonnull final Optional<String> required,
+                                              @Nonnull final String label) {
+    final var colorPicker = new VAColorPicker(label);
+    colorPicker.setPresets(ColorPresets.getDefaultColorPresets());
+    colorPicker.setWidthFull();
+    bindEntry(colorPicker, valueProvider, valueSetter, binder, required);
+    return colorPicker;
   }
 
   @Nonnull
