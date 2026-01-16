@@ -3,7 +3,7 @@ button.va-toggle-filters::part(base):hover {
 }
 
 button.va-toggle-filters::part(base):active {
-    background-color: var(--lumo-contrast-10pct);
+    background-color: var(--lumo-contrast-30pct);
 }
 
 button.va-toggle-filters::part(base) {
