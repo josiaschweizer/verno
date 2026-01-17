@@ -10,7 +10,7 @@ import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailView;
+import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.Component;
