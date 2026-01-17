@@ -3,7 +3,7 @@ package ch.verno.ui.verno.settings.setting.courselevel;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailView;
+import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Div;

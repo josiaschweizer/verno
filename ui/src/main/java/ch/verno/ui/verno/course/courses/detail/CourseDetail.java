@@ -5,7 +5,7 @@ import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailView;
+import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.html.Span;

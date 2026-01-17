@@ -1,4 +1,4 @@
-package ch.verno.ui.base.grid;
+package ch.verno.ui.base.pages.grid;
 
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;

@@ -1,4 +1,4 @@
-package ch.verno.ui.base.detail;
+package ch.verno.ui.base.pages.detail;
 
 import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
@@ -126,7 +126,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   @Nullable
   protected VABadgeLabel getInfoBadge() {
-    // can be overridden by subclasses to add an info label to the toolbar
+    // can be overridden by subclasses to add an info component to the toolbar
     return null;
   }
 

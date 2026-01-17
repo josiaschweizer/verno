@@ -1,8 +1,11 @@
-package ch.verno.ui.base.grid;
+package ch.verno.ui.base.pages.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
 import ch.verno.ui.base.components.filter.VAFilterBar;
+import ch.verno.ui.base.components.grid.GridActionRoles;
+import ch.verno.ui.base.components.grid.VAGrid;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.lib.Routes;
@@ -25,18 +28,12 @@ import java.util.stream.Stream;
 
 public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
 
-  @Nonnull
-  protected final Grid<T> grid;
-  @Nonnull
-  protected final Map<String, Grid.Column<T>> columnsByKey;
-  @Nonnull
-  private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
-  @Nonnull
-  private F filter;
-  @Nonnull
-  protected final FilterEntryFactory<F> filterEntryFactory;
-  @Nonnull
-  protected final Binder<F> filterBinder;
+  @Nonnull protected final VAGrid<T> grid;
+  @Nonnull protected final Map<String, Grid.Column<T>> columnsByKey;
+  @Nonnull private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
+  @Nonnull private F filter;
+  @Nonnull protected final FilterEntryFactory<F> filterEntryFactory;
+  @Nonnull protected final Binder<F> filterBinder;
 
   protected boolean showGridToolbar = true;
   protected boolean showFilterToolbar = true;
@@ -57,7 +54,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected BaseOverviewGrid(@Nonnull final F initialFilter) {
     this.columnsByKey = new HashMap<>();
     this.filter = initialFilter;
-    this.grid = new Grid<>();
+    this.grid = new VAGrid<>();
     this.filterEntryFactory = new FilterEntryFactory<>();
     this.filterBinder = new Binder<>();
 
@@ -234,6 +231,17 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
             .setResizable(true)
             .setAutoWidth(true);
 
+    final var actions = gridColumn.actionRoles();
+    if (actions != null) {
+      for (final var action : actions) {
+        if (action.equals(GridActionRoles.STICK_COLUMN)) {
+          col.setFrozenToEnd(true);
+        } else if (action.equals(GridActionRoles.INVISIBLE_COLUMN)) {
+          col.setVisible(false);
+        }
+      }
+    }
+
     this.columnsByKey.put(gridColumn.key(), col);
   }
 
@@ -253,6 +261,13 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   public void createContextMenu() {
     // Default implementation returns an empty context menu -> to be implemented by subclasses if needed
+  }
+
+  protected List<ActionDef> buildContextMenuActions(@Nonnull final T dto) {
+    // Default implementation returns an empty list - to be implemented by subclass if needed
+    // normally used by createContextMenu to get all context menu items and use the items at the same time
+    // in the sticky action slot at the end of the grid
+    return new ArrayList<>();
   }
 
   @Nonnull

@@ -5,7 +5,7 @@ import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.detail.BaseDetailView;
+import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

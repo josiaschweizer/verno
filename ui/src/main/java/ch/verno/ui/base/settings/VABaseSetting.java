@@ -74,7 +74,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     }
 
     actionButtonSpan = new Span(actionButton);
-    actionButtonSpan.addClassName("setting-card-action-button");
+    actionButtonSpan.addClassName("setting-card-runnable-button");
     headerWrapper.add(actionButtonSpan);
   }
 
