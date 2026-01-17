@@ -99,6 +99,7 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
         events.add(new WeekCalendarEventDto(
                 course.getTitle(),
+                course.getInstructorAsString(),
                 start,
                 end,
                 course.getId(),

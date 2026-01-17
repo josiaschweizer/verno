@@ -196,7 +196,15 @@ public class VAWeekCalendar extends Composite<Div> {
     final var hex = event.color();
     block.getStyle().set("--va-event-color", hex);
 
-    block.setText(event.title());
+    final var titleSpan = new Span(event.title());
+    titleSpan.addClassName("va-week-calendar-course-title");
+    block.add(titleSpan);
+
+    if (event.instructor() != null && !event.instructor().isBlank()) {
+      final var instructorSpan = new Span(event.instructor());
+      instructorSpan.addClassName("va-week-calendar-course-instructor");
+      block.add(instructorSpan);
+    }
 
     block.getStyle().setCursor("pointer");
     block.addClickListener(e -> {

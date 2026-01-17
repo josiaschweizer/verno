@@ -113,6 +113,10 @@
 .va-week-calendar-course {
     --va-event-color: #55A6F6;
 
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
     background: color-mix(in srgb, var(--va-event-color) 30%, var(--lumo-base-color));
     color: var(--va-event-color);
     border-left: 4px solid var(--va-event-color);
@@ -127,6 +131,18 @@
     z-index: 1;
     pointer-events: auto;
     box-sizing: border-box;
+}
+
+.va-week-calendar-course-title {
+    font-size: var(--lumo-font-size-xs);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.va-week-calendar-course-instructor {
+    font-size: var(--lumo-font-size-xxs);
+    opacity: 0.75;
+    line-height: 1.1;
 }
 
 .va-week-calendar-course:hover {
