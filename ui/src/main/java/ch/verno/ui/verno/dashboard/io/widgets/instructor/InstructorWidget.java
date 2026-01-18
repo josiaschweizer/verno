@@ -16,6 +16,7 @@ public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final VernoApplicationGate vernoApplicationGate;
   @Nonnull private final IInstructorService instructorService;
+  private InstructorsGrid instructorGrid;
 
   public InstructorWidget(@Nonnull final VernoApplicationGate vernoApplicationGate) {
     this.vernoApplicationGate = vernoApplicationGate;
@@ -42,6 +43,7 @@ public class InstructorWidget extends VAAccordionWidgetBase {
                       getTranslation("shared.import") + Publ.SPACE + getTranslation("shared.instructor"),
                       config
               );
+              importDialog.addClosedListener(c -> refresh());
               importDialog.open();
             });
     final var exportButton = createHeaderButton(
@@ -54,8 +56,16 @@ public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    final var instructorGrid = new InstructorsGrid(instructorService, false, false);
+    instructorGrid = new InstructorsGrid(instructorService, false, false);
     instructorGrid.getGrid().setAllRowsVisible(true);
     add(instructorGrid);
+  }
+
+  protected void refresh() {
+    if (instructorGrid == null) {
+      return;
+    }
+
+    instructorGrid.setFilter(instructorGrid.getFilter());
   }
 }

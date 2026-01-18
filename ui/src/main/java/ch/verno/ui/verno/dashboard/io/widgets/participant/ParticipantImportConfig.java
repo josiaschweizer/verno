@@ -18,7 +18,6 @@ import ch.verno.server.service.ParentService;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,8 +125,9 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
   }
 
+  @Nonnull
   @Override
-  public @NonNull ImportResult performImport(@Nonnull final String fileToken,
+  public ImportResult performImport(@Nonnull final String fileToken,
                                              @Nonnull final Map<String, String> mapping) {
     final var fileServerGate = vernoApplicationGate.getService(FileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);

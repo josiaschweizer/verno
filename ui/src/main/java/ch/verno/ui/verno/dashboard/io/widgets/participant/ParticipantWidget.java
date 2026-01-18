@@ -68,9 +68,5 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
     }
 
     participantsGrid.setFilter(participantsGrid.getFilter());
-//    participantsInCurrentCourse = participantsGrid.getGrid()
-//            .getDataProvider()
-//            .fetch(new Query<>())
-//            .toList();
   }
 }

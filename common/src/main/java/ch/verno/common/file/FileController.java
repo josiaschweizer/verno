@@ -20,7 +20,7 @@ public class FileController {
     fileServerGate = vernoApplicationGate.getGate(FileServerGate.class);
   }
 
-  @GetMapping(value = "/{token}", produces = MediaType.APPLICATION_PDF_VALUE)
+  @GetMapping(value = "/{token}", produces = "text/csv")
   public ResponseEntity<ByteArrayResource> get(@PathVariable String token,
                                                @RequestParam(defaultValue = "inline") String disposition) {
     final var reportDto = fileServerGate.loadFile(token);
@@ -32,7 +32,7 @@ public class FileController {
 
     return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, cd.toString())
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+            .header(HttpHeaders.CONTENT_TYPE, "text/csv; charset=UTF-8")
             .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
             .header(HttpHeaders.PRAGMA, "no-cache")
             .header(HttpHeaders.EXPIRES, "0")
