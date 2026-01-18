@@ -1,9 +1,14 @@
 package ch.verno.server.file;
 
-import ch.verno.common.file.FileServerGate;
+import ch.verno.common.file.CsvMapDto;
 import ch.verno.common.file.FileDto;
+import ch.verno.common.file.FileServerGate;
+import ch.verno.server.io.importing.csv.CsvImportUtil;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FileServerGateImpl implements FileServerGate {
@@ -24,6 +29,12 @@ public class FileServerGateImpl implements FileServerGate {
   @Override
   public FileDto loadFile(@Nonnull final String token) {
     return fileStorageHandler.getFileByToken(token);
+  }
+
+  @NonNull
+  @Override
+  public List<CsvMapDto> parseRows(@NonNull final FileDto fileDto) {
+    return CsvImportUtil.parseRows(fileDto.pdfBytes());
   }
 
   @Override

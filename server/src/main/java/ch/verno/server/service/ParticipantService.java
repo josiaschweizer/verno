@@ -15,11 +15,13 @@ import ch.verno.server.spec.PageHelper;
 import ch.verno.server.spec.ParticipantSpec;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ParticipantService implements IParticipantService {
@@ -128,6 +130,14 @@ public class ParticipantService implements IParticipantService {
       throw new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, id);
     }
     return ParticipantMapper.toDto(foundById.get());
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<ParticipantDto> getParticipantByEmail(@NonNull final String email) {
+    final var participantByEmail = participantRepository.findByEmail(email);
+    return participantByEmail.map(ParticipantMapper::toDto);
   }
 
   @Nonnull

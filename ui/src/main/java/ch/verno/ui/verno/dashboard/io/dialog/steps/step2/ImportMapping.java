@@ -12,18 +12,18 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class ImportMapping extends BaseDialogStep {
+public class ImportMapping<T> extends BaseDialogStep {
 
   @Nonnull private final VernoApplicationGate vernoApplicationGate;
-  @Nonnull private final ImportEntityConfig entityConfig;
+  @Nonnull private final ImportEntityConfig<T> entityConfig;
 
-  private ImportColumnMappingPanel panel;
+  private ImportColumnMappingPanel<T> panel;
 
   @Nullable private String fileToken;
   @Nullable private Runnable onValidationChangedListener;
 
   public ImportMapping(@Nonnull final VernoApplicationGate vernoApplicationGate,
-                       @Nonnull final ImportEntityConfig entityConfig) {
+                       @Nonnull final ImportEntityConfig<T> entityConfig) {
     this.vernoApplicationGate = vernoApplicationGate;
     this.entityConfig = entityConfig;
     setSizeFull();
@@ -51,10 +51,7 @@ public class ImportMapping extends BaseDialogStep {
   }
 
   private void initUI(@Nonnull final List<String> csvHeaders) {
-    panel = new ImportColumnMappingPanel(
-            csvHeaders,
-            entityConfig.getDbFields()
-    );
+    panel = new ImportColumnMappingPanel<>(csvHeaders, entityConfig.getDbFields());
 
     if (onValidationChangedListener != null) {
       panel.addValidationChangeListener(() -> onValidationChangedListener.run());

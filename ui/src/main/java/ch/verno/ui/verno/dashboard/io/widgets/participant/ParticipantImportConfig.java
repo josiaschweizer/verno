@@ -1,17 +1,21 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
+import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.db.dto.ParticipantDto;
+import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.file.FileServerGate;
 import ch.verno.common.gate.VernoApplicationGate;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.step2.ImportColumnMappingPanel;
+import ch.verno.server.io.importing.dto.DbField;
+import ch.verno.server.io.importing.dto.DbFieldTyped;
+import ch.verno.server.mapper.csv.ParticipantCsvMapper;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * Import configuration for Participant entities.
- */
-public class ParticipantImportConfig implements ImportEntityConfig {
+public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDto> {
 
   @Nonnull private final VernoApplicationGate vernoApplicationGate;
 
@@ -21,28 +25,60 @@ public class ParticipantImportConfig implements ImportEntityConfig {
 
   @Nonnull
   @Override
-  public List<ImportColumnMappingPanel.DbField> getDbFields() {
+  public List<DbField<ParticipantDto>> getDbFields() {
     return List.of(
-            new ImportColumnMappingPanel.DbField("firstname", "Vorname", true),
-            new ImportColumnMappingPanel.DbField("lastname", "Nachname", true),
-            new ImportColumnMappingPanel.DbField("email", "E-Mail", true),
-            new ImportColumnMappingPanel.DbField("phone", "Telefon", false),
-            new ImportColumnMappingPanel.DbField("birthdate", "Geburtsdatum", false),
-            new ImportColumnMappingPanel.DbField("note", "Notiz", false)
+            new DbField<>("firstname", "shared.first.name", ParticipantDto::setFirstName, true),
+            new DbField<>("lastname", "shared.last.name", ParticipantDto::setLastName, true),
+            new DbField<>("email", "shared.e.mail", ParticipantDto::setEmail, true),
+            new DbField<>("note", "shared.note", ParticipantDto::setNote, false)
+    );
+  }
+
+  @Override
+  public List<DbFieldTyped<ParticipantDto, ?>> getTypedDbFields() {
+    return List.of(
+            new DbFieldTyped<>(
+                    "birthdate",
+                    "shared.birthdate",
+                    ParticipantImportParser::parseDate,
+                    ParticipantDto::setBirthdate,
+                    false
+            ),
+            new DbFieldTyped<>(
+                    "phone",
+                    "shared.telefon",
+                    PhoneNumber::fromString,
+                    ParticipantDto::setPhone,
+                    false
+            )
     );
   }
 
   @Override
   public boolean performImport(@Nonnull final String fileToken,
                                 @Nonnull final Map<String, String> mapping) {
-    // TODO: Implement actual participant import logic
-    // Example: vernoApplicationGate.getService(IParticipantService.class).importFromCsv(fileToken, mapping);
-    return true;
-  }
+    final var fileServerGate = vernoApplicationGate.getService(FileServerGate.class);
+    final var fileDto = fileServerGate.loadFile(fileToken);
+    final var csvRows = fileServerGate.parseRows(fileDto);
 
-  @Nonnull
-  @Override
-  public String getEntityTypeName() {
-    return "Participant";
+    final var mapper = new ParticipantCsvMapper();
+    final var result = mapper.map(
+            csvRows,
+            mapping,
+            getDbFields(),
+            getTypedDbFields()
+    );
+
+    final var saveables = result.saveables();
+    final var participantService = vernoApplicationGate.getService(IParticipantService.class);
+    for (final var saveable : saveables) {
+      participantService.createParticipant(saveable);
+    }
+
+    for (final var error : result.errors()) {
+      NotificationFactory.showErrorNotification(error.message());
+    }
+
+    return true;
   }
 }

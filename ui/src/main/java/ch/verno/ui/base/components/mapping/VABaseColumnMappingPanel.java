@@ -19,9 +19,8 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
                            @Nullable String fieldKey) {
   }
 
-  private final Grid<MappingRow> grid = new Grid<>(MappingRow.class, false);
-  private final ListDataProvider<MappingRow> dataProvider;
-  private final Map<String, String> selectionByCsvColumn;
+  @Nonnull private final Grid<MappingRow> grid;
+  @Nonnull private final Map<String, String> selectionByCsvColumn;
 
   @Nonnull private final String ignoreLabel;
   private final boolean allowDuplicates;
@@ -31,6 +30,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
                                      final boolean allowDuplicates,
                                      @Nonnull final String ignoreLabelKey) {
     this.selectionByCsvColumn = new LinkedHashMap<>();
+    this.grid = new Grid<>(MappingRow.class, false);
 
     this.allowDuplicates = allowDuplicates;
     this.ignoreLabel = getTranslation(ignoreLabelKey);
@@ -42,12 +42,10 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
             .distinct()
             .map(col -> new MappingRow(col, null))
             .toList();
-
     rows.forEach(r -> selectionByCsvColumn.put(r.csvColumn(), null));
-    dataProvider = new ListDataProvider<>(new ArrayList<>(rows));
 
+    final var dataProvider = new ListDataProvider<>(new ArrayList<>(rows));
     buildGrid(availableFields);
-
     grid.setItems(dataProvider);
 
     getContent().setSizeFull();
@@ -73,26 +71,26 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
   private ComboBox<FieldOption<TField>> buildFieldCombo(@Nonnull final MappingRow row,
                                                         @Nonnull final List<TField> availableFields) {
 
-    final var combo = new ComboBox<FieldOption<TField>>();
-    combo.setWidthFull();
-    combo.setClearButtonVisible(true);
+    final var comboBox = new ComboBox<FieldOption<TField>>();
+    comboBox.setWidthFull();
+    comboBox.setClearButtonVisible(true);
 
     final var options = new ArrayList<FieldOption<TField>>();
     options.add(FieldOption.ignore(ignoreLabel));
 
-    for (final var f : availableFields) {
-      options.add(FieldOption.of(getFieldKey(f), getFieldLabel(f), f));
+    for (final var field : availableFields) {
+      options.add(FieldOption.of(getFieldKey(field), getFieldLabel(field), field));
     }
 
-    combo.setItems(options);
-    combo.setItemLabelGenerator(FieldOption::label);
+    comboBox.setItems(options);
+    comboBox.setItemLabelGenerator(fieldOption -> getTranslation(fieldOption.label()));
 
     final var selectedKey = selectionByCsvColumn.get(row.csvColumn());
     if (selectedKey != null) {
-      combo.setValue(options.stream().filter(o -> selectedKey.equals(o.key())).findFirst().orElse(null));
+      comboBox.setValue(options.stream().filter(o -> selectedKey.equals(o.key())).findFirst().orElse(null));
     }
 
-    combo.addValueChangeListener(e -> {
+    comboBox.addValueChangeListener(e -> {
       final var oldKey = selectionByCsvColumn.get(row.csvColumn());
       final FieldOption<TField> newValue = e.getValue();
       final var newKey = (newValue == null ? null : newValue.key());
@@ -103,7 +101,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
 
         if (alreadyUsedByOther) {
           final var oldOpt = options.stream().filter(o -> Objects.equals(oldKey, o.key())).findFirst().orElse(null);
-          combo.setValue(oldOpt);
+          comboBox.setValue(oldOpt);
           return;
         }
       }
@@ -112,7 +110,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
       onMappingChanged(row.csvColumn(), oldKey, newKey);
     });
 
-    return combo;
+    return comboBox;
   }
 
   @Nonnull

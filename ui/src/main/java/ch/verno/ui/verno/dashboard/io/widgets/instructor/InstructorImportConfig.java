@@ -1,7 +1,9 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
+import ch.verno.common.db.dto.InstructorDto;
 import ch.verno.common.gate.VernoApplicationGate;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.step2.ImportColumnMappingPanel;
+import ch.verno.server.io.importing.dto.DbField;
+import ch.verno.server.io.importing.dto.DbFieldTyped;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import jakarta.annotation.Nonnull;
 
@@ -11,7 +13,7 @@ import java.util.Map;
 /**
  * Import configuration for Instructor entities.
  */
-public class InstructorImportConfig implements ImportEntityConfig {
+public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
   @Nonnull private final VernoApplicationGate vernoApplicationGate;
 
@@ -21,13 +23,13 @@ public class InstructorImportConfig implements ImportEntityConfig {
 
   @Nonnull
   @Override
-  public List<ImportColumnMappingPanel.DbField> getDbFields() {
-    return List.of(
-            new ImportColumnMappingPanel.DbField("firstname", "Vorname", true),
-            new ImportColumnMappingPanel.DbField("lastname", "Nachname", true),
-            new ImportColumnMappingPanel.DbField("email", "E-Mail", true),
-            new ImportColumnMappingPanel.DbField("phone", "Telefon", false)
-    );
+  public List<DbField<InstructorDto>> getDbFields() {
+    return List.of();
+  }
+
+  @Override
+  public List<DbFieldTyped<InstructorDto, ?>> getTypedDbFields() {
+    return List.of();
   }
 
   @Override
@@ -36,11 +38,5 @@ public class InstructorImportConfig implements ImportEntityConfig {
     // TODO: Implement actual instructor import logic
     // Example: vernoApplicationGate.getService(IInstructorService.class).importFromCsv(fileToken, mapping);
     return true;
-  }
-
-  @Nonnull
-  @Override
-  public String getEntityTypeName() {
-    return "Instructor";
   }
 }

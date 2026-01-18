@@ -6,11 +6,12 @@ import ch.verno.server.io.importing.csv.CsvSchemaAnalyzer;
 import jakarta.annotation.Nonnull;
 
 import java.io.ByteArrayInputStream;
+import java.util.Map;
 
 public class SchemaResolver {
 
   @Nonnull private final FileServerGate fileServerGate;
-  private final CsvSchemaAnalyzer csvSchemaAnalyzer;
+  @Nonnull private final CsvSchemaAnalyzer csvSchemaAnalyzer;
 
   public SchemaResolver(@Nonnull final FileServerGate fileServerGate) {
     this.fileServerGate = fileServerGate;

@@ -133,11 +133,9 @@ public class ImportDialog extends Dialog {
   }
 
   private void updateButtonVisibility() {
-    if (forwardButton == null || finishButton == null || backButton == null) {
+    if (forwardButton == null || finishButton == null) {
       return;
     }
-
-    backButton.setVisible(currentStep.getStepNumber() > 1);
 
     if (currentStep.getStepNumber() == steps.size()) {
       forwardButton.setVisible(false);

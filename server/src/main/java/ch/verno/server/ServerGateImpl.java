@@ -5,7 +5,10 @@ import ch.verno.common.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvSchema;
 import ch.verno.server.io.importing.SchemaResolver;
 import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class ServerGateImpl implements ServerGate {
@@ -21,6 +24,11 @@ public class ServerGateImpl implements ServerGate {
   public CsvSchema resolveCsvSchema(@Nonnull final String fileToken) {
     final var schemaResolver = new SchemaResolver(fileServerGate);
     return schemaResolver.resolveCsvSchema(fileToken);
+  }
+
+  @Override
+  public void importCsvData(@NonNull final String fileToken, @NonNull final Map<String, String> mapping) {
+
   }
 
 }

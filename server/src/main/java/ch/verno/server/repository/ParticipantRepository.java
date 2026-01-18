@@ -27,6 +27,11 @@ public class ParticipantRepository {
   }
 
   @Nonnull
+  public Optional<ParticipantEntity> findByEmail(@Nonnull final String email) {
+    return jpaRepository.findByEmail(email);
+  }
+
+  @Nonnull
   public List<ParticipantEntity> findAll() {
     return jpaRepository.findAll();
   }

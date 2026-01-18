@@ -7,6 +7,7 @@ import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IParticipantService {
 
@@ -18,6 +19,9 @@ public interface IParticipantService {
 
   @Nonnull
   ParticipantDto getParticipantById(@Nonnull Long id);
+
+  @Nonnull
+  Optional<ParticipantDto> getParticipantByEmail(@Nonnull String email);
 
   @Nonnull
   List<ParticipantDto> getAllParticipants();
