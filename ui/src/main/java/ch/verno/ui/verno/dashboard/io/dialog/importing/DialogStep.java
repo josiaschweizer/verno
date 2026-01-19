@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.dashboard.io.dialog;
+package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
 import jakarta.annotation.Nonnull;
 

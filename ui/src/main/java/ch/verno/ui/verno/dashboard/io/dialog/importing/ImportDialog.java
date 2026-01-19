@@ -1,10 +1,10 @@
-package ch.verno.ui.verno.dashboard.io.dialog;
+package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
-import ch.verno.common.gate.VernoApplicationGate;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.DialogStepDto;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.error.ImportErrorDownloadDialog;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.step1.ImportFile;
-import ch.verno.ui.verno.dashboard.io.dialog.steps.step2.ImportMapping;
+import ch.verno.common.gate.GlobalGate;
+import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.DialogStepDto;
+import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDownloadDialog;
+import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
+import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2.ImportMapping;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -28,14 +28,14 @@ public class ImportDialog extends Dialog {
 
   private DialogStep currentStep;
 
-  public ImportDialog(@Nonnull final VernoApplicationGate vernoApplicationGate,
+  public ImportDialog(@Nonnull final GlobalGate globalGate,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig entityConfig) {
     steps = new ArrayList<>();
     currentStep = DialogStep.ZERO;
 
-    final var importFileStep = new ImportFile(vernoApplicationGate);
-    final var importMappingStep = new ImportMapping(vernoApplicationGate, entityConfig);
+    final var importFileStep = new ImportFile(globalGate);
+    final var importMappingStep = new ImportMapping(globalGate, entityConfig);
 
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);

@@ -1,4 +1,4 @@
-package ch.verno.common.file;
+package ch.verno.common.file.dto;
 
 import jakarta.annotation.Nonnull;
 

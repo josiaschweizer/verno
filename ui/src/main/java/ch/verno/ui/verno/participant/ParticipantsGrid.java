@@ -8,7 +8,7 @@ import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
@@ -55,25 +55,25 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ReportServerGate reportServerGate;
 
-  public ParticipantsGrid(@Nonnull final VernoApplicationGate vernoApplicationGate,
+  public ParticipantsGrid(@Nonnull final GlobalGate globalGate,
                           final boolean showGridToolbar,
                           final boolean showFilterToolbar) {
     super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
-    this.participantService = vernoApplicationGate.getService(IParticipantService.class);
-    this.courseService = vernoApplicationGate.getService(ICourseService.class);
-    this.courseLevelService = vernoApplicationGate.getService(ICourseLevelService.class);
-    this.reportServerGate = vernoApplicationGate.getGate(ReportServerGate.class);
+    this.participantService = globalGate.getService(IParticipantService.class);
+    this.courseService = globalGate.getService(ICourseService.class);
+    this.courseLevelService = globalGate.getService(ICourseLevelService.class);
+    this.reportServerGate = globalGate.getGate(ReportServerGate.class);
   }
 
   @Autowired
-  public ParticipantsGrid(@Nonnull final VernoApplicationGate vernoApplicationGate) {
+  public ParticipantsGrid(@Nonnull final GlobalGate globalGate) {
     super(ParticipantFilter.empty(), true, true);
 
-    this.participantService = vernoApplicationGate.getService(IParticipantService.class);
-    this.courseService = vernoApplicationGate.getService(ICourseService.class);
-    this.courseLevelService = vernoApplicationGate.getService(ICourseLevelService.class);
-    this.reportServerGate = vernoApplicationGate.getGate(ReportServerGate.class);
+    this.participantService = globalGate.getService(IParticipantService.class);
+    this.courseService = globalGate.getService(ICourseService.class);
+    this.courseLevelService = globalGate.getService(ICourseLevelService.class);
+    this.reportServerGate = globalGate.getGate(ReportServerGate.class);
   }
 
   @Nonnull

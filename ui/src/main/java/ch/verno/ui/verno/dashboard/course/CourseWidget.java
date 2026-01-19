@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseService;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
@@ -23,16 +23,16 @@ import java.util.stream.Stream;
 public class CourseWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final CourseDto currentCourse;
-  @Nonnull private final VernoApplicationGate vernoApplicationGate;
+  @Nonnull private final GlobalGate globalGate;
 
   @Nullable private ParticipantsGrid participantsGrid;
   @Nullable private List<ParticipantDto> participantsInCurrentCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
-                      @Nonnull final VernoApplicationGate vernoApplicationGate) {
-    this.vernoApplicationGate = vernoApplicationGate;
+                      @Nonnull final GlobalGate globalGate) {
+    this.globalGate = globalGate;
 
-    final var courseService = vernoApplicationGate.getService(ICourseService.class);
+    final var courseService = globalGate.getService(ICourseService.class);
     this.currentCourse = courseService.getCourseById(currentCourseId);
 
     build();
@@ -48,7 +48,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
   protected void buildHeaderActions(@Nonnull final HorizontalLayout header) {
     final var reportButton = createHeaderButton("Report", VaadinIcon.FILE_TEXT, e -> {
       final var dialog = new CourseReportDialog(
-              vernoApplicationGate,
+              globalGate,
               currentCourse,
               participantsInCurrentCourse != null ?
                       participantsInCurrentCourse :
@@ -59,7 +59,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
               final var dialog = new AssignToCourseDialog(
-                      vernoApplicationGate,
+                      globalGate,
                       currentCourse.getId(),
                       participantsInCurrentCourse != null
                               ? participantsInCurrentCourse.stream().map(ParticipantDto::getId).toList()
@@ -74,7 +74,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
     final var detailButton = createHeaderButton(Publ.EMPTY_STRING,
             VaadinIcon.EXTERNAL_LINK, e -> {
               final var courseDetailDialog = new CourseDetailDialog(
-                      vernoApplicationGate,
+                      globalGate,
                       currentCourse
               );
               courseDetailDialog.open();
@@ -85,7 +85,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    this.participantsGrid = new ParticipantsGrid(vernoApplicationGate,
+    this.participantsGrid = new ParticipantsGrid(globalGate,
             false,
             false) {
 

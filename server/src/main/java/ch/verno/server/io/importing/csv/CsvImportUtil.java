@@ -1,7 +1,7 @@
 package ch.verno.server.io.importing.csv;
 
 import ch.verno.common.exceptions.io.ParseCsvException;
-import ch.verno.common.file.CsvMapDto;
+import ch.verno.common.file.dto.CsvMapDto;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;

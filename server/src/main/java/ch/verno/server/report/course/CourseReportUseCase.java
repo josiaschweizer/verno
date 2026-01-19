@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.file.FileDto;
+import ch.verno.common.file.dto.FileDto;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 

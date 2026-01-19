@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
@@ -12,10 +12,10 @@ import jakarta.annotation.Nonnull;
 
 public class Dashboard extends VerticalLayout {
 
-  @Nonnull private final VernoApplicationGate vernoApplicationGate;
+  @Nonnull private final GlobalGate globalGate;
 
-  public Dashboard(@Nonnull final VernoApplicationGate vernoApplicationGate) {
-    this.vernoApplicationGate = vernoApplicationGate;
+  public Dashboard(@Nonnull final GlobalGate globalGate) {
+    this.globalGate = globalGate;
 
     setSizeFull();
     setPadding(false);
@@ -28,10 +28,10 @@ public class Dashboard extends VerticalLayout {
     final var tabSheet = new TabSheet();
     tabSheet.setWidthFull();
 
-    final var plannedTab = new CourseWidgetGroup(vernoApplicationGate, CourseScheduleStatus.PLANNED);
-    final var activeTab = new CourseWidgetGroup(vernoApplicationGate, CourseScheduleStatus.ACTIVE);
-    final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(vernoApplicationGate);
-    final var ioTab = new ImportExportWidgetGroup(vernoApplicationGate);
+    final var plannedTab = new CourseWidgetGroup(globalGate, CourseScheduleStatus.PLANNED);
+    final var activeTab = new CourseWidgetGroup(globalGate, CourseScheduleStatus.ACTIVE);
+    final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(globalGate);
+    final var ioTab = new ImportExportWidgetGroup(globalGate);
 
     tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), plannedTab);
     tabSheet.add(getTranslation(CourseScheduleStatus.ACTIVE.getDisplayNameKey()), activeTab);

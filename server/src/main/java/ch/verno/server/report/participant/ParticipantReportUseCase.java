@@ -1,7 +1,7 @@
 package ch.verno.server.report.participant;
 
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.file.FileDto;
+import ch.verno.common.file.dto.FileDto;
 import ch.verno.report.dto.ParticipantListReportDto;
 import ch.verno.report.dto.ParticipantReportDto;
 import ch.verno.server.report.base.usecase.BaseListReportUseCase;

@@ -1,5 +1,7 @@
 package ch.verno.common.file;
 
+import ch.verno.common.file.dto.CsvMapDto;
+import ch.verno.common.file.dto.FileDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -21,4 +23,6 @@ public interface FileServerGate {
   FileDto parseRows(@Nonnull final List<CsvMapDto> rows, @Nonnull final String fileName);
 
   void delete(@Nonnull String token);
+
+  String generateFile(List<CsvMapDto> rows);
 }

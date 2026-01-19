@@ -1,7 +1,7 @@
-package ch.verno.ui.verno.dashboard.io.dialog.steps.step1;
+package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.ui.base.components.upload.VAFileUpload;
 import ch.verno.ui.base.dialog.stepdialog.BaseDialogStep;
 import jakarta.annotation.Nonnull;
@@ -14,12 +14,12 @@ public class ImportFile extends BaseDialogStep {
   @Nullable
   private Runnable onFileUploadedListener;
 
-  public ImportFile(@Nonnull final VernoApplicationGate vernoApplicationGate) {
+  public ImportFile(@Nonnull final GlobalGate globalGate) {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
 
-    fileUpload = new VAFileUpload(vernoApplicationGate.getService(FileServerGate.class));
+    fileUpload = new VAFileUpload(globalGate.getService(FileServerGate.class));
     fileUpload.setAcceptedFileTypes(".csv");
     fileUpload.setMaxFileUpload(1);
 

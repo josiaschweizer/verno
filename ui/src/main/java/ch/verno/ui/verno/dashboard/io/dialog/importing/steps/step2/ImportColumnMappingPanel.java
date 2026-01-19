@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.dashboard.io.dialog.steps.step2;
+package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 
 
 import ch.verno.ui.base.components.mapping.VABaseColumnMappingPanel;

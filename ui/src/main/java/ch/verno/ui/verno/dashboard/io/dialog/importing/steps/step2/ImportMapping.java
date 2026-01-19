@@ -1,6 +1,6 @@
-package ch.verno.ui.verno.dashboard.io.dialog.steps.step2;
+package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.common.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
 import ch.verno.ui.base.components.notification.NotificationFactory;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ImportMapping<T> extends BaseDialogStep {
 
-  @Nonnull private final VernoApplicationGate vernoApplicationGate;
+  @Nonnull private final GlobalGate globalGate;
   @Nonnull private final ImportEntityConfig<T> entityConfig;
 
   private ImportColumnMappingPanel panel;
@@ -25,9 +25,9 @@ public class ImportMapping<T> extends BaseDialogStep {
   @Nullable private String fileToken;
   @Nullable private Runnable onValidationChangedListener;
 
-  public ImportMapping(@Nonnull final VernoApplicationGate vernoApplicationGate,
+  public ImportMapping(@Nonnull final GlobalGate globalGate,
                        @Nonnull final ImportEntityConfig<T> entityConfig) {
-    this.vernoApplicationGate = vernoApplicationGate;
+    this.globalGate = globalGate;
     this.entityConfig = entityConfig;
     setSizeFull();
     setPadding(false);
@@ -46,7 +46,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
     removeAll();
 
-    final var serverGate = vernoApplicationGate.getService(ServerGate.class);
+    final var serverGate = globalGate.getService(ServerGate.class);
     final var fileColumns = serverGate.resolveCsvSchema(fileToken);
     final List<String> csvHeaders = fileColumns.columns().stream().map(CsvColumn::name).toList();
 

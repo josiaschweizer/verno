@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.dashboard.io.dialog.steps.error;
+package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error;
 
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
 import ch.verno.common.db.service.ICourseScheduleService;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleActivateWidget;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleFinishWidget;
@@ -13,8 +13,8 @@ public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implement
   @Nonnull
   private final ICourseScheduleService courseScheduleService;
 
-  public CourseScheduleLifecycleWidgetGroup(@Nonnull final VernoApplicationGate vernoApplicationGate) {
-    this.courseScheduleService = vernoApplicationGate.getService(ICourseScheduleService.class);
+  public CourseScheduleLifecycleWidgetGroup(@Nonnull final GlobalGate globalGate) {
+    this.courseScheduleService = globalGate.getService(ICourseScheduleService.class);
 
     setWidthFull();
 

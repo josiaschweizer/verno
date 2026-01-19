@@ -3,7 +3,7 @@ package ch.verno.ui.verno.course.courses.detail;
 import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 @Menu(order = 3.11, icon = "vaadin:mobile", title = "course.course.detail")
 public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
-  @Nonnull private final VernoApplicationGate vernoApplicationGate;
+  @Nonnull private final GlobalGate globalGate;
   @Nonnull private final ICourseService courseService;
   @Nonnull private final IInstructorService instructorService;
   @Nonnull private final ICourseLevelService courseLevelService;
@@ -40,23 +40,23 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Nonnull private final IParticipantService participantService;
 
 
-  public CourseDetail(@Nonnull final VernoApplicationGate vernoApplicationGate,
+  public CourseDetail(@Nonnull final GlobalGate globalGate,
                       final boolean showHeaderToolbar,
                       final boolean showPaddingAroundDetail) {
-    this(vernoApplicationGate);
+    this(globalGate);
 
     this.setShowHeaderToolbar(showHeaderToolbar);
     this.setShowPaddingAroundDetail(showPaddingAroundDetail);
   }
 
   @Autowired
-  public CourseDetail(@Nonnull final VernoApplicationGate vernoApplicationGate) {
-    this.vernoApplicationGate = vernoApplicationGate;
-    this.courseService = vernoApplicationGate.getService(CourseService.class);
-    this.instructorService = vernoApplicationGate.getService(InstructorService.class);
-    this.courseLevelService = vernoApplicationGate.getService(CourseLevelService.class);
-    this.courseScheduleService = vernoApplicationGate.getService(CourseScheduleService.class);
-    this.participantService = vernoApplicationGate.getService(ParticipantService.class);
+  public CourseDetail(@Nonnull final GlobalGate globalGate) {
+    this.globalGate = globalGate;
+    this.courseService = globalGate.getService(CourseService.class);
+    this.instructorService = globalGate.getService(InstructorService.class);
+    this.courseLevelService = globalGate.getService(CourseLevelService.class);
+    this.courseScheduleService = globalGate.getService(CourseScheduleService.class);
+    this.participantService = globalGate.getService(ParticipantService.class);
 
     this.setShowHeaderToolbar(true);
     this.setShowPaddingAroundDetail(true);
@@ -269,7 +269,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var title = new Span(getTranslation("course.participants.in.this.course"));
     title.getStyle().setFontWeight("bold");
 
-    final var participantsGrid = new ParticipantsGrid(vernoApplicationGate,
+    final var participantsGrid = new ParticipantsGrid(globalGate,
             false,
             false) {
 

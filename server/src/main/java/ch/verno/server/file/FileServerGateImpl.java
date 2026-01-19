@@ -1,7 +1,7 @@
 package ch.verno.server.file;
 
-import ch.verno.common.file.CsvMapDto;
-import ch.verno.common.file.FileDto;
+import ch.verno.common.file.dto.CsvMapDto;
+import ch.verno.common.file.dto.FileDto;
 import ch.verno.common.file.FileServerGate;
 import ch.verno.server.io.importing.csv.CsvImportUtil;
 import jakarta.annotation.Nonnull;

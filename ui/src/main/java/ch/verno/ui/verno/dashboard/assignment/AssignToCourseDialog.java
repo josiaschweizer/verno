@@ -6,7 +6,7 @@ import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.publ.Publ;
 import ch.verno.server.service.CourseService;
 import ch.verno.server.service.MandantSettingService;
@@ -14,7 +14,6 @@ import ch.verno.server.service.ParticipantService;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -63,16 +62,16 @@ public class AssignToCourseDialog extends VADialog {
 
   private boolean suppressSelectionSync;
 
-  public AssignToCourseDialog(@Nonnull final VernoApplicationGate vernoApplicationGate) {
-    this(vernoApplicationGate, null, List.of());
+  public AssignToCourseDialog(@Nonnull final GlobalGate globalGate) {
+    this(globalGate, null, List.of());
   }
 
-  public AssignToCourseDialog(@Nonnull final VernoApplicationGate vernoApplicationGate,
+  public AssignToCourseDialog(@Nonnull final GlobalGate globalGate,
                               @Nullable final Long preSelectedCourseId,
                               @Nonnull final List<Long> preSelectedParticipantIds) {
-    this.courseService = vernoApplicationGate.getService(CourseService.class);
-    this.participantService = vernoApplicationGate.getService(ParticipantService.class);
-    this.mandantSettingService = vernoApplicationGate.getService(MandantSettingService.class);
+    this.courseService = globalGate.getService(CourseService.class);
+    this.participantService = globalGate.getService(ParticipantService.class);
+    this.mandantSettingService = globalGate.getService(MandantSettingService.class);
     this.preSelectedCourseId = preSelectedCourseId;
 
     this.selectedParticipantIds = new LinkedHashSet<>(preSelectedParticipantIds);

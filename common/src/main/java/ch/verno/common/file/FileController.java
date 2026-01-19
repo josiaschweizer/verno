@@ -1,12 +1,11 @@
 package ch.verno.common.file;
 
-import ch.verno.common.gate.VernoApplicationGate;
+import ch.verno.common.gate.GlobalGate;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,8 @@ public class FileController {
 
   @Nonnull private final FileServerGate fileServerGate;
 
-  public FileController(@Nonnull VernoApplicationGate vernoApplicationGate) {
-    fileServerGate = vernoApplicationGate.getGate(FileServerGate.class);
+  public FileController(@Nonnull GlobalGate globalGate) {
+    fileServerGate = globalGate.getGate(FileServerGate.class);
   }
 
   @GetMapping(value = "/{token}", produces = "text/csv")
