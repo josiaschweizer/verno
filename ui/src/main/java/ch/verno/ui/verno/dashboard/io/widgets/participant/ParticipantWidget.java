@@ -2,8 +2,8 @@ package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
 import ch.verno.common.gate.GlobalGate;
 import ch.verno.publ.Publ;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
-import ch.verno.ui.verno.dashboard.io.dialog.export.ExportDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.ImportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -48,9 +48,13 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
             getTranslation("shared.export"),
             VaadinIcon.UPLOAD,
             e -> {
-              final var config = new ParticipantExportConfig(globalGate);
-              final var exportDialog = new ExportDialog<>(globalGate, config);
-              exportDialog.open();
+//              final var config = new ParticipantExportConfig(globalGate);
+//              final var exportDialog = new ExportDialog<>(globalGate, config);
+//              exportDialog.open();
+              NotificationFactory.showInfoNotification("Not implemented yet.");
+              NotificationFactory.showWarningNotification("Not implemented yet.");
+              NotificationFactory.showSuccessNotification("Not implemented yet.");
+              NotificationFactory.showErrorNotification("Not implemented yet.");
             });
 
     header.add(importButton, exportButton);
