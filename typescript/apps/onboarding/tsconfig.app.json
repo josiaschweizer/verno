@@ -4,6 +4,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "@onboarding/*": ["src/*"],
       "@/*": ["src/*"]
     }
   },

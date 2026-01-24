@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 export default function CreateTenantPage() {
   return (
@@ -12,14 +12,18 @@ export default function CreateTenantPage() {
             Mandant erstellen
           </h1>
           <p className="mt-2 text-sm text-slate-400 leading-relaxed">
-            Registriere dich und konfiguriere deinen Mandanten. Die Provisionierung
-            erfolgt automatisch.
+            Registriere dich und konfiguriere deinen Mandanten. Die
+            Provisionierung erfolgt automatisch.
           </p>
         </header>
 
         <form className="space-y-5">
           <Field label="E-Mail">
-            <input type="email" placeholder="name@verein.ch" className="input" />
+            <input
+              type="email"
+              placeholder="name@verein.ch"
+              className="input"
+            />
           </Field>
 
           <Field label="Organisation / Verein">
@@ -27,9 +31,13 @@ export default function CreateTenantPage() {
           </Field>
 
           <Field label="Mandanten-Key">
-            <input type="text" placeholder="z. B. musterverein" className="input" />
+            <input
+              type="text"
+              placeholder="z. B. musterverein"
+              className="input"
+            />
             <p className="mt-1 text-xs text-slate-500">
-              Wird Teil der URL:{" "}
+              Wird Teil der URL:{' '}
               <span className="text-slate-400">musterverein.verno.swiss</span>
             </p>
           </Field>
@@ -45,20 +53,20 @@ export default function CreateTenantPage() {
         </form>
 
         <footer className="mt-6 text-center text-xs text-slate-500">
-          Bereits registriert?{" "}
+          Bereits registriert?{' '}
           <Link to="/login" className="text-slate-300 hover:underline">
             Anmelden
           </Link>
         </footer>
       </section>
     </main>
-  );
+  )
 }
 
 type FieldProps = {
-  label: string;
-  children: React.ReactNode;
-};
+  label: string
+  children: React.ReactNode
+}
 
 function Field({ label, children }: FieldProps) {
   return (
@@ -68,5 +76,5 @@ function Field({ label, children }: FieldProps) {
       </span>
       {children}
     </label>
-  );
+  )
 }

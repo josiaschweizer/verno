@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 export default function SignUpPage() {
   return (
@@ -18,5 +18,5 @@ export default function SignUpPage() {
         </div>
       </section>
     </main>
-  );
+  )
 }
