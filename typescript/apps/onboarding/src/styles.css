@@ -1,16 +1,14 @@
 @import 'tailwindcss';
 
 :root {
-  /* Brand (Light defaults) */
-  --verno-bg: #f6f1e9; /* warmes Off-White */
-  --verno-surface: #ffffff; /* Karten */
-  --verno-surface-light: #eef2f4; /* leichte Flächen / Hover */
-  --verno-dark: #1e2427; /* Text "dark" */
-  --verno-dark-hover: #384247; /* Hover/Muted Text */
-  --verno-darker: #101416; /* starke Headlines */
-  --verno-accent: #6b5744; /* warmes Braun */
+  --verno-bg: #f6f1e9;
+  --verno-surface: #ffffff;
+  --verno-surface-light: #eef2f4;
+  --verno-dark: #1e2427;
+  --verno-dark-hover: #384247;
+  --verno-darker: #101416;
+  --verno-accent: #6b5744;
 
-  /* System tokens (Light) */
   --background: var(--verno-bg);
   --foreground: var(--verno-darker);
 
@@ -58,16 +56,14 @@
 }
 
 .dark {
-  /* Brand (Dark) */
   --verno-bg: #0a0908;
-  --verno-surface: #141a1d; /* etwas heller als bg, bessere Trennung */
+  --verno-surface: #141a1d;
   --verno-surface-light: #22333b;
   --verno-dark: #eae0d5;
-  --verno-dark-hover: #b7aea5; /* lesbarer als #736f69 auf dark */
-  --verno-darker: #f3ede6; /* für sehr prominenten Text */
-  --verno-accent: #c6ac8f; /* Akzent heller, damit Buttons knallen */
+  --verno-dark-hover: #b7aea5;
+  --verno-darker: #f3ede6;
+  --verno-accent: #c6ac8f;
 
-  /* System tokens (Dark) */
   --background: var(--verno-bg);
   --foreground: var(--verno-dark);
 
@@ -163,6 +159,10 @@
 
   body {
     @apply bg-verno-bg text-verno-darker antialiased;
+  }
+
+  button {
+    @apply cursor-pointer;
   }
 }
 

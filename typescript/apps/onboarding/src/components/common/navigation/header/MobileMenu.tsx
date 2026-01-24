@@ -11,9 +11,14 @@ import type { Product } from './Header'
 interface Props {
   products: Product[]
   onClose: () => void
+  onRegisterOpen?: () => void
 }
 
-export default function MobileMenu({ products, onClose }: Props) {
+export default function MobileMenu({
+  products,
+  onClose,
+  onRegisterOpen,
+}: Props) {
   return (
     <>
       <div className="fixed inset-0 z-50" />
@@ -86,13 +91,17 @@ export default function MobileMenu({ products, onClose }: Props) {
               </a>
             </div>
 
-            <div className="py-6">
-              <a
-                href="/login"
-                className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
+            <div className="py-6 space-y-3">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose()
+                  onRegisterOpen?.()
+                }}
+                className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
               >
-                Log in
-              </a>
+                Get started <span aria-hidden="true">&rarr;</span>
+              </button>
             </div>
           </div>
         </div>
