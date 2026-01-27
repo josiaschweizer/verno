@@ -1,12 +1,12 @@
+import { ComboBoxItem } from '@/type/ComboBoxItem'
+
 export default interface RegisterDialogFormData {
   firstname: string
   lastname: string
   email: string
-  phone: string
-  preferredLanguage: string
   password: string
   confirmPassword: string
 
-  tenantDisplayName: string
+  tenantName: string
   tenantSubdomain: string
 }

@@ -1,6 +1,8 @@
 import { Input } from '@/components/ui/input'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { Control, Controller } from 'react-hook-form'
+import ComboBox from '@/components/ui/custom/ComboBox'
+import { ComboBoxItem } from '@/type/ComboBoxItem'
 
 interface Props {
   control: Control<RegisterDialogFormData>
@@ -16,6 +18,12 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
     )
     return value === getValues('password') || 'Passwords do not match'
   }
+
+  const languages: ComboBoxItem[] = [
+    { label: 'German', value: 'de' },
+    { label: 'English', value: 'en' },
+    { label: 'French', value: 'fr' },
+  ]
 
   return (
     <div>
@@ -100,6 +108,20 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
               value={value}
               onChange={onChange}
               disabled={readOnly}
+              className="w-full"
+            />
+          )}
+        />
+
+        <Controller
+          name="preferredLanguage"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <ComboBox
+              placeholder="Preferred Language"
+              value={value}
+              onChange={onChange}
+              items={languages}
               className="w-full"
             />
           )}
