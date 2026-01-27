@@ -10,6 +10,10 @@ interface Props {
 
 export default function StepOne({ control, getValues, readOnly }: Props) {
   const validatePasswordMatch = (value: string) => {
+    console.log(
+      'validating',
+      value === getValues('password') || 'Passwords do not match',
+    )
     return value === getValues('password') || 'Passwords do not match'
   }
 
@@ -53,12 +57,46 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
           </div>
         </div>
 
+        <div className="flex w-full gap-2">
+          <div className="flex-1 min-w-0">
+            <Controller
+              name="email"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-Mail"
+                  value={value}
+                  onChange={onChange}
+                  disabled={readOnly}
+                  className="w-full"
+                />
+              )}
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Phone"
+                  value={value}
+                  onChange={onChange}
+                  disabled={readOnly}
+                  className="w-full"
+                />
+              )}
+            />
+          </div>
+        </div>
+
         <Controller
-          name="email"
+          name="preferredLanguage"
           control={control}
           render={({ field: { onChange, value } }) => (
             <Input
-              placeholder="E-Mail"
+              placeholder="Preferred Language"
+              type=""
               value={value}
               onChange={onChange}
               disabled={readOnly}
@@ -92,7 +130,10 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
           control={control}
           rules={{
             required: 'Please confirm your password',
-            validate: validatePasswordMatch,
+            minLength: {
+              value: 8,
+              message: 'Password must be at least 8 characters',
+            },
           }}
           render={({ field, fieldState }) => (
             <div>
@@ -100,12 +141,11 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
                 {...field}
                 type="password"
                 placeholder="Confirm your password"
-                className={`w-full ${fieldState.error ? 'border-red-500' : ''}`}
+                className={`w-full ${fieldState.invalid ? 'border-red-500' : ''}`}
               />
-
-              {fieldState.error && (
+              {fieldState.invalid && (
                 <p className="mt-1 text-sm text-red-500">
-                  {fieldState.error.message}
+                  {fieldState.invalid}
                 </p>
               )}
             </div>
