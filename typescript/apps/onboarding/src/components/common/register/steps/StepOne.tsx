@@ -1,7 +1,6 @@
 import { Input } from '@/components/ui/input'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { Control, Controller } from 'react-hook-form'
-import ComboBox from '@/components/ui/custom/ComboBox'
 import { ComboBoxItem } from '@/type/ComboBoxItem'
 
 interface Props {

@@ -86,7 +86,13 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   readOnly={!open}
                 />
               )}
-              {step === 1 && <StepTwo />}
+              {step === 1 && (
+                <StepTwo
+                  control={control}
+                  getValues={getValues}
+                  readOnly={!open}
+                />
+              )}
               {step === 2 && <StepThree />}
             </div>
 

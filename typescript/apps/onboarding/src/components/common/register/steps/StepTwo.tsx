@@ -1,6 +1,15 @@
 import { Input } from '@/components/ui/input'
+import { Control, Controller } from 'react-hook-form'
+import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
+import DomainInputField from '@/components/ui/custom/DomainInputField'
 
-export function StepTwo() {
+interface Props {
+  control: Control<RegisterDialogFormData>
+  getValues: (field: string) => any
+  readOnly: boolean
+}
+
+export default function StepTwo({ control, getValues, readOnly }: Props) {
   return (
     <div>
       <h3 className="text-base font-medium">
@@ -8,29 +17,27 @@ export function StepTwo() {
       </h3>
 
       <div className="mt-4 space-y-2">
-        <div className="flex w-full gap-2">
-          <div className="flex-1 min-w-0">
-            <Input placeholder="Firstname" className="w-full" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <Input placeholder="Lastname" className="w-full" />
-          </div>
-        </div>
-
-        <Input className="w-full" type="email" placeholder="E-Mail" />
-        <Input
-          className="w-full"
-          type="password"
-          placeholder="Enter your password"
+        <Controller
+          name="tenantName"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Tenant Display Name"
+              onChange={onChange}
+              value={value}
+              disabled={readOnly}
+              className="w-full"
+            />
+          )}
         />
-        <Input
-          className="w-full"
-          type="password"
-          placeholder="Confirm password"
+
+        <DomainInputField
+          baseDomain=".verno.swiss"
+          control={control}
+          getValues={getValues}
+          readOnly={readOnly}
         />
       </div>
     </div>
   )
 }
-
-export default StepTwo
