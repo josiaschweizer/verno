@@ -98,34 +98,19 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
           </div>
         </div>
 
-        <Controller
-          name="preferredLanguage"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder="Preferred Language"
-              type=""
-              value={value}
-              onChange={onChange}
-              disabled={readOnly}
-              className="w-full"
-            />
-          )}
-        />
-
-        <Controller
-          name="preferredLanguage"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <ComboBox
-              placeholder="Preferred Language"
-              value={value}
-              onChange={onChange}
-              items={languages}
-              className="w-full"
-            />
-          )}
-        />
+        {/*<Controller*/}
+        {/*  name="preferredLanguage"*/}
+        {/*  control={control}*/}
+        {/*  render={({ field: { onChange, value } }) => (*/}
+        {/*    <ComboBox*/}
+        {/*      placeholder="Preferred Language"*/}
+        {/*      value={value}*/}
+        {/*      onChange={onChange}*/}
+        {/*      items={languages}*/}
+        {/*      className="w-full"*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*/>*/}
 
         <Controller
           name="password"

@@ -4,6 +4,8 @@ export default interface RegisterDialogFormData {
   firstname: string
   lastname: string
   email: string
+  phone: string
+  preferredLanguage: ComboBoxItem
   password: string
   confirmPassword: string
 
