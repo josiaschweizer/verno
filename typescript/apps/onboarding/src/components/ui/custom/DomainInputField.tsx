@@ -1,6 +1,5 @@
 import { Control, Controller } from 'react-hook-form'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
-import { Input } from '@/components/ui/input'
 import { Field } from '@headlessui/react'
 import {
   InputGroup,
@@ -8,7 +7,6 @@ import {
   InputGroupInput,
   InputGroupText,
 } from '@/components/ui/input-group'
-import { InfoIcon } from 'lucide-react'
 
 interface Props {
   baseDomain: string
@@ -30,9 +28,14 @@ export default function DomainInputField({
       name="tenantSubdomain"
       control={control}
       render={({ field: { onChange, value } }) => (
-        <Field>
+        <Field onChange={onChange}>
           <InputGroup>
-            <InputGroupInput id="input-group-url" placeholder={placeholder} />
+            <InputGroupInput
+              readOnly={readOnly}
+              value={value}
+              id="input-group-url"
+              placeholder={placeholder}
+            />
             <InputGroupAddon align="inline-end">
               <InputGroupText>{baseDomain}</InputGroupText>
             </InputGroupAddon>

@@ -122,12 +122,19 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
             },
           }}
           render={({ field, fieldState }) => (
-            <Input
-              {...field}
-              type="password"
-              placeholder="Enter your password"
-              className="w-full"
-            />
+            <div>
+              <Input
+                {...field}
+                type="password"
+                placeholder="Enter your password"
+                className={`w-full ${fieldState.invalid ? 'border-red-500' : ''}`}
+              />
+              {fieldState.error && (
+                <p className="mt-1 text-sm text-red-500">
+                  {fieldState.error?.message}
+                </p>
+              )}
+            </div>
           )}
         />
 
@@ -149,9 +156,9 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
                 placeholder="Confirm your password"
                 className={`w-full ${fieldState.invalid ? 'border-red-500' : ''}`}
               />
-              {fieldState.invalid && (
+              {fieldState.error && (
                 <p className="mt-1 text-sm text-red-500">
-                  {fieldState.invalid}
+                  {fieldState.error?.message}
                 </p>
               )}
             </div>

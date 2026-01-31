@@ -16,7 +16,7 @@ import {
   FlagIcon,
 } from 'lucide-react'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
-import { get, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 interface Props {
   open: boolean
@@ -31,7 +31,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
     handleSubmit,
     getValues,
     formState: { isDirty, isValid, errors },
-  } = useForm<RegisterDialogFormData>()
+  } = useForm<RegisterDialogFormData>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  })
 
   useEffect(() => {
     if (open) setStep(0)
