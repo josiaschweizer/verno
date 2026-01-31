@@ -17,8 +17,9 @@ type Props = {
   fieldDescription?: string
   fieldId?: string
   options: ComboBoxItem[]
-  value?: ComboBoxItem | null
-  onChange?: (value: ComboBoxItem | null) => void
+  // allow string also because some consumers may pass raw string values
+  value?: ComboBoxItem | string | null
+  onChange?: (value: ComboBoxItem | string | null) => void
   placeholder?: string
   disabled?: boolean
   className?: string
@@ -44,13 +45,22 @@ export function ComboBoxField({
   const comboboxContent = (
     <div className="relative w-full">
       <ComboboxRoot<ComboBoxItem>
-        value={value ?? null}
+        value={(value as ComboBoxItem) ?? null}
         onValueChange={(v) => {
-          const item =
-            v && typeof v === 'object' && 'value' in v
-              ? (v as ComboBoxItem)
-              : null
-          onChange?.(item)
+          // v can be a ComboBoxItem or string depending on the underlying combobox impl
+          if (v && typeof v === 'object' && 'value' in v) {
+            onChange?.(v as ComboBoxItem)
+            return
+          }
+
+          if (typeof v === 'string') {
+            // try to map string to an option by value
+            const found = options.find((o) => o.value === v) || null
+            onChange?.(found)
+            return
+          }
+
+          onChange?.(null)
         }}
         items={options}
         disabled={disabled}

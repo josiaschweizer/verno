@@ -16,7 +16,9 @@ import {
   FlagIcon,
 } from 'lucide-react'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
+import { tenantsApi } from '@/lib/api/tenantsApi'
+import { ApiError } from '@/lib/apiClient'
 
 interface Props {
   open: boolean
@@ -27,27 +29,107 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState: { isDirty, isValid, errors },
-  } = useForm<RegisterDialogFormData>({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [validatingNext, setValidatingNext] = useState(false)
+
+  const { control, handleSubmit, getValues, trigger, formState } =
+    useForm<RegisterDialogFormData>({
+      mode: 'onChange',
+      reValidateMode: 'onChange',
+      defaultValues: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        preferredLanguage: { label: 'German', value: 'de' },
+        password: '',
+        confirmPassword: '',
+        tenantName: '',
+        tenantSubdomain: '',
+        tenantKey: '',
+      },
+    })
+  const { errors } = formState
+
+  const watchedEmail = useWatch({ control, name: 'email' })
+  const watchedPassword = useWatch({ control, name: 'password' })
+  const watchedTenantName = useWatch({ control, name: 'tenantName' })
+  const watchedTenantSubdomain = useWatch({ control, name: 'tenantSubdomain' })
 
   useEffect(() => {
     if (open) setStep(0)
   }, [open])
 
-  const next = () => setStep((s) => Math.min(2, s + 1))
+  const next = async () => {
+    setValidatingNext(true)
+    try {
+      let ok = true
+
+      if (step === 0) {
+        ok = await trigger(['email', 'password'])
+      } else if (step === 1) {
+        ok = await trigger(['tenantName', 'tenantSubdomain'])
+      }
+
+      if (ok) setStep((s) => Math.min(2, s + 1))
+    } finally {
+      setValidatingNext(false)
+    }
+  }
   const back = () => setStep((s) => Math.max(0, s - 1))
 
-  const onSubmit = () => {
-    //todo implement submission logic
+  const onSubmit = handleSubmit(async (form) => {
+    try {
+      setSubmitting(true)
+      setSubmitError(null)
 
-    onClose()
+      const preferredLanguage =
+        typeof form.preferredLanguage === 'string'
+          ? form.preferredLanguage
+          : (form.preferredLanguage?.value ?? '')
+
+      const tenantKey = form.tenantKey?.trim() || form.tenantSubdomain.trim()
+      const subdomain = form.tenantSubdomain.trim()
+
+      const result = await tenantsApi.createTenant({
+        tenantKey,
+        tenantName: form.tenantName,
+        subdomain,
+        preferredLanguage,
+        adminEmail: form.email,
+        adminDisplayName: `${form.firstname} ${form.lastname}`.trim(),
+        adminPassword: form.password,
+      })
+
+      console.debug('createTenant response', result)
+
+      onClose()
+      window.location.reload()
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setSubmitError(`${e.status}: ${e.message}`)
+      } else if (e instanceof Error) {
+        setSubmitError(e.message)
+      } else {
+        setSubmitError('Unknown error')
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  })
+
+  let canContinue = true
+  if (step === 0) {
+    canContinue =
+      Boolean(watchedEmail && watchedPassword) &&
+      !errors.email &&
+      !errors.password
+  } else if (step === 1) {
+    canContinue =
+      Boolean(watchedTenantName && watchedTenantSubdomain) &&
+      !errors.tenantName &&
+      !errors.tenantSubdomain
   }
 
   return (
@@ -82,7 +164,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               </div>
             </div>
 
-            <div ref={dialogContentRef} className="mt-6 min-h-80">
+            <div ref={dialogContentRef} className="mt-6 min-h-100">
               {step === 0 && (
                 <StepOne
                   control={control}
@@ -91,16 +173,8 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   portalContainerRef={dialogContentRef}
                 />
               )}
-              {step === 1 && (
-                <StepTwo
-                  control={control}
-                  getValues={getValues}
-                  readOnly={!open}
-                />
-              )}
-              {step === 2 && (
-                <StepThree getValues={getValues} />
-              )}
+              {step === 1 && <StepTwo control={control} readOnly={!open} />}
+              {step === 2 && <StepThree getValues={getValues} />}
             </div>
 
             <div className="mt-6 flex items-center justify-between">
@@ -115,13 +189,23 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
 
               <div className="flex items-center gap-2">
                 {step < 2 ? (
-                  <Button onClick={next}>
-                    Continue <ArrowRightIcon className="h-5 w-5" />
+                  <Button
+                    onClick={next}
+                    disabled={validatingNext || !canContinue}
+                  >
+                    {validatingNext ? 'Validating...' : 'Continue'}{' '}
+                    <ArrowRightIcon className="h-5 w-5" />
                   </Button>
                 ) : (
-                  <Button onClick={onSubmit}>
-                    Finish <FlagIcon className="h-5 w-5" />
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    {submitError && (
+                      <p className="text-sm text-red-500">{submitError}</p>
+                    )}
+                    <Button onClick={onSubmit} disabled={submitting}>
+                      {submitting ? 'Creating...' : 'Finish'}{' '}
+                      <FlagIcon className="h-5 w-5" />
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>

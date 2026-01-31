@@ -8,6 +8,7 @@ interface Props {
 const overviewFields = [
   { key: 'firstname' as const, label: 'Vorname' },
   { key: 'lastname' as const, label: 'Nachname' },
+  { key: 'email' as const, label: 'E-Mail' },
   { key: 'tenantSubdomain' as const, label: 'URL' },
   { key: 'tenantName' as const, label: 'Display Name' },
 ] as const

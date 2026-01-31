@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CreateTenantRequest(
+
         @NotBlank
         @Pattern(regexp = "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$", message = "tenantKey must be dns-safe (lowercase, digits, hyphen)")
         String tenantKey,

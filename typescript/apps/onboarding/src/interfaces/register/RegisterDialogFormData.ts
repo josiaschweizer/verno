@@ -11,4 +11,5 @@ export default interface RegisterDialogFormData {
 
   tenantName: string
   tenantSubdomain: string
+  tenantKey?: string
 }

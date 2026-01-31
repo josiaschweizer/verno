@@ -1,14 +1,15 @@
-import { Input } from '@/components/ui/input'
 import { ComboBoxField } from '@/components/ui/custom/ComboBoxField'
+import { InputField } from '@/components/ui/custom/InputField'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { Control, Controller } from 'react-hook-form'
 import { ComboBoxItem } from '@/type/ComboBoxItem'
+import { RefObject } from 'react'
 
 interface Props {
-  control: Control<RegisterDialogFormData>
+  control: Control<RegisterDialogFormData, any, any>
   getValues: (field: string) => any
   readOnly: boolean
-  portalContainerRef?: React.RefObject<HTMLDivElement | null>
+  portalContainerRef?: RefObject<HTMLDivElement | null>
 }
 
 export default function StepOne({
@@ -17,9 +18,8 @@ export default function StepOne({
   readOnly,
   portalContainerRef,
 }: Props) {
-  const validatePasswordMatch = (value: string) => {
-    return value === getValues('password') || 'Passwords do not match'
-  }
+  const validatePasswordMatch = (value: string) =>
+    value === getValues('password') || 'Passwords do not match'
 
   const languages: ComboBoxItem[] = [
     { label: 'German', value: 'de' },
@@ -35,69 +35,78 @@ export default function StepOne({
 
       <div className="mt-4 space-y-2">
         <div className="flex w-full gap-2">
-          <div className="flex-1 min-w-0">
-            <Controller
-              name="firstname"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder="Firstname"
-                  value={value}
-                  onChange={onChange}
-                  disabled={readOnly}
-                  className="w-full"
-                />
-              )}
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <Controller
-              name="lastname"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder="Lastname"
-                  value={value}
-                  onChange={onChange}
-                  disabled={readOnly}
-                  className="w-full"
-                />
-              )}
-            />
-          </div>
+          <Controller
+            name="firstname"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                fieldLabel="Firstname"
+                placeholder="Firstname"
+                {...field}
+                disabled={readOnly}
+                className="flex-1"
+              />
+            )}
+          />
+
+          <Controller
+            name="lastname"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                fieldLabel="Lastname"
+                placeholder="Lastname"
+                {...field}
+                disabled={readOnly}
+                className="flex-1"
+              />
+            )}
+          />
         </div>
 
         <div className="flex w-full gap-2">
-          <div className="flex-1 min-w-0">
-            <Controller
-              name="email"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: 'E-Mail is required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Invalid e-mail address',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <div className="flex-1">
+                <InputField
+                  fieldLabel="E-Mail"
                   placeholder="E-Mail"
-                  value={value}
-                  onChange={onChange}
+                  {...field}
                   disabled={readOnly}
                   className="w-full"
+                  required
                 />
-              )}
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder="Phone"
-                  value={value}
-                  onChange={onChange}
-                  disabled={readOnly}
-                  className="w-full"
-                />
-              )}
-            />
-          </div>
+                {fieldState.error && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {fieldState.error.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
+
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                fieldLabel="Phone"
+                placeholder="Phone"
+                {...field}
+                disabled={readOnly}
+                className="flex-1"
+              />
+            )}
+          />
         </div>
 
         <Controller
@@ -106,10 +115,10 @@ export default function StepOne({
           render={({ field: { onChange, value } }) => (
             <ComboBoxField
               fieldId="preferredLanguage"
+              fieldLabel="Preferred Language"
               options={languages}
-              value={value ?? null}
+              value={(value ?? null) as any}
               onChange={(v) => onChange(v ?? undefined)}
-              placeholder="Preferred Language"
               disabled={readOnly}
               portalContainer={portalContainerRef}
             />
@@ -128,15 +137,18 @@ export default function StepOne({
           }}
           render={({ field, fieldState }) => (
             <div>
-              <Input
-                {...field}
+              <InputField
+                fieldLabel="Password"
                 type="password"
                 placeholder="Enter your password"
-                className={`w-full ${fieldState.invalid ? 'border-red-500' : ''}`}
+                {...field}
+                disabled={readOnly}
+                className="w-full"
+                required
               />
               {fieldState.error && (
                 <p className="mt-1 text-sm text-red-500">
-                  {fieldState.error?.message}
+                  {fieldState.error.message}
                 </p>
               )}
             </div>
@@ -152,15 +164,18 @@ export default function StepOne({
           }}
           render={({ field, fieldState }) => (
             <div>
-              <Input
-                {...field}
+              <InputField
+                fieldLabel="Confirm Password"
                 type="password"
                 placeholder="Confirm your password"
-                className={`w-full ${fieldState.invalid ? 'border-red-500' : ''}`}
+                {...field}
+                disabled={readOnly}
+                className="w-full"
+                required
               />
               {fieldState.error && (
                 <p className="mt-1 text-sm text-red-500">
-                  {fieldState.error?.message}
+                  {fieldState.error.message}
                 </p>
               )}
             </div>

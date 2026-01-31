@@ -21,14 +21,22 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(@Nonnull final HttpSecurity http) {
-    http.csrf(AbstractHttpConfigurer::disable)
+  public SecurityFilterChain securityFilterChain(@Nonnull final HttpSecurity http) throws Exception {
+    http
+            .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .requestMatchers("/actuator/health", "/actuator/info").permitAll()
-                    .requestMatchers("/api/v1/tenants").permitAll() //todo anpassen !!!! -> darf nicht offen sein
+                    .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/info").permitAll()
+
+                    .requestMatchers(HttpMethod.GET,  "/api/v1/tenants", "/api/v1/tenants/").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/tenants", "/api/v1/tenants/").permitAll()
+                    .requestMatchers(HttpMethod.GET,  "/api/v1/tenants/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/tenants/**").permitAll()
+
+                    .requestMatchers("/error").permitAll()
                     .requestMatchers("/api/**").authenticated()
+
                     .anyRequest().denyAll()
             )
             .httpBasic(Customizer.withDefaults());
@@ -58,9 +66,7 @@ public class SecurityConfig {
 
   private static String readEnvOrDefault(@Nonnull final String key, @Nonnull final String defaultValue) {
     final var value = System.getenv(key);
-    if (value == null) {
-      return defaultValue;
-    }
+    if (value == null) return defaultValue;
 
     final var trimmed = value.trim();
     return trimmed.isEmpty() ? defaultValue : trimmed;
