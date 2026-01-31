@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -25,6 +25,7 @@ interface Props {
 
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const [step, setStep] = useState<number>(0)
+  const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const {
     control,
@@ -81,12 +82,13 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               </div>
             </div>
 
-            <div className="mt-6 min-h-30">
+            <div ref={dialogContentRef} className="mt-6 min-h-30">
               {step === 0 && (
                 <StepOne
                   control={control}
                   getValues={getValues}
                   readOnly={!open}
+                  portalContainerRef={dialogContentRef}
                 />
               )}
               {step === 1 && (

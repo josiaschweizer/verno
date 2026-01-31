@@ -12,9 +12,7 @@ interface Props {
 export default function StepTwo({ control, getValues, readOnly }: Props) {
   return (
     <div>
-      <h3 className="text-base font-medium">
-        Schritt 2 — Tenant Configuration
-      </h3>
+      <h3 className="text-base font-medium">Step 2 — Tenant Configuration</h3>
 
       <div className="mt-4 space-y-2">
         <Controller
@@ -34,7 +32,6 @@ export default function StepTwo({ control, getValues, readOnly }: Props) {
         <DomainInputField
           baseDomain=".verno.swiss"
           control={control}
-          getValues={getValues}
           readOnly={readOnly}
         />
       </div>

@@ -11,7 +11,6 @@ import {
 interface Props {
   baseDomain: string
   control: Control<RegisterDialogFormData>
-  getValues: (field: string) => any
   readOnly: boolean
   placeholder?: string
 }
@@ -19,7 +18,6 @@ interface Props {
 export default function DomainInputField({
   baseDomain,
   control,
-  getValues,
   readOnly,
   placeholder = 'your-subdomain',
 }: Props) {

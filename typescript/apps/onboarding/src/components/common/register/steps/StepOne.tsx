@@ -1,4 +1,5 @@
 import { Input } from '@/components/ui/input'
+import { ComboBoxField } from '@/components/ui/custom/ComboBoxField'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { Control, Controller } from 'react-hook-form'
 import { ComboBoxItem } from '@/type/ComboBoxItem'
@@ -7,14 +8,16 @@ interface Props {
   control: Control<RegisterDialogFormData>
   getValues: (field: string) => any
   readOnly: boolean
+  portalContainerRef?: React.RefObject<HTMLDivElement | null>
 }
 
-export default function StepOne({ control, getValues, readOnly }: Props) {
+export default function StepOne({
+  control,
+  getValues,
+  readOnly,
+  portalContainerRef,
+}: Props) {
   const validatePasswordMatch = (value: string) => {
-    console.log(
-      'validating',
-      value === getValues('password') || 'Passwords do not match',
-    )
     return value === getValues('password') || 'Passwords do not match'
   }
 
@@ -27,7 +30,7 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
   return (
     <div>
       <h3 className="text-base font-medium">
-        Schritt 1 — Basic Data for Your Account
+        Step 1 — Basic Data for Your Account
       </h3>
 
       <div className="mt-4 space-y-2">
@@ -97,19 +100,21 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
           </div>
         </div>
 
-        {/*<Controller*/}
-        {/*  name="preferredLanguage"*/}
-        {/*  control={control}*/}
-        {/*  render={({ field: { onChange, value } }) => (*/}
-        {/*    <ComboBox*/}
-        {/*      placeholder="Preferred Language"*/}
-        {/*      value={value}*/}
-        {/*      onChange={onChange}*/}
-        {/*      items={languages}*/}
-        {/*      className="w-full"*/}
-        {/*    />*/}
-        {/*  )}*/}
-        {/*/>*/}
+        <Controller
+          name="preferredLanguage"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <ComboBoxField
+              fieldId="preferredLanguage"
+              options={languages}
+              value={value ?? null}
+              onChange={(v) => onChange(v ?? undefined)}
+              placeholder="Preferred Language"
+              disabled={readOnly}
+              portalContainer={portalContainerRef}
+            />
+          )}
+        />
 
         <Controller
           name="password"
@@ -143,10 +148,7 @@ export default function StepOne({ control, getValues, readOnly }: Props) {
           control={control}
           rules={{
             required: 'Please confirm your password',
-            minLength: {
-              value: 8,
-              message: 'Password must be at least 8 characters',
-            },
+            validate: validatePasswordMatch,
           }}
           render={({ field, fieldState }) => (
             <div>

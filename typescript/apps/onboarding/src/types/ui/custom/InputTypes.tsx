@@ -1,3 +1,3 @@
 import { HTMLInputTypeAttribute } from 'react'
 
-export type InputTypes = HTMLInputTypeAttribute | 'combobox'
+export type InputTypes = HTMLInputTypeAttribute
