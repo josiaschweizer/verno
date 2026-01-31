@@ -42,3 +42,4 @@ build/
 node_modules/
 ui/src/main/frontend/generated/
 vite.generated.ts
+verno-provisioner-sa.json
