@@ -82,7 +82,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               </div>
             </div>
 
-            <div ref={dialogContentRef} className="mt-6 min-h-30">
+            <div ref={dialogContentRef} className="mt-6 min-h-80">
               {step === 0 && (
                 <StepOne
                   control={control}
@@ -98,7 +98,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   readOnly={!open}
                 />
               )}
-              {step === 2 && <StepThree />}
+              {step === 2 && (
+                <StepThree getValues={getValues} />
+              )}
             </div>
 
             <div className="mt-6 flex items-center justify-between">
