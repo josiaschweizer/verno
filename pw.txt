@@ -1,0 +1,3 @@
+pw sql db user = kDdfuQr6S50mOywf89b0WXJa6FkvCncg6LXvDWKsIIw=
+
+postgres user = eEsjKhR744XHa26uUH19lic1RYYCj8cULTn3P8MEJQc=

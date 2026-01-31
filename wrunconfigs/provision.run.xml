@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Provision" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="DB_PASS" value="kDdfuQr6S50mOywf89b0WXJa6FkvCncg6LXvDWKsIIw=" />
+      <env name="DB_URL" value="jdbc:postgresql://127.0.0.1:5433/verno_control" />
+      <env name="DB_USER" value="verno_app" />
+    </envs>
+    <module name="provisioner" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.provisioner.ProvisionerApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
