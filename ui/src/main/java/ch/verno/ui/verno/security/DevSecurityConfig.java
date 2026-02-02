@@ -26,7 +26,6 @@ public class DevSecurityConfig {
             .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
-            .requestMatchers(ApiUrl.DEBUG + "/**").permitAll()
     );
 
     http = http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
