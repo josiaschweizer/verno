@@ -21,11 +21,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class DevSecurityConfig {
 
   @Bean
-  SecurityFilterChain devSecurityFilterChain(@Nonnull HttpSecurity http) {
+  SecurityFilterChain devSecurityFilterChain(@Nonnull HttpSecurity http) throws Exception{
     http.authorizeHttpRequests(auth -> auth
             .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
+            .requestMatchers(ApiUrl.DEBUG + "/**").permitAll()
     );
 
     http = http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
@@ -36,6 +37,7 @@ public class DevSecurityConfig {
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**")
+            .ignoringRequestMatchers(ApiUrl.DEBUG + "/**")
     );
 
     http.headers(headers -> headers
