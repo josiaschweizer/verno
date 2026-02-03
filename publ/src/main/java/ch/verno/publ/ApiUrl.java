@@ -8,6 +8,8 @@ public class ApiUrl {
   public static final String TEMP_FILE_IMPORT = BASE_API + "/temp-file/import";
   public static final String TEMP_FILE_EXPORT = BASE_API + "/temp-file/export";
 
+  public static final String DEBUG = BASE_API + "/_debug";
+
   public static final String DISPOSITION_INLINE = "?disposition=inline";
   public static final String DISPOSITION_ATTACHMENT = "?disposition=attachment";
 

@@ -9,11 +9,37 @@ target/
 .project
 .classpath
 
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 *.iml
 *.class
 .DS_Store
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
 ui/src/main/frontend/generated/
 vite.generated.ts
+verno-provisioner-sa.json

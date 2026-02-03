@@ -9,6 +9,7 @@ import MobileMenu from './MobileMenu'
 import HeaderLogo from './HeaderLogo'
 import { CursorArrowRaysIcon, FolderIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
+import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
 
 export interface Product {
   name: string
@@ -34,11 +35,12 @@ const products: Product[] = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [registerOpen, setRegisterOpen] = useState(false)
 
   return (
     <header>
       <nav
-        aria-label="Global"
+        aria-label="global"
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
@@ -62,12 +64,13 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a
-            href="/login"
-            className="text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
+          <Button
+            size="sm"
+            onClick={() => setRegisterOpen(true)}
+            className="rounded-md"
           >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+            Get started <span aria-hidden="true">&rarr;</span>
+          </Button>
         </div>
       </nav>
 
@@ -79,8 +82,27 @@ export default function Header() {
         <MobileMenu
           products={products}
           onClose={() => setMobileMenuOpen(false)}
+          onRegisterOpen={() => {
+            setMobileMenuOpen(false)
+            setRegisterOpen(true)
+          }}
         />
       </Dialog>
+
+      <_RegisterDialogRenderer
+        open={registerOpen}
+        onClose={() => setRegisterOpen(false)}
+      />
     </header>
   )
+}
+
+function _RegisterDialogRenderer({
+  open,
+  onClose,
+}: {
+  open: boolean
+  onClose: () => void
+}) {
+  return <RegisterMultiStepDialog open={open} onClose={onClose} />
 }
