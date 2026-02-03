@@ -5,8 +5,10 @@ import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.InstructorEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.publ.Publ;
+import ch.verno.server.mandant.MandantContext;
 import ch.verno.server.mapper.InstructorMapper;
 import ch.verno.server.repository.AddressRepository;
 import ch.verno.server.repository.GenderRepository;
@@ -52,6 +54,7 @@ public class InstructorService implements IInstructorService {
   @Transactional
   public InstructorDto createInstructor(@Nonnull final InstructorDto instructorDto) {
     final var entity = new InstructorEntity(
+            MandantEntity.ref(MandantContext.getRequired()),
             ServiceHelper.safeString(instructorDto.getFirstName()),
             ServiceHelper.safeString(instructorDto.getLastName()),
             ServiceHelper.safeString(instructorDto.getEmail()),

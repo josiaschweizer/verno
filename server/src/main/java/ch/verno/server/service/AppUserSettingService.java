@@ -49,7 +49,8 @@ public class AppUserSettingService implements IAppUserSettingService {
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
 
     try {
-      final var entity = new AppUserSettingEntity(user, dto.getTheme(), dto.getLanguageTag());
+      // AppUserSettingEntity requires mandant first; use the mandant from the user entity
+      final var entity = new AppUserSettingEntity(user.getMandant(), user, dto.getTheme(), dto.getLanguageTag());
       final var savedEntity = repository.save(entity);
       return AppUserSettingMapper.toDto(savedEntity);
     } catch (DataIntegrityViolationException ex) {

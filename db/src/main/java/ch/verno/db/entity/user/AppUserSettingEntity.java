@@ -48,6 +48,10 @@ public class AppUserSettingEntity {
     return id;
   }
 
+  public void setId(final Long id) {
+    this.id = id;
+  }
+
   public MandantEntity getMandant() {
     return mandant;
   }

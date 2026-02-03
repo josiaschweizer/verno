@@ -3,6 +3,7 @@ package ch.verno.server.service;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.db.entity.user.AppUserEntity;
+import ch.verno.server.mandant.MandantContext;
 import ch.verno.server.mapper.AppUserMapper;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
@@ -38,7 +39,7 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public AppUserDto save(@Nonnull final AppUserDto user) {
-    final var save = appUserRepository.save(AppUserMapper.toEntity(user));
+    final var save = appUserRepository.save(AppUserMapper.toEntity(user, MandantContext.getRequired()));
     return AppUserMapper.toDto(save);
   }
 

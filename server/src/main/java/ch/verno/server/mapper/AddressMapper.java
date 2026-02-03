@@ -1,8 +1,9 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AddressDto;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.AddressEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -16,7 +17,7 @@ public final class AddressMapper {
       return AddressDto.empty();
     }
 
-    return new AddressDto(
+    final var dto = new AddressDto(
         entity.getId(),
         entity.getStreet() == null ? Publ.EMPTY_STRING : entity.getStreet(),
         entity.getHouseNumber() == null ? Publ.EMPTY_STRING : entity.getHouseNumber(),
@@ -24,15 +25,22 @@ public final class AddressMapper {
         entity.getCity() == null ? Publ.EMPTY_STRING : entity.getCity(),
         entity.getCountry() == null ? Publ.EMPTY_STRING : entity.getCountry()
     );
+
+    if (entity.getMandant() != null) {
+      dto.setMandantId(entity.getMandant().getId());
+    }
+
+    return dto;
   }
 
   @Nullable
-  public static AddressEntity toEntity(@Nullable final AddressDto dto) {
+  public static AddressEntity toEntity(@Nullable final AddressDto dto, final long mandantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
     final var entity = new AddressEntity(
+            MandantEntity.ref(mandantId),
         dto.getStreet(),
         dto.getHouseNumber(),
         dto.getZipCode(),

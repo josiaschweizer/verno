@@ -8,6 +8,8 @@ import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.CourseEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.server.mandant.MandantContext;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.repository.*;
 import ch.verno.server.service.helper.ServiceHelper;
@@ -60,6 +62,7 @@ public class CourseService implements ICourseService {
     }
 
     final var entity = new CourseEntity(
+            MandantEntity.ref(MandantContext.getRequired()),
             ServiceHelper.safeString(courseDto.getTitle()),
             courseDto.getCapacity(),
             ServiceHelper.safeString(courseDto.getLocation()),
@@ -174,7 +177,7 @@ public class CourseService implements ICourseService {
       return DeleteResponseDto.failure("Cannot delete course with registered participants");
     }
 
-    final var entity = CourseMapper.toEntity(course);
+    final var entity = CourseMapper.toEntity(course, MandantContext.getRequired());
     if (entity == null) {
       throw new DBNotFoundException(DBNotFoundReason.NOT_ABLE_TO_DELETE_ENTITY);
     }

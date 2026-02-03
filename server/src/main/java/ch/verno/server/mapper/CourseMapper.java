@@ -3,6 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -25,13 +26,11 @@ public final class CourseMapper {
             ? new ArrayList<DayOfWeek>()
             : new ArrayList<>(entity.getWeekdays());
 
-    final List<CourseLevelDto> courseLevels = entity.getCourseLevels() == null || entity.getCourseLevels().isEmpty()
+    final List<CourseLevelDto> courseLevels = entity.getCourseLevels().isEmpty()
             ? List.of()
-            : entity.getCourseLevels().stream()
-            .map(CourseLevelMapper::toDto)
-            .toList();
+            : entity.getCourseLevels().stream().map(CourseLevelMapper::toDto).toList();
 
-    return new CourseDto(
+    final var dto = new CourseDto(
             entity.getId(),
             entity.getTitle(),
             entity.getCapacity(),
@@ -44,24 +43,32 @@ public final class CourseMapper {
             InstructorMapper.toDto(entity.getInstructor()),
             entity.getNote()
     );
+
+    if (entity.getMandant() != null) {
+      dto.setMandantId(entity.getMandant().getId());
+    }
+
+    return dto;
   }
 
   @Nullable
-  public static CourseEntity toEntity(@Nullable final CourseDto dto) {
+  public static CourseEntity toEntity(@Nullable final CourseDto dto, final long mandantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
+    final var mandant = MandantEntity.ref(mandantId);
     final var entity = new CourseEntity(
+            mandant,
             dto.getTitle(),
             dto.getCapacity(),
             dto.getLocation(),
             CourseLevelMapper.toEntityRefs(dto.getCourseLevels()),
-            CourseScheduleMapper.toEntity(dto.getCourseSchedule()),
+            CourseScheduleMapper.toEntity(dto.getCourseSchedule(), mandantId),
             dto.getWeekdays(),
             dto.getStartTime(),
             dto.getEndTime(),
-            InstructorMapper.toEntity(dto.getInstructor()),
+            InstructorMapper.toEntity(dto.getInstructor(), mandantId),
             dto.getNote()
     );
 

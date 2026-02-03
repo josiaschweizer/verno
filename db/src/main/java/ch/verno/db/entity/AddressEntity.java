@@ -59,6 +59,10 @@ public class AddressEntity {
     return id;
   }
 
+  public void setId(final Long id) {
+    this.id = id;
+  }
+
   public MandantEntity getMandant() {
     return mandant;
   }
