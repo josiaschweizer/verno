@@ -8,8 +8,13 @@ import jakarta.persistence.*;
 public class MandantSettingEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false, updatable = false)
   private Long id;
+
+  @OneToOne(optional = false, fetch = FetchType.LAZY)
+  @MapsId
+  @JoinColumn(name = "id", nullable = false)
+  private MandantEntity mandant;
 
   @Column(name = "course_weeks_per_schedule")
   private Integer courseDaysPerSchedule;
@@ -36,13 +41,15 @@ public class MandantSettingEntity {
     // JPA
   }
 
-  public MandantSettingEntity(@Nonnull final Integer courseDaysPerSchedule,
+  public MandantSettingEntity(@Nonnull final MandantEntity mandant,
+                              @Nonnull final Integer courseDaysPerSchedule,
                               @Nonnull final Integer maxParticipantsPerCourse,
                               final boolean enforceQuantitySettings,
                               final boolean enforceCourseLevelSettings,
                               final boolean isParentOneMainParent,
                               @Nonnull final String courseReportName,
                               final boolean limitCourseAssignmentsToActive) {
+    this.mandant = mandant;
     this.courseDaysPerSchedule = courseDaysPerSchedule;
     this.maxParticipantsPerCourse = maxParticipantsPerCourse;
     this.enforceQuantitySettings = enforceQuantitySettings;
@@ -56,8 +63,12 @@ public class MandantSettingEntity {
     return id;
   }
 
-  public void setId(final Long id) {
-    this.id = id;
+  public MandantEntity getMandant() {
+    return mandant;
+  }
+
+  public void setMandant(final MandantEntity mandant) {
+    this.mandant = mandant;
   }
 
   public Integer getCourseDaysPerSchedule() {

@@ -1,12 +1,8 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
@@ -17,6 +13,10 @@ public class AddressEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandant_id", nullable = false)
+  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false)
@@ -41,11 +41,13 @@ public class AddressEntity {
     // JPA
   }
 
-  public AddressEntity(@Nonnull final String street,
+  public AddressEntity(@Nonnull final MandantEntity mandant,
+                       @Nonnull final String street,
                        @Nonnull final String houseNumber,
                        @Nonnull final String zipCode,
                        @Nonnull final String city,
                        @Nonnull final String country) {
+    this.mandant = mandant;
     this.street = street;
     this.houseNumber = houseNumber;
     this.zipCode = zipCode;
@@ -57,8 +59,12 @@ public class AddressEntity {
     return id;
   }
 
-  public void setId(final Long id) {
-    this.id = id;
+  public MandantEntity getMandant() {
+    return mandant;
+  }
+
+  public void setMandant(final MandantEntity mandant) {
+    this.mandant = mandant;
   }
 
   public OffsetDateTime getCreatedAt() {

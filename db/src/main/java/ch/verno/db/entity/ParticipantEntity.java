@@ -1,5 +1,6 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -15,6 +16,10 @@ public class ParticipantEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandant_id", nullable = false)
+  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false)
@@ -77,19 +82,22 @@ public class ParticipantEntity {
     // JPA
   }
 
-  public ParticipantEntity(@Nonnull final String firstname,
+  public ParticipantEntity(@Nonnull final MandantEntity mandant,
+                           @Nonnull final String firstname,
                            @Nonnull final String lastname,
                            @Nonnull final LocalDate birthdate,
                            @Nonnull final String email,
                            @Nonnull final String phone,
                            @Nonnull final String note,
                            final boolean active) {
+    this.mandant = mandant;
     this.firstname = firstname;
     this.lastname = lastname;
     this.birthdate = birthdate;
     this.email = email;
     this.phone = phone;
     this.note = note;
+    this.active = active;
   }
 
   public Long getId() {
@@ -98,6 +106,14 @@ public class ParticipantEntity {
 
   public void setId(final Long id) {
     this.id = id;
+  }
+
+  public MandantEntity getMandant() {
+    return mandant;
+  }
+
+  public void setMandant(final MandantEntity mandant) {
+    this.mandant = mandant;
   }
 
   public OffsetDateTime getCreatedAt() {

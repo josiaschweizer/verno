@@ -2,6 +2,7 @@ package ch.verno.db.entity;
 
 import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -15,6 +16,10 @@ public class CourseScheduleEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandant_id", nullable = false)
+  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false)
@@ -43,10 +48,12 @@ public class CourseScheduleEntity {
     // JPA
   }
 
-  public CourseScheduleEntity(@Nonnull final String title,
+  public CourseScheduleEntity(@Nonnull final MandantEntity mandant,
+                              @Nonnull final String title,
                               @Nonnull final String color,
                               @Nonnull final CourseScheduleStatus status,
                               @Nonnull final List<String> weeks) {
+    this.mandant = mandant;
     this.title = title;
     this.color = color;
     this.status = status;
@@ -57,17 +64,17 @@ public class CourseScheduleEntity {
     return id;
   }
 
-  public void setId(final Long id) {
-    this.id = id;
+  public MandantEntity getMandant() {
+    return mandant;
+  }
+
+  public void setMandant(final MandantEntity mandant) {
+    this.mandant = mandant;
   }
 
   @Nonnull
   public OffsetDateTime getCreatedAt() {
     return createdAt;
-  }
-
-  public void setCreatedAt(@Nonnull final OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
   }
 
   public String getTitle() {

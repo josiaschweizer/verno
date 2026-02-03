@@ -1,5 +1,6 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -17,6 +18,10 @@ public class CourseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandant_id", nullable = false)
+  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -79,7 +84,8 @@ public class CourseEntity {
   protected CourseEntity() {
   }
 
-  public CourseEntity(@Nonnull final String title,
+  public CourseEntity(@Nonnull final MandantEntity mandant,
+                      @Nonnull final String title,
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
@@ -89,13 +95,12 @@ public class CourseEntity {
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
                       @Nonnull final String note) {
+    this.mandant = mandant;
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-
     this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
     this.courseSchedule = courseSchedule;
-
     this.weekdays = weekdays;
     this.startTime = startTime;
     this.endTime = endTime;
@@ -116,6 +121,14 @@ public class CourseEntity {
 
   public void setId(final Long id) {
     this.id = id;
+  }
+
+  public MandantEntity getMandant() {
+    return mandant;
+  }
+
+  public void setMandant(final MandantEntity mandant) {
+    this.mandant = mandant;
   }
 
   @Nonnull
