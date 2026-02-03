@@ -40,6 +40,7 @@ public class UserSeeder implements CommandLineRunner {
             role
     );
 
-    appUserService.save(user);
+    //todo remove save for seed and use real save with mandant context
+    appUserService.saveForSeed(user);
   }
 }

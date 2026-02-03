@@ -1,2 +1,0 @@
-ALTER TABLE course
-    ADD COLUMN note TEXT;

@@ -16,6 +16,9 @@ public class MandantEntity {
   @Column(name = "slug", nullable = false, unique = true, length = 64)
   private String slug;
 
+  @Column(name = "name", length = 128)
+  private String name;
+
   protected MandantEntity() {
     // JPA
   }
@@ -42,5 +45,13 @@ public class MandantEntity {
 
   public void setSlug(final String slug) {
     this.slug = slug;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(final String name) {
+    this.name = name;
   }
 }

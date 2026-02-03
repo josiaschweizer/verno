@@ -53,5 +53,12 @@ public class AppUserService implements IAppUserService {
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
     return appUserRepository.findByUsername(username);
   }
+
+  //todo delete this method and use save with mandant context
+  @Deprecated
+  public void saveForSeed(@Nonnull final AppUserDto user){
+    final var save = appUserRepository.save(AppUserMapper.toEntity(user, 7777L));
+    AppUserMapper.toDto(save);
+  }
 }
 

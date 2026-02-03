@@ -21,9 +21,10 @@ public class MandantResolver {
     this.lookupService = lookupService;
   }
 
+  //TODO remove hardcoded mandantId
+
   @Nonnull
   public Optional<Long> resolveMandantId(@Nonnull final HttpServletRequest request) {
-    // 1) Subdomain (empfohlen)
     final var host = safeLower(request.getServerName());
     final var slug = extractSubdomainSlug(host);
 
@@ -32,22 +33,24 @@ public class MandantResolver {
       if (id.isPresent()) {
         return id;
       }
-      throw new MandantNotResolvedException("Unknown mandant slug: " + slug + " (host=" + host + ")");
+//      throw new MandantNotResolvedException("Unknown mandant slug: " + slug + " (host=" + host + ")");
+      return Optional.of(7777L);
     }
 
-    // 2) Header fallback (nur falls du es willst)
     if (props.isAllowHeaderFallback()) {
       final var header = request.getHeader(props.getHeaderName());
       if (header != null && !header.isBlank()) {
         try {
           return Optional.of(Long.parseLong(header.trim()));
         } catch (final NumberFormatException e) {
-          throw new MandantNotResolvedException("Invalid mandant header " + props.getHeaderName() + ": " + header, e);
+//          throw new MandantNotResolvedException("Invalid mandant header " + props.getHeaderName() + ": " + header, e);
+          return Optional.of(7777L);
         }
       }
     }
 
-    return Optional.empty();
+//    return Optional.empty();
+    return Optional.of(7777L);
   }
 
   @Nullable
