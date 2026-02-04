@@ -1,5 +1,7 @@
 package ch.verno.common.mandant;
 
+import jakarta.annotation.Nonnull;
+
 public final class MandantContext {
 
   private static final ThreadLocal<Long> CURRENT = new ThreadLocal<>();
@@ -7,13 +9,18 @@ public final class MandantContext {
   private MandantContext() {
   }
 
-  public static void set(final long mandantId) {
+  public static void set(@Nonnull final Long mandantId) {
     CURRENT.set(mandantId);
   }
 
-  public static long getRequired() {
+  @Nonnull
+  public static Long getRequired() {
     final var id = CURRENT.get();
-    if (id == null) throw new IllegalStateException("No mandant set for request");
+
+    if (id == null) {
+      throw new IllegalStateException("No mandant set for request");
+    }
+
     return id;
   }
 

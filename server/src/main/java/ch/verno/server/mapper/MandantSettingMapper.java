@@ -1,9 +1,7 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.MandantSettingDto;
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantSettingEntity;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.db.entity.setting.MandantSettingEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +31,7 @@ public class MandantSettingMapper {
   @Nonnull
   public static MandantSettingEntity toEntity(@Nonnull final MandantSettingDto dto) {
     final var entity = new MandantSettingEntity(
-            MandantEntity.ref(MandantContext.getRequired()),
+            null,
             dto.getCourseDaysPerSchedule(),
             dto.getMaxParticipantsPerCourse(),
             dto.isEnforceQuantitySettings(),
@@ -43,7 +41,13 @@ public class MandantSettingMapper {
             dto.isLimitCourseAssignmentsToActive()
     );
 
-    entity.setId(dto.getId());
+    if (dto.getMandantId() != null) {
+      // we don't import MandantEntity here; caller/service should set a managed Mandant reference before saving
+      entity.setId(dto.getMandantId());
+    } else if (dto.getId() != null) {
+      entity.setId(dto.getId());
+    }
+
     return entity;
   }
 
@@ -56,7 +60,5 @@ public class MandantSettingMapper {
     entity.setParentOneMainParent(dto.isParentOneMainParent());
     entity.setCourseReportName(dto.getCourseReportName());
     entity.setLimitCourseAssignmentsToActive(dto.isLimitCourseAssignmentsToActive());
-
-    // do not change mandant here - mandant is tied to the entity identity
   }
 }

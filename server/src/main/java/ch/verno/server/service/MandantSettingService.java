@@ -1,116 +1,80 @@
 package ch.verno.server.service;
 
+import ch.verno.common.db.dto.defaultdto.DefaultMandantSettingDto;
 import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.common.db.service.IMandantSettingService;
-import ch.verno.common.exceptions.db.DBNotFoundException;
-import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.mandant.MandantContext;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.setting.MandantSettingEntity;
 import ch.verno.server.mapper.MandantSettingMapper;
 import ch.verno.server.repository.MandantSettingRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class MandantSettingService implements IMandantSettingService {
 
-  //TODO DIFFERENT MANDANTS MANAGEMENT - currently only one mandant is supported
+  @Nonnull
+  private final MandantSettingRepository repo;
+
+  @PersistenceContext
+  private EntityManager em;
+
+  public MandantSettingService(@Nonnull final MandantSettingRepository repo) {
+    this.repo = repo;
+  }
 
   @Nonnull
-  private final MandantSettingRepository mandantSettingRepository;
+  @Override
+  @Transactional(readOnly = true)
+  public MandantSettingDto getCurrentMandantSettingOrDefault() {
+    final long mandantId = MandantContext.getRequired();
 
-  @Autowired
-  public MandantSettingService(@Nonnull final MandantSettingRepository mandantSettingRepository) {
-    this.mandantSettingRepository = mandantSettingRepository;
+    return repo.findById(mandantId)
+            .map(MandantSettingMapper::toDto)
+            .orElseGet(() -> DefaultMandantSettingDto.getDefault(mandantId));
   }
 
   @Nonnull
   @Override
   @Transactional
-  public MandantSettingDto createMandanSetting(@Nonnull final MandantSettingDto mandantSettingDto) {
-    final var entity = MandantSettingMapper.toEntity(mandantSettingDto);
-    final var saved = mandantSettingRepository.save(entity);
-    return MandantSettingMapper.toDto(saved);
+  public MandantSettingDto getOrCreateCurrentMandantSetting(@Nonnull final MandantSettingDto defaultDto) {
+    final long mandantId = MandantContext.getRequired();
+
+    return repo.findById(mandantId)
+            .map(MandantSettingMapper::toDto)
+            .orElseGet(() -> saveCurrentMandantSetting(DefaultMandantSettingDto.getDefault(mandantId)));
   }
 
   @Nonnull
   @Override
   @Transactional
-  public MandantSettingDto updateMandantSetting(@Nonnull final MandantSettingDto mandantSettingDto) {
-    final var id = mandantSettingDto.getId();
-    if (id == null) {
-      throw new IllegalArgumentException("MandantSettingDto.id must not be null for update");
-    }
+  public MandantSettingDto saveCurrentMandantSetting(@Nonnull final MandantSettingDto dto) {
+    final long mandantId = MandantContext.getRequired();
+    final MandantEntity mandantRef = em.getReference(MandantEntity.class, mandantId);
 
-    final var existing = mandantSettingRepository.findById(id);
-    if (existing.isEmpty()) {
-      throw new DBNotFoundException(DBNotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
-    }
-
-    final var entity = existing.get();
-    MandantSettingMapper.updateEntity(mandantSettingDto, entity);
-
-    final var saved = mandantSettingRepository.save(entity);
-    return MandantSettingMapper.toDto(saved);
-  }
-
-  @Nonnull
-  @Override
-  @Transactional(readOnly = true)
-  public MandantSettingDto getMandantSettingById(@Nonnull final Long id) {
-    final var foundById = mandantSettingRepository.findById(id);
-    if (foundById.isEmpty()) {
-      throw new DBNotFoundException(DBNotFoundReason.MANDANT_SETTINGS_BY_ID_NOT_FOUND, id);
-    }
-
-    return MandantSettingMapper.toDto(foundById.get());
-  }
-
-  @Nonnull
-  @Override
-  @Transactional(readOnly = true)
-  public List<MandantSettingDto> getAllMandantSettings() {
-    return mandantSettingRepository.findAll().stream()
-            .map(MandantSettingMapper::toDto)
-            .toList();
-  }
-
-  @Nonnull
-  @Override
-  @Transactional(readOnly = true)
-  public MandantSettingDto getSingleMandantSetting() {
-    return mandantSettingRepository.findAll().stream()
-            .findFirst()
-            .map(MandantSettingMapper::toDto)
-            .orElse(saveSingleMandantSetting(
-                    new MandantSettingDto(1L,
-                            8,
-                            12,
-                            false,
-                            false,
-                            true,
-                            "Course Report",
-                            false)
+    final MandantSettingEntity entity = repo.findById(mandantId)
+            .orElseGet(() -> new MandantSettingEntity(
+                    mandantRef,
+                    dto.getCourseDaysPerSchedule(),
+                    dto.getMaxParticipantsPerCourse(),
+                    dto.isEnforceQuantitySettings(),
+                    dto.isEnforceCourseLevelSettings(),
+                    dto.isParentOneMainParent(),
+                    dto.getCourseReportName(),
+                    dto.isLimitCourseAssignmentsToActive()
             ));
-  }
 
-  @Nonnull
-  @Override
-  @Transactional
-  public MandantSettingDto getOrCreateSingleMandantSetting(@Nonnull final MandantSettingDto defaultDto) {
-    final var existing = mandantSettingRepository.findAll().stream().findFirst();
-    return existing.map(MandantSettingMapper::toDto).orElseGet(() -> createMandanSetting(defaultDto));
-  }
-
-  @Nonnull
-  @Override
-  @Transactional
-  public MandantSettingDto saveSingleMandantSetting(@Nonnull final MandantSettingDto dto) {
-    if (dto.getId() == null) {
-      return createMandanSetting(dto);
+    if (entity.getMandant() == null) {
+      entity.setMandant(mandantRef);
     }
-    return updateMandantSetting(dto);
+
+    MandantSettingMapper.updateEntity(dto, entity);
+
+    final var saved = repo.save(entity);
+    return MandantSettingMapper.toDto(saved);
   }
 }

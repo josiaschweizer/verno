@@ -16,8 +16,8 @@ public class MandantConfiguration {
   }
 
   @Bean
-  public MandantResolver mandantResolver(final MandantProperties props,
-                                         final MandantLookupService lookupService) {
+  public MandantResolver mandantResolver(@Nonnull final MandantProperties props,
+                                         @Nonnull final MandantLookupService lookupService) {
     return new MandantResolver(props, lookupService);
   }
 

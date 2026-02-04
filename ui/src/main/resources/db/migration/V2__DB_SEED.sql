@@ -15,7 +15,7 @@ SELECT CURRENT_TIMESTAMP, 'Female', 'Weiblich'
     WHERE NOT EXISTS (SELECT 1 FROM public.gender WHERE name = 'Female');
 
 INSERT INTO public.mandant_settings (
-    mandant_id,
+    id,
     course_weeks_per_schedule,
     max_participants_per_course,
     enforce_quantity_settings,
@@ -33,18 +33,17 @@ SELECT
     TRUE,
     'course-report-',
     FALSE
-    WHERE NOT EXISTS (SELECT 1 FROM public.mandant_settings WHERE mandant_id = 7777);
+    WHERE NOT EXISTS (SELECT 1 FROM public.mandant_settings WHERE id = 7777);
 
 INSERT INTO public.mandant_settings (
-    mandant_id,
+    id,
     course_weeks_per_schedule,
     max_participants_per_course,
     enforce_quantity_settings,
     enforce_course_level_settings,
     is_parent_one_main_parent,
     course_report_name,
-    limit_course_assignments_to_active
-)
+    limit_course_assignments_to_active)
 SELECT
     8888,
     6,
@@ -54,7 +53,7 @@ SELECT
     TRUE,
     'demo-course-report-',
     FALSE
-    WHERE NOT EXISTS (SELECT 1 FROM public.mandant_settings WHERE mandant_id = 8888);
+    WHERE NOT EXISTS (SELECT 1 FROM public.mandant_settings WHERE id = 8888);
 
 INSERT INTO public.address (created_at, mandant_id, street, house_number, zip_code, city, country)
 SELECT NOW(), 7777, v.street, v.house_number, v.zip_code, v.city, v.country

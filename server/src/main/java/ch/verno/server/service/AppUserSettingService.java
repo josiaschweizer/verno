@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
-import ch.verno.db.entity.user.AppUserSettingEntity;
+import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.server.mapper.AppUserSettingMapper;
 import ch.verno.server.repository.AppUserRepository;
 import ch.verno.server.repository.AppUserSettingRepository;
@@ -49,17 +49,17 @@ public class AppUserSettingService implements IAppUserSettingService {
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
 
     try {
-      // AppUserSettingEntity requires mandant first; use the mandant from the user entity
+      // AppUserSettingEntity requires mandant first - use the mandant from the user entity
       final var entity = new AppUserSettingEntity(user.getMandant(), user, dto.getTheme(), dto.getLanguageTag());
-      final var savedEntity = repository.save(entity);
-      return AppUserSettingMapper.toDto(savedEntity);
-    } catch (DataIntegrityViolationException ex) {
+      return AppUserSettingMapper.toDto(repository.save(entity));
+    } catch (DataIntegrityViolationException exception) {
       final var existing = repository.findByUserId(dto.getUserId());
+
       if (existing.isPresent()) {
         return updateAppUserSetting(dto);
       }
 
-      throw ex;
+      throw exception;
     }
   }
 
@@ -68,9 +68,11 @@ public class AppUserSettingService implements IAppUserSettingService {
   @Transactional(readOnly = true)
   public AppUserSettingDto getAppUserSettingById(@Nonnull final Long id) {
     final var foundById = repository.findById(id);
+
     if (foundById.isEmpty()) {
       throw new DBNotFoundException(DBNotFoundReason.USER_SETTING_BY_ID_NOT_FOUND);
     }
+
     return AppUserSettingMapper.toDto(foundById.get());
   }
 

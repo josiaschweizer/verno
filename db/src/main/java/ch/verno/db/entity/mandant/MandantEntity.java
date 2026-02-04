@@ -1,5 +1,7 @@
 package ch.verno.db.entity.mandant;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,35 +25,38 @@ public class MandantEntity {
     // JPA
   }
 
-  private MandantEntity(final Long id) {
+  private MandantEntity(@Nonnull final Long id) {
     this.id = id;
   }
 
-  public static MandantEntity ref(final long id) {
+  public static MandantEntity ref(@Nonnull final Long id) {
     return new MandantEntity(id);
   }
 
+  @Nonnull
   public Long getId() {
     return id;
   }
 
-  public void setId(final Long id) {
+  public void setId(@Nonnull final Long id) {
     this.id = id;
   }
 
+  @Nonnull
   public String getSlug() {
     return slug;
   }
 
-  public void setSlug(final String slug) {
+  public void setSlug(@Nonnull final String slug) {
     this.slug = slug;
   }
 
+  @Nullable
   public String getName() {
     return name;
   }
 
-  public void setName(final String name) {
+  public void setName(@Nullable final String name) {
     this.name = name;
   }
 }

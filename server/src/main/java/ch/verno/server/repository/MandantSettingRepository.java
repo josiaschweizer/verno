@@ -1,6 +1,6 @@
 package ch.verno.server.repository;
 
-import ch.verno.db.entity.mandant.MandantSettingEntity;
+import ch.verno.db.entity.setting.MandantSettingEntity;
 import ch.verno.db.jpa.SpringDataMandantSettingJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
@@ -32,6 +32,4 @@ public class MandantSettingRepository {
   public MandantSettingEntity save(@Nonnull final MandantSettingEntity entity) {
     return springDataMandantSettingJpaRepository.save(entity);
   }
-
-
 }

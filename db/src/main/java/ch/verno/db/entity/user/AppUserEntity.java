@@ -1,6 +1,8 @@
 package ch.verno.db.entity.user;
 
 import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -11,15 +13,12 @@ import jakarta.persistence.*;
                 @UniqueConstraint(name = "uk_app_user_mandant_username", columnNames = {"mandant_id", "username"})
         }
 )
-public class AppUserEntity {
+@EntityListeners(MandantEntityListener.class)
+public class AppUserEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandant_id", nullable = false)
-  private MandantEntity mandant;
 
   @Column(nullable = false, length = 200)
   private String username;
@@ -38,7 +37,7 @@ public class AppUserEntity {
                        @Nonnull final String username,
                        @Nonnull final String passwordHash,
                        @Nonnull final String role) {
-    this.mandant = mandant;
+    setMandant(mandant);
     this.username = username;
     this.passwordHash = passwordHash;
     this.role = role;
@@ -50,14 +49,6 @@ public class AppUserEntity {
 
   public void setId(final Long id) {
     this.id = id;
-  }
-
-  public MandantEntity getMandant() {
-    return mandant;
-  }
-
-  public void setMandant(final MandantEntity mandant) {
-    this.mandant = mandant;
   }
 
   public String getUsername() {

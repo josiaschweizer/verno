@@ -36,13 +36,16 @@ public class CourseReportUseCase {
   @Nonnull
   public FileDto generate(@Nonnull final CourseDto course,
                           @Nonnull final List<ParticipantDto> participants) {
-    final var courseDates = new ArrayList<LocalDate>(); //todo liste ergänzen -> auflösen nach course & course schedule
+
+    final var courseDates = new ArrayList<LocalDate>(); // TODO aus Schedules ableiten
     final var reportData = CourseReportMapper.map(course, participants, courseDates);
 
-    final var prefix = mandantSettingService.getSingleMandantSetting().getCourseReportName();
-    final var filename = prefix.toLowerCase() + course.getTitle().toLowerCase() + ".pdf";
+    final var settings = mandantSettingService.getCurrentMandantSettingOrDefault();
+    final var prefix = settings.getCourseReportName();
+
+    final var filename = prefix.toLowerCase() + "_" + course.getTitle().toLowerCase() + ".pdf";
+
     final var pdfBytes = courseReportRenderer.renderReportPdf(reportData);
     return new FileDto(filename, pdfBytes);
   }
-
 }

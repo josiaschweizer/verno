@@ -1,6 +1,8 @@
 package ch.verno.db.entity;
 
 import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -8,15 +10,12 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "parent", schema = "public")
-public class ParentEntity {
+@EntityListeners(MandantEntityListener.class)
+public class ParentEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandant_id", nullable = false)
-  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false)
@@ -51,7 +50,7 @@ public class ParentEntity {
                       @Nonnull final String lastname,
                       @Nonnull final String email,
                       @Nonnull final String phone) {
-    this.mandant = mandant;
+    setMandant(mandant);
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
@@ -64,14 +63,6 @@ public class ParentEntity {
 
   public void setId(final Long id) {
     this.id = id;
-  }
-
-  public MandantEntity getMandant() {
-    return mandant;
-  }
-
-  public void setMandant(final MandantEntity mandant) {
-    this.mandant = mandant;
   }
 
   public OffsetDateTime getCreatedAt() {

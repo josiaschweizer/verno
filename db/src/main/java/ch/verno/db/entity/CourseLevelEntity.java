@@ -1,6 +1,8 @@
 package ch.verno.db.entity;
 
 import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -17,15 +19,12 @@ import java.time.Instant;
                 )
         }
 )
-public class CourseLevelEntity {
+@EntityListeners(MandantEntityListener.class)
+public class CourseLevelEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandant_id", nullable = false)
-  private MandantEntity mandant;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt = Instant.now();
@@ -51,7 +50,7 @@ public class CourseLevelEntity {
                            @Nonnull final String name,
                            final String description,
                            final Integer sortingOrder) {
-    this.mandant = mandant;
+    setMandant(mandant);
     this.code = code;
     this.name = name;
     this.description = description;
@@ -71,14 +70,6 @@ public class CourseLevelEntity {
 
   public void setId(final Long id) {
     this.id = id;
-  }
-
-  public MandantEntity getMandant() {
-    return mandant;
-  }
-
-  public void setMandant(final MandantEntity mandant) {
-    this.mandant = mandant;
   }
 
   public Instant getCreatedAt() {

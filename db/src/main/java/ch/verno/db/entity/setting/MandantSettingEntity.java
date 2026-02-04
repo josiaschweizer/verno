@@ -1,7 +1,10 @@
-package ch.verno.db.entity.mandant;
+package ch.verno.db.entity.setting;
 
+import ch.verno.db.entity.mandant.MandantEntity;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "mandant_settings")
@@ -38,10 +41,9 @@ public class MandantSettingEntity {
   private boolean limitCourseAssignmentsToActive;
 
   protected MandantSettingEntity() {
-    // JPA
   }
 
-  public MandantSettingEntity(@Nonnull final MandantEntity mandant,
+  public MandantSettingEntity(@Nullable final MandantEntity mandant,
                               @Nonnull final Integer courseDaysPerSchedule,
                               @Nonnull final Integer maxParticipantsPerCourse,
                               final boolean enforceQuantitySettings,

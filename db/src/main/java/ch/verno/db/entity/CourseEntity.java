@@ -1,6 +1,8 @@
 package ch.verno.db.entity;
 
 import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -12,16 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "course")
-public class CourseEntity {
+@Table(name = "course", schema = "public")
+@EntityListeners(MandantEntityListener.class)
+public class CourseEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandant_id", nullable = false)
-  private MandantEntity mandant;
 
   @Nonnull
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -95,7 +94,7 @@ public class CourseEntity {
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
                       @Nonnull final String note) {
-    this.mandant = mandant;
+    setMandant(mandant);
     this.title = title;
     this.capacity = capacity;
     this.location = location;
@@ -121,14 +120,6 @@ public class CourseEntity {
 
   public void setId(final Long id) {
     this.id = id;
-  }
-
-  public MandantEntity getMandant() {
-    return mandant;
-  }
-
-  public void setMandant(final MandantEntity mandant) {
-    this.mandant = mandant;
   }
 
   @Nonnull

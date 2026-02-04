@@ -253,7 +253,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     final var courses = new ArrayList<CourseDto>();
-    if (mandantSettingService.getSingleMandantSetting().isLimitCourseAssignmentsToActive()) {
+    if (mandantSettingService.getCurrentMandantSettingOrDefault().isLimitCourseAssignmentsToActive()) {
       courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.PLANNED));
       courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.ACTIVE));
     } else {
@@ -271,7 +271,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     courseLevelsEntry.addValueChangeListener(e -> {
-      if (mandantSettingService.getSingleMandantSetting().isEnforceCourseLevelSettings()) {
+      if (mandantSettingService.getCurrentMandantSettingOrDefault().isEnforceCourseLevelSettings()) {
         final var selectedLevels = e.getValue();
         final var selectedCourse = coursesEntry.getValue();
 

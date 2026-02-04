@@ -1,29 +1,28 @@
 package ch.verno.db.entity.mandant;
 
 import ch.verno.common.mandant.MandantContext;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 public class MandantEntityListener {
 
   @PrePersist
-  public void prePersist(final Object entity) {
+  public void prePersist(@Nonnull final Object entity) {
     if (!(entity instanceof MandantScopedEntity scoped)) {
       return;
     }
 
-    final long ctxMandantId = MandantContext.getRequired();
-
     if (scoped.getMandant() == null) {
-      scoped.setMandant(MandantEntity.ref(ctxMandantId));
+      scoped.setMandant(MandantEntity.ref(MandantContext.getRequired()));
       return;
     }
 
-    validate(scoped, ctxMandantId);
+    validate(scoped, MandantContext.getRequired());
   }
 
   @PreUpdate
-  public void preUpdate(final Object entity) {
+  public void preUpdate(@Nonnull final Object entity) {
     if (!(entity instanceof MandantScopedEntity scoped)) {
       return;
     }
@@ -32,16 +31,12 @@ public class MandantEntityListener {
     validate(scoped, ctxMandantId);
   }
 
-  private void validate(final MandantScopedEntity scoped,
-                        final long ctxMandantId) {
-
+  private void validate(@Nonnull final MandantScopedEntity scoped,
+                        @Nonnull final Long contextMandantId) {
     final Long entityMandantId = scoped.getMandant().getId();
 
-    if (entityMandantId == null || entityMandantId != ctxMandantId) {
-      throw new IllegalStateException(
-              "Mandant mismatch: entity=" + entityMandantId +
-                      ", context=" + ctxMandantId
-      );
+    if (!entityMandantId.equals(contextMandantId)) {
+      throw new IllegalStateException("Mandant mismatch: entity=" + entityMandantId + ", context=" + contextMandantId);
     }
   }
 }

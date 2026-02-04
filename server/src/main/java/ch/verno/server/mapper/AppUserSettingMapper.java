@@ -3,7 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.db.entity.user.AppUserSettingEntity;
+import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.common.mandant.MandantContext;
 import jakarta.annotation.Nonnull;
 

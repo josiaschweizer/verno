@@ -12,10 +12,11 @@ import java.io.IOException;
 
 public class MandantFilter extends OncePerRequestFilter {
 
-  private final MandantProperties props;
-  private final MandantResolver resolver;
+  @Nonnull private final MandantProperties props;
+  @Nonnull private final MandantResolver resolver;
 
-  public MandantFilter(final MandantProperties props, final MandantResolver resolver) {
+  public MandantFilter(@Nonnull final MandantProperties props,
+                       @Nonnull final MandantResolver resolver) {
     this.props = props;
     this.resolver = resolver;
   }

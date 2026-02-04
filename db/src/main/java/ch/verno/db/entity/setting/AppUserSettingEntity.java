@@ -1,6 +1,9 @@
-package ch.verno.db.entity.user;
+package ch.verno.db.entity.setting;
 
 import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,15 +13,12 @@ import jakarta.persistence.*;
                 @UniqueConstraint(name = "uk_user_settings_user", columnNames = {"user_id"})
         }
 )
-public class AppUserSettingEntity {
+@EntityListeners(MandantEntityListener.class)
+public class AppUserSettingEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "mandant_id", nullable = false)
-  private MandantEntity mandant;
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
@@ -38,7 +38,7 @@ public class AppUserSettingEntity {
                               final AppUserEntity user,
                               final String theme,
                               final String languageTag) {
-    this.mandant = mandant;
+    setMandant(mandant);
     this.user = user;
     this.theme = theme;
     this.languageTag = languageTag;
@@ -50,14 +50,6 @@ public class AppUserSettingEntity {
 
   public void setId(final Long id) {
     this.id = id;
-  }
-
-  public MandantEntity getMandant() {
-    return mandant;
-  }
-
-  public void setMandant(final MandantEntity mandant) {
-    this.mandant = mandant;
   }
 
   public AppUserEntity getUser() {

@@ -3,28 +3,26 @@ package ch.verno.common.db.service;
 import ch.verno.common.db.dto.table.MandantSettingDto;
 import jakarta.annotation.Nonnull;
 
-import java.util.List;
-
 public interface IMandantSettingService {
 
+  /**
+   * Liefert die Settings des aktuellen Mandanten (MandantContext).
+   * Falls noch keine existieren, wird ein Default-DTO zurückgegeben (ohne zu speichern).
+   */
   @Nonnull
-  MandantSettingDto createMandanSetting(@Nonnull final MandantSettingDto mandantSettingDto);
+  MandantSettingDto getCurrentMandantSettingOrDefault();
 
+  /**
+   * Liefert die Settings des aktuellen Mandanten (MandantContext).
+   * Falls noch keine existieren, werden sie mit defaultDto erstellt.
+   */
   @Nonnull
-  MandantSettingDto updateMandantSetting(@Nonnull final MandantSettingDto mandantSettingDto);
+  MandantSettingDto getOrCreateCurrentMandantSetting(@Nonnull MandantSettingDto defaultDto);
 
+  /**
+   * Speichert (upsert) die Settings des aktuellen Mandanten (MandantContext).
+   * Der Mandant wird ausschliesslich aus dem Context genommen (dto.mandantId / dto.id werden ignoriert).
+   */
   @Nonnull
-  MandantSettingDto getMandantSettingById(@Nonnull final Long id);
-
-  @Nonnull
-  List<MandantSettingDto> getAllMandantSettings();
-
-  @Nonnull
-  MandantSettingDto getSingleMandantSetting();
-
-  @Nonnull
-  MandantSettingDto getOrCreateSingleMandantSetting(@Nonnull MandantSettingDto defaultDto);
-
-  @Nonnull
-  MandantSettingDto saveSingleMandantSetting(@Nonnull MandantSettingDto dto);
+  MandantSettingDto saveCurrentMandantSetting(@Nonnull MandantSettingDto dto);
 }
