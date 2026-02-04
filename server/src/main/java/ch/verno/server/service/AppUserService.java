@@ -3,6 +3,7 @@ package ch.verno.server.service;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.db.entity.user.AppUserEntity;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.mapper.AppUserMapper;
 import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
@@ -38,7 +39,7 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public AppUserDto save(@Nonnull final AppUserDto user) {
-    final var save = appUserRepository.save(AppUserMapper.toEntity(user));
+    final var save = appUserRepository.save(AppUserMapper.toEntity(user, MandantContext.getRequired()));
     return AppUserMapper.toDto(save);
   }
 
@@ -51,6 +52,13 @@ public class AppUserService implements IAppUserService {
 
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
     return appUserRepository.findByUsername(username);
+  }
+
+  //todo delete this method and use save with mandant context
+  @Deprecated
+  public void saveForSeed(@Nonnull final AppUserDto user){
+    final var save = appUserRepository.save(AppUserMapper.toEntity(user, 7777L));
+    AppUserMapper.toDto(save);
   }
 }
 

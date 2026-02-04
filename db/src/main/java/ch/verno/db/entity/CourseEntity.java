@@ -1,5 +1,8 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -11,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "course")
-public class CourseEntity {
+@Table(name = "course", schema = "public")
+@EntityListeners(MandantEntityListener.class)
+public class CourseEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +83,8 @@ public class CourseEntity {
   protected CourseEntity() {
   }
 
-  public CourseEntity(@Nonnull final String title,
+  public CourseEntity(@Nonnull final MandantEntity mandant,
+                      @Nonnull final String title,
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
@@ -89,13 +94,12 @@ public class CourseEntity {
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
                       @Nonnull final String note) {
+    setMandant(mandant);
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-
     this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
     this.courseSchedule = courseSchedule;
-
     this.weekdays = weekdays;
     this.startTime = startTime;
     this.endTime = endTime;

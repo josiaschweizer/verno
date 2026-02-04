@@ -1,18 +1,17 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "address")
-public class AddressEntity {
+@Table(name = "address", schema = "public")
+@EntityListeners(MandantEntityListener.class)
+public class AddressEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +40,13 @@ public class AddressEntity {
     // JPA
   }
 
-  public AddressEntity(@Nonnull final String street,
+  public AddressEntity(@Nonnull final MandantEntity mandant,
+                       @Nonnull final String street,
                        @Nonnull final String houseNumber,
                        @Nonnull final String zipCode,
                        @Nonnull final String city,
                        @Nonnull final String country) {
+    setMandant(mandant);
     this.street = street;
     this.houseNumber = houseNumber;
     this.zipCode = zipCode;

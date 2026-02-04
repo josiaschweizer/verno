@@ -1,8 +1,10 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.CourseLevelEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.publ.Publ;
+import ch.verno.common.mandant.MandantContext;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -18,13 +20,19 @@ public final class CourseLevelMapper {
       return CourseLevelDto.empty();
     }
 
-    return new CourseLevelDto(
+    final var dto = new CourseLevelDto(
             entity.getId(),
             entity.getCode() == null ? Publ.EMPTY_STRING : entity.getCode(),
             entity.getName() == null ? Publ.EMPTY_STRING : entity.getName(),
             entity.getDescription() == null ? Publ.EMPTY_STRING : entity.getDescription(),
             entity.getSortingOrder()
     );
+
+    if (entity.getMandant() != null) {
+      dto.setMandantId(entity.getMandant().getId());
+    }
+
+    return dto;
   }
 
   @Nonnull
@@ -45,7 +53,10 @@ public final class CourseLevelMapper {
       return null;
     }
 
+    final var mandantId = MandantContext.getRequired();
+
     final var entity = new CourseLevelEntity(
+            MandantEntity.ref(mandantId),
             dto.getCode(),
             dto.getName(),
             dto.getDescription(),

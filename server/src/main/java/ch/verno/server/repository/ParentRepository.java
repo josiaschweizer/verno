@@ -19,13 +19,13 @@ public class ParentRepository {
   }
 
   @Nonnull
-  public Optional<ParentEntity> findById(@Nonnull final Long id) {
-    return springDataParentJpaRepository.findById(id);
+  public Optional<ParentEntity> findById(@Nonnull final Long id, @Nonnull final Long mandantId) {
+    return springDataParentJpaRepository.findByIdAndMandant_Id(id, mandantId);
   }
 
   @Nonnull
-  public List<ParentEntity> findAll() {
-    return springDataParentJpaRepository.findAll();
+  public List<ParentEntity> findAll(@Nonnull final Long mandantId) {
+    return springDataParentJpaRepository.findAllByMandant_Id(mandantId);
   }
 
   @Nonnull
@@ -34,12 +34,13 @@ public class ParentRepository {
   }
 
   @Nonnull
-  public Optional<ParentEntity> findByFields(@Nonnull final String firstname,
-                                              @Nonnull final String lastname,
-                                              @Nonnull final String email,
-                                              @Nonnull final String phone) {
-    return springDataParentJpaRepository.findByFirstnameAndLastnameAndEmailAndPhone(
-            firstname, lastname, email, phone
+  public Optional<ParentEntity> findByFields(@Nonnull final Long mandantId,
+                                             @Nonnull final String firstname,
+                                             @Nonnull final String lastname,
+                                             @Nonnull final String email,
+                                             @Nonnull final String phone) {
+    return springDataParentJpaRepository.findByMandant_IdAndFirstnameAndLastnameAndEmailAndPhone(
+            mandantId, firstname, lastname, email, phone
     );
   }
 }

@@ -1,16 +1,27 @@
-package ch.verno.db.entity.user;
+package ch.verno.db.entity.setting;
 
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "app_user_settings")
-public class AppUserSettingEntity {
+@Table(
+        name = "app_user_settings",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_user_settings_user", columnNames = {"user_id"})
+        }
+)
+@EntityListeners(MandantEntityListener.class)
+public class AppUserSettingEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
   private AppUserEntity user;
 
   @Column(nullable = false, length = 16)
@@ -23,20 +34,22 @@ public class AppUserSettingEntity {
     // JPA
   }
 
-  public AppUserSettingEntity(final AppUserEntity user,
+  public AppUserSettingEntity(final MandantEntity mandant,
+                              final AppUserEntity user,
                               final String theme,
                               final String languageTag) {
+    setMandant(mandant);
     this.user = user;
     this.theme = theme;
     this.languageTag = languageTag;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public Long getId() {
     return id;
+  }
+
+  public void setId(final Long id) {
+    this.id = id;
   }
 
   public AppUserEntity getUser() {

@@ -1,33 +1,41 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "course_level", schema = "public")
-public class CourseLevelEntity {
+@Table(
+        name = "course_level",
+        schema = "public",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_course_level_mandant_code",
+                        columnNames = {"mandant_id", "code"}
+                )
+        }
+)
+@EntityListeners(MandantEntityListener.class)
+public class CourseLevelEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "created_at", nullable = false)
-  private Instant createdAt;
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private Instant createdAt = Instant.now();
 
-  @Column(name = "code")
+  @Column(name = "code", nullable = false, length = 64)
   private String code;
 
-  @Column(name = "name")
+  @Column(name = "name", nullable = false, length = 128)
   private String name;
 
-  @Column(name = "description")
+  @Column(name = "description", columnDefinition = "TEXT")
   private String description;
 
   @Column(name = "sorting_order")
@@ -37,11 +45,12 @@ public class CourseLevelEntity {
     // JPA
   }
 
-  public CourseLevelEntity(@Nonnull final String code,
+  public CourseLevelEntity(@Nonnull final MandantEntity mandant,
+                           @Nonnull final String code,
                            @Nonnull final String name,
                            final String description,
                            final Integer sortingOrder) {
-    this.createdAt = Instant.now();
+    setMandant(mandant);
     this.code = code;
     this.name = name;
     this.description = description;
@@ -55,7 +64,6 @@ public class CourseLevelEntity {
     return entity;
   }
 
-
   public Long getId() {
     return id;
   }
@@ -66,10 +74,6 @@ public class CourseLevelEntity {
 
   public Instant getCreatedAt() {
     return createdAt;
-  }
-
-  public void setCreatedAt(@Nonnull final Instant createdAt) {
-    this.createdAt = createdAt;
   }
 
   public String getCode() {

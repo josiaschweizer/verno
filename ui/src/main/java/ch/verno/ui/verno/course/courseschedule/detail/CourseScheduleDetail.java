@@ -40,8 +40,15 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
 
   @Override
   protected void initUI() {
-    final var singleMandantSetting = mandantSettingService.getSingleMandantSetting();
-    add(new VerticalLayout(createInfoLayout(), createSchedulePickerLayout(singleMandantSetting.getCourseDaysPerSchedule(), singleMandantSetting.isEnforceQuantitySettings())));
+    final var setting = mandantSettingService.getCurrentMandantSettingOrDefault();
+
+    add(new VerticalLayout(
+            createInfoLayout(),
+            createSchedulePickerLayout(
+                    setting.getCourseDaysPerSchedule(),
+                    setting.isEnforceQuantitySettings()
+            )
+    ));
   }
 
   @Nonnull

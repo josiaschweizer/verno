@@ -1,7 +1,8 @@
 package ch.verno.db.jpa;
 
+import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.db.entity.user.AppUserSettingEntity;
+import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -11,6 +12,7 @@ public interface SpringDataAppUserSettingJpaRepository extends
         JpaRepository<AppUserSettingEntity, Long>,
         JpaSpecificationExecutor<AppUserSettingEntity> {
 
+  @Nonnull
   Optional<AppUserSettingEntity> findByUser(AppUserEntity userId);
 
 }

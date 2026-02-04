@@ -20,7 +20,7 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
     super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;
-    this.dto = mandantSettingService.getSingleMandantSetting();
+    this.dto = mandantSettingService.getCurrentMandantSettingOrDefault();
   }
 
   @Nonnull
@@ -67,7 +67,7 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mandantSettingService.saveSingleMandantSetting(dto);
+      mandantSettingService.saveCurrentMandantSetting(dto);
     }
   }
 

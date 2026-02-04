@@ -7,7 +7,9 @@ import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParticipantEntity;
+import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.publ.Publ;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
@@ -66,7 +68,10 @@ public class ParticipantService implements IParticipantService {
   @Override
   @Transactional
   public ParticipantDto createParticipant(@Nonnull final ParticipantDto participant) {
+    final long mandantId = MandantContext.getRequired();
+
     final var entity = new ParticipantEntity(
+            MandantEntity.ref(mandantId),
             ServiceHelper.safeString(participant.getFirstName()),
             ServiceHelper.safeString(participant.getLastName()),
             participant.getBirthdate() != null ? participant.getBirthdate() : LocalDate.now(),
@@ -194,7 +199,7 @@ public class ParticipantService implements IParticipantService {
   @Override
   @Transactional(readOnly = true)
   public List<ParticipantDto> findParticipantsByCourse(@Nonnull final CourseDto course) {
-    final var courseEntity = CourseMapper.toEntity(course);
+    final var courseEntity = CourseMapper.toEntity(course, MandantContext.getRequired());
 
     if (courseEntity == null) {
       return List.of();

@@ -3,8 +3,10 @@ package ch.verno.server.service.helper;
 import ch.verno.common.db.dto.table.*;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.*;
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.publ.Publ;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.repository.*;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -48,7 +50,9 @@ public class ServiceHelper {
       entity.setCity(city);
       entity.setCountry(country);
     } else {
-      entity = new AddressEntity(street, houseNumber, zipCode, city, country);
+      // entity constructors now require a MandantEntity first; use a null-id MandantEntity as fallback
+      final var mandantId = MandantContext.getRequired();
+      entity = new AddressEntity(MandantEntity.ref(mandantId), street, houseNumber, zipCode, city, country);
     }
 
     return addressRepository.save(entity);
@@ -66,19 +70,16 @@ public class ServiceHelper {
     final var firstName = safeString(parentDto.getFirstName()).trim();
     final var lastName = safeString(parentDto.getLastName()).trim();
     final var email = safeTrimToNull(parentDto.getEmail());
-    final var phone = safeTrimToNull(parentDto.getPhone() != null && !parentDto.getPhone().isEmpty()
-            ? parentDto.getPhone().toString()
-            : null);
+    final var phone = safeTrimToNull(!parentDto.getPhone().isEmpty() ? parentDto.getPhone().toString() : null);
 
     final boolean noTextFields = firstName.isEmpty()
             && lastName.isEmpty()
             && email == null
             && phone == null;
 
-    final boolean hasGender = parentDto.getGender() != null
-            && !parentDto.getGender().isEmpty()
-            && parentDto.getGender().getId() != null
-            && parentDto.getGender().getId() != 0;
+    final boolean hasGender = !parentDto.getGender().isEmpty() &&
+            parentDto.getGender().getId() != null &&
+            parentDto.getGender().getId() != 0;
 
     final boolean hasAddress = hasAddressContent(parentDto.getAddress());
 
@@ -86,15 +87,19 @@ public class ServiceHelper {
       return null;
     }
 
+    final var mandantId = MandantContext.getRequired();
+
     final ParentEntity entity;
     if (parentDto.getId() != null && parentDto.getId() != 0L) {
-      entity = parentRepository.findById(parentDto.getId())
+      entity = parentRepository.findById(parentDto.getId(), mandantId)
               .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
     } else {
+      // ParentEntity requires MandantEntity as first parameter
       entity = new ParentEntity(
+              MandantEntity.ref(mandantId),
               firstName,
               lastName,
-              email,
+              email == null ? Publ.EMPTY_STRING : email,
               phone == null ? Publ.EMPTY_STRING : phone
       );
     }
@@ -238,10 +243,19 @@ public class ServiceHelper {
     if (addressDto == null) {
       return false;
     }
-    return safeTrimToNull(addressDto.getStreet()) != null
-            || safeTrimToNull(addressDto.getHouseNumber()) != null
-            || safeTrimToNull(addressDto.getZipCode()) != null
-            || safeTrimToNull(addressDto.getCity()) != null
-            || safeTrimToNull(addressDto.getCountry()) != null;
+
+    final var street = safeString(addressDto.getStreet()).trim();
+    final var houseNumber = safeString(addressDto.getHouseNumber()).trim();
+    final var zipCode = safeString(addressDto.getZipCode()).trim();
+    final var city = safeString(addressDto.getCity()).trim();
+    final var country = safeString(addressDto.getCountry()).trim();
+
+    final boolean allBlank = street.isEmpty()
+            && houseNumber.isEmpty()
+            && zipCode.isEmpty()
+            && city.isEmpty()
+            && country.isEmpty();
+
+    return !allBlank;
   }
 }

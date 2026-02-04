@@ -1,6 +1,6 @@
 package ch.verno.server.repository;
 
-import ch.verno.db.entity.user.AppUserSettingEntity;
+import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.db.jpa.SpringDataAppUserJpaRepository;
 import ch.verno.db.jpa.SpringDataAppUserSettingJpaRepository;
 import jakarta.annotation.Nonnull;
@@ -35,10 +35,7 @@ public class AppUserSettingRepository {
   @Nonnull
   public Optional<AppUserSettingEntity> findByUserId(@Nonnull final Long userId) {
     final var user = appUserJpaRepository.findById(userId);
-    if (user.isEmpty()) {
-      return Optional.empty();
-    }
-    return jpaRepository.findByUser(user.get());
+    return user.flatMap(jpaRepository::findByUser);
   }
 
   @Nonnull

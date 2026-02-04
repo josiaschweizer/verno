@@ -8,11 +8,23 @@ public class BaseDto {
   private Long id;
 
   @Nullable
+  private Long mandantId; // new: tenant/mandant id shared by all DTOs
+
+  @Nullable
   public Long getId() {
     return id;
   }
 
   public void setId(@Nullable final Long id) {
     this.id = id;
+  }
+
+  @Nullable
+  public Long getMandantId() {
+    return mandantId;
+  }
+
+  public void setMandantId(@Nullable final Long mandantId) {
+    this.mandantId = mandantId;
   }
 }

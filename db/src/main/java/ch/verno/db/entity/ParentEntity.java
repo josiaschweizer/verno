@@ -1,21 +1,17 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.mandant.MandantEntityListener;
+import ch.verno.db.entity.mandant.MandantScopedEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "parent", schema = "public")
-public class ParentEntity {
+@EntityListeners(MandantEntityListener.class)
+public class ParentEntity extends MandantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +45,12 @@ public class ParentEntity {
     // JPA
   }
 
-  public ParentEntity(@Nonnull final String firstname,
+  public ParentEntity(@Nonnull final MandantEntity mandant,
+                      @Nonnull final String firstname,
                       @Nonnull final String lastname,
                       @Nonnull final String email,
                       @Nonnull final String phone) {
+    setMandant(mandant);
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;

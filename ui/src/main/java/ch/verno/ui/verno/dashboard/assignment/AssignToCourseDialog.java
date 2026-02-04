@@ -179,7 +179,7 @@ public class AssignToCourseDialog extends VADialog {
   }
 
   private boolean filterForInvalidCourseLevel(@Nonnull final Long id) {
-    if (mandantSettingService.getSingleMandantSetting().isEnforceCourseLevelSettings() &&
+    if (mandantSettingService.getCurrentMandantSettingOrDefault().isEnforceCourseLevelSettings() &&
             courseComboBox != null &&
             courseComboBox.getValue() != null) {
       final var course = courseService.getCourseById(courseComboBox.getValue());

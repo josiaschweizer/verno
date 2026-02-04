@@ -1,7 +1,7 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.MandantSettingDto;
-import ch.verno.db.entity.mandant.MandantSettingEntity;
+import ch.verno.db.entity.setting.MandantSettingEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ public class MandantSettingMapper {
 
   @Nonnull
   public static MandantSettingDto toDto(@Nonnull final MandantSettingEntity entity) {
-    return new MandantSettingDto(
+    final var dto = new MandantSettingDto(
             entity.getId(),
             entity.getCourseDaysPerSchedule(),
             entity.getMaxParticipantsPerCourse(),
@@ -20,11 +20,18 @@ public class MandantSettingMapper {
             entity.getCourseReportName(),
             entity.isLimitCourseAssignmentsToActive()
     );
+
+    if (entity.getMandant() != null) {
+      dto.setMandantId(entity.getMandant().getId());
+    }
+
+    return dto;
   }
 
   @Nonnull
   public static MandantSettingEntity toEntity(@Nonnull final MandantSettingDto dto) {
     final var entity = new MandantSettingEntity(
+            null,
             dto.getCourseDaysPerSchedule(),
             dto.getMaxParticipantsPerCourse(),
             dto.isEnforceQuantitySettings(),
@@ -33,7 +40,14 @@ public class MandantSettingMapper {
             dto.getCourseReportName(),
             dto.isLimitCourseAssignmentsToActive()
     );
-    entity.setId(dto.getId());
+
+    if (dto.getMandantId() != null) {
+      // we don't import MandantEntity here; caller/service should set a managed Mandant reference before saving
+      entity.setId(dto.getMandantId());
+    } else if (dto.getId() != null) {
+      entity.setId(dto.getId());
+    }
+
     return entity;
   }
 

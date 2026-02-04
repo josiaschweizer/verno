@@ -23,7 +23,7 @@ public class ReportSetting extends VABaseSetting<MandantSettingDto> {
     super(TITLE_KEY, true);
 
     this.mandantSettingService = mandantSettingService;
-    this.dto = mandantSettingService.getSingleMandantSetting();
+    this.dto = mandantSettingService.getCurrentMandantSettingOrDefault();
     this.entryFactory = new EntryFactory<>(TranslationHelper.getI18NProvider());
   }
 
@@ -59,7 +59,7 @@ public class ReportSetting extends VABaseSetting<MandantSettingDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mandantSettingService.saveSingleMandantSetting(dto);
+      mandantSettingService.saveCurrentMandantSetting(dto);
     }
   }
 }

@@ -2,12 +2,7 @@ package ch.verno.db.entity;
 
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
@@ -46,6 +41,7 @@ public class GenderEntity {
     return entity;
   }
 
+  @Nonnull
   public static GenderEntity empty() {
     return new GenderEntity(Publ.EMPTY_STRING, Publ.EMPTY_STRING);
   }
