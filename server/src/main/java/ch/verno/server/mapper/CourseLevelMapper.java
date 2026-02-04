@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseLevelEntity;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

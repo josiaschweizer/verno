@@ -9,7 +9,7 @@ import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.mapper.ParticipantMapper;
 import ch.verno.server.repository.*;
@@ -199,8 +199,7 @@ public class ParticipantService implements IParticipantService {
   @Override
   @Transactional(readOnly = true)
   public List<ParticipantDto> findParticipantsByCourse(@Nonnull final CourseDto course) {
-    final var mandantId = MandantContext.getRequired();
-    final var courseEntity = CourseMapper.toEntity(course, mandantId);
+    final var courseEntity = CourseMapper.toEntity(course, MandantContext.getRequired());
 
     if (courseEntity == null) {
       return List.of();

@@ -1,4 +1,4 @@
-package ch.verno.server.mandant;
+package ch.verno.common.mandant;
 
 public final class MandantContext {
 

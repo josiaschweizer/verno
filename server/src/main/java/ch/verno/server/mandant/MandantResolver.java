@@ -1,5 +1,6 @@
 package ch.verno.server.mandant;
 
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +22,6 @@ public class MandantResolver {
     this.lookupService = lookupService;
   }
 
-  //TODO remove hardcoded mandantId
-
   @Nonnull
   public Optional<Long> resolveMandantId(@Nonnull final HttpServletRequest request) {
     final var host = safeLower(request.getServerName());
@@ -33,8 +32,7 @@ public class MandantResolver {
       if (id.isPresent()) {
         return id;
       }
-//      throw new MandantNotResolvedException("Unknown mandant slug: " + slug + " (host=" + host + ")");
-      return Optional.of(7777L);
+      throw new MandantNotResolvedException("Unknown mandant slug: " + slug + " (host=" + host + ")");
     }
 
     if (props.isAllowHeaderFallback()) {
@@ -43,14 +41,12 @@ public class MandantResolver {
         try {
           return Optional.of(Long.parseLong(header.trim()));
         } catch (final NumberFormatException e) {
-//          throw new MandantNotResolvedException("Invalid mandant header " + props.getHeaderName() + ": " + header, e);
-          return Optional.of(7777L);
+          throw new MandantNotResolvedException("Invalid mandant header " + props.getHeaderName() + ": " + header, e);
         }
       }
     }
 
-//    return Optional.empty();
-    return Optional.of(7777L);
+    return Optional.empty();
   }
 
   @Nullable
@@ -59,31 +55,28 @@ public class MandantResolver {
       return null;
     }
 
-    // IPs oder "localhost" ohne Subdomain
-    if (isIp(host) || host.equals("localhost")) {
+    if (isIp(host) || host.equals(Publ.LOCALHOST)) {
       return null;
     }
 
-    // Für dev: demo.localhost -> slug = demo
-    if (host.endsWith(".localhost")) {
+    if (host.endsWith(Publ.DOT + Publ.LOCALHOST)) {
       final var parts = host.split("\\.");
       return parts.length >= 2 ? parts[0] : null;
     }
 
-    // Prod: fcsg.verno-app.ch -> slug = fcsg (base domain = verno-app.ch)
     for (final var base : props.getBaseDomains()) {
       final var baseLower = safeLower(base);
-      if (baseLower.equals("localhost")) {
+      if (baseLower.equals(Publ.LOCALHOST)) {
         continue;
       }
 
-      final var suffix = "." + baseLower;
+      final var suffix = Publ.DOT + baseLower;
       if (host.endsWith(suffix)) {
-        final var prefix = host.substring(0, host.length() - suffix.length()); // z.B. "fcsg" oder "a.b"
+        final var prefix = host.substring(0, host.length() - suffix.length());
         if (prefix.isBlank()) {
           return null;
         }
-        // nur erste Label als slug (fcsg bei fcsg.verno-app.ch)
+
         final var labels = prefix.split("\\.");
         return labels.length >= 1 ? labels[0] : null;
       }
@@ -93,12 +86,11 @@ public class MandantResolver {
   }
 
   private boolean isIp(@Nonnull final String host) {
-    // sehr einfache Heuristik (IPv4)
     return host.matches("^\\d{1,3}(\\.\\d{1,3}){3}$");
   }
 
   @Nonnull
   private String safeLower(@Nullable final String value) {
-    return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+    return value == null ? Publ.EMPTY_STRING : value.trim().toLowerCase(Locale.ROOT);
   }
 }

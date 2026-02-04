@@ -6,7 +6,7 @@ import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.*;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.repository.*;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

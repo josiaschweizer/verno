@@ -2,6 +2,7 @@ package ch.verno.ui.verno.security;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.CommandLineRunner;
@@ -21,9 +22,14 @@ public class UserSeeder implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... args) {
-    seedUserIfMissing("admin", "admin1234", "ADMIN");
-    seedUserIfMissing("user", "user1234", "USER");
+  public void run(@Nonnull final String... args) {
+    MandantContext.set(7777L);
+    try {
+      seedUserIfMissing("admin", "admin1234", "ADMIN");
+      seedUserIfMissing("user", "user1234", "USER");
+    } finally {
+      MandantContext.clear();
+    }
   }
 
   private void seedUserIfMissing(@Nonnull final String username,

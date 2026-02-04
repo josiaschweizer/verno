@@ -3,7 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.db.dto.table.MandantSettingDto;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.db.entity.mandant.MandantSettingEntity;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

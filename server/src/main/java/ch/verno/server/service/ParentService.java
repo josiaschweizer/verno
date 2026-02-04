@@ -6,7 +6,7 @@ import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParentEntity;
 import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.mapper.ParentMapper;
 import ch.verno.server.repository.ParentRepository;
 import ch.verno.server.service.helper.ServiceHelper;

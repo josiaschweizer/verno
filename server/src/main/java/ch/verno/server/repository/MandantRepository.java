@@ -2,6 +2,7 @@ package ch.verno.server.repository;
 
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.db.jpa.SpringDataMandantJpaRepository;
+import ch.verno.server.mandant.UnscopedQuery;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@UnscopedQuery
 public class MandantRepository {
 
   @Nonnull private final SpringDataMandantJpaRepository repository;

@@ -8,7 +8,7 @@ import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.InstructorEntity;
 import ch.verno.db.entity.mandant.MandantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.server.mandant.MandantContext;
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.server.mapper.InstructorMapper;
 import ch.verno.server.repository.AddressRepository;
 import ch.verno.server.repository.GenderRepository;

@@ -1,5 +1,6 @@
 package ch.verno.server.repository;
 
+import ch.verno.common.mandant.MandantContext;
 import ch.verno.db.entity.CourseEntity;
 import ch.verno.db.entity.ParticipantEntity;
 import ch.verno.db.jpa.SpringDataParticipantJpaRepository;

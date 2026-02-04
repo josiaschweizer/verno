@@ -1,5 +1,6 @@
 package ch.verno.server.mandant;
 
+import ch.verno.common.mandant.MandantContext;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
