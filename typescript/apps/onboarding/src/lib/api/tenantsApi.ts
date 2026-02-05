@@ -18,7 +18,7 @@ export type CreateTenantResponse = {
   dbStatus: string
 }
 
-const env = import.meta.env as any
+const env = (import.meta as any).env as any
 
 const baseUrl =
   (env.VITE_PROVISIONER_BASE_URL as string | undefined) ||
