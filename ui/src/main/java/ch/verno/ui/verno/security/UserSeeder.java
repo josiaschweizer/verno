@@ -6,10 +6,12 @@ import ch.verno.common.mandant.MandantContext;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("dev")
 public class UserSeeder implements CommandLineRunner {
 
   @Nonnull private final IAppUserService appUserService;

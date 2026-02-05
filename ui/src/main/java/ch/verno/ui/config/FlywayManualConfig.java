@@ -19,7 +19,6 @@ public class FlywayManualConfig {
   @ConditionalOnProperty(name = "spring.flyway.enabled", havingValue = "true", matchIfMissing = true)
   public Flyway flyway(@Nonnull final DataSource dataSource,
                        @Nonnull final ObjectProvider<FlywayProperties> propertiesProvider) {
-
     final var properties = propertiesProvider.getIfAvailable(FlywayProperties::new);
 
     return Flyway.configure()

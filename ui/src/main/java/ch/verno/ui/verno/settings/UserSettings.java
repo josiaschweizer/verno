@@ -4,7 +4,7 @@ import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;

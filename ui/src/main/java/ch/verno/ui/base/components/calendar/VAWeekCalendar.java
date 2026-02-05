@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.calendar;
 
 import ch.verno.publ.Publ;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

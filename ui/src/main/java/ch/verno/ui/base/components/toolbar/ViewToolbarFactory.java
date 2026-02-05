@@ -4,7 +4,7 @@ import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.filter.VASearchFilter;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.lib.helper.LogoutHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

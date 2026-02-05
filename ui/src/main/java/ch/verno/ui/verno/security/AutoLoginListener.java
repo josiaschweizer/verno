@@ -64,13 +64,15 @@ public class AutoLoginListener implements VaadinServiceInitListener {
       final var authToken = new UsernamePasswordAuthenticationToken(username, password);
       final var authentication = authenticationManager.authenticate(authToken);
 
+      LOG.debug("AutoLogin: authenticated principal={} thread={}", authentication.getPrincipal(), Thread.currentThread().getName());
+
       final var securityContext = SecurityContextHolder.createEmptyContext();
       securityContext.setAuthentication(authentication);
       SecurityContextHolder.setContext(securityContext);
 
       ui.getSession().getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
-      LOG.info("Auto-Login erfolgreich für Benutzer: {}", username);
+      LOG.info("Auto-Login erfolgreich für Benutzer: {} (thread={})", username, Thread.currentThread().getName());
 
       ui.getPage().setLocation("/");
 
@@ -79,4 +81,3 @@ public class AutoLoginListener implements VaadinServiceInitListener {
     }
   }
 }
-

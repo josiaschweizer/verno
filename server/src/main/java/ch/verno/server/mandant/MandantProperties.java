@@ -13,6 +13,7 @@ public class MandantProperties {
 
   private List<String> baseDomains = List.of(
           "verno-app.ch",
+          "a.run.app",
           "localhost"
   );
 

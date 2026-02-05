@@ -1,5 +1,6 @@
 package ch.verno.common.mandant;
 
+import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
 
 public final class MandantContext {
@@ -18,6 +19,7 @@ public final class MandantContext {
     final var id = CURRENT.get();
 
     if (id == null) {
+      final var iu = UI.getCurrent();
       throw new IllegalStateException("No mandant set for request");
     }
 

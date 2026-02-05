@@ -7,7 +7,7 @@ import ch.verno.common.gate.GlobalGate;
 import ch.verno.server.service.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

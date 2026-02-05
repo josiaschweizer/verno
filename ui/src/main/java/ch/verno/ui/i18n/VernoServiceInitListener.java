@@ -2,20 +2,23 @@ package ch.verno.ui.i18n;
 
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
-import com.vaadin.flow.component.UI;
+import ch.verno.ui.base.error.GlobalErrorHandler;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
-import com.vaadin.flow.server.VaadinSession;
 import jakarta.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
 @Component
 public final class VernoServiceInitListener implements VaadinServiceInitListener {
+
+  private static final Logger LOG = LoggerFactory.getLogger(VernoServiceInitListener.class);
 
   private final ApplicationContext applicationContext;
 
@@ -26,12 +29,21 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
   }
 
   @Override
-  public void serviceInit(@Nonnull final ServiceInitEvent event) {
+  public void serviceInit(@Nonnull ServiceInitEvent event) {
+    event.getSource().addSessionInitListener(sessionEvent -> {
+      sessionEvent.getSession().setErrorHandler(new GlobalErrorHandler());
+    });
+
     event.getSource().addUIInitListener(uiEvent -> {
-      final UI ui = uiEvent.getUI();
-      final Locale locale = loadLocaleFromDatabase();
+      final var ui = uiEvent.getUI();
+
+      final var locale = loadLocaleFromDatabase();
       ui.setLocale(locale);
-      VaadinSession.getCurrent().setLocale(locale);
+
+      final var session = ui.getSession();
+      if (session != null) {
+        session.setLocale(locale);
+      }
     });
   }
 
@@ -69,6 +81,7 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
   private User getCurrentUser() {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
+    LOG.debug("VernoServiceInitListener.getCurrentUser: authentication={} thread={}", authentication, Thread.currentThread().getName());
     if (authentication != null && authentication.getPrincipal() instanceof User) {
       return (User) authentication.getPrincipal();
     }

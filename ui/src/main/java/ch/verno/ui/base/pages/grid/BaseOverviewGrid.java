@@ -8,7 +8,7 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.grid.VAGrid;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;

@@ -1,5 +1,6 @@
 package ch.verno.server.mandant;
 
+import ch.verno.common.exceptions.server.mandant.MandantNotResolvedException;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
