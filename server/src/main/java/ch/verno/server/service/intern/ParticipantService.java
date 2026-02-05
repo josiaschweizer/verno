@@ -1,4 +1,4 @@
-package ch.verno.server.service;
+package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;

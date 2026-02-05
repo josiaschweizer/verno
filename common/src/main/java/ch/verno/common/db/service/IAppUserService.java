@@ -14,7 +14,6 @@ public interface IAppUserService extends UserDetailsService {
   @Nonnull
   Optional<AppUserDto> findByUserName(@Nonnull String username);
 
-  //todo delete this method and use save with mandant context
-  @Deprecated
+  @Deprecated(forRemoval = true)
   void saveForSeed(@Nonnull AppUserDto user);
 }

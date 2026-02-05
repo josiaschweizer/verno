@@ -1,0 +1,8 @@
+CREATE SEQUENCE IF NOT EXISTS mandants_id_seq
+  INCREMENT BY 1
+  MINVALUE 1
+  START WITH 1000
+  NO CYCLE;
+
+ALTER TABLE mandants
+    ALTER COLUMN id SET DEFAULT nextval('mandants_id_seq');

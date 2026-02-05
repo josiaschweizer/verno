@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
 import ch.verno.common.gate.GlobalGate;
-import ch.verno.server.service.*;
+import ch.verno.server.service.intern.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.common.lib.Routes;

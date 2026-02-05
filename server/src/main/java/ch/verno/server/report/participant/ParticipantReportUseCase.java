@@ -5,7 +5,7 @@ import ch.verno.common.file.dto.FileDto;
 import ch.verno.report.dto.ParticipantListReportDto;
 import ch.verno.report.dto.ParticipantReportDto;
 import ch.verno.server.report.base.usecase.BaseListReportUseCase;
-import ch.verno.server.service.ParticipantService;
+import ch.verno.server.service.intern.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 

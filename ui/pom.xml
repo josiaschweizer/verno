@@ -35,6 +35,11 @@
 
     <dependency>
       <groupId>ch.verno</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.verno</groupId>
       <artifactId>publ</artifactId>
     </dependency>
 

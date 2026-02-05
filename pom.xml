@@ -16,6 +16,7 @@
     <module>ui</module>
     <module>report</module>
     <module>publ</module>
+    <module>api</module>
   </modules>
 
   <parent>
@@ -43,6 +44,11 @@
       </dependency>
 
       <!-- interne Module-Versionen zentral managen -->
+      <dependency>
+        <groupId>ch.verno</groupId>
+        <artifactId>api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>ch.verno</groupId>
         <artifactId>common</artifactId>

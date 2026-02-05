@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -26,6 +27,7 @@ public class SecurityConfig {
             .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
+            .requestMatchers("/api/v1/tenants").permitAll()
     );
 
     http = http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
@@ -36,6 +38,7 @@ public class SecurityConfig {
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**")
+            .ignoringRequestMatchers("/api/v1/tenants")
     );
 
     http.headers(headers -> headers

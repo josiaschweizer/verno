@@ -12,7 +12,7 @@ import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
 import ch.verno.server.mapper.csv.InstructorCsvMapper;
-import ch.verno.server.service.AddressService;
+import ch.verno.server.service.intern.AddressService;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
 import jakarta.annotation.Nonnull;

@@ -35,8 +35,17 @@ public class MandantRepository {
   }
 
   @Nonnull
-  public Optional<Long> findIdBySlug(String slug) {
+  public Optional<Long> findIdBySlug(@Nonnull final String slug) {
     return repository.findIdBySlug(slug);
+  }
+
+  public boolean existsBySlug(@Nonnull final String slug) {
+    return repository.existsBySlug(slug);
+  }
+
+  @Nonnull
+  public Long nextId() {
+    return repository.nextId();
   }
 
   @Nonnull

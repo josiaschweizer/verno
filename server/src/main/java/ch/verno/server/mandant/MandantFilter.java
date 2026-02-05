@@ -4,6 +4,7 @@ import ch.verno.common.exceptions.server.mandant.MandantNotResolvedException;
 import ch.verno.common.lib.Routes;
 import ch.verno.common.mandant.MandantContext;
 import ch.verno.db.entity.mandant.MandantFilters;
+import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
@@ -47,13 +48,18 @@ public class MandantFilter extends OncePerRequestFilter {
       return true;
     }
 
-    if (path.equals("/" + Routes.MANDANT_NOT_FOUND) || path.equals("/" + Routes.MANDANT_NOT_FOUND + "/")) {
-      request.getSession(true).setAttribute(ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
+    if (path.startsWith(ApiUrl.BASE_API)) {
       return true;
     }
 
-    if (path.equals("/UIDL") || path.equals("/HEARTBEAT") || path.equals("/PUSH")) {
-      return true;
+    switch (path) {
+      case Publ.SLASH + Routes.MANDANT_NOT_FOUND, Publ.SLASH + Routes.MANDANT_NOT_FOUND + Publ.SLASH -> {
+        request.getSession(true).setAttribute(ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
+        return true;
+      }
+      case "/UIDL", "/HEARTBEAT", "/PUSH" -> {
+        return true;
+      }
     }
 
     return path.startsWith("/VAADIN/")
@@ -86,7 +92,7 @@ public class MandantFilter extends OncePerRequestFilter {
 
       filterChain.doFilter(request, response);
     } catch (MandantNotResolvedException e) {
-      response.sendRedirect(request.getContextPath()  + Routes.MANDANT_NOT_FOUND);
+      response.sendRedirect(request.getContextPath() + Routes.MANDANT_NOT_FOUND);
     } finally {
       MandantContext.clear();
     }

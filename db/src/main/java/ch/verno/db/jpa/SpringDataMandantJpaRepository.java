@@ -13,4 +13,8 @@ public interface SpringDataMandantJpaRepository extends JpaRepository<MandantEnt
   @Query("select m.id from MandantEntity m where m.slug = :slug")
   Optional<Long> findIdBySlug(String slug);
 
+  boolean existsBySlug(String slug);
+
+  @Query(value = "select nextval('mandants_id_seq')", nativeQuery = true)
+  Long nextId();
 }

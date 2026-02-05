@@ -46,7 +46,7 @@ export default function StepTwo({ control, readOnly }: Props) {
         />
 
         <DomainInputField
-          baseDomain=".verno.swiss"
+          baseDomain=".verno-app.ch"
           control={control}
           readOnly={readOnly}
           rules={{ required: 'Subdomain is required' }}
