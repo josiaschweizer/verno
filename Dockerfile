@@ -1,6 +1,4 @@
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY app.jar app.jar
-EXPOSE 8080
-ENV PORT=8080
-ENTRYPOINT ["java","-jar","app.jar"]
+COPY ui/target/ui-1.0-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app/app.jar"]

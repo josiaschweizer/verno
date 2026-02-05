@@ -1,3 +1,5 @@
+./mvnw clean package -DskipTests
+
 PROJECT_ID="keen-jigsaw-482516-e6"
 REGION="europe-west6"
 REPO="verno"
@@ -21,3 +23,5 @@ gcloud run deploy "${SERVICE}" \
   --add-cloudsql-instances "${CLOUDSQL_INSTANCE}" \
   --set-env-vars "SPRING_PROFILES_ACTIVE=prod,CLOUDSQL_INSTANCE=${CLOUDSQL_INSTANCE}" \
   --set-secrets "DB_USER=verno_db_user:latest,DB_PASS=verno_db_pass:latest,DB_NAME=verno_db_name:latest"
+
+./scripts/create-default-mandant.sh
