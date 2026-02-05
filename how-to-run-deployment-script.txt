@@ -1,3 +1,0 @@
-## run this command in the base dir of the repo at the place where the Dockerfile is located
-
-./scripts/provision-tenant.sh --slug flipper --image-name verno-app --tag beta-1 --db-tier db-perf-optimized-N-8

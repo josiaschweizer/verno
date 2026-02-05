@@ -4,7 +4,7 @@ import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.db.service.IMandantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.verno.settings.setting.courselevel.CourseLevelSetting;
 import ch.verno.ui.verno.settings.setting.quantity.QuantitySetting;
 import ch.verno.ui.verno.settings.setting.report.ReportSetting;

@@ -15,10 +15,20 @@ public class MandantFilterEnabler {
 
   @Transactional
   public void enable() {
-    final long mandantId = MandantContext.getRequired();
+    final Long mandantId = MandantContext.get();
 
-    Session session = entityManager.unwrap(Session.class);
+    if (mandantId == null) {
+      return;
+    }
+
+    final Session session = entityManager.unwrap(Session.class);
     session.enableFilter("mandantFilter")
             .setParameter("mandantId", mandantId);
+  }
+
+  @Transactional
+  public void disable() {
+    final Session session = entityManager.unwrap(Session.class);
+    session.disableFilter("mandantFilter");
   }
 }

@@ -1,8 +1,5 @@
 package ch.verno.ui.base.components.toolbar;
 
-import ch.verno.ui.base.components.badge.UserActionBadge;
-import ch.verno.ui.lib.Routes;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.applayout.DrawerToggle;

@@ -1,8 +1,12 @@
 package ch.verno.server.mandant;
 
+import ch.verno.common.db.dto.table.MandantDto;
+import ch.verno.server.mapper.MandantMapper;
 import ch.verno.server.repository.MandantRepository;
+import com.google.errorprone.annotations.RestrictedApi;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +33,13 @@ public class MandantLookupService {
     final var idOpt = mandantRepository.findIdBySlug(key);
     idOpt.ifPresent(id -> cacheBySlug.put(key, id));
     return idOpt;
+  }
+
+  @Nonnull
+  public List<MandantDto> findAllTenants() {
+    return mandantRepository.findAll().stream()
+            .map(MandantMapper::toDto)
+            .toList();
   }
 
   public void evictSlug(@Nonnull final String slug) {

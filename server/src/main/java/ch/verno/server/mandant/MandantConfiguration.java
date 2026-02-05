@@ -2,6 +2,7 @@ package ch.verno.server.mandant;
 
 import ch.verno.server.repository.MandantRepository;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.EntityManager;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +24,10 @@ public class MandantConfiguration {
 
   @Bean
   public FilterRegistrationBean<MandantFilter> mandantFilter(@Nonnull final MandantProperties props,
-                                                             @Nonnull final MandantResolver resolver) {
+                                                             @Nonnull final MandantResolver resolver,
+                                                             @Nonnull final EntityManager entityManager) {
     final var bean = new FilterRegistrationBean<MandantFilter>();
-    bean.setFilter(new MandantFilter(props, resolver));
+    bean.setFilter(new MandantFilter(props, resolver, entityManager));
     bean.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
     return bean;
   }

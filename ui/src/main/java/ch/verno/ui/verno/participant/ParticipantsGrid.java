@@ -19,7 +19,7 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.ui.lib.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.verno.dashboard.report.ParticipantsReportDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

@@ -1,4 +1,4 @@
-package ch.verno.server.mandant;
+package ch.verno.common.exceptions.server.mandant;
 
 public class MandantNotResolvedException extends RuntimeException {
 
