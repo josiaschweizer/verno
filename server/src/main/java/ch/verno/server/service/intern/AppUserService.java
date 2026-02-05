@@ -34,7 +34,7 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public UserDetails loadUserByUsername(@Nonnull final String username) throws UsernameNotFoundException {
-    final var user = appUserRepository.findByUsername(username)
+    final var user = appUserRepository.findByUsername(username, MandantContext.getRequired())
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
     return User.withUsername(user.getUsername())
@@ -63,7 +63,7 @@ public class AppUserService implements IAppUserService {
   }
 
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
-    return appUserRepository.findByUsername(username);
+    return appUserRepository.findByUsername(username, MandantContext.getRequired());
   }
 
   @Deprecated

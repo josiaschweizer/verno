@@ -11,4 +11,5 @@ public interface SpringDataAppUserJpaRepository extends JpaRepository<AppUserEnt
   @Nonnull
   Optional<AppUserEntity> findByUsername(@Nonnull final String username);
 
+  Optional<AppUserEntity> findByUsernameAndMandant_Id(@Nonnull final String username, @Nonnull final Long mandantId);
 }
