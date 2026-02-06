@@ -24,7 +24,7 @@ public final class AppUserSettingMapper {
     );
 
     if (entity.getUser() != null && entity.getUser().getMandant() != null) {
-      dto.setMandantId(entity.getUser().getMandant().getId());
+      dto.setTenant(entity.getUser().getMandant().getId());
     }
 
     return dto;

@@ -29,7 +29,7 @@ public final class ParentMapper {
     );
 
     if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+      dto.setTenant(entity.getMandant().getId());
     }
 
     return dto;

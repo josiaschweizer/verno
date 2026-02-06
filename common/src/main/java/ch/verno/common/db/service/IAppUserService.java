@@ -14,6 +14,6 @@ public interface IAppUserService extends UserDetailsService {
   @Nonnull
   Optional<AppUserDto> findByUserName(@Nonnull String username);
 
-  @Deprecated(forRemoval = true)
-  void saveForSeed(@Nonnull AppUserDto user);
+  Optional<AppUserDto> findByUserNameMandantId(@Nonnull final String username,
+                                               @Nonnull final Long mandantId);
 }

@@ -85,6 +85,12 @@
         <artifactId>libphonenumber</artifactId>
         <version>${libphonenumber.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin-spring-security</artifactId>
+        <version>${vaadin.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

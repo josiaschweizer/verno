@@ -30,7 +30,7 @@ public final class CourseScheduleMapper {
 
     // propagate mandant id
     if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+      dto.setTenant(entity.getMandant().getId());
     }
 
     return dto;

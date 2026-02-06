@@ -20,7 +20,7 @@ public final class AppUserMapper {
     );
 
     if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+      dto.setTenant(entity.getMandant().getId());
     }
 
     return dto;
