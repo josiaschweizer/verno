@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface SpringDataParentJpaRepository extends JpaRepository<ParentEntity, Long> {
 
-  Optional<ParentEntity> findByIdAndMandant_Id(Long id, Long mandantId);
+  Optional<ParentEntity> findByIdAndTenant_Id(Long id, Long tenantId);
 
-  List<ParentEntity> findAllByMandant_Id(Long mandantId);
+  List<ParentEntity> findAllByTenant_Id(Long tenantId);
 
-  Optional<ParentEntity> findByMandant_IdAndFirstnameAndLastnameAndEmailAndPhone(
-          Long mandantId,
+  Optional<ParentEntity> findByTenant_IdAndFirstnameAndLastnameAndEmailAndPhone(
+          Long tenantId,
           String firstname,
           String lastname,
           String email,

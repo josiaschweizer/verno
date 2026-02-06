@@ -19,8 +19,8 @@ public class AppUserRepository {
 
   @Nonnull
   public Optional<AppUserEntity> findByUsername(@Nonnull final String username,
-                                                @Nonnull final Long mandantId) {
-    return springDataAppUserJpaRepository.findByUsernameAndMandant_Id(username, mandantId);
+                                                @Nonnull final Long tenantId) {
+    return springDataAppUserJpaRepository.findByUsernameAndTenant_Id(username, tenantId);
   }
 
   @Nonnull

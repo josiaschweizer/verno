@@ -3,7 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.db.entity.ParentEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -28,21 +28,21 @@ public final class ParentMapper {
             AddressMapper.toDto(entity.getAddress())
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
   }
 
   @Nullable
-  public static ParentEntity toEntity(@Nullable final ParentDto dto, final long mandantId) {
+  public static ParentEntity toEntity(@Nullable final ParentDto dto, final long tenantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
     final var entity = new ParentEntity(
-            MandantEntity.ref(mandantId),
+            TenantEntity.ref(tenantId),
             dto.getFirstName(),
             dto.getLastName(),
             dto.getEmail(),
@@ -56,7 +56,7 @@ public final class ParentMapper {
     }
 
     entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
-    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), mandantId));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), tenantId));
 
     return entity;
   }

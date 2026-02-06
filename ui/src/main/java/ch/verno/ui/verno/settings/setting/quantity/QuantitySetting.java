@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.quantity;
 
-import ch.verno.common.db.dto.table.MandantSettingDto;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.dto.table.TenantSettingDto;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,17 +10,17 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
+public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "setting.quantity_settings";
   @Nonnull
-  private final IMandantSettingService mandantSettingService;
+  private final ITenantSettingService tenantSettingService;
 
-  public QuantitySetting(@Nonnull IMandantSettingService mandantSettingService) {
+  public QuantitySetting(@Nonnull ITenantSettingService tenantSettingService) {
     super(TITLE_KEY, true);
 
-    this.mandantSettingService = mandantSettingService;
-    this.dto = mandantSettingService.getCurrentMandantSettingOrDefault();
+    this.tenantSettingService = tenantSettingService;
+    this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
   }
 
   @Nonnull
@@ -30,15 +30,15 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
             getTranslation("setting.quantity.of.course.days.in.one.course.schedule"),
             Optional.of(getTranslation("setting.defines.the.maximum.number.of.course.days.allowed.within.a.single.course.schedule")),
             binder,
-            MandantSettingDto::getCourseDaysPerSchedule,
-            MandantSettingDto::setCourseDaysPerSchedule
+            TenantSettingDto::getCourseDaysPerSchedule,
+            TenantSettingDto::setCourseDaysPerSchedule
     );
     final var courseQuantity = settingEntryFactory.createQuantitySetting(
             getTranslation("setting.quantity.of.participants.in.one.course"),
             Optional.of(getTranslation("setting.defines.the.maximum.number.of.participants.allowed.per.course")),
             binder,
-            MandantSettingDto::getMaxParticipantsPerCourse,
-            MandantSettingDto::setMaxParticipantsPerCourse
+            TenantSettingDto::getMaxParticipantsPerCourse,
+            TenantSettingDto::setMaxParticipantsPerCourse
     );
 
     final var content = new VerticalLayout(courseScheduleQuantity, courseQuantity);
@@ -50,19 +50,19 @@ public class QuantitySetting extends VABaseSetting<MandantSettingDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mandantSettingService.saveCurrentMandantSetting(dto);
+      tenantSettingService.saveCurrentTenantSetting(dto);
     }
   }
 
   @Nonnull
   @Override
-  protected Binder<MandantSettingDto> createBinder() {
-    return new Binder<>(MandantSettingDto.class);
+  protected Binder<TenantSettingDto> createBinder() {
+    return new Binder<>(TenantSettingDto.class);
   }
 
   @Nonnull
   @Override
-  protected MandantSettingDto createNewBeanInstance() {
-    return new MandantSettingDto();
+  protected TenantSettingDto createNewBeanInstance() {
+    return new TenantSettingDto();
   }
 }

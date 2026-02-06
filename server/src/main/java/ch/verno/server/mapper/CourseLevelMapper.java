@@ -2,9 +2,9 @@ package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseLevelEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.common.tenant.TenantContext;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -28,8 +28,8 @@ public final class CourseLevelMapper {
             entity.getSortingOrder()
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
@@ -53,10 +53,10 @@ public final class CourseLevelMapper {
       return null;
     }
 
-    final var mandantId = MandantContext.getRequired();
+    final var tenantId = TenantContext.getRequired();
 
     final var entity = new CourseLevelEntity(
-            MandantEntity.ref(mandantId),
+            TenantEntity.ref(tenantId),
             dto.getCode(),
             dto.getName(),
             dto.getDescription(),

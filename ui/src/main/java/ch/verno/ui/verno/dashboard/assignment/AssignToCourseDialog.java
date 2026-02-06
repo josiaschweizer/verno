@@ -4,12 +4,12 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.ICourseService;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.gate.GlobalGate;
 import ch.verno.publ.Publ;
 import ch.verno.server.service.intern.CourseService;
-import ch.verno.server.service.intern.MandantSettingService;
+import ch.verno.server.service.intern.TenantSettingService;
 import ch.verno.server.service.intern.ParticipantService;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
@@ -40,7 +40,7 @@ public class AssignToCourseDialog extends VADialog {
   @Nonnull
   private final IParticipantService participantService;
   @Nonnull
-  private final IMandantSettingService mandantSettingService;
+  private final ITenantSettingService tenantSettingService;
 
   @Nullable
   private final Long preSelectedCourseId;
@@ -71,7 +71,7 @@ public class AssignToCourseDialog extends VADialog {
                               @Nonnull final List<Long> preSelectedParticipantIds) {
     this.courseService = globalGate.getService(CourseService.class);
     this.participantService = globalGate.getService(ParticipantService.class);
-    this.mandantSettingService = globalGate.getService(MandantSettingService.class);
+    this.tenantSettingService = globalGate.getService(TenantSettingService.class);
     this.preSelectedCourseId = preSelectedCourseId;
 
     this.selectedParticipantIds = new LinkedHashSet<>(preSelectedParticipantIds);
@@ -179,7 +179,7 @@ public class AssignToCourseDialog extends VADialog {
   }
 
   private boolean filterForInvalidCourseLevel(@Nonnull final Long id) {
-    if (mandantSettingService.getCurrentMandantSettingOrDefault().isEnforceCourseLevelSettings() &&
+    if (tenantSettingService.getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings() &&
             courseComboBox != null &&
             courseComboBox.getValue() != null) {
       final var course = courseService.getCourseById(courseComboBox.getValue());

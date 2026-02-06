@@ -3,7 +3,7 @@ package ch.verno.ui.verno.course.courseschedule.detail;
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.ICourseScheduleService;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.common.lib.Routes;
@@ -28,19 +28,19 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
   @Nonnull
   private final ICourseScheduleService courseScheduleService;
   @Nonnull
-  private final IMandantSettingService mandantSettingService;
+  private final ITenantSettingService tenantSettingService;
 
   public CourseScheduleDetail(@Nonnull final ICourseScheduleService courseScheduleService,
-                              @Nonnull final IMandantSettingService mandantSettingService) {
+                              @Nonnull final ITenantSettingService tenantSettingService) {
     this.courseScheduleService = courseScheduleService;
-    this.mandantSettingService = mandantSettingService;
+    this.tenantSettingService = tenantSettingService;
 
     this.setShowPaddingAroundDetail(true);
   }
 
   @Override
   protected void initUI() {
-    final var setting = mandantSettingService.getCurrentMandantSettingOrDefault();
+    final var setting = tenantSettingService.getCurrentTenantSettingOrDefault();
 
     add(new VerticalLayout(
             createInfoLayout(),

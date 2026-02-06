@@ -1,8 +1,8 @@
 package ch.verno.db.entity;
 
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -19,8 +19,8 @@ import java.time.Instant;
                 )
         }
 )
-@EntityListeners(MandantEntityListener.class)
-public class CourseLevelEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class CourseLevelEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +45,12 @@ public class CourseLevelEntity extends MandantScopedEntity {
     // JPA
   }
 
-  public CourseLevelEntity(@Nonnull final MandantEntity mandant,
+  public CourseLevelEntity(@Nonnull final TenantEntity tenant,
                            @Nonnull final String code,
                            @Nonnull final String name,
                            final String description,
                            final Integer sortingOrder) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.code = code;
     this.name = name;
     this.description = description;

@@ -5,8 +5,8 @@ import ch.verno.common.db.service.IAddressService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.AddressEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.server.mapper.AddressMapper;
 import ch.verno.server.repository.AddressRepository;
 import ch.verno.server.service.helper.ServiceHelper;
@@ -29,7 +29,7 @@ public class AddressService implements IAddressService {
   @Override
   public AddressDto createAddress(@Nonnull final AddressDto addressDto) {
     final var entity = new AddressEntity(
-            MandantEntity.ref(MandantContext.getRequired()),
+            TenantEntity.ref(TenantContext.getRequired()),
             ServiceHelper.safeString(addressDto.getStreet()),
             ServiceHelper.safeString(addressDto.getHouseNumber()),
             ServiceHelper.safeString(addressDto.getZipCode()),
@@ -81,7 +81,7 @@ public class AddressService implements IAddressService {
     }
 
     final var entity = new AddressEntity(
-            MandantEntity.ref(MandantContext.getRequired()),
+            TenantEntity.ref(TenantContext.getRequired()),
             street,
             houseNumber,
             zipCode,

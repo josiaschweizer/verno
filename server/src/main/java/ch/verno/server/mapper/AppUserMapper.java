@@ -1,7 +1,7 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.annotation.Nonnull;
 
@@ -19,8 +19,8 @@ public final class AppUserMapper {
             entity.getRole()
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
@@ -28,9 +28,9 @@ public final class AppUserMapper {
 
   @Nonnull
   public static AppUserEntity toEntity(@Nonnull final AppUserDto dto,
-                                       @Nonnull final MandantEntity mandant) {
+                                       @Nonnull final TenantEntity tenant) {
     final var entity = new AppUserEntity(
-            mandant,
+            tenant,
             dto.getUsername(),
             dto.getPasswordHash(),
             dto.getRole()

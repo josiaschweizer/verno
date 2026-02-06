@@ -1,8 +1,8 @@
 package ch.verno.db.entity.user;
 
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -13,8 +13,8 @@ import jakarta.persistence.*;
                 @UniqueConstraint(name = "uk_app_user_mandant_username", columnNames = {"mandant_id", "username"})
         }
 )
-@EntityListeners(MandantEntityListener.class)
-public class AppUserEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class AppUserEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,11 @@ public class AppUserEntity extends MandantScopedEntity {
     // JPA
   }
 
-  public AppUserEntity(@Nonnull final MandantEntity mandant,
+  public AppUserEntity(@Nonnull final TenantEntity tenant,
                        @Nonnull final String username,
                        @Nonnull final String passwordHash,
                        @Nonnull final String role) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.username = username;
     this.passwordHash = passwordHash;
     this.role = role;

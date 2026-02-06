@@ -5,8 +5,8 @@ import ch.verno.common.db.service.IParentService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParentEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.server.mapper.ParentMapper;
 import ch.verno.server.repository.ParentRepository;
 import ch.verno.server.service.helper.ServiceHelper;
@@ -30,10 +30,10 @@ public class ParentService implements IParentService {
   @Nonnull
   @Override
   public ParentDto createParent(@Nonnull final ParentDto parentDto) {
-    final long mandantId = MandantContext.getRequired();
+    final long tenantId = TenantContext.getRequired();
 
     final var entity = new ParentEntity(
-            MandantEntity.ref(mandantId),
+            TenantEntity.ref(tenantId),
             ServiceHelper.safeString(parentDto.getFirstName()),
             ServiceHelper.safeString(parentDto.getLastName()),
             ServiceHelper.safeString(parentDto.getEmail()),
@@ -53,9 +53,9 @@ public class ParentService implements IParentService {
   @Override
   @Transactional(readOnly = true)
   public ParentDto getParentById(@Nonnull final Long id) {
-    final long mandantId = MandantContext.getRequired();
+    final long tenantId = TenantContext.getRequired();
 
-    final var found = parentRepository.findById(id, mandantId);
+    final var found = parentRepository.findById(id, tenantId);
     if (found.isEmpty()) {
       throw new DBNotFoundException(DBNotFoundReason.PARENT_BY_ID_NOT_FOUND, id);
     }
@@ -67,9 +67,9 @@ public class ParentService implements IParentService {
   @Override
   @Transactional(readOnly = true)
   public List<ParentDto> getParents() {
-    final long mandantId = MandantContext.getRequired();
+    final long tenantId = TenantContext.getRequired();
 
-    return parentRepository.findAll(mandantId)
+    return parentRepository.findAll(tenantId)
             .stream()
             .map(ParentMapper::toDto)
             .toList();
@@ -77,19 +77,19 @@ public class ParentService implements IParentService {
 
   @Nonnull
   public ParentDto findOrCreateParent(@Nonnull final ParentDto parentDto) {
-    final long mandantId = MandantContext.getRequired();
+    final long tenantId = TenantContext.getRequired();
 
     final var firstname = ServiceHelper.safeString(parentDto.getFirstName());
     final var lastname = ServiceHelper.safeString(parentDto.getLastName());
     final var email = ServiceHelper.safeString(parentDto.getEmail());
     final var phone = ServiceHelper.safeString(parentDto.getPhone().toString());
 
-    final var existing = parentRepository.findByFields(mandantId, firstname, lastname, email, phone);
+    final var existing = parentRepository.findByFields(tenantId, firstname, lastname, email, phone);
     if (existing.isPresent()) {
       return ParentMapper.toDto(existing.get());
     }
 
-    final var entity = new ParentEntity(MandantEntity.ref(mandantId), firstname, lastname, email, phone);
+    final var entity = new ParentEntity(TenantEntity.ref(tenantId), firstname, lastname, email, phone);
     return ParentMapper.toDto(parentRepository.save(entity));
   }
 }

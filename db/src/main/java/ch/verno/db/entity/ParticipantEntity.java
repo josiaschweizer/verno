@@ -1,8 +1,8 @@
 package ch.verno.db.entity;
 
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -13,8 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "participant", schema = "public")
-@EntityListeners(MandantEntityListener.class)
-public class ParticipantEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class ParticipantEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,7 +81,7 @@ public class ParticipantEntity extends MandantScopedEntity {
     // JPA
   }
 
-  public ParticipantEntity(@Nonnull final MandantEntity mandant,
+  public ParticipantEntity(@Nonnull final TenantEntity tenant,
                            @Nonnull final String firstname,
                            @Nonnull final String lastname,
                            @Nonnull final LocalDate birthdate,
@@ -89,7 +89,7 @@ public class ParticipantEntity extends MandantScopedEntity {
                            @Nonnull final String phone,
                            @Nonnull final String note,
                            final boolean active) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.firstname = firstname;
     this.lastname = lastname;
     this.birthdate = birthdate;

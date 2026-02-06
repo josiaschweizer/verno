@@ -2,7 +2,7 @@ package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.db.entity.CourseScheduleEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -28,26 +28,24 @@ public final class CourseScheduleMapper {
             weeks
     );
 
-    // propagate mandant id
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    // propagate tenant id
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
   }
 
   @Nullable
-  public static CourseScheduleEntity toEntity(@Nullable final CourseScheduleDto dto, final long mandantId) {
+  public static CourseScheduleEntity toEntity(@Nullable final CourseScheduleDto dto, final long tenantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
     final var weeks = YearWeekMapper.mapWeeksToStrings(dto.getWeeks());
 
-    final var mandant = MandantEntity.ref(mandantId);
-
     final var entity = new CourseScheduleEntity(
-            mandant,
+            TenantEntity.ref(tenantId),
             dto.getTitle(),
             dto.getColor(),
             dto.getStatus(),

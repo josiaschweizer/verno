@@ -49,18 +49,18 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull private final IGenderService genderService;
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ICourseService courseService;
-  @Nonnull private final IMandantSettingService mandantSettingService;
+  @Nonnull private final ITenantSettingService tenantSettingService;
 
   public ParticipantDetail(@Nonnull final IParticipantService participantService,
                            @Nonnull final IGenderService genderService,
                            @Nonnull final ICourseLevelService courseLevelService,
                            @Nonnull final ICourseService courseService,
-                           @Nonnull final IMandantSettingService mandantSettingService) {
+                           @Nonnull final ITenantSettingService tenantSettingService) {
     this.participantService = participantService;
     this.genderService = genderService;
     this.courseLevelService = courseLevelService;
     this.courseService = courseService;
-    this.mandantSettingService = mandantSettingService;
+    this.tenantSettingService = tenantSettingService;
 
     super.setShowPaddingAroundDetail(true);
   }
@@ -253,7 +253,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     final var courses = new ArrayList<CourseDto>();
-    if (mandantSettingService.getCurrentMandantSettingOrDefault().isLimitCourseAssignmentsToActive()) {
+    if (tenantSettingService.getCurrentTenantSettingOrDefault().isLimitCourseAssignmentsToActive()) {
       courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.PLANNED));
       courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.ACTIVE));
     } else {
@@ -271,7 +271,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     courseLevelsEntry.addValueChangeListener(e -> {
-      if (mandantSettingService.getCurrentMandantSettingOrDefault().isEnforceCourseLevelSettings()) {
+      if (tenantSettingService.getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings()) {
         final var selectedLevels = e.getValue();
         final var selectedCourse = coursesEntry.getValue();
 

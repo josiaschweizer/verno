@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.db.dto.table.MandantSettingDto;
+import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
@@ -12,7 +12,7 @@ import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
+public class CourseLevelSetting extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "courseLevel.course_levels";
 
@@ -82,13 +82,13 @@ public class CourseLevelSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   @Override
-  protected Binder<MandantSettingDto> createBinder() {
-    return new Binder<>(MandantSettingDto.class);
+  protected Binder<TenantSettingDto> createBinder() {
+    return new Binder<>(TenantSettingDto.class);
   }
 
   @Nonnull
   @Override
-  protected MandantSettingDto createNewBeanInstance() {
-    return new MandantSettingDto();
+  protected TenantSettingDto createNewBeanInstance() {
+    return new TenantSettingDto();
   }
 }

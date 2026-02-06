@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.shared;
 
-import ch.verno.common.db.dto.table.MandantSettingDto;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.dto.table.TenantSettingDto;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,17 +10,17 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class SharedSettings extends VABaseSetting<MandantSettingDto> {
+public class SharedSettings extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "setting.shared_settings";
   @Nonnull
-  private final IMandantSettingService mandantSettingService;
+  private final ITenantSettingService tenantSettingService;
 
-  public SharedSettings(@Nonnull final IMandantSettingService mandantSettingService) {
+  public SharedSettings(@Nonnull final ITenantSettingService tenantSettingService) {
     super(TITLE_KEY, true);
 
-    this.mandantSettingService = mandantSettingService;
-    this.dto = mandantSettingService.getCurrentMandantSettingOrDefault();
+    this.tenantSettingService = tenantSettingService;
+    this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
   }
 
   @Nonnull
@@ -30,22 +30,22 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
             getTranslation("setting.enforce.quantity.settings"),
             Optional.of(getTranslation("setting.when.enabled.quantity.limits.cannot.be.exceeded")),
             binder,
-            MandantSettingDto::isEnforceQuantitySettings,
-            MandantSettingDto::setEnforceQuantitySettings
+            TenantSettingDto::isEnforceQuantitySettings,
+            TenantSettingDto::setEnforceQuantitySettings
     );
     final var enforceCourseLevel = settingEntryFactory.createBooleanSetting(
             getTranslation("setting.enforce.course.level.on.participant.assignment"),
             Optional.of(getTranslation("setting.when.enabled.participants.can.only.be.assigned.to.courses.that.match.their.course.level")),
             binder,
-            MandantSettingDto::isEnforceCourseLevelSettings,
-            MandantSettingDto::setEnforceCourseLevelSettings
+            TenantSettingDto::isEnforceCourseLevelSettings,
+            TenantSettingDto::setEnforceCourseLevelSettings
     );
     final var limitCourses = settingEntryFactory.createBooleanSetting(
             getTranslation("setting.limit.course.assignment.to.planned.or.active.courses"),
             Optional.of(getTranslation("setting.when.enabled.participants.can.only.be.assigned.to.courses.that.are.currently.planned.or.active.archived.completed.or.inactive.courses.are.excluded.from.selection")),
             binder,
-            MandantSettingDto::isLimitCourseAssignmentsToActive,
-            MandantSettingDto::setLimitCourseAssignmentsToActive
+            TenantSettingDto::isLimitCourseAssignmentsToActive,
+            TenantSettingDto::setLimitCourseAssignmentsToActive
     );
 
     final var mainParentSetting = settingEntryFactory.createToggleSetting(
@@ -54,8 +54,8 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
             getTranslation("participant.parent_two"),
             Optional.of(getTranslation("setting.defines.which.parent.is.considered.the.main.contact.for.a.participant")),
             binder,
-            MandantSettingDto::isParentOneMainParent,
-            MandantSettingDto::setParentOneMainParent
+            TenantSettingDto::isParentOneMainParent,
+            TenantSettingDto::setParentOneMainParent
     );
 
     final var content = new VerticalLayout(enforceQuantityLimits, enforceCourseLevel, limitCourses, mainParentSetting);
@@ -67,19 +67,19 @@ public class SharedSettings extends VABaseSetting<MandantSettingDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mandantSettingService.saveCurrentMandantSetting(dto);
+      tenantSettingService.saveCurrentTenantSetting(dto);
     }
   }
 
   @Nonnull
   @Override
-  protected Binder<MandantSettingDto> createBinder() {
-    return new Binder<>(MandantSettingDto.class);
+  protected Binder<TenantSettingDto> createBinder() {
+    return new Binder<>(TenantSettingDto.class);
   }
 
   @Nonnull
   @Override
-  protected MandantSettingDto createNewBeanInstance() {
-    return new MandantSettingDto();
+  protected TenantSettingDto createNewBeanInstance() {
+    return new TenantSettingDto();
   }
 }

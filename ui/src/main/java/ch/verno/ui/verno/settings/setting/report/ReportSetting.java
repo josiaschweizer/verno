@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.setting.report;
 
-import ch.verno.common.db.dto.table.MandantSettingDto;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.dto.table.TenantSettingDto;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
@@ -12,18 +12,18 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class ReportSetting extends VABaseSetting<MandantSettingDto> {
+public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "setting.report.settings";
 
-  @Nonnull private final IMandantSettingService mandantSettingService;
-  @Nonnull private final EntryFactory<MandantSettingDto> entryFactory;
+  @Nonnull private final ITenantSettingService tenantSettingService;
+  @Nonnull private final EntryFactory<TenantSettingDto> entryFactory;
 
-  public ReportSetting(@Nonnull final IMandantSettingService mandantSettingService) {
+  public ReportSetting(@Nonnull final ITenantSettingService tenantSettingService) {
     super(TITLE_KEY, true);
 
-    this.mandantSettingService = mandantSettingService;
-    this.dto = mandantSettingService.getCurrentMandantSettingOrDefault();
+    this.tenantSettingService = tenantSettingService;
+    this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
     this.entryFactory = new EntryFactory<>(TranslationHelper.getI18NProvider());
   }
 
@@ -31,8 +31,8 @@ public class ReportSetting extends VABaseSetting<MandantSettingDto> {
   @Override
   protected Component createContent() {
     final var courseReport = entryFactory.createTextEntry(
-            MandantSettingDto::getCourseReportName,
-            MandantSettingDto::setCourseReportName,
+            TenantSettingDto::getCourseReportName,
+            TenantSettingDto::setCourseReportName,
             binder,
             Optional.empty(),
             getTranslation("course.pdf.course.report.name")
@@ -46,20 +46,20 @@ public class ReportSetting extends VABaseSetting<MandantSettingDto> {
 
   @Nonnull
   @Override
-  protected Binder<MandantSettingDto> createBinder() {
-    return new Binder<>(MandantSettingDto.class);
+  protected Binder<TenantSettingDto> createBinder() {
+    return new Binder<>(TenantSettingDto.class);
   }
 
   @Nonnull
   @Override
-  protected MandantSettingDto createNewBeanInstance() {
-    return new MandantSettingDto();
+  protected TenantSettingDto createNewBeanInstance() {
+    return new TenantSettingDto();
   }
 
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mandantSettingService.saveCurrentMandantSetting(dto);
+      tenantSettingService.saveCurrentTenantSetting(dto);
     }
   }
 }

@@ -3,7 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.db.entity.InstructorEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -28,21 +28,21 @@ public final class InstructorMapper {
             AddressMapper.toDto(entity.getAddress())
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
   }
 
   @Nullable
-  public static InstructorEntity toEntity(@Nullable final InstructorDto dto, final long mandantId) {
+  public static InstructorEntity toEntity(@Nullable final InstructorDto dto, final long tenantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
     final var entity = new InstructorEntity(
-            MandantEntity.ref(mandantId),
+            TenantEntity.ref(tenantId),
             dto.getFirstName(),
             dto.getLastName(),
             dto.getEmail(),
@@ -56,7 +56,7 @@ public final class InstructorMapper {
     }
 
     entity.setGender(GenderMapper.toEntityRef(dto.getGender()));
-    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), mandantId));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), tenantId));
 
     return entity;
   }
@@ -64,15 +64,15 @@ public final class InstructorMapper {
   @Nonnull
   public static InstructorEntity updateEntity(@Nonnull final InstructorEntity entity,
                                               @Nonnull final InstructorDto dto,
-                                              final long mandantId) {
+                                              final long tenantId) {
     entity.setFirstname(dto.getFirstName());
     entity.setLastname(dto.getLastName());
     entity.setEmail(dto.getEmail());
     entity.setPhone(dto.getPhone().toString());
     entity.setGender(GenderMapper.toEntity(dto.getGender()));
-    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), mandantId));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), tenantId));
 
-    // do not overwrite mandant on update here (preserve existing)
+    // do not overwrite Tenant on update here (preserve existing)
     return entity;
   }
 }

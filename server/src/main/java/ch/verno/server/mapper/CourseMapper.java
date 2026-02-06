@@ -3,7 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -44,31 +44,31 @@ public final class CourseMapper {
             entity.getNote()
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
   }
 
   @Nullable
-  public static CourseEntity toEntity(@Nullable final CourseDto dto, final long mandantId) {
+  public static CourseEntity toEntity(@Nullable final CourseDto dto, final long tenantId) {
     if (dto == null || dto.isEmpty()) {
       return null;
     }
 
-    final var mandant = MandantEntity.ref(mandantId);
+    final var tenant = TenantEntity.ref(tenantId);
     final var entity = new CourseEntity(
-            mandant,
+            tenant,
             dto.getTitle(),
             dto.getCapacity(),
             dto.getLocation(),
             CourseLevelMapper.toEntityRefs(dto.getCourseLevels()),
-            CourseScheduleMapper.toEntity(dto.getCourseSchedule(), mandantId),
+            CourseScheduleMapper.toEntity(dto.getCourseSchedule(), tenantId),
             dto.getWeekdays(),
             dto.getStartTime(),
             dto.getEndTime(),
-            InstructorMapper.toEntity(dto.getInstructor(), mandantId),
+            InstructorMapper.toEntity(dto.getInstructor(), tenantId),
             dto.getNote()
     );
 

@@ -19,10 +19,10 @@ public class Routes {
   public static final String IO = "io";
   public static final String SETTINGS = "settings";
   public static final String USER_SETTINGS = SETTINGS + Publ.SLASH + "user";
-  public static final String MANDANT_SETTINGS = SETTINGS + Publ.SLASH + "mandant";
+  public static final String TENANT_SETTINGS = SETTINGS + Publ.SLASH + "mandant";
   public static final String DETAIL = "/detail";
 
-  public static final String MANDANT_NOT_FOUND = "mandant-not-found";
+  public static final String TENANT_NOT_FOUND = "mandant-not-found";
 
   public static final String VALUE_ACCESSOR_ID = Publ.QUESTION_MARK + Publ.ID + Publ.EQUALS;
 

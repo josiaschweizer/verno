@@ -102,6 +102,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         adminPassword: form.password,
       })
 
+      await new Promise((resolve) => setTimeout(resolve, 100))
       console.debug('createTenant response', result)
 
       onClose()

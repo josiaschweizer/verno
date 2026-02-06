@@ -1,10 +1,10 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AppUserSettingDto;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.db.entity.setting.AppUserSettingEntity;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.common.tenant.TenantContext;
 import jakarta.annotation.Nonnull;
 
 import java.util.Locale;
@@ -23,8 +23,8 @@ public final class AppUserSettingMapper {
             Locale.of(entity.getLanguageTag())
     );
 
-    if (entity.getUser() != null && entity.getUser().getMandant() != null) {
-      dto.setMandantId(entity.getUser().getMandant().getId());
+    if (entity.getUser() != null && entity.getUser().getTenant() != null) {
+      dto.setTenantId(entity.getUser().getTenant().getId());
     }
 
     return dto;
@@ -33,7 +33,7 @@ public final class AppUserSettingMapper {
   @Nonnull
   public static AppUserSettingEntity toEntity(@Nonnull final AppUserSettingDto dto,
                                               @Nonnull final AppUserEntity user) {
-    final var entity = new AppUserSettingEntity(MandantEntity.ref(MandantContext.getRequired()), user, dto.getTheme(), dto.getLanguageTag());
+    final var entity = new AppUserSettingEntity(TenantEntity.ref(TenantContext.getRequired()), user, dto.getTheme(), dto.getLanguageTag());
     entity.setId(dto.getId());
     return entity;
   }

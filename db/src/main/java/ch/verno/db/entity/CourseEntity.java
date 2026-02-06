@@ -1,8 +1,8 @@
 package ch.verno.db.entity;
 
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -15,8 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "course", schema = "public")
-@EntityListeners(MandantEntityListener.class)
-public class CourseEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class CourseEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,7 +83,7 @@ public class CourseEntity extends MandantScopedEntity {
   protected CourseEntity() {
   }
 
-  public CourseEntity(@Nonnull final MandantEntity mandant,
+  public CourseEntity(@Nonnull final TenantEntity tenant,
                       @Nonnull final String title,
                       @Nullable final Integer capacity,
                       @Nonnull final String location,
@@ -94,7 +94,7 @@ public class CourseEntity extends MandantScopedEntity {
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
                       @Nonnull final String note) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.title = title;
     this.capacity = capacity;
     this.location = location;

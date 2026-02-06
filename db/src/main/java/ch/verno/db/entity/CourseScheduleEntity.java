@@ -2,9 +2,9 @@ package ch.verno.db.entity;
 
 import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -13,8 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "course_schedule", schema = "public")
-@EntityListeners(MandantEntityListener.class)
-public class CourseScheduleEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class CourseScheduleEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,12 +47,12 @@ public class CourseScheduleEntity extends MandantScopedEntity {
     // JPA
   }
 
-  public CourseScheduleEntity(@Nonnull final MandantEntity mandant,
+  public CourseScheduleEntity(@Nonnull final TenantEntity tenant,
                               @Nonnull final String title,
                               @Nonnull final String color,
                               @Nonnull final CourseScheduleStatus status,
                               @Nonnull final List<String> weeks) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.title = title;
     this.color = color;
     this.status = status;

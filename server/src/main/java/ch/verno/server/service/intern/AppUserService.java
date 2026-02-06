@@ -2,8 +2,8 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.IAppUserService;
-import ch.verno.common.mandant.MandantContext;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.common.tenant.TenantContext;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.mapper.AppUserMapper;
 import ch.verno.server.repository.AppUserRepository;
@@ -25,7 +25,7 @@ public class AppUserService implements IAppUserService {
   private final AppUserRepository appUserRepository;
 
   @PersistenceContext
-  private EntityManager em;
+  private EntityManager entityManager;
 
   public AppUserService(@Nonnull final AppUserRepository appUserRepository) {
     this.appUserRepository = appUserRepository;
@@ -34,7 +34,7 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public UserDetails loadUserByUsername(@Nonnull final String username) throws UsernameNotFoundException {
-    final var user = appUserRepository.findByUsername(username, MandantContext.getRequired())
+    final var user = appUserRepository.findByUsername(username, TenantContext.getRequired())
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
     return User.withUsername(user.getUsername())
@@ -47,10 +47,10 @@ public class AppUserService implements IAppUserService {
   @Override
   @Transactional
   public AppUserDto save(@Nonnull final AppUserDto user) {
-    final long mandantId = MandantContext.getRequired();
+    final long tenantId = TenantContext.getRequired();
 
-    final MandantEntity mandantRef = em.getReference(MandantEntity.class, mandantId);
-    final AppUserEntity entity = AppUserMapper.toEntity(user, mandantRef);
+    final TenantEntity tenantRef = entityManager.getReference(TenantEntity.class, tenantId);
+    final AppUserEntity entity = AppUserMapper.toEntity(user, tenantRef);
 
     final var saved = appUserRepository.save(entity);
     return AppUserMapper.toDto(saved);
@@ -63,6 +63,6 @@ public class AppUserService implements IAppUserService {
   }
 
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
-    return appUserRepository.findByUsername(username, MandantContext.getRequired());
+    return appUserRepository.findByUsername(username, TenantContext.getRequired());
   }
 }

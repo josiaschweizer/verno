@@ -1,8 +1,8 @@
 package ch.verno.db.entity.setting;
 
-import ch.verno.db.entity.mandant.MandantEntity;
-import ch.verno.db.entity.mandant.MandantEntityListener;
-import ch.verno.db.entity.mandant.MandantScopedEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.persistence.*;
 
@@ -13,8 +13,8 @@ import jakarta.persistence.*;
                 @UniqueConstraint(name = "uk_user_settings_user", columnNames = {"user_id"})
         }
 )
-@EntityListeners(MandantEntityListener.class)
-public class AppUserSettingEntity extends MandantScopedEntity {
+@EntityListeners(TenantEntityListener.class)
+public class AppUserSettingEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +34,11 @@ public class AppUserSettingEntity extends MandantScopedEntity {
     // JPA
   }
 
-  public AppUserSettingEntity(final MandantEntity mandant,
+  public AppUserSettingEntity(final TenantEntity tenant,
                               final AppUserEntity user,
                               final String theme,
                               final String languageTag) {
-    setMandant(mandant);
+    setTenant(tenant);
     this.user = user;
     this.theme = theme;
     this.languageTag = languageTag;

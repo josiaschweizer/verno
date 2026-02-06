@@ -4,9 +4,9 @@ import ch.verno.common.db.dto.table.*;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.*;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.common.mandant.MandantContext;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.server.repository.*;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -50,9 +50,9 @@ public class ServiceHelper {
       entity.setCity(city);
       entity.setCountry(country);
     } else {
-      // entity constructors now require a MandantEntity first; use a null-id MandantEntity as fallback
-      final var mandantId = MandantContext.getRequired();
-      entity = new AddressEntity(MandantEntity.ref(mandantId), street, houseNumber, zipCode, city, country);
+      // entity constructors now require a TenantEntity first; use a null-id TenantEntity as fallback
+      final var tenant = TenantEntity.ref(TenantContext.getRequired());
+      entity = new AddressEntity(tenant, street, houseNumber, zipCode, city, country);
     }
 
     return addressRepository.save(entity);
@@ -87,16 +87,16 @@ public class ServiceHelper {
       return null;
     }
 
-    final var mandantId = MandantContext.getRequired();
+    final var tenantId = TenantContext.getRequired();
 
     final ParentEntity entity;
     if (parentDto.getId() != null && parentDto.getId() != 0L) {
-      entity = parentRepository.findById(parentDto.getId(), mandantId)
+      entity = parentRepository.findById(parentDto.getId(), tenantId)
               .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARENT_BY_ID_NOT_FOUND, parentDto.getId()));
     } else {
-      // ParentEntity requires MandantEntity as first parameter
+      // ParentEntity requires TenantEntity as first parameter
       entity = new ParentEntity(
-              MandantEntity.ref(mandantId),
+              TenantEntity.ref(tenantId),
               firstName,
               lastName,
               email == null ? Publ.EMPTY_STRING : email,

@@ -2,7 +2,7 @@ package ch.verno.server.report.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.service.IMandantSettingService;
+import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.file.dto.FileDto;
 import jakarta.annotation.Nonnull;
@@ -16,14 +16,14 @@ import java.util.List;
 public class CourseReportUseCase {
 
   @Nonnull private final IParticipantService participantService;
-  @Nonnull private final IMandantSettingService mandantSettingService;
+  @Nonnull private final ITenantSettingService tenantSettingService;
   @Nonnull private final CourseReportRenderer courseReportRenderer;
 
   public CourseReportUseCase(@Nonnull final IParticipantService participantService,
-                             @Nonnull final IMandantSettingService mandantSettingService,
+                             @Nonnull final ITenantSettingService tenantSettingService,
                              @Nonnull final CourseReportRenderer courseReportRenderer) {
     this.participantService = participantService;
-    this.mandantSettingService = mandantSettingService;
+    this.tenantSettingService = tenantSettingService;
     this.courseReportRenderer = courseReportRenderer;
   }
 
@@ -40,7 +40,7 @@ public class CourseReportUseCase {
     final var courseDates = new ArrayList<LocalDate>(); // TODO aus Schedules ableiten
     final var reportData = CourseReportMapper.map(course, participants, courseDates);
 
-    final var settings = mandantSettingService.getCurrentMandantSettingOrDefault();
+    final var settings = tenantSettingService.getCurrentTenantSettingOrDefault();
     final var prefix = settings.getCourseReportName();
 
     final var filename = prefix.toLowerCase() + "_" + course.getTitle().toLowerCase() + ".pdf";

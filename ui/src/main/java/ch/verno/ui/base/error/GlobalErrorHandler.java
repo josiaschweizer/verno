@@ -1,6 +1,6 @@
 package ch.verno.ui.base.error;
 
-import ch.verno.common.exceptions.server.mandant.MandantNotResolvedException;
+import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
 import ch.verno.common.lib.Routes;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.ErrorEvent;
@@ -22,12 +22,12 @@ public class GlobalErrorHandler implements ErrorHandler {
 
     log.debug("GlobalErrorHandler root cause: {}", root.getClass().getName());
 
-    if (root instanceof MandantNotResolvedException) {
+    if (root instanceof TenantNotResolvedException) {
       final var ui = UI.getCurrent();
       if (ui != null) {
-        ui.access(() -> ui.navigate(Routes.MANDANT_NOT_FOUND));
+        ui.access(() -> ui.navigate(Routes.TENANT_NOT_FOUND));
       } else {
-        log.warn("MandantNotResolvedException occurred but UI.getCurrent() returned null - cannot navigate");
+        log.warn("TenantNotResolvedException occurred but UI.getCurrent() returned null - cannot navigate");
       }
 
       return;

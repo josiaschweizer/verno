@@ -4,7 +4,7 @@ import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.publ.Publ;
 import ch.verno.db.entity.ParticipantEntity;
-import ch.verno.db.entity.mandant.MandantEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -39,21 +39,21 @@ public final class ParticipantMapper {
             ParentMapper.toDto(entity.getParentTwo())
     );
 
-    if (entity.getMandant() != null) {
-      dto.setMandantId(entity.getMandant().getId());
+    if (entity.getTenant() != null) {
+      dto.setTenantId(entity.getTenant().getId());
     }
 
     return dto;
   }
 
   @Nullable
-  public static ParticipantEntity toEntity(@Nullable final ParticipantDto dto, final long mandantId) {
+  public static ParticipantEntity toEntity(@Nullable final ParticipantDto dto, final long tenantId) {
     if (dto == null) {
       return null;
     }
 
     final var entity = new ParticipantEntity(
-            MandantEntity.ref(mandantId),
+            TenantEntity.ref(tenantId),
             dto.getFirstName(),
             dto.getLastName(),
             dto.getBirthdate() != null ? dto.getBirthdate() : LocalDate.now(),
@@ -73,9 +73,9 @@ public final class ParticipantMapper {
     entity.setCourseLevels(dto.getCourseLevels().stream().map(CourseLevelMapper::toEntityRef).toList());
     entity.setCourses(dto.getCourses().stream().map(CourseMapper::toEntityRef).toList());
 
-    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), mandantId));
-    entity.setParentOne(ParentMapper.toEntity(dto.getParentOne(), mandantId));
-    entity.setParentTwo(ParentMapper.toEntity(dto.getParentTwo(), mandantId));
+    entity.setAddress(AddressMapper.toEntity(dto.getAddress(), tenantId));
+    entity.setParentOne(ParentMapper.toEntity(dto.getParentOne(), tenantId));
+    entity.setParentTwo(ParentMapper.toEntity(dto.getParentTwo(), tenantId));
 
     return entity;
   }
