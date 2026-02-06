@@ -65,15 +65,4 @@ public class AppUserService implements IAppUserService {
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
     return appUserRepository.findByUsername(username, MandantContext.getRequired());
   }
-
-  @Deprecated
-  @Transactional
-  public void saveForSeed(@Nonnull final AppUserDto user) {
-    final long mandantId = 7777L;
-
-    final MandantEntity mandantRef = em.getReference(MandantEntity.class, mandantId);
-    final AppUserEntity entity = AppUserMapper.toEntity(user, mandantRef);
-
-    appUserRepository.save(entity);
-  }
 }

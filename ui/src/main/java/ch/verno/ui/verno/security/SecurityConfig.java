@@ -6,12 +6,9 @@ import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Profile("prod")
@@ -22,7 +19,6 @@ public class SecurityConfig {
   @Bean
   @Nonnull
   SecurityFilterChain securityFilterChain(@Nonnull HttpSecurity http) throws Exception {
-
     http.authorizeHttpRequests(auth -> auth
             .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
@@ -46,11 +42,5 @@ public class SecurityConfig {
     );
 
     return http.build();
-  }
-
-  @Bean
-  @Nonnull
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 }

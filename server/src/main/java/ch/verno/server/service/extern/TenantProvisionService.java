@@ -26,9 +26,9 @@ public class TenantProvisionService {
   @PersistenceContext
   private EntityManager em;
 
-  public TenantProvisionService(MandantRepository mandantRepository,
-                                AppUserRepository appUserRepository,
-                                PasswordEncoder passwordEncoder) {
+  public TenantProvisionService(@Nonnull final MandantRepository mandantRepository,
+                                @Nonnull final AppUserRepository appUserRepository,
+                                @Nonnull final PasswordEncoder passwordEncoder) {
     this.mandantRepository = mandantRepository;
     this.appUserRepository = appUserRepository;
     this.passwordEncoder = passwordEncoder;
