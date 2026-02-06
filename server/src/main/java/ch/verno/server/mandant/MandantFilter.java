@@ -35,9 +35,7 @@ public class MandantFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(@Nonnull HttpServletRequest request) {
-    if (!props.isEnabled()) {
-      return true;
-    }
+    if (!props.isEnabled()) return true;
 
     String path = request.getRequestURI();
     String ctx = request.getContextPath();
@@ -54,16 +52,6 @@ public class MandantFilter extends OncePerRequestFilter {
       return true;
     }
 
-    if (path.equals(Publ.SLASH + Routes.LOGIN) || path.startsWith(Publ.SLASH + Routes.LOGIN + Publ.SLASH)) {
-      return true;
-    }
-    if (path.equals("/logout") || path.startsWith("/logout/")) {
-      return true;
-    }
-    if (path.equals("/error") || path.startsWith("/error/")) {
-      return true;
-    }
-
     switch (path) {
       case Publ.SLASH + Routes.MANDANT_NOT_FOUND, Publ.SLASH + Routes.MANDANT_NOT_FOUND + Publ.SLASH -> {
         request.getSession(true).setAttribute(ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
@@ -77,9 +65,6 @@ public class MandantFilter extends OncePerRequestFilter {
     return path.startsWith("/VAADIN/")
             || path.startsWith("/frontend/")
             || path.startsWith("/assets/")
-            || path.startsWith("/styles/")
-            || path.equals("/styles.css")
-            || path.equals("/offline-stub.html")
             || path.equals("/favicon.ico");
   }
 

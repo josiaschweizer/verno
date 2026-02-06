@@ -25,7 +25,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   }
 
   @Override
-  public Authentication authenticate(@Nonnull final Authentication authentication) throws AuthenticationException {
+  public Authentication authenticate(@Nonnull final Authentication authentication)
+          throws AuthenticationException {
 
     if (!(authentication instanceof CustomUserPasswordAuthenticationToken token)) {
       throw new IllegalArgumentException("Unsupported authentication type");
@@ -40,12 +41,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     final var tenantId = userToken.getTenant();
     final var password = (String) token.getCredentials();
 
+    // Benutzer aus Datenbank laden
     final var appUser = loadUser(username, tenantId);
 
+    // Passwort prüfen
     if (!passwordEncoder.matches(password, appUser.getPasswordHash())) {
       throw new BadCredentialsException("Invalid password");
     }
 
+    // Erfolgreiches Authentication-Token zurückgeben
     return new CustomUserPasswordAuthenticationToken(appUser, password);
   }
 
