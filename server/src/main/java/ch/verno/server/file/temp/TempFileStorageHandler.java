@@ -46,7 +46,7 @@ public final class TempFileStorageHandler {
       throw new RuntimeException("Failed to write temp file: " + file, e);
     }
 
-    index.put(token, new TempFileEntry(safeName, file, Instant.now().plusSeconds(360)));
+    index.put(token, new TempFileEntry(safeName, file, Instant.now().plusSeconds(10600)));
     return token;
   }
 

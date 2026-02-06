@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 
 public enum DialogSize {
   BIG("90vh", "min(1500px, 95vw)", "1500px", "320px"),
+  MEDIUM("30vh", "min(1500px, 40vw)", "1500px", "320px"),
   SMALL("15vh", "20vw", "1500px", "320px"),
   ;
 

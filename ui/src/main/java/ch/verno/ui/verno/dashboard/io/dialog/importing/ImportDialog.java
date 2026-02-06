@@ -24,7 +24,6 @@ public class ImportDialog extends Dialog {
   @Nullable private HorizontalLayout contentLayout;
   @Nullable private Button forwardButton;
   @Nullable private Button finishButton;
-  @Nullable private Button backButton;
 
   private DialogStep currentStep;
 
@@ -74,17 +73,6 @@ public class ImportDialog extends Dialog {
   protected Collection<Button> createActionButtons() {
     final var cancelButton = new Button(getTranslation("shared.cancel"), e -> close());
 
-//    backButton = new Button(getTranslation("shared.back"), e -> {
-//      if (contentLayout == null) {
-//        return;
-//      }
-//
-//      final var previousStep = DialogStep.addSteps(currentStep, -1);
-//      if (previousStep.getStepNumber() > 0) {
-//        updateContentByStep(previousStep, contentLayout);
-//      }
-//    });
-
     forwardButton = new Button(getTranslation("shared.forward"), e -> {
       if (contentLayout == null) {
         return;
@@ -115,7 +103,7 @@ public class ImportDialog extends Dialog {
       updateContentByStep(nextStep, contentLayout);
     });
 
-    finishButton = new Button(getTranslation("shared.finish"), e -> {
+    finishButton = new Button(getTranslation("shared.importing"), e -> {
       final var importMappingStep = steps.stream()
               .filter(s -> s.step() == DialogStep.TWO)
               .findFirst();

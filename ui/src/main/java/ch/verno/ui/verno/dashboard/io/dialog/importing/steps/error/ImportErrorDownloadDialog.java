@@ -25,7 +25,7 @@ public class ImportErrorDownloadDialog extends VADialog {
     this.errorFileToken = errorFileToken;
     this.fileName = fileName;
 
-    initUI(getTranslation("shared.download"), DialogSize.SMALL);
+    initUI(getTranslation("shared.download"), DialogSize.MEDIUM);
   }
 
   @Nonnull
