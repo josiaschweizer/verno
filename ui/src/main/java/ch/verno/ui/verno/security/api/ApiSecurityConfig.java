@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.security.api;
 
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -19,7 +20,7 @@ public class ApiSecurityConfig {
   @Order(1)
   public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final CorsConfigurationSource apiCorsSource,
-                                            @Nonnull final AuthenticationManager apiAuthenticationManager) throws Exception {
+                                            @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) throws Exception {
     http
             .securityMatcher("/api/**")
             .cors(cors -> cors.configurationSource(apiCorsSource))

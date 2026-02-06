@@ -29,11 +29,6 @@ function buildBasicAuthHeader(user: string, pass: string): string {
   return `Basic ${token}`
 }
 
-/**
- * Minimaler JSON client um deinen Provisioner zu callen.
- * - wirft ApiError bei non-2xx
- * - parst JSON wenn vorhanden
- */
 export function createApiClient(config: {
   baseUrl: string
   basicAuth?: { user: string; pass: string }
@@ -42,8 +37,6 @@ export function createApiClient(config: {
 
   async function request<T>(opts: RequestOptions): Promise<T> {
     const url = `${baseUrl}${opts.path.startsWith('/') ? '' : '/'}${opts.path}`
-
-    console.log('url', url)
 
     const headers: Record<string, string> = {
       Accept: 'application/json',
@@ -58,16 +51,12 @@ export function createApiClient(config: {
       )
     }
 
-    console.log('headers', headers)
-
     const res = await fetch(url, {
       method: opts.method ?? 'GET',
       headers,
       body: opts.body != null ? JSON.stringify(opts.body) : undefined,
       signal: opts.signal,
     })
-
-    console.log('res', res)
 
     const contentType = res.headers.get('content-type') ?? ''
     const isJson = contentType.includes('application/json')

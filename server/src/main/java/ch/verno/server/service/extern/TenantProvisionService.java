@@ -3,6 +3,8 @@ package ch.verno.server.service.extern;
 import ch.verno.common.api.dto.CreateTenantRequest;
 import ch.verno.common.api.dto.CreateTenantResponse;
 import ch.verno.common.exceptions.server.service.TenantAlreadyExistsException;
+import ch.verno.common.exceptions.server.service.TenantProvisionFailedException;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.publ.Publ;
@@ -34,22 +36,22 @@ public class TenantProvisionService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public CreateTenantResponse createTenant(@Nonnull final CreateTenantRequest req) {
     if (tenantRepository.existsBySlug(req.tenantKey())) {
       throw new TenantAlreadyExistsException("tenantKey already exists: " + req.tenantKey());
     }
 
-    final Long newId = tenantRepository.nextId(); //TODO tenant id von user setzten lassen?
+    final Long newId = tenantRepository.nextId();
 
-    final TenantEntity m = TenantEntity.ref(newId);
-    m.setSlug(req.tenantKey());
-    m.setName(req.tenantName());
-    tenantRepository.save(m);
+    final var tenant = TenantEntity.ref(newId);
+    tenant.setSlug(req.tenantKey());
+    tenant.setName(req.tenantName());
+    final var save = tenantRepository.save(tenant);
+    TenantContext.set(save.getId());
 
-    final var tenantRef = em.getReference(TenantEntity.class, newId);
+    final var tenantRef = em.getReference(TenantEntity.class, save.getId());
     final var username = req.adminEmail();
-
 
     final var hash = passwordEncoder.encode(req.adminPassword());
 
@@ -59,8 +61,14 @@ public class TenantProvisionService {
             hash != null ? hash : Publ.EMPTY_STRING,
             VernoConstants.ADMIN_ROLE
     );
-    appUserRepository.save(admin);
 
-    return new CreateTenantResponse(newId, req.tenantKey(), req.subdomain(), VernoConstants.STATUS_CREATED);
+    try {
+      appUserRepository.save(admin);
+      appUserRepository.flush();
+    } catch (Exception e) {
+      throw new TenantProvisionFailedException("Failed to create admin user for tenant: " + req.tenantKey(), e);
+    }
+
+    return new CreateTenantResponse(newId, req.tenantKey(), req.subdomain(), false, VernoConstants.STATUS_CREATED);
   }
 }

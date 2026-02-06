@@ -1,3 +1,4 @@
+// RegisterMultiStepDialog.tsx
 import { useEffect, useRef, useState } from 'react'
 import {
   Dialog,
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import StepOne from '../steps/StepOne'
 import StepTwo from '../steps/StepTwo'
 import StepThree from '../steps/StepThree'
+import ErrorDisplay from './ErrorDisplay'
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -25,12 +27,18 @@ interface Props {
   onClose: () => void
 }
 
+type SubmitErrorInfo = {
+  title: string
+  message?: string
+  details?: string[]
+}
+
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<SubmitErrorInfo | null>(null)
   const [validatingNext, setValidatingNext] = useState(false)
 
   const { control, handleSubmit, getValues, trigger, formState } =
@@ -58,7 +66,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const watchedTenantSubdomain = useWatch({ control, name: 'tenantSubdomain' })
 
   useEffect(() => {
-    if (open) setStep(0)
+    if (open) {
+      setStep(0)
+      setSubmitError(null)
+    }
   }, [open])
 
   const next = async () => {
@@ -77,7 +88,65 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       setValidatingNext(false)
     }
   }
-  const back = () => setStep((s) => Math.max(0, s - 1))
+
+  const back = () => {
+    setSubmitError(null)
+    setStep((s) => Math.max(0, s - 1))
+  }
+
+  const resolveSubmitError = (e: unknown): SubmitErrorInfo => {
+    if (e instanceof ApiError) {
+      const status = e.status
+      const payload = e.details as any
+      const code = payload?.code
+      const message = payload?.message ?? e.message
+      const details = payload?.details
+
+      if (code === 'TENANT_ALREADY_EXISTS') {
+        return {
+          title: 'Tenant-Key bereits vergeben',
+          message:
+            'Der Tenant-Key/Subdomain existiert bereits. Bitte wähle einen anderen Wert.',
+        }
+      }
+      if (code === 'VALIDATION_FAILED') {
+        return {
+          title: 'Eingaben sind ungültig',
+          message: 'Bitte prüfe deine Eingaben und versuche es erneut.',
+          details: Array.isArray(details) ? details : undefined,
+        }
+      }
+      if (code === 'DATA_INTEGRITY_VIOLATION') {
+        return {
+          title: 'Konflikt beim Speichern',
+          message:
+            'Ein Datenbank-Constraint wurde verletzt. Bitte prüfe deine Angaben und versuche es erneut.',
+          details: details ? [details] : message ? [message] : undefined,
+        }
+      }
+      if (code === 'TENANT_PROVISION_FAILED') {
+        return {
+          title: 'Tenant konnte nicht erstellt werden',
+          message:
+            message ??
+            'Beim Erstellen des Tenants ist ein Fehler aufgetreten. Bitte versuche es später erneut.',
+        }
+      }
+
+      return {
+        title: status ? `Fehler ${status}` : 'Fehler',
+        message: message ?? 'Unbekannter Fehler',
+        details: details
+          ? Array.isArray(details)
+            ? details
+            : [details]
+          : undefined,
+      }
+    }
+
+    if (e instanceof Error) return { title: 'Fehler', message: e.message }
+    return { title: 'Fehler', message: 'Unbekannter Fehler' }
+  }
 
   const onSubmit = handleSubmit(async (form) => {
     try {
@@ -92,7 +161,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       const tenantKey = form.tenantKey?.trim() || form.tenantSubdomain.trim()
       const subdomain = form.tenantSubdomain.trim()
 
-      const result = await tenantsApi.createTenant({
+      await tenantsApi.createTenant({
         tenantKey,
         tenantName: form.tenantName,
         subdomain,
@@ -102,19 +171,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         adminPassword: form.password,
       })
 
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      console.debug('createTenant response', result)
-
       onClose()
       window.location.reload()
     } catch (e) {
-      if (e instanceof ApiError) {
-        setSubmitError(`${e.status}: ${e.message}`)
-      } else if (e instanceof Error) {
-        setSubmitError(e.message)
-      } else {
-        setSubmitError('Unknown error')
-      }
+      setSubmitError(resolveSubmitError(e))
     } finally {
       setSubmitting(false)
     }
@@ -178,36 +238,48 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               {step === 2 && <StepThree getValues={getValues} />}
             </div>
 
-            <div className="mt-6 flex items-center justify-between">
-              <div>
-                <Button variant="outline" onClick={back} disabled={step === 0}>
-                  <ArrowLeftIcon className="h-5 w-5" /> Back
-                </Button>
-                <Button variant="outline" className="ml-2" onClick={onClose}>
-                  <CircleSlash className="h-5 w-5" /> Cancel
-                </Button>
-              </div>
+            <div className="mt-6">
+              {step === 2 && submitError && (
+                <div className="mb-4">
+                  <ErrorDisplay
+                    title={submitError.title}
+                    message={submitError.message}
+                    details={submitError.details}
+                    onDismiss={() => setSubmitError(null)}
+                  />
+                </div>
+              )}
 
-              <div className="flex items-center gap-2">
-                {step < 2 ? (
+              <div className="flex items-center justify-between">
+                <div>
                   <Button
-                    onClick={next}
-                    disabled={validatingNext || !canContinue}
+                    variant="outline"
+                    onClick={back}
+                    disabled={step === 0}
                   >
-                    {validatingNext ? 'Validating...' : 'Continue'}{' '}
-                    <ArrowRightIcon className="h-5 w-5" />
+                    <ArrowLeftIcon className="h-5 w-5" /> Back
                   </Button>
-                ) : (
-                  <div className="flex items-center gap-3">
-                    {submitError && (
-                      <p className="text-sm text-red-500">{submitError}</p>
-                    )}
+                  <Button variant="outline" className="ml-2" onClick={onClose}>
+                    <CircleSlash className="h-5 w-5" /> Cancel
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {step < 2 ? (
+                    <Button
+                      onClick={next}
+                      disabled={validatingNext || !canContinue}
+                    >
+                      {validatingNext ? 'Validating...' : 'Continue'}{' '}
+                      <ArrowRightIcon className="h-5 w-5" />
+                    </Button>
+                  ) : (
                     <Button onClick={onSubmit} disabled={submitting}>
                       {submitting ? 'Creating...' : 'Finish'}{' '}
                       <FlagIcon className="h-5 w-5" />
                     </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </DialogPanel>

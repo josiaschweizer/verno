@@ -24,6 +24,11 @@ public class AppUserRepository {
   }
 
   @Nonnull
+  public Optional<AppUserEntity> findByUsernameWithoutMandantContext(@Nonnull final String username) {
+    return springDataAppUserJpaRepository.findByUsername(username);
+  }
+
+  @Nonnull
   public Optional<AppUserEntity> findById(@Nonnull final Long id) {
     return springDataAppUserJpaRepository.findById(id);
   }
@@ -31,5 +36,9 @@ public class AppUserRepository {
   @Nonnull
   public AppUserEntity save(@Nonnull final AppUserEntity user) {
     return springDataAppUserJpaRepository.save(user);
+  }
+
+  public void flush() {
+    springDataAppUserJpaRepository.flush();
   }
 }

@@ -35,16 +35,11 @@ const client = createApiClient({
 
 export const tenantsApi = {
   async createTenant(req: CreateTenantRequest) {
-    console.log('createTenant -> sending', req)
-
-    const res = await client.request<CreateTenantResponse>({
+    return await client.request<CreateTenantResponse>({
       method: 'POST',
       path: '/api/v1/tenants',
       body: req,
     })
-
-    console.log('createTenant -> response', res)
-    return res
   },
 
   async listTenants() {
