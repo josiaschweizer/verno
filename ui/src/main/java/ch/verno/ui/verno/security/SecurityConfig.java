@@ -16,7 +16,6 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -48,6 +47,7 @@ public class SecurityConfig {
             "/images/**",
             "/img/**",
             "/styles/**",
+            "/styles.css",
             "/themes/**",
             "/line-awesome/**",
             "/lumo/**",
@@ -56,6 +56,7 @@ public class SecurityConfig {
             "/sw.js",
             "/sw-runtime-resources-precache.js",
             "/offline.html",
+            "/offline-stub.html",
             "/favicon.ico",
             "/robots.txt",
 
@@ -91,58 +92,49 @@ public class SecurityConfig {
   }
 
   @Bean
-  public CustomAuthenticationProvider customAuthenticationProvider(
-          @Nonnull final AppUserService appUserService,
-          @Nonnull final PasswordEncoder encoder) {
+  public CustomAuthenticationProvider customAuthenticationProvider(@Nonnull final AppUserService appUserService,
+                                                                   @Nonnull final PasswordEncoder encoder) {
     return new CustomAuthenticationProvider(appUserService, encoder);
   }
 
   @Bean
-  public JwtAuthenticationFilter jwtAuthenticationFilter(
-          @Nonnull final JwtUtil jwtUtil,
-          @Nonnull final AppUserService appUserService) {
+  public JwtAuthenticationFilter jwtAuthenticationFilter(@Nonnull final JwtUtil jwtUtil,
+                                                         @Nonnull final AppUserService appUserService) {
     return new JwtAuthenticationFilter(jwtUtil, appUserService);
   }
 
   @Bean
-  public SecurityFilterChain filterChain(
-          @Nonnull final HttpSecurity http,
-          @Nonnull final CustomAuthenticationProvider customAuthProvider,
-          @Nonnull final JwtAuthenticationFilter jwtAuthFilter) throws Exception {
+  public SecurityFilterChain filterChain(@Nonnull final HttpSecurity http,
+                                         @Nonnull final CustomAuthenticationProvider customAuthProvider,
+                                         @Nonnull final JwtAuthenticationFilter jwtAuthFilter) throws Exception {
 
     return http
             .cors(Customizer.withDefaults())
             .authenticationProvider(customAuthProvider)
-            .csrf(csrf -> csrf
-                    .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**"))
-            )
+            .csrf(AbstractHttpConfigurer::disable)
+//            .csrf(csrf -> csrf
+//                    .ignoringRequestMatchers("/api/**")
+//            )
 
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
             .formLogin(form -> form
                     .loginPage("/login")
-                    .loginProcessingUrl("/login")
                     .permitAll()
                     .defaultSuccessUrl("/", true)
-                    .failureUrl("/login?error")
             )
 
             .logout(logout -> logout
-                    .logoutSuccessUrl("/login?logout")
+                    .logoutSuccessUrl("/login")
                     .permitAll()
             )
 
             .authorizeHttpRequests(auth -> auth
-                    // Vaadin public resources - MUSS ZUERST kommen
                     .requestMatchers(PublicEndpoints.VAADIN_PUBLIC).permitAll()
                     .requestMatchers(PublicEndpoints.VAADIN_INTERNAL).permitAll()
-
-                    // Login page und Error page
                     .requestMatchers("/login", "/login/**").permitAll()
                     .requestMatchers("/error").permitAll()
-
-                    // Public API endpoints
                     .requestMatchers(HttpMethod.POST, PublicEndpoints.API_PUBLIC_POST).permitAll()
                     .requestMatchers(HttpMethod.GET, PublicEndpoints.API_PUBLIC_GET).permitAll()
                     .requestMatchers(PublicEndpoints.ACTUATOR).permitAll()
@@ -150,7 +142,7 @@ public class SecurityConfig {
                     .anyRequest().authenticated()
             )
 
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+//            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
             .build();
   }
