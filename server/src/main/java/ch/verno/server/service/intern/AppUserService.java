@@ -10,7 +10,6 @@ import ch.verno.server.repository.AppUserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,7 +34,7 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public UserDetails loadUserByUsername(@Nonnull final String username) throws UsernameNotFoundException {
-    final var user = appUserRepository.findByUsernameMandantId(username, MandantContext.getRequired())
+    final var user = appUserRepository.findByUsername(username, MandantContext.getRequired())
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
     return User.withUsername(user.getUsername())
@@ -60,16 +59,21 @@ public class AppUserService implements IAppUserService {
   @Nonnull
   @Override
   public Optional<AppUserDto> findByUserName(@Nonnull final String username) {
-    return findByUserNameMandantId(username, MandantContext.getRequired());
+    return findEntityByUserName(username).map(AppUserMapper::toDto);
   }
 
-  @Override
-  public Optional<AppUserDto> findByUserNameMandantId(@NonNull final String username, @NonNull final Long mandantId) {
-    return appUserRepository.findByUsernameMandantId(username, mandantId).map(AppUserMapper::toDto);
-  }
-
-  @Nonnull
   private Optional<AppUserEntity> findEntityByUserName(@Nonnull final String username) {
-    return appUserRepository.findByUsernameMandantId(username, MandantContext.getRequired());
+    return appUserRepository.findByUsername(username, MandantContext.getRequired());
+  }
+
+  @Deprecated
+  @Transactional
+  public void saveForSeed(@Nonnull final AppUserDto user) {
+    final long mandantId = 7777L;
+
+    final MandantEntity mandantRef = em.getReference(MandantEntity.class, mandantId);
+    final AppUserEntity entity = AppUserMapper.toEntity(user, mandantRef);
+
+    appUserRepository.save(entity);
   }
 }

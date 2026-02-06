@@ -22,7 +22,7 @@ public class MandantSettingMapper {
     );
 
     if (entity.getMandant() != null) {
-      dto.setTenant(entity.getMandant().getId());
+      dto.setMandantId(entity.getMandant().getId());
     }
 
     return dto;
@@ -41,9 +41,9 @@ public class MandantSettingMapper {
             dto.isLimitCourseAssignmentsToActive()
     );
 
-    if (dto.getTenant() != null) {
+    if (dto.getMandantId() != null) {
       // we don't import MandantEntity here; caller/service should set a managed Mandant reference before saving
-      entity.setId(dto.getTenant());
+      entity.setId(dto.getMandantId());
     } else if (dto.getId() != null) {
       entity.setId(dto.getId());
     }

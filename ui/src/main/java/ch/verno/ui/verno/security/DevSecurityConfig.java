@@ -6,7 +6,8 @@ import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -14,20 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Profile("prod")
 @Configuration
+@Profile("dev")
 @EnableWebSecurity
-public class SecurityConfig {
+public class DevSecurityConfig {
 
   @Bean
-  @Nonnull
-  SecurityFilterChain securityFilterChain(@Nonnull HttpSecurity http) throws Exception {
-
+  SecurityFilterChain devSecurityFilterChain(@Nonnull HttpSecurity http) throws Exception{
     http.authorizeHttpRequests(auth -> auth
             .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
             .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
-            .requestMatchers("/api/v1/tenants").permitAll()
     );
 
     http = http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
@@ -38,7 +36,7 @@ public class SecurityConfig {
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**")
             .ignoringRequestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**")
-            .ignoringRequestMatchers("/api/v1/tenants")
+            .ignoringRequestMatchers(ApiUrl.DEBUG + "/**")
     );
 
     http.headers(headers -> headers
@@ -49,8 +47,12 @@ public class SecurityConfig {
   }
 
   @Bean
-  @Nonnull
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
   }
 }

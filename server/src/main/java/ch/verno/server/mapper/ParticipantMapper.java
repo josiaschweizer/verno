@@ -40,7 +40,7 @@ public final class ParticipantMapper {
     );
 
     if (entity.getMandant() != null) {
-      dto.setTenant(entity.getMandant().getId());
+      dto.setMandantId(entity.getMandant().getId());
     }
 
     return dto;
