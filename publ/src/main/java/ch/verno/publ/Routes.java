@@ -1,6 +1,5 @@
-package ch.verno.common.lib;
+package ch.verno.publ;
 
-import ch.verno.publ.Publ;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -20,6 +19,8 @@ public class Routes {
   public static final String SETTINGS = "settings";
   public static final String USER_SETTINGS = SETTINGS + Publ.SLASH + "user";
   public static final String TENANT_SETTINGS = SETTINGS + Publ.SLASH + "mandant";
+  public static final String APP_USERS = "app-users";
+
   public static final String DETAIL = "/detail";
 
   public static final String TENANT_NOT_FOUND = "mandant-not-found";

@@ -1,7 +1,7 @@
 package ch.verno.common.file.controller;
 
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.core.io.ByteArrayResource;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiUrl.TEMP_FILE_IMPORT)
 public class ImportController extends BaseController {
 
-  public ImportController(@Nonnull GlobalGate globalGate) {
-    super(globalGate.getGate(FileServerGate.class));
+  public ImportController(@Nonnull GlobalInterface globalInterface) {
+    super(globalInterface.getGate(FileServerGate.class));
   }
 
   @Nonnull

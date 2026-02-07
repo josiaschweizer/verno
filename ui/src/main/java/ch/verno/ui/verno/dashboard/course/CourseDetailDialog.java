@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.verno.course.courses.detail.CourseDetail;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -9,12 +9,12 @@ import jakarta.annotation.Nonnull;
 
 public class CourseDetailDialog extends Dialog {
 
-  @Nonnull private final GlobalGate globalGate;
+  @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final CourseDto currentCourse;
 
-  public CourseDetailDialog(@Nonnull final GlobalGate globalGate,
+  public CourseDetailDialog(@Nonnull final GlobalInterface globalInterface,
                             @Nonnull final CourseDto currentCourse) {
-    this.globalGate = globalGate;
+    this.globalInterface = globalInterface;
     this.currentCourse = currentCourse;
 
     initUI();
@@ -34,7 +34,7 @@ public class CourseDetailDialog extends Dialog {
 
   @Nonnull
   private VerticalLayout createCourseDetail() {
-    final var courseDetail = new CourseDetail(globalGate,
+    final var courseDetail = new CourseDetail(globalInterface,
             false,
             false);
     courseDetail.setParameter(null, currentCourse.getId());

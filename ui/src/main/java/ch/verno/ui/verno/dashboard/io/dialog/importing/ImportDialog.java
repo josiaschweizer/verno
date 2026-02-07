@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.DialogStepDto;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDownloadDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
@@ -27,14 +27,14 @@ public class ImportDialog extends Dialog {
 
   private DialogStep currentStep;
 
-  public ImportDialog(@Nonnull final GlobalGate globalGate,
+  public ImportDialog(@Nonnull final GlobalInterface globalInterface,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig entityConfig) {
     steps = new ArrayList<>();
     currentStep = DialogStep.ZERO;
 
-    final var importFileStep = new ImportFile(globalGate);
-    final var importMappingStep = new ImportMapping(globalGate, entityConfig);
+    final var importFileStep = new ImportFile(globalInterface);
+    final var importMappingStep = new ImportMapping(globalInterface, entityConfig);
 
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);

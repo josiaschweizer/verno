@@ -1,6 +1,6 @@
 package ch.verno.ui.base.error.tenant;
 
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import ch.verno.server.tenant.TenantLookupService;
 import ch.verno.ui.base.layout.PublicLayout;
 import com.vaadin.flow.component.html.Div;

@@ -3,7 +3,7 @@ package ch.verno.ui.verno.dashboard.io.widgets.participant;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.file.dto.CsvMapDto;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.i18n.AbstractTranslationHelper;
 import ch.verno.publ.Publ;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
@@ -14,16 +14,16 @@ import java.util.List;
 
 public class ParticipantExportConfig extends AbstractTranslationHelper implements ExportEntityConfig<ParticipantDto> {
 
-  @Nonnull private final GlobalGate globalGate;
+  @Nonnull private final GlobalInterface globalInterface;
 
-  public ParticipantExportConfig(@Nonnull final GlobalGate globalGate) {
-    this.globalGate = globalGate;
+  public ParticipantExportConfig(@Nonnull final GlobalInterface globalInterface) {
+    this.globalInterface = globalInterface;
   }
 
   @Nonnull
   @Override
   public List<CsvMapDto> getRows() {
-    final var participantService = globalGate.getService(IParticipantService.class);
+    final var participantService = globalInterface.getService(IParticipantService.class);
     final var participants = participantService.getAllParticipants();
 
     return participants.stream()

@@ -6,7 +6,7 @@ import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.server.service.intern.CourseService;
 import ch.verno.server.service.intern.TenantSettingService;
@@ -62,16 +62,16 @@ public class AssignToCourseDialog extends VADialog {
 
   private boolean suppressSelectionSync;
 
-  public AssignToCourseDialog(@Nonnull final GlobalGate globalGate) {
-    this(globalGate, null, List.of());
+  public AssignToCourseDialog(@Nonnull final GlobalInterface globalInterface) {
+    this(globalInterface, null, List.of());
   }
 
-  public AssignToCourseDialog(@Nonnull final GlobalGate globalGate,
+  public AssignToCourseDialog(@Nonnull final GlobalInterface globalInterface,
                               @Nullable final Long preSelectedCourseId,
                               @Nonnull final List<Long> preSelectedParticipantIds) {
-    this.courseService = globalGate.getService(CourseService.class);
-    this.participantService = globalGate.getService(ParticipantService.class);
-    this.tenantSettingService = globalGate.getService(TenantSettingService.class);
+    this.courseService = globalInterface.getService(CourseService.class);
+    this.participantService = globalInterface.getService(ParticipantService.class);
+    this.tenantSettingService = globalInterface.getService(TenantSettingService.class);
     this.preSelectedCourseId = preSelectedCourseId;
 
     this.selectedParticipantIds = new LinkedHashSet<>(preSelectedParticipantIds);

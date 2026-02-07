@@ -29,6 +29,9 @@ public class AppUserEntity extends TenantScopedEntity {
   @Column(nullable = false, length = 64)
   private String role;
 
+  @Column(nullable = false)
+  private boolean active = false;
+
   protected AppUserEntity() {
     // JPA
   }
@@ -36,11 +39,13 @@ public class AppUserEntity extends TenantScopedEntity {
   public AppUserEntity(@Nonnull final TenantEntity tenant,
                        @Nonnull final String username,
                        @Nonnull final String passwordHash,
-                       @Nonnull final String role) {
+                       @Nonnull final String role,
+                       final boolean active) {
     setTenant(tenant);
     this.username = username;
     this.passwordHash = passwordHash;
     this.role = role;
+    this.active = active;
   }
 
   public Long getId() {
@@ -73,5 +78,13 @@ public class AppUserEntity extends TenantScopedEntity {
 
   public void setRole(final String role) {
     this.role = role;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(final boolean active) {
+    this.active = active;
   }
 }

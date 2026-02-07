@@ -1,6 +1,7 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AppUserDto;
+import ch.verno.common.db.role.Role;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.annotation.Nonnull;
@@ -16,7 +17,8 @@ public final class AppUserMapper {
             entity.getId(),
             entity.getUsername(),
             entity.getPasswordHash(),
-            entity.getRole()
+            Role.fromString(entity.getRole()),
+            entity.isActive()
     );
 
     if (entity.getTenant() != null) {
@@ -33,7 +35,8 @@ public final class AppUserMapper {
             tenant,
             dto.getUsername(),
             dto.getPasswordHash(),
-            dto.getRole()
+            dto.getRole().getRole(),
+            dto.isActive()
     );
 
     entity.setId(dto.getId());

@@ -1,7 +1,7 @@
 package ch.verno.ui.base.error;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.ErrorEvent;
 import com.vaadin.flow.server.ErrorHandler;

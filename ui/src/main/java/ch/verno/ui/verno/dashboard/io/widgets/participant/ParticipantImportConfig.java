@@ -7,7 +7,7 @@ import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.file.dto.CsvMapDto;
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
@@ -25,10 +25,10 @@ import java.util.Map;
 
 public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDto> {
 
-  @Nonnull private final GlobalGate globalGate;
+  @Nonnull private final GlobalInterface globalInterface;
 
-  public ParticipantImportConfig(@Nonnull final GlobalGate globalGate) {
-    this.globalGate = globalGate;
+  public ParticipantImportConfig(@Nonnull final GlobalInterface globalInterface) {
+    this.globalInterface = globalInterface;
   }
 
   @Nonnull
@@ -129,7 +129,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @Override
   public ImportResult performImport(@Nonnull final String fileToken,
                                              @Nonnull final Map<String, String> mapping) {
-    final var fileServerGate = globalGate.getService(FileServerGate.class);
+    final var fileServerGate = globalInterface.getService(FileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);
     final var csvRows = fileServerGate.parseRows(fileDto);
 
@@ -143,7 +143,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
 
     final var saveables = result.saveables();
-    final var participantService = globalGate.getService(IParticipantService.class);
+    final var participantService = globalInterface.getService(IParticipantService.class);
 
     for (final var saveable : saveables) {
       processNestedEntities(saveable);
@@ -167,8 +167,8 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   }
 
   private void processNestedEntities(@Nonnull final ParticipantDto participant) {
-    final var addressService = globalGate.getService(AddressService.class);
-    final var parentService = globalGate.getService(ParentService.class);
+    final var addressService = globalInterface.getService(AddressService.class);
+    final var parentService = globalInterface.getService(ParentService.class);
 
     if (!participant.getAddress().isEmpty()) {
       final var addressDto = addressService.findOrCreateAddress(participant.getAddress());

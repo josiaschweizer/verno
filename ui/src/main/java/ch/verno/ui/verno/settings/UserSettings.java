@@ -4,7 +4,7 @@ import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -35,7 +35,7 @@ public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle 
 
   @Nonnull
   @Override
-  protected List<VABaseSetting<?>> createSettings() {
+  protected List<VABaseSetting<?>> getSettings() {
     return List.of(new UISetting(appUserService, appUserSettingService));
   }
 

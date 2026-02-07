@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard;
 
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,13 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DashboardView extends VerticalLayout {
 
   @Autowired
-  public DashboardView(@Nonnull final GlobalGate globalGate) {
+  public DashboardView(@Nonnull final GlobalInterface globalInterface) {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
     setAlignItems(Alignment.STRETCH);
 
-    final var dashboard = new Dashboard(globalGate);
+    final var dashboard = new Dashboard(globalInterface);
 
     add(createViewToolBar());
     add(dashboard);

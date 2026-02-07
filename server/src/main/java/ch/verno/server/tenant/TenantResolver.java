@@ -2,6 +2,7 @@ package ch.verno.server.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,18 +57,18 @@ public class TenantResolver {
       return null;
     }
 
-    if (isIp(host) || host.equals(Publ.LOCALHOST)) {
+    if (isIp(host) || host.equals(VernoConstants.LOCALHOST)) {
       return null;
     }
 
-    if (host.endsWith(Publ.DOT + Publ.LOCALHOST)) {
+    if (host.endsWith(Publ.DOT + VernoConstants.LOCALHOST)) {
       final var parts = host.split("\\.");
       return parts.length >= 2 ? parts[0] : null;
     }
 
     for (final var base : props.getBaseDomains()) {
       final var baseLower = safeLower(base);
-      if (baseLower.equals(Publ.LOCALHOST)) {
+      if (baseLower.equals(VernoConstants.LOCALHOST)) {
         continue;
       }
 

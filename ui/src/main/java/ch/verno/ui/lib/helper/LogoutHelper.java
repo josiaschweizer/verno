@@ -1,6 +1,6 @@
 package ch.verno.ui.lib.helper;
 
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import org.springframework.security.core.context.SecurityContextHolder;
 

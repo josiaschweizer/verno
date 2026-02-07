@@ -1,0 +1,8 @@
+ALTER TABLE app_user
+    ADD COLUMN active BOOLEAN DEFAULT FALSE;
+
+UPDATE app_user
+SET active = TRUE;
+
+ALTER TABLE app_user
+    ALTER COLUMN active SET NOT NULL;

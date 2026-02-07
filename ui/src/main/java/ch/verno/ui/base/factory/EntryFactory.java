@@ -1,10 +1,10 @@
 package ch.verno.ui.base.factory;
 
-import ch.verno.common.base.components.colorpicker.Colors;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
@@ -16,11 +16,11 @@ import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.charts.model.style.Color;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
@@ -32,7 +32,6 @@ import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.vaadin.addons.tatu.ColorPicker;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -94,6 +93,31 @@ public class EntryFactory<DTO> {
     textArea.setValueChangeMode(ValueChangeMode.EAGER);
     bindEntry(textArea, valueProvider, valueSetter, binder, required);
     return textArea;
+  }
+
+  @Nonnull
+  public PasswordField createPasswordField(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                           @Nonnull final Setter<DTO, String> valueSetter,
+                                           @Nonnull final Binder<DTO> binder,
+                                           @Nonnull final Optional<String> required,
+                                           @Nonnull final String label,
+                                           final boolean newMode) {
+    final var passwordField = new PasswordField(label);
+    passwordField.setWidthFull();
+
+    if (!newMode) {
+      passwordField.setReadOnly(true);
+      passwordField.setTooltipText("Password can only be set when creating a new user. To change the password of an existing user, please use the 'Change Password' function via right-click on the user in the users grid.");
+      passwordField.setRevealButtonVisible(false);
+    } else {
+      passwordField.setReadOnly(false);
+      passwordField.setTooltipText(Publ.EMPTY_STRING);
+      passwordField.setRevealButtonVisible(true);
+    }
+
+    passwordField.setValueChangeMode(ValueChangeMode.EAGER);
+    bindEntry(passwordField, valueProvider, valueSetter, binder, required);
+    return passwordField;
   }
 
   @Nonnull

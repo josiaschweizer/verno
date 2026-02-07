@@ -55,11 +55,12 @@ public class TenantProvisionService {
 
     final var hash = passwordEncoder.encode(req.adminPassword());
 
-    final AppUserEntity admin = new AppUserEntity(
+    final var admin = new AppUserEntity(
             tenantRef,
             username,
             hash != null ? hash : Publ.EMPTY_STRING,
-            VernoConstants.ADMIN_ROLE
+            VernoConstants.ADMIN_ROLE,
+            true
     );
 
     try {

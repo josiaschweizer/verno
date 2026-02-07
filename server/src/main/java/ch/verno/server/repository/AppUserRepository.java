@@ -5,6 +5,7 @@ import ch.verno.db.jpa.SpringDataAppUserJpaRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +16,11 @@ public class AppUserRepository {
 
   public AppUserRepository(@Nonnull final SpringDataAppUserJpaRepository springDataAppUserJpaRepository) {
     this.springDataAppUserJpaRepository = springDataAppUserJpaRepository;
+  }
+
+  @Nonnull
+  public List<AppUserEntity> findAll() {
+    return springDataAppUserJpaRepository.findAll();
   }
 
   @Nonnull

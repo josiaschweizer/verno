@@ -5,7 +5,7 @@ import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;

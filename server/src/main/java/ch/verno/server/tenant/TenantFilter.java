@@ -1,11 +1,12 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.tenant.TenantFilters;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.FilterChain;
@@ -45,7 +46,7 @@ public class TenantFilter extends OncePerRequestFilter {
     }
 
     final var session = request.getSession(false);
-    if (session != null && Boolean.TRUE.equals(session.getAttribute(Publ.ATTR_PUBLIC_NO_TENANT))) {
+    if (session != null && Boolean.TRUE.equals(session.getAttribute(VernoConstants.ATTR_PUBLIC_NO_TENANT))) {
       return true;
     }
 
@@ -55,7 +56,7 @@ public class TenantFilter extends OncePerRequestFilter {
 
     switch (path) {
       case Publ.SLASH + Routes.TENANT_NOT_FOUND, Publ.SLASH + Routes.TENANT_NOT_FOUND + Publ.SLASH -> {
-        request.getSession(true).setAttribute(Publ.ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
+        request.getSession(true).setAttribute(VernoConstants.ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
         return true;
       }
       case "/UIDL", "/HEARTBEAT", "/PUSH" -> {
@@ -82,7 +83,7 @@ public class TenantFilter extends OncePerRequestFilter {
       final var tenantId = resolveTenantIdWithDevFallback(request).orElseThrow(() -> new TenantNotResolvedException("Tenant could not be resolved"));
       final var httpSession = request.getSession(false);
       if (httpSession != null) {
-        httpSession.removeAttribute(Publ.ATTR_PUBLIC_NO_TENANT);
+        httpSession.removeAttribute(VernoConstants.ATTR_PUBLIC_NO_TENANT);
       }
 
       TenantContext.set(tenantId);
@@ -147,9 +148,9 @@ public class TenantFilter extends OncePerRequestFilter {
       return false;
     }
 
-    return Publ.LOCALHOST.equalsIgnoreCase(host)
-            || Publ.IP_172_0_0_1.equals(host)
-            || Publ.URL_DOUBLE_POINT_1.equals(host);
+    return VernoConstants.LOCALHOST.equalsIgnoreCase(host)
+            || VernoConstants.IP_172_0_0_1.equals(host)
+            || VernoConstants.URL_DOUBLE_POINT_1.equals(host);
   }
 
   private Optional<Long> resolveFirstTenantIdFromDb() {

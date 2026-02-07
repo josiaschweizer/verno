@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -108,12 +109,16 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   protected abstract Component createContent();
 
   @Nonnull
-  protected abstract Binder<T> createBinder();
+  protected abstract Class<T> getBeanType();
 
   @Nonnull
   protected abstract T createNewBeanInstance();
 
   protected void save() {
     throw new NotImplementedException("Save method not implemented");
+  }
+
+  private Binder<T> createBinder() {
+    return new Binder<>(getBeanType());
   }
 }

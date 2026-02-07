@@ -5,7 +5,6 @@ import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
@@ -55,9 +54,8 @@ public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
   }
 
   @Nonnull
-  @Override
-  protected Binder<TenantSettingDto> createBinder() {
-    return new Binder<>(TenantSettingDto.class);
+  public Class<TenantSettingDto> getBeanType() {
+    return TenantSettingDto.class;
   }
 
   @Nonnull

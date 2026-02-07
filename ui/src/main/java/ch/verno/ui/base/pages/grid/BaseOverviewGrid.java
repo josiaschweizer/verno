@@ -1,6 +1,7 @@
 package ch.verno.ui.base.pages.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
 import ch.verno.ui.base.components.filter.VAFilterBar;
@@ -8,7 +9,6 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.grid.VAGrid;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
-import ch.verno.common.lib.Routes;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -206,9 +206,13 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     cachedSortOrders = new ArrayList<>(query.getSortOrders());
   }
 
-  private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {
+  protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {
+    navigateToDetail(event.getItem());
+  }
+
+  protected void navigateToDetail(@Nonnull final T dto) {
     final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, event.getItem().getId());
+    final var redirectURL = Routes.getURLWithId(url, dto.getId());
     UI.getCurrent().navigate(redirectURL);
   }
 

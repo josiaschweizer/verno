@@ -6,7 +6,7 @@ import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;

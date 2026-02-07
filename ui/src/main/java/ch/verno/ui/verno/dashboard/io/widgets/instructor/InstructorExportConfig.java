@@ -3,7 +3,7 @@ package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.common.file.dto.CsvMapDto;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.i18n.AbstractTranslationHelper;
 import ch.verno.publ.Publ;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
@@ -14,16 +14,16 @@ import java.util.List;
 
 public class InstructorExportConfig extends AbstractTranslationHelper implements ExportEntityConfig<InstructorDto> {
 
-  @Nonnull private final GlobalGate globalGate;
+  @Nonnull private final GlobalInterface globalInterface;
 
-  public InstructorExportConfig(@Nonnull final GlobalGate globalGate) {
-    this.globalGate = globalGate;
+  public InstructorExportConfig(@Nonnull final GlobalInterface globalInterface) {
+    this.globalInterface = globalInterface;
   }
 
   @Nonnull
   @Override
   public List<CsvMapDto> getRows() {
-    final var instructorService = globalGate.getService(IInstructorService.class);
+    final var instructorService = globalInterface.getService(IInstructorService.class);
     final var instructors = instructorService.getAllInstructors();
 
     return instructors.stream()

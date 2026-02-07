@@ -2,7 +2,7 @@ package ch.verno.ui.base.file.csv;
 
 import ch.verno.common.exceptions.io.ParseCsvException;
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -46,7 +46,7 @@ public class CsvPreview extends VerticalLayout {
   @Nonnull
   private List<Map<String, String>> loadCsvData(@Nonnull final String token) {
     try {
-      final var globalGate = GlobalGate.getInstance();
+      final var globalGate = GlobalInterface.getInstance();
       final var fileServerGate = globalGate.getGate(FileServerGate.class);
       final var fileDto = fileServerGate.loadFile(token);
 

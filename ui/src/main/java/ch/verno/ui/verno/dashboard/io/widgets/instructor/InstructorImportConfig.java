@@ -6,7 +6,7 @@ import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.service.IInstructorService;
 import ch.verno.common.file.dto.CsvMapDto;
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
@@ -24,10 +24,10 @@ import java.util.Map;
 public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
   @Nonnull
-  private final GlobalGate globalGate;
+  private final GlobalInterface globalInterface;
 
-  public InstructorImportConfig(@Nonnull final GlobalGate globalGate) {
-    this.globalGate = globalGate;
+  public InstructorImportConfig(@Nonnull final GlobalInterface globalInterface) {
+    this.globalInterface = globalInterface;
   }
 
   @Nonnull
@@ -79,7 +79,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   public ImportResult performImport(@Nonnull final String fileToken,
                                     @Nonnull final Map<String, String> mapping) {
 
-    final var fileServerGate = globalGate.getService(FileServerGate.class);
+    final var fileServerGate = globalInterface.getService(FileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);
     final var csvRows = fileServerGate.parseRows(fileDto);
 
@@ -93,7 +93,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     );
 
     final var saveables = result.saveables();
-    final var instructorService = globalGate.getService(IInstructorService.class);
+    final var instructorService = globalInterface.getService(IInstructorService.class);
 
     for (final var saveable : saveables) {
       processNestedEntities(saveable);
@@ -117,7 +117,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   }
 
   private void processNestedEntities(@Nonnull final InstructorDto instructor) {
-    final var addressService = globalGate.getService(AddressService.class);
+    final var addressService = globalInterface.getService(AddressService.class);
 
     if (!instructor.getAddress().isEmpty()) {
       final var addressDto = addressService.findOrCreateAddress(instructor.getAddress());

@@ -8,7 +8,7 @@ import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
@@ -19,7 +19,7 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import ch.verno.ui.verno.dashboard.report.ParticipantsReportDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -55,25 +55,25 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ReportServerGate reportServerGate;
 
-  public ParticipantsGrid(@Nonnull final GlobalGate globalGate,
+  public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface,
                           final boolean showGridToolbar,
                           final boolean showFilterToolbar) {
     super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
-    this.participantService = globalGate.getService(IParticipantService.class);
-    this.courseService = globalGate.getService(ICourseService.class);
-    this.courseLevelService = globalGate.getService(ICourseLevelService.class);
-    this.reportServerGate = globalGate.getGate(ReportServerGate.class);
+    this.participantService = globalInterface.getService(IParticipantService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
   @Autowired
-  public ParticipantsGrid(@Nonnull final GlobalGate globalGate) {
+  public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface) {
     super(ParticipantFilter.empty(), true, true);
 
-    this.participantService = globalGate.getService(IParticipantService.class);
-    this.courseService = globalGate.getService(ICourseService.class);
-    this.courseLevelService = globalGate.getService(ICourseLevelService.class);
-    this.reportServerGate = globalGate.getGate(ReportServerGate.class);
+    this.participantService = globalInterface.getService(IParticipantService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
   @Nonnull

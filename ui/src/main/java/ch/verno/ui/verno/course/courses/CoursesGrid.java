@@ -10,7 +10,7 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;

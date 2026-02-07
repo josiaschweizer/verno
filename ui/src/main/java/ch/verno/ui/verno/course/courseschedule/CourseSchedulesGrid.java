@@ -7,7 +7,7 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.common.lib.Routes;
+import ch.verno.publ.Routes;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.HasDynamicTitle;

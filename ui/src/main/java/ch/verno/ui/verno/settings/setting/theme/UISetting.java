@@ -8,7 +8,6 @@ import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -160,8 +159,8 @@ public class UISetting extends VABaseSetting<UISettingDto> {
 
   @Nonnull
   @Override
-  protected Binder<UISettingDto> createBinder() {
-    return new Binder<>(UISettingDto.class);
+  protected Class<UISettingDto> getBeanType() {
+    return UISettingDto.class;
   }
 
   @Nonnull

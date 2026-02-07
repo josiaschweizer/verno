@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
 import ch.verno.common.file.FileServerGate;
-import ch.verno.common.gate.GlobalGate;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.server.ServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
@@ -24,10 +24,10 @@ public class ExportDialog<T> extends VADialog {
   @Nonnull private final FileServerGate fileServerGate;
   @Nonnull private String fileToken;
 
-  public ExportDialog(@Nonnull final GlobalGate globalGate,
+  public ExportDialog(@Nonnull final GlobalInterface globalInterface,
                       @Nonnull final ExportEntityConfig<T> config) {
-    this.serverGate = globalGate.getGate(ServerGate.class);
-    this.fileServerGate = globalGate.getGate(FileServerGate.class);
+    this.serverGate = globalInterface.getGate(ServerGate.class);
+    this.fileServerGate = globalInterface.getGate(FileServerGate.class);
 
     generateCsvFile(config);
     initUI(getTranslation("shared.export.csv"));

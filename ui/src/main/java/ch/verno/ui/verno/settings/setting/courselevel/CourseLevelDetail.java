@@ -2,11 +2,10 @@ package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.service.ICourseLevelService;
-import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.common.lib.Routes;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.html.Div;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
+import ch.verno.ui.base.settings.grid.BaseSettingDetail;
+import com.vaadin.flow.component.charts.model.Global;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -17,62 +16,19 @@ import java.util.Optional;
 
 @UIScope
 @SpringComponent
-public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
+public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
   @Nonnull
   private ICourseLevelService courseLevelService;
 
-  public CourseLevelDetail(@Nonnull final ICourseLevelService courseLevelService) {
-    this.courseLevelService = courseLevelService;
-
+  public CourseLevelDetail(@Nonnull final GlobalInterface globalInterface) {
+    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
     init();
-  }
-
-  @Override
-  protected void onAttach(final AttachEvent attachEvent) {
-    // we have to override the attach so that init does not get called every time the detail view gets attached
-    // and so the form data always grows (because of the add() calls in init)
   }
 
   @Autowired
   public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
     this.courseLevelService = courseLevelService;
-  }
-
-  @Override
-  protected void init() {
-    setWidthFull();
-    setHeightFull();
-    setPadding(false);
-    setSpacing(false);
-
-    initUI();
-
-    this.saveButton.addClickListener(event -> save());
-    getBinder().addValueChangeListener(event -> updateSaveButtonState());
-    getBinder().addStatusChangeListener(event -> updateSaveButtonState());
-
-    final var spacer = new Div();
-    spacer.getStyle().set("flex-grow", "1");
-
-    add(spacer);
-    add(createActionButtonLayout());
-
-    applyFormMode(getDefaultFormMode());
-    updateSaveButtonState();
-  }
-
-  @Override
-  protected void save() {
-    if (formMode == FormMode.CREATE) {
-      createBean(getBinder().getBean());
-    } else if (formMode == FormMode.EDIT) {
-      updateBean(getBinder().getBean());
-    } else {
-      return;
-    }
-
-    afterSave.run();
   }
 
   @Override
@@ -109,7 +65,6 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
     add(createLayoutFromComponents(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));
   }
 
-
   @Nonnull
   @Override
   protected String getDetailPageName() {
@@ -144,12 +99,6 @@ public class CourseLevelDetail extends BaseDetailView<CourseLevelDto> {
   @Override
   protected CourseLevelDto updateBean(@Nonnull final CourseLevelDto bean) {
     return courseLevelService.updateCourseLevel(bean);
-  }
-
-  @Nonnull
-  @Override
-  protected FormMode getDefaultFormMode() {
-    return FormMode.EDIT;
   }
 
   @Nonnull

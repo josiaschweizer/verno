@@ -3,21 +3,22 @@ package ch.verno.common.gate;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GlobalGate {
+public class GlobalInterface {
 
   private static ApplicationContext context;
 
   @Autowired
-  public GlobalGate(@Nonnull final ApplicationContext applicationContext) {
+  public GlobalInterface(@Nonnull final ApplicationContext applicationContext) {
     context = applicationContext;
   }
 
   @Nonnull
-  public static GlobalGate getInstance() {
-    return context.getBean(GlobalGate.class);
+  public static GlobalInterface getInstance() {
+    return context.getBean(GlobalInterface.class);
   }
 
   @Nonnull
@@ -28,5 +29,10 @@ public class GlobalGate {
   @Nonnull
   public <T> T getService(@Nonnull final Class<T> serviceClass) {
     return context.getBean(serviceClass);
+  }
+
+  @Nonnull
+  public PasswordEncoder getPasswordEncoder() {
+    return context.getBean(PasswordEncoder.class);
   }
 }

@@ -153,7 +153,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     saveButton.setEnabled(valid);
   }
 
-  protected void applyFormMode(@Nonnull final FormMode formMode) {
+  public void applyFormMode(@Nonnull final FormMode formMode) {
     this.formMode = formMode;
 
     final boolean saveVisible = (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
