@@ -3,6 +3,7 @@
     <module name="ui" />
     <option name="PROGRAM_PARAMETERS" value="--server.address=0.0.0.0 --server.port=8080 --auto-login.username=admin --auto-login.password=admin1234" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.ui.Application" />
+    <option name="VM_PARAMETERS" value="-Dverno.dev.tenant-id=7777" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

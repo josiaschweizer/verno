@@ -32,6 +32,10 @@ public class Publ {
   public static final String ID = "id";
 
   public static final String LOCALHOST = "localhost";
+  public static final String IP_172_0_0_1 = "127.0.0.1";
+  public static final String URL_DOUBLE_POINT_1 = "::1";
+
+  public static final String ATTR_PUBLIC_NO_TENANT = "PUBLIC_NO_TENANT";
 
   public static final Pattern KW_PATTERN = Pattern.compile("^KW(\\d{1,2})-(\\d{4})$");
 }

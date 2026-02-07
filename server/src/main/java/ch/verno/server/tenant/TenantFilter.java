@@ -16,10 +16,9 @@ import org.hibernate.Session;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class TenantFilter extends OncePerRequestFilter {
-
-  private static final String ATTR_PUBLIC_NO_TENANT = "PUBLIC_NO_TENANT";
 
   @Nonnull private final TenantProperties props;
   @Nonnull private final TenantResolver resolver;
@@ -46,7 +45,7 @@ public class TenantFilter extends OncePerRequestFilter {
     }
 
     final var session = request.getSession(false);
-    if (session != null && Boolean.TRUE.equals(session.getAttribute(ATTR_PUBLIC_NO_TENANT))) {
+    if (session != null && Boolean.TRUE.equals(session.getAttribute(Publ.ATTR_PUBLIC_NO_TENANT))) {
       return true;
     }
 
@@ -56,7 +55,7 @@ public class TenantFilter extends OncePerRequestFilter {
 
     switch (path) {
       case Publ.SLASH + Routes.TENANT_NOT_FOUND, Publ.SLASH + Routes.TENANT_NOT_FOUND + Publ.SLASH -> {
-        request.getSession(true).setAttribute(ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
+        request.getSession(true).setAttribute(Publ.ATTR_PUBLIC_NO_TENANT, Boolean.TRUE);
         return true;
       }
       case "/UIDL", "/HEARTBEAT", "/PUSH" -> {
@@ -80,11 +79,10 @@ public class TenantFilter extends OncePerRequestFilter {
     }
 
     try {
-      final Long tenantId = resolver.resolveTenantId(request).orElseThrow(() -> new TenantNotResolvedException("Tenant could not be resolved"));
-
+      final var tenantId = resolveTenantIdWithDevFallback(request).orElseThrow(() -> new TenantNotResolvedException("Tenant could not be resolved"));
       final var httpSession = request.getSession(false);
       if (httpSession != null) {
-        httpSession.removeAttribute(ATTR_PUBLIC_NO_TENANT);
+        httpSession.removeAttribute(Publ.ATTR_PUBLIC_NO_TENANT);
       }
 
       TenantContext.set(tenantId);
@@ -97,6 +95,93 @@ public class TenantFilter extends OncePerRequestFilter {
       response.sendRedirect(request.getContextPath() + Routes.TENANT_NOT_FOUND);
     } finally {
       TenantContext.clear();
+    }
+  }
+
+  @Nonnull
+  private Optional<Long> resolveTenantIdWithDevFallback(@Nonnull HttpServletRequest request) {
+    final var resolved = resolver.resolveTenantId(request);
+    if (resolved.isPresent()) {
+      return resolved;
+    }
+
+    if (isLocalhostRequest(request)) {
+      final var devTenant = resolveDevTenantFromRunConfig()
+              .flatMap(this::resolveTenantIdIfExists);
+
+      if (devTenant.isPresent()) {
+        return devTenant;
+      }
+
+      final var preferred = resolveTenantIdIfExists(7777L);
+      if (preferred.isPresent()) {
+        return preferred;
+      }
+
+      final var fallback = resolveFirstTenantIdFromDb();
+      if (fallback.isPresent()) {
+        return fallback;
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  @Nonnull
+  private Optional<Long> resolveDevTenantFromRunConfig() {
+    final var sysProp = System.getProperty("verno.dev.tenant-id");
+
+    if (sysProp != null && !sysProp.isBlank()) {
+      try {
+        return Optional.of(Long.parseLong(sysProp));
+      } catch (NumberFormatException ignored) {
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  private boolean isLocalhostRequest(@Nonnull final HttpServletRequest request) {
+    final var host = request.getServerName();
+    if (host == null) {
+      return false;
+    }
+
+    return Publ.LOCALHOST.equalsIgnoreCase(host)
+            || Publ.IP_172_0_0_1.equals(host)
+            || Publ.URL_DOUBLE_POINT_1.equals(host);
+  }
+
+  private Optional<Long> resolveFirstTenantIdFromDb() {
+    try {
+      final var query = entityManager.createNativeQuery("select id from mandants order by id asc limit 1");
+      final var first = query.getSingleResult();
+      if (first == null) {
+        return Optional.empty();
+      } else if (first instanceof Number n) {
+        return Optional.of(n.longValue());
+      }
+
+      return Optional.of(Long.parseLong(first.toString()));
+    } catch (Exception ignored) {
+      return Optional.empty();
+    }
+  }
+
+  @Nonnull
+  private Optional<Long> resolveTenantIdIfExists(@Nonnull final Long tenantId) {
+    try {
+      final var query = entityManager.createNativeQuery("select id from mandants where id = :id");
+      query.setParameter(Publ.ID, tenantId);
+
+      final var first = query.getSingleResult();
+      if (first instanceof Number n) {
+        return Optional.of(n.longValue());
+      }
+
+      return Optional.of(Long.parseLong(first.toString()));
+    } catch (Exception ignored) {
+      return Optional.empty();
     }
   }
 }
