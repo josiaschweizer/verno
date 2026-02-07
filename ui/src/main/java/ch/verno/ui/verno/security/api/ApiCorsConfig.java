@@ -14,10 +14,16 @@ public class ApiCorsConfig {
   @Bean
   public CorsConfigurationSource apiCorsSource() {
     final var config = new CorsConfiguration();
-    config.setAllowedOriginPatterns(List.of("http://localhost:*"));
+    config.setAllowCredentials(true);
+
+    config.setAllowedOrigins(List.of(
+            "https://www.verno-app.ch",
+            "https://verno-app.ch",
+            "http://localhost:5173"
+    ));
+
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     config.setAllowedHeaders(List.of("*"));
-    config.setAllowCredentials(true);
     config.setExposedHeaders(List.of("Authorization"));
 
     final var source = new UrlBasedCorsConfigurationSource();

@@ -45,3 +45,6 @@ vite.generated.ts
 verno-provisioner-sa.json
 
 .m2-temp/
+
+# secrets
+.env

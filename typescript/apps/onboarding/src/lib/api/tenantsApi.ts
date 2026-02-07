@@ -26,8 +26,6 @@ const baseUrl =
 const apiUser = (env.VITE_PROVISIONER_API_USER as string | undefined) || 'verno'
 const apiPass = (env.VITE_PROVISIONER_API_PASS as string | undefined) || 'verno'
 
-console.log('provisioner env', { baseUrl, apiUser, hasPass: Boolean(apiPass) })
-
 const client = createApiClient({
   baseUrl,
   basicAuth: { user: apiUser, pass: apiPass },
