@@ -3,6 +3,7 @@
 html, body {
     --lumo-required-field-indicator: "*";
     --lumo-required-field-indicator-color: red;
+    --vaadin-notification-viewport-inset: var(--lumo-space-s);
 }
 
 :root[theme='dark'] {
@@ -83,6 +84,25 @@ html, body {
     /* Card-specific colors for better contrast */
     --app-card-background: hsl(220, 15%, 15%);
     --app-card-border: hsl(220, 15%, 30%);
+}
+
+@media lumo_components_notification-card {
+  :host {
+    margin: var(--lumo-space-s) !important;
+    margin-inline-end: var(--lumo-space-xs) !important;
+    margin-block-end: var(--lumo-space-xs) !important;
+  }
+  [part='overlay'] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    pointer-events: auto !important;
+  }
+  [part='content'] {
+    padding: 0 !important;
+    pointer-events: auto !important;
+  }
 }
 
 vaadin-app-layout.main-layout::part(drawer) {

@@ -3,6 +3,8 @@ package ch.verno.ui.verno.course.courses;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.notification.NotificationFactory;
@@ -10,7 +12,6 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -35,8 +36,9 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
 
   @Nonnull private final ICourseService courseService;
 
-  public CoursesGrid(@Nonnull final ICourseService courseService) {
-    super(CourseFilter.empty());
+  public CoursesGrid(@Nonnull final GlobalInterface globalInterface,
+                     @Nonnull final ICourseService courseService) {
+    super(globalInterface, CourseFilter.empty());
     this.courseService = courseService;
   }
 

@@ -1,0 +1,25 @@
+/* Wrapper (Overlay) ausblenden – nur unser .modern-notification bleibt sichtbar */
+
+:host {
+  --vaadin-notification-background: transparent;
+  --vaadin-notification-border-width: 0;
+  --vaadin-notification-border-color: transparent;
+  --vaadin-notification-shadow: none;
+  --vaadin-notification-padding: 0;
+  --vaadin-notification-border-radius: 0;
+  --vaadin-notification-width: auto;
+}
+
+/* Direktes Überschreiben des Overlay-Elements (innerhalb des Shadow DOM) */
+[part="overlay"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+[part="content"] {
+  padding: 0 !important;
+}

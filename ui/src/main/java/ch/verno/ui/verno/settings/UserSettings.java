@@ -2,9 +2,10 @@ package ch.verno.ui.verno.settings;
 
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.publ.Routes;
 import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -25,12 +26,11 @@ public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle 
   @Nonnull
   private final IAppUserSettingService appUserSettingService;
 
-  public UserSettings(@Nonnull final IAppUserService appUserService,
-                      @Nonnull final IAppUserSettingService appUserSettingService) {
-    this.appUserService = appUserService;
-    this.appUserSettingService = appUserSettingService;
+  public UserSettings(@Nonnull final GlobalInterface globalInterface) {
+    this.appUserService = globalInterface.getService(IAppUserService.class);
+    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
 
-    initUI();
+    initUI(globalInterface);
   }
 
   @Nonnull

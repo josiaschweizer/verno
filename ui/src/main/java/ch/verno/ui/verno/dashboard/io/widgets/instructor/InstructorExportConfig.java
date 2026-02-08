@@ -35,17 +35,17 @@ public class InstructorExportConfig extends AbstractTranslationHelper implements
   private CsvMapDto instructorToCsvMap(@Nonnull final InstructorDto instructor) {
     final var row = new LinkedHashMap<String, String>();
 
-    row.put(getTranslation("shared.id"), instructor.getId() != null ? instructor.getId().toString() : Publ.EMPTY_STRING);
-    row.put(getTranslation("shared.first.name"), instructor.getFirstName());
-    row.put(getTranslation("shared.last.name"), instructor.getLastName());
-    row.put(getTranslation("shared.e.mail"), instructor.getEmail());
-    row.put(getTranslation("shared.telefon"), instructor.phoneAsString());
-    row.put(getTranslation("shared.gender"), instructor.genderAsString());
-    row.put(getTranslation("shared.street"), instructor.getAddress().getStreet());
-    row.put(getTranslation("shared.house.number"), instructor.getAddress().getHouseNumber());
-    row.put(getTranslation("shared.zip.code"), instructor.getAddress().getZipCode());
-    row.put(getTranslation("course.location"), instructor.getAddress().getCity());
-    row.put(getTranslation("shared.country"), instructor.getAddress().getCountry());
+    row.put(getTranslation(globalInterface, "shared.id"), instructor.getId() != null ? instructor.getId().toString() : Publ.EMPTY_STRING);
+    row.put(getTranslation(globalInterface, "shared.first.name"), instructor.getFirstName());
+    row.put(getTranslation(globalInterface, "shared.last.name"), instructor.getLastName());
+    row.put(getTranslation(globalInterface, "shared.e.mail"), instructor.getEmail());
+    row.put(getTranslation(globalInterface, "shared.telefon"), instructor.phoneAsString());
+    row.put(getTranslation(globalInterface, "shared.gender"), instructor.genderAsString());
+    row.put(getTranslation(globalInterface, "shared.street"), instructor.getAddress().getStreet());
+    row.put(getTranslation(globalInterface, "shared.house.number"), instructor.getAddress().getHouseNumber());
+    row.put(getTranslation(globalInterface, "shared.zip.code"), instructor.getAddress().getZipCode());
+    row.put(getTranslation(globalInterface, "course.location"), instructor.getAddress().getCity());
+    row.put(getTranslation(globalInterface, "shared.country"), instructor.getAddress().getCountry());
 
     return new CsvMapDto(row);
   }

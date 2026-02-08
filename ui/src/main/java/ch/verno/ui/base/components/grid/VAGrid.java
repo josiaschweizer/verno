@@ -1,9 +1,12 @@
 package ch.verno.ui.base.components.grid;
 
+import ch.verno.ui.base.components.contextmenu.ActionDef;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.DataProvider;
+import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
+import java.util.List;
 
 public class VAGrid<T> extends Grid<T> {
 

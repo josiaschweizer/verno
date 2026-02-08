@@ -20,6 +20,10 @@
       <groupId>com.vaadin</groupId>
       <artifactId>flow-data</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-icons-flow</artifactId>
+    </dependency>
   </dependencies>
   <properties>
     <maven.compiler.source>21</maven.compiler.source>

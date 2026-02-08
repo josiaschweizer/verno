@@ -1,5 +1,6 @@
 package ch.verno.ui.base.settings;
 
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -9,12 +10,12 @@ import java.util.List;
 
 public abstract class VABaseSettingsPage extends VerticalLayout {
 
-  protected void initUI() {
+  protected void initUI(@Nonnull final GlobalInterface globalInterface) {
     setPadding(false);
     setSpacing(false);
     setSizeFull();
 
-    add(ViewToolbarFactory.createSimpleToolbar(getSettingsPageName()));
+    add(ViewToolbarFactory.createSimpleToolbar(globalInterface, getSettingsPageName()));
 
     final var settingsRow = new HorizontalLayout();
     settingsRow.setWidthFull();

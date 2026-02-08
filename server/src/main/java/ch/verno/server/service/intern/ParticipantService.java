@@ -29,23 +29,15 @@ import java.util.Optional;
 @Service
 public class ParticipantService implements IParticipantService {
 
-  @Nonnull
-  private final ParticipantRepository participantRepository;
-  @Nonnull
-  private final AddressRepository addressRepository;
-  @Nonnull
-  private final ParentRepository parentRepository;
-  @Nonnull
-  private final GenderRepository genderRepository;
-  @Nonnull
-  private final CourseLevelRepository courseLevelRepository;
-  @Nonnull
-  private final CourseRepository courseRepository;
+  @Nonnull private final ParticipantRepository participantRepository;
+  @Nonnull private final AddressRepository addressRepository;
+  @Nonnull private final ParentRepository parentRepository;
+  @Nonnull private final GenderRepository genderRepository;
+  @Nonnull private final CourseLevelRepository courseLevelRepository;
+  @Nonnull private final CourseRepository courseRepository;
 
-  @Nonnull
-  private final ServiceHelper serviceHelper;
-  @Nonnull
-  private final ParticipantSpec participantSpec;
+  @Nonnull private final ServiceHelper serviceHelper;
+  @Nonnull private final ParticipantSpec participantSpec;
 
   public ParticipantService(@Nonnull final ParticipantRepository participantRepository,
                             @Nonnull final AddressRepository addressRepository,

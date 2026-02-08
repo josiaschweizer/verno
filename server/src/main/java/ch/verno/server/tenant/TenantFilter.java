@@ -67,6 +67,7 @@ public class TenantFilter extends OncePerRequestFilter {
     return path.startsWith("/VAADIN/")
             || path.startsWith("/frontend/")
             || path.startsWith("/assets/")
+            || path.startsWith("/icons/")
             || path.equals("/favicon.ico");
   }
 

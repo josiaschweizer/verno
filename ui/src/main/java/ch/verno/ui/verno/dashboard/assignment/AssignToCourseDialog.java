@@ -35,30 +35,20 @@ import java.util.stream.Collectors;
 @CssImport("./components/assignment/assignment.css")
 public class AssignToCourseDialog extends VADialog {
 
-  @Nonnull
-  private final ICourseService courseService;
-  @Nonnull
-  private final IParticipantService participantService;
-  @Nonnull
-  private final ITenantSettingService tenantSettingService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ITenantSettingService tenantSettingService;
 
-  @Nullable
-  private final Long preSelectedCourseId;
+  @Nullable private final Long preSelectedCourseId;
 
-  @Nullable
-  private CheckboxGroup<Long> participantsGroup;
-  @Nullable
-  private VAComboBox<Long> courseComboBox;
-  @Nullable
-  private Button saveButton;
-  @Nullable
-  private String searchTerm;
-  @Nonnull
-  private LinkedHashSet<Long> selectedParticipantIds;
-  @Nonnull
-  private final LinkedHashSet<Long> unselectedParticipantIds;
-  @Nonnull
-  private final Map<Long, String> participantItems;
+  @Nullable private CheckboxGroup<Long> participantsGroup;
+  @Nullable private VAComboBox<Long> courseComboBox;
+  @Nullable private Button saveButton;
+
+  @Nullable private String searchTerm;
+  @Nonnull private LinkedHashSet<Long> selectedParticipantIds;
+  @Nonnull private final LinkedHashSet<Long> unselectedParticipantIds;
+  @Nonnull private final Map<Long, String> participantItems;
 
   private boolean suppressSelectionSync;
 
@@ -117,7 +107,7 @@ public class AssignToCourseDialog extends VADialog {
     final var title = createTitleSpan(getTranslation("course.course"));
     courseComboBox = createCourseComboBox();
 
-    return createLayoutFromComponents(title, courseComboBox);
+    return createVerticalLayoutFromComponents(title, courseComboBox);
   }
 
   @Nonnull
@@ -127,7 +117,7 @@ public class AssignToCourseDialog extends VADialog {
     searchBar.addValueChangeListener(e -> searchChanged(e.getValue()));
     final var participants = createParticipantsCheckboxGroup();
 
-    final var layout = createLayoutFromComponents(title, searchBar, participants);
+    final var layout = createVerticalLayoutFromComponents(title, searchBar, participants);
     layout.setFlexGrow(1, participants);
     return layout;
   }

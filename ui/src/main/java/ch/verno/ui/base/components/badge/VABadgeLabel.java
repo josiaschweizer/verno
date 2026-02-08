@@ -6,7 +6,7 @@ import jakarta.annotation.Nonnull;
 public class VABadgeLabel extends Span {
 
   public VABadgeLabel(@Nonnull final String label,
-                      @Nonnull final VABadgeLabelOptions option) {
+                      @Nonnull final ch.verno.common.base.components.badge.VABadgeLabelOptions option) {
     super(label);
     this.getElement().getThemeList().add(option.getTheme());
   }

@@ -5,7 +5,6 @@ import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.grid.BaseSettingDetail;
-import com.vaadin.flow.component.charts.model.Global;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -22,6 +21,7 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
   private ICourseLevelService courseLevelService;
 
   public CourseLevelDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
     init();
   }

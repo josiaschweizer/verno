@@ -1,6 +1,8 @@
 package ch.verno.ui.base.pages.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
@@ -22,12 +24,14 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
 
+  @Nonnull protected final GlobalInterface globalInterface;
   @Nonnull protected final VAGrid<T> grid;
   @Nonnull protected final Map<String, Grid.Column<T>> columnsByKey;
   @Nonnull private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
@@ -43,15 +47,18 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   private List<?> cachedSortOrders = null;
   private final Object cacheLock = new Object();
 
-  protected BaseOverviewGrid(@Nonnull final F initialFilter,
+  protected BaseOverviewGrid(@Nonnull final GlobalInterface globalInterface,
+                             @Nonnull final F initialFilter,
                              final boolean showGridToolbar,
                              final boolean showFilterToolbar) {
-    this(initialFilter);
+    this(globalInterface, initialFilter);
     this.showGridToolbar = showGridToolbar;
     this.showFilterToolbar = showFilterToolbar;
   }
 
-  protected BaseOverviewGrid(@Nonnull final F initialFilter) {
+  protected BaseOverviewGrid(@Nonnull final GlobalInterface globalInterface,
+                             @Nonnull final F initialFilter) {
+    this.globalInterface = globalInterface;
     this.columnsByKey = new HashMap<>();
     this.filter = initialFilter;
     this.grid = new VAGrid<>();
@@ -98,7 +105,16 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   @Nonnull
   protected ViewToolbar createGridToolbar() {
-    return ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
+    if (hasDetailPage()) {
+      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
+    }
+
+    final var customRunnable = getCustomActionButtonRunnable();
+    if (customRunnable == null) {
+      throw new IllegalStateException("No custom action button runnable - override getCustomActionButtonRunnable to provide one or override createGridToolbar to provide a custom toolbar");
+    }
+
+    return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getCustomActionButtonRunnable());
   }
 
   @Nonnull
@@ -281,14 +297,32 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   protected abstract String getGridObjectName();
 
   @Nonnull
-  protected abstract String getDetailPageRoute();
-
-  @Nonnull
   protected abstract List<ObjectGridColumn<T>> getColumns();
 
   @Nonnull
   protected List<ComponentGridColumn<T>> getComponentColumns() {
     // Default implementation returns no component columns -> to be implemented by subclasses if needed
     return new ArrayList<>();
+  }
+
+  @Nonnull
+  protected String getDetailPageRoute() {
+    // Default implementation returns an empty route - override to provide a detail page route for this grid
+    return Publ.EMPTY_STRING;
+  }
+
+  protected boolean hasDetailPage() {
+    // Default implementation assumes there is a detail page - override if there is no detail page for this grid
+    // -> THEN ALSO THE getCustomActionButtonRunnable TO BE OVERRIDDEN
+    return true;
+  }
+
+  @Nullable
+  protected Runnable getCustomActionButtonRunnable() {
+    return null;
+  }
+
+  protected void refreshGrid() {
+    grid.getDataProvider().refreshAll();
   }
 }
