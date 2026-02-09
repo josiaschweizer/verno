@@ -3,6 +3,8 @@ package ch.verno.common.db.role;
 import ch.verno.common.base.components.badge.VABadgeLabelOptions;
 import jakarta.annotation.Nonnull;
 
+import java.util.Objects;
+
 public enum Role {
   ADMIN(1L, "ADMIN", "Admin", VABadgeLabelOptions.ERROR),
   MANDANT_ADMIN(2L, "MANDANT_ADMIN", "Mandant Admin", VABadgeLabelOptions.WARNING),
@@ -27,7 +29,7 @@ public enum Role {
   @Nonnull
   public static Role fromId(final Long id) {
     for (final var role : values()) {
-      if (role.getId() == id) {
+      if (Objects.equals(role.getId(), id)) {
         return role;
       }
     }

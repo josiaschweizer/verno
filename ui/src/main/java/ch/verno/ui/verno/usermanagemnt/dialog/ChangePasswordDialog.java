@@ -30,7 +30,8 @@ public class ChangePasswordDialog extends VADialog {
     this.binder = new Binder<>(ChangePasswordDto.class);
     this.binder.setBean(new ChangePasswordDto(userId));
 
-    initUI(getTranslation("shared.change.password"), DialogSize.MEDIUM);
+    final var user = appUserService.findAppUserById(userId);
+    initUI(getTranslation("shared.change.password", user.getUsername()), DialogSize.MEDIUM_COMPACT);
   }
 
   @Nonnull

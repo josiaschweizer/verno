@@ -11,13 +11,12 @@ import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class CreateUserDialog extends VADialog {
 
@@ -47,7 +46,7 @@ public class CreateUserDialog extends VADialog {
     this.formMode = formMode;
     this.oldUserName = binderDto.getUsername();
 
-    initUI(getTranslation("shared.create.new.application.user"), DialogSize.MEDIUM);
+    initUI(getTranslation("shared.create.new.application.user"), DialogSize.MEDIUM_COMPACT);
   }
 
   @Nonnull
@@ -69,6 +68,7 @@ public class CreateUserDialog extends VADialog {
     );
 
     if (formMode != FormMode.CREATE) {
+      password.setValue("********"); // show placeholder with 8 positions instead of actual password
       password.setReadOnly(true);
       password.setTooltipText(getTranslation("shared.password.can.only.be.changed.via.the.change.password.dialog.via.grid.right.click.change.password"));
     }
@@ -77,7 +77,9 @@ public class CreateUserDialog extends VADialog {
             CreateUserDto::getRole,
             CreateUserDto::setRole,
             binder,
-            Role.values(),
+            Arrays.stream(Role.values())
+                    .sorted(Comparator.comparing(Role::getId).reversed())
+                    .toArray(Role[]::new),
             Optional.of(getTranslation("shared.role.is.required")),
             getTranslation("shared.role"),
             Role::getRoleNameKey

@@ -18,10 +18,13 @@ public abstract class VADialog extends Dialog {
 
   protected void initUI(@Nonnull final String title,
                         @Nonnull final DialogSize dialogSize) {
-    setHeight(dialogSize.getHeight());
+
+    setHeight("auto");
+    setMaxHeight(dialogSize.getMaxHeight());
+
     setWidth(dialogSize.getWidth());
-    setMaxWidth(dialogSize.getMaxWidth());
     setMinWidth(dialogSize.getMinWidth());
+    setMaxWidth("95vw");
 
     setHeaderTitle(title);
     add(createContent());
@@ -39,6 +42,7 @@ public abstract class VADialog extends Dialog {
     final var layout = new VerticalLayout(components);
     layout.setPadding(false);
     layout.setSpacing(false);
+    layout.setWidthFull();
     return layout;
   }
 

@@ -139,7 +139,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
             dto.isActive()
     ));
     actions.add(ActionDef.create(
-            SpanFactory.createSpan(getTranslation("shared.change.password"), VaadinIcon.KEY),
+            SpanFactory.createSpan(getTranslation("shared.change.password", dto.getUsername()), VaadinIcon.KEY),
             () -> openChangePasswordDialog(dto),
             dto.isActive()
     ));
