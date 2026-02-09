@@ -4,10 +4,10 @@ import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.*;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.server.service.intern.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.publ.Routes;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -37,7 +37,6 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Nonnull private final IInstructorService instructorService;
   @Nonnull private final ICourseLevelService courseLevelService;
   @Nonnull private final ICourseScheduleService courseScheduleService;
-  @Nonnull private final IParticipantService participantService;
 
 
   public CourseDetail(@Nonnull final GlobalInterface globalInterface,
@@ -51,12 +50,12 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Autowired
   public CourseDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
     this.globalInterface = globalInterface;
     this.courseService = globalInterface.getService(CourseService.class);
     this.instructorService = globalInterface.getService(InstructorService.class);
     this.courseLevelService = globalInterface.getService(CourseLevelService.class);
     this.courseScheduleService = globalInterface.getService(CourseScheduleService.class);
-    this.participantService = globalInterface.getService(ParticipantService.class);
 
     this.setShowHeaderToolbar(true);
     this.setShowPaddingAroundDetail(true);
@@ -74,7 +73,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     setPadding(false);
     setSpacing(false);
 
-    if (showHeaderToolbar) {
+    if (showHeaderToolbar && viewToolbar != null) {
       add(viewToolbar.toolbar());
     }
 

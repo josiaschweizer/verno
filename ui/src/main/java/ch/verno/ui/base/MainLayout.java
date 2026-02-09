@@ -3,6 +3,9 @@ package ch.verno.ui.base;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.ui.base.menu.MenuOrder;
+import ch.verno.ui.lib.icon.CustomIconConstants;
+import ch.verno.ui.lib.icon.CustomIconUtil;
+import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.verno.settings.setting.theme.UISetting;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -142,7 +145,7 @@ public final class MainLayout extends AppLayout {
     final var title = getTranslation(menuEntry.title());
 
     final SideNavItem item = (menuEntry.icon() != null)
-            ? new SideNavItem(title, menuEntry.path(), new Icon(menuEntry.icon()))
+            ? new SideNavItem(title, menuEntry.path(), createIcon(menuEntry))
             : new SideNavItem(title, menuEntry.path());
 
     // so that the grid items isn't highlighted if we are on the detail view
@@ -151,6 +154,19 @@ public final class MainLayout extends AppLayout {
     }
 
     return item;
+  }
+
+  @Nonnull
+  private Component createIcon(final @Nonnull MenuEntry menuEntry) {
+    final var icon = menuEntry.icon();
+    if (icon == null) {
+      return new Icon(VaadinIcon.CUBES); // default icon
+    } else if (icon.startsWith(CustomIconConstants.VAADIN_ICON)) {
+      return new Icon(icon);
+    } else {
+      final var customIcon = CustomIcons.of(icon);
+      return CustomIconUtil.create(customIcon);
+    }
   }
 
   @Nonnull

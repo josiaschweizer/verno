@@ -2,6 +2,7 @@ package ch.verno.ui.verno.settings.setting.quantity;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,10 +16,10 @@ public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull
   private final ITenantSettingService tenantSettingService;
 
-  public QuantitySetting(@Nonnull ITenantSettingService tenantSettingService) {
+  public QuantitySetting(@Nonnull final GlobalInterface globalInterface) {
     super(TITLE_KEY, true);
 
-    this.tenantSettingService = tenantSettingService;
+    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
   }
 

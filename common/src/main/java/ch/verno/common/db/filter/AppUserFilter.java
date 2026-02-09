@@ -1,5 +1,6 @@
 package ch.verno.common.db.filter;
 
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 
 public class AppUserFilter {
@@ -10,4 +11,14 @@ public class AppUserFilter {
     this.searchText = searchText;
   }
 
+  @Nonnull
+  public static AppUserFilter empty() {
+    return new AppUserFilter(Publ.EMPTY_STRING);
+  }
+
+
+  @Nonnull
+  public String getSearchText() {
+    return searchText;
+  }
 }

@@ -3,29 +3,38 @@ package ch.verno.ui.base.dialog;
 import jakarta.annotation.Nonnull;
 
 public enum DialogSize {
-  BIG("90vh", "min(1500px, 95vw)", "1500px", "320px"),
-  MEDIUM("30vh", "min(1500px, 40vw)", "1500px", "320px"),
-  SMALL("15vh", "20vw", "1500px", "320px"),
-  ;
 
-  @Nonnull private final String height;
+  BIG(
+          "clamp(320px, 95vw, 1500px)",
+          "90vh",
+          "320px"
+  ),
+  MEDIUM(
+          "clamp(320px, 70vw, 1100px)",
+          "80vh",
+          "320px"
+  ),
+  MEDIUM_COMPACT(
+          "clamp(320px, 50vw, 900px)",
+          "80vh",
+          "320px"
+  ),
+  SMALL(
+          "clamp(320px, 45vw, 800px)",
+          "70vh",
+          "320px"
+  );
+
   @Nonnull private final String width;
-  @Nonnull private final String maxWidth;
+  @Nonnull private final String maxHeight;
   @Nonnull private final String minWidth;
 
-  DialogSize(@Nonnull final String height,
-             @Nonnull final String width,
-             @Nonnull final String maxWidth,
+  DialogSize(@Nonnull final String width,
+             @Nonnull final String maxHeight,
              @Nonnull final String minWidth) {
-    this.height = height;
     this.width = width;
-    this.maxWidth = maxWidth;
+    this.maxHeight = maxHeight;
     this.minWidth = minWidth;
-  }
-
-  @Nonnull
-  public String getHeight() {
-    return height;
   }
 
   @Nonnull
@@ -34,8 +43,8 @@ public enum DialogSize {
   }
 
   @Nonnull
-  public String getMaxWidth() {
-    return maxWidth;
+  public String getMaxHeight() {
+    return maxHeight;
   }
 
   @Nonnull

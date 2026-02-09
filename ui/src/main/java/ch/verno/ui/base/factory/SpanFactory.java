@@ -19,6 +19,10 @@ public class SpanFactory {
   public static Span createSpan(@Nonnull final String text,
                                 @Nonnull final VaadinIcon vaadinIcon) {
     final var icon = vaadinIcon.create();
+    icon.getStyle()
+            .setWidth("14px")
+            .setHeight("14px");
+
     final var textSpan = new Span(text);
 
     final var wrapper = new Span(icon, textSpan);

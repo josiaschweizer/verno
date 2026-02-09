@@ -3,9 +3,10 @@ package ch.verno.ui.verno.instructor.detail;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.service.IGenderService;
 import ch.verno.common.db.service.IInstructorService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -26,10 +27,10 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
   @Nonnull
   private final IGenderService genderService;
 
-  public InstructorDetail(@Nonnull final IInstructorService instructorService,
-                          @Nonnull final IGenderService genderService) {
-    this.instructorService = instructorService;
-    this.genderService = genderService;
+  public InstructorDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
+    this.instructorService = globalInterface.getService(IInstructorService.class);
+    this.genderService = globalInterface.getService(IGenderService.class);
 
     super.setShowPaddingAroundDetail(true);
   }

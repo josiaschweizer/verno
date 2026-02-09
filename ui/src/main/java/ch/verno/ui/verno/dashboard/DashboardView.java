@@ -24,13 +24,13 @@ public class DashboardView extends VerticalLayout {
 
     final var dashboard = new Dashboard(globalInterface);
 
-    add(createViewToolBar());
+    add(createViewToolBar(globalInterface));
     add(dashboard);
   }
 
   @Nonnull
-  private ViewToolbar createViewToolBar() {
-    return ViewToolbarFactory.createSimpleToolbar(getTranslation("shared.dashboard"));
+  private ViewToolbar createViewToolBar(@Nonnull final GlobalInterface globalInterface) {
+    return ViewToolbarFactory.createSimpleToolbar(globalInterface, getTranslation("shared.dashboard"));
   }
 
 }

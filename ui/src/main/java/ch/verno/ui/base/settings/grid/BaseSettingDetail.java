@@ -1,13 +1,17 @@
 package ch.verno.ui.base.settings.grid;
 
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 
 public abstract class BaseSettingDetail<T> extends BaseDetailView<T> {
+
+  public BaseSettingDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
+  }
 
   @Override
   protected void onAttach(final AttachEvent attachEvent) {

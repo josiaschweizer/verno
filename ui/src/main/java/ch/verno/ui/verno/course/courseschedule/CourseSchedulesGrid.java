@@ -3,11 +3,12 @@ package ch.verno.ui.verno.course.courseschedule;
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.filter.CourseScheduleFilter;
 import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -28,9 +29,9 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Nonnull
   private final ICourseScheduleService courseScheduleService;
 
-  public CourseSchedulesGrid(@Nonnull final ICourseScheduleService courseScheduleService) {
-    super(CourseScheduleFilter.empty());
-    this.courseScheduleService = courseScheduleService;
+  public CourseSchedulesGrid(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface, CourseScheduleFilter.empty());
+    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
   }
 
 

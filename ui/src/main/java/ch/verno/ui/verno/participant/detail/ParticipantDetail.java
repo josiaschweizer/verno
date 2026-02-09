@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.participant.detail;
 
+import ch.verno.common.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
@@ -7,13 +8,13 @@ import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.*;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
-import ch.verno.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -51,16 +52,14 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull private final ICourseService courseService;
   @Nonnull private final ITenantSettingService tenantSettingService;
 
-  public ParticipantDetail(@Nonnull final IParticipantService participantService,
-                           @Nonnull final IGenderService genderService,
-                           @Nonnull final ICourseLevelService courseLevelService,
-                           @Nonnull final ICourseService courseService,
-                           @Nonnull final ITenantSettingService tenantSettingService) {
-    this.participantService = participantService;
-    this.genderService = genderService;
-    this.courseLevelService = courseLevelService;
-    this.courseService = courseService;
-    this.tenantSettingService = tenantSettingService;
+  public ParticipantDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
+
+    this.participantService = globalInterface.getService(IParticipantService.class);
+    this.genderService = globalInterface.getService(IGenderService.class);
+    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
 
     super.setShowPaddingAroundDetail(true);
   }
@@ -73,7 +72,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     final var labelText = active ? getTranslation("shared.active") : getTranslation("shared.inactive");
     final var badgeOption = active ? VABadgeLabelOptions.SUCCESS : VABadgeLabelOptions.WARNING;
 
-    final var badge = BadgeLabelFactory.createToolbarInfoBadgeLabel(labelText, badgeOption);
+    final var badge = BadgeLabelFactory.createBadgeLabel(labelText, badgeOption);
     return null;
   }
 

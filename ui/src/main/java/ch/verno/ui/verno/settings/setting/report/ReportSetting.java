@@ -2,7 +2,7 @@ package ch.verno.ui.verno.settings.setting.report;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;
-import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
@@ -18,12 +18,12 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull private final ITenantSettingService tenantSettingService;
   @Nonnull private final EntryFactory<TenantSettingDto> entryFactory;
 
-  public ReportSetting(@Nonnull final ITenantSettingService tenantSettingService) {
+  public ReportSetting(@Nonnull final GlobalInterface globalInterface) {
     super(TITLE_KEY, true);
 
-    this.tenantSettingService = tenantSettingService;
+    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
-    this.entryFactory = new EntryFactory<>(TranslationHelper.getI18NProvider());
+    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
   }
 
   @Nonnull

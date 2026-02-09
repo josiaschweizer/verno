@@ -3,9 +3,10 @@ package ch.verno.ui.verno.instructor;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.IInstructorService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
@@ -28,17 +29,17 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Nonnull
   private final IInstructorService instructorService;
 
-  public InstructorsGrid(@Nonnull final IInstructorService instructorService,
+  public InstructorsGrid(@Nonnull final GlobalInterface globalInterface,
                          final boolean showGridToolbar,
                          final boolean showFilterToolbar) {
-    super(InstructorFilter.empty(), showGridToolbar, showFilterToolbar);
-    this.instructorService = instructorService;
+    super(globalInterface, InstructorFilter.empty(), showGridToolbar, showFilterToolbar);
+    this.instructorService = globalInterface.getService(IInstructorService.class);
   }
 
   @Autowired
-  public InstructorsGrid(@Nonnull final IInstructorService instructorService) {
-    super(InstructorFilter.empty(), true, true);
-    this.instructorService = instructorService;
+  public InstructorsGrid(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface, InstructorFilter.empty(), true, true);
+    this.instructorService = globalInterface.getService(IInstructorService.class);
   }
 
   @Nonnull

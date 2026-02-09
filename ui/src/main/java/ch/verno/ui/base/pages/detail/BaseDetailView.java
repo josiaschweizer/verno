@@ -1,6 +1,6 @@
 package ch.verno.ui.base.pages.detail;
 
-import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
@@ -16,7 +16,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -27,13 +26,11 @@ import java.util.List;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
-  @Nonnull
-  public FormMode formMode;
+  @Nonnull private final GlobalInterface globalInterface;
 
   @Nonnull private final Binder<T> binder;
   @Nonnull protected EntryFactory<T> entryFactory;
   @Nonnull protected FieldFactory<T> fieldFactory;
-  @Nullable protected I18NProvider i18nProvider;
 
   @Nonnull protected Button saveButton;
   @Nonnull protected Runnable afterSave;
@@ -47,11 +44,15 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nullable protected FormMode pendingFormMode;
   @Nullable protected VABadgeLabel infoLabel;
 
-  protected BaseDetailView() {
-    this(true);
+  @Nonnull public FormMode formMode;
+
+  protected BaseDetailView(@Nonnull final GlobalInterface globalInterface) {
+    this(globalInterface, true);
   }
 
-  protected BaseDetailView(final boolean showHeaderToolbar) {
+  protected BaseDetailView(@Nonnull final GlobalInterface globalInterface,
+                           final boolean showHeaderToolbar) {
+    this.globalInterface = globalInterface;
     this.showHeaderToolbar = showHeaderToolbar;
 
     this.saveButton = new Button(getTranslation("common.save"));
@@ -60,9 +61,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
     this.formMode = getDefaultFormMode();
     this.binder = createBinder();
-    this.i18nProvider = TranslationHelper.getI18NProvider();
-    this.entryFactory = new EntryFactory<>(i18nProvider);
-    this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
+    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.fieldFactory = new FieldFactory<>(entryFactory, globalInterface.getI18NProvider());
   }
 
   @Override
@@ -82,7 +82,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     setPadding(false);
     setSpacing(false);
 
-    if (showHeaderToolbar) {
+    if (showHeaderToolbar && viewToolbar != null) {
       final var toolbar = viewToolbar.toolbar();
       add(toolbar);
     }
@@ -102,7 +102,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   @Nonnull
   protected ViewToolbarResult createViewToolbar() {
-    final var result = ViewToolbarFactory.createDetailToolbar(getDetailPageName(), getDetailRoute());
+    final var result = ViewToolbarFactory.createDetailToolbar(globalInterface, getDetailPageName(), getDetailRoute());
 
     if (result.createButton() != null) {
       result.createButton().addClickListener(this::onCreateButtonClick);

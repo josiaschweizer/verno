@@ -35,36 +35,36 @@ public class ParticipantExportConfig extends AbstractTranslationHelper implement
   private CsvMapDto participantsToCsvMap(@Nonnull final ParticipantDto participant) {
     final var row = new LinkedHashMap<String, String>();
 
-    row.put(getTranslation("shared.id"), participant.getId() != null ? participant.getId().toString() : Publ.EMPTY_STRING);
-    row.put(getTranslation("shared.first.name"), participant.getFirstName());
-    row.put(getTranslation("shared.last.name"), participant.getLastName());
-    row.put(getTranslation("shared.e.mail"), participant.getEmail());
-    row.put(getTranslation("shared.telefon"), participant.getPhoneString());
-    row.put(getTranslation("shared.gender"), participant.getGenderAsString());
+    row.put(getTranslation(globalInterface, "shared.id"), participant.getId() != null ? participant.getId().toString() : Publ.EMPTY_STRING);
+    row.put(getTranslation(globalInterface, "shared.first.name"), participant.getFirstName());
+    row.put(getTranslation(globalInterface, "shared.last.name"), participant.getLastName());
+    row.put(getTranslation(globalInterface, "shared.e.mail"), participant.getEmail());
+    row.put(getTranslation(globalInterface, "shared.telefon"), participant.getPhoneString());
+    row.put(getTranslation(globalInterface, "shared.gender"), participant.getGenderAsString());
 
-    row.put(getTranslation("shared.birthdate"), participant.getBirthdate() != null ? participant.getBirthdate().toString() : Publ.EMPTY_STRING);
-    row.put(getTranslation("shared.age"), participant.getAgeFromBirthday() != null ? participant.getAgeFromBirthday().toString() : Publ.EMPTY_STRING);
+    row.put(getTranslation(globalInterface, "shared.birthdate"), participant.getBirthdate() != null ? participant.getBirthdate().toString() : Publ.EMPTY_STRING);
+    row.put(getTranslation(globalInterface, "shared.age"), participant.getAgeFromBirthday() != null ? participant.getAgeFromBirthday().toString() : Publ.EMPTY_STRING);
 
-    row.put(getTranslation("shared.active"), participant.isActive() ? getTranslation("shared.yes") : getTranslation("shared.no"));
-    row.put(getTranslation("shared.note"), participant.getNote());
+    row.put(getTranslation(globalInterface, "shared.active"), participant.isActive() ? getTranslation(globalInterface, "shared.yes") : getTranslation(globalInterface, "shared.no"));
+    row.put(getTranslation(globalInterface, "shared.note"), participant.getNote());
 
-    row.put(getTranslation("courseLevel.course_levels"), participant.getCourseLevelsAsString());
+    row.put(getTranslation(globalInterface, "courseLevel.course_levels"), participant.getCourseLevelsAsString());
 
-    row.put(getTranslation("shared.street"), participant.getAddress().getStreet());
-    row.put(getTranslation("shared.house.number"), participant.getAddress().getHouseNumber());
-    row.put(getTranslation("shared.zip.code"), participant.getAddress().getZipCode());
-    row.put(getTranslation("course.location"), participant.getAddress().getCity());
-    row.put(getTranslation("shared.country"), participant.getAddress().getCountry());
+    row.put(getTranslation(globalInterface, "shared.street"), participant.getAddress().getStreet());
+    row.put(getTranslation(globalInterface, "shared.house.number"), participant.getAddress().getHouseNumber());
+    row.put(getTranslation(globalInterface, "shared.zip.code"), participant.getAddress().getZipCode());
+    row.put(getTranslation(globalInterface, "course.location"), participant.getAddress().getCity());
+    row.put(getTranslation(globalInterface, "shared.country"), participant.getAddress().getCountry());
 
-    row.put(getTranslation("participant.parent.1.first.name"), participant.getParentOne().getFirstName());
-    row.put(getTranslation("participant.parent.1.last.name"), participant.getParentOne().getLastName());
-    row.put(getTranslation("participant.parent.1.email"), participant.getParentOne().getEmail());
-    row.put(getTranslation("participant.parent.1.phone"), participant.getParentOne().getPhone().toString());
+    row.put(getTranslation(globalInterface, "participant.parent.1.first.name"), participant.getParentOne().getFirstName());
+    row.put(getTranslation(globalInterface, "participant.parent.1.last.name"), participant.getParentOne().getLastName());
+    row.put(getTranslation(globalInterface, "participant.parent.1.email"), participant.getParentOne().getEmail());
+    row.put(getTranslation(globalInterface, "participant.parent.1.phone"), participant.getParentOne().getPhone().toString());
 
-    row.put(getTranslation("participant.parent.2.first.name"), participant.getParentTwo().getFirstName());
-    row.put(getTranslation("participant.parent.2.last.name"), participant.getParentTwo().getLastName());
-    row.put(getTranslation("participant.parent.2.email"), participant.getParentTwo().getEmail());
-    row.put(getTranslation("participant.parent.2.phone"), participant.getParentTwo().getPhone().toString());
+    row.put(getTranslation(globalInterface, "participant.parent.2.first.name"), participant.getParentTwo().getFirstName());
+    row.put(getTranslation(globalInterface, "participant.parent.2.last.name"), participant.getParentTwo().getLastName());
+    row.put(getTranslation(globalInterface, "participant.parent.2.email"), participant.getParentTwo().getEmail());
+    row.put(getTranslation(globalInterface, "participant.parent.2.phone"), participant.getParentTwo().getPhone().toString());
 
     return new CsvMapDto(row);
   }

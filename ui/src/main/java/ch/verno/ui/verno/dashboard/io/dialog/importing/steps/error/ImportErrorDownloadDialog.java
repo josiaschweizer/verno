@@ -31,7 +31,7 @@ public class ImportErrorDownloadDialog extends VADialog {
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var text = new Text("Beim Import konnten nicht alle Datensätze erfolgreich verarbeitet werden. Die betroffenen Einträge wurden in einer separaten Datei zusammengefasst und können hier heruntergeladen werden.");
+    final var text = new Text(getTranslation("shared.beim.import.konnten.nicht.alle.datensatze.erfolgreich.verarbeitet.werden.die.betroffenen.eintrage.wurden.in.einer.separaten.datei.zusammengefasst.und.konnen.hier.heruntergeladen.werden"));
     final var layout = new HorizontalLayout(text);
     layout.setWidthFull();
     layout.setPadding(false);

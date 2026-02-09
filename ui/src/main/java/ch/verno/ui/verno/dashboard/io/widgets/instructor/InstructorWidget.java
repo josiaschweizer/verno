@@ -59,7 +59,7 @@ public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    instructorGrid = new InstructorsGrid(instructorService, false, false);
+    instructorGrid = new InstructorsGrid(globalInterface, false, false);
     instructorGrid.getGrid().setAllRowsVisible(true);
     add(instructorGrid);
   }

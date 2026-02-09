@@ -11,6 +11,7 @@ import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.report.ReportServerGate;
 import ch.verno.publ.Publ;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
@@ -19,7 +20,6 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
-import ch.verno.publ.Routes;
 import ch.verno.ui.verno.dashboard.report.ParticipantsReportDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -58,7 +58,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface,
                           final boolean showGridToolbar,
                           final boolean showFilterToolbar) {
-    super(ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
+    super(globalInterface, ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
     this.courseService = globalInterface.getService(ICourseService.class);
@@ -68,7 +68,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Autowired
   public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface) {
-    super(ParticipantFilter.empty(), true, true);
+    super(globalInterface, ParticipantFilter.empty(), true, true);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
     this.courseService = globalInterface.getService(ICourseService.class);
@@ -140,13 +140,13 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   private void disableItem(@Nonnull final ParticipantDto dto) {
     dto.setActive(false);
     participantService.updateParticipant(dto);
-    grid.getDataProvider().refreshAll();
+    refreshGrid();
   }
 
   private void enableItem(@Nonnull final ParticipantDto dto) {
     dto.setActive(true);
     participantService.updateParticipant(dto);
-    grid.getDataProvider().refreshAll();
+    refreshGrid();
   }
 
   @Nonnull
@@ -255,8 +255,8 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull
   @Override
   protected ViewToolbar createGridToolbar() {
-    final var gridToolbar = ViewToolbarFactory.createGridToolbar(getGridObjectName(), getDetailPageRoute());
-    final var participantReportDialogButton = new Button("Report", VaadinIcon.FILE_TEXT.create());
+    final var gridToolbar = ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
+    final var participantReportDialogButton = new Button(getTranslation("shared.report"), VaadinIcon.FILE_TEXT.create());
     participantReportDialogButton.addClickListener(e -> createDialogButtonClick());
     gridToolbar.addActionButton(participantReportDialogButton, true);
     return gridToolbar;

@@ -4,9 +4,10 @@ import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ITenantSettingService;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -30,10 +31,10 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
   @Nonnull
   private final ITenantSettingService tenantSettingService;
 
-  public CourseScheduleDetail(@Nonnull final ICourseScheduleService courseScheduleService,
-                              @Nonnull final ITenantSettingService tenantSettingService) {
-    this.courseScheduleService = courseScheduleService;
-    this.tenantSettingService = tenantSettingService;
+  public CourseScheduleDetail(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface);
+    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
+    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
 
     this.setShowPaddingAroundDetail(true);
   }

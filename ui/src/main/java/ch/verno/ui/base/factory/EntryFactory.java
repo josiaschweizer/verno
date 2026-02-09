@@ -4,7 +4,6 @@ import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
-import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
@@ -42,8 +41,7 @@ import java.util.function.Function;
 
 public class EntryFactory<DTO> {
 
-  @Nullable
-  private final I18NProvider i18nProvider;
+  @Nullable private final I18NProvider i18nProvider;
 
   public EntryFactory(@Nullable final I18NProvider i18nProvider) {
     this.i18nProvider = i18nProvider;
@@ -100,21 +98,11 @@ public class EntryFactory<DTO> {
                                            @Nonnull final Setter<DTO, String> valueSetter,
                                            @Nonnull final Binder<DTO> binder,
                                            @Nonnull final Optional<String> required,
-                                           @Nonnull final String label,
-                                           final boolean newMode) {
+                                           @Nonnull final String label) {
     final var passwordField = new PasswordField(label);
     passwordField.setWidthFull();
-
-    if (!newMode) {
-      passwordField.setReadOnly(true);
-      passwordField.setTooltipText("Password can only be set when creating a new user. To change the password of an existing user, please use the 'Change Password' function via right-click on the user in the users grid.");
-      passwordField.setRevealButtonVisible(false);
-    } else {
-      passwordField.setReadOnly(false);
-      passwordField.setTooltipText(Publ.EMPTY_STRING);
-      passwordField.setRevealButtonVisible(true);
-    }
-
+    passwordField.setClearButtonVisible(true);
+    passwordField.setRevealButtonVisible(true);
     passwordField.setValueChangeMode(ValueChangeMode.EAGER);
     bindEntry(passwordField, valueProvider, valueSetter, binder, required);
     return passwordField;
@@ -315,11 +303,11 @@ public class EntryFactory<DTO> {
   @Nonnull
   public VATwoOptionEntry<GenderDto> createGenderEntry(@Nonnull final ValueProvider<DTO, GenderDto> valueProvider,
                                                        @Nonnull final Setter<DTO, GenderDto> valueSetter,
-                                                             @Nonnull final Binder<DTO> binder,
+                                                       @Nonnull final Binder<DTO> binder,
                                                        @Nonnull final List<GenderDto> options,
                                                        @Nonnull final ValueProvider<GenderDto, String> optionLabelProvider,
-                                                             @Nonnull final Optional<String> required,
-                                                             @Nonnull final String label) {
+                                                       @Nonnull final Optional<String> required,
+                                                       @Nonnull final String label) {
     final var entry = new VATwoOptionEntry<>(label, options, optionLabelProvider);
     bindEntry(entry, valueProvider, valueSetter, binder, required);
     entry.setWidthFull();
