@@ -9,7 +9,6 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
@@ -17,6 +16,7 @@ import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.GridColumnHelper;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
 import ch.verno.ui.lib.icon.CustomIconConstants;
+import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
 import ch.verno.ui.verno.usermanagemnt.dialog.CreateUserDialog;
 import ch.verno.ui.verno.usermanagemnt.dialog.CreateUserDto;
 import com.vaadin.flow.component.Component;
@@ -131,8 +131,13 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final AppUserDto dto) {
     final var currentUser = globalInterface.getCurrentUser();
-
     final var actions = new ArrayList<ActionDef>();
+
+    actions.add(ActionDef.create(
+            SpanFactory.createSpan(getTranslation("shared.edit.user"), VaadinIcon.EDIT),
+            () -> openUserDialog(dto),
+            dto.isActive()
+    ));
     actions.add(ActionDef.create(
             SpanFactory.createSpan(getTranslation("shared.change.password"), VaadinIcon.KEY),
             () -> openChangePasswordDialog(dto),
@@ -141,13 +146,13 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
 
     if (dto.isActive()) {
       actions.add(ActionDef.create(
-              SpanFactory.createSpan(getTranslation("participant.disable.participant"), VaadinIcon.BAN),
+              SpanFactory.createSpan(getTranslation("shared.disable.user"), VaadinIcon.BAN),
               () -> disableItem(dto),
               !Objects.equals(dto.getId(), currentUser.getId())
       ));
     } else {
       actions.add(ActionDef.create(
-              SpanFactory.createSpan(getTranslation("participant.enable.participant"), VaadinIcon.CHECK_CIRCLE),
+              SpanFactory.createSpan(getTranslation("shared.enable.user"), VaadinIcon.CHECK_CIRCLE),
               () -> enableItem(dto)
       ));
     }
@@ -161,8 +166,25 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
     return actions;
   }
 
+  private void openUserDialog(@Nullable final AppUserDto dto) {
+    CreateUserDialog dialog;
+    if (dto == null) {
+      dialog = new CreateUserDialog(globalInterface);
+    } else {
+      dialog = new CreateUserDialog(globalInterface, FormMode.EDIT, CreateUserDto.fromAppUserDto(dto));
+    }
+
+    dialog.addClosedListener(e -> setFilter(getFilter())); // refresh grid by reapplying filter when dialog is closed
+    dialog.open();
+  }
+
   private void openChangePasswordDialog(@Nonnull final AppUserDto dto) {
-    NotificationFactory.showInfoNotification("This feature is not implemented yet.");
+    if (dto.getId() == null) {
+      return;
+    }
+
+    final var dialog = new ChangePasswordDialog(globalInterface, dto.getId());
+    dialog.open();
   }
 
   private void disableItem(@Nonnull final AppUserDto dto) {
@@ -178,7 +200,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
   }
 
   private void deleteItem(@Nonnull final AppUserDto dto) {
-    final var confirm = new ConfirmDialog("Delete", "Are you sure you want to delete this user?", "Confirm", e -> confirmDelete(dto), "Cancel", e -> confirmDelete(null));
+    final var confirm = new ConfirmDialog(getTranslation("shared.delete"), getTranslation("shared.are.you.sure.you.want.to.delete.this.user"), getTranslation("shared.confirm"), e -> confirmDelete(dto), getTranslation("shared.cancel"), e -> confirmDelete(null));
     confirm.open();
   }
 
@@ -202,17 +224,5 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
     }
 
     openUserDialog(dto);
-  }
-
-  private void openUserDialog(@Nullable final AppUserDto dto) {
-    CreateUserDialog dialog;
-    if (dto == null) {
-      dialog = new CreateUserDialog(globalInterface);
-    } else {
-      dialog = new CreateUserDialog(globalInterface, FormMode.EDIT, CreateUserDto.fromAppUserDto(dto));
-    }
-
-    dialog.addClosedListener(e -> setFilter(getFilter())); // refresh grid by reapplying filter when dialog is closed
-    dialog.open();
   }
 }

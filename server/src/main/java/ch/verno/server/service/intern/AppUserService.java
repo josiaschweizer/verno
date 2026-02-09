@@ -135,6 +135,15 @@ public class AppUserService implements IAppUserService {
 
   @Override
   @Transactional
+  public void changePassword(@Nonnull final Long userId, @Nonnull final String newPassword) {
+    final var found = appUserRepository.findById(userId).orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND, userId));
+    found.setPasswordHash(newPassword);
+
+    appUserRepository.save(found);
+  }
+
+  @Override
+  @Transactional
   public void deleteAppUser(@Nonnull final Long id) {
     appUserRepository.deleteById(id);
   }

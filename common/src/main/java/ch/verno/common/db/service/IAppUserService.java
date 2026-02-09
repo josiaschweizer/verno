@@ -30,5 +30,7 @@ public interface IAppUserService extends UserDetailsService {
 
   void updateAppUser(@Nonnull AppUserDto user);
 
+  void changePassword(@Nonnull Long userId, @Nonnull String newPassword);
+
   void deleteAppUser(@Nonnull Long id);
 }
