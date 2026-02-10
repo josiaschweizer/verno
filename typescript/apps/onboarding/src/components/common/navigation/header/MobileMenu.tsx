@@ -72,12 +72,6 @@ export default function MobileMenu({
               </Disclosure>
 
               <a
-                href="/features"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
-              >
-                Features
-              </a>
-              <a
                 href="/marketplace"
                 className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
               >
