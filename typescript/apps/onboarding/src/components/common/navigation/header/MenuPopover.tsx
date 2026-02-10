@@ -3,8 +3,10 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
+  CloseButton,
 } from '@headlessui/react'
 import { ChevronDownIcon } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import type { Product } from './Header'
 
 interface Props {
@@ -41,13 +43,14 @@ export default function MenuPopover({ title, products }: Props) {
                   />
                 </div>
                 <div className="flex-auto">
-                  <a
-                    href={item.href}
+                  <CloseButton
+                    as={Link}
+                    to={item.href}
                     className="block font-semibold text-verno-dark"
                   >
                     {item.name}
                     <span className="absolute inset-0" />
-                  </a>
+                  </CloseButton>
                   <p className="mt-1 text-verno-darker/80">
                     {item.description}
                   </p>

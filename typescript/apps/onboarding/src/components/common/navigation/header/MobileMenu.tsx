@@ -6,6 +6,7 @@ import {
 } from '@headlessui/react'
 import { ChevronDownIcon } from 'lucide-react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom'
 import type { Product } from './Header'
 
 interface Props {
@@ -24,7 +25,11 @@ export default function MobileMenu({
       <div className="fixed inset-0 z-50" />
       <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-verno-bg p-6 sm:max-w-sm sm:ring-1 sm:ring-verno-accent/20">
         <div className="flex items-center justify-between">
-          <a href="#" className="-m-1.5 p-1.5 flex items-center gap-2">
+          <Link
+            to="/"
+            className="-m-1.5 p-1.5 flex items-center gap-2"
+            onClick={onClose}
+          >
             <img
               alt="Profile picture"
               width={1}
@@ -35,7 +40,7 @@ export default function MobileMenu({
             <span className="text-verno-dark text-base font-semibold tracking-wide">
               Verno
             </span>
-          </a>
+          </Link>
           <button
             type="button"
             onClick={onClose}
@@ -61,8 +66,9 @@ export default function MobileMenu({
                   {products.map((item) => (
                     <DisclosureButton
                       key={item.name}
-                      as="a"
-                      href={item.href}
+                      as={Link}
+                      to={item.href}
+                      onClick={onClose}
                       className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
                     >
                       {item.name}
@@ -71,18 +77,20 @@ export default function MobileMenu({
                 </DisclosurePanel>
               </Disclosure>
 
-              <a
-                href="/marketplace"
+              <Link
+                to="/marketplace"
+                onClick={onClose}
                 className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
               >
                 Marketplace
-              </a>
-              <a
-                href="/company"
+              </Link>
+              <Link
+                to="/company"
+                onClick={onClose}
                 className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
               >
                 Company
-              </a>
+              </Link>
             </div>
 
             <div className="py-6 space-y-3">
