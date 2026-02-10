@@ -9,6 +9,9 @@ import jakarta.annotation.Nullable;
 public class AppUserDto extends BaseDto {
 
   @Nonnull private String username;
+  @Nonnull private String firstname;
+  @Nonnull private String lastname;
+  @Nonnull private String email;
   @Nonnull private String passwordHash;
   @Nonnull private Role role;
   private boolean active;
@@ -21,19 +24,28 @@ public class AppUserDto extends BaseDto {
   }
 
   public AppUserDto(@Nonnull final String username,
+                    @Nonnull final String firstname,
+                    @Nonnull final String lastname,
+                    @Nonnull final String email,
                     @Nonnull final String passwordHash,
                     @Nonnull final Role role,
                     final boolean active) {
-    this(null, username, passwordHash, role, active);
+    this(null, username, firstname, lastname, email, passwordHash, role, active);
   }
 
   public AppUserDto(@Nullable final Long id,
                     @Nonnull final String username,
+                    @Nonnull final String firstname,
+                    @Nonnull final String lastname,
+                    @Nonnull final String email,
                     @Nonnull final String passwordHash,
                     @Nonnull final Role role,
                     final boolean active) {
     setId(id);
     this.username = username;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
     this.passwordHash = passwordHash;
     this.role = role;
     this.active = active;
@@ -46,6 +58,33 @@ public class AppUserDto extends BaseDto {
 
   public void setUsername(@Nonnull final String username) {
     this.username = username;
+  }
+
+  @Nonnull
+  public String getFirstname() {
+    return firstname;
+  }
+
+  public void setFirstname(@Nonnull final String firstname) {
+    this.firstname = firstname;
+  }
+
+  @Nonnull
+  public String getLastname() {
+    return lastname;
+  }
+
+  public void setLastname(@Nonnull final String lastname) {
+    this.lastname = lastname;
+  }
+
+  @Nonnull
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(@Nonnull final String email) {
+    this.email = email;
   }
 
   @Nonnull

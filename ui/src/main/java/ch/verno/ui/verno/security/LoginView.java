@@ -5,6 +5,7 @@ import ch.verno.publ.Routes;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -18,6 +19,10 @@ public class LoginView extends VerticalLayout {
     login.setForgotPasswordButtonVisible(false);
     login.setAction("login");
 
+    final var i18n = LoginI18n.createDefault();
+    i18n.getForm().setUsername("Username / Email");
+    login.setI18n(i18n);
+
     setSizeFull();
     setPadding(false);
     setSpacing(false);
@@ -28,6 +33,8 @@ public class LoginView extends VerticalLayout {
 
     add(login);
   }
+
+
 
   @Override
   protected void onAttach(final AttachEvent attachEvent) {

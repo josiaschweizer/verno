@@ -1,5 +1,6 @@
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { UseFormGetValues } from 'react-hook-form'
+import resolveUsername from '@/components/common/register/steps/resolveUsername'
 
 interface Props {
   getValues: UseFormGetValues<RegisterDialogFormData>
@@ -8,6 +9,7 @@ interface Props {
 const overviewFields = [
   { key: 'firstname' as const, label: 'Vorname' },
   { key: 'lastname' as const, label: 'Nachname' },
+  { key: 'username' as const, label: 'Username' },
   { key: 'email' as const, label: 'E-Mail' },
   { key: 'tenantSubdomain' as const, label: 'URL' },
   { key: 'tenantName' as const, label: 'Display Name' },
@@ -32,7 +34,9 @@ export function StepThree({ getValues }: Props) {
                   {label}
                 </dt>
                 <dd className="text-sm text-verno-dark">
-                  {values[key] ?? '—'}
+                  {key === 'username'
+                    ? (resolveUsername(values) ?? '—')
+                    : (values[key] ?? '—')}
                 </dd>
               </div>
             ))}

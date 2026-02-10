@@ -11,7 +11,6 @@ import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
@@ -59,6 +58,29 @@ public class CreateUserDialog extends VADialog {
             Optional.of(getTranslation("shared.username.is.required")),
             getTranslation("shared.username")
     );
+    final var email = entryFactory.createTextEntry(
+            CreateUserDto::getEmail,
+            CreateUserDto::setEmail,
+            binder,
+            Optional.empty(),
+            getTranslation("shared.e.mail")
+    );
+
+    final var firstname = entryFactory.createTextEntry(
+            CreateUserDto::getFirstname,
+            CreateUserDto::setFirstname,
+            binder,
+            Optional.empty(),
+            getTranslation("shared.first.name")
+    );
+    final var lastname = entryFactory.createTextEntry(
+            CreateUserDto::getLastname,
+            CreateUserDto::setLastname,
+            binder,
+            Optional.empty(),
+            getTranslation("shared.last.name")
+    );
+
     final var password = entryFactory.createPasswordField(
             CreateUserDto::getPassword,
             CreateUserDto::setPassword,
@@ -85,7 +107,7 @@ public class CreateUserDialog extends VADialog {
             Role::getRoleNameKey
     );
 
-    return createHorizontalLayoutFromComponents(username, password, role);
+    return createHorizontalLayoutFromComponents(username, email, firstname, lastname, password, role);
   }
 
   @Nonnull
@@ -136,6 +158,9 @@ public class CreateUserDialog extends VADialog {
 
     appUserService.createAppUser(new AppUserDto(
             bean.getUsername(),
+            bean.getFirstname(),
+            bean.getLastname(),
+            bean.getEmail(),
             hashedPassword,
             bean.getRole(),
             true
@@ -151,9 +176,13 @@ public class CreateUserDialog extends VADialog {
       return;
     }
 
-    appUserService.updateAppUser(new AppUserDto(
+    appUserService.updateAppUser(
+            new AppUserDto(
             foundById.get().getId(),
             bean.getUsername(),
+            bean.getFirstname(),
+            bean.getLastname(),
+            bean.getEmail(),
             Publ.EMPTY_STRING,
             bean.getRole(),
             false

@@ -51,13 +51,16 @@ public class TenantProvisionService {
     TenantContext.set(save.getId());
 
     final var tenantRef = em.getReference(TenantEntity.class, save.getId());
-    final var username = req.adminEmail();
+    final var username = req.adminUsername();
 
     final var hash = passwordEncoder.encode(req.adminPassword());
 
     final var admin = new AppUserEntity(
             tenantRef,
             username,
+            req.adminFirstname(),
+            req.adminLastname(),
+            req.adminEmail(),
             hash != null ? hash : Publ.EMPTY_STRING,
             VernoConstants.ADMIN_ROLE,
             true

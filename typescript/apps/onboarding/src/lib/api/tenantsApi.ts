@@ -5,6 +5,9 @@ export type CreateTenantRequest = {
   tenantName: string
   subdomain: string
   preferredLanguage: string
+  adminUsername: string
+  adminFirstname: string
+  adminLastname: string
   adminEmail: string
   adminDisplayName: string
   adminPassword: string

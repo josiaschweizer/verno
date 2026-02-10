@@ -16,6 +16,9 @@ public final class AppUserMapper {
     final var dto = new AppUserDto(
             entity.getId(),
             entity.getUsername(),
+            entity.getFirstname(),
+            entity.getLastname(),
+            entity.getEmail(),
             entity.getPasswordHash(),
             Role.fromString(entity.getRole()),
             entity.isActive()
@@ -34,6 +37,9 @@ public final class AppUserMapper {
     final var entity = new AppUserEntity(
             tenant,
             dto.getUsername(),
+            dto.getFirstname(),
+            dto.getLastname(),
+            dto.getEmail(),
             dto.getPasswordHash(),
             dto.getRole().getRole(),
             dto.isActive()

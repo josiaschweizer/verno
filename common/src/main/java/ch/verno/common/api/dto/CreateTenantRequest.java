@@ -22,6 +22,9 @@ public record CreateTenantRequest(
         @Pattern(regexp = "^(de|en|fr)$")
         String preferredLanguage,
 
+        @Size(max = 255) String adminFirstname,
+        @Size(max = 255) String adminLastname,
+        @NotBlank @Size(max = 255) String adminUsername,
         @NotBlank @Email @Size(max = 255) String adminEmail,
         @NotBlank @Size(max = 128) String adminDisplayName,
         @NotBlank @Size(min = 8, max = 128) String adminPassword
