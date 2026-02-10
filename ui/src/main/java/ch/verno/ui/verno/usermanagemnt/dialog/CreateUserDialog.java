@@ -11,7 +11,6 @@ import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
@@ -136,6 +135,9 @@ public class CreateUserDialog extends VADialog {
 
     appUserService.createAppUser(new AppUserDto(
             bean.getUsername(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
             hashedPassword,
             bean.getRole(),
             true
@@ -154,6 +156,9 @@ public class CreateUserDialog extends VADialog {
     appUserService.updateAppUser(new AppUserDto(
             foundById.get().getId(),
             bean.getUsername(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,
             bean.getRole(),
             false

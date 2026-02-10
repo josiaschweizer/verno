@@ -62,6 +62,20 @@ export default function StepOne({
               />
             )}
           />
+
+          <Controller
+            name="username"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                fieldLabel="Username"
+                placeholder="Username"
+                {...field}
+                disabled={readOnly}
+                className="flex-1"
+              />
+            )}
+          />
         </div>
 
         <div className="flex w-full gap-2">
@@ -97,14 +111,27 @@ export default function StepOne({
           <Controller
             name="phone"
             control={control}
-            render={({ field }) => (
-              <InputField
-                fieldLabel="Phone"
-                placeholder="Phone"
-                {...field}
-                disabled={readOnly}
-                className="flex-1"
-              />
+            rules={{
+              pattern: {
+                value: /^\d+$/,
+                message: 'Only numbers are allowed',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <div className="flex-1">
+                <InputField
+                  fieldLabel="Phone"
+                  placeholder="Phone"
+                  {...field}
+                  disabled={readOnly}
+                  className="flex-1"
+                />
+                {fieldState.error && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {fieldState.error.message}
+                  </p>
+                )}
+              </div>
             )}
           />
         </div>

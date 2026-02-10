@@ -23,6 +23,15 @@ public class AppUserEntity extends TenantScopedEntity {
   @Column(nullable = false, length = 200)
   private String username;
 
+  @Column(length = 255)
+  private String firstname;
+
+  @Column(length = 255)
+  private String lastname;
+
+  @Column(length = 255)
+  private String email;
+
   @Column(nullable = false, length = 100)
   private String passwordHash;
 
@@ -38,11 +47,17 @@ public class AppUserEntity extends TenantScopedEntity {
 
   public AppUserEntity(@Nonnull final TenantEntity tenant,
                        @Nonnull final String username,
+                       @Nonnull final String firstname,
+                       @Nonnull final String lastname,
+                       @Nonnull final String email,
                        @Nonnull final String passwordHash,
                        @Nonnull final String role,
                        final boolean active) {
     setTenant(tenant);
     this.username = username;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
     this.passwordHash = passwordHash;
     this.role = role;
     this.active = active;
@@ -62,6 +77,30 @@ public class AppUserEntity extends TenantScopedEntity {
 
   public void setUsername(final String username) {
     this.username = username;
+  }
+
+  public String getFirstname() {
+    return firstname;
+  }
+
+  public void setFirstname(final String firstname) {
+    this.firstname = firstname;
+  }
+
+  public String getLastname() {
+    return lastname;
+  }
+
+  public void setLastname(final String lastname) {
+    this.lastname = lastname;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(final String email) {
+    this.email = email;
   }
 
   public String getPasswordHash() {

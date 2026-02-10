@@ -21,6 +21,7 @@ import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData
 import { useForm, useWatch } from 'react-hook-form'
 import { tenantsApi } from '@/lib/api/tenantsApi'
 import { ApiError } from '@/lib/apiClient'
+import resolveUsername from '@/components/common/register/steps/resolveUsername'
 
 interface Props {
   open: boolean
@@ -62,6 +63,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
 
   const watchedEmail = useWatch({ control, name: 'email' })
   const watchedPassword = useWatch({ control, name: 'password' })
+  const watchedPasswordConfirm = useWatch({ control, name: 'confirmPassword' })
   const watchedTenantName = useWatch({ control, name: 'tenantName' })
   const watchedTenantSubdomain = useWatch({ control, name: 'tenantSubdomain' })
 
@@ -166,6 +168,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         tenantName: form.tenantName,
         subdomain,
         preferredLanguage,
+        adminUsername: resolveUsername(form),
+        adminFirstname: form.firstname,
+        adminLastname: form.lastname,
         adminEmail: form.email,
         adminDisplayName: `${form.firstname} ${form.lastname}`.trim(),
         adminPassword: form.password,
@@ -183,7 +188,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   let canContinue = true
   if (step === 0) {
     canContinue =
-      Boolean(watchedEmail && watchedPassword) &&
+      Boolean(watchedEmail && watchedPassword && watchedPasswordConfirm) &&
       !errors.email &&
       !errors.password
   } else if (step === 1) {
