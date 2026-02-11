@@ -37,7 +37,7 @@ export default function Product() {
     }
   > = {
     courseSchedules: {
-      title: 'Course schedules',
+      title: 'Schedules',
       caption: 'Plan blocks and weeks clearly.',
       alt: 'Course schedules overview',
       lightSrc: '/course-schedules-light.png',
