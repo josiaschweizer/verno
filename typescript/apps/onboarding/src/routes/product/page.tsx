@@ -1,8 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
 
 export default function Product() {
   const location = useLocation()
+  const [peopleView, setPeopleView] = useState<'participants' | 'users'>(
+    'participants',
+  )
+
+  const [organizationView, setOrganizationView] = useState<
+    'courseSchedules' | 'courses' | 'instructors' | 'participants'
+  >('courseSchedules')
 
   useEffect(() => {
     if (location.hash) {
@@ -10,13 +18,55 @@ export default function Product() {
       const element = document.getElementById(id)
 
       if (element) {
-        //timeout to ensure that page is already rendered
+        // timeout to ensure that page is already rendered
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }, 100)
       }
     }
   }, [location])
+
+  const organizationConfig: Record<
+    'courseSchedules' | 'courses' | 'instructors' | 'participants',
+    {
+      title: string
+      caption: string
+      alt: string
+      lightSrc: string
+      darkSrc: string
+    }
+  > = {
+    courseSchedules: {
+      title: 'Course schedules',
+      caption: 'Plan blocks and weeks clearly.',
+      alt: 'Course schedules overview',
+      lightSrc: '/course-schedules-light.png',
+      darkSrc: '/course-schedules.png',
+    },
+    courses: {
+      title: 'Courses',
+      caption: 'Capacity, weekdays, levels and times.',
+      alt: 'Courses overview',
+      lightSrc: '/courses-light.png',
+      darkSrc: '/courses.png',
+    },
+    instructors: {
+      title: 'Instructors',
+      caption: 'Directory with contact and assignment info.',
+      alt: 'Instructors overview',
+      lightSrc: '/instructors-light.png',
+      darkSrc: '/instructors.png',
+    },
+    participants: {
+      title: 'Participants',
+      caption: 'Fast search, statuses and course links.',
+      alt: 'Participants overview',
+      lightSrc: '/participants-light.png',
+      darkSrc: '/participants.png',
+    },
+  }
+
+  const activeOrganization = organizationConfig[organizationView]
 
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker">
@@ -43,61 +93,23 @@ export default function Product() {
                 {/* TODO: Secondary CTA link */}
               </div>
             </div>
-            <div className="h-64 rounded-2xl bg-verno-surface shadow flex items-center justify-center">
-              {/* TODO: Hero illustration / screenshot */}
-              <span className="text-sm text-muted-foreground">
-                Hero illustration / UI overview
-              </span>
-            </div>
-          </div>
-        </section>
 
-        <section aria-labelledby="verno-for-title">
-          <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
-            <div>
-              <h2
-                id="verno-for-title"
-                className="text-2xl font-semibold text-verno-darker"
-              >
-                Built for real club operations
-              </h2>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Verno supports clubs, academies and community organizations that
-                run multiple teams, courses and venues.
+            <div className="rounded-2xl bg-verno-surface shadow p-4">
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+                <HoverSplitImage
+                  lightSrc="/dashboard-light.png"
+                  darkSrc="/dashboard.png"
+                  alt="Dashboard with course sections, participant tables and quick actions"
+                  className="h-full"
+                  initialSplit={0.6}
+                />
+              </div>
+
+              <p className="mt-3 text-[11px] text-muted-foreground">
+                Screenshot: dashboard with course sections, sortable participant
+                tables and quick actions (report, edit participants). Hover the
+                image to compare light and dark mode.
               </p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                It fits into the daily work of coordinators, head coaches and
-                club managers.
-              </p>
-              <ul className="mt-4 space-y-2 text-sm text-verno-dark">
-                <li>• Multi-team field and court sports</li>
-                <li>• Seasonal programs and courses</li>
-                <li>• Volunteer or part-time coaches</li>
-              </ul>
-            </div>
-            <div className="space-y-3">
-              <div className="rounded-2xl bg-verno-surface p-4 shadow">
-                <p className="text-sm font-medium text-verno-darker">
-                  Club managers
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Overview of teams, venues and seasons.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-verno-surface p-4 shadow">
-                <p className="text-sm font-medium text-verno-darker">
-                  Coordinators
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Day-to-day scheduling and changes.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-verno-surface p-4 shadow">
-                <p className="text-sm font-medium text-verno-darker">Coaches</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Clear view of sessions and teams.
-                </p>
-              </div>
             </div>
           </div>
         </section>
@@ -141,20 +153,78 @@ export default function Product() {
                 {/* TODO: Swap in actual icon component */}
               </div>
             </div>
-            <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
-              {/* TODO: Organization illustration / screenshot */}
-              <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent flex items-center justify-center">
-                <span className="text-xs text-muted-foreground">
-                  Organization overview: club, teams, venues
-                </span>
+
+            <div className="rounded-2xl bg-verno-surface shadow p-4">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <p className="text-xs font-medium text-verno-darker">
+                  {activeOrganization.title}
+                </p>
+
+                <div className="inline-flex rounded-xl bg-verno-bg p-1">
+                  <button
+                    type="button"
+                    onClick={() => setOrganizationView('courseSchedules')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      organizationView === 'courseSchedules'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Schedules
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOrganizationView('courses')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      organizationView === 'courses'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Courses
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOrganizationView('instructors')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      organizationView === 'instructors'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Instructors
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOrganizationView('participants')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      organizationView === 'participants'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Participants
+                  </button>
+                </div>
               </div>
+
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+                <HoverSplitImage
+                  lightSrc={activeOrganization.lightSrc}
+                  darkSrc={activeOrganization.darkSrc}
+                  alt={activeOrganization.alt}
+                  className="h-full"
+                  initialSplit={0.6}
+                />
+              </div>
+
               <p className="mt-3 text-[11px] text-muted-foreground">
-                Composition: main dashboard with a left sidebar and central
-                organization tree. Simple cards for club, teams and venues on{' '}
-                <code>bg-verno-surface</code>, connections and secondary panels
-                on <code>bg-verno-surface-light</code>, text in{' '}
-                <code>text-verno-dark</code>, highlights in{' '}
-                <code>bg-verno-accent</code>.
+                {activeOrganization.caption} Hover the image to compare light
+                and dark mode.
               </p>
             </div>
           </div>
@@ -200,18 +270,22 @@ export default function Product() {
               </div>
             </div>
             <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
-              {/* TODO: Scheduling illustration / screenshot */}
-              <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent flex items-center justify-center">
-                <span className="text-xs text-muted-foreground">
-                  Weekly schedule: training, games, courses
-                </span>
+              <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent overflow-hidden">
+                <HoverSplitImage
+                  lightSrc="/calendar-view-light.png"
+                  darkSrc="/calendar-view.png"
+                  alt="Weekly schedules overview"
+                  className="h-full"
+                  initialSplit={0.6}
+                />
               </div>
               <p className="mt-3 text-[11px] text-muted-foreground">
-                Composition: central weekly calendar on{' '}
-                <code>bg-verno-surface</code> with event blocks on{' '}
-                <code>bg-verno-surface-light</code>. Filters and selected events
-                highlighted using <code>bg-verno-accent</code>, text in{' '}
-                <code>text-verno-dark</code>.
+                Screenshot: weekly timetable with a clear hour grid, week
+                navigation and color-coded sessions (training, courses and
+                events). Each block shows the session name and instructor;
+                longer sessions (e.g. all-day events) span the full day. A left
+                sidebar keeps all club areas accessible while the calendar stays
+                the focus.
               </p>
             </div>
           </div>
@@ -233,7 +307,8 @@ export default function Product() {
                 Keep players, guardians and staff aligned.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Brings player profiles, guardians and team roles into one place.
+                Brings participant profiles, guardians and team roles into one
+                place.
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Shows who is active and where they play.
@@ -245,7 +320,7 @@ export default function Product() {
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                   <li>• Profiles for players and guardians</li>
                   <li>• Membership status by team or season</li>
-                  <li>• Simple groups for communication lists</li>
+                  <li>• Integrated user and role administration</li>
                 </ul>
               </div>
               <div className="mt-4 text-xs text-muted-foreground space-y-1">
@@ -256,26 +331,68 @@ export default function Product() {
                 {/* TODO: Swap in actual icon component */}
               </div>
             </div>
-            <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col gap-3">
-              {/* TODO: Participants illustration / screenshot */}
-              <div className="flex-1 rounded-xl bg-verno-surface-light flex">
-                <div className="w-2/5 border-r border-transparent flex flex-col justify-center items-center">
-                  <span className="text-xs text-muted-foreground">
-                    Profile card
-                  </span>
-                </div>
-                <div className="w-3/5 flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">
-                    Participants list
-                  </span>
+
+            <div className="rounded-2xl bg-verno-surface shadow p-4">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <p className="text-xs font-medium text-verno-darker">
+                  {peopleView === 'participants'
+                    ? 'Participants overview'
+                    : 'Roles & users'}
+                </p>
+
+                <div className="inline-flex rounded-xl bg-verno-bg p-1">
+                  <button
+                    type="button"
+                    onClick={() => setPeopleView('participants')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      peopleView === 'participants'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Participants
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPeopleView('users')}
+                    className={[
+                      'px-3 py-1.5 text-xs rounded-lg transition',
+                      peopleView === 'users'
+                        ? 'bg-verno-surface shadow text-verno-darker'
+                        : 'text-muted-foreground hover:text-verno-darker',
+                    ].join(' ')}
+                  >
+                    Roles & Users
+                  </button>
                 </div>
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                Composition: large profile card and compact list on{' '}
-                <code>bg-verno-surface</code>, chips and tags on{' '}
-                <code>bg-verno-surface-light</code>, text in{' '}
-                <code>text-verno-dark</code>, active membership and main actions
-                using <code>bg-verno-accent</code>.
+
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+                {peopleView === 'participants' ? (
+                  <HoverSplitImage
+                    lightSrc="/participants-list-light.png"
+                    darkSrc="/participants-list.png"
+                    alt="Participants overview table with search, filters and status badges"
+                    className="h-full"
+                    initialSplit={0.6}
+                  />
+                ) : (
+                  <HoverSplitImage
+                    lightSrc="/user-administration-light.png"
+                    darkSrc="/user-administration.png"
+                    alt="User administration overview with roles and create-user dialog"
+                    className="h-full"
+                    initialSplit={0.6}
+                  />
+                )}
+              </div>
+
+              <p className="mt-3 text-[11px] text-muted-foreground">
+                {peopleView === 'participants'
+                  ? 'Directory view with fast search, sortable columns, filters and clear active/inactive badges.'
+                  : 'Role-based access with a streamlined create-user flow and clear role/status badges.'}{' '}
+                Hover the image to compare light and dark mode.
               </p>
             </div>
           </div>
