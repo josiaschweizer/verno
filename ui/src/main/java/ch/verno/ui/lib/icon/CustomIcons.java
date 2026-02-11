@@ -3,6 +3,7 @@ package ch.verno.ui.lib.icon;
 import jakarta.annotation.Nonnull;
 
 public enum CustomIcons {
+  VERNO_LOGO(CustomIconConstants.VERNO_LOGO, "icons/verno.svg"),
   USER_COG(CustomIconConstants.USER_COG, "icons/user-cog.svg");
 
   @Nonnull private final String name;
