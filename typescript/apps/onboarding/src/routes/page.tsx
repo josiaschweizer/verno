@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Home() {
   return (
     <main className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden -m-4">
@@ -17,16 +19,16 @@ export default function Home() {
               </p>
 
               <div className="mt-8 flex items-center gap-6">
-                <a href="/product" className="btn-primary">
+                <Link to="/product" className="btn-primary">
                   Explore product
-                </a>
+                </Link>
 
-                <a
-                  href="/company"
+                <Link
+                  to="/company"
                   className="inline-flex items-center text-sm font-medium hover:underline"
                 >
                   About Verno
-                </a>
+                </Link>
               </div>
             </div>
 
