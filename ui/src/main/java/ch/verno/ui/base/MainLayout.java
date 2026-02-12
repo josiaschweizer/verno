@@ -100,9 +100,7 @@ public final class MainLayout extends AppLayout {
 
   private Component createHeader() {
     // TODO Replace with real application logo and name
-    final var appLogo = VaadinIcon.CUBES.create();
-    appLogo.setSize("48px");
-    appLogo.setColor("green");
+    final var appLogo = CustomIconUtil.create(CustomIcons.VERNO_LOGO, "72px");
 
     final var appName = new Span("Verno");
     appName.getStyle().setFontWeight(Style.FontWeight.BOLD);

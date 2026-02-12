@@ -7,7 +7,13 @@ import MenuPopover from './MenuPopover'
 import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenu from './MobileMenu'
 import HeaderLogo from './HeaderLogo'
-import { CursorArrowRaysIcon, FolderIcon } from '@heroicons/react/24/outline'
+import {
+  FolderIcon,
+  CalendarDaysIcon,
+  UsersIcon,
+  ChartBarIcon,
+} from '@heroicons/react/24/outline'
+
 import { Button } from '@/components/ui/button'
 import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
 
@@ -18,18 +24,30 @@ export interface Product {
   icon: ComponentType<SVGProps<SVGSVGElement>>
 }
 
-const products: Product[] = [
+const product: Product[] = [
   {
     name: 'Organization',
-    description: 'Manage your participants and instructors',
-    href: '/products/organization',
+    description: 'Manage members, instructors, roles and structure',
+    href: '/product#organization',
     icon: FolderIcon,
   },
   {
-    name: 'Engagement ',
-    description: 'Speak directly to your customers in a more meaningful way',
-    href: '/products/engagement',
-    icon: CursorArrowRaysIcon,
+    name: 'Scheduling & Courses',
+    description: 'Plan courses, trainings and schedules in one place',
+    href: '/product#scheduling',
+    icon: CalendarDaysIcon,
+  },
+  {
+    name: 'Participants & Memberships',
+    description: 'Keep track of participants, memberships and statuses',
+    href: '/product#participants',
+    icon: UsersIcon,
+  },
+  {
+    name: 'Reporting & Insights',
+    description: 'Get clear insights, reports and exports instantly',
+    href: '/product#reporting',
+    icon: ChartBarIcon,
   },
 ]
 
@@ -59,7 +77,7 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
-          <MenuPopover title="Products" products={products} />
+          <MenuPopover title="Product" products={product} />
           <DesktopNavLinks />
         </div>
 
@@ -80,7 +98,7 @@ export default function Header() {
         className="lg:hidden"
       >
         <MobileMenu
-          products={products}
+          products={product}
           onClose={() => setMobileMenuOpen(false)}
           onRegisterOpen={() => {
             setMobileMenuOpen(false)

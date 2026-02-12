@@ -44,15 +44,13 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
     final var weekCalendar = new VAWeekCalendar();
 
-    weekCalendar.addWeekStartChangeListener(weekChange -> {
-      weekCalendar.setEvents(getEventsForWeek(weekChange));
-    });
+    weekCalendar.addWeekStartChangeListener(weekChange -> weekCalendar.setEvents(getEventsForWeek(weekChange)));
 
     add(weekCalendar);
     expand(weekCalendar);
 
     weekCalendar.setEvents(getEventsForWeek(
-            LocalDate.now().with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+            LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
     ));
   }
 

@@ -18,10 +18,8 @@ import java.util.List;
 @Service
 public class AppUserSettingService implements IAppUserSettingService {
 
-  @Nonnull
-  private final AppUserSettingRepository repository;
-  @Nonnull
-  private final AppUserRepository appUserRepository;
+  @Nonnull private final AppUserSettingRepository repository;
+  @Nonnull private final AppUserRepository appUserRepository;
 
   public AppUserSettingService(@Nonnull final AppUserSettingRepository repository,
                                @Nonnull final AppUserRepository appUserRepository) {
