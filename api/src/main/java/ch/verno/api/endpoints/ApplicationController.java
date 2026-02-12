@@ -1,6 +1,7 @@
 package ch.verno.api.endpoints;
 
 import ch.verno.api.base.BaseController;
+import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
@@ -30,7 +31,18 @@ public class ApplicationController extends BaseController {
 
   @GetMapping("courseCount")
   public ResponseEntity<?> getCoursesCount() {
-    return ok(courseService.getAllCourses().size());
+    return ok(courseService.getAllCourses()
+            .stream()
+            .filter(item -> {
+              final var courseSchedule = item.getCourseSchedule();
+              if (courseSchedule == null) {
+                return false;
+              }
+
+              return courseSchedule.getStatus().equals(CourseScheduleStatus.ACTIVE);
+            })
+            .toList()
+            .size());
   }
 
 }

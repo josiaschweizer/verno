@@ -1,17 +1,80 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
 import { tenantsApi } from '@/lib/api/tenantsApi'
 
+type PeopleView = 'participants' | 'users'
+type OrganizationView =
+  | 'courseSchedules'
+  | 'courses'
+  | 'instructors'
+  | 'participants'
+
+type OrganizationItem = {
+  title: string
+  caption: string
+  alt: string
+  lightSrc: string
+  darkSrc: string
+}
+
+const organizationConfig: Record<OrganizationView, OrganizationItem> = {
+  courseSchedules: {
+    title: 'Schedules',
+    caption: 'Plan weeks and sessions with clarity.',
+    alt: 'Course schedules overview',
+    lightSrc: '/course-schedules-light.png',
+    darkSrc: '/course-schedules.png',
+  },
+  courses: {
+    title: 'Courses',
+    caption: 'Capacity, levels, weekdays and times in one place.',
+    alt: 'Courses overview',
+    lightSrc: '/courses-light.png',
+    darkSrc: '/courses.png',
+  },
+  instructors: {
+    title: 'Instructors',
+    caption: 'Contacts and assignments, always up to date.',
+    alt: 'Instructors overview',
+    lightSrc: '/instructors-light.png',
+    darkSrc: '/instructors.png',
+  },
+  participants: {
+    title: 'Participants',
+    caption: 'Search, statuses and direct links to courses.',
+    alt: 'Participants overview',
+    lightSrc: '/participants-light.png',
+    darkSrc: '/participants.png',
+  },
+}
+
+function formatCount(value: number | null): string {
+  if (value == null) return '–'
+  return Intl.NumberFormat().format(value)
+}
+
+function extractNumber(value: unknown): number | null {
+  if (typeof value === 'number') return value
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    return Number.isNaN(parsed) ? null : parsed
+  }
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const obj = value as Record<string, unknown>
+    if (typeof obj.count === 'number') return obj.count
+    if (typeof obj.total === 'number') return obj.total
+    if (typeof obj.value === 'number') return obj.value
+  }
+  return null
+}
+
 export default function Product() {
   const location = useLocation()
 
-  const [peopleView, setPeopleView] = useState<'participants' | 'users'>(
-    'participants',
-  )
-  const [organizationView, setOrganizationView] = useState<
-    'courseSchedules' | 'courses' | 'instructors' | 'participants'
-  >('courseSchedules')
+  const [peopleView, setPeopleView] = useState<PeopleView>('participants')
+  const [organizationView, setOrganizationView] =
+    useState<OrganizationView>('courseSchedules')
 
   const [tenantsCount, setTenantsCount] = useState<number | null>(null)
   const [memberCount, setMemberCount] = useState<number | null>(null)
@@ -19,28 +82,6 @@ export default function Product() {
 
   useEffect(() => {
     let cancelled = false
-
-    // Helper function to safely extract a number from various response formats
-    const extractNumber = (value: unknown): number | null => {
-      if (typeof value === 'number') return value
-      if (typeof value === 'string') {
-        const parsed = Number(value)
-        return Number.isNaN(parsed) ? null : parsed
-      }
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        const obj = value as Record<string, unknown>
-        if (typeof obj.count === 'number') {
-          return obj.count
-        }
-        if (typeof obj.total === 'number') {
-          return obj.total
-        }
-        if (typeof obj.value === 'number') {
-          return obj.value
-        }
-      }
-      return null
-    }
 
     ;(async () => {
       try {
@@ -50,18 +91,16 @@ export default function Product() {
           tenantsApi.getTotalCourseCount(),
         ])
 
-        if (!cancelled) {
-          setTenantsCount(extractNumber(t))
-          setMemberCount(extractNumber(m))
-          setCourseCount(extractNumber(c))
-        }
-      } catch (error) {
-        console.error('Failed to fetch counts:', error)
-        if (!cancelled) {
-          setTenantsCount(null)
-          setMemberCount(null)
-          setCourseCount(null)
-        }
+        if (cancelled) return
+
+        setTenantsCount(extractNumber(t))
+        setMemberCount(extractNumber(m))
+        setCourseCount(extractNumber(c))
+      } catch {
+        if (cancelled) return
+        setTenantsCount(null)
+        setMemberCount(null)
+        setCourseCount(null)
       }
     })()
 
@@ -71,60 +110,25 @@ export default function Product() {
   }, [])
 
   useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace('#', '')
-      const element = document.getElementById(id)
+    if (!location.hash) return
 
-      if (element) {
-        // timeout to ensure that page is already rendered
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }, 100)
-      }
-    }
+    const id = location.hash.replace('#', '')
+    const element = document.getElementById(id)
+    if (!element) return
+
+    const t = window.setTimeout(() => {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+
+    return () => window.clearTimeout(t)
   }, [location])
 
-  const organizationConfig: Record<
-    'courseSchedules' | 'courses' | 'instructors' | 'participants',
-    {
-      title: string
-      caption: string
-      alt: string
-      lightSrc: string
-      darkSrc: string
-    }
-  > = {
-    courseSchedules: {
-      title: 'Schedules',
-      caption: 'Plan blocks and weeks clearly.',
-      alt: 'Course schedules overview',
-      lightSrc: '/course-schedules-light.png',
-      darkSrc: '/course-schedules.png',
-    },
-    courses: {
-      title: 'Courses',
-      caption: 'Capacity, weekdays, levels and times.',
-      alt: 'Courses overview',
-      lightSrc: '/courses-light.png',
-      darkSrc: '/courses.png',
-    },
-    instructors: {
-      title: 'Instructors',
-      caption: 'Directory with contact and assignment info.',
-      alt: 'Instructors overview',
-      lightSrc: '/instructors-light.png',
-      darkSrc: '/instructors.png',
-    },
-    participants: {
-      title: 'Participants',
-      caption: 'Fast search, statuses and course links.',
-      alt: 'Participants overview',
-      lightSrc: '/participants-light.png',
-      darkSrc: '/participants.png',
-    },
-  }
+  const activeOrganization = useMemo(
+    () => organizationConfig[organizationView],
+    [organizationView],
+  )
 
-  const activeOrganization = organizationConfig[organizationView]
+  const showReporting = tenantsCount != null && tenantsCount > 1
 
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker">
@@ -143,13 +147,20 @@ export default function Product() {
                 running teams, courses and venues.
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
-                Designed for coordinators, coaches and club managers who need a
-                calm, reliable system for everyday work.
+                Built for coordinators, coaches and club managers who want a
+                calm, reliable system for everyday operations.
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-4">
-                {/* TODO: Primary CTA button */}
-                {/* TODO: Secondary CTA link */}
-              </div>
+              {/*<div className="mt-6 flex flex-wrap items-center gap-4">*/}
+              {/*  <a href="#contact" className="btn-primary">*/}
+              {/*    Request a demo*/}
+              {/*  </a>*/}
+              {/*  <a*/}
+              {/*    href="#organization"*/}
+              {/*    className="text-sm font-medium text-verno-darker hover:underline"*/}
+              {/*  >*/}
+              {/*    Explore features*/}
+              {/*  </a>*/}
+              {/*</div>*/}
             </div>
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
@@ -164,9 +175,8 @@ export default function Product() {
               </div>
 
               <p className="mt-3 text-[11px] text-muted-foreground">
-                Screenshot: dashboard with course sections, sortable participant
-                tables and quick actions (report, edit participants). Hover the
-                image to compare light and dark mode.
+                Dashboard overview with course sections, sortable tables and
+                quick actions. Hover to compare light and dark mode.
               </p>
             </div>
           </div>
@@ -175,15 +185,12 @@ export default function Product() {
         <section id="organization" aria-labelledby="organization-title">
           <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
             <div>
-              <div className="flex items-center gap-3">
-                {/* TODO: Icon for Organization (squares-2x2 / rectangle-group) */}
-                <h2
-                  id="organization-title"
-                  className="text-2xl font-semibold text-verno-darker"
-                >
-                  Organization
-                </h2>
-              </div>
+              <h2
+                id="organization-title"
+                className="text-2xl font-semibold text-verno-darker"
+              >
+                Organization
+              </h2>
               <p className="mt-3 text-sm font-medium text-verno-dark">
                 Keep clubs, teams and venues organized.
               </p>
@@ -191,8 +198,9 @@ export default function Product() {
                 Designed for clubs with many teams and locations.
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Gives you a clear, shared structure for your organization.
+                A shared structure that stays consistent across seasons.
               </p>
+
               <div className="mt-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Key points
@@ -202,13 +210,6 @@ export default function Product() {
                   <li>• Shared directory for venues and contacts</li>
                   <li>• Templates for seasons and programs</li>
                 </ul>
-              </div>
-              <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                <p>
-                  Icon suggestion: Heroicon outline <code>squares-2x2</code> or{' '}
-                  <code>rectangle-group</code>.
-                </p>
-                {/* TODO: Swap in actual icon component */}
               </div>
             </div>
 
@@ -281,8 +282,8 @@ export default function Product() {
               </div>
 
               <p className="mt-3 text-[11px] text-muted-foreground">
-                {activeOrganization.caption} Hover the image to compare light
-                and dark mode.
+                {activeOrganization.caption} Hover to compare light and dark
+                mode.
               </p>
             </div>
           </div>
@@ -291,15 +292,12 @@ export default function Product() {
         <section id="scheduling" aria-labelledby="scheduling-title">
           <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
             <div>
-              <div className="flex items-center gap-3">
-                {/* TODO: Icon for Scheduling (calendar-days / clock) */}
-                <h2
-                  id="scheduling-title"
-                  className="text-2xl font-semibold text-verno-darker"
-                >
-                  Scheduling &amp; Courses
-                </h2>
-              </div>
+              <h2
+                id="scheduling-title"
+                className="text-2xl font-semibold text-verno-darker"
+              >
+                Scheduling &amp; Courses
+              </h2>
               <p className="mt-3 text-sm font-medium text-verno-dark">
                 Plan training, matches and courses clearly.
               </p>
@@ -307,26 +305,21 @@ export default function Product() {
                 Built for weekly training, fixtures and multi-week courses.
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Helps coaches see where they are needed and when.
+                Coaches can see where they are needed and when.
               </p>
+
               <div className="mt-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Key points
                 </h3>
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                   <li>• Calendar views for teams and venues</li>
-                  <li>• Course sessions with instructors and capacity</li>
-                  <li>• Filters for training, games, events</li>
+                  <li>• Sessions with instructors and capacity</li>
+                  <li>• Filters for training, games and events</li>
                 </ul>
               </div>
-              <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                <p>
-                  Icon suggestion: Heroicon outline <code>calendar-days</code>{' '}
-                  or <code>clock</code>.
-                </p>
-                {/* TODO: Swap in actual icon component */}
-              </div>
             </div>
+
             <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
               <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent overflow-hidden">
                 <HoverSplitImage
@@ -338,12 +331,8 @@ export default function Product() {
                 />
               </div>
               <p className="mt-3 text-[11px] text-muted-foreground">
-                Screenshot: weekly timetable with a clear hour grid, week
-                navigation and color-coded sessions (training, courses and
-                events). Each block shows the session name and instructor;
-                longer sessions (e.g. all-day events) span the full day. A left
-                sidebar keeps all club areas accessible while the calendar stays
-                the focus.
+                Weekly timetable with a clear hour grid, week navigation and
+                color-coded sessions. Hover to compare light and dark mode.
               </p>
             </div>
           </div>
@@ -352,41 +341,31 @@ export default function Product() {
         <section id="participants" aria-labelledby="participants-title">
           <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
             <div>
-              <div className="flex items-center gap-3">
-                {/* TODO: Icon for Participants (users / identification) */}
-                <h2
-                  id="participants-title"
-                  className="text-2xl font-semibold text-verno-darker"
-                >
-                  Participants &amp; Memberships
-                </h2>
-              </div>
+              <h2
+                id="participants-title"
+                className="text-2xl font-semibold text-verno-darker"
+              >
+                Participants &amp; Memberships
+              </h2>
               <p className="mt-3 text-sm font-medium text-verno-dark">
                 Keep players, guardians and staff aligned.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Brings participant profiles, guardians and team roles into one
-                place.
+                Profiles, guardians and team roles in one place.
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Shows who is active and where they play.
+                See who is active and where they train.
               </p>
+
               <div className="mt-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Key points
                 </h3>
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                  <li>• Profiles for players and guardians</li>
+                  <li>• Profiles for participants and guardians</li>
                   <li>• Membership status by team or season</li>
                   <li>• Integrated user and role administration</li>
                 </ul>
-              </div>
-              <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                <p>
-                  Icon suggestion: Heroicon outline <code>users</code> or{' '}
-                  <code>identification</code>.
-                </p>
-                {/* TODO: Swap in actual icon component */}
               </div>
             </div>
 
@@ -421,7 +400,7 @@ export default function Product() {
                         : 'text-muted-foreground hover:text-verno-darker',
                     ].join(' ')}
                   >
-                    Roles & Users
+                    Roles &amp; Users
                   </button>
                 </div>
               </div>
@@ -448,105 +427,119 @@ export default function Product() {
 
               <p className="mt-3 text-[11px] text-muted-foreground">
                 {peopleView === 'participants'
-                  ? 'Directory view with fast search, sortable columns, filters and clear active/inactive badges.'
-                  : 'Role-based access with a streamlined create-user flow and clear role/status badges.'}{' '}
-                Hover the image to compare light and dark mode.
+                  ? 'Fast search, sortable columns and clear active/inactive status.'
+                  : 'Role-based access with a streamlined user creation flow.'}{' '}
+                Hover to compare light and dark mode.
               </p>
             </div>
           </div>
         </section>
 
-        {tenantsCount > 1 && (
+        {showReporting && (
           <section id="reporting" aria-labelledby="reporting-title">
             <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
               <div>
-                <div className="flex items-center gap-3">
-                  {/* TODO: Icon for Reporting (chart-bar / presentation-chart-line) */}
-                  <h2
-                    id="reporting-title"
-                    className="text-2xl font-semibold text-verno-darker"
-                  >
-                    Reporting &amp; Insights
-                  </h2>
-                </div>
+                <h2
+                  id="reporting-title"
+                  className="text-2xl font-semibold text-verno-darker"
+                >
+                  Reporting &amp; Insights
+                </h2>
                 <p className="mt-3 text-sm font-medium text-verno-dark">
-                  See attendance and capacity at a glance.
+                  Track participation and capacity trends.
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Focuses on participation across teams, venues and courses.
+                  Simple metrics to understand attendance patterns and resource
+                  usage across your organization.
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Helps leaders prepare simple updates for boards and
-                  committees.
+                  Export data for board meetings and season planning.
                 </p>
+
                 <div className="mt-4">
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Key points
                   </h3>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                    <li>• Attendance by team and course</li>
-                    <li>• Venue and field utilization trends</li>
-                    <li>• Exports for board reports</li>
+                    <li>• Attendance and enrollment tracking</li>
+                    <li>• Venue and resource utilization</li>
+                    <li>• Season-over-season comparisons</li>
                   </ul>
                 </div>
-                <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                  <p>
-                    Icon suggestion: Heroicon outline <code>chart-bar</code> or{' '}
-                    <code>presentation-chart-line</code>.
-                  </p>
-                  {/* TODO: Swap in actual icon component */}
-                </div>
               </div>
-              <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col gap-3">
-                {/* TODO: Reporting illustration / screenshot */}
-                <div className="flex-1 rounded-xl bg-verno-surface-light p-3 flex flex-col gap-3">
-                  <div className="h-20 rounded-md bg-verno-bg flex items-center justify-center">
-                    <span className="text-xs text-muted-foreground">
-                      Attendance chart
-                    </span>
+
+              <div className="rounded-2xl bg-verno-surface shadow p-4">
+                <div className="space-y-3">
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
+                      <div className="text-2xl font-bold text-verno-darker">
+                        {formatCount(tenantsCount)}
+                      </div>
+                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                        Active clubs
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
+                      <div className="text-2xl font-bold text-verno-darker">
+                        {formatCount(memberCount)}
+                      </div>
+                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                        Total participants
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
+                      <div className="text-2xl font-bold text-verno-darker">
+                        {formatCount(courseCount)}
+                      </div>
+                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                        Running courses
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-md bg-verno-bg py-2 text-center">
-                      <div className="text-sm font-semibold text-verno-darker">
-                        {tenantsCount ?? '–'}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground">
-                        Tenants
-                      </div>
+
+                  <div className="rounded-xl bg-verno-surface-light p-4 border border-transparent">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-xs font-medium text-verno-darker">
+                        Attendance overview
+                      </p>
+                      <span className="text-[10px] text-muted-foreground">
+                        Last 6 months
+                      </span>
                     </div>
 
-                    <div className="rounded-md bg-verno-bg py-2 text-center">
-                      <div className="text-sm font-semibold text-verno-darker">
-                        {memberCount ?? '–'}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground">
-                        Members
-                      </div>
-                    </div>
-
-                    <div className="rounded-md bg-verno-bg py-2 text-center">
-                      <div className="text-sm font-semibold text-verno-darker">
-                        {courseCount ?? '–'}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground">
-                        Courses
-                      </div>
+                    <div className="flex items-end justify-between gap-2 h-32">
+                      {[65, 78, 82, 75, 88, 92].map((height, i) => (
+                        <div
+                          key={i}
+                          className="flex-1 flex flex-col items-center gap-2"
+                        >
+                          <div className="w-full flex items-end justify-center h-full">
+                            <div
+                              className="w-full rounded-t-md bg-verno-accent/70 hover:bg-verno-accent transition-colors"
+                              style={{ height: `${height}%` }}
+                            />
+                          </div>
+                          <span className="text-[9px] text-muted-foreground">
+                            {['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'][i]}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-                <p className="text-[11px] text-muted-foreground">
-                  Composition: dashboard on <code>bg-verno-surface</code> with
-                  simple chart and metric cards on{' '}
-                  <code>bg-verno-surface-light</code>. Key data points
-                  highlighted using <code>bg-verno-accent</code>, labels in{' '}
-                  <code>text-verno-dark</code>.
+
+                <p className="mt-3 text-[11px] text-muted-foreground">
+                  Metrics showing club activity, participation and course
+                  demand.
                 </p>
               </div>
             </div>
           </section>
         )}
 
-        <section aria-labelledby="closing-cta-title">
+        <section id="contact" aria-labelledby="closing-cta-title">
           <div className="rounded-2xl bg-verno-surface px-6 py-8 shadow flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h2
@@ -556,14 +549,21 @@ export default function Product() {
                 Start with one season and grow
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Begin with a single season, team or venue and add more once your
-                staff are comfortable.
+                Begin with a single team or venue, then expand as your staff get
+                comfortable.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              {/* TODO: Closing primary CTA (use btn-primary style) */}
-              {/* TODO: Optional secondary text link */}
-            </div>
+            {/*<div className="flex flex-wrap items-center gap-4">*/}
+            {/*  <a href="#contact" className="btn-primary">*/}
+            {/*    Get in touch*/}
+            {/*  </a>*/}
+            {/*  <a*/}
+            {/*    href="#organization"*/}
+            {/*    className="text-sm font-medium text-verno-darker hover:underline"*/}
+            {/*  >*/}
+            {/*    View features*/}
+            {/*  </a>*/}
+            {/*</div>*/}
           </div>
         </section>
       </div>
