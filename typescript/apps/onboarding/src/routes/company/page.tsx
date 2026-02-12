@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
@@ -88,12 +89,12 @@ export default function Company() {
             {/*<a href="#contact" className="btn-primary">*/}
             {/*  Contact*/}
             {/*</a>*/}
-            <a
-              href="/product#organization"
+            <Link
+              to="/product#organization"
               className="inline-flex items-center text-sm font-medium text-verno-darker hover:underline"
             >
               Product overview
-            </a>
+            </Link>
           </div>
         </div>
       </div>
