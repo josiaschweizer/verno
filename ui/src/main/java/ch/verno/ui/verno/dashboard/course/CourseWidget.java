@@ -27,6 +27,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Nonnull private final GlobalInterface globalInterface;
 
   @Nonnull private final CourseDto currentCourse;
+  private final IParticipantService participantService;
 
   @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
@@ -36,9 +37,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
     this.globalInterface = globalInterface;
 
     final var courseService = globalInterface.getService(ICourseService.class);
-    this.currentCourse = courseService.getCourseById(currentCourseId);
+    currentCourse = courseService.getCourseById(currentCourseId);
 
-    final var participantService = globalInterface.getService(IParticipantService.class);
+    participantService = globalInterface.getService(IParticipantService.class);
     participantsInCourse = participantService.findParticipants(
             ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
     );
@@ -90,7 +91,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Override
   protected void initContent() {
     if (!participantsInCourse.isEmpty()) {
-      this.participantsGrid = new ParticipantsGrid(globalInterface,
+      participantsGrid = new ParticipantsGrid(globalInterface,
               false,
               false) {
 
@@ -118,11 +119,12 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Override
   protected void refresh() {
     if (participantsGrid == null) {
+      participantsInCourse = participantService.findParticipants(ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null));
       return;
     }
 
-    this.participantsGrid.setFilter(participantsGrid.getFilter());
-    this.participantsInCourse = participantsGrid.getGrid()
+    participantsGrid.setFilter(participantsGrid.getFilter());
+    participantsInCourse = participantsGrid.getGrid()
             .getDataProvider()
             .fetch(new Query<>())
             .toList();
