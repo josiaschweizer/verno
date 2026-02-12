@@ -15,8 +15,10 @@ public class ApiUrl {
 
   public static final String DEBUG = BASE_API + "/_debug";
   public static final String TENANTS = BASE_API + "/tenants";
+  public static final String APPLICATION = BASE_API + "/application";
 
-  public static final String DISPOSITION_INLINE = "?disposition=inline";
+  public static final String COUNT = "/count";
+
   public static final String DISPOSITION_ATTACHMENT = "?disposition=attachment";
-
+  public static final String DISPOSITION_INLINE = "?disposition=inline";
 }

@@ -53,4 +53,8 @@ public class TenantRepository {
     return repository.save(entity);
   }
 
+  public long count() {
+    return repository.count();
+  }
+
 }

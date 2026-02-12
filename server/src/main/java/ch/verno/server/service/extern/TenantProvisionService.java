@@ -75,4 +75,8 @@ public class TenantProvisionService {
 
     return new CreateTenantResponse(newId, req.tenantKey(), req.subdomain(), false, VernoConstants.STATUS_CREATED);
   }
+
+  public long getCountOfTenants() {
+    return tenantRepository.count();
+  }
 }

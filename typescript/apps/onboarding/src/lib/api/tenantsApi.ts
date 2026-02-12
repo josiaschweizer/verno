@@ -63,4 +63,25 @@ export const tenantsApi = {
       path: `/api/v1/tenants/${encodeURIComponent(tenantKey)}/reconcile`,
     })
   },
+
+  async getCountOfTenants() {
+    return await client.request<any>({
+      method: 'GET',
+      path: `/api/v1/tenants/count`,
+    })
+  },
+
+  async getTotalMemberCount() {
+    return await client.request<any>({
+      method: 'GET',
+      path: `/api/v1/application/memberCount`,
+    })
+  },
+
+  async getTotalCourseCount() {
+    return await client.request<any>({
+      method: 'GET',
+      path: `/api/v1/application/courseCount`,
+    })
+  },
 }

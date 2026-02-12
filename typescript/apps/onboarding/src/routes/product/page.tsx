@@ -1,16 +1,74 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
+import { tenantsApi } from '@/lib/api/tenantsApi'
 
 export default function Product() {
   const location = useLocation()
+
   const [peopleView, setPeopleView] = useState<'participants' | 'users'>(
     'participants',
   )
-
   const [organizationView, setOrganizationView] = useState<
     'courseSchedules' | 'courses' | 'instructors' | 'participants'
   >('courseSchedules')
+
+  const [tenantsCount, setTenantsCount] = useState<number | null>(null)
+  const [memberCount, setMemberCount] = useState<number | null>(null)
+  const [courseCount, setCourseCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    // Helper function to safely extract a number from various response formats
+    const extractNumber = (value: unknown): number | null => {
+      if (typeof value === 'number') return value
+      if (typeof value === 'string') {
+        const parsed = Number(value)
+        return Number.isNaN(parsed) ? null : parsed
+      }
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const obj = value as Record<string, unknown>
+        if (typeof obj.count === 'number') {
+          return obj.count
+        }
+        if (typeof obj.total === 'number') {
+          return obj.total
+        }
+        if (typeof obj.value === 'number') {
+          return obj.value
+        }
+      }
+      return null
+    }
+
+    ;(async () => {
+      try {
+        const [t, m, c] = await Promise.all([
+          tenantsApi.getCountOfTenants(),
+          tenantsApi.getTotalMemberCount(),
+          tenantsApi.getTotalCourseCount(),
+        ])
+
+        if (!cancelled) {
+          setTenantsCount(extractNumber(t))
+          setMemberCount(extractNumber(m))
+          setCourseCount(extractNumber(c))
+        }
+      } catch (error) {
+        console.error('Failed to fetch counts:', error)
+        if (!cancelled) {
+          setTenantsCount(null)
+          setMemberCount(null)
+          setCourseCount(null)
+        }
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     if (location.hash) {
@@ -398,81 +456,95 @@ export default function Product() {
           </div>
         </section>
 
-        <section id="reporting" aria-labelledby="reporting-title">
-          <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
-            <div>
-              <div className="flex items-center gap-3">
-                {/* TODO: Icon for Reporting (chart-bar / presentation-chart-line) */}
-                <h2
-                  id="reporting-title"
-                  className="text-2xl font-semibold text-verno-darker"
-                >
-                  Reporting &amp; Insights
-                </h2>
-              </div>
-              <p className="mt-3 text-sm font-medium text-verno-dark">
-                See attendance and capacity at a glance.
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Focuses on participation across teams, venues and courses.
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Helps leaders prepare simple updates for boards and committees.
-              </p>
-              <div className="mt-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Key points
-                </h3>
-                <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                  <li>• Attendance by team and course</li>
-                  <li>• Venue and field utilization trends</li>
-                  <li>• Exports for board reports</li>
-                </ul>
-              </div>
-              <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                <p>
-                  Icon suggestion: Heroicon outline <code>chart-bar</code> or{' '}
-                  <code>presentation-chart-line</code>.
+        {tenantsCount > 1 && (
+          <section id="reporting" aria-labelledby="reporting-title">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+              <div>
+                <div className="flex items-center gap-3">
+                  {/* TODO: Icon for Reporting (chart-bar / presentation-chart-line) */}
+                  <h2
+                    id="reporting-title"
+                    className="text-2xl font-semibold text-verno-darker"
+                  >
+                    Reporting &amp; Insights
+                  </h2>
+                </div>
+                <p className="mt-3 text-sm font-medium text-verno-dark">
+                  See attendance and capacity at a glance.
                 </p>
-                {/* TODO: Swap in actual icon component */}
-              </div>
-            </div>
-            <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col gap-3">
-              {/* TODO: Reporting illustration / screenshot */}
-              <div className="flex-1 rounded-xl bg-verno-surface-light p-3 flex flex-col gap-3">
-                <div className="h-20 rounded-md bg-verno-bg flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">
-                    Attendance chart
-                  </span>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Focuses on participation across teams, venues and courses.
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Helps leaders prepare simple updates for boards and
+                  committees.
+                </p>
+                <div className="mt-4">
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Key points
+                  </h3>
+                  <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                    <li>• Attendance by team and course</li>
+                    <li>• Venue and field utilization trends</li>
+                    <li>• Exports for board reports</li>
+                  </ul>
                 </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="rounded-md bg-verno-bg py-2 text-center">
-                    <span className="text-[11px] text-muted-foreground">
-                      Total members
-                    </span>
-                  </div>
-                  <div className="rounded-md bg-verno-bg py-2 text-center">
-                    <span className="text-[11px] text-muted-foreground">
-                      Avg attendance
-                    </span>
-                  </div>
-                  <div className="rounded-md bg-verno-bg py-2 text-center">
-                    <span className="text-[11px] text-muted-foreground">
-                      Field usage
-                    </span>
-                  </div>
+                <div className="mt-4 text-xs text-muted-foreground space-y-1">
+                  <p>
+                    Icon suggestion: Heroicon outline <code>chart-bar</code> or{' '}
+                    <code>presentation-chart-line</code>.
+                  </p>
+                  {/* TODO: Swap in actual icon component */}
                 </div>
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                Composition: dashboard on <code>bg-verno-surface</code> with
-                simple chart and metric cards on{' '}
-                <code>bg-verno-surface-light</code>. Key data points highlighted
-                using <code>bg-verno-accent</code>, labels in{' '}
-                <code>text-verno-dark</code>.
-              </p>
+              <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col gap-3">
+                {/* TODO: Reporting illustration / screenshot */}
+                <div className="flex-1 rounded-xl bg-verno-surface-light p-3 flex flex-col gap-3">
+                  <div className="h-20 rounded-md bg-verno-bg flex items-center justify-center">
+                    <span className="text-xs text-muted-foreground">
+                      Attendance chart
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="rounded-md bg-verno-bg py-2 text-center">
+                      <div className="text-sm font-semibold text-verno-darker">
+                        {tenantsCount ?? '–'}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">
+                        Tenants
+                      </div>
+                    </div>
+
+                    <div className="rounded-md bg-verno-bg py-2 text-center">
+                      <div className="text-sm font-semibold text-verno-darker">
+                        {memberCount ?? '–'}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">
+                        Members
+                      </div>
+                    </div>
+
+                    <div className="rounded-md bg-verno-bg py-2 text-center">
+                      <div className="text-sm font-semibold text-verno-darker">
+                        {courseCount ?? '–'}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">
+                        Courses
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  Composition: dashboard on <code>bg-verno-surface</code> with
+                  simple chart and metric cards on{' '}
+                  <code>bg-verno-surface-light</code>. Key data points
+                  highlighted using <code>bg-verno-accent</code>, labels in{' '}
+                  <code>text-verno-dark</code>.
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section aria-labelledby="closing-cta-title">
           <div className="rounded-2xl bg-verno-surface px-6 py-8 shadow flex flex-col md:flex-row md:items-center md:justify-between gap-4">

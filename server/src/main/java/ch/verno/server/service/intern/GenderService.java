@@ -15,16 +15,15 @@ import java.util.List;
 @Service
 public class GenderService implements IGenderService {
 
-  @Nonnull
-  private final GenderRepository genderRepository;
+  @Nonnull private final GenderRepository genderRepository;
 
   public GenderService(@Nonnull final GenderRepository genderRepository) {
     this.genderRepository = genderRepository;
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional(readOnly = true)
   public GenderDto getGenderById(@Nonnull final Long id) {
     final var genderOptional = genderRepository.findById(id);
     if (genderOptional.isEmpty()) {
@@ -35,8 +34,8 @@ public class GenderService implements IGenderService {
   }
 
   @Nonnull
-  @Transactional(readOnly = true)
   @Override
+  @Transactional(readOnly = true)
   public List<GenderDto> getAllGenders() {
     return genderRepository.findAll().stream().map(GenderMapper::toDto).toList();
   }
