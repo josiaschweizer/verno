@@ -36,9 +36,9 @@ export default function Company() {
   )
 
   return (
-    <div className="h-full bg-verno-bg text-verno-darker overflow-hidden -m-4">
-      <div className="mx-auto h-full max-w-5xl px-4 flex flex-col justify-center">
-        <section className="space-y-8">
+    <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden -m-4">
+      <div className="mx-auto min-h-full max-w-5xl px-4 pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
+        <section className="space-y-6 md:space-y-8">
           <h1 className="text-3xl md:text-4xl font-semibold text-verno-darker">
             About Verno
           </h1>
@@ -80,7 +80,7 @@ export default function Company() {
           </div>
         </section>
 
-        <div className="mt-8 shrink-0 flex flex-wrap items-center gap-4 justify-between">
+        <div className="mt-6 shrink-0 flex flex-wrap items-center gap-4 justify-between">
           <p className="text-xs text-muted-foreground">
             Switzerland-first mindset. Long-term partnerships with clubs.
           </p>

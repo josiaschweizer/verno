@@ -131,7 +131,7 @@ export default function Product() {
   const showReporting = tenantsCount != null && tenantsCount > 1
 
   return (
-    <main className="min-h-screen bg-verno-bg text-verno-darker">
+    <main className="min-h-screen bg-verno-bg text-verno-darker overflow-x-hidden">
       <div className="mx-auto max-w-6xl px-4 py-16 space-y-24">
         <section aria-labelledby="verno-hero-title">
           <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-center">
@@ -164,7 +164,7 @@ export default function Product() {
             </div>
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
-              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                 <HoverSplitImage
                   lightSrc="/dashboard-light.png"
                   darkSrc="/dashboard.png"
@@ -215,11 +215,25 @@ export default function Product() {
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
               <div className="flex items-center justify-between gap-3 mb-3">
-                <p className="text-xs font-medium text-verno-darker">
+                <p className="text-xs font-medium text-verno-darker shrink-0">
                   {activeOrganization.title}
                 </p>
 
-                <div className="inline-flex rounded-xl bg-verno-bg p-1">
+                <select
+                  value={organizationView}
+                  onChange={(e) =>
+                    setOrganizationView(e.target.value as OrganizationView)
+                  }
+                  className="md:hidden text-xs rounded-lg bg-verno-bg border border-border px-3 py-1.5 text-verno-darker focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="courseSchedules">Schedules</option>
+                  <option value="courses">Courses</option>
+                  <option value="instructors">Instructors</option>
+                  <option value="participants">Participants</option>
+                </select>
+
+                {/* Desktop: Tabs */}
+                <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
                   <button
                     type="button"
                     onClick={() => setOrganizationView('courseSchedules')}
@@ -271,13 +285,14 @@ export default function Product() {
                 </div>
               </div>
 
-              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                 <HoverSplitImage
                   lightSrc={activeOrganization.lightSrc}
                   darkSrc={activeOrganization.darkSrc}
                   alt={activeOrganization.alt}
-                  className="h-full"
+                  className="w-full h-full"
                   initialSplit={0.6}
+                  objectFit="contain"
                 />
               </div>
 
@@ -371,13 +386,24 @@ export default function Product() {
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
               <div className="flex items-center justify-between gap-3 mb-3">
-                <p className="text-xs font-medium text-verno-darker">
+                <p className="text-xs font-medium text-verno-darker shrink-0">
                   {peopleView === 'participants'
                     ? 'Participants overview'
                     : 'Roles & users'}
                 </p>
 
-                <div className="inline-flex rounded-xl bg-verno-bg p-1">
+                {/* Mobile: Dropdown */}
+                <select
+                  value={peopleView}
+                  onChange={(e) => setPeopleView(e.target.value as PeopleView)}
+                  className="md:hidden text-xs rounded-lg bg-verno-bg border border-border px-3 py-1.5 text-verno-darker focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="participants">Participants</option>
+                  <option value="users">Roles &amp; Users</option>
+                </select>
+
+                {/* Desktop: Tabs */}
+                <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
                   <button
                     type="button"
                     onClick={() => setPeopleView('participants')}
@@ -405,7 +431,7 @@ export default function Product() {
                 </div>
               </div>
 
-              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[16/10]">
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                 {peopleView === 'participants' ? (
                   <HoverSplitImage
                     lightSrc="/participants-list-light.png"
@@ -470,7 +496,7 @@ export default function Product() {
 
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="space-y-3">
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
                       <div className="text-2xl font-bold text-verno-darker">
                         {formatCount(tenantsCount)}

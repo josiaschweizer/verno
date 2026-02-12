@@ -8,6 +8,7 @@ type HoverSplitImageProps = {
   className?: string
   initialSplit?: number
   showHandle?: boolean
+  objectFit?: 'cover' | 'contain'
 }
 
 export function HoverSplitImage({
@@ -17,6 +18,7 @@ export function HoverSplitImage({
   className = '',
   initialSplit = 0.55,
   showHandle = true,
+  objectFit = 'cover',
 }: HoverSplitImageProps) {
   const ref = useRef<HTMLDivElement | null>(null)
   const [split, setSplit] = useState<number>(initialSplit)
@@ -78,7 +80,7 @@ export function HoverSplitImage({
         <img
           src={lightSrc}
           alt={alt}
-          className="block w-full h-full object-cover select-none pointer-events-none"
+          className={`block w-full h-full object-${objectFit} select-none pointer-events-none`}
           draggable={false}
         />
 
@@ -87,7 +89,7 @@ export function HoverSplitImage({
             src={darkSrc}
             alt=""
             aria-hidden="true"
-            className="block w-full h-full object-cover select-none pointer-events-none"
+            className={`block w-full h-full object-${objectFit} select-none pointer-events-none`}
             draggable={false}
           />
         </div>
