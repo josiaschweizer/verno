@@ -168,6 +168,13 @@ public class ParticipantService implements IParticipantService {
   @Nonnull
   @Override
   @Transactional(readOnly = true)
+  public List<ParticipantDto> findParticipants(@Nonnull final ParticipantFilter filter) {
+    return findParticipants(filter, 0, Integer.MAX_VALUE, List.of());
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
   public List<ParticipantDto> findParticipants(@Nonnull final ParticipantFilter filter,
                                                final int offset,
                                                final int limit,

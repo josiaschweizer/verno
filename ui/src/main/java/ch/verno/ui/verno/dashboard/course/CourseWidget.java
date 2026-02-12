@@ -4,12 +4,14 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.Query;
@@ -22,11 +24,12 @@ import java.util.stream.Stream;
 
 public class CourseWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final CourseDto currentCourse;
   @Nonnull private final GlobalInterface globalInterface;
 
+  @Nonnull private final CourseDto currentCourse;
+
   @Nullable private ParticipantsGrid participantsGrid;
-  @Nullable private List<ParticipantDto> participantsInCurrentCourse;
+  @Nonnull private List<ParticipantDto> participantsInCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
@@ -34,6 +37,11 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var courseService = globalInterface.getService(ICourseService.class);
     this.currentCourse = courseService.getCourseById(currentCourseId);
+
+    final var participantService = globalInterface.getService(IParticipantService.class);
+    participantsInCourse = participantService.findParticipants(
+            ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
+    );
 
     build();
   }
@@ -50,9 +58,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
       final var dialog = new CourseReportDialog(
               globalInterface,
               currentCourse,
-              participantsInCurrentCourse != null ?
-                      participantsInCurrentCourse :
-                      List.of());
+              participantsInCourse);
       dialog.open();
     });
 
@@ -61,9 +67,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
               final var dialog = new AssignToCourseDialog(
                       globalInterface,
                       currentCourse.getId(),
-                      participantsInCurrentCourse != null
-                              ? participantsInCurrentCourse.stream().map(ParticipantDto::getId).toList()
-                              : List.of()
+                      participantsInCourse.stream().map(ParticipantDto::getId).toList()
               );
 
               dialog.addClosedListener(ev -> refresh());
@@ -85,26 +89,30 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    this.participantsGrid = new ParticipantsGrid(globalInterface,
-            false,
-            false) {
+    if (!participantsInCourse.isEmpty()) {
+      this.participantsGrid = new ParticipantsGrid(globalInterface,
+              false,
+              false) {
 
-      @Nonnull
-      @Override
-      protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
-                                             @Nonnull final ParticipantFilter filter) {
-        if (currentCourse.getId() != null) {
-          filter.setCourseIds(Set.of(currentCourse.getId()));
+        @Nonnull
+        @Override
+        protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
+                                               @Nonnull final ParticipantFilter filter) {
+          if (currentCourse.getId() != null) {
+            filter.setCourseIds(Set.of(currentCourse.getId()));
+          }
+
+          final var participants = super.fetch(query, filter).toList();
+          CourseWidget.this.participantsInCourse = participants;
+          return participants.stream();
         }
+      };
 
-        final var participants = super.fetch(query, filter).toList();
-        CourseWidget.this.participantsInCurrentCourse = participants;
-        return participants.stream();
-      }
-    };
-
-    participantsGrid.getGrid().setAllRowsVisible(true);
-    add(participantsGrid);
+      participantsGrid.getGrid().setAllRowsVisible(true);
+      add(participantsGrid);
+    } else {
+      add(new Text(getTranslation("shared.no.participants.assigned.to.this.course.yet")));
+    }
   }
 
   @Override
@@ -113,8 +121,8 @@ public class CourseWidget extends VAAccordionWidgetBase {
       return;
     }
 
-    participantsGrid.setFilter(participantsGrid.getFilter());
-    participantsInCurrentCourse = participantsGrid.getGrid()
+    this.participantsGrid.setFilter(participantsGrid.getFilter());
+    this.participantsInCourse = participantsGrid.getGrid()
             .getDataProvider()
             .fetch(new Query<>())
             .toList();

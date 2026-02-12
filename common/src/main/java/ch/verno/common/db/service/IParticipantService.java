@@ -30,6 +30,9 @@ public interface IParticipantService {
   List<ParticipantDto> getAllParticipants();
 
   @Nonnull
+  List<ParticipantDto> findParticipants(@Nonnull final ParticipantFilter filter);
+
+  @Nonnull
   List<ParticipantDto> findParticipants(@Nonnull ParticipantFilter filter,
                                         int offset,
                                         int limit,

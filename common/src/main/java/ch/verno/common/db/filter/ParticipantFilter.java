@@ -55,6 +55,11 @@ public class ParticipantFilter {
   }
 
   @Nonnull
+  public static ParticipantFilter fromCourseId(@Nullable final Set<Long> courseIds) {
+    return new ParticipantFilter(null, null, null, null, courseIds, null, null, null);
+  }
+
+  @Nonnull
   public static ParticipantFilter fromSearchText(@Nullable final String searchText) {
     return fromSearchTextAndActive(searchText, null);
   }
