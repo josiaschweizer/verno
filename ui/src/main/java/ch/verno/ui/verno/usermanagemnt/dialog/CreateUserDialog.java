@@ -12,7 +12,9 @@ import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationResult;
 import jakarta.annotation.Nonnull;
 
 import java.util.*;
@@ -51,14 +53,9 @@ public class CreateUserDialog extends VADialog {
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var username = entryFactory.createTextEntry(
-            CreateUserDto::getUsername,
-            CreateUserDto::setUsername,
-            binder,
-            Optional.of(getTranslation("shared.username.is.required")),
-            getTranslation("shared.username")
-    );
-    final var email = entryFactory.createTextEntry(
+    final var username = createUserNameField();
+
+    final var email = entryFactory.createEmailEntry(
             CreateUserDto::getEmail,
             CreateUserDto::setEmail,
             binder,
@@ -108,6 +105,31 @@ public class CreateUserDialog extends VADialog {
     );
 
     return createHorizontalLayoutFromComponents(username, email, firstname, lastname, password, role);
+  }
+
+  @Nonnull
+  private TextField createUserNameField() {
+    final var username = new TextField(getTranslation("shared.username"));
+    username.setWidthFull();
+    username.setValueChangeMode(com.vaadin.flow.data.value.ValueChangeMode.EAGER);
+
+    final var usernameBinding = binder.forField(username)
+            .asRequired(getTranslation("shared.username.is.required"))
+            .withValidator((value, context) -> {
+              if (value == null || value.isBlank()) {
+                return ValidationResult.error(getTranslation("shared.username.is.required"));
+              }
+              final var userNameExists = appUserService.findByUserName(value);
+              if (userNameExists.isEmpty()) {
+                return ValidationResult.ok();
+              } else if (formMode == FormMode.EDIT && value.equals(oldUserName)) {
+                return ValidationResult.ok(); // allow unchanged username in edit mode
+              } else {
+                return ValidationResult.error(getTranslation("shared.username.0.already.exists", value));
+              }
+            });
+    usernameBinding.bind(CreateUserDto::getUsername, CreateUserDto::setUsername);
+    return username;
   }
 
   @Nonnull

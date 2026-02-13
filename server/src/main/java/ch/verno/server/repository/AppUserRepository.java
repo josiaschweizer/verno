@@ -31,25 +31,18 @@ public class AppUserRepository {
   }
 
   @Nonnull
-  public Optional<AppUserEntity> findByUsername(@Nonnull final String username,
-                                                @Nonnull final Long tenantId) {
-    return jpaRepository.findByUsernameAndTenant_Id(username, tenantId);
+  public Optional<AppUserEntity> findByUsername(@Nonnull final String username) {
+    return jpaRepository.findByUsername(username);
   }
 
   @Nonnull
-  public Optional<AppUserEntity> findByUsernameOrEmail(@Nonnull final String usernameOrEmail,
-                                                       @Nonnull final Long tenantId) {
-    final var userByUsername = jpaRepository.findByUsernameAndTenant_Id(usernameOrEmail, tenantId);
+  public Optional<AppUserEntity> findByUsernameOrEmail(@Nonnull final String usernameOrEmail) {
+    final var userByUsername = jpaRepository.findByUsername(usernameOrEmail);
     if (userByUsername.isPresent()) {
       return userByUsername;
     }
 
-    return jpaRepository.findByEmailAndTenant_Id(usernameOrEmail, tenantId);
-  }
-
-  @Nonnull
-  public Optional<AppUserEntity> findByUsernameWithoutMandantContext(@Nonnull final String username) {
-    return jpaRepository.findByUsername(username);
+    return jpaRepository.findByEmail(usernameOrEmail);
   }
 
   @Nonnull

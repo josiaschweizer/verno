@@ -14,7 +14,6 @@ public interface SpringDataAppUserJpaRepository extends
   @Nonnull
   Optional<AppUserEntity> findByUsername(@Nonnull final String username);
 
-  Optional<AppUserEntity> findByUsernameAndTenant_Id(@Nonnull final String username, @Nonnull final Long tenantId);
+  Optional<AppUserEntity> findByEmail(@Nonnull final String email);
 
-  Optional<AppUserEntity> findByEmailAndTenant_Id(@Nonnull final String email, @Nonnull final Long tenantId);
 }
