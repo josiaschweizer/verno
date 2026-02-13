@@ -5,11 +5,10 @@ import org.vaadin.addons.tatu.ColorPicker;
 
 public class VAColorPicker extends ColorPicker {
 
-  public VAColorPicker() {
-  }
-
   public VAColorPicker(@Nonnull final String label) {
     super();
     setLabel(label);
+    setNoClear(true);
   }
+  
 }

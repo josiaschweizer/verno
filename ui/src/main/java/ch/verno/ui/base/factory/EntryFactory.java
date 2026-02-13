@@ -31,6 +31,7 @@ import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.vaadin.addons.tatu.ColorPicker;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -322,6 +323,7 @@ public class EntryFactory<DTO> {
                                               @Nonnull final String label) {
     final var colorPicker = new VAColorPicker(label);
     colorPicker.setPresets(ColorPresets.getDefaultColorPresets());
+    colorPicker.setInputMode(ColorPicker.InputMode.PRESETANDCSS);
     colorPicker.setWidthFull();
     bindEntry(colorPicker, valueProvider, valueSetter, binder, required);
     return colorPicker;
