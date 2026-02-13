@@ -136,7 +136,7 @@ public class CreateUserDialog extends VADialog {
   @Override
   protected Collection<Button> createActionButtons() {
     final var createButton = createSaveButton();
-    final var cancelButton = new Button("Cancel", event -> close());
+    final var cancelButton = new Button(getTranslation("shared.cancel"), event -> close());
 
     return List.of(cancelButton, createButton);
   }
