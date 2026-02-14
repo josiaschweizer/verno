@@ -1,0 +1,24 @@
+package ch.verno.common.gate.servergate;
+
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.api.dto.internal.file.temp.FileDto;
+import jakarta.annotation.Nonnull;
+
+import java.util.List;
+
+public interface ReportServerGate {
+
+  String generateCourseReport(@Nonnull CourseDto course,
+                              @Nonnull List<ParticipantDto> participants);
+
+  String generateParticipantsReport();
+
+  FileDto loadTempFile(@Nonnull String token);
+
+  void deleteTempFile(@Nonnull String token);
+
+  @Nonnull
+  String storeFile(@Nonnull String filename,
+                   @Nonnull byte[] fileBytes);
+}

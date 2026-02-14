@@ -1,9 +1,9 @@
 package ch.verno.server;
 
-import ch.verno.common.file.FileServerGate;
-import ch.verno.common.file.dto.CsvMapDto;
-import ch.verno.common.file.dto.FileDto;
-import ch.verno.common.server.ServerGate;
+import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
+import ch.verno.common.api.dto.internal.file.temp.FileDto;
+import ch.verno.common.gate.servergate.ServerGate;
 import ch.verno.common.server.io.importing.CsvSchema;
 import ch.verno.server.io.importing.SchemaResolver;
 import jakarta.annotation.Nonnull;
@@ -15,16 +15,16 @@ import java.util.List;
 @Service
 public class ServerGateImpl implements ServerGate {
 
-  @Nonnull private final FileServerGate fileServerGate;
+  @Nonnull private final TempFileServerGate tempFileServerGate;
 
-  public ServerGateImpl(@Nonnull final FileServerGate fileServerGate) {
-    this.fileServerGate = fileServerGate;
+  public ServerGateImpl(@Nonnull final TempFileServerGate tempFileServerGate) {
+    this.tempFileServerGate = tempFileServerGate;
   }
 
   @Nonnull
   @Override
   public CsvSchema resolveCsvSchema(@Nonnull final String fileToken) {
-    final var schemaResolver = new SchemaResolver(fileServerGate);
+    final var schemaResolver = new SchemaResolver(tempFileServerGate);
     return schemaResolver.resolveCsvSchema(fileToken);
   }
 
@@ -32,7 +32,7 @@ public class ServerGateImpl implements ServerGate {
   @Override
   public FileDto generateFileFromCsv(@Nonnull final String filename,
                                      @NonNull final List<CsvMapDto> rows) {
-    return fileServerGate.parseRows(rows, filename);
+    return tempFileServerGate.parseRows(rows, filename);
   }
 
 }

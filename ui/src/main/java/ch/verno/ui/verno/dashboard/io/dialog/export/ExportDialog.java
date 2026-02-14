@@ -1,12 +1,12 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
-import ch.verno.common.file.FileServerGate;
+import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.server.ServerGate;
+import ch.verno.common.gate.servergate.ServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.dialog.VADialog;
-import ch.verno.ui.base.file.csv.CsvPreview;
+import ch.verno.ui.base.components.file.csv.CsvPreview;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -21,13 +21,13 @@ import java.util.List;
 public class ExportDialog<T> extends VADialog {
 
   @Nonnull private final ServerGate serverGate;
-  @Nonnull private final FileServerGate fileServerGate;
+  @Nonnull private final TempFileServerGate tempFileServerGate;
   @Nonnull private String fileToken;
 
   public ExportDialog(@Nonnull final GlobalInterface globalInterface,
                       @Nonnull final ExportEntityConfig<T> config) {
     this.serverGate = globalInterface.getGate(ServerGate.class);
-    this.fileServerGate = globalInterface.getGate(FileServerGate.class);
+    this.tempFileServerGate = globalInterface.getGate(TempFileServerGate.class);
 
     generateCsvFile(config);
     initUI(getTranslation("shared.export.csv"));
@@ -79,11 +79,11 @@ public class ExportDialog<T> extends VADialog {
 
   private void generateCsvFile(@Nonnull final ExportEntityConfig<T> config) {
     final var fileDto = serverGate.generateFileFromCsv(config.getFileName(), config.getRows());
-    fileToken = fileServerGate.store(fileDto);
+    fileToken = tempFileServerGate.store(fileDto);
   }
 
   private void deleteTempOnServer() {
-    fileServerGate.delete(fileToken);
+    tempFileServerGate.delete(fileToken);
   }
 
   @Nonnull

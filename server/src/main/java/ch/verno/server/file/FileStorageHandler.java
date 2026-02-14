@@ -1,6 +1,6 @@
 package ch.verno.server.file;
 
-import ch.verno.common.file.dto.FileDto;
+import ch.verno.common.api.dto.internal.file.temp.FileDto;
 import ch.verno.server.file.temp.TempFileStorageHandler;
 import jakarta.annotation.Nonnull;
 

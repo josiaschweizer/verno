@@ -1,7 +1,7 @@
 package ch.verno.server.service.extern;
 
-import ch.verno.common.api.dto.CreateTenantRequest;
-import ch.verno.common.api.dto.CreateTenantResponse;
+import ch.verno.common.api.dto.exernal.CreateTenantRequest;
+import ch.verno.common.api.dto.exernal.CreateTenantResponse;
 import ch.verno.common.exceptions.server.service.TenantAlreadyExistsException;
 import ch.verno.common.exceptions.server.service.TenantProvisionFailedException;
 import ch.verno.common.tenant.TenantContext;

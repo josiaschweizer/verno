@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.widgets;
 
-import ch.verno.common.file.dto.CsvMapDto;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

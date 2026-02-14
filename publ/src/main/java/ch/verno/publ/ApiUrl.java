@@ -12,6 +12,7 @@ public class ApiUrl {
   public static final String TEMP_FILE_REPORT = INTERNAL + BASE_API + "/temp-file/report";
   public static final String TEMP_FILE_IMPORT = INTERNAL + BASE_API + "/temp-file/import";
   public static final String TEMP_FILE_EXPORT = INTERNAL + BASE_API + "/temp-file/export";
+  public static final String FILES = INTERNAL + BASE_API + "/files";
 
   public static final String DEBUG = BASE_API + "/_debug";
   public static final String TENANTS = BASE_API + "/tenants";

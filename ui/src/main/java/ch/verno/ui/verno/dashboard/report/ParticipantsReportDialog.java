@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.dashboard.report;
 
-import ch.verno.common.report.ReportServerGate;
+import ch.verno.common.gate.servergate.ReportServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.dialog.VADialog;
-import ch.verno.ui.base.file.pdf.PdfPreview;
+import ch.verno.ui.base.components.file.pdf.PdfPreview;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;

@@ -1,7 +1,7 @@
 package ch.verno.server.mapper.csv;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.file.dto.CsvMapDto;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;

@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.upload;
 
-import ch.verno.common.file.FileServerGate;
+import ch.verno.common.gate.servergate.TempFileServerGate;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -19,7 +19,7 @@ public class VAFileUpload extends VerticalLayout {
   //TODO ANZEIGE AUF UI FUNKTIONIERT NICHT WIRKLCIH - FILE WIRD NACH DRAG & DROP ANGEZEIGT, HELP-TEXT NICHT & DRAUF CLICKEN FUNKTIONIERT AUCH NICHT RICHTIG
 
   @Nonnull
-  private final FileServerGate fileServerGate;
+  private final TempFileServerGate tempFileServerGate;
 
   @Nullable private String tempToken;
   @Nullable private String originalFileName;
@@ -28,8 +28,8 @@ public class VAFileUpload extends VerticalLayout {
   @Nonnull private final Div dropArea;
   @Nonnull private final Upload upload;
 
-  public VAFileUpload(@Nonnull final FileServerGate fileServerGate) {
-    this.fileServerGate = fileServerGate;
+  public VAFileUpload(@Nonnull final TempFileServerGate tempFileServerGate) {
+    this.tempFileServerGate = tempFileServerGate;
 
     setSizeFull();
     setPadding(false);
@@ -66,7 +66,7 @@ public class VAFileUpload extends VerticalLayout {
       originalFileName = event.getFileName();
       final byte[] bytes = readAllBytes(event.getInputStream());
       sizeBytes = bytes.length;
-      tempToken = fileServerGate.store(sanitizeFileName(originalFileName), bytes);
+      tempToken = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
     });
 
     upload.addAllFinishedListener(e -> {
@@ -167,7 +167,7 @@ public class VAFileUpload extends VerticalLayout {
       return;
     }
     try {
-      fileServerGate.delete(tempToken);
+      tempFileServerGate.delete(tempToken);
     } catch (Exception ignored) {
     } finally {
       tempToken = null;
