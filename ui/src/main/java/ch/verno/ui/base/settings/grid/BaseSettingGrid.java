@@ -15,10 +15,8 @@ import java.util.Map;
 
 public abstract class BaseSettingGrid<T> extends VerticalLayout {
 
-  @Nullable
-  protected Grid<T> grid;
-  @Nonnull
-  protected final Map<String, Grid.Column<T>> columnsByKey;
+  @Nullable protected Grid<T> grid;
+  @Nonnull protected final Map<String, Grid.Column<T>> columnsByKey;
 
   protected BaseSettingGrid() {
     this.columnsByKey = new LinkedHashMap<>();
@@ -36,8 +34,7 @@ public abstract class BaseSettingGrid<T> extends VerticalLayout {
   protected void initGrid() {
     grid = new Grid<>();
 
-    final var columns = getColumns();
-    columns.forEach((valueProvider, header) -> addColumn(header, valueProvider));
+    getColumns().forEach((valueProvider, header) -> addColumn(header, valueProvider));
 
     final var items = fetchItems();
     grid.setItems(items);
@@ -52,6 +49,7 @@ public abstract class BaseSettingGrid<T> extends VerticalLayout {
     }
 
     grid.addColumn(valueProvider)
+            .setKey(header)
             .setHeader(header)
             .setSortable(true)
             .setResizable(true)
@@ -92,7 +90,7 @@ public abstract class BaseSettingGrid<T> extends VerticalLayout {
       return;
     }
 
-    Grid.Column<T> column = columnsByKey.get(sortColumnKey);
+    final var column = columnsByKey.get(sortColumnKey);
     if (column != null && grid != null) {
       grid.sort(GridSortOrder.asc(column).build());
     }

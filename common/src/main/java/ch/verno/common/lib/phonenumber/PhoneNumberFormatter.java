@@ -1,6 +1,6 @@
 package ch.verno.common.lib.phonenumber;
 
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import jakarta.annotation.Nonnull;

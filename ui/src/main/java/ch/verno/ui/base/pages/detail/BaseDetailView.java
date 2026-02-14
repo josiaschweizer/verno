@@ -23,6 +23,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
@@ -41,10 +42,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   protected boolean showHeaderToolbar;
   protected boolean showPaddingAroundDetail;
 
-  @Nullable protected FormMode pendingFormMode;
   @Nullable protected VABadgeLabel infoLabel;
 
   @Nonnull public FormMode formMode;
+  @Nullable protected FormMode pendingFormMode;
 
   protected BaseDetailView(@Nonnull final GlobalInterface globalInterface) {
     this(globalInterface, true);
@@ -140,17 +141,16 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     final boolean canSaveByMode = (formMode == FormMode.CREATE || formMode == FormMode.EDIT);
     if (!canSaveByMode) {
       saveButton.setEnabled(false);
-      return;
-    }
+    } else {
+      final var bean = binder.getBean();
+      if (bean == null) {
+        saveButton.setEnabled(false);
+        return;
+      }
 
-    final var bean = binder.getBean();
-    if (bean == null) {
-      saveButton.setEnabled(false);
-      return;
+      final boolean valid = binder.isValid();
+      saveButton.setEnabled(valid);
     }
-
-    final boolean valid = binder.isValid();
-    saveButton.setEnabled(valid);
   }
 
   public void applyFormMode(@Nonnull final FormMode formMode) {
@@ -162,9 +162,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     if (formMode == FormMode.CREATE) {
       saveButton.setText(getTranslation("shared.create"));
 
-      if (viewToolbar.createButton() != null) {
+      if (viewToolbar != null && viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(false);
       }
+
       setAddOnVisible(false);
     } else if (formMode == FormMode.EDIT) {
       saveButton.setText(getTranslation("shared.update"));
@@ -172,9 +173,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     } else {
       saveButton.setText(getTranslation("common.save"));
 
-      if (viewToolbar.createButton() != null) {
+      if (viewToolbar != null && viewToolbar.createButton() != null) {
         viewToolbar.createButton().setVisible(true);
       }
+
       setAddOnVisible(true);
     }
 
@@ -231,10 +233,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   protected abstract Binder<T> createBinder();
 
   @Nonnull
-  protected abstract T createBean(@Nonnull final T bean);
+  protected abstract void createBean(@Nonnull final T bean);
 
   @Nonnull
-  protected abstract T updateBean(@Nonnull final T bean);
+  protected abstract void updateBean(@Nonnull final T bean);
 
   @Nonnull
   protected abstract T newBeanInstance();
@@ -250,23 +252,6 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   protected void onEditButtonClick(@Nonnull final ClickEvent<Button> event) {
     applyFormMode(FormMode.EDIT);
     updateSaveButtonState();
-  }
-
-  @Nonnull
-  public HorizontalLayout createLayoutFromComponents(@Nonnull final Component... components) {
-    final var layout = new HorizontalLayout();
-    layout.setWidthFull();
-
-    layout.getStyle().set("flex-wrap", "wrap");
-    layout.setDefaultVerticalComponentAlignment(Alignment.START);
-
-    for (final var component : components) {
-      component.getElement().getStyle().set("min-width", "260px");
-      component.getElement().getStyle().set("flex", "1 1 260px");
-      layout.add(component);
-    }
-
-    return layout;
   }
 
   @Nonnull
@@ -291,21 +276,18 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
     if (parameter == null) {
       binder.setBean(newBeanInstance());
-      pendingFormMode = forcedFormMode != null ? forcedFormMode : FormMode.CREATE;
+      pendingFormMode = Objects.requireNonNullElse(forcedFormMode, FormMode.CREATE);
+
       updateSaveButtonState();
-      return;
-    }
-
-    final var bean = getBeanById(parameter);
-    binder.setBean(bean);
-
-    if (forcedFormMode != null) {
-      pendingFormMode = forcedFormMode;
     } else {
-      pendingFormMode = getFormModeByBean(bean);
+      final var bean = getBeanById(parameter);
+      binder.setBean(bean);
+      pendingFormMode = Objects.requireNonNullElseGet(forcedFormMode, () -> getFormModeByBean(bean));
+
+      updateSaveButtonState();
     }
 
-    updateSaveButtonState();
+    applyFormMode(pendingFormMode);
   }
 
   @Nullable

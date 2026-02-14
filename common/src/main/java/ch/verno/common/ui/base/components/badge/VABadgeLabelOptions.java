@@ -1,4 +1,4 @@
-package ch.verno.common.base.components.badge;
+package ch.verno.common.ui.base.components.badge;
 
 import jakarta.annotation.Nonnull;
 

@@ -49,7 +49,7 @@ public class AppUserService implements IAppUserService {
     final var user = appUserRepository.findByUsernameOrEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-    return User.withUsername(user.getUsername())
+  return User.withUsername(user.getUsername())
             .password(user.getPasswordHash())
             .roles(user.getRole())
             .build();
@@ -114,9 +114,10 @@ public class AppUserService implements IAppUserService {
     AppUserMapper.toDto(saved);
   }
 
+  @Nonnull
   @Override
   @Transactional
-  public void updateAppUser(@Nonnull final AppUserDto user) {
+  public AppUserDto updateAppUser(@Nonnull final AppUserDto user) {
     if (user.getId() == null) {
       throw new IllegalArgumentException("user.id must not be null for update");
     }
@@ -133,7 +134,7 @@ public class AppUserService implements IAppUserService {
     }
 
     final var saved = appUserRepository.save(entity);
-    AppUserMapper.toDto(saved);
+    return AppUserMapper.toDto(saved);
   }
 
   @Override

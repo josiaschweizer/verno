@@ -7,6 +7,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -61,14 +62,14 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
 
   @Nonnull
   @Override
-  protected InstructorDto createBean(@Nonnull final InstructorDto bean) {
-    return instructorService.createInstructor(bean);
+  protected void createBean(@Nonnull final InstructorDto bean) {
+    instructorService.createInstructor(bean);
   }
 
   @Nonnull
   @Override
-  protected InstructorDto updateBean(@Nonnull final InstructorDto bean) {
-    return instructorService.updateInstructor(bean);
+  protected void updateBean(@Nonnull final InstructorDto bean) {
+    instructorService.updateInstructor(bean);
   }
 
   @Nonnull
@@ -118,7 +119,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             getBinder(),
             genderService.getAllGenders());
 
-    return createLayoutFromComponents(firstname, lastname, gender);
+    return LayoutUtil.createHorizontalLayoutFromComponents(firstname, lastname, gender);
   }
 
   @Nonnull
@@ -131,7 +132,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             InstructorDto::getPhone,
             InstructorDto::setPhone,
             getBinder());
-    return createLayoutFromComponents(email, phone);
+    return LayoutUtil.createHorizontalLayoutFromComponents(email, phone);
   }
 
   @Nonnull
@@ -157,7 +158,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             (dto, value) -> dto.getAddress().setCountry(value),
             getBinder());
 
-    return new VerticalLayout(createLayoutFromComponents(street, houseNumber, zipCode, city, country));
+    return new VerticalLayout(LayoutUtil.createHorizontalLayoutFromComponents(street, houseNumber, zipCode, city, country));
   }
 
   @Override

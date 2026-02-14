@@ -1,6 +1,6 @@
 package ch.verno.ui.base.factory;
 
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;

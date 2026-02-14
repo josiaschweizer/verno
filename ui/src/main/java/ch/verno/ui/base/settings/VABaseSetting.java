@@ -1,6 +1,7 @@
 package ch.verno.ui.base.settings;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.verno.settings.SettingEntryFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -8,7 +9,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -17,30 +17,26 @@ import org.apache.commons.lang3.NotImplementedException;
 @CssImport("./components/setting/va-base-setting.css")
 public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
-  @Nonnull
-  protected final Binder<T> binder;
-  @Nonnull
-  protected T dto;
+  @Nonnull protected final GlobalInterface globalInterface;
+  @Nonnull protected final Binder<T> binder;
+  @Nonnull protected T dto;
 
-  @Nonnull
-  private final Div headerWrapper;
-  @Nonnull
-  private final Div contentWrapper;
-  @Nullable
-  protected Component contentComponent;
-  @Nullable
-  private Span actionButtonSpan;
-  @Nonnull
-  protected Button saveButton;
+  @Nonnull private final Div headerWrapper;
+  @Nonnull private final Div contentWrapper;
+  @Nullable protected Component contentComponent;
+  @Nullable private Span actionButtonSpan;
+  @Nonnull protected Button saveButton;
 
   @Nonnull
   public final SettingEntryFactory<T> settingEntryFactory;
 
-  protected VABaseSetting(@Nonnull final String titleKey,
+  protected VABaseSetting(@Nonnull final GlobalInterface globalInterface,
+                          @Nonnull final String titleKey,
                           final boolean showSaveButton) {
-    settingEntryFactory = new SettingEntryFactory<>();
-    dto = createNewBeanInstance();
-    binder = createBinder();
+    this.globalInterface = globalInterface;
+    this.settingEntryFactory = new SettingEntryFactory<>();
+    this.dto = createNewBeanInstance();
+    this.binder = createBinder();
 
     addClassName("setting-card");
 
@@ -56,26 +52,31 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     contentWrapper = new Div();
     add(contentWrapper);
 
-    createSaveButton(showSaveButton);
+    addSaveButton(showSaveButton);
   }
 
-  private void createSaveButton(final boolean showSaveButton) {
+  private void addSaveButton(final boolean showSaveButton) {
     saveButton = new Button(getTranslation("common.save"), e -> save());
     saveButton.setEnabled(false);
 
     if (showSaveButton) {
-      setActionButton(saveButton);
+      addActionButtons(saveButton);
     }
   }
 
-  protected final void setActionButton(@Nonnull final Button actionButton) {
+  protected final void addActionButtons(@Nonnull final Button... actionButtons) {
     if (actionButtonSpan != null) {
       headerWrapper.remove(actionButtonSpan);
       actionButtonSpan = null;
     }
 
-    actionButtonSpan = new Span(actionButton);
+    actionButtonSpan = new Span();
     actionButtonSpan.addClassName("setting-card-action-button");
+
+    for (final var actionButton : actionButtons) {
+      actionButtonSpan.add(actionButton);
+    }
+
     headerWrapper.add(actionButtonSpan);
   }
 

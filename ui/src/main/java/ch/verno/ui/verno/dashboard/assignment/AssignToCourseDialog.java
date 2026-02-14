@@ -15,6 +15,7 @@ import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -107,7 +108,7 @@ public class AssignToCourseDialog extends VADialog {
     final var title = createTitleSpan(getTranslation("course.course"));
     courseComboBox = createCourseComboBox();
 
-    return createVerticalLayoutFromComponents(title, courseComboBox);
+    return LayoutUtil.createVerticalLayoutFromComponents(title, courseComboBox);
   }
 
   @Nonnull
@@ -117,7 +118,7 @@ public class AssignToCourseDialog extends VADialog {
     searchBar.addValueChangeListener(e -> searchChanged(e.getValue()));
     final var participants = createParticipantsCheckboxGroup();
 
-    final var layout = createVerticalLayoutFromComponents(title, searchBar, participants);
+    final var layout = LayoutUtil.createVerticalLayoutFromComponents(title, searchBar, participants);
     layout.setFlexGrow(1, participants);
     return layout;
   }

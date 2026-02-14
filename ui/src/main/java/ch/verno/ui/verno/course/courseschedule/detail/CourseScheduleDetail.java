@@ -8,6 +8,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -78,7 +79,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             getTranslation("shared.color")
     );
 
-    return createLayoutFromComponents(title, status, colorPicker);
+    return LayoutUtil.createHorizontalLayoutFromComponents(title, status, colorPicker);
   }
 
   @Nonnull
@@ -94,7 +95,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
     schedulePicker.setQuantityProposalCourseDays(quantityProposalCourseDays);
     schedulePicker.setEnforceQuantitySetting(enforceQuantitySetting);
 
-    return createLayoutFromComponents(schedulePicker);
+    return LayoutUtil.createHorizontalLayoutFromComponents(schedulePicker);
   }
 
   @Nonnull
@@ -123,14 +124,14 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
 
   @Nonnull
   @Override
-  protected CourseScheduleDto createBean(@Nonnull final CourseScheduleDto bean) {
-    return courseScheduleService.createCourseSchedule(bean);
+  protected void createBean(@Nonnull final CourseScheduleDto bean) {
+    courseScheduleService.createCourseSchedule(bean);
   }
 
   @Nonnull
   @Override
-  protected CourseScheduleDto updateBean(@Nonnull final CourseScheduleDto bean) {
-    return courseScheduleService.updateCourseSchedule(bean);
+  protected void updateBean(@Nonnull final CourseScheduleDto bean) {
+    courseScheduleService.updateCourseSchedule(bean);
   }
 
   @Nonnull

@@ -65,7 +65,7 @@ public class SettingEntryFactory<T extends BaseDto> {
     setting.getComboBox().setItems(items);
     setting.getComboBox().setItemLabelGenerator(itemLabelGenerator);
 
-    binder.bind(setting.getComboBox(), getter, setter);
+    binder.forField(setting.getComboBox()).bind(getter, setter);
 
     tooltip.ifPresent(setting::setTooltipText);
     return setting;

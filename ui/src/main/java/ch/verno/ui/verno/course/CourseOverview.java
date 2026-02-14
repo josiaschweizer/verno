@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.course;
 
-import ch.verno.common.base.components.colorpicker.Colors;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;

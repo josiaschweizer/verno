@@ -18,6 +18,9 @@ public class AppUserDto extends BaseDto {
 
   public AppUserDto() {
     username = Publ.EMPTY_STRING;
+    firstname = Publ.EMPTY_STRING;
+    lastname = Publ.EMPTY_STRING;
+    email = Publ.EMPTY_STRING;
     passwordHash = Publ.EMPTY_STRING;
     role = Role.USER;
     active = false;

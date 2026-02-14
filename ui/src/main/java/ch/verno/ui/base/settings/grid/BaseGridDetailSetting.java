@@ -1,6 +1,7 @@
 package ch.verno.ui.base.settings.grid;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -14,10 +15,11 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
   @Nonnull protected final G grid;
   @Nonnull protected final D detailView;
 
-  protected BaseGridDetailSetting(@Nonnull final String titleKey,
+  protected BaseGridDetailSetting(@Nonnull final GlobalInterface globalInterface,
+                                  @Nonnull final String titleKey,
                                   @Nonnull final G grid,
                                   @Nonnull final D detailView) {
-    super(titleKey, false);
+    super(globalInterface, titleKey, false);
     setCardDefaultHeight();
 
     this.grid = grid;
@@ -31,7 +33,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
     detailView.setAfterSave(this::displayGrid);
 
-    setActionButton(getAddButton());
+    addActionButtons(getAddButton());
   }
 
   @Nonnull
@@ -43,7 +45,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
 
   private void displayDetail(@Nullable final Long entityId) {
     setContent(detailView);
-    setActionButton(createBackToGridButton());
+    addActionButtons(createBackToGridButton());
     detailView.setParameter(null, entityId);
   }
 
@@ -57,7 +59,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
   private void displayGrid() {
     setContent(grid);
     grid.refresh();
-    setActionButton(getAddButton());
+    addActionButtons(getAddButton());
   }
 
   private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {

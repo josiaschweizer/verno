@@ -6,7 +6,7 @@ import ch.verno.ui.base.menu.MenuOrder;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIconUtil;
 import ch.verno.ui.lib.icon.CustomIcons;
-import ch.verno.ui.verno.settings.setting.theme.UISetting;
+import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -77,13 +77,13 @@ public final class MainLayout extends AppLayout {
     try {
       final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
       final boolean isDarkMode = "setting.dark".equals(userSetting.getTheme());
-      UISetting.applyTheme(isDarkMode);
-      UISetting.applyLanguage(userSetting.getLanguage());
+      ThemeSetting.applyTheme(isDarkMode);
+      ThemeSetting.applyLanguage(userSetting.getLanguage());
     } catch (Exception e) {
       UI.getCurrent().getPage().executeJs("return localStorage.getItem('v-theme');")
               .then(String.class, theme -> {
                 if ("setting.dark".equals(theme)) {
-                  UISetting.applyTheme(true);
+                  ThemeSetting.applyTheme(true);
                 }
               });
     }

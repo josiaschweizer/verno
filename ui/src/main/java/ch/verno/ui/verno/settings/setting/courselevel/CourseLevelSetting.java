@@ -1,7 +1,6 @@
 package ch.verno.ui.verno.settings.setting.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.grid.BaseGridDetailSetting;
 import jakarta.annotation.Nonnull;
@@ -14,6 +13,7 @@ public class CourseLevelSetting extends BaseGridDetailSetting<CourseLevelDto, Co
 
   public CourseLevelSetting(@Nonnull final GlobalInterface globalInterface) {
     super(
+            globalInterface,
             TITLE_KEY,
             new CourseLevelGrid(globalInterface),
             new CourseLevelDetail(globalInterface)

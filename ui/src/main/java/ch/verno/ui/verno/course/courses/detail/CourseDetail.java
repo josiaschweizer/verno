@@ -8,12 +8,14 @@ import ch.verno.publ.Routes;
 import ch.verno.server.service.intern.*;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.util.LayoutUtil;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -110,14 +112,14 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Nonnull
   @Override
-  protected CourseDto createBean(@Nonnull final CourseDto bean) {
-    return courseService.createCourse(bean);
+  protected void createBean(@Nonnull final CourseDto bean) {
+    courseService.createCourse(bean);
   }
 
   @Nonnull
   @Override
-  protected CourseDto updateBean(@Nonnull final CourseDto bean) {
-    return courseService.updateCourse(bean);
+  protected void updateBean(@Nonnull final CourseDto bean) {
+    courseService.updateCourse(bean);
   }
 
   @Nonnull
@@ -188,7 +190,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             Optional.empty(),
             getTranslation("course.end.time"));
 
-    return createLayoutFromComponents(titleEntry, capacityEntry, location, startTime, endTime);
+    return LayoutUtil.createHorizontalLayoutFromComponents(titleEntry, capacityEntry, location, startTime, endTime);
   }
 
   private HorizontalLayout createCourseLayout() {
@@ -233,7 +235,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             instructorOptions
     );
 
-    return createLayoutFromComponents(courseScheduleEntry, courseLevelEntry, instructorEntry);
+    return LayoutUtil.createHorizontalLayoutFromComponents(courseScheduleEntry, courseLevelEntry, instructorEntry);
   }
 
   @Nonnull
@@ -247,7 +249,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             true
     );
 
-    return createLayoutFromComponents(noteEntry);
+    return LayoutUtil.createHorizontalLayoutFromComponents(noteEntry);
   }
 
   @Nonnull
@@ -260,13 +262,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getTranslation("course.weekdays")
     );
 
-    return createLayoutFromComponents(weekOptions);
+    return LayoutUtil.createHorizontalLayoutFromComponents(weekOptions);
   }
 
   @Override
   protected void initAdditionalInfoUIBelowSaveButton() {
     final var title = new Span(getTranslation("course.participants.in.this.course"));
-    title.getStyle().setFontWeight("bold");
+    title.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
     final var participantsGrid = new ParticipantsGrid(globalInterface,
             false,

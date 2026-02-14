@@ -17,7 +17,7 @@ public class SharedSettings extends VABaseSetting<TenantSettingDto> {
   private final ITenantSettingService tenantSettingService;
 
   public SharedSettings(@Nonnull final GlobalInterface globalInterface) {
-    super(TITLE_KEY, true);
+    super(globalInterface, TITLE_KEY, true);
 
     this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();

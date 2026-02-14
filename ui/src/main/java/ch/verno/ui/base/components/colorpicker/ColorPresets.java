@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.colorpicker;
 
-import ch.verno.common.base.components.colorpicker.Colors;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
 import org.vaadin.addons.tatu.ColorPicker;
 
 import java.util.Arrays;

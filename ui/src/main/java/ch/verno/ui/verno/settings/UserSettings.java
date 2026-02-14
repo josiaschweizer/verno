@@ -6,7 +6,8 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.ui.verno.settings.setting.theme.UISetting;
+import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
+import ch.verno.ui.verno.settings.setting.user.PersonalInformation;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -21,14 +22,10 @@ import java.util.List;
 //todo user user_cog icon from external source
 public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle {
 
-  @Nonnull
-  private final IAppUserService appUserService;
-  @Nonnull
-  private final IAppUserSettingService appUserSettingService;
+  @Nonnull private final GlobalInterface globalInterface;
 
   public UserSettings(@Nonnull final GlobalInterface globalInterface) {
-    this.appUserService = globalInterface.getService(IAppUserService.class);
-    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
+    this.globalInterface = globalInterface;
 
     initUI(globalInterface);
   }
@@ -36,7 +33,10 @@ public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle 
   @Nonnull
   @Override
   protected List<VABaseSetting<?>> getSettings() {
-    return List.of(new UISetting(appUserService, appUserSettingService));
+    return List.of(
+            new ThemeSetting(globalInterface),
+            new PersonalInformation(globalInterface)
+    );
   }
 
   @Nonnull

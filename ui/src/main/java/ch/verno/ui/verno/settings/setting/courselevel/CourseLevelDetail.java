@@ -5,11 +5,11 @@ import ch.verno.common.db.service.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.grid.BaseSettingDetail;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -17,18 +17,13 @@ import java.util.Optional;
 @SpringComponent
 public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
-  @Nonnull
-  private ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseLevelService courseLevelService;
 
   public CourseLevelDetail(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface);
+
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
     init();
-  }
-
-  @Autowired
-  public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
-    this.courseLevelService = courseLevelService;
   }
 
   @Override
@@ -62,7 +57,7 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
             getTranslation("setting.sorting.order")
     );
 
-    add(createLayoutFromComponents(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));
+    add(LayoutUtil.createHorizontalLayoutFromComponents(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));
   }
 
   @Nonnull
@@ -91,14 +86,14 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
   @Nonnull
   @Override
-  protected CourseLevelDto createBean(@Nonnull final CourseLevelDto bean) {
-    return courseLevelService.createCourseLevel(bean);
+  protected void createBean(@Nonnull final CourseLevelDto bean) {
+    courseLevelService.createCourseLevel(bean);
   }
 
   @Nonnull
   @Override
-  protected CourseLevelDto updateBean(@Nonnull final CourseLevelDto bean) {
-    return courseLevelService.updateCourseLevel(bean);
+  protected void updateBean(@Nonnull final CourseLevelDto bean) {
+    courseLevelService.updateCourseLevel(bean);
   }
 
   @Nonnull

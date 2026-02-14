@@ -31,5 +31,7 @@ public class Publ {
   public static final String S = "s";
   public static final String ID = "id";
 
+  public static final String EIGHT_STARS = "*********";
+
   public static final Pattern KW_PATTERN = Pattern.compile("^KW(\\d{1,2})-(\\d{4})$");
 }

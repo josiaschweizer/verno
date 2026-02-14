@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.participant.detail;
 
-import ch.verno.common.base.components.badge.VABadgeLabelOptions;
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.GenderDto;
@@ -15,6 +15,7 @@ import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -145,14 +146,14 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
   @Nonnull
   @Override
-  protected ParticipantDto createBean(@Nonnull final ParticipantDto bean) {
-    return participantService.createParticipant(bean);
+  protected void createBean(@Nonnull final ParticipantDto bean) {
+    participantService.createParticipant(bean);
   }
 
   @Nonnull
   @Override
-  protected ParticipantDto updateBean(@Nonnull final ParticipantDto bean) {
-    return participantService.updateParticipant(bean);
+  protected void updateBean(@Nonnull final ParticipantDto bean) {
+    participantService.updateParticipant(bean);
   }
 
   @Nonnull
@@ -221,7 +222,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getBinder(),
             genderService.getAllGenders());
 
-    return createLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
+    return LayoutUtil.createHorizontalLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
   }
 
   @Nonnull
@@ -235,7 +236,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             ParticipantDto::setPhone,
             getBinder());
 
-    return createLayoutFromComponents(emailEntry, phoneEntry);
+    return LayoutUtil.createHorizontalLayoutFromComponents(emailEntry, phoneEntry);
   }
 
   @Nonnull
@@ -286,7 +287,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
       }
     });
 
-    return createLayoutFromComponents(courseLevelsEntry, coursesEntry);
+    return LayoutUtil.createHorizontalLayoutFromComponents(courseLevelsEntry, coursesEntry);
   }
 
   @Nonnull
@@ -299,7 +300,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getTranslation("shared.note")
     );
 
-    return createLayoutFromComponents(note);
+    return LayoutUtil.createHorizontalLayoutFromComponents(note);
   }
 
   @Nonnull
@@ -325,7 +326,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             (dto, country) -> dto.getAddress().setCountry(country),
             getBinder());
 
-    return new VerticalLayout(createLayoutFromComponents(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
+    return new VerticalLayout(LayoutUtil.createHorizontalLayoutFromComponents(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
   }
 
   @Nonnull
@@ -356,7 +357,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhone(phoneNumber)
     );
 
-    return createLayoutFromComponents(parentOneLayout, parentTwoLayout);
+    return LayoutUtil.createHorizontalLayoutFromComponents(parentOneLayout, parentTwoLayout);
   }
 
   @Nonnull
@@ -420,7 +421,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
     return new VerticalLayout(
             title,
-            createLayoutFromComponents(firstNameEntry, lastNameEntry),
+            LayoutUtil.createHorizontalLayoutFromComponents(firstNameEntry, lastNameEntry),
             genderEntry,
             emailEntry,
             phoneEntry

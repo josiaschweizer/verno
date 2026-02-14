@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;

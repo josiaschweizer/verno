@@ -1,11 +1,12 @@
 package ch.verno.ui.verno.usermanagemnt;
 
-import ch.verno.common.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.filter.AppUserFilter;
 import ch.verno.common.db.role.Role;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.form.FormMode;
@@ -18,7 +19,6 @@ import ch.verno.ui.base.pages.grid.ObjectGridColumn;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
 import ch.verno.ui.verno.usermanagemnt.dialog.CreateUserDialog;
-import ch.verno.ui.verno.usermanagemnt.dialog.CreateUserDto;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
@@ -171,7 +171,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
     if (dto == null) {
       dialog = new CreateUserDialog(globalInterface);
     } else {
-      dialog = new CreateUserDialog(globalInterface, FormMode.EDIT, CreateUserDto.fromAppUserDto(dto));
+      dialog = new CreateUserDialog(globalInterface, FormMode.EDIT, UserDtoUnhashedPw.fromAppUserDto(dto));
     }
 
     dialog.addClosedListener(e -> setFilter(getFilter())); // refresh grid by reapplying filter when dialog is closed
