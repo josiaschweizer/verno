@@ -34,8 +34,7 @@ public abstract class BaseSettingGrid<T> extends VerticalLayout {
   protected void initGrid() {
     grid = new Grid<>();
 
-    final var columns = getColumns();
-    columns.forEach((valueProvider, header) -> addColumn(header, valueProvider));
+    getColumns().forEach((valueProvider, header) -> addColumn(header, valueProvider));
 
     final var items = fetchItems();
     grid.setItems(items);
@@ -50,6 +49,7 @@ public abstract class BaseSettingGrid<T> extends VerticalLayout {
     }
 
     grid.addColumn(valueProvider)
+            .setKey(header)
             .setHeader(header)
             .setSortable(true)
             .setResizable(true)

@@ -12,6 +12,7 @@ import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
@@ -54,7 +55,11 @@ public class CreateUserDialog extends VADialog {
   @Override
   protected HorizontalLayout createContent() {
     final var userLayout = new UserLayout(globalInterface, entryFactory);
-    userLayout.setPasswordReadOnly("shared.password.can.only.be.changed.via.the.change.password.dialog.via.grid.right.click.change.password");
+
+    if (formMode != FormMode.CREATE) {
+      userLayout.setPasswordReadOnly("shared.password.can.only.be.changed.via.the.change.password.dialog.via.grid.right.click.change.password");
+    }
+
     return userLayout.buildUserLayout(binder, formMode, oldUserName);
   }
 
@@ -69,8 +74,12 @@ public class CreateUserDialog extends VADialog {
 
   @Nonnull
   private Button createSaveButton() {
-    final var button = new Button(formMode == FormMode.CREATE ? getTranslation("shared.create") : getTranslation("shared.update"));
+    final var button = new Button(formMode == FormMode.CREATE ?
+            getTranslation("shared.create") :
+            getTranslation("shared.update")
+    );
     button.addClickListener(event -> save());
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     button.setEnabled(false);
 
     binder.addValueChangeListener(event -> button.setEnabled(binder.isValid()));
@@ -126,15 +135,15 @@ public class CreateUserDialog extends VADialog {
 
     appUserService.updateAppUser(
             new AppUserDto(
-            foundById.get().getId(),
-            bean.getUsername(),
-            bean.getFirstname(),
-            bean.getLastname(),
-            bean.getEmail(),
-            Publ.EMPTY_STRING,
-            bean.getRole(),
-            false
-    ));
+                    foundById.get().getId(),
+                    bean.getUsername(),
+                    bean.getFirstname(),
+                    bean.getLastname(),
+                    bean.getEmail(),
+                    Publ.EMPTY_STRING,
+                    bean.getRole(),
+                    false
+            ));
 
     final var currentUser = globalInterface.getOptionalCurrentUser();
     if (currentUser.isEmpty()) {
