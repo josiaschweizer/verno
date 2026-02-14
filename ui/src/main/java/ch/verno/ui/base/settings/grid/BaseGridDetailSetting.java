@@ -33,7 +33,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
     detailView.setAfterSave(this::displayGrid);
 
-    setActionButton(getAddButton());
+    addActionButtons(getAddButton());
   }
 
   @Nonnull
@@ -45,7 +45,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
 
   private void displayDetail(@Nullable final Long entityId) {
     setContent(detailView);
-    setActionButton(createBackToGridButton());
+    addActionButtons(createBackToGridButton());
     detailView.setParameter(null, entityId);
   }
 
@@ -59,7 +59,7 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
   private void displayGrid() {
     setContent(grid);
     grid.refresh();
-    setActionButton(getAddButton());
+    addActionButtons(getAddButton());
   }
 
   private void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<T> event) {

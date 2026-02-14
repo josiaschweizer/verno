@@ -52,26 +52,31 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     contentWrapper = new Div();
     add(contentWrapper);
 
-    createSaveButton(showSaveButton);
+    addSaveButton(showSaveButton);
   }
 
-  private void createSaveButton(final boolean showSaveButton) {
+  private void addSaveButton(final boolean showSaveButton) {
     saveButton = new Button(getTranslation("common.save"), e -> save());
     saveButton.setEnabled(false);
 
     if (showSaveButton) {
-      setActionButton(saveButton);
+      addActionButtons(saveButton);
     }
   }
 
-  protected final void setActionButton(@Nonnull final Button actionButton) {
+  protected final void addActionButtons(@Nonnull final Button... actionButtons) {
     if (actionButtonSpan != null) {
       headerWrapper.remove(actionButtonSpan);
       actionButtonSpan = null;
     }
 
-    actionButtonSpan = new Span(actionButton);
+    actionButtonSpan = new Span();
     actionButtonSpan.addClassName("setting-card-action-button");
+
+    for (final var actionButton : actionButtons) {
+      actionButtonSpan.add(actionButton);
+    }
+
     headerWrapper.add(actionButtonSpan);
   }
 

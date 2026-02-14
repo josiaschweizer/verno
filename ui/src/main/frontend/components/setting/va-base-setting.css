@@ -45,6 +45,10 @@
 .setting-card-action-button {
     margin-left: auto;
     padding-bottom: var(--lumo-space-xs);
+
+    display: flex;
+    align-items: center;
+    gap: var(--lumo-space-s);
 }
 
 .setting-card-content {
