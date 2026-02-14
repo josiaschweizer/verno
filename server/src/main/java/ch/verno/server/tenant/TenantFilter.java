@@ -85,6 +85,7 @@ public class TenantFilter extends OncePerRequestFilter {
       final var httpSession = request.getSession(false);
       if (httpSession != null) {
         httpSession.removeAttribute(VernoConstants.ATTR_PUBLIC_NO_TENANT);
+        httpSession.setAttribute(VernoConstants.ATTR_TENANT_ID, tenantId);
       }
 
       TenantContext.set(tenantId);

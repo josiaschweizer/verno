@@ -15,6 +15,7 @@ public class VernoConstants {
   public static final String URL_DOUBLE_POINT_1 = "::1";
 
   public static final String ATTR_PUBLIC_NO_TENANT = "PUBLIC_NO_TENANT";
+  public static final String ATTR_TENANT_ID = "TENANT_ID";
   public static final String AUTO_LOGIN_ATTEMPTED = "AUTO_LOGIN_ATTEMPTED";
   public static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 

@@ -3,13 +3,16 @@ package ch.verno.ui.verno.settings.panels.report;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.client.file.FileApiClient;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.streams.UploadEvent;
 import com.vaadin.flow.server.streams.UploadHandler;
 import jakarta.annotation.Nonnull;
@@ -57,18 +60,35 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
       @Override
       public void handleUploadRequest(@Nonnull final UploadEvent event) throws IOException {
-        final var api = new FileApiClient("http://localhost:8080");
+        final var vaadinRequest = event.getRequest();
 
-        final var resp = api.uploadReportTemplate(
-                "default",
-                event.getFileName(),
-                event.getContentType(),
-                event.getInputStream(),
-                event.getFileSize()
-        );
+        if (vaadinRequest instanceof VaadinServletRequest servletRequest) {
+          final var session = servletRequest.getHttpServletRequest().getSession(false);
 
-        dto.setCourseReportTemplate(resp != null ? resp.id() : Publ.ZERO_LONG);
-        tenantSettingService.saveCurrentTenantSetting(dto);
+          if (session != null) {
+            final var tenantId = session.getAttribute(VernoConstants.ATTR_TENANT_ID);
+
+            if (tenantId instanceof Long tid) {
+              TenantContext.set(tid);
+            }
+          }
+        }
+
+        try {
+          final var api = new FileApiClient("http://localhost:8080");
+          final var resp = api.uploadReportTemplate(
+                  "default",
+                  event.getFileName(),
+                  event.getContentType(),
+                  event.getInputStream(),
+                  event.getFileSize()
+          );
+
+          dto.setCourseReportTemplate(resp != null ? resp.id() : Publ.ZERO_LONG);
+          tenantSettingService.saveCurrentTenantSetting(dto);
+        } finally {
+          TenantContext.clear();
+        }
       }
     };
 
