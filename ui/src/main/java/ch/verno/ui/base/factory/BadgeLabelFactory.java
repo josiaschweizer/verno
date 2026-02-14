@@ -2,7 +2,7 @@ package ch.verno.ui.base.factory;
 
 import ch.verno.common.db.enums.CourseScheduleStatus;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
-import ch.verno.common.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import jakarta.annotation.Nonnull;
 
 public class BadgeLabelFactory {

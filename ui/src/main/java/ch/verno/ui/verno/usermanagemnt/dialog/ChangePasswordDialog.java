@@ -6,9 +6,11 @@ import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.Layout;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -60,7 +62,7 @@ public class ChangePasswordDialog extends VADialog {
             )
             .bind(ChangePasswordDto::getConfirmNewPassword, ChangePasswordDto::setConfirmNewPassword);
 
-    return createHorizontalLayoutFromComponents(newPassword, confirmNewPassword);
+    return LayoutUtil.createHorizontalLayoutFromComponents(newPassword, confirmNewPassword);
   }
 
   @Nonnull

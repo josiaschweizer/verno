@@ -1,6 +1,6 @@
 package ch.verno.common.db.role;
 
-import ch.verno.common.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import jakarta.annotation.Nonnull;
 
 import java.util.Objects;

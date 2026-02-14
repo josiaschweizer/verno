@@ -1,11 +1,12 @@
-package ch.verno.ui.verno.usermanagemnt.dialog;
+package ch.verno.common.ui.dto;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.role.Role;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 
-public class CreateUserDto {
+public class UserDtoUnhashedPw extends BaseDto {
 
   @Nonnull private String username;
   @Nonnull private String email;
@@ -15,7 +16,7 @@ public class CreateUserDto {
   @Nonnull private Role role;
   private boolean active;
 
-  public CreateUserDto() {
+  public UserDtoUnhashedPw() {
     username = Publ.EMPTY_STRING;
     email = Publ.EMPTY_STRING;
     firstname = Publ.EMPTY_STRING;
@@ -26,8 +27,9 @@ public class CreateUserDto {
   }
 
   @Nonnull
-  public static CreateUserDto fromAppUserDto(@Nonnull final AppUserDto appUserDto) {
-    final CreateUserDto dto = new CreateUserDto();
+  public static UserDtoUnhashedPw fromAppUserDto(@Nonnull final AppUserDto appUserDto) {
+    final UserDtoUnhashedPw dto = new UserDtoUnhashedPw();
+    dto.setId(appUserDto.getId());
     dto.setUsername(appUserDto.getUsername());
     dto.setEmail(appUserDto.getEmail());
     dto.setFirstname(appUserDto.getFirstname());

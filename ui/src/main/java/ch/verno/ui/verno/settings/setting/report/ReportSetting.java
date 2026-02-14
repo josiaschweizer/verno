@@ -19,7 +19,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull private final EntryFactory<TenantSettingDto> entryFactory;
 
   public ReportSetting(@Nonnull final GlobalInterface globalInterface) {
-    super(TITLE_KEY, true);
+    super(globalInterface, TITLE_KEY, true);
 
     this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();

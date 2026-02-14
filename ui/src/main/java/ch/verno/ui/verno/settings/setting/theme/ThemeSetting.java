@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-public class UISetting extends VABaseSetting<UISettingDto> {
+public class ThemeSetting extends VABaseSetting<UISettingDto> {
 
   public static final String TITLE_KEY = "setting.ui_settings";
   @Nonnull
@@ -27,11 +28,11 @@ public class UISetting extends VABaseSetting<UISettingDto> {
   @Nullable
   private AppUserSettingDto currentSetting;
 
-  public UISetting(@Nonnull final IAppUserService userService,
-                   @Nonnull final IAppUserSettingService appUserSettingService) {
-    super(TITLE_KEY, true);
+  public ThemeSetting(@Nonnull final GlobalInterface globalInterface) {
+    super(globalInterface, TITLE_KEY, true);
 
-    this.appUserSettingService = appUserSettingService;
+    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
+    final var userService = globalInterface.getService(IAppUserService.class);
 
     final var currentSecurityContextUser = getCurrentUser();
     if (currentSecurityContextUser == null) {
@@ -53,10 +54,8 @@ public class UISetting extends VABaseSetting<UISettingDto> {
       currentSetting = appUserSettingService.getAppUserSettingByUserId(currentUser.getId());
       dto.setDarkModeEnabled("setting.dark".equals(currentSetting.getTheme()));
       dto.setLanguage(currentSetting.getLanguage());
-      binder.readBean(dto);
     } catch (Exception e) {
       dto.setDarkModeEnabled(false);
-      binder.readBean(dto);
     }
   }
 

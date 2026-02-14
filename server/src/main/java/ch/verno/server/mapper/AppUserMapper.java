@@ -2,6 +2,7 @@ package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.role.Role;
+import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.annotation.Nonnull;

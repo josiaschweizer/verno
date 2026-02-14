@@ -1,6 +1,6 @@
 package ch.verno.common.db.dto.table;
 
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;

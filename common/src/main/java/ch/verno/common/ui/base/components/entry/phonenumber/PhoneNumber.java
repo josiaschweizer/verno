@@ -1,4 +1,4 @@
-package ch.verno.common.base.components.entry.phonenumber;
+package ch.verno.common.ui.base.components.entry.phonenumber;
 
 import ch.verno.publ.Publ;
 import ch.verno.common.lib.calling.CallingCode;

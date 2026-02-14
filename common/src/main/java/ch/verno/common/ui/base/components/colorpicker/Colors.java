@@ -1,4 +1,4 @@
-package ch.verno.common.base.components.colorpicker;
+package ch.verno.common.ui.base.components.colorpicker;
 
 public class Colors {
 

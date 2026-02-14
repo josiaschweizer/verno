@@ -1,6 +1,6 @@
 package ch.verno.server.mapper;
 
-import ch.verno.common.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.db.entity.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
