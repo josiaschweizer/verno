@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.settings.setting.theme;
+package ch.verno.ui.verno.settings.panels.theme;
 
 import ch.verno.common.db.dto.base.BaseDto;
 import jakarta.annotation.Nonnull;

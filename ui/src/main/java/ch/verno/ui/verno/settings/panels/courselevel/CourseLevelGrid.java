@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.settings.setting.courselevel;
+package ch.verno.ui.verno.settings.panels.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.service.ICourseLevelService;

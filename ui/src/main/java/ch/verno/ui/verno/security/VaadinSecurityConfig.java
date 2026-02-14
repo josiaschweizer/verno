@@ -27,6 +27,7 @@ public class VaadinSecurityConfig {
                     .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
                     .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
                     .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
+                    .requestMatchers(ApiUrl.FILES + "/**").permitAll()
             )
             .with(VaadinSecurityConfigurer.vaadin(), configurer ->
                     configurer.loginView(LoginView.class)

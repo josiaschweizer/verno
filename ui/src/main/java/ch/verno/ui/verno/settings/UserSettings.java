@@ -1,13 +1,11 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.common.db.service.IAppUserService;
-import ch.verno.common.db.service.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
-import ch.verno.ui.verno.settings.setting.user.PersonalInformation;
+import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
+import ch.verno.ui.verno.settings.panels.user.PersonalInformation;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;

@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.settings.setting.shared;
+package ch.verno.ui.verno.settings.panels.shared;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;

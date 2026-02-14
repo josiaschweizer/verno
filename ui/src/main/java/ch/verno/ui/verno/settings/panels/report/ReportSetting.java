@@ -1,12 +1,13 @@
-package ch.verno.ui.verno.settings.setting.report;
+package ch.verno.ui.verno.settings.panels.report;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;
-import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.client.file.FileApiClient;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.streams.UploadEvent;
@@ -56,11 +57,21 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
       @Override
       public void handleUploadRequest(@Nonnull final UploadEvent event) throws IOException {
-        final var fileServerGate = globalInterface.getGate(TempFileServerGate.class);
-        System.out.println(event);
-      }
+        final var api = new FileApiClient("http://localhost:8080");
 
+        final var resp = api.uploadReportTemplate(
+                "default",
+                event.getFileName(),
+                event.getContentType(),
+                event.getInputStream(),
+                event.getFileSize()
+        );
+
+        dto.setCourseReportTemplate(resp != null ? resp.id() : Publ.ZERO_LONG);
+        tenantSettingService.saveCurrentTenantSetting(dto);
+      }
     };
+
     final var courseReportFileUpload = entryFactory.createFileUploadEntry(uploadHandler, "Custom Report Template");
     courseReportFileUpload.setWidthFull();
     courseReportFileUpload.setMaxFiles(1);

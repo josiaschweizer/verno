@@ -36,6 +36,9 @@ public class TenantSettingEntity {
   @Column(name = "course_report_name")
   private String courseReportName;
 
+  @Column(name = "course_report_template")
+  private Long courseReportTemplate;
+
   @Column(name = "limit_course_assignments_to_active")
   private boolean limitCourseAssignmentsToActive;
 
@@ -49,6 +52,7 @@ public class TenantSettingEntity {
                              final boolean enforceCourseLevelSettings,
                              final boolean isParentOneMainParent,
                              @Nonnull final String courseReportName,
+                             @Nonnull final Long courseReportTemplate,
                              final boolean limitCourseAssignmentsToActive) {
     this.tenant = tenant;
     this.courseDaysPerSchedule = courseDaysPerSchedule;
@@ -57,6 +61,7 @@ public class TenantSettingEntity {
     this.enforceCourseLevelSettings = enforceCourseLevelSettings;
     this.isParentOneMainParent = isParentOneMainParent;
     this.courseReportName = courseReportName;
+    this.courseReportTemplate = courseReportTemplate;
     this.limitCourseAssignmentsToActive = limitCourseAssignmentsToActive;
   }
 
@@ -122,6 +127,14 @@ public class TenantSettingEntity {
 
   public void setCourseReportName(final String courseReportName) {
     this.courseReportName = courseReportName;
+  }
+
+  public Long getCourseReportTemplate() {
+    return courseReportTemplate;
+  }
+
+  public void setCourseReportTemplate(final Long courseReportTemplate) {
+    this.courseReportTemplate = courseReportTemplate;
   }
 
   public boolean isLimitCourseAssignmentsToActive() {

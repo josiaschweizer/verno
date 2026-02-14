@@ -6,7 +6,7 @@ import ch.verno.ui.base.menu.MenuOrder;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIconUtil;
 import ch.verno.ui.lib.icon.CustomIcons;
-import ch.verno.ui.verno.settings.setting.theme.ThemeSetting;
+import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;

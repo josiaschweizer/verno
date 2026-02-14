@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.settings.setting.user;
+package ch.verno.ui.verno.settings.panels.user;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.role.Role;

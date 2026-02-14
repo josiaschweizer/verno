@@ -1,4 +1,4 @@
-package ch.verno.ui.verno.settings.setting.quantity;
+package ch.verno.ui.verno.settings.panels.quantity;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.ITenantSettingService;
