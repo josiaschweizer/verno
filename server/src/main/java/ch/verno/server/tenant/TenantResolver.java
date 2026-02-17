@@ -16,10 +16,10 @@ public class TenantResolver {
   private final TenantProperties props;
 
   @Nonnull
-  private final TenantLookupService lookupService;
+  private final TenantService lookupService;
 
   public TenantResolver(@Nonnull final TenantProperties props,
-                        @Nonnull final TenantLookupService lookupService) {
+                        @Nonnull final TenantService lookupService) {
     this.props = props;
     this.lookupService = lookupService;
   }

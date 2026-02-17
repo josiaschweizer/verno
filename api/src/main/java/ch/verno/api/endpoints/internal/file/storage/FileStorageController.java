@@ -1,20 +1,15 @@
 package ch.verno.api.endpoints.internal.file.storage;
 
+import ch.verno.common.api.dto.internal.file.storage.DownloadFileResponse;
 import ch.verno.common.api.dto.internal.file.storage.FileMetaResponse;
 import ch.verno.common.api.dto.internal.file.storage.FileUploadResponse;
 import ch.verno.common.db.dto.file.StoredFile;
 import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
 import ch.verno.server.service.intern.FileStorageService;
 import jakarta.annotation.Nonnull;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(ApiUrl.FILES)
@@ -33,24 +28,28 @@ public class FileStorageController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<StreamingResponseBody> download(@PathVariable @Nonnull final Long id) {
+  public ResponseEntity<DownloadFileResponse> downloadDto(@PathVariable @Nonnull final Long id) {
     final var download = service.download(id);
 
-    final var encoded = URLEncoder.encode(download.meta().filename(), StandardCharsets.UTF_8).replace(Publ.PLUS, "%20");
-    final var contentDisposition = "attachment; filename=\"" + download.meta().filename().replace("\"", "") + "\"; filename*=UTF-8''" + encoded;
-
-    StreamingResponseBody body = out -> {
-      try (var in = download.stream()) {
-        in.transferTo(out);
+    final byte[] bytes;
+    try (final var inputStream = download.stream()) {
+      if (inputStream != null) {
+        bytes = inputStream.readAllBytes();
+      } else {
+        bytes = new byte[0];
       }
-    };
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to read file stream", e);
+    }
 
-    return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-            .header(HttpHeaders.CONTENT_TYPE, download.meta().contentType())
-            .header("X-Checksum-SHA256", download.meta().checksumSha256())
-            .contentLength(download.meta().size())
-            .body(body);
+    final var meta = download.meta();
+    return ResponseEntity.ok(new DownloadFileResponse(
+            bytes,
+            meta.filename(),
+            meta.contentType(),
+            meta.size(),
+            meta.checksumSha256()
+    ));
   }
 
   @GetMapping("/{id}/meta")

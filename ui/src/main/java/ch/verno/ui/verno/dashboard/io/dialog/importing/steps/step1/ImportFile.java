@@ -2,14 +2,14 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
 import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.components.upload.VAFileUpload;
+import ch.verno.ui.base.components.upload.VAFileUploadArea;
 import ch.verno.ui.base.dialog.stepdialog.BaseDialogStep;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ImportFile extends BaseDialogStep {
 
-  private final VAFileUpload fileUpload;
+  private final VAFileUploadArea fileUpload;
 
   @Nullable
   private Runnable onFileUploadedListener;
@@ -19,7 +19,7 @@ public class ImportFile extends BaseDialogStep {
     setPadding(false);
     setSpacing(false);
 
-    fileUpload = new VAFileUpload(globalInterface.getService(TempFileServerGate.class));
+    fileUpload = new VAFileUploadArea(globalInterface.getService(TempFileServerGate.class));
     fileUpload.setAcceptedFileTypes(".csv");
     fileUpload.setMaxFileUpload(1);
 

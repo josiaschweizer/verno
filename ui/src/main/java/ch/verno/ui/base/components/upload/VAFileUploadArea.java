@@ -13,8 +13,8 @@ import jakarta.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-@CssImport("./components/upload/va-file-upload.css")
-public class VAFileUpload extends VerticalLayout {
+@CssImport("./components/upload/va-file-upload-area.css")
+public class VAFileUploadArea extends VerticalLayout {
 
   //TODO ANZEIGE AUF UI FUNKTIONIERT NICHT WIRKLCIH - FILE WIRD NACH DRAG & DROP ANGEZEIGT, HELP-TEXT NICHT & DRAUF CLICKEN FUNKTIONIERT AUCH NICHT RICHTIG
 
@@ -28,7 +28,7 @@ public class VAFileUpload extends VerticalLayout {
   @Nonnull private final Div dropArea;
   @Nonnull private final Upload upload;
 
-  public VAFileUpload(@Nonnull final TempFileServerGate tempFileServerGate) {
+  public VAFileUploadArea(@Nonnull final TempFileServerGate tempFileServerGate) {
     this.tempFileServerGate = tempFileServerGate;
 
     setSizeFull();

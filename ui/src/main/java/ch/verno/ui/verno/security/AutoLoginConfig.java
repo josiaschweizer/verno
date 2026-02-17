@@ -2,10 +2,9 @@ package ch.verno.ui.verno.security;
 
 import ch.verno.publ.Routes;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import ch.verno.server.service.intern.AppUserService;
-import ch.verno.server.tenant.TenantLookupService;
+import ch.verno.server.tenant.TenantService;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
@@ -25,14 +24,14 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
   private String devUser;
 
   @Nonnull private final AppUserService appUserService;
-  @Nonnull private final TenantLookupService tenantLookupService;
+  @Nonnull private final TenantService tenantService;
   @Nonnull private final AuthenticationContext authenticationContext;
 
   public AutoLoginConfig(@Nonnull final AppUserService appUserService,
-                         @Nonnull final TenantLookupService tenantLookupService,
+                         @Nonnull final TenantService tenantService,
                          @Nonnull final AuthenticationContext authenticationContext) {
     this.appUserService = appUserService;
-    this.tenantLookupService = tenantLookupService;
+    this.tenantService = tenantService;
     this.authenticationContext = authenticationContext;
   }
 
@@ -67,7 +66,7 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
   }
 
   private void applyTenant() {
-    final var tenants = tenantLookupService.findAllTenants();
+    final var tenants = tenantService.findAllTenants();
     if (tenants.isEmpty()) {
       return;
     }

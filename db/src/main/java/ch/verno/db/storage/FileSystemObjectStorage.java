@@ -4,8 +4,10 @@ import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.Optional;
 
 @Component
 public class FileSystemObjectStorage implements ObjectStorage {
@@ -32,13 +34,23 @@ public class FileSystemObjectStorage implements ObjectStorage {
 
   @Nonnull
   @Override
-  public InputStream get(@Nonnull final String key) throws Exception {
-    Path target = root.resolve(key).normalize();
+  public Optional<InputStream> get(@Nonnull final String key) throws IOException {
+    final Path target = root.resolve(key).normalize();
+
     if (!target.startsWith(root)) {
       throw new SecurityException("Invalid storage key");
     }
 
-    return Files.newInputStream(target, StandardOpenOption.READ);
+    try {
+      if (!Files.exists(target, LinkOption.NOFOLLOW_LINKS) ||
+              !Files.isRegularFile(target, LinkOption.NOFOLLOW_LINKS)) {
+        return Optional.empty();
+      }
+
+      return Optional.of(Files.newInputStream(target, StandardOpenOption.READ));
+    } catch (NoSuchFileException e) {
+      return Optional.empty();
+    }
   }
 
   @Override

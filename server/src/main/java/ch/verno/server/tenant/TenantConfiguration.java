@@ -12,13 +12,13 @@ import org.springframework.core.Ordered;
 public class TenantConfiguration {
 
   @Bean
-  public TenantLookupService tenantLookupService(@Nonnull final TenantRepository tenantRepository) {
-    return new TenantLookupService(tenantRepository);
+  public TenantService tenantLookupService(@Nonnull final TenantRepository tenantRepository) {
+    return new TenantService(tenantRepository);
   }
 
   @Bean
   public TenantResolver tenantResolver(@Nonnull final TenantProperties props,
-                                       @Nonnull final TenantLookupService lookupService) {
+                                       @Nonnull final TenantService lookupService) {
     return new TenantResolver(props, lookupService);
   }
 

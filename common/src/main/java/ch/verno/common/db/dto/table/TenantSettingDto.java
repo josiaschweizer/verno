@@ -45,6 +45,7 @@ public class TenantSettingDto extends BaseDto {
     this.enforceCourseLevelSettings = enforceCourseLevelSettings;
     this.isParentOneMainParent = isParentOneMainParent;
     this.courseReportName = courseReportName;
+    this.courseReportTemplate = courseReportTemplate;
     this.limitCourseAssignmentsToActive = limitCourseAssignmentsToActive;
   }
 

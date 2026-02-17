@@ -24,4 +24,5 @@ public class VernoConstants {
 
   public static final MediaType OCTET_STREAM = MediaType.APPLICATION_OCTET_STREAM;
 
+  public static final String X_TENANT = "X-Mandant";
 }

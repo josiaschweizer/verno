@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.HexFormat;
@@ -38,7 +37,7 @@ public class FileStorageService implements IFileStorageService {
     }
 
     final var originalFilename = file.getOriginalFilename();
-    var filename = safeFilename(originalFilename != null ? originalFilename : Publ.EMPTY_STRING);
+    final var filename = safeFilename(originalFilename != null ? originalFilename : Publ.EMPTY_STRING);
     final var contentType = (file.getContentType() == null || file.getContentType().isBlank())
             ? "application/octet-stream"
             : file.getContentType();
@@ -59,11 +58,16 @@ public class FileStorageService implements IFileStorageService {
 
       entity = storedFileRepository.save(entity);
 
-      final var storageKey = buildStorageKey(entity.getId(), filename);
-      objectStorage.put(storageKey, new java.io.ByteArrayInputStream(data), data.length);
+      try {
+        final var storageKey = buildStorageKey(entity.getId(), filename);
+        objectStorage.put(storageKey, new java.io.ByteArrayInputStream(data), data.length);
 
-      entity.setStorageKey(storageKey);
-      storedFileRepository.save(entity);
+        entity.setStorageKey(storageKey);
+        storedFileRepository.save(entity);
+      } catch (Exception storageException) {
+        storedFileRepository.delete(entity);
+        throw new RuntimeException("Failed to store file in object storage", storageException);
+      }
 
       return new StoredFile(
               entity.getId(),
@@ -79,21 +83,21 @@ public class FileStorageService implements IFileStorageService {
 
   @Nonnull
   @Override
-  @Transactional(readOnly = true)
   public FileDownload download(@Nonnull final Long id) {
-    StoredFileEntity entity = storedFileRepository.findById(id)
+    final var entity = storedFileRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("File not found: " + id));
 
     try {
-      InputStream stream = objectStorage.get(entity.getStorageKey());
-      StoredFile meta = new StoredFile(
+      final var stream = objectStorage.get(entity.getStorageKey());
+      final var meta = new StoredFile(
               entity.getId(),
               entity.getFilename(),
               entity.getContentType(),
               entity.getSize(),
               entity.getChecksumSha256()
       );
-      return new FileDownload(meta, stream);
+
+      return new FileDownload(meta, stream.orElse(null));
     } catch (Exception e) {
       throw new RuntimeException("Download failed", e);
     }
@@ -101,7 +105,6 @@ public class FileStorageService implements IFileStorageService {
 
   @Nonnull
   @Override
-  @Transactional(readOnly = true)
   public StoredFile getMeta(@Nonnull final Long id) {
     StoredFileEntity entity = storedFileRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("File not found: " + id));

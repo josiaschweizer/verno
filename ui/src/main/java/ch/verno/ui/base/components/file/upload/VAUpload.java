@@ -16,4 +16,26 @@ public class VAUpload extends Upload {
     super(uploadHandler, targetName);
   }
 
+  public void prefillUploadWithExistingFile(@Nonnull final String fileName,
+                                            @Nonnull final String contentType,
+                                            final long sizeBytes) {
+    this.getElement().executeJs("""
+              const name = $0;
+              const type = $1;
+              const size = $2;
+            
+              // vaadin-upload file item model
+              this.files = [{
+                name,
+                type,
+                size,
+                progress: 100,
+                complete: true,
+                error: false,
+                uploading: false
+              }];
+            """, fileName, contentType, sizeBytes);
+  }
+
+
 }

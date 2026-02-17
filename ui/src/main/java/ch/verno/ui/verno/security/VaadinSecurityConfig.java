@@ -18,21 +18,29 @@ public class VaadinSecurityConfig {
 
   @Bean
   @Order(2)
+  public SecurityFilterChain internalApiFilterChain(@Nonnull HttpSecurity http) throws Exception {
+    http
+            .securityMatcher("/internal/api/v1/**")
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+
+    return http.build();
+  }
+
+  @Bean
+  @Order(3)
   public SecurityFilterChain vaadinFilterChain(@Nonnull HttpSecurity http,
-                                               @Qualifier("vaadinAuthenticationManager") @Nonnull AuthenticationManager vaadinAuthenticationManager) {
+                                               @Qualifier("vaadinAuthenticationManager") @Nonnull AuthenticationManager vaadinAuthenticationManager) throws Exception {
     http
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(vaadinAuthenticationManager)
+            .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(ApiUrl.TEMP_FILE_REPORT + "/**").permitAll()
-                    .requestMatchers(ApiUrl.TEMP_FILE_IMPORT + "/**").permitAll()
-                    .requestMatchers(ApiUrl.TEMP_FILE_EXPORT + "/**").permitAll()
-                    .requestMatchers(ApiUrl.FILES + "/**").permitAll()
+                    .requestMatchers("/error").permitAll()
             )
             .with(VaadinSecurityConfigurer.vaadin(), configurer ->
                     configurer.loginView(LoginView.class)
-            )
-            .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+            );
 
     return http.build();
   }

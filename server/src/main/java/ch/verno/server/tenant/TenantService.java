@@ -1,6 +1,7 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.db.dto.table.TenantDto;
+import ch.verno.common.db.service.ITenantService;
 import ch.verno.server.mapper.TenantMapper;
 import ch.verno.server.repository.TenantRepository;
 import jakarta.annotation.Nonnull;
@@ -10,18 +11,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TenantLookupService {
+public class TenantService implements ITenantService {
 
   @Nonnull
   private final TenantRepository tenantRepository;
 
   private final Map<String, Long> cacheBySlug = new ConcurrentHashMap<>();
 
-  public TenantLookupService(@Nonnull final TenantRepository tenantRepository) {
+  public TenantService(@Nonnull final TenantRepository tenantRepository) {
     this.tenantRepository = tenantRepository;
   }
 
   @Nonnull
+  @Override
   public Optional<Long> findTenantIdBySlug(@Nonnull final String slug) {
     final var key = slug.trim().toLowerCase();
     final var cached = cacheBySlug.get(key);
@@ -35,6 +37,14 @@ public class TenantLookupService {
   }
 
   @Nonnull
+  @Override
+  public Optional<TenantDto> findById(@Nonnull final Long id) {
+    return tenantRepository.findById(id)
+            .map(TenantMapper::toDto);
+  }
+
+  @Nonnull
+  @Override
   public List<TenantDto> findAllTenants() {
     return tenantRepository.findAll().stream()
             .map(TenantMapper::toDto)

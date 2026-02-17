@@ -29,7 +29,7 @@ public class StoredFileEntity extends TenantScopedEntity {
   @Column(nullable = false, length = 128)
   private String checksumSha256;
 
-  @Column(nullable = false, length = 1024)
+  @Column(nullable = true, length = 1024)
   private String storageKey;
 
   @Column(nullable = false)

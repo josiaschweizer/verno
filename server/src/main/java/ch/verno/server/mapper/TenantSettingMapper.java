@@ -61,6 +61,7 @@ public class TenantSettingMapper {
     entity.setEnforceCourseLevelSettings(dto.isEnforceCourseLevelSettings());
     entity.setParentOneMainParent(dto.isParentOneMainParent());
     entity.setCourseReportName(dto.getCourseReportName());
+    entity.setCourseReportTemplate(dto.getCourseReportTemplate());
     entity.setLimitCourseAssignmentsToActive(dto.isLimitCourseAssignmentsToActive());
   }
 }

@@ -1,7 +1,7 @@
 package ch.verno.ui.base.error.tenant;
 
 import ch.verno.publ.Routes;
-import ch.verno.server.tenant.TenantLookupService;
+import ch.verno.server.tenant.TenantService;
 import ch.verno.ui.base.layout.PublicLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -16,7 +16,7 @@ import jakarta.annotation.Nonnull;
 @Route(value = Routes.TENANT_NOT_FOUND, layout = PublicLayout.class)
 public class TenantNotFoundView extends VerticalLayout {
 
-  public TenantNotFoundView(@Nonnull TenantLookupService tenantLookupService) {
+  public TenantNotFoundView(@Nonnull TenantService tenantService) {
     setSpacing(true);
     setPadding(true);
     setMaxWidth("800px");
@@ -27,7 +27,7 @@ public class TenantNotFoundView extends VerticalLayout {
 
     add(title, description);
 
-    final var tenants = tenantLookupService.findAllTenants();
+    final var tenants = tenantService.findAllTenants();
 
     if (tenants.isEmpty()) {
       final var empty = new Span("No tenant available.");
