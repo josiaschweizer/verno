@@ -27,9 +27,9 @@ public abstract class VABaseSettingsPage extends VerticalLayout {
       // Make each setting a flexible panel: allow it to grow and shrink but keep a sensible
       // minimum and maximum width so panels themselves resize when the viewport changes.
       setting.getStyle()
-              .set("flex", "1 1 320px");
+              .set("flex", "1 1 400px");
       setting.getStyle()
-              .set("min-width", "320px");
+              .set("min-width", "400px");
       setting.getStyle()
               .set("max-width", "900px");
 

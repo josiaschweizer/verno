@@ -58,4 +58,14 @@ public class ApiExceptionHandler {
                     .toList()
     ));
   }
+
+  @Nonnull
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity<?> handleRuntimeException(@Nonnull final RuntimeException ex) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "code", "INTERNAL_ERROR",
+            "message", ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred"
+    ));
+  }
 }

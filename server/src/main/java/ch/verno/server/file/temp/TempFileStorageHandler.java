@@ -1,7 +1,8 @@
 package ch.verno.server.file.temp;
 
-import ch.verno.common.file.dto.FileDto;
+import ch.verno.common.api.dto.internal.file.temp.FileDto;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
@@ -17,16 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class TempFileStorageHandler {
 
-  public static final String BASE_DIR = "verno-temp-";
-
-  private final Path baseDir;
-  private final Map<String, TempFileEntry> index;
+  @Nonnull private final Path baseDir;
+  @Nonnull private final Map<String, TempFileEntry> index;
 
   public TempFileStorageHandler() {
     index = new ConcurrentHashMap<>();
 
     try {
-      this.baseDir = Files.createTempDirectory(BASE_DIR);
+      this.baseDir = Files.createTempDirectory(VernoConstants.TEMP_FILE_BASE_DIR);
     } catch (IOException e) {
       throw new IllegalStateException("Could not create temp directory", e);
     }

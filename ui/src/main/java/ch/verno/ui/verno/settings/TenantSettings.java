@@ -2,13 +2,12 @@ package ch.verno.ui.verno.settings;
 
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
-import ch.verno.server.service.intern.TenantSettingService;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
-import ch.verno.ui.verno.settings.setting.courselevel.CourseLevelSetting;
-import ch.verno.ui.verno.settings.setting.quantity.QuantitySetting;
-import ch.verno.ui.verno.settings.setting.report.ReportSetting;
-import ch.verno.ui.verno.settings.setting.shared.SharedSettings;
+import ch.verno.ui.verno.settings.panels.courselevel.CourseLevelSetting;
+import ch.verno.ui.verno.settings.panels.quantity.QuantitySetting;
+import ch.verno.ui.verno.settings.panels.report.ReportSetting;
+import ch.verno.ui.verno.settings.panels.shared.SharedSettings;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;

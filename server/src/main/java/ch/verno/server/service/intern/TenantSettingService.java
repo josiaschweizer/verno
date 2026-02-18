@@ -65,6 +65,7 @@ public class TenantSettingService implements ITenantSettingService {
                     dto.isEnforceCourseLevelSettings(),
                     dto.isParentOneMainParent(),
                     dto.getCourseReportName(),
+                    dto.getCourseReportTemplate(),
                     dto.isLimitCourseAssignmentsToActive()
             ));
 

@@ -18,6 +18,7 @@ public class TenantSettingMapper {
             entity.isEnforceCourseLevelSettings(),
             entity.isParentOneMainParent(),
             entity.getCourseReportName(),
+            entity.getCourseReportTemplate(),
             entity.isLimitCourseAssignmentsToActive()
     );
 
@@ -38,6 +39,7 @@ public class TenantSettingMapper {
             dto.isEnforceCourseLevelSettings(),
             dto.isParentOneMainParent(),
             dto.getCourseReportName(),
+            dto.getCourseReportTemplate(),
             dto.isLimitCourseAssignmentsToActive()
     );
 
@@ -59,6 +61,7 @@ public class TenantSettingMapper {
     entity.setEnforceCourseLevelSettings(dto.isEnforceCourseLevelSettings());
     entity.setParentOneMainParent(dto.isParentOneMainParent());
     entity.setCourseReportName(dto.getCourseReportName());
+    entity.setCourseReportTemplate(dto.getCourseReportTemplate());
     entity.setLimitCourseAssignmentsToActive(dto.isLimitCourseAssignmentsToActive());
   }
 }

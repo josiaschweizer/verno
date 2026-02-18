@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto.defaultdto;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 
 public class DefaultTenantSettingDto {
@@ -17,6 +18,7 @@ public class DefaultTenantSettingDto {
             false,
             true,
             "Course Report",
+            Publ.ZERO_LONG,
             false
     );
   }

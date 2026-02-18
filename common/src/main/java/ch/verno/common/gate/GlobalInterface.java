@@ -1,11 +1,15 @@
 package ch.verno.common.gate;
 
 import ch.verno.common.db.dto.table.AppUserDto;
+import ch.verno.common.db.dto.table.TenantDto;
 import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.db.service.ITenantService;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -100,5 +104,17 @@ public class GlobalInterface {
   @Nonnull
   public I18NProvider getI18NProvider() {
     return context.getBean(I18NProvider.class);
+  }
+
+  @Nullable
+  public TenantDto resolveTenant() {
+    final var tenantService = getService(ITenantService.class);
+    final var tenantId = TenantContext.get();
+
+    if (tenantId != null) {
+      return tenantService.findById(tenantId).orElse(null);
+    }
+
+    return null;
   }
 }

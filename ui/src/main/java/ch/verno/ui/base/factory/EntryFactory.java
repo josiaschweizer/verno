@@ -1,9 +1,9 @@
 package ch.verno.ui.base.factory;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
@@ -12,6 +12,7 @@ import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
+import ch.verno.ui.base.components.file.upload.VAUpload;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
@@ -29,6 +30,7 @@ import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.i18n.I18NProvider;
+import com.vaadin.flow.server.streams.UploadHandler;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.vaadin.addons.tatu.ColorPicker;
@@ -383,6 +385,12 @@ public class EntryFactory<DTO> {
     );
 
     return scheduleWeekPicker;
+  }
+
+  @Nonnull
+  public VAUpload createFileUploadEntry(@Nonnull final UploadHandler uploadHandler,
+                                        @Nonnull final String label) {
+    return new VAUpload(uploadHandler, label);
   }
 
   @Nonnull

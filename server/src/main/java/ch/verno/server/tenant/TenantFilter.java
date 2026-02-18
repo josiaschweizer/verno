@@ -83,8 +83,10 @@ public class TenantFilter extends OncePerRequestFilter {
     try {
       final var tenantId = resolveTenantIdWithDevFallback(request).orElseThrow(() -> new TenantNotResolvedException("Tenant could not be resolved"));
       final var httpSession = request.getSession(false);
+
       if (httpSession != null) {
         httpSession.removeAttribute(VernoConstants.ATTR_PUBLIC_NO_TENANT);
+        httpSession.setAttribute(VernoConstants.ATTR_TENANT_ID, tenantId);
       }
 
       TenantContext.set(tenantId);

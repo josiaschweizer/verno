@@ -5,8 +5,8 @@ import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.IParticipantService;
-import ch.verno.common.file.dto.CsvMapDto;
-import ch.verno.common.file.FileServerGate;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
+import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.server.io.importing.dto.DbField;
@@ -129,7 +129,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @Override
   public ImportResult performImport(@Nonnull final String fileToken,
                                              @Nonnull final Map<String, String> mapping) {
-    final var fileServerGate = globalInterface.getService(FileServerGate.class);
+    final var fileServerGate = globalInterface.getService(TempFileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);
     final var csvRows = fileServerGate.parseRows(fileDto);
 
