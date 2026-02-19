@@ -13,7 +13,7 @@ public class TenantSettingDto extends BaseDto {
   private boolean enforceCourseLevelSettings;
   private boolean isParentOneMainParent;
   @Nonnull private String courseReportName;
-  @Nonnull private Long courseReportTemplate;
+  @Nullable private Long courseReportTemplate;
   private boolean limitCourseAssignmentsToActive;
 
   public TenantSettingDto() {
@@ -24,7 +24,7 @@ public class TenantSettingDto extends BaseDto {
             false,
             true,
             Publ.EMPTY_STRING,
-            Publ.ZERO_LONG,
+            null,
             false
     );
   }
@@ -36,7 +36,7 @@ public class TenantSettingDto extends BaseDto {
                           final boolean enforceCourseLevelSettings,
                           final boolean isParentOneMainParent,
                           @Nonnull final String courseReportName,
-                          @Nonnull final Long courseReportTemplate,
+                          @Nullable final Long courseReportTemplate,
                           final boolean limitCourseAssignmentsToActive) {
     setId(id);
     this.courseDaysPerSchedule = courseDaysPerSchedule;
@@ -100,12 +100,12 @@ public class TenantSettingDto extends BaseDto {
     this.courseReportName = courseReportName;
   }
 
-  @Nonnull
+  @Nullable
   public Long getCourseReportTemplate() {
     return courseReportTemplate;
   }
 
-  public void setCourseReportTemplate(@Nonnull final Long courseReportTemplate) {
+  public void setCourseReportTemplate(@Nullable final Long courseReportTemplate) {
     this.courseReportTemplate = courseReportTemplate;
   }
 

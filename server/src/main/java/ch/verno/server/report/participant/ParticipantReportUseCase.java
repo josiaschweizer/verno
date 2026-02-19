@@ -39,7 +39,7 @@ public class ParticipantReportUseCase implements BaseListReportUseCase<Participa
     final var reportData = new ParticipantListReportDto(dtoList);
 
     final var filename = "participant_list_report.pdf";
-    final var pdfBytes = reportRenderer.renderReportPdf(reportData);
+    final var pdfBytes = reportRenderer.renderReportPdf(reportData, null);
 
     return new FileDto(filename, pdfBytes);
   }

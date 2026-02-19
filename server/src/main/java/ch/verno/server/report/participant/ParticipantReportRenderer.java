@@ -4,6 +4,7 @@ import ch.verno.report.dto.ParticipantListReportDto;
 import ch.verno.report.participant.ParticipantReport;
 import ch.verno.server.report.base.renderer.BaseReportRenderer;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 
@@ -15,7 +16,8 @@ public class ParticipantReportRenderer extends BaseReportRenderer<ParticipantLis
   }
 
   @Override
-  public byte[] renderReportPdf(@Nonnull final ParticipantListReportDto reportData) {
+  public byte[] renderReportPdf(@Nonnull final ParticipantListReportDto reportData,
+                                @Nullable final byte[] reportTemplate) {
     return new ParticipantReport(templateEngine).generateReportPdf(reportData);
   }
 }

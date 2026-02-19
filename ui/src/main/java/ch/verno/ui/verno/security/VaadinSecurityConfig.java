@@ -22,6 +22,7 @@ public class VaadinSecurityConfig {
     http
             .securityMatcher("/internal/api/v1/**")
             .csrf(AbstractHttpConfigurer::disable)
+            .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
     return http.build();
