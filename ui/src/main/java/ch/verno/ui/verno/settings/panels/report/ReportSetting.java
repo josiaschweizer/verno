@@ -67,21 +67,26 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
     courseReportFileUpload.setMaxFiles(1);
     courseReportFileUpload.setAcceptedFileTypes(FileType.HTML.getMimeType());
     courseReportFileUpload.addFileRemovedListener(event -> {
+      final var courseReportTemplate = dto.getCourseReportTemplate();
+      if (courseReportTemplate == null) {
+        return;
+      }
+
       fileApiClient.deleteReportTemplate(
               resolveTenantSlug(),
-              dto.getCourseReportTemplate()
+              courseReportTemplate
       );
 
-      dto.setCourseReportTemplate(Publ.ZERO_LONG);
+      dto.setCourseReportTemplate(null);
 
       // we don't save the dto because then all changes would be saved and with this methode we can only remove the template without saving other changes that the user maybe made but doesn't want to save yet
       final var toUpdate = tenantSettingService.getCurrentTenantSettingOrDefault();
-      toUpdate.setCourseReportTemplate(Publ.ZERO_LONG);
+      toUpdate.setCourseReportTemplate(null);
       tenantSettingService.saveCurrentTenantSetting(toUpdate);
     });
 
     final var templateId = dto.getCourseReportTemplate();
-    if (!templateId.equals(Publ.ZERO_LONG)) {
+    if (templateId != null) {
       final var report = fileApiClient.getReportTemplate(resolveTenantSlug(), templateId);
 
       if (report != null && report.bytes().length > 0) {

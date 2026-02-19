@@ -4,6 +4,7 @@ import ch.verno.report.course.CourseReport;
 import ch.verno.report.dto.CourseReportDto;
 import ch.verno.server.report.base.renderer.BaseReportRenderer;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 
@@ -15,8 +16,9 @@ public class CourseReportRenderer extends BaseReportRenderer<CourseReportDto> {
   }
 
   @Override
-  public byte[] renderReportPdf(@Nonnull final CourseReportDto reportData) {
-    return new CourseReport(templateEngine).generateReportPdf(reportData);
+  public byte[] renderReportPdf(@Nonnull final CourseReportDto reportData,
+                                @Nullable final byte[] reportTemplate) {
+    return new CourseReport(templateEngine, reportTemplate).generateReportPdf(reportData);
   }
 
 }

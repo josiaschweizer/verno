@@ -14,6 +14,7 @@ public class CourseReportMapper {
   private CourseReportMapper() {
   }
 
+  @Nonnull
   public static CourseReportDto map(@Nonnull final CourseDto course,
                                     @Nonnull final List<ParticipantDto> participants,
                                     @Nonnull final List<LocalDate> courseDate) {

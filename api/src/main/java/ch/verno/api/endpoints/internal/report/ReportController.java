@@ -25,13 +25,13 @@ public class ReportController {
                                                @RequestParam(defaultValue = "inline") String disposition) {
     final var reportDto = reportServerGate.loadTempFile(token);
 
-    ContentDisposition cd = ContentDisposition
+    final var contentDisposition = ContentDisposition
             .builder("attachment".equalsIgnoreCase(disposition) ? "attachment" : "inline")
             .filename(reportDto.filename())
             .build();
 
     return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, cd.toString())
+            .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
             .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
             .header(HttpHeaders.PRAGMA, "no-cache")

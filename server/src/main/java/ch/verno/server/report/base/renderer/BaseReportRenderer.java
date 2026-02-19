@@ -1,6 +1,7 @@
 package ch.verno.server.report.base.renderer;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.thymeleaf.TemplateEngine;
 
 public abstract class BaseReportRenderer<T> {
@@ -11,6 +12,7 @@ public abstract class BaseReportRenderer<T> {
     this.templateEngine = templateEngine;
   }
 
-  public abstract byte[] renderReportPdf(@Nonnull final T reportData);
+  public abstract byte[] renderReportPdf(@Nonnull T reportData,
+                                         @Nullable byte[] reportTemplate);
 
 }
