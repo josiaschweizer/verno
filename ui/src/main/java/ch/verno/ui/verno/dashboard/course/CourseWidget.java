@@ -9,6 +9,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
+import ch.verno.ui.verno.dashboard.email.EmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.Text;
@@ -55,12 +56,15 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void buildHeaderActions(@Nonnull final HorizontalLayout header) {
+    final var emailButton = createHeaderButton("Send Email", VaadinIcon.MAILBOX, e -> {
+      new EmailDialog(globalInterface).open();
+    });
+
     final var reportButton = createHeaderButton("Report", VaadinIcon.FILE_TEXT, e -> {
-      final var dialog = new CourseReportDialog(
+      new CourseReportDialog(
               globalInterface,
               currentCourse,
-              participantsInCourse);
-      dialog.open();
+              participantsInCourse).open();
     });
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
@@ -85,7 +89,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
               courseDetailDialog.open();
             });
 
-    header.add(reportButton, assignButton, detailButton);
+    header.add(emailButton, reportButton, assignButton, detailButton);
   }
 
   @Override
@@ -119,7 +123,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Override
   protected void refresh() {
     if (participantsGrid == null) {
-      participantsInCourse = participantService.findParticipants(ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null));
+      participantsInCourse = participantService.findParticipants(
+              ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null
+              ));
       return;
     }
 

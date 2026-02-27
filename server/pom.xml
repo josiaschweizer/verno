@@ -69,5 +69,15 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-crypto</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.simplejavamail</groupId>
+      <artifactId>simple-java-mail</artifactId>
+      <version>8.12.6</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.2.0</version>
+    </dependency>
   </dependencies>
 </project>

@@ -145,9 +145,9 @@ public class CreateUserDialog extends VADialog {
                     false
             ));
 
-    final var currentUser = globalInterface.getOptionalCurrentUser();
+    final var currentUser = globalInterface.getUserProperties().getOptionalCurrentUser();
     if (currentUser.isEmpty()) {
-      globalInterface.logout(); // user has changed his own username - log him out to avoid any issues with the security context
+      globalInterface.getUserProperties().logout(); // user has changed his own username - log him out to avoid any issues with the security context
       return;
     }
 

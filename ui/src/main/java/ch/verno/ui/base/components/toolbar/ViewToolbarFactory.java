@@ -1,7 +1,13 @@
 package ch.verno.ui.base.components.toolbar;
 
+import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.gate.servergate.MailServerGate;
 import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.common.lib.mail.MailContentDto;
+import ch.verno.common.lib.mail.placeholder.Placeholder;
+import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.UserActionBadge;
@@ -13,6 +19,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+
+import java.util.List;
 
 public class ViewToolbarFactory {
 
@@ -99,16 +107,27 @@ public class ViewToolbarFactory {
 
   private static void applyUserBadgeToToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final ViewToolbar toolbar) {
-    final var currentUser = getCurrentUser();
-    if (currentUser == null) {
-      return;
-    }
+    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
+//    final var currentUser = getCurrentUser();
+//    if (currentUser == null) {
+//      return;
+//    }
 
     final var ui = UI.getCurrent();
     final var userBadge = new UserActionBadge(currentUser.getUsername())
 //            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
-            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", globalInterface::logout);
+            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", () -> globalInterface.getUserProperties().logout())
+            .addItem(VaadinIcon.MAILBOX, "Send test mail", () -> {
+              final var participantService = globalInterface.getService(IParticipantService.class);
+              final var participants = participantService.getAllParticipants();
+
+              final var mailService = globalInterface.getService(MailServerGate.class);
+              mailService.sendCourseEmails(
+                      new MailContentDto("Test Email", "This is a ${firstname} email from the Verno application."),
+                      List.of(new PlaceholderValue<>(Placeholder.FIRSTNAME, ParticipantDto::getFirstName)),
+                      participants);
+            });
 
     toolbar.addUserAction(userBadge);
   }
@@ -116,9 +135,10 @@ public class ViewToolbarFactory {
   @Nullable
   private static User getCurrentUser() {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
       return (User) authentication.getPrincipal();
     }
+
     return null;
   }
 

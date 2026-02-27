@@ -21,6 +21,7 @@ public abstract class VADialog extends Dialog {
 
     setHeight("auto");
     setMaxHeight(dialogSize.getMaxHeight());
+    setMinHeight(dialogSize.getMinHeight());
 
     setWidth(dialogSize.getWidth());
     setMinWidth(dialogSize.getMinWidth());
