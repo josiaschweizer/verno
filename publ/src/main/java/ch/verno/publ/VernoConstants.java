@@ -7,6 +7,8 @@ public class VernoConstants {
   private VernoConstants() {
   }
 
+  public static final int DEFAULT_SMTP_PORT = 587;
+
   public static final String ADMIN_ROLE = "ADMIN";
   public static final String STATUS_CREATED = "CREATED";
 

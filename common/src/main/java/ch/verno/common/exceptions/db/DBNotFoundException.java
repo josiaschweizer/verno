@@ -14,9 +14,20 @@ public class DBNotFoundException extends IllegalArgumentException {
     super(buildMessage(notFoundReason, id));
   }
 
+  public DBNotFoundException(@Nonnull final DBNotFoundReason notFoundReason,
+                             @Nonnull final String identifier) {
+    super(buildMessage(notFoundReason, identifier));
+  }
+
   @Nonnull
   private static String buildMessage(@Nonnull final DBNotFoundReason reason,
                                      @Nonnull final Long id) {
+    return buildMessage(reason, id.toString());
+  }
+
+  @Nonnull
+  private static String buildMessage(@Nonnull final DBNotFoundReason reason,
+                                     @Nonnull final String id) {
     final var base = reason.getMessage();
     return base.endsWith(Publ.SPACE)
         ? base + id
