@@ -2,6 +2,7 @@ package ch.verno.ui.verno.settings.panels.mail;
 
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.servergate.MailServerGate;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.dialog.DialogSize;
 import ch.verno.ui.base.dialog.VADialog;
@@ -150,8 +151,9 @@ public class TestConnectionDialog extends VADialog {
 
     final var ui = UI.getCurrent();
     final var session = VaadinSession.getCurrent();
+    final var tenantId = TenantContext.get();
 
-    // Resolve translations in UI thread before async call
+    // resolve translations in ui thread before async call
     final var successMsg = getTranslation("setting.configuration.is.valid.test.email.sent.to.0", email);
     final var errorMsgTemplate = getTranslation("setting.configuration.is.not.valid.0.1", "{0}", "{1}");
 
@@ -162,7 +164,14 @@ public class TestConnectionDialog extends VADialog {
     CompletableFuture
             .supplyAsync(() -> {
               VaadinSession.setCurrent(session);
-              return sendTestMail(email, successMsg, errorMsgTemplate);
+              if (tenantId != null) {
+                TenantContext.set(tenantId);
+              }
+              try {
+                return sendTestMail(email, successMsg, errorMsgTemplate);
+              } finally {
+                TenantContext.clear();
+              }
             }, executor)
             .handle((res, ex) -> {
               final TestResult finalRes;
@@ -192,7 +201,7 @@ public class TestConnectionDialog extends VADialog {
       return new TestResult(TestStatus.VALID, successMsg);
     } catch (Exception e) {
       final var message = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
-      return new TestResult(TestStatus.INVALID, errorMsgTemplate.replace("{0}", Publ.PAGE_BREK).replace("{1}", message));
+      return new TestResult(TestStatus.INVALID, errorMsgTemplate.replace("{0}", Publ.COLON + Publ.SPACE).replace("{1}", message));
     }
   }
 

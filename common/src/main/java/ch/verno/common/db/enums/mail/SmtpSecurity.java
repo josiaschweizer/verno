@@ -1,6 +1,7 @@
 package ch.verno.common.db.enums.mail;
 
 import jakarta.annotation.Nonnull;
+import org.simplejavamail.api.mailer.config.TransportStrategy;
 
 public enum SmtpSecurity {
   STARTTLS(0, "STARTTLS"),
@@ -34,5 +35,14 @@ public enum SmtpSecurity {
   @Nonnull
   public String getDisplayName() {
     return displayName;
+  }
+
+  @Nonnull
+  public TransportStrategy toTransportStrategy() {
+    return switch (this) {
+      case STARTTLS -> TransportStrategy.SMTP_TLS;
+      case SSL_TLS -> TransportStrategy.SMTPS;
+      case NONE -> TransportStrategy.SMTP;
+    };
   }
 }

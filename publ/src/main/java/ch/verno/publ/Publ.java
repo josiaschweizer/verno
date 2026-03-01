@@ -27,7 +27,6 @@ public class Publ {
   public static final String MINUS = "−";
   public static final String LEFT_SINGLE_ANGLE_QUOTATION_MARK = "‹";
   public static final String RIGHT_SINGLE_ANGLE_QUOTATION_MARK = "›";
-  public static final String PAGE_BREK = "\n";
 
   public static final String S = "s";
   public static final String ID = "id";

@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class MailServerGateImpl implements MailServerGate {
 
-  @Nonnull private final Lazy<MailUtil> mailHelper;
+  @Nonnull private final Lazy<MailFactory> mailHelper;
 
   public MailServerGateImpl(@Nonnull final GlobalInterface globalInterface) {
-    this.mailHelper = Lazy.of(() -> new MailUtil(globalInterface));
+    this.mailHelper = Lazy.of(() -> new MailFactory(globalInterface));
   }
 
   @Override
