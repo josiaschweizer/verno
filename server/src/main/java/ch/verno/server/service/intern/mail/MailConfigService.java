@@ -71,6 +71,12 @@ public class MailConfigService implements IMailConfigService {
   }
 
   @Override
+  public boolean hasConfigForCurrentTenant(){
+    final var tenantId = TenantContext.getRequired();
+    return mailConfigRepository.findByTenantId(tenantId).isPresent();
+  }
+
+  @Override
   @Transactional
   public void setEnabled(final boolean enabled) {
     final var tenantId = TenantContext.getRequired();

@@ -62,7 +62,7 @@ public class ChangePasswordDialog extends VADialog {
             )
             .bind(ChangePasswordDto::getConfirmNewPassword, ChangePasswordDto::setConfirmNewPassword);
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(newPassword, confirmNewPassword);
+    return LayoutUtil.createHorizontal(newPassword, confirmNewPassword);
   }
 
   @Nonnull

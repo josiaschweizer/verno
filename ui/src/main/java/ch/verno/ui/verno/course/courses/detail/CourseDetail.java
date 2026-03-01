@@ -156,7 +156,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Nonnull
   private HorizontalLayout createInfoLayout() {
-    final var titleEntry = entryFactory.createTextEntry(
+    final var titleEntry = entryFactory.createTextField(
             CourseDto::getTitle,
             CourseDto::setTitle,
             getBinder(),
@@ -170,7 +170,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getBinder(),
             Optional.empty(),
             getTranslation("course.max.capacity"));
-    final var location = entryFactory.createTextEntry(
+    final var location = entryFactory.createTextField(
             CourseDto::getLocation,
             CourseDto::setLocation,
             getBinder(),
@@ -190,7 +190,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             Optional.empty(),
             getTranslation("course.end.time"));
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(titleEntry, capacityEntry, location, startTime, endTime);
+    return LayoutUtil.createHorizontal(titleEntry, capacityEntry, location, startTime, endTime);
   }
 
   private HorizontalLayout createCourseLayout() {
@@ -235,12 +235,12 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             instructorOptions
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(courseScheduleEntry, courseLevelEntry, instructorEntry);
+    return LayoutUtil.createHorizontal(courseScheduleEntry, courseLevelEntry, instructorEntry);
   }
 
   @Nonnull
   private HorizontalLayout createNoteLayout() {
-    final var noteEntry = entryFactory.createTextEntry(
+    final var noteEntry = entryFactory.createTextField(
             CourseDto::getNote,
             CourseDto::setNote,
             getBinder(),
@@ -249,7 +249,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             true
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(noteEntry);
+    return LayoutUtil.createHorizontal(noteEntry);
   }
 
   @Nonnull
@@ -262,7 +262,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getTranslation("course.weekdays")
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(weekOptions);
+    return LayoutUtil.createHorizontal(weekOptions);
   }
 
   @Override

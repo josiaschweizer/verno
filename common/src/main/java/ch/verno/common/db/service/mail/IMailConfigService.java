@@ -11,5 +11,7 @@ public interface IMailConfigService {
   @Nonnull
   MailConfigDto getConfigForCurrentTenant();
 
+  boolean hasConfigForCurrentTenant();
+
   void setEnabled(boolean enabled);
 }

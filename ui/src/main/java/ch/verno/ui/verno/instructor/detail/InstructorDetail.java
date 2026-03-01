@@ -119,7 +119,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             getBinder(),
             genderService.getAllGenders());
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(firstname, lastname, gender);
+    return LayoutUtil.createHorizontal(firstname, lastname, gender);
   }
 
   @Nonnull
@@ -132,7 +132,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             InstructorDto::getPhone,
             InstructorDto::setPhone,
             getBinder());
-    return LayoutUtil.createHorizontalLayoutFromComponents(email, phone);
+    return LayoutUtil.createHorizontal(email, phone);
   }
 
   @Nonnull
@@ -158,7 +158,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             (dto, value) -> dto.getAddress().setCountry(value),
             getBinder());
 
-    return new VerticalLayout(LayoutUtil.createHorizontalLayoutFromComponents(street, houseNumber, zipCode, city, country));
+    return new VerticalLayout(LayoutUtil.createHorizontal(street, houseNumber, zipCode, city, country));
   }
 
   @Override

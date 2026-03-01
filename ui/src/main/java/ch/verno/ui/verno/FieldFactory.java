@@ -1,14 +1,14 @@
 package ch.verno.ui.verno;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.GenderDto;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
+import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
@@ -48,10 +48,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createFirstNameField(@Nonnull final ValueProvider<T, String> valueProvider,
-                                        @Nonnull final Setter<T, String> valueSetter,
-                                        @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+  public VATextField createFirstNameField(@Nonnull final ValueProvider<T, String> valueProvider,
+                                          @Nonnull final Setter<T, String> valueSetter,
+                                          @Nonnull final Binder<T> binder) {
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -60,10 +60,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createLastNameField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createLastNameField(@Nonnull final ValueProvider<T, String> valueProvider,
                                        @Nonnull final Setter<T, String> valueSetter,
                                        @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -130,10 +130,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createStreetField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createStreetField(@Nonnull final ValueProvider<T, String> valueProvider,
                                      @Nonnull final Setter<T, String> valueSetter,
                                      @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -143,10 +143,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createHouseNumberField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createHouseNumberField(@Nonnull final ValueProvider<T, String> valueProvider,
                                           @Nonnull final Setter<T, String> valueSetter,
                                           @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -156,10 +156,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createZipCodeField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createZipCodeField(@Nonnull final ValueProvider<T, String> valueProvider,
                                       @Nonnull final Setter<T, String> valueSetter,
                                       @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -169,10 +169,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createCityField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createCityField(@Nonnull final ValueProvider<T, String> valueProvider,
                                    @Nonnull final Setter<T, String> valueSetter,
                                    @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,
@@ -182,10 +182,10 @@ public class FieldFactory<T> {
   }
 
   @Nonnull
-  public TextField createCountryField(@Nonnull final ValueProvider<T, String> valueProvider,
+  public VATextField createCountryField(@Nonnull final ValueProvider<T, String> valueProvider,
                                       @Nonnull final Setter<T, String> valueSetter,
                                       @Nonnull final Binder<T> binder) {
-    return entryFactory.createTextEntry(
+    return entryFactory.createTextField(
             valueProvider,
             valueSetter,
             binder,

@@ -2,6 +2,7 @@ package ch.verno.common.db.dto.table.mail;
 
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.enums.mail.SmtpSecurity;
+import ch.verno.common.lib.Base64Util;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import jakarta.annotation.Nonnull;
@@ -139,8 +140,17 @@ public class MailConfigDto extends BaseDto {
     return smtpPasswordB64;
   }
 
+  @Nonnull
+  public String getDecodedSmtpPassword() {
+    return Base64Util.decodeToString(smtpPasswordB64);
+  }
+
   public void setSmtpPasswordB64(@Nonnull final String smtpPasswordB64) {
     this.smtpPasswordB64 = smtpPasswordB64;
+  }
+
+  public void setDecodedPasswordB64(@Nonnull final String decodedPassword) {
+    this.smtpPasswordB64 = Base64Util.encodeString(decodedPassword);
   }
 
   @Nonnull

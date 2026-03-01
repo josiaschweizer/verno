@@ -53,7 +53,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
   @Nonnull
   private VerticalLayout createCourseLayout() {
-    final var courseReportName = entryFactory.createTextEntry(
+    final var courseReportName = entryFactory.createTextField(
             TenantSettingDto::getCourseReportName,
             TenantSettingDto::setCourseReportName,
             binder,
@@ -165,6 +165,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
       tenantSettingService.saveCurrentTenantSetting(dto);
+      binder.setBean(dto);
     }
   }
 }

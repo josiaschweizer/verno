@@ -222,7 +222,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getBinder(),
             genderService.getAllGenders());
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
+    return LayoutUtil.createHorizontal(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
   }
 
   @Nonnull
@@ -236,7 +236,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             ParticipantDto::setPhone,
             getBinder());
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(emailEntry, phoneEntry);
+    return LayoutUtil.createHorizontal(emailEntry, phoneEntry);
   }
 
   @Nonnull
@@ -287,7 +287,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
       }
     });
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(courseLevelsEntry, coursesEntry);
+    return LayoutUtil.createHorizontal(courseLevelsEntry, coursesEntry);
   }
 
   @Nonnull
@@ -300,7 +300,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getTranslation("shared.note")
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(note);
+    return LayoutUtil.createHorizontal(note);
   }
 
   @Nonnull
@@ -326,7 +326,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             (dto, country) -> dto.getAddress().setCountry(country),
             getBinder());
 
-    return new VerticalLayout(LayoutUtil.createHorizontalLayoutFromComponents(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
+    return new VerticalLayout(LayoutUtil.createHorizontal(streetEntry, houseNumberEntry, zipCodeEntry, cityEntry, countryEntry));
   }
 
   @Nonnull
@@ -357,7 +357,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             (participantDto, phoneNumber) -> participantDto.getParentTwo().setPhone(phoneNumber)
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(parentOneLayout, parentTwoLayout);
+    return LayoutUtil.createHorizontal(parentOneLayout, parentTwoLayout);
   }
 
   @Nonnull
@@ -380,7 +380,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             LumoUtility.Border.BOTTOM
     );
 
-    final var firstNameEntry = entryFactory.createTextEntry(
+    final var firstNameEntry = entryFactory.createTextField(
             firstNameGetter,
             firstNameSetter,
             getBinder(),
@@ -388,7 +388,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getTranslation("shared.first.name")
     );
 
-    final var lastNameEntry = entryFactory.createTextEntry(
+    final var lastNameEntry = entryFactory.createTextField(
             lastNameGetter,
             lastNameSetter,
             getBinder(),
@@ -421,7 +421,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
     return new VerticalLayout(
             title,
-            LayoutUtil.createHorizontalLayoutFromComponents(firstNameEntry, lastNameEntry),
+            LayoutUtil.createHorizontal(firstNameEntry, lastNameEntry),
             genderEntry,
             emailEntry,
             phoneEntry

@@ -5,12 +5,11 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class LayoutUtil {
 
   @Nonnull
-  public static VerticalLayout createVerticalLayoutFromComponents(@Nonnull final Component... components) {
+  public static VerticalLayout createVertical(@Nonnull final Component... components) {
     final var layout = new VerticalLayout(components);
     layout.setPadding(false);
     layout.setSpacing(false);
@@ -19,7 +18,7 @@ public class LayoutUtil {
   }
 
   @Nonnull
-  public static HorizontalLayout createHorizontalLayoutFromComponents(@Nonnull final Component... components) {
+  public static HorizontalLayout createHorizontal(@Nonnull final Component... components) {
     final var layout = new HorizontalLayout();
     layout.setWidthFull();
 
