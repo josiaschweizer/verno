@@ -1,5 +1,6 @@
 package ch.verno.db.entity.mail;
 
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.enums.mail.SmtpSecurity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
@@ -20,9 +21,6 @@ public class MailConfigEntity {
   @MapsId
   @JoinColumn(name = "tenant_id", nullable = false)
   private TenantEntity tenant;
-
-  @Column(name = "enabled", nullable = false)
-  private boolean enabled = true;
 
   @Nonnull
   @Column(name = "from_name", nullable = false)
@@ -64,6 +62,11 @@ public class MailConfigEntity {
   private boolean smtpAuth = true;
 
   @Nonnull
+  @Enumerated(EnumType.STRING)
+  @Column(name = "mail_validity", nullable = false)
+  private MailValidity mailValidity;
+
+  @Nonnull
   @Column(name = "created_at", nullable = false, updatable = false)
   private OffsetDateTime createdAt = OffsetDateTime.now();
 
@@ -75,7 +78,6 @@ public class MailConfigEntity {
   }
 
   public MailConfigEntity(@Nonnull final TenantEntity tenant,
-                          final boolean enabled,
                           @Nonnull final String fromName,
                           @Nonnull final String fromEmail,
                           @Nullable final String replyToEmail,
@@ -85,9 +87,9 @@ public class MailConfigEntity {
                           @Nonnull final String smtpUsername,
                           @Nonnull final String smtpPasswordB64,
                           @Nonnull final SmtpSecurity smtpSecurity,
-                          final boolean smtpAuth) {
+                          final boolean smtpAuth,
+                          @Nonnull final MailValidity mailValidity) {
     this.tenant = tenant;
-    this.enabled = enabled;
     this.fromName = fromName;
     this.fromEmail = fromEmail;
     this.replyToEmail = replyToEmail;
@@ -98,6 +100,7 @@ public class MailConfigEntity {
     this.smtpPasswordB64 = smtpPasswordB64;
     this.smtpSecurity = smtpSecurity;
     this.smtpAuth = smtpAuth;
+    this.mailValidity = mailValidity;
   }
 
   @PreUpdate
@@ -115,14 +118,6 @@ public class MailConfigEntity {
 
   public void setTenant(@Nonnull final TenantEntity tenant) {
     this.tenant = tenant;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(final boolean enabled) {
-    this.enabled = enabled;
   }
 
   @Nonnull
@@ -211,6 +206,15 @@ public class MailConfigEntity {
 
   public void setSmtpAuth(final boolean smtpAuth) {
     this.smtpAuth = smtpAuth;
+  }
+
+  @Nonnull
+  public MailValidity getMailValidity() {
+    return mailValidity;
+  }
+
+  public void setMailValidity(@Nonnull final MailValidity mailValidity) {
+    this.mailValidity = mailValidity;
   }
 
   @Nonnull

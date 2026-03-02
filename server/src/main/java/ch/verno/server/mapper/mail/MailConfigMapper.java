@@ -17,7 +17,6 @@ public final class MailConfigMapper {
   public static MailConfigDto toDto(@Nonnull final MailConfigEntity entity) {
     return new MailConfigDto(
             entity.getTenant().getId(),
-            entity.isEnabled(),
             entity.getFromName(),
             entity.getFromEmail(),
             Optional.ofNullable(entity.getReplyToEmail()).orElse(Publ.EMPTY_STRING),
@@ -27,7 +26,8 @@ public final class MailConfigMapper {
             entity.getSmtpUsername(),
             entity.getSmtpPasswordB64(),
             entity.getSmtpSecurity(),
-            entity.isSmtpAuth()
+            entity.isSmtpAuth(),
+            entity.getMailValidity()
     );
   }
 
@@ -36,7 +36,6 @@ public final class MailConfigMapper {
                                           @Nonnull final TenantEntity tenant) {
     return new MailConfigEntity(
             tenant,
-            dto.isEnabled(),
             dto.getFromName(),
             dto.getFromEmail(),
             dto.getReplyToEmail(),
@@ -46,14 +45,13 @@ public final class MailConfigMapper {
             dto.getSmtpUsername(),
             dto.getSmtpPasswordB64(),
             dto.getSmtpSecurity(),
-            dto.isSmtpAuth()
+            dto.isSmtpAuth(),
+            dto.getMailValidity()
     );
   }
 
   public static void updateEntity(@Nonnull final MailConfigEntity entity,
                                   @Nonnull final MailConfigDto dto) {
-    entity.setEnabled(dto.isEnabled());
-
     entity.setFromName(dto.getFromName());
     entity.setFromEmail(dto.getFromEmail());
     entity.setReplyToEmail(dto.getReplyToEmail());
@@ -65,5 +63,6 @@ public final class MailConfigMapper {
     entity.setSmtpPasswordB64(dto.getSmtpPasswordB64());
     entity.setSmtpSecurity(dto.getSmtpSecurity());
     entity.setSmtpAuth(dto.isSmtpAuth());
+    entity.setMailValidity(dto.getMailValidity());
   }
 }

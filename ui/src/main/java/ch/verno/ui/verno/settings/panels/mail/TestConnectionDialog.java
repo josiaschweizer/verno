@@ -1,5 +1,7 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
+import ch.verno.common.db.enums.mail.MailValidity;
+import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.servergate.MailServerGate;
 import ch.verno.common.tenant.TenantContext;
@@ -26,6 +28,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
@@ -118,7 +121,6 @@ public class TestConnectionDialog extends VADialog {
   @Override
   protected Collection<Button> createActionButtons() {
     closeButton = new Button(getTranslation("shared.cancel"));
-    closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     closeButton.addClickListener(e -> {
       if (!running) {
         close();
@@ -149,7 +151,7 @@ public class TestConnectionDialog extends VADialog {
       return;
     }
 
-    final var ui = UI.getCurrent();
+    final var nullableUI = UI.getCurrent();
     final var session = VaadinSession.getCurrent();
     final var tenantId = TenantContext.get();
 
@@ -175,7 +177,6 @@ public class TestConnectionDialog extends VADialog {
             }, executor)
             .handle((res, ex) -> {
               final TestResult finalRes;
-
               if (ex != null) {
                 final var msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
                 finalRes = new TestResult(TestStatus.INVALID, getTranslation("setting.test.failed.0", Objects.toString(msg, "unknown error")));
@@ -183,12 +184,22 @@ public class TestConnectionDialog extends VADialog {
                 finalRes = res;
               }
 
-              ui.access(() -> {
+              Optional.ofNullable(nullableUI).ifPresent(ui -> ui.access(() -> {
                 showResult(finalRes);
+                updateButtonText();
                 setLoading(false);
                 running = false;
                 ui.push();
-              });
+              }));
+
+              if (tenantId != null) {
+                TenantContext.set(tenantId);
+              }
+              try {
+                setMailConfigEnabled(finalRes.isValid());
+              } finally {
+                TenantContext.clear();
+              }
 
               return null;
             });
@@ -232,6 +243,10 @@ public class TestConnectionDialog extends VADialog {
       resultTitle.setText(getTranslation("shared.failed"));
       applyResultTheme(false);
     }
+  }
+
+  private void updateButtonText() {
+    closeButton.setText(getTranslation("setting.close"));
   }
 
   private void setResultIcon(@Nonnull final VaadinIcon icon) {
@@ -287,5 +302,10 @@ public class TestConnectionDialog extends VADialog {
     if (resultIcon != null) {
       resultIcon.getStyle().remove("color");
     }
+  }
+
+  private void setMailConfigEnabled(final boolean valid) {
+    final var mailConfigService = globalInterface.getService(IMailConfigService.class);
+    mailConfigService.updateMailValidity(valid ? MailValidity.TESTED_VALID : MailValidity.TESTED_INVALID);
   }
 }

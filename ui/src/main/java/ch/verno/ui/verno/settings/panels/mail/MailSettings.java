@@ -1,9 +1,13 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
 import ch.verno.common.db.dto.table.mail.MailConfigDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.enums.mail.SmtpSecurity;
 import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.ui.base.components.badge.VABadgeLabel;
+import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -41,6 +45,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
     addActionButtons(saveButton, getActionButton());
+    updateHeaderBadge();
   }
 
   @Nonnull
@@ -51,8 +56,16 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
     menu.setTarget(button);
     menu.setOpenOnClick(true);
 
-    menu.addItem("Test Connection", e -> {
+    menu.addItem(getTranslation("setting.test.connection"), e -> {
       final var dialog = new TestConnectionDialog(globalInterface);
+      dialog.addClosedListener(close -> {
+        // refresh config after test connection dialog is closed, as the test dialog might update the mail validity
+        if (mailConfigService.hasConfigForCurrentTenant()) {
+          dto = mailConfigService.getConfigForCurrentTenant();
+          binder.readBean(dto);
+          updateHeaderBadge();
+        }
+      });
       dialog.open();
     });
 
@@ -66,51 +79,51 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
             MailConfigDto::getFromEmail,
             MailConfigDto::setFromEmail,
             binder,
-            Optional.of("From Email is required"),
-            "From Email"
+            Optional.of(getTranslation("setting.from.email.is.required")),
+            getTranslation("setting.from.email")
     );
     final var fromName = entryFactory.createTextField(
             MailConfigDto::getFromName,
             MailConfigDto::setFromName,
             binder,
-            Optional.of("From Name is required"),
-            "From Name"
+            Optional.of(getTranslation("setting.from.name.is.required")),
+            getTranslation("setting.from.name")
     );
     final var replyToEmail = entryFactory.createEmailEntry(
             MailConfigDto::getReplyToEmail,
             MailConfigDto::setReplyToEmail,
             binder,
             Optional.empty(),
-            "Reply-To Email"
+            getTranslation("setting.reply.to.email")
     );
     final var defaultBcc = entryFactory.createEmailEntry(
             MailConfigDto::getDefaultBcc,
             MailConfigDto::setDefaultBcc,
             binder,
             Optional.empty(),
-            "Default BCC"
+            getTranslation("setting.default.bcc")
     );
 
     final var smtpHost = entryFactory.createTextField(
             MailConfigDto::getSmtpHost,
             MailConfigDto::setSmtpHost,
             binder,
-            Optional.of("SMTP Host is required"),
-            "SMTP Host"
+            Optional.of(getTranslation("setting.smtp.host.is.required")),
+            getTranslation("setting.smtp.host")
     );
     final var smtpUsername = entryFactory.createTextField(
             MailConfigDto::getSmtpUsername,
             MailConfigDto::setSmtpUsername,
             binder,
-            Optional.of("SMTP Username is required"),
-            "SMTP Username"
+            Optional.of(getTranslation("setting.smtp.username.is.required")),
+            getTranslation("setting.smtp.username")
     );
     final var smtpPassword = entryFactory.createPasswordField(
-            MailConfigDto::getSmtpPasswordB64,
-            MailConfigDto::setSmtpPasswordB64,
+            MailConfigDto::getDecodedSmtpPassword,
+            MailConfigDto::setDecodedPasswordB64,
             binder,
-            Optional.of("SMTP Password is required"),
-            "SMTP Password"
+            Optional.of(getTranslation("setting.smtp.password.is.required")),
+            getTranslation("setting.smtp.password")
     );
 
     final var smtpSecurityOptions = Arrays.stream(SmtpSecurity.values())
@@ -124,8 +137,8 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
             dto -> dto.getSmtpSecurity().getId(),
             (dto, id) -> dto.setSmtpSecurity(SmtpSecurity.fromId(id)),
             binder,
-            Optional.of("SMTP Security is required"),
-            "SMTP Security",
+            Optional.of(getTranslation("setting.smtp.security.is.required")),
+            getTranslation("setting.smtp.security"),
             smtpSecurityOptions
     );
 
@@ -156,7 +169,45 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      final var saved = mailConfigService.upsertConfig(dto);
+      mailConfigService.upsertConfig(dto);
     }
+  }
+
+  @Override
+  protected void binderValueChanged() {
+    super.binderValueChanged();
+    updateEntity();
+    updateHeaderBadge();
+  }
+
+  private void updateEntity() {
+    if (binder.hasChanges()) {
+      dto.setMailValidity(MailValidity.UNTESTED);
+    }
+  }
+
+  private void updateHeaderBadge() {
+    final var badge = switch (dto.getMailValidity()) {
+      case TESTED_VALID -> createValidHeaderBadge();
+      case TESTED_INVALID -> createInvalidHeaderBadge();
+      case UNTESTED -> createUntestedHeaderBadge();
+    };
+
+    setHeaderBadge(badge);
+  }
+
+  @Nonnull
+  private VABadgeLabel createValidHeaderBadge() {
+    return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.valid.configuration"), VABadgeLabelOptions.SUCCESS);
+  }
+
+  @Nonnull
+  private VABadgeLabel createInvalidHeaderBadge() {
+    return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.invalid.configuration"), VABadgeLabelOptions.ERROR);
+  }
+
+  @Nonnull
+  private VABadgeLabel createUntestedHeaderBadge() {
+    return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.untested.configuration"), VABadgeLabelOptions.WARNING);
   }
 }

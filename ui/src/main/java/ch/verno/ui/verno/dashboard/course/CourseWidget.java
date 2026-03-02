@@ -2,10 +2,13 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
@@ -27,20 +30,23 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final GlobalInterface globalInterface;
 
-  @Nonnull private final CourseDto currentCourse;
-  private final IParticipantService participantService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final Lazy<IMailConfigService> mailConfigService;
 
   @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
+  @Nonnull private final CourseDto currentCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
 
+    participantService = globalInterface.getService(IParticipantService.class);
+    mailConfigService = Lazy.of(() -> globalInterface.getService(IMailConfigService.class));
+
     final var courseService = globalInterface.getService(ICourseService.class);
     currentCourse = courseService.getCourseById(currentCourseId);
 
-    participantService = globalInterface.getService(IParticipantService.class);
     participantsInCourse = participantService.findParticipants(
             ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
     );
@@ -56,11 +62,22 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void buildHeaderActions(@Nonnull final HorizontalLayout header) {
-    final var emailButton = createHeaderButton("Send Email", VaadinIcon.MAILBOX, e -> {
+    final var emailButton = createHeaderButton(getTranslation("setting.send.email"), VaadinIcon.MAILBOX, e -> {
       new EmailDialog(globalInterface).open();
     });
+    if (mailConfigService.get().hasConfigForCurrentTenant()) {
+      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID)) {
+        emailButton.setEnabled(true);
+      } else {
+        emailButton.setEnabled(false);
+        emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
+      }
+    } else {
+      emailButton.setEnabled(false);
+      emailButton.setTooltipText(getTranslation("setting.please.set.up.your.email.configuration.in.the.settings.to.enable.this.feature"));
+    }
 
-    final var reportButton = createHeaderButton("Report", VaadinIcon.FILE_TEXT, e -> {
+    final var reportButton = createHeaderButton(getTranslation("setting.report"), VaadinIcon.FILE_TEXT, e -> {
       new CourseReportDialog(
               globalInterface,
               currentCourse,

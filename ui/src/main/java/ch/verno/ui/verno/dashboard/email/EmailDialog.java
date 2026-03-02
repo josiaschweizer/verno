@@ -21,7 +21,7 @@ public class EmailDialog extends VADialog {
   @Nullable private TextArea selectedTextArea;
 
   public EmailDialog(@Nonnull final GlobalInterface globalInterface) {
-    initUI("Send Email", DialogSize.BIG);
+    initUI(getTranslation("setting.send.email"), DialogSize.BIG);
 
     selectedTextArea = null;
   }
@@ -31,14 +31,14 @@ public class EmailDialog extends VADialog {
   protected HorizontalLayout createContent() {
     final var emailSubject = new TextArea();
     emailSubject.addFocusListener(event -> selectedTextArea = emailSubject);
-    emailSubject.setLabel("Email Subject");
-    emailSubject.setPlaceholder("No email subject yet. Use the buttons on the right to add placeholders and type your own subject.");
+    emailSubject.setLabel(getTranslation("setting.email.subject"));
+    emailSubject.setPlaceholder(getTranslation("setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"));
     emailSubject.setWidthFull();
 
     final var emailContent = new TextArea();
     emailContent.addFocusListener(event -> selectedTextArea = emailContent);
-    emailContent.setLabel("Email Content");
-    emailContent.setPlaceholder("No email content yet. Use the buttons on the right to add placeholders and type your own content.");
+    emailContent.setLabel(getTranslation("setting.email.content"));
+    emailContent.setPlaceholder(getTranslation("setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"));
     emailContent.setWidthFull();
     emailContent.setHeightFull();
     emailContent.setSizeFull();

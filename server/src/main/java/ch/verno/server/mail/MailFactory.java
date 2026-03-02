@@ -1,42 +1,51 @@
 package ch.verno.server.mail;
 
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderUtil;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import jakarta.annotation.Nonnull;
-import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.email.EmailBuilder;
 
 import java.util.List;
 
 public class MailFactory {
 
-  @Nonnull private final Mailer mailer;
+  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final IMailConfigService mailConfigService;
 
   public MailFactory(@Nonnull final GlobalInterface globalInterface) {
-    mailer = MailerUtil.createMailer(globalInterface);
+    this.globalInterface = globalInterface;
+    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
   }
 
 
   public void sendWelcomeMail(@Nonnull final String to) {
+    final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+    final var fromEmail = mailConfig.getFromEmail();
+
     final var email = EmailBuilder.startingBlank()
-            .from("Verno", "noreply@deine-domain.ch")
+            .from("Verno", fromEmail)
             .to(to)
             .withSubject("Willkommen bei Verno")
             .withHTMLText("""
                       <h2>Willkommen</h2>
-                      <p>Dein Account ist bereit.</p>
+                      <p>Deine Email Konfiguration ist bereit.</p>
                     """)
             .buildEmail();
 
-    mailer.sendMail(email);
+    MailerUtil.sendMail(globalInterface, email);
   }
+
 
   public void sendCourseEmails(@Nonnull final MailContentDto mailContentDto,
                                @Nonnull final List<PlaceholderValue<ParticipantDto>> placeHolderValues,
                                @Nonnull final List<ParticipantDto> participants) {
+    final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+    final var fromEmail = mailConfig.getFromEmail();
+
     for (final var participant : participants) {
       final var subject = PlaceholderUtil.replacePlaceholders(
               mailContentDto.subject(),
@@ -50,7 +59,7 @@ public class MailFactory {
       );
 
       final var builder = EmailBuilder.startingBlank()
-              .from("Verno", "noreply@verno-app.ch")
+              .from("Verno", fromEmail)
               .to(participant.getEmail())
               .withSubject(subject);
 
@@ -61,7 +70,7 @@ public class MailFactory {
       }
 
       final var email = builder.buildEmail();
-      mailer.sendMail(email);
+      MailerUtil.sendMail(globalInterface, email);
     }
   }
 }

@@ -1,6 +1,7 @@
 package ch.verno.server.service.intern.mail;
 
 import ch.verno.common.db.dto.table.mail.MailConfigDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
@@ -34,7 +35,6 @@ public class MailConfigService implements IMailConfigService {
     if (existing == null) {
       entity = new MailConfigEntity(
               TenantEntity.ref(tenantId),
-              dto.isEnabled(),
               dto.getFromName(),
               dto.getFromEmail(),
               dto.getReplyToEmail(),
@@ -44,7 +44,8 @@ public class MailConfigService implements IMailConfigService {
               dto.getSmtpUsername(),
               dto.getSmtpPasswordB64(),
               dto.getSmtpSecurity(),
-              dto.isSmtpAuth()
+              dto.isSmtpAuth(),
+              dto.getMailValidity()
       );
     } else {
       entity = existing;
@@ -78,7 +79,7 @@ public class MailConfigService implements IMailConfigService {
 
   @Override
   @Transactional
-  public void setEnabled(final boolean enabled) {
+  public void updateMailValidity(@Nonnull final MailValidity validity) {
     final var tenantId = TenantContext.getRequired();
 
     final var entity = mailConfigRepository.findByTenantId(tenantId)
@@ -87,7 +88,7 @@ public class MailConfigService implements IMailConfigService {
                     tenantId
             ));
 
-    entity.setEnabled(enabled);
+    entity.setMailValidity(validity);
     mailConfigRepository.save(entity);
   }
 }

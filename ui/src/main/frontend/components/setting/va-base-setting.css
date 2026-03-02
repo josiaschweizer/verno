@@ -27,6 +27,7 @@
 .setting-card-header {
     display: flex;
     align-items: center;
+    gap: var(--lumo-space-s);
 }
 
 .setting-card-title {

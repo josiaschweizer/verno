@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto.table.mail;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.enums.mail.SmtpSecurity;
 import ch.verno.common.lib.Base64Util;
 import ch.verno.publ.Publ;
@@ -9,8 +10,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class MailConfigDto extends BaseDto {
-
-  private boolean enabled;
 
   @Nonnull private String fromName;
   @Nonnull private String fromEmail;
@@ -23,9 +22,9 @@ public class MailConfigDto extends BaseDto {
   @Nonnull private String smtpPasswordB64;
   @Nonnull private SmtpSecurity smtpSecurity;
   private boolean smtpAuth;
+  @Nonnull private MailValidity mailValidity;
 
   public MailConfigDto() {
-    enabled = true;
     fromName = Publ.EMPTY_STRING;
     fromEmail = Publ.EMPTY_STRING;
     replyToEmail = Publ.EMPTY_STRING;
@@ -36,10 +35,10 @@ public class MailConfigDto extends BaseDto {
     smtpPasswordB64 = Publ.EMPTY_STRING;
     smtpSecurity = SmtpSecurity.STARTTLS;
     smtpAuth = true;
+    mailValidity = MailValidity.UNTESTED;
   }
 
   public MailConfigDto(@Nonnull final Long id,
-                       final boolean enabled,
                        @Nonnull final String fromName,
                        @Nonnull final String fromEmail,
                        @Nonnull final String replyToEmail,
@@ -49,10 +48,10 @@ public class MailConfigDto extends BaseDto {
                        @Nonnull final String smtpUsername,
                        @Nonnull final String smtpPasswordB64,
                        @Nonnull final SmtpSecurity smtpSecurity,
-                       final boolean smtpAuth) {
+                       final boolean smtpAuth,
+                       @Nonnull final MailValidity mailValidity) {
     setId(id);
     setTenantId(id);
-    this.enabled = enabled;
     this.fromName = fromName;
     this.fromEmail = fromEmail;
     this.replyToEmail = replyToEmail;
@@ -63,14 +62,7 @@ public class MailConfigDto extends BaseDto {
     this.smtpPasswordB64 = smtpPasswordB64;
     this.smtpSecurity = smtpSecurity;
     this.smtpAuth = smtpAuth;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(final boolean enabled) {
-    this.enabled = enabled;
+    this.mailValidity = mailValidity;
   }
 
   @Nonnull
@@ -168,5 +160,14 @@ public class MailConfigDto extends BaseDto {
 
   public void setSmtpAuth(final boolean smtpAuth) {
     this.smtpAuth = smtpAuth;
+  }
+
+  @Nonnull
+  public MailValidity getMailValidity() {
+    return mailValidity;
+  }
+
+  public void setMailValidity(@Nonnull final MailValidity mailValidity) {
+    this.mailValidity = mailValidity;
   }
 }

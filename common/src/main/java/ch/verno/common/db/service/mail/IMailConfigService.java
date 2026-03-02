@@ -1,6 +1,7 @@
 package ch.verno.common.db.service.mail;
 
 import ch.verno.common.db.dto.table.mail.MailConfigDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import jakarta.annotation.Nonnull;
 
 public interface IMailConfigService {
@@ -13,5 +14,5 @@ public interface IMailConfigService {
 
   boolean hasConfigForCurrentTenant();
 
-  void setEnabled(boolean enabled);
+  void updateMailValidity(@Nonnull final MailValidity validity);
 }
