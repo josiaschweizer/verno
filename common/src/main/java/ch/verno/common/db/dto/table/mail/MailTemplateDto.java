@@ -19,6 +19,11 @@ public class MailTemplateDto extends BaseDto {
     contentFormat = MailContentFormat.AUTO;
   }
 
+  public MailTemplateDto(@Nonnull final String templateKey) {
+    this();
+    setTemplateKey(templateKey);
+  }
+
   public MailTemplateDto(@Nonnull final Long id,
                          @Nonnull final String templateKey,
                          @Nonnull final String subject,

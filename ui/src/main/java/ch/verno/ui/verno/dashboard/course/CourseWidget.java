@@ -2,6 +2,7 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseService;
@@ -33,9 +34,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final Lazy<IMailConfigService> mailConfigService;
 
-  @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
   @Nonnull private final CourseDto currentCourse;
+  @Nullable private ParticipantsGrid participantsGrid;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
@@ -62,9 +63,16 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void buildHeaderActions(@Nonnull final HorizontalLayout header) {
-    final var emailButton = createHeaderButton(getTranslation("setting.send.email"), VaadinIcon.MAILBOX, e -> {
-      new EmailDialog(globalInterface).open();
-    });
+    final var emailButton = createHeaderButton(
+            getTranslation("setting.send.email"),
+            VaadinIcon.MAILBOX,
+            e -> {
+              final var dialog = new EmailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
+              dialog.setParticipants(participantsInCourse);
+              dialog.open();
+            }
+    );
+
     if (mailConfigService.get().hasConfigForCurrentTenant()) {
       if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID)) {
         emailButton.setEnabled(true);

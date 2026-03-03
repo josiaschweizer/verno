@@ -1,5 +1,6 @@
 package ch.verno.ui.base.dialog;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -15,7 +16,6 @@ public abstract class VADialog extends Dialog {
 
   protected void initUI(@Nonnull final String title,
                         @Nonnull final DialogSize dialogSize) {
-
     setHeight("auto");
     setMaxHeight(dialogSize.getMaxHeight());
     setMinHeight(dialogSize.getMinHeight());

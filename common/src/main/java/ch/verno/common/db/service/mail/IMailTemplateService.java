@@ -12,6 +12,8 @@ public interface IMailTemplateService {
   @Nonnull
   MailTemplateDto getTemplateByKey(@Nonnull String templateKey);
 
+  boolean hasTemplateByKey(@Nonnull String templateKey);
+
   @Nonnull
   List<MailTemplateDto> getAllTemplatesForCurrentTenant();
 

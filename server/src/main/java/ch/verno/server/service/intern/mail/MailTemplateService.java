@@ -69,6 +69,13 @@ public class MailTemplateService implements IMailTemplateService {
     return MailTemplateMapper.toDto(entity);
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public boolean hasTemplateByKey(@Nonnull final String templateKey) {
+    final var tenantId = TenantContext.getRequired();
+    return mailTemplateRepository.existsByTenantAndTemplateKey(tenantId, templateKey);
+  }
+
   @Nonnull
   @Override
   @Transactional(readOnly = true)

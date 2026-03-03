@@ -19,7 +19,9 @@ public enum I18nBundles {
   COMMON("common", "i18n.common"),
   FILTER("filter", "i18n.filter"),
   SHARED("shared", "i18n.shared"),
-  SETTINGS("setting", "i18n.setting");
+  SETTINGS("setting", "i18n.setting"),
+  MAIL("mail", "i18n.mail"),
+  ;
 
   @Nonnull
   private final String keyPrefix;
