@@ -5,6 +5,9 @@ import jakarta.annotation.Nonnull;
 public enum Placeholder {
   FIRSTNAME("Firstname", "${firstname}"),
   LASTNAME("Lastname", "${lastname}"),
+  COURSE_NAME("CourseName", "${courseName}"),
+  COURSE_START_DATE("CourseStartDate", "${courseStartDate}"),
+  COURSE_END_DATE("CourseEndDate", "${courseEndDate}")
   ;
 
   @Nonnull private final String nameKey;

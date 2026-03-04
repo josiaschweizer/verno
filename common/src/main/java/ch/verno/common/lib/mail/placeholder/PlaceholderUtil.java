@@ -1,6 +1,9 @@
 package ch.verno.common.lib.mail.placeholder;
 
+import ch.verno.common.lib.mail.placeholder.context.MailContext;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
@@ -10,18 +13,18 @@ public final class PlaceholderUtil {
   }
 
   @Nonnull
-  public static <T> String replacePlaceholders(@Nonnull String content,
-                                               @Nonnull T source,
-                                               @Nonnull List<PlaceholderValue<T>> placeholderValues) {
+  public static <C extends MailContext> String replacePlaceholders(@Nonnull String content,
+                                                                   @Nonnull C context,
+                                                                   @Nonnull List<PlaceholderValue<C>> placeholderValues) {
     for (final var pv : placeholderValues) {
-      final var replacement = pv.valueFunction().apply(source);
+      final var replacement = pv.valueFunction().apply(context);
       content = content.replace(pv.placeholder().getValue(), nullToEmpty(replacement));
     }
     return content;
   }
 
   @Nonnull
-  private static String nullToEmpty(final String s) {
-    return s == null ? "" : s;
+  private static String nullToEmpty(@Nullable final String s) {
+    return s == null ? Publ.EMPTY_STRING : s;
   }
 }

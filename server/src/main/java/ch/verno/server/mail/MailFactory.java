@@ -1,12 +1,16 @@
 package ch.verno.server.mail;
 
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderUtil;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
+import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.simplejavamail.email.EmailBuilder;
 
 import java.util.List;
@@ -41,20 +45,28 @@ public class MailFactory {
 
 
   public void sendCourseEmails(@Nonnull final MailContentDto mailContentDto,
-                               @Nonnull final List<PlaceholderValue<ParticipantDto>> placeHolderValues,
-                               @Nonnull final List<ParticipantDto> participants) {
+                               @Nonnull final List<PlaceholderValue<CourseMailPlaceholderContext>> placeHolderValues,
+                               @Nullable final List<ParticipantDto> participants,
+                               @Nullable final CourseScheduleDto schedule,
+                               @Nullable final CourseDto course) {
+    if (participants == null) {
+      return;
+    }
+
     final var mailConfig = mailConfigService.getConfigForCurrentTenant();
     final var fromEmail = mailConfig.getFromEmail();
 
     for (final var participant : participants) {
+      final var mailContext = new CourseMailPlaceholderContext(participant, schedule, course);
+
       final var subject = PlaceholderUtil.replacePlaceholders(
               mailContentDto.subject(),
-              participant,
+              mailContext,
               placeHolderValues
       );
       final var content = PlaceholderUtil.replacePlaceholders(
               mailContentDto.content(),
-              participant,
+              mailContext,
               placeHolderValues
       );
 
@@ -69,8 +81,7 @@ public class MailFactory {
         builder.withPlainText(content);
       }
 
-      final var email = builder.buildEmail();
-      MailerUtil.sendMail(globalInterface, email);
+      MailerUtil.sendMail(globalInterface, builder.buildEmail());
     }
   }
 }

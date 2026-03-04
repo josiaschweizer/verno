@@ -1,12 +1,16 @@
 package ch.verno.server.mail;
 
+import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.servergate.MailServerGate;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
+import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
 import ch.verno.lib.Lazy;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +32,16 @@ public class MailServerGateImpl implements MailServerGate {
 
   @Override
   public void sendCourseEmails(@Nonnull final MailContentDto mailContent,
-                               @Nonnull final List<PlaceholderValue<ParticipantDto>> placeHolderValues,
-                               @Nonnull final List<ParticipantDto> participants) {
-    mailHelper.get().sendCourseEmails(mailContent, placeHolderValues, participants);
+                               @Nonnull final List<PlaceholderValue<CourseMailPlaceholderContext>> placeHolderValues,
+                               @Nullable final List<ParticipantDto> participants,
+                               @Nullable final CourseScheduleDto courseSchedule,
+                               @Nullable final CourseDto course) {
+    mailHelper.get().sendCourseEmails(
+            mailContent,
+            placeHolderValues,
+            participants,
+            courseSchedule,
+            course);
   }
 
 }

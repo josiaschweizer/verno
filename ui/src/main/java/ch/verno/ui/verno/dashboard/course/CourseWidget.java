@@ -13,7 +13,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
-import ch.verno.ui.verno.dashboard.email.EmailDialog;
+import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.Text;
@@ -67,7 +67,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
             getTranslation("setting.send.email"),
             VaadinIcon.MAILBOX,
             e -> {
-              final var dialog = new EmailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
+              final var dialog = new CourseEmailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
               dialog.setParticipants(participantsInCourse);
               dialog.open();
             }
