@@ -1,14 +1,16 @@
 package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
+import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
@@ -69,6 +71,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
             e -> {
               final var dialog = new CourseEmailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
               dialog.setParticipants(participantsInCourse);
+              dialog.setCourse(currentCourse);
               dialog.open();
             }
     );

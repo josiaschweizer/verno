@@ -31,11 +31,10 @@ public class CourseEmailDialog extends AbstractEmailDialog {
   @Override
   @Nonnull
   protected List<Button> createPlaceholderButtons() {
-    return List.of(
-            createPlaceholderButton(Placeholder.FIRSTNAME),
-            createPlaceholderButton(Placeholder.LASTNAME),
-            createPlaceholderButton(Placeholder.COURSE_NAME)
-    );
+    return getPlaceholderValues().stream()
+            .map(PlaceholderValue::placeholder)
+            .map(this::createPlaceholderButton)
+            .toList();
   }
 
   @Override
@@ -59,6 +58,10 @@ public class CourseEmailDialog extends AbstractEmailDialog {
 
   public void setCourse(@Nullable final CourseDto course) {
     this.course = course;
+
+    if (course != null) {
+      this.courseSchedule = course.getCourseSchedule();
+    }
   }
 
   @Nonnull
@@ -66,7 +69,11 @@ public class CourseEmailDialog extends AbstractEmailDialog {
     return List.of(
             new PlaceholderValue<>(Placeholder.FIRSTNAME, ctx -> ctx.participant().getFirstName()),
             new PlaceholderValue<>(Placeholder.LASTNAME, ctx -> ctx.participant().getLastName()),
-            new PlaceholderValue<>(Placeholder.COURSE_NAME, ctx -> ctx.course() != null ? ctx.course().getTitle() : Publ.EMPTY_STRING)
+            new PlaceholderValue<>(Placeholder.COURSE_NAME, ctx -> ctx.course() != null ? ctx.course().getTitle() : Publ.EMPTY_STRING),
+            new PlaceholderValue<>(Placeholder.COURSE_START_DATE, CourseMailPlaceholderContext::getCourseStartDate),
+            new PlaceholderValue<>(Placeholder.COURSE_END_DATE, CourseMailPlaceholderContext::getCourseEndDate),
+            new PlaceholderValue<>(Placeholder.COURSE_START_TIME, CourseMailPlaceholderContext::getCourseStartTime),
+            new PlaceholderValue<>(Placeholder.COURSE_END_TIME, CourseMailPlaceholderContext::getCourseEndTime)
     );
   }
 }

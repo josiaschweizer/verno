@@ -3,11 +3,13 @@ package ch.verno.common.lib.mail.placeholder;
 import jakarta.annotation.Nonnull;
 
 public enum Placeholder {
-  FIRSTNAME("Firstname", "${firstname}"),
-  LASTNAME("Lastname", "${lastname}"),
-  COURSE_NAME("CourseName", "${courseName}"),
-  COURSE_START_DATE("CourseStartDate", "${courseStartDate}"),
-  COURSE_END_DATE("CourseEndDate", "${courseEndDate}")
+  FIRSTNAME("shared.first.name", "${firstname}"),
+  LASTNAME("shared.last.name", "${lastname}"),
+  COURSE_NAME("shared.course.name", "${courseName}"),
+  COURSE_START_DATE("shared.course.start.date", "${courseStartDate}"),
+  COURSE_END_DATE("shared.course.end.date", "${courseEndDate}"),
+  COURSE_START_TIME("shared.course.start.time", "${courseStartTime}"),
+  COURSE_END_TIME("shared.course.end.time", "${courseEndTime}"),
   ;
 
   @Nonnull private final String nameKey;

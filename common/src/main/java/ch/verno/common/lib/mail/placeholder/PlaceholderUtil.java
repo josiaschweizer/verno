@@ -16,9 +16,9 @@ public final class PlaceholderUtil {
   public static <C extends MailContext> String replacePlaceholders(@Nonnull String content,
                                                                    @Nonnull C context,
                                                                    @Nonnull List<PlaceholderValue<C>> placeholderValues) {
-    for (final var pv : placeholderValues) {
-      final var replacement = pv.valueFunction().apply(context);
-      content = content.replace(pv.placeholder().getValue(), nullToEmpty(replacement));
+    for (final var placeholder : placeholderValues) {
+      final var replacement = placeholder.valueFunction().apply(context);
+      content = content.replace(placeholder.placeholder().getValue(), nullToEmpty(replacement));
     }
     return content;
   }

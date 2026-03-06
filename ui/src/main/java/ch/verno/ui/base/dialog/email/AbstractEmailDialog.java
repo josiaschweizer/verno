@@ -80,7 +80,7 @@ public abstract class AbstractEmailDialog extends VADialog {
     );
     emailSubject.setWidthFull();
     emailSubject.addFocusListener(e -> selectedTextArea = emailSubject);
-    emailSubject.setPlaceholder(getTranslation("setting.no.email.subject.yet..."));
+    emailSubject.setPlaceholder(getTranslation("setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"));
 
     final var emailContent = entryFactory.createTextAreaEntry(
             MailTemplateDto::getContent, MailTemplateDto::setContent, binder,
@@ -88,7 +88,7 @@ public abstract class AbstractEmailDialog extends VADialog {
             getTranslation("setting.email.content")
     );
     emailContent.addFocusListener(e -> selectedTextArea = emailContent);
-    emailContent.setPlaceholder(getTranslation("setting.no.email.content.yet..."));
+    emailContent.setPlaceholder(getTranslation("setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"));
     emailContent.setSizeFull();
 
     final var emailLayout = new VerticalLayout(emailSubject, emailContent);
