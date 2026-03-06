@@ -1,8 +1,10 @@
 package ch.verno.server.mail;
 
 import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.db.service.mail.IMailLogService;
 import ch.verno.common.exceptions.server.mail.SendMailException;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
@@ -32,10 +34,22 @@ public class MailerUtil {
 
   public static void sendMail(@Nonnull final GlobalInterface globalInterface,
                               @Nonnull final Email email) {
+    boolean valid = true;
+    String errorMsg = null;
+
     try (final var mailer = MailerUtil.createMailer(globalInterface)) {
       mailer.sendMail(email, true).get();
     } catch (Exception e) {
-      throw new SendMailException("Failed to send welcome mail", e);
+      valid = false;
+      errorMsg = e.getMessage();
+      throw new SendMailException("Failed to send mail", e);
+    } finally {
+      final var mailLogService = globalInterface.getService(IMailLogService.class);
+      if (valid) {
+        mailLogService.logSent(email, Publ.EMPTY_STRING);
+      } else {
+        mailLogService.logFailed(email, errorMsg != null ? errorMsg : "Unknown error");
+      }
     }
   }
 

@@ -2,5 +2,5 @@ flyway \
   -url="jdbc:postgresql://localhost:5432/verno" \
   -user="verno" \
   -password="verno" \
-  -locations="filesystem:./src/main/resources/db/migration/common,filesystem:./src/main/resources/db/migration/dev" \
+  -locations="filesystem:./ui/src/main/resources/db/migration/common,filesystem:./ui/src/main/resources/db/migration/dev" \
   repair

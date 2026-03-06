@@ -29,12 +29,12 @@ public class ImportDialog extends Dialog {
 
   public ImportDialog(@Nonnull final GlobalInterface globalInterface,
                       @Nonnull final String dialogTitle,
-                      @Nonnull final ImportEntityConfig entityConfig) {
+                      @Nonnull final ImportEntityConfig<?> entityConfig) {
     steps = new ArrayList<>();
     currentStep = DialogStep.ZERO;
 
     final var importFileStep = new ImportFile(globalInterface);
-    final var importMappingStep = new ImportMapping(globalInterface, entityConfig);
+    final var importMappingStep = new ImportMapping<>(globalInterface, entityConfig);
 
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);
@@ -91,7 +91,7 @@ public class ImportDialog extends Dialog {
 
         if (importFileStep.isPresent() && importMappingStep.isPresent()) {
           final var importFile = (ImportFile) importFileStep.get().content();
-          final var importMapping = (ImportMapping) importMappingStep.get().content();
+          final var importMapping = (ImportMapping<?>) importMappingStep.get().content();
 
           if (importFile.hasFile()) {
             final var fileToken = importFile.getTempToken();
@@ -109,7 +109,7 @@ public class ImportDialog extends Dialog {
               .findFirst();
 
       if (importMappingStep.isPresent()) {
-        final var importMapping = (ImportMapping) importMappingStep.get().content();
+        final var importMapping = (ImportMapping<?>) importMappingStep.get().content();
         final var importResult = importMapping.performImport();
 
         if (importResult.completeSuccess()) {

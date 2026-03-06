@@ -1,5 +1,6 @@
 package ch.verno.db.entity.mail;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -18,7 +19,8 @@ public class MailTemplateId implements Serializable {
   protected MailTemplateId() {
   }
 
-  public MailTemplateId(final Long tenantId, final String templateKey) {
+  public MailTemplateId(@Nonnull final Long tenantId,
+                        @Nonnull final String templateKey) {
     this.tenantId = tenantId;
     this.templateKey = templateKey;
   }

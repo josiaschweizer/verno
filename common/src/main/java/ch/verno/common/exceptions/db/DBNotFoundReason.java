@@ -17,6 +17,7 @@ public enum DBNotFoundReason {
   APP_USER_NOT_FOUND("App user not found with id: "),
   MAIL_TEMPLATE_BY_KEY_NOT_FOUND("Mail template not found with key: "),
   MAIL_CONFIG_BY_TENANT_NOT_FOUND("Mail config not found for tenant: "),
+  MAIL_LOG_BY_ID_NOT_FOUND("Mail log not found with id: "),
 
   NOT_ABLE_TO_DELETE_ENTITY("Not able to delete entity with")
   ;
