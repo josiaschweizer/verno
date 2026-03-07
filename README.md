@@ -1,10 +1,10 @@
 # Verno - Course Management System
 
-Verno is a comprehensive course management application built with Spring Boot and Vaadin. It provides a modern web interface for managing courses, participants, instructors, and course schedules.
+Verno is a comprehensive course management application built with Spring Boot and Vaadin. It provides a modern web interface for managing courses, participants, instructors, and course schedules with multi-tenant support.
 
 ## Overview
 
-Verno is designed to help organizations manage their course offerings, track participants, assign instructors, and organize course schedules. The application features a clean, intuitive user interface with support for multiple languages.
+Verno is designed to help organizations manage their course offerings, track participants, assign instructors, and organize course schedules. The application features a clean, intuitive user interface with support for multiple languages, multi-tenant architecture, and REST API access.
 
 ## Features
 
@@ -18,25 +18,38 @@ Verno is designed to help organizations manage their course offerings, track par
   - Weekday assignments
   - Duration and instructor assignments
 - **Course Schedules**: Organize and manage course scheduling information
+- **User Management**: Comprehensive user administration with role-based access control (ADMIN, MANDANT_ADMIN roles)
+- **Mail System**: Track and manage email communications with mail log functionality
+- **Report Generation**: Generate PDF reports for participants and courses
 - **Dashboard**: Overview page providing quick access to key information
-- **Settings**: User and mandant (tenant) configuration options
+- **Settings**: 
+  - User settings (personal preferences)
+  - Tenant settings (quantities, shared settings, reports, course levels, mail configuration)
 
 ### Technical Features
 
+- **Multi-tenant Architecture**: Support for multiple tenants with header-based routing and domain-based identification
+- **REST API**: External API endpoints for tenant and application management, plus internal API for reports
 - **Multi-language Support**: Internationalization (i18n) support for German and English
 - **Responsive UI**: Modern Vaadin-based user interface with Lumo theme
-- **Database**: H2 in-memory database for development (configurable for production)
+- **Database**: PostgreSQL with Flyway migrations for schema versioning
+- **File Storage**: Support for file uploads up to 200MB
 - **Docker Support**: Ready for containerized deployment
+- **Security**: Spring Security integration with role-based access control
 
 ## Technology Stack
 
 - **Java**: 21
 - **Spring Boot**: 4.0.0
 - **Vaadin**: 25.0.0
-- **Database**: H2 (development), configurable for production
+- **Database**: PostgreSQL with Flyway migrations
 - **Build Tool**: Maven
+- **Frontend**: TypeScript/pnpm workspace for additional applications (onboarding)
 - **Additional Libraries**:
   - libphonenumber: 8.13.41 (for phone number validation)
+  - Spring Security (authentication and authorization)
+  - Hibernate/JPA (ORM)
+  - Flyway (database migrations)
 
 ## Project Structure
 
@@ -46,8 +59,15 @@ This is a multi-module Maven project with the following modules:
 verno/
 ├── common/          # Shared utilities and common components
 ├── db/              # Database entities and JPA repositories
+├── publ/            # Public constants, routes, and shared definitions
 ├── server/          # Business logic services and repositories
+├── api/             # REST API endpoints (external and internal)
+├── report/          # PDF report generation for participants and courses
 ├── ui/              # Vaadin UI components and views
+├── typescript/      # TypeScript workspace with additional apps
+│   └── apps/
+│       └── onboarding/  # Onboarding application
+├── scripts/         # Deployment and provisioning scripts
 └── pom.xml          # Parent POM with module configuration
 ```
 
@@ -55,8 +75,12 @@ verno/
 
 - **common**: Contains base components, database DTOs, exceptions, and utility classes
 - **db**: JPA entities for the domain model (Course, Participant, Instructor, Address, etc.)
+- **publ**: Public constants, API URLs, routes, and utilities shared across modules
 - **server**: Service layer with business logic and data access repositories
+- **api**: REST API controllers for external tenant/application management and internal report generation
+- **report**: Report generation service for creating PDF documents
 - **ui**: Vaadin-based user interface with views, layouts, and components
+- **typescript**: TypeScript/pnpm workspace for standalone applications like onboarding
 
 ## Getting Started
 
@@ -64,7 +88,20 @@ verno/
 
 - Java 21 or higher
 - Maven 3.6+ (or use the included Maven wrapper `./mvnw`)
+- PostgreSQL database (version 12 or higher recommended)
 - IDE (IntelliJ IDEA, Eclipse, or VS Code recommended)
+
+### Database Setup
+
+1. **Install PostgreSQL** if not already installed
+2. **Create the database**:
+```sql
+CREATE DATABASE verno;
+CREATE USER verno WITH PASSWORD 'verno';
+GRANT ALL PRIVILEGES ON DATABASE verno TO verno;
+```
+
+3. The application uses Flyway for database migrations, which will automatically create the schema on first run.
 
 ### Running in Development Mode
 
@@ -79,10 +116,7 @@ verno/
 
 3. **Access the Application**:
    - Open your browser and navigate to `http://localhost:8080`
-   - The H2 console is available at `http://localhost:8080/h2-console`
-     - JDBC URL: `jdbc:h2:mem:verno`
-     - Username: `verno`
-     - Password: `verno`
+   - Default credentials will be set up during initial provisioning
 
 ### Building for Production
 
@@ -92,7 +126,13 @@ To build the application for production:
 ./mvnw clean package
 ```
 
-The JAR file will be created in the `ui/target/` directory.
+Or use the provided build script:
+
+```bash
+./scripts/build-app.sh
+```
+
+The JAR file will be created in the `ui/target/` directory and also copied to `app.jar` in the root.
 
 ### Docker Deployment
 
@@ -105,40 +145,117 @@ docker build -t verno:latest .
 If you use Vaadin commercial components, pass the license key as a build secret:
 
 ```bash
-docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
+docker build --secret id=proKey,src=$HOME/.vaadin/proKey -t verno:latest .
 ```
 
 For Vaadin offline key:
 
 ```bash
-docker build --secret id=offlineKey,src=$HOME/.vaadin/offlineKey .
+docker build --secret id=offlineKey,src=$HOME/.vaadin/offlineKey -t verno:latest .
 ```
 
 Run the container:
 
 ```bash
-docker run -p 8080:8080 verno:latest
+docker run -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/verno \
+  -e SPRING_DATASOURCE_USERNAME=verno \
+  -e SPRING_DATASOURCE_PASSWORD=verno \
+  verno:latest
 ```
+
+For deployment scripts, see the `scripts/` directory:
+- `deploy.sh` - Deployment automation
+- `provision-tenant.sh` - Tenant provisioning
+- `repair-flyway.sh` - Flyway migration repair
 
 ## Configuration
 
-Application configuration is located in `ui/src/main/resources/application.properties`. The default configuration uses an H2 in-memory database. For production, update the datasource configuration to use your preferred database (PostgreSQL, MySQL, etc.).
+Application configuration is located in `ui/src/main/resources/application.properties`. 
 
-### Current Configuration
+### Key Configuration Options
 
-- **Database**: H2 in-memory (`jdbc:h2:mem:verno`)
-- **H2 Console**: Enabled at `/h2-console`
-- **JPA**: Auto-update DDL enabled for development
+**Database (PostgreSQL)**:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/verno
+spring.datasource.username=verno
+spring.datasource.password=verno
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+
+**Flyway Migrations**:
+```properties
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration/common,classpath:db/migration/dev
+```
+
+**Multi-tenant Support**:
+```properties
+verno.mandant.enabled=true
+verno.mandant.header-name=default
+verno.mandant.allow-header-fallback=true
+verno.mandant.base-domains=localhost:8080,https://www.verno-app.ch,verno.swiss,localhost
+```
+
+**File Storage**:
+```properties
+files.storage.root=./data/files
+spring.servlet.multipart.max-file-size=200MB
+spring.servlet.multipart.max-request-size=200MB
+```
+
+**JPA Settings**:
+```properties
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
 
 ## Application Navigation
 
 The application includes the following main sections accessible via the side navigation:
 
-1. **Dashboard** - Overview and welcome page
-2. **Participants** - Manage course participants
-3. **Instructors** - Manage course instructors
-4. **Courses** - Manage courses and course schedules
-5. **Settings** - User and mandant settings
+1. **Participants** (order 1)
+   - Participants Overview - Manage all participants
+   - Participant Detail - Individual participant information
+
+2. **Instructors** (order 2)
+   - Instructors Overview - Manage all instructors
+   - Instructor Detail - Individual instructor information
+
+3. **Courses** (order 3)
+   - Course Overview - Main course management
+   - Courses Grid - List all courses
+   - Course Detail - Individual course configuration
+   - Course Schedules - Schedule management
+   - Course Schedule Detail - Individual schedule details
+
+4. **Mail Log** (order 96) - View email communication history
+
+5. **User Settings** (order 97) - Personal user preferences
+
+6. **Tenant Settings** (order 98) - Tenant configuration:
+   - Quantity settings
+   - Shared settings
+   - Report settings
+   - Course level settings
+   - Mail settings
+
+7. **User Management** (order 99) - Admin: Manage application users
+
+All views are protected with role-based access control (ADMIN, MANDANT_ADMIN).
+
+## REST API
+
+The application provides REST API endpoints in the `api` module:
+
+### External API
+- **TenantController**: Manage tenant operations
+- **ApplicationController**: Application-level operations
+
+### Internal API
+- **ReportController**: Generate and retrieve PDF reports
+
+API endpoints are available under the base path configured in the application.
 
 ## Internationalization
 
@@ -161,18 +278,51 @@ The project follows a feature-based package structure, organizing code by functi
 - **Feature packages**: Domain-specific functionality in `ui/src/main/java/ch/verno/ui/verno/`
 - **Entities**: Domain model in `db/src/main/java/ch/verno/db/entity/`
 - **Services**: Business logic in `server/src/main/java/ch/verno/server/service/`
+- **API Controllers**: REST endpoints in `api/src/main/java/ch/verno/api/endpoints/`
+- **Reports**: Report generation in `report/src/main/java/ch/verno/report/`
+
+### TypeScript Development
+
+The `typescript` directory contains a pnpm workspace for standalone applications:
+
+```bash
+cd typescript
+
+# Install dependencies
+pnpm install
+
+# Run onboarding app in development
+pnpm dev:onboarding
+
+# Build onboarding app
+pnpm build:onboarding
+
+# Lint all TypeScript projects
+pnpm lint
+```
 
 ### Database Schema
 
-The application uses JPA entities for the following domain objects:
+The application uses JPA entities with Flyway migrations for the following domain objects:
+
+**Core Entities**:
 - `CourseEntity` - Course information
 - `ParticipantEntity` - Participant details
 - `InstructorEntity` - Instructor information
 - `CourseScheduleEntity` - Course scheduling
 - `CourseLevelEntity` - Course difficulty levels
+
+**Supporting Entities**:
 - `AddressEntity` - Address information
 - `ParentEntity` - Parent/guardian information
 - `GenderEntity` - Gender reference data
+- `UserEntity` - Application users
+- `TenantEntity` - Multi-tenant support
+- `MailLogEntity` - Email tracking
+
+**Flyway Migrations**: Located in `ui/src/main/resources/db/migration/`
+- `common/` - Shared migrations across environments
+- `dev/` - Development-specific migrations
 
 ## License
 
@@ -181,9 +331,13 @@ See [LICENSE.md](LICENSE.md) for license information.
 ## Next Steps
 
 - Review the [Vaadin Building Apps](https://vaadin.com/docs/v25/building-apps) guides for adding features
-- Configure production database settings
-- Customize the theme and UI components
-- Add authentication and authorization if needed
+- Configure production database and environment variables
+- Set up tenant domains and multi-tenant routing
+- Configure SMTP settings for email functionality
+- Customize report templates in the `report` module
+- Review security configuration and user roles
+- Set up continuous integration/deployment pipelines
+- Configure file storage location for production
 
 ## Support
 
