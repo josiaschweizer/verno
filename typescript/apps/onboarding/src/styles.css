@@ -174,7 +174,7 @@
 
   .btn-primary {
     @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl
-    bg-verno-accent text-verno-dark
+    bg-verno-accent text-primary-foreground
     hover:opacity-90
     active:scale-95 active:opacity-80
     transition-transform transition-opacity duration-150

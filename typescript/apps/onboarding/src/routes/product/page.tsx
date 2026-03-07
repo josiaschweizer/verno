@@ -142,25 +142,14 @@ export default function Product() {
               >
                 Verno for sports clubs
               </h1>
-              <p className="mt-4 text-base text-muted-foreground">
+              <p className="mt-4 text-sm text-muted-foreground">
                 Clear structure, schedules and membership overview for clubs
                 running teams, courses and venues.
               </p>
-              <p className="mt-3 text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Built for coordinators, coaches and club managers who want a
                 calm, reliable system for everyday operations.
               </p>
-              {/*<div className="mt-6 flex flex-wrap items-center gap-4">*/}
-              {/*  <a href="#contact" className="btn-primary">*/}
-              {/*    Request a demo*/}
-              {/*  </a>*/}
-              {/*  <a*/}
-              {/*    href="#organization"*/}
-              {/*    className="text-sm font-medium text-verno-darker hover:underline"*/}
-              {/*  >*/}
-              {/*    Explore features*/}
-              {/*  </a>*/}
-              {/*</div>*/}
             </div>
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
@@ -173,8 +162,7 @@ export default function Product() {
                   initialSplit={0.6}
                 />
               </div>
-
-              <p className="mt-3 text-[11px] text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 Dashboard overview with course sections, sortable tables and
                 quick actions. Hover to compare light and dark mode.
               </p>
@@ -191,7 +179,7 @@ export default function Product() {
               >
                 Organization
               </h2>
-              <p className="mt-3 text-sm font-medium text-verno-dark">
+              <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
                 Keep clubs, teams and venues organized.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -202,9 +190,9 @@ export default function Product() {
               </p>
 
               <div className="mt-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-xs uppercase text-muted-foreground">
                   Key points
-                </h3>
+                </p>
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                   <li>• Clear club and team hierarchy</li>
                   <li>• Shared directory for venues and contacts</li>
@@ -215,7 +203,7 @@ export default function Product() {
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
               <div className="flex items-center justify-between gap-3 mb-3">
-                <p className="text-xs font-medium text-verno-darker shrink-0">
+                <p className="text-xs text-verno-darker shrink-0">
                   {activeOrganization.title}
                 </p>
 
@@ -232,56 +220,29 @@ export default function Product() {
                   <option value="participants">Participants</option>
                 </select>
 
-                {/* Desktop: Tabs */}
                 <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setOrganizationView('courseSchedules')}
-                    className={[
-                      'px-3 py-1.5 text-xs rounded-lg transition',
-                      organizationView === 'courseSchedules'
-                        ? 'bg-verno-surface shadow text-verno-darker'
-                        : 'text-muted-foreground hover:text-verno-darker',
-                    ].join(' ')}
-                  >
-                    Schedules
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOrganizationView('courses')}
-                    className={[
-                      'px-3 py-1.5 text-xs rounded-lg transition',
-                      organizationView === 'courses'
-                        ? 'bg-verno-surface shadow text-verno-darker'
-                        : 'text-muted-foreground hover:text-verno-darker',
-                    ].join(' ')}
-                  >
-                    Courses
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOrganizationView('instructors')}
-                    className={[
-                      'px-3 py-1.5 text-xs rounded-lg transition',
-                      organizationView === 'instructors'
-                        ? 'bg-verno-surface shadow text-verno-darker'
-                        : 'text-muted-foreground hover:text-verno-darker',
-                    ].join(' ')}
-                  >
-                    Instructors
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOrganizationView('participants')}
-                    className={[
-                      'px-3 py-1.5 text-xs rounded-lg transition',
-                      organizationView === 'participants'
-                        ? 'bg-verno-surface shadow text-verno-darker'
-                        : 'text-muted-foreground hover:text-verno-darker',
-                    ].join(' ')}
-                  >
-                    Participants
-                  </button>
+                  {(
+                    [
+                      'courseSchedules',
+                      'courses',
+                      'instructors',
+                      'participants',
+                    ] as OrganizationView[]
+                  ).map((view) => (
+                    <button
+                      key={view}
+                      type="button"
+                      onClick={() => setOrganizationView(view)}
+                      className={[
+                        'px-3 py-1.5 text-xs rounded-lg transition',
+                        organizationView === view
+                          ? 'bg-verno-surface shadow text-verno-darker'
+                          : 'text-muted-foreground hover:text-verno-darker',
+                      ].join(' ')}
+                    >
+                      {organizationConfig[view].title}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -296,7 +257,7 @@ export default function Product() {
                 />
               </div>
 
-              <p className="mt-3 text-[11px] text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 {activeOrganization.caption} Hover to compare light and dark
                 mode.
               </p>
@@ -313,7 +274,7 @@ export default function Product() {
               >
                 Scheduling &amp; Courses
               </h2>
-              <p className="mt-3 text-sm font-medium text-verno-dark">
+              <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
                 Plan training, matches and courses clearly.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -324,9 +285,9 @@ export default function Product() {
               </p>
 
               <div className="mt-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-xs uppercase text-muted-foreground">
                   Key points
-                </h3>
+                </p>
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                   <li>• Calendar views for teams and venues</li>
                   <li>• Sessions with instructors and capacity</li>
@@ -345,7 +306,7 @@ export default function Product() {
                   initialSplit={0.6}
                 />
               </div>
-              <p className="mt-3 text-[11px] text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 Weekly timetable with a clear hour grid, week navigation and
                 color-coded sessions. Hover to compare light and dark mode.
               </p>
@@ -362,7 +323,7 @@ export default function Product() {
               >
                 Participants &amp; Memberships
               </h2>
-              <p className="mt-3 text-sm font-medium text-verno-dark">
+              <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
                 Keep players, guardians and staff aligned.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -373,9 +334,9 @@ export default function Product() {
               </p>
 
               <div className="mt-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-xs uppercase text-muted-foreground">
                   Key points
-                </h3>
+                </p>
                 <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                   <li>• Profiles for participants and guardians</li>
                   <li>• Membership status by team or season</li>
@@ -386,13 +347,12 @@ export default function Product() {
 
             <div className="rounded-2xl bg-verno-surface shadow p-4">
               <div className="flex items-center justify-between gap-3 mb-3">
-                <p className="text-xs font-medium text-verno-darker shrink-0">
+                <p className="text-xs text-verno-darker shrink-0">
                   {peopleView === 'participants'
                     ? 'Participants overview'
                     : 'Roles & users'}
                 </p>
 
-                {/* Mobile: Dropdown */}
                 <select
                   value={peopleView}
                   onChange={(e) => setPeopleView(e.target.value as PeopleView)}
@@ -402,7 +362,6 @@ export default function Product() {
                   <option value="users">Roles &amp; Users</option>
                 </select>
 
-                {/* Desktop: Tabs */}
                 <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
                   <button
                     type="button"
@@ -451,11 +410,63 @@ export default function Product() {
                 )}
               </div>
 
-              <p className="mt-3 text-[11px] text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 {peopleView === 'participants'
                   ? 'Fast search, sortable columns and clear active/inactive status.'
                   : 'Role-based access with a streamlined user creation flow.'}{' '}
                 Hover to compare light and dark mode.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="mailing" aria-labelledby="mailing-title">
+          <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+            <div>
+              <h2
+                id="mailing-title"
+                className="text-2xl font-semibold text-verno-darker"
+              >
+                Mail Delivery &amp; Communication
+              </h2>
+              <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                Reach participants, guardians and instructors quickly.
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Send targeted emails for course updates, reminders and important
+                club communication.
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Keep templates, recipients and delivery history in one
+                structured place.
+              </p>
+
+              <div className="mt-4">
+                <p className="text-xs uppercase text-muted-foreground">
+                  Key points
+                </p>
+                <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                  <li>• Email templates for recurring communication</li>
+                  <li>• Send to courses, groups or selected recipients</li>
+                  <li>• Delivery logs with status and error visibility</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-verno-surface shadow p-4">
+              <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
+                <HoverSplitImage
+                  lightSrc="/mail-overview-light.png"
+                  darkSrc="/mail-overview.png"
+                  alt="Mail overview with templates, recipients and delivery log"
+                  className="w-full h-full"
+                  initialSplit={0.6}
+                  objectFit="contain"
+                />
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Manage templates, send messages to the right audience and review
+                delivery history. Hover to compare light and dark mode.
               </p>
             </div>
           </div>
@@ -471,7 +482,7 @@ export default function Product() {
                 >
                   Reporting &amp; Insights
                 </h2>
-                <p className="mt-3 text-sm font-medium text-verno-dark">
+                <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
                   Track participation and capacity trends.
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -483,9 +494,9 @@ export default function Product() {
                 </p>
 
                 <div className="mt-4">
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="text-xs uppercase text-muted-foreground">
                     Key points
-                  </h3>
+                  </p>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
                     <li>• Attendance and enrollment tracking</li>
                     <li>• Venue and resource utilization</li>
@@ -498,28 +509,28 @@ export default function Product() {
                 <div className="space-y-3">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
-                      <div className="text-2xl font-bold text-verno-darker">
+                      <div className="text-2xl font-semibold text-verno-darker">
                         {formatCount(tenantsCount)}
                       </div>
-                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                      <div className="text-xs text-muted-foreground mt-1">
                         Active clubs
                       </div>
                     </div>
 
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
-                      <div className="text-2xl font-bold text-verno-darker">
+                      <div className="text-2xl font-semibold text-verno-darker">
                         {formatCount(memberCount)}
                       </div>
-                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                      <div className="text-xs text-muted-foreground mt-1">
                         Total participants
                       </div>
                     </div>
 
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-verno-accent/10">
-                      <div className="text-2xl font-bold text-verno-darker">
+                      <div className="text-2xl font-semibold text-verno-darker">
                         {formatCount(courseCount)}
                       </div>
-                      <div className="text-xs font-medium text-muted-foreground mt-1">
+                      <div className="text-xs text-muted-foreground mt-1">
                         Running courses
                       </div>
                     </div>
@@ -527,10 +538,10 @@ export default function Product() {
 
                   <div className="rounded-xl bg-verno-surface-light p-4 border border-transparent">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-xs font-medium text-verno-darker">
+                      <p className="text-xs text-verno-darker">
                         Attendance overview
                       </p>
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         Last 6 months
                       </span>
                     </div>
@@ -547,7 +558,7 @@ export default function Product() {
                               style={{ height: `${height}%` }}
                             />
                           </div>
-                          <span className="text-[9px] text-muted-foreground">
+                          <span className="text-xs text-muted-foreground">
                             {['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'][i]}
                           </span>
                         </div>
@@ -556,7 +567,7 @@ export default function Product() {
                   </div>
                 </div>
 
-                <p className="mt-3 text-[11px] text-muted-foreground">
+                <p className="mt-3 text-xs text-muted-foreground">
                   Metrics showing club activity, participation and course
                   demand.
                 </p>
@@ -579,17 +590,6 @@ export default function Product() {
                 comfortable.
               </p>
             </div>
-            {/*<div className="flex flex-wrap items-center gap-4">*/}
-            {/*  <a href="#contact" className="btn-primary">*/}
-            {/*    Get in touch*/}
-            {/*  </a>*/}
-            {/*  <a*/}
-            {/*    href="#organization"*/}
-            {/*    className="text-sm font-medium text-verno-darker hover:underline"*/}
-            {/*  >*/}
-            {/*    View features*/}
-            {/*  </a>*/}
-            {/*</div>*/}
           </div>
         </section>
       </div>
