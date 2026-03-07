@@ -14,7 +14,6 @@ import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
 @PermitAll
 @Route(Routes.MAIL_LOG)
 @Menu(order = 96, icon = "vaadin:mailbox", title = "mail.log")
-public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> implements HasDynamicTitle {
+public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> {
 
   @Nonnull private final IMailLogService mailLogService;
 
@@ -88,16 +87,18 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
 
   @Nonnull
   private VABadgeLabel getBadgeLabel(@Nonnull final MailLogDto mailLog) {
+    final var badgeDisplayName = getTranslation(mailLog.getStatus().getDisplayKey());
+
     return switch (mailLog.getStatus()) {
-      case SENT -> new VABadgeLabel("Send", VABadgeLabelOptions.SUCCESS);
-      case FAILED -> new VABadgeLabel("Failed", VABadgeLabelOptions.ERROR);
-      default -> new VABadgeLabel("Unknown", VABadgeLabelOptions.NORMAL);
+      case SENT -> new VABadgeLabel(badgeDisplayName, VABadgeLabelOptions.SUCCESS);
+      case FAILED -> new VABadgeLabel(badgeDisplayName, VABadgeLabelOptions.ERROR);
+      case QUEUED -> new VABadgeLabel(badgeDisplayName, VABadgeLabelOptions.CONTRAST);
     };
   }
 
   @Override
-  public String getPageTitle() {
-    return "";
+  protected boolean hasDetailPage() {
+    return false;
   }
 
   @Override

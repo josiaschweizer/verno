@@ -26,6 +26,12 @@ public class ViewToolbarFactory {
 
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
+                                              @Nonnull final String gridObjectName) {
+    return createGridToolbar(globalInterface, gridObjectName, null, null);
+  }
+
+  @Nonnull
+  public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final String gridObjectName,
                                               @Nonnull final String url) {
     return createGridToolbar(globalInterface, gridObjectName, createNewButton(globalInterface, url), null);
@@ -41,7 +47,7 @@ public class ViewToolbarFactory {
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final String gridObjectName,
-                                              @Nonnull final Button actionButton,
+                                              @Nullable final Button actionButton,
                                               @Nullable final VASearchFilter filter) {
     final var translation = TranslationHelper.getTranslation(globalInterface, "base.grid");
 
@@ -53,7 +59,13 @@ public class ViewToolbarFactory {
       );
     }
 
-    final var viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation, actionButton);
+    ViewToolbar viewToolbar;
+    if (actionButton != null) {
+      viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation, actionButton);
+    } else {
+      viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation);
+    }
+
     applyUserBadgeToToolbar(globalInterface, viewToolbar);
     return viewToolbar;
   }
