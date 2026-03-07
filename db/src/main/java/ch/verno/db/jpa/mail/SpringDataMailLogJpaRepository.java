@@ -4,10 +4,13 @@ import ch.verno.common.db.enums.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface SpringDataMailLogJpaRepository extends JpaRepository<MailLogEntity, Long> {
+public interface SpringDataMailLogJpaRepository extends
+        JpaRepository<MailLogEntity, Long>,
+        JpaSpecificationExecutor<MailLogEntity> {
 
   @Nonnull
   List<MailLogEntity> findAllByStatusOrderByCreatedAtDesc(@Nonnull MailLogStatus status);

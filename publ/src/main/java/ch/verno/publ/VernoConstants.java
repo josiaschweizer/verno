@@ -27,4 +27,9 @@ public class VernoConstants {
   public static final MediaType OCTET_STREAM = MediaType.APPLICATION_OCTET_STREAM;
 
   public static final String X_TENANT = "X-Mandant";
+
+
+  public static final Integer MAX_MAIL_BATCH_SIZE = 100;
+  public static final Double MAIL_SEND_DELAY_MS = 500.0;
+
 }

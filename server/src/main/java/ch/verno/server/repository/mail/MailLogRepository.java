@@ -4,6 +4,8 @@ import ch.verno.common.db.enums.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.jpa.mail.SpringDataMailLogJpaRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,6 +34,12 @@ public class MailLogRepository {
   @Nonnull
   public List<MailLogEntity> findAll() {
     return repository.findAll();
+  }
+
+  @Nonnull
+  public List<MailLogEntity> findAll(@Nonnull final Specification<MailLogEntity> spec,
+                                     @Nonnull final Pageable pageable) {
+    return repository.findAll(spec, pageable).getContent();
   }
 
   @Nonnull

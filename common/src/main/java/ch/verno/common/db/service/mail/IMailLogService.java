@@ -2,6 +2,8 @@ package ch.verno.common.db.service.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
 import ch.verno.common.db.enums.mail.MailLogStatus;
+import ch.verno.common.db.filter.MailLogFilter;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 import org.simplejavamail.api.email.Email;
 
@@ -51,4 +53,10 @@ public interface IMailLogService {
                        @Nonnull String placeholdersJson,
                        @Nonnull String errorMessage,
                        Long createdBy);
+
+  @Nonnull
+  List<MailLogDto> findMailLogs(@Nonnull MailLogFilter filter,
+                                int offset,
+                                int limit,
+                                @Nonnull List<QuerySortOrder> sortOrders);
 }

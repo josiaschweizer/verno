@@ -2,12 +2,16 @@ package ch.verno.server.service.intern.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
 import ch.verno.common.db.enums.mail.MailLogStatus;
+import ch.verno.common.db.filter.MailLogFilter;
 import ch.verno.common.db.service.mail.IMailLogService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.publ.Publ;
 import ch.verno.server.mapper.mail.MailLogMapper;
 import ch.verno.server.repository.mail.MailLogRepository;
+import ch.verno.server.spec.MailLogSpec;
+import ch.verno.server.spec.PageHelper;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 import org.simplejavamail.api.email.Email;
 import org.springframework.stereotype.Service;
@@ -22,8 +26,12 @@ public class MailLogService implements IMailLogService {
 
   @Nonnull private final MailLogRepository mailLogRepository;
 
+  @Nonnull private final MailLogSpec mailLogSpec;
+
   public MailLogService(@Nonnull final MailLogRepository mailLogRepository) {
     this.mailLogRepository = mailLogRepository;
+
+    this.mailLogSpec = new MailLogSpec();
   }
 
   @Nonnull
@@ -198,5 +206,19 @@ public class MailLogService implements IMailLogService {
     dto.setCreatedAt(LocalDateTime.now());
     dto.setCreatedBy(createdBy);
     return create(dto);
+  }
+
+  @Nonnull
+  @Override
+  public List<MailLogDto> findMailLogs(@Nonnull final MailLogFilter filter,
+                                       final int offset,
+                                       final int limit,
+                                       @Nonnull final List<QuerySortOrder> sortOrders) {
+    final var spec = mailLogSpec.getSpecification(filter);
+    final var pageable = PageHelper.createPageRequest(offset, limit, sortOrders);
+
+    return mailLogRepository.findAll(spec, pageable).stream()
+            .map(MailLogMapper::toDto)
+            .toList();
   }
 }

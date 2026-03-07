@@ -1,11 +1,9 @@
 package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
 import ch.verno.common.db.service.mail.IMailConfigService;
@@ -13,6 +11,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
@@ -77,11 +76,20 @@ public class CourseWidget extends VAAccordionWidgetBase {
     );
 
     if (mailConfigService.get().hasConfigForCurrentTenant()) {
-      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID)) {
+      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
+              !participantsInCourse.isEmpty()) {
         emailButton.setEnabled(true);
+        emailButton.setTooltipText(getTranslation("setting.send.email"));
       } else {
         emailButton.setEnabled(false);
-        emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
+
+        if (participantsInCourse.isEmpty()) {
+          emailButton.setTooltipText(getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature"));
+        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE){
+          emailButton.setTooltipText(getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE));
+        }else {
+          emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
+        }
       }
     } else {
       emailButton.setEnabled(false);
