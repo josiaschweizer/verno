@@ -5,6 +5,7 @@ import ch.verno.common.db.enums.mail.MailLogStatus;
 import ch.verno.common.db.filter.MailLogFilter;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.simplejavamail.api.email.Email;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public interface IMailLogService {
                      @Nonnull String templateName,
                      @Nonnull String subject,
                      @Nonnull String content,
-                     @Nonnull String placeholdersJson,
+                     @Nullable String placeholdersJson,
                      @Nonnull String providerMessageId,
                      Long createdBy);
 
@@ -50,7 +51,7 @@ public interface IMailLogService {
                        @Nonnull String templateName,
                        @Nonnull String subject,
                        @Nonnull String content,
-                       @Nonnull String placeholdersJson,
+                       @Nullable String placeholdersJson,
                        @Nonnull String errorMessage,
                        Long createdBy);
 

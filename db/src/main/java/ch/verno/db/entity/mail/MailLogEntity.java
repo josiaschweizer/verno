@@ -6,6 +6,8 @@ import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -33,7 +35,8 @@ public class MailLogEntity extends TenantScopedEntity {
   @Column(nullable = false, columnDefinition = "text")
   private String content;
 
-  @Column(columnDefinition = "text")
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(name = "placeholders")
   private String placeholdersJson;
 
   @Enumerated(EnumType.STRING)

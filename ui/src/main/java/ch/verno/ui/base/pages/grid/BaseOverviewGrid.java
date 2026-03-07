@@ -152,9 +152,6 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     componentColumns.forEach(this::addComponentColumn);
 
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
-    grid.addSortListener(sort -> {
-      System.out.println("Sort event: " + sort.getSortOrder());
-    });
     setDefaultSorting();
     dataProvider.setFilter(filter);
   }

@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.enums.mail.MailLogStatus;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class MailLogDto extends BaseDto {
   @Nonnull private String subject;
   @Nonnull private String content;
 
-  @Nonnull private String placeholdersJson;
+  @Nullable private String placeholdersJson;
 
   @Nonnull private MailLogStatus status;
 
@@ -46,7 +47,7 @@ public class MailLogDto extends BaseDto {
                     @Nonnull final String templateName,
                     @Nonnull final String subject,
                     @Nonnull final String content,
-                    @Nonnull final String placeholdersJson,
+                    @Nullable final String placeholdersJson,
                     @Nonnull final MailLogStatus status,
                     @Nonnull final String errorMessage,
                     @Nonnull final String providerMessageId,
@@ -116,12 +117,12 @@ public class MailLogDto extends BaseDto {
     this.content = content;
   }
 
-  @Nonnull
+  @Nullable
   public String getPlaceholdersJson() {
     return placeholdersJson;
   }
 
-  public void setPlaceholdersJson(@Nonnull final String placeholdersJson) {
+  public void setPlaceholdersJson(@Nullable final String placeholdersJson) {
     this.placeholdersJson = placeholdersJson;
   }
 

@@ -4,10 +4,15 @@ import ch.verno.common.db.dto.table.mail.MailLogDto;
 import ch.verno.common.db.filter.MailLogFilter;
 import ch.verno.common.db.service.mail.IMailLogService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.format.Converter;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.publ.Routes;
 import ch.verno.server.service.intern.mail.MailLogService;
+import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
+import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -16,6 +21,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -58,11 +64,44 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   @Nonnull
   @Override
   protected List<ObjectGridColumn<MailLogDto>> getColumns() {
-    return List.of();
+    final var columns = new ArrayList<ObjectGridColumn<MailLogDto>>();
+
+    columns.add(new ObjectGridColumn<>("recipientEmail", MailLogDto::getRecipientEmail, "Recipient Email", true));
+    columns.add(new ObjectGridColumn<>("recipientName", MailLogDto::getRecipientName, "Recipient Name", true));
+    columns.add(new ObjectGridColumn<>("templateName", MailLogDto::getTemplateName, "Template", true));
+    columns.add(new ObjectGridColumn<>("subject", MailLogDto::getSubject, "Subject", true));
+    columns.add(new ObjectGridColumn<>("sentAt", mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), "Sent At", true));
+    columns.add(new ObjectGridColumn<>("errorMessage", MailLogDto::getErrorMessage, "Error", false));
+
+    return columns;
+  }
+
+  @Nonnull
+  @Override
+  protected List<ComponentGridColumn<MailLogDto>> getComponentColumns() {
+    final var columns = new ArrayList<ComponentGridColumn<MailLogDto>>();
+
+    columns.add(new ComponentGridColumn<>("status", this::getBadgeLabel, "Status", true));
+
+    return columns;
+  }
+
+  @Nonnull
+  private VABadgeLabel getBadgeLabel(@Nonnull final MailLogDto mailLog) {
+    return switch (mailLog.getStatus()) {
+      case SENT -> new VABadgeLabel("Send", VABadgeLabelOptions.SUCCESS);
+      case FAILED -> new VABadgeLabel("Failed", VABadgeLabelOptions.ERROR);
+      default -> new VABadgeLabel("Unknown", VABadgeLabelOptions.NORMAL);
+    };
   }
 
   @Override
   public String getPageTitle() {
     return "";
+  }
+
+  @Override
+  protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<MailLogDto> event) {
+    // override the default behavior of re-navigating to the detail view on double click
   }
 }

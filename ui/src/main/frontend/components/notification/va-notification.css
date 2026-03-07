@@ -1,3 +1,13 @@
+vaadin-notification-container[slot="bottom-end"] {
+    position: fixed !important;
+    right: var(--lumo-space-m) !important;
+    left: auto !important;
+    bottom: var(--lumo-space-m) !important;
+    transform: none !important;
+    max-width: 420px;
+    width: auto;
+}
+
 .modern-notification {
   display: flex;
   align-items: flex-start;

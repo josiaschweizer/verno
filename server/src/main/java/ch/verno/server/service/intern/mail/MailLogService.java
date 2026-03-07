@@ -13,6 +13,7 @@ import ch.verno.server.spec.MailLogSpec;
 import ch.verno.server.spec.PageHelper;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.simplejavamail.api.email.Email;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -123,7 +124,7 @@ public class MailLogService implements IMailLogService {
             Publ.EMPTY_STRING,
             subject,
             content,
-            Publ.EMPTY_STRING,
+            null,
             providerMessageId,
             null
     );
@@ -137,7 +138,7 @@ public class MailLogService implements IMailLogService {
                             @Nonnull final String templateName,
                             @Nonnull final String subject,
                             @Nonnull final String content,
-                            @Nonnull final String placeholdersJson,
+                            @Nullable final String placeholdersJson,
                             @Nonnull final String providerMessageId,
                             final Long createdBy) {
     final var dto = new MailLogDto();
@@ -176,7 +177,7 @@ public class MailLogService implements IMailLogService {
             Publ.EMPTY_STRING,
             subject,
             content,
-            Publ.EMPTY_STRING,
+            null,
             errorMessage,
             null
     );
@@ -190,7 +191,7 @@ public class MailLogService implements IMailLogService {
                               @Nonnull final String templateName,
                               @Nonnull final String subject,
                               @Nonnull final String content,
-                              @Nonnull final String placeholdersJson,
+                              @Nullable final String placeholdersJson,
                               @Nonnull final String errorMessage,
                               final Long createdBy) {
     final var dto = new MailLogDto();
