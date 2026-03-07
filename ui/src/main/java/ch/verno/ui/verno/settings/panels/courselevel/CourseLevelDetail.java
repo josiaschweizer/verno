@@ -28,21 +28,21 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
   @Override
   protected void initUI() {
-    final var codeEntry = entryFactory.createTextEntry(
+    final var codeEntry = entryFactory.createTextField(
             CourseLevelDto::getCode,
             CourseLevelDto::setCode,
             getBinder(),
             Optional.of(getTranslation("setting.code.required")),
             getTranslation("setting.code")
     );
-    final var nameEntry = entryFactory.createTextEntry(
+    final var nameEntry = entryFactory.createTextField(
             CourseLevelDto::getName,
             CourseLevelDto::setName,
             getBinder(),
             Optional.of(getTranslation("setting.name.required")),
             getTranslation("setting.name")
     );
-    final var descriptionEntry = entryFactory.createTextEntry(
+    final var descriptionEntry = entryFactory.createTextField(
             CourseLevelDto::getDescription,
             CourseLevelDto::setDescription,
             getBinder(),
@@ -57,7 +57,7 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
             getTranslation("setting.sorting.order")
     );
 
-    add(LayoutUtil.createHorizontalLayoutFromComponents(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));
+    add(LayoutUtil.createHorizontal(codeEntry, nameEntry, descriptionEntry, sortingOrderEntry));
   }
 
   @Nonnull

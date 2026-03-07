@@ -62,7 +62,7 @@ public class ChangePasswordDialog extends VADialog {
             )
             .bind(ChangePasswordDto::getConfirmNewPassword, ChangePasswordDto::setConfirmNewPassword);
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(newPassword, confirmNewPassword);
+    return LayoutUtil.createHorizontal(newPassword, confirmNewPassword);
   }
 
   @Nonnull
@@ -97,9 +97,9 @@ public class ChangePasswordDialog extends VADialog {
 
       appUserService.changePassword(changePasswordDto.getUserId(), newHashedPassword);
 
-      final var currentUser = globalInterface.getCurrentUser();
+      final var currentUser = globalInterface.getUserProperties().getCurrentUser();
       if (currentUser.getId() != null && currentUser.getId().equals(changePasswordDto.getUserId())) {
-        globalInterface.logout();
+        globalInterface.getUserProperties().logout();
       }
 
       final var user = appUserService.findAppUserById(changePasswordDto.getUserId());

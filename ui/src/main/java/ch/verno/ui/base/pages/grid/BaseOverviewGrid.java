@@ -111,7 +111,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
     final var customRunnable = getCustomActionButtonRunnable();
     if (customRunnable == null) {
-      throw new IllegalStateException("No custom action button runnable - override getCustomActionButtonRunnable to provide one or override createGridToolbar to provide a custom toolbar");
+      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName());
     }
 
     return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getCustomActionButtonRunnable());
@@ -152,9 +152,6 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     componentColumns.forEach(this::addComponentColumn);
 
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
-    grid.addSortListener(sort -> {
-      System.out.println("Sort event: " + sort.getSortOrder());
-    });
     setDefaultSorting();
     dataProvider.setFilter(filter);
   }

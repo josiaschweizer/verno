@@ -26,6 +26,12 @@ public class ViewToolbarFactory {
 
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
+                                              @Nonnull final String gridObjectName) {
+    return createGridToolbar(globalInterface, gridObjectName, null, null);
+  }
+
+  @Nonnull
+  public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final String gridObjectName,
                                               @Nonnull final String url) {
     return createGridToolbar(globalInterface, gridObjectName, createNewButton(globalInterface, url), null);
@@ -41,7 +47,7 @@ public class ViewToolbarFactory {
   @Nonnull
   public static ViewToolbar createGridToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final String gridObjectName,
-                                              @Nonnull final Button actionButton,
+                                              @Nullable final Button actionButton,
                                               @Nullable final VASearchFilter filter) {
     final var translation = TranslationHelper.getTranslation(globalInterface, "base.grid");
 
@@ -53,7 +59,13 @@ public class ViewToolbarFactory {
       );
     }
 
-    final var viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation, actionButton);
+    ViewToolbar viewToolbar;
+    if (actionButton != null) {
+      viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation, actionButton);
+    } else {
+      viewToolbar = new ViewToolbar(gridObjectName + Publ.SPACE + translation);
+    }
+
     applyUserBadgeToToolbar(globalInterface, viewToolbar);
     return viewToolbar;
   }
@@ -99,16 +111,13 @@ public class ViewToolbarFactory {
 
   private static void applyUserBadgeToToolbar(@Nonnull final GlobalInterface globalInterface,
                                               @Nonnull final ViewToolbar toolbar) {
-    final var currentUser = getCurrentUser();
-    if (currentUser == null) {
-      return;
-    }
-
+    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
     final var ui = UI.getCurrent();
+
     final var userBadge = new UserActionBadge(currentUser.getUsername())
 //            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
-            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", globalInterface::logout);
+            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", () -> globalInterface.getUserProperties().logout());
 
     toolbar.addUserAction(userBadge);
   }
@@ -116,9 +125,10 @@ public class ViewToolbarFactory {
   @Nullable
   private static User getCurrentUser() {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
       return (User) authentication.getPrincipal();
     }
+
     return null;
   }
 

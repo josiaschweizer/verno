@@ -1,11 +1,11 @@
 package ch.verno.ui.verno.usermanagemnt;
 
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.filter.AppUserFilter;
 import ch.verno.common.db.role.Role;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
@@ -130,7 +130,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
 
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final AppUserDto dto) {
-    final var currentUser = globalInterface.getCurrentUser();
+    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
     final var actions = new ArrayList<ActionDef>();
 
     actions.add(ActionDef.create(

@@ -2,6 +2,7 @@ package ch.verno.ui;
 
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+@Push
 @SpringBootApplication(scanBasePackages = "ch.verno")
 @EnableJpaRepositories(basePackages = "ch.verno.db.jpa")
 @EntityScan(basePackages = "ch.verno.db.entity")

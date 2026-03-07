@@ -1,10 +1,12 @@
 package ch.verno.ui.verno.settings;
 
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.Lazy;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.verno.settings.panels.courselevel.CourseLevelSetting;
+import ch.verno.ui.verno.settings.panels.mail.MailSettings;
 import ch.verno.ui.verno.settings.panels.quantity.QuantitySetting;
 import ch.verno.ui.verno.settings.panels.report.ReportSetting;
 import ch.verno.ui.verno.settings.panels.shared.SharedSettings;
@@ -22,17 +24,19 @@ import java.util.List;
 @Menu(order = 98, icon = "vaadin:cog", title = "setting.tenant_settings")
 public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitle {
 
-  @Nonnull private final SharedSettings sharedSetting;
-  @Nonnull private final QuantitySetting quantitySetting;
-  @Nonnull private final ReportSetting reportSetting;
-  @Nonnull private final CourseLevelSetting courseLevelGridSetting;
+  @Nonnull private final Lazy<SharedSettings> sharedSetting;
+  @Nonnull private final Lazy<QuantitySetting> quantitySetting;
+  @Nonnull private final Lazy<ReportSetting> reportSetting;
+  @Nonnull private final Lazy<CourseLevelSetting> courseLevelGridSetting;
+  @Nonnull private final Lazy<MailSettings> mailSettings;
 
   @Autowired
   public TenantSettings(@Nonnull final GlobalInterface globalInterface) {
-    this.sharedSetting = new SharedSettings(globalInterface);
-    this.quantitySetting = new QuantitySetting(globalInterface);
-    this.reportSetting = new ReportSetting(globalInterface);
-    this.courseLevelGridSetting = new CourseLevelSetting(globalInterface);
+    this.sharedSetting = Lazy.of(() -> new SharedSettings(globalInterface));
+    this.quantitySetting = Lazy.of(() -> new QuantitySetting(globalInterface));
+    this.reportSetting = Lazy.of(() -> new ReportSetting(globalInterface));
+    this.courseLevelGridSetting = Lazy.of(() -> new CourseLevelSetting(globalInterface));
+    this.mailSettings = Lazy.of(() -> new MailSettings(globalInterface));
 
     initUI(globalInterface);
   }
@@ -40,7 +44,13 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
   @Nonnull
   @Override
   protected List<VABaseSetting<?>> getSettings() {
-    return List.of(quantitySetting, sharedSetting, reportSetting, courseLevelGridSetting);
+    return List.of(
+            quantitySetting.get(),
+            sharedSetting.get(),
+            reportSetting.get(),
+            courseLevelGridSetting.get(),
+            mailSettings.get()
+    );
   }
 
 

@@ -57,7 +57,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
     final var userLayout = new UserLayout(globalInterface, new EntryFactory<>(globalInterface.getI18NProvider()));
     userLayout.setUsernamePanelReadOnly(getTranslation("shared.der.benutzername.kann.nur.durch.den.administrator.geandert.werden"));
 
-    final var currentUser = globalInterface.getCurrentUser();
+    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
     if (currentUser.getRole().equals(Role.ADMIN)) {
       userLayout.setRoleReadOnly(getTranslation("shared.ein.administrator.kann.sich.selber.nicht.die.rolle.entziehen.bitte.wenden.sie.sich.an.einen.anderen.administrator.um.ihre.rolle.zu.andern"));
     } else {
@@ -100,7 +100,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
   @Nonnull
   @Override
   protected UserDtoUnhashedPw createNewBeanInstance() {
-    final var currentUser = globalInterface.getCurrentUser();
+    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
     currentUser.setPasswordHash(Publ.EIGHT_STARS);
     return UserDtoUnhashedPw.fromAppUserDto(currentUser);
   }

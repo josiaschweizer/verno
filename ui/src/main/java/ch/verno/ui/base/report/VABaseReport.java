@@ -5,6 +5,7 @@ import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.Page;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
@@ -18,18 +19,18 @@ public abstract class VABaseReport<T> extends BaseReport<T> {
     CENTER(HorizontalAlign.CENTER),
     RIGHT(HorizontalAlign.RIGHT);
 
-    private final HorizontalAlign dj;
+    @Nonnull private final HorizontalAlign dj;
 
-    ReportHorizontalAlignment(HorizontalAlign dj) {
+    ReportHorizontalAlignment(@Nonnull final HorizontalAlign dj) {
       this.dj = dj;
     }
   }
 
   @Nonnull
-  private String title = "";
+  private String title = Publ.EMPTY_STRING;
 
   @Nonnull
-  private String subtitle = "";
+  private String subtitle = Publ.EMPTY_STRING;
 
   @Nonnull
   private ReportHorizontalAlignment titleAlignment = ReportHorizontalAlignment.LEFT;

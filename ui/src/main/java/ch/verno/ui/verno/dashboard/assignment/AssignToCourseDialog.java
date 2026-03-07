@@ -108,7 +108,7 @@ public class AssignToCourseDialog extends VADialog {
     final var title = createTitleSpan(getTranslation("course.course"));
     courseComboBox = createCourseComboBox();
 
-    return LayoutUtil.createVerticalLayoutFromComponents(title, courseComboBox);
+    return LayoutUtil.createVertical(title, courseComboBox);
   }
 
   @Nonnull
@@ -118,7 +118,7 @@ public class AssignToCourseDialog extends VADialog {
     searchBar.addValueChangeListener(e -> searchChanged(e.getValue()));
     final var participants = createParticipantsCheckboxGroup();
 
-    final var layout = LayoutUtil.createVerticalLayoutFromComponents(title, searchBar, participants);
+    final var layout = LayoutUtil.createVertical(title, searchBar, participants);
     layout.setFlexGrow(1, participants);
     return layout;
   }

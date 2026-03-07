@@ -2,6 +2,7 @@ package ch.verno.ui.base;
 
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.ui.base.components.notification.NotificationStyles;
 import ch.verno.ui.base.menu.MenuOrder;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIconUtil;
@@ -53,6 +54,8 @@ public final class MainLayout extends AppLayout {
             createHeader(),
             new Scroller(createSideNav()),
             createDrawerFooter());
+
+    registerUtilityStyleClasses();
   }
 
   @Override
@@ -181,5 +184,9 @@ public final class MainLayout extends AppLayout {
     footerLayout.setAlignItems(FlexComponent.Alignment.CENTER);
     footerLayout.add(version);
     return footerLayout;
+  }
+
+  private void registerUtilityStyleClasses(){
+    addToDrawer(new NotificationStyles());
   }
 }

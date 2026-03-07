@@ -2,6 +2,7 @@ package ch.verno.ui.base.settings;
 
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.verno.settings.SettingEntryFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -9,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -22,10 +24,12 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   @Nonnull protected T dto;
 
   @Nonnull private final Div headerWrapper;
-  @Nonnull private final Div contentWrapper;
-  @Nullable protected Component contentComponent;
+  @Nullable private VABadgeLabel headerBadge;
   @Nullable private Span actionButtonSpan;
   @Nonnull protected Button saveButton;
+
+  @Nonnull private final Div contentWrapper;
+  @Nullable protected Component contentComponent;
 
   @Nonnull
   public final SettingEntryFactory<T> settingEntryFactory;
@@ -80,6 +84,18 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     headerWrapper.add(actionButtonSpan);
   }
 
+  protected final void setHeaderBadge(@Nullable final VABadgeLabel badge) {
+    if (headerBadge != null) {
+      headerWrapper.remove(headerBadge);
+      headerBadge = null;
+    }
+
+    if (badge != null) {
+      headerBadge = badge;
+      headerWrapper.addComponentAtIndex(1, headerBadge);
+    }
+  }
+
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
@@ -88,8 +104,8 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
       setContent(createContent());
 
       binder.readBean(dto);
-      binder.addStatusChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
-      binder.addValueChangeListener(e -> saveButton.setEnabled(binder.hasChanges() && binder.isValid()));
+      binder.addStatusChangeListener(e -> binderStatusChanged());
+      binder.addValueChangeListener(e -> binderValueChanged());
     }
   }
 
@@ -121,5 +137,13 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   private Binder<T> createBinder() {
     return new Binder<>(getBeanType());
+  }
+
+  protected void binderStatusChanged() {
+    saveButton.setEnabled(binder.hasChanges() && binder.isValid());
+  }
+
+  protected void binderValueChanged() {
+    saveButton.setEnabled(binder.hasChanges() && binder.isValid());
   }
 }

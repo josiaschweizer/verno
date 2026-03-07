@@ -2,13 +2,19 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.ICourseService;
 import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.mail.MailTemplateType;
+import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
+import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.Text;
@@ -26,20 +32,23 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final GlobalInterface globalInterface;
 
-  @Nonnull private final CourseDto currentCourse;
-  private final IParticipantService participantService;
+  @Nonnull private final IParticipantService participantService;
+  @Nonnull private final Lazy<IMailConfigService> mailConfigService;
 
-  @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
+  @Nonnull private final CourseDto currentCourse;
+  @Nullable private ParticipantsGrid participantsGrid;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
 
+    participantService = globalInterface.getService(IParticipantService.class);
+    mailConfigService = Lazy.of(() -> globalInterface.getService(IMailConfigService.class));
+
     final var courseService = globalInterface.getService(ICourseService.class);
     currentCourse = courseService.getCourseById(currentCourseId);
 
-    participantService = globalInterface.getService(IParticipantService.class);
     participantsInCourse = participantService.findParticipants(
             ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
     );
@@ -55,12 +64,43 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void buildHeaderActions(@Nonnull final HorizontalLayout header) {
-    final var reportButton = createHeaderButton("Report", VaadinIcon.FILE_TEXT, e -> {
-      final var dialog = new CourseReportDialog(
+    final var emailButton = createHeaderButton(
+            getTranslation("setting.send.email"),
+            VaadinIcon.MAILBOX,
+            e -> {
+              final var dialog = new CourseEmailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
+              dialog.setParticipants(participantsInCourse);
+              dialog.setCourse(currentCourse);
+              dialog.open();
+            }
+    );
+
+    if (mailConfigService.get().hasConfigForCurrentTenant()) {
+      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
+              !participantsInCourse.isEmpty()) {
+        emailButton.setEnabled(true);
+        emailButton.setTooltipText(getTranslation("setting.send.email"));
+      } else {
+        emailButton.setEnabled(false);
+
+        if (participantsInCourse.isEmpty()) {
+          emailButton.setTooltipText(getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature"));
+        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE){
+          emailButton.setTooltipText(getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE));
+        }else {
+          emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
+        }
+      }
+    } else {
+      emailButton.setEnabled(false);
+      emailButton.setTooltipText(getTranslation("setting.please.set.up.your.email.configuration.in.the.settings.to.enable.this.feature"));
+    }
+
+    final var reportButton = createHeaderButton(getTranslation("setting.report"), VaadinIcon.FILE_TEXT, e -> {
+      new CourseReportDialog(
               globalInterface,
               currentCourse,
-              participantsInCourse);
-      dialog.open();
+              participantsInCourse).open();
     });
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
@@ -85,7 +125,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
               courseDetailDialog.open();
             });
 
-    header.add(reportButton, assignButton, detailButton);
+    header.add(emailButton, reportButton, assignButton, detailButton);
   }
 
   @Override
@@ -119,7 +159,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Override
   protected void refresh() {
     if (participantsGrid == null) {
-      participantsInCourse = participantService.findParticipants(ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null));
+      participantsInCourse = participantService.findParticipants(
+              ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null
+              ));
       return;
     }
 

@@ -55,7 +55,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
 
   @Nonnull
   private HorizontalLayout createInfoLayout() {
-    final var title = entryFactory.createTextEntry(
+    final var title = entryFactory.createTextField(
             CourseScheduleDto::getTitle,
             CourseScheduleDto::setTitle,
             getBinder(),
@@ -79,7 +79,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             getTranslation("shared.color")
     );
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(title, status, colorPicker);
+    return LayoutUtil.createHorizontal(title, status, colorPicker);
   }
 
   @Nonnull
@@ -95,7 +95,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
     schedulePicker.setQuantityProposalCourseDays(quantityProposalCourseDays);
     schedulePicker.setEnforceQuantitySetting(enforceQuantitySetting);
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(schedulePicker);
+    return LayoutUtil.createHorizontal(schedulePicker);
   }
 
   @Nonnull

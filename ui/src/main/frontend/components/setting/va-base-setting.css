@@ -1,7 +1,7 @@
 .setting-card {
     width: 100%;
-    max-width: 900px;
-    min-width: 400px;
+    max-width: 1400px;
+    min-width: 700px;
 
     margin-left: 0;
     margin-right: 0;
@@ -19,7 +19,6 @@
     gap: var(--lumo-space-m);
 }
 
-/* Dark mode specific styling for better card visibility */
 :root[theme='dark'] .setting-card {
     background-color: var(--app-card-background, hsl(220, 15%, 15%));
     border-color: var(--app-card-border, hsl(220, 15%, 30%));
@@ -28,6 +27,7 @@
 .setting-card-header {
     display: flex;
     align-items: center;
+    gap: var(--lumo-space-s);
 }
 
 .setting-card-title {

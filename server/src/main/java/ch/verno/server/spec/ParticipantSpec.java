@@ -1,22 +1,21 @@
 package ch.verno.server.spec;
 
 import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.ParticipantEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class ParticipantSpec {
+public class ParticipantSpec extends BaseSpec<ParticipantEntity, ParticipantFilter> {
 
-  @Nonnull
-  public Specification<ParticipantEntity> participantSpec(@Nonnull final ParticipantFilter filter) {
+  @Override
+  public Specification<ParticipantEntity> getSpecification(@Nonnull final ParticipantFilter filter) {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
@@ -162,32 +161,5 @@ public class ParticipantSpec {
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
-  }
-
-  @Nonnull
-  private static Predicate likeLower(@Nonnull final CriteriaBuilder cb,
-                                     @Nonnull final Expression<?> path,
-                                     @Nonnull final String pattern) {
-    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
-  }
-
-  @Nullable
-  private static Integer tryParseInt(@Nullable final String s) {
-    if (s == null || s.isBlank()) {
-      return null;
-    }
-    try {
-      return Integer.parseInt(s.trim());
-    } catch (NumberFormatException e) {
-      return null;
-    }
-  }
-
-  @Nonnull
-  private static String normalize(@Nullable final String s) {
-    if (s == null) {
-      return Publ.EMPTY_STRING;
-    }
-    return s.trim().toLowerCase(Locale.ROOT);
   }
 }

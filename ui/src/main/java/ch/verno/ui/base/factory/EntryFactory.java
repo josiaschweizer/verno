@@ -7,6 +7,7 @@ import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
+import ch.verno.ui.base.components.entry.email.VAEmailField;
 import ch.verno.ui.base.components.entry.numberfield.VANumberField;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
@@ -19,7 +20,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.timepicker.TimePicker;
@@ -60,16 +60,16 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VATextField createTextEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+  public VATextField createTextField(@Nonnull final ValueProvider<DTO, String> valueProvider,
                                      @Nonnull final Setter<DTO, String> valueSetter,
                                      @Nonnull final Binder<DTO> binder,
                                      @Nonnull final Optional<String> required,
                                      @Nonnull final String label) {
-    return createTextEntry(valueProvider, valueSetter, binder, required, label, false);
+    return createTextField(valueProvider, valueSetter, binder, required, label, false);
   }
 
   @Nonnull
-  public VATextField createTextEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+  public VATextField createTextField(@Nonnull final ValueProvider<DTO, String> valueProvider,
                                      @Nonnull final Setter<DTO, String> valueSetter,
                                      @Nonnull final Binder<DTO> binder,
                                      @Nonnull final Optional<String> required,
@@ -112,12 +112,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public EmailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
-                                     @Nonnull final Setter<DTO, String> valueSetter,
-                                     @Nonnull final Binder<DTO> binder,
-                                     @Nonnull final Optional<String> required,
-                                     @Nonnull final String label) {
-    final var emailField = new EmailField(label);
+  public VAEmailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                       @Nonnull final Setter<DTO, String> valueSetter,
+                                       @Nonnull final Binder<DTO> binder,
+                                       @Nonnull final Optional<String> required,
+                                       @Nonnull final String label) {
+    final var emailField = new VAEmailField(label);
     emailField.setClearButtonVisible(true);
     emailField.setWidthFull();
     emailField.setValueChangeMode(ValueChangeMode.EAGER);

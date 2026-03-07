@@ -1,12 +1,13 @@
 package ch.verno.ui.verno.course;
 
-import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.ICourseScheduleService;
 import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
+import ch.verno.publ.LumoUtility;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
-import ch.verno.publ.Routes;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -43,15 +44,14 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
     setSizeFull();
 
     final var weekCalendar = new VAWeekCalendar();
+    weekCalendar.getStyle().setPaddingTop(LumoUtility.LUMO_SPACE_M);
 
     weekCalendar.addWeekStartChangeListener(weekChange -> weekCalendar.setEvents(getEventsForWeek(weekChange)));
 
     add(weekCalendar);
     expand(weekCalendar);
 
-    weekCalendar.setEvents(getEventsForWeek(
-            LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-    ));
+    weekCalendar.setEvents(getEventsForWeek(LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))));
   }
 
   @Nonnull

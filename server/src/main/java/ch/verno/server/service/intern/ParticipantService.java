@@ -180,7 +180,7 @@ public class ParticipantService implements IParticipantService {
                                                final int limit,
                                                @Nonnull final List<QuerySortOrder> sortOrders) {
     final var pageable = PageHelper.createPageRequest(offset, limit, sortOrders);
-    final var spec = participantSpec.participantSpec(filter);
+    final var spec = participantSpec.getSpecification(filter);
 
     return participantRepository.findAll(spec, pageable).stream()
             .map(ParticipantMapper::toDto)
@@ -190,7 +190,7 @@ public class ParticipantService implements IParticipantService {
   @Override
   @Transactional(readOnly = true)
   public int countParticipants(@Nonnull final ParticipantFilter filter) {
-    return Math.toIntExact(participantRepository.count(participantSpec.participantSpec(filter)));
+    return Math.toIntExact(participantRepository.count(participantSpec.getSpecification(filter)));
   }
 
   @Nonnull

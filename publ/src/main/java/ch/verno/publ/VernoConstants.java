@@ -7,6 +7,8 @@ public class VernoConstants {
   private VernoConstants() {
   }
 
+  public static final int DEFAULT_SMTP_PORT = 587;
+
   public static final String ADMIN_ROLE = "ADMIN";
   public static final String STATUS_CREATED = "CREATED";
 
@@ -25,4 +27,9 @@ public class VernoConstants {
   public static final MediaType OCTET_STREAM = MediaType.APPLICATION_OCTET_STREAM;
 
   public static final String X_TENANT = "X-Mandant";
+
+
+  public static final Integer MAX_MAIL_BATCH_SIZE = 100;
+  public static final Double MAIL_SEND_DELAY_MS = 500.0;
+
 }

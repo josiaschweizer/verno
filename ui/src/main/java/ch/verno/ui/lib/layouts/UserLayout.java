@@ -50,14 +50,14 @@ public class UserLayout {
             TranslationHelper.getTranslation(globalInterface, "shared.e.mail")
     );
 
-    final var firstname = entryFactory.createTextEntry(
+    final var firstname = entryFactory.createTextField(
             UserDtoUnhashedPw::getFirstname,
             UserDtoUnhashedPw::setFirstname,
             binder,
             Optional.empty(),
             TranslationHelper.getTranslation(globalInterface, "shared.first.name")
     );
-    final var lastname = entryFactory.createTextEntry(
+    final var lastname = entryFactory.createTextField(
             UserDtoUnhashedPw::getLastname,
             UserDtoUnhashedPw::setLastname,
             binder,
@@ -99,7 +99,7 @@ public class UserLayout {
       password.setTooltipText(TranslationHelper.getTranslation(globalInterface, passwordDisabledReasonKey));
     }
 
-    return LayoutUtil.createHorizontalLayoutFromComponents(username, email, firstname, lastname, password, role);
+    return LayoutUtil.createHorizontal(username, email, firstname, lastname, password, role);
   }
 
 
