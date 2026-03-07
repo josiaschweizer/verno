@@ -1,7 +1,9 @@
 package ch.verno.ui.verno.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.filter.MailLogFilter;
+import ch.verno.common.db.service.mail.IMailConfigService;
 import ch.verno.common.db.service.mail.IMailLogService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.format.Converter;
@@ -14,6 +16,8 @@ import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
@@ -27,15 +31,37 @@ import java.util.stream.Stream;
 @PermitAll
 @Route(Routes.MAIL_LOG)
 @Menu(order = 96, icon = "vaadin:mailbox", title = "mail.log")
-public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> {
+public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> implements BeforeEnterObserver {
 
   @Nonnull private final IMailLogService mailLogService;
+  @Nonnull private final IMailConfigService mailConfigService;
 
   @Autowired
   protected MailsGrid(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface, MailLogFilter.empty());
 
     this.mailLogService = globalInterface.getService(MailLogService.class);
+    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
+  }
+
+  @Override
+  public void beforeEnter(@Nonnull final BeforeEnterEvent event) {
+    // Redirect to settings if mail configuration is not valid
+    if (!hasValidMailConfiguration()) {
+      event.forwardTo(Routes.TENANT_SETTINGS);
+    }
+  }
+
+  private boolean hasValidMailConfiguration() {
+    try {
+      if (!mailConfigService.hasConfigForCurrentTenant()) {
+        return false;
+      }
+      final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+      return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Override

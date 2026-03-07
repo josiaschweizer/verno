@@ -1,15 +1,23 @@
 package ch.verno.ui.base;
 
+import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.service.IAppUserService;
 import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.event.ReloadNavigationBarEvent;
+import ch.verno.publ.Publ;
+import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.notification.NotificationStyles;
 import ch.verno.ui.base.menu.MenuOrder;
+import ch.verno.ui.lib.event.bus.ViewEventBus;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIconUtil;
 import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Span;
@@ -33,6 +41,7 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 @Layout
@@ -41,18 +50,29 @@ public final class MainLayout extends AppLayout {
 
   @Nonnull private final IAppUserService appUserService;
   @Nonnull private final IAppUserSettingService appUserSettingService;
+  @Nonnull private final IMailConfigService mailConfigService;
+  @Nonnull private final Scroller navBarScoller;
+
+  @Nonnull private final List<MenuEntry> cachedMenuEntries;
 
   MainLayout(@Nonnull final IAppUserService appUserService,
-             @Nonnull final IAppUserSettingService appUserSettingService) {
+             @Nonnull final IAppUserSettingService appUserSettingService,
+             @Nonnull final IMailConfigService mailConfigService) {
     this.appUserService = appUserService;
     this.appUserSettingService = appUserSettingService;
+    this.mailConfigService = mailConfigService;
 
     setPrimarySection(Section.DRAWER);
     addClassNames("main-layout");
 
+    cachedMenuEntries = MenuConfiguration.getMenuEntries();
+
+    navBarScoller = new Scroller();
+    navBarScoller.setContent(createSideNav());
+
     addToDrawer(
             createHeader(),
-            new Scroller(createSideNav()),
+            navBarScoller,
             createDrawerFooter());
 
     registerUtilityStyleClasses();
@@ -62,6 +82,12 @@ public final class MainLayout extends AppLayout {
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
     loadAndApplyUserSettingsFromDatabase();
+    ViewEventBus.getInstance().register(this);
+  }
+
+  @Override
+  protected void onDetach(@Nonnull final DetachEvent detachEvent) {
+    ViewEventBus.getInstance().unregister(this);
   }
 
   private void loadAndApplyUserSettingsFromDatabase() {
@@ -124,7 +150,8 @@ public final class MainLayout extends AppLayout {
 
     final var itemsByOrder = new HashMap<MenuOrder, SideNavItem>();
 
-    MenuConfiguration.getMenuEntries().stream()
+    cachedMenuEntries.stream()
+            .filter(this::shouldShowMenuEntry)
             .sorted(Comparator.comparing(e -> MenuOrder.of(e.order())))
             .forEach(entry -> {
               final var order = MenuOrder.of(entry.order());
@@ -141,6 +168,33 @@ public final class MainLayout extends AppLayout {
             });
 
     return sideNav;
+  }
+
+  private boolean shouldShowMenuEntry(@Nonnull final MenuEntry entry) {
+    if (isSamePath(Routes.MAIL_LOG, entry.path())) {
+      return hasValidMailConfiguration();
+    }
+    return true;
+  }
+
+  private boolean isSamePath(@Nonnull final String route,
+                             @Nonnull final String path) {
+    final var replacedRoute = route.replaceAll(Publ.SLASH, Publ.EMPTY_STRING);
+    final var replacedPath = path.replaceAll(Publ.SLASH, Publ.EMPTY_STRING);
+    return replacedRoute.equalsIgnoreCase(replacedPath);
+  }
+
+  private boolean hasValidMailConfiguration() {
+    try {
+      if (!mailConfigService.hasConfigForCurrentTenant()) {
+        return false;
+      }
+
+      final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+      return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Nonnull
@@ -188,5 +242,16 @@ public final class MainLayout extends AppLayout {
 
   private void registerUtilityStyleClasses(){
     addToDrawer(new NotificationStyles());
+  }
+
+  @Subscribe
+  @SuppressWarnings("unused")
+  private void reloadNavigationBar(@Nonnull final ReloadNavigationBarEvent event) {
+    final var ui = getUI().orElse(null);
+    if (ui == null) {
+      return;
+    }
+
+    ui.access(() -> navBarScoller.setContent(createSideNav()));
   }
 }

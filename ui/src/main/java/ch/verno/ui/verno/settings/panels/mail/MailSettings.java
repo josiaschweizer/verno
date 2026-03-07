@@ -4,12 +4,14 @@ import ch.verno.common.db.dto.table.mail.MailConfigDto;
 import ch.verno.common.db.enums.mail.MailValidity;
 import ch.verno.common.db.enums.mail.SmtpSecurity;
 import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.event.ReloadNavigationBarEvent;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.event.bus.ViewEventBus;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -64,6 +66,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
           dto = mailConfigService.getConfigForCurrentTenant();
           binder.readBean(dto);
           updateHeaderBadge();
+          updateNavigationBar();
         }
       });
       dialog.open();
@@ -170,6 +173,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
       mailConfigService.upsertConfig(dto);
+      updateNavigationBar();
     }
   }
 
@@ -194,6 +198,10 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
     };
 
     setHeaderBadge(badge);
+  }
+
+  private void updateNavigationBar() {
+    ViewEventBus.getInstance().post(new ReloadNavigationBarEvent());
   }
 
   @Nonnull

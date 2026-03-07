@@ -44,17 +44,6 @@ public class Routes {
   }
 
   @Nonnull
-  public static String getBaseURL(final Class<?> currentClass) {
-//    final var annotations = currentClass.getAnnotations();
-//    for (final Annotation annotation : annotations) {
-//      if (annotation instanceof MenuConfiguration menuConfiguration) {
-//        return menuConfiguration.getBaseUrl();
-//      }
-//    }
-    return Publ.EMPTY_STRING;
-  }
-
-  @Nonnull
   public static String getDetailURL(@Nonnull final Class<?> currentClass) {
     return getURL(currentClass) + DETAIL;
   }
@@ -68,6 +57,7 @@ public class Routes {
     return baseURL + Publ.SLASH + id;
   }
 
+  @Nonnull 
   private static String getURL(final Class<?> currentClass) {
     final var annotations = Arrays.stream(currentClass.getAnnotations()).toList();
     for (final var annotation : annotations) {
