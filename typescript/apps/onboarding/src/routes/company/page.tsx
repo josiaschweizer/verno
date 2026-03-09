@@ -91,7 +91,7 @@ export default function Company() {
             {/*</a>*/}
             <Link
               to="/product#organization"
-              className="inline-flex items-center text-sm font-medium text-verno-darker hover:underline"
+              className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
             >
               Product overview
             </Link>

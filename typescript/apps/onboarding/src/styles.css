@@ -180,4 +180,19 @@
     transition-transform transition-opacity duration-150
     cursor-pointer select-none;
   }
+
+  .link-underline-animated {
+    @apply relative;
+  }
+  .link-underline-animated::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-px bg-current;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.25s ease;
+  }
+  .link-underline-animated:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 }

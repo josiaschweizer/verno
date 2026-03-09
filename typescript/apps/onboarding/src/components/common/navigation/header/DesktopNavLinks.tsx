@@ -5,7 +5,7 @@ export default function DesktopNavLinks() {
     <>
       <Link
         to="/company"
-        className="text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
+        className="link-underline-animated text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
       >
         Company
       </Link>

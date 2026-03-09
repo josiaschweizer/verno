@@ -46,7 +46,7 @@ export default function MenuPopover({ title, products }: Props) {
                   <CloseButton
                     as={Link}
                     to={item.href}
-                    className="block font-semibold text-verno-dark"
+                    className="link-underline-animated inline-block font-semibold text-verno-dark"
                   >
                     {item.name}
                     <span className="absolute inset-0" />

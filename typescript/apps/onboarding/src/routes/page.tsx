@@ -23,7 +23,7 @@ export default function Home() {
 
                 <Link
                   to="/company"
-                  className="inline-flex items-center text-sm font-medium hover:underline"
+                  className="link-underline-animated inline-flex items-center text-sm font-medium"
                 >
                   About Verno
                 </Link>
