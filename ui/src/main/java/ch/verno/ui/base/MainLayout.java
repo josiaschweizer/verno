@@ -20,6 +20,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.charts.model.Cursor;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -128,18 +130,23 @@ public final class MainLayout extends AppLayout {
   }
 
   private Component createHeader() {
-    // TODO Replace with real application logo and name
-    final var appLogo = VaadinIcon.CUBES.create();
-    appLogo.setSize("48px");
-    appLogo.setColor("green");
+    final var appLogo = new Image("/verno-logo.png", "Verno logo");
+    appLogo.setHeight("36px");
+    appLogo.addClassNames(LumoUtility.Padding.Top.MEDIUM);
+    appLogo.addClassNames(LumoUtility.Padding.Bottom.MEDIUM);
 
     final var appName = new Span("Verno");
     appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
+    appName.getStyle().setFontSize("1.25rem");
 
     final var header = new VerticalLayout(appLogo, appName);
+    header.setPadding(false);
+    header.setSpacing(false);
     header.setAlignItems(FlexComponent.Alignment.CENTER);
-    header.getStyle().setCursor("pointer");
+    header.getStyle().setCursor(Cursor.POINTER.toString());
+
     header.addClickListener(event -> UI.getCurrent().navigate(""));
+
     return header;
   }
 

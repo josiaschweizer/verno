@@ -6,13 +6,13 @@ export default function HeaderLogo() {
       <span className="sr-only">Verno</span>
 
       <img
-        src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-        alt="Profile picture"
-        className="w-10 h-10 rounded-md"
+        src="/verno-logo.png"
+        alt="Verno logo"
+        className="h-8 w-auto"
         loading="lazy"
       />
 
-      <span className="text-verno-dark text-base font-semibold tracking-wide">
+      <span className="text-verno-dark font-semibold text-2xl tracking-wide">
         Verno
       </span>
     </Link>

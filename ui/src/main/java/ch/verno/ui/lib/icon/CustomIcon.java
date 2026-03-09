@@ -1,5 +1,7 @@
 package ch.verno.ui.lib.icon;
 
+import ch.verno.publ.LumoUtility;
+import ch.verno.publ.Publ;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
@@ -23,8 +25,13 @@ public class CustomIcon extends Span {
 
   private void initializeIcon(@Nonnull final String path, @Nonnull final String size) {
     try {
-      final var svgContent = loadSvgContent(path);
-      getElement().setProperty("innerHTML", svgContent);
+      String iconContent;
+      if (path.endsWith(Publ.PNG)) {
+        iconContent = loadPngContent(path);
+      } else {
+        iconContent = loadSvgContent(path);
+      }
+      getElement().setProperty("innerHTML", iconContent);
 
       configureStyling(size);
       configureSvgElement(size);
@@ -60,7 +67,7 @@ public class CustomIcon extends Span {
 
   @Nonnull
   private String loadSvgContent(@Nonnull final String path) throws IOException {
-    final String resourcePath = RESOURCE_PREFIX + path;
+    final var resourcePath = RESOURCE_PREFIX + path;
 
     try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
       if (is == null) {
@@ -70,10 +77,26 @@ public class CustomIcon extends Span {
     }
   }
 
+  @Nonnull
+  private String loadPngContent(@Nonnull final String path) throws IOException {
+    final var resourcePath = RESOURCE_PREFIX + path;
+
+    try (final var inputStream = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
+      if (inputStream == null) {
+        throw new IOException("PNG resource not found: " + resourcePath);
+      }
+
+      byte[] imageBytes = inputStream.readAllBytes();
+      String base64 = java.util.Base64.getEncoder().encodeToString(imageBytes);
+
+      return "<img src=\"data:image/png;base64," + base64 + "\" />";
+    }
+  }
+
   private void showErrorIcon() {
     setText("⚠");
     getStyle()
-            .setColor("var(--lumo-error-color)")
+            .setColor(LumoUtility.LUMO_ERROR_COLOR)
             .setFontSize("1.2em");
   }
 

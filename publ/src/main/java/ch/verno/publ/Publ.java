@@ -34,4 +34,9 @@ public class Publ {
   public static final String EIGHT_STARS = "*********";
 
   public static final Pattern KW_PATTERN = Pattern.compile("^KW(\\d{1,2})-(\\d{4})$");
+
+  public static final String PNG = "png";
+  public static final String JPEG = "jpeg";
+  public static final String PDF = "pdf";
+  public static final String SVG = "svg";
 }
