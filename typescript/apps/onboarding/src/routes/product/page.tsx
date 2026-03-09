@@ -114,15 +114,39 @@ export default function Product() {
     if (!location.hash) return
 
     const id = location.hash.replace('#', '')
-    const element = document.getElementById(id)
-    if (!element) return
+    let cancelled = false
 
-    const t = window.setTimeout(() => {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 100)
+    const scrollToElement = () => {
+      const element = document.getElementById(id)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return true
+      }
 
-    return () => window.clearTimeout(t)
-  }, [location])
+      return false
+    }
+
+    const tryScroll = (attempt = 0) => {
+      if (cancelled) {
+        return
+      } else if (scrollToElement()) {
+        return
+      } else if (attempt >= 8) {
+        return
+      }
+
+      const delay = 50 + attempt * 100
+      const t = window.setTimeout(() => tryScroll(attempt + 1), delay)
+      return () => window.clearTimeout(t)
+    }
+
+    const t = window.setTimeout(() => tryScroll(), 150)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(t)
+    }
+  }, [location, tenantsCount])
 
   const activeOrganization = useMemo(
     () => organizationConfig[organizationView],
