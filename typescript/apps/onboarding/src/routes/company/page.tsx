@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import RevealSection from '@/components/ui/RevealSection'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
@@ -40,63 +41,68 @@ export default function Company() {
     <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden -m-4">
       <div className="mx-auto min-h-full max-w-5xl px-4 pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
         <section className="space-y-6 md:space-y-8">
-          <h1 className="text-3xl md:text-4xl font-semibold text-verno-darker">
-            About Verno
-          </h1>
+          <RevealSection>
+            <h1 className="text-3xl md:text-4xl font-semibold text-verno-darker">
+              About Verno
+            </h1>
+            <p className="mt-2 text-sm md:text-base text-muted-foreground max-w-2xl">
+              Verno builds modern club software for teams, courses and venues.
+              We help sports clubs replace scattered tools with one calm,
+              reliable system for scheduling, memberships and everyday
+              coordination.
+            </p>
+          </RevealSection>
 
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-            Verno builds modern club software for teams, courses and venues. We
-            help sports clubs replace scattered tools with one calm, reliable
-            system for scheduling, memberships and everyday coordination.
-          </p>
+          <RevealSection stagger={50}>
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl bg-verno-surface shadow p-6"
+                >
+                  <div className="text-lg md:text-xl font-semibold text-verno-darker">
+                    {s.value}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </RevealSection>
 
-          <div className="grid grid-cols-2 gap-4">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl bg-verno-surface shadow p-6"
-              >
-                <div className="text-lg md:text-xl font-semibold text-verno-darker">
-                  {s.value}
+          <RevealSection stagger={80}>
+            <div className="grid gap-4">
+              {values.map((v) => (
+                <div
+                  key={v.title}
+                  className="rounded-2xl bg-verno-surface shadow p-6"
+                >
+                  <div className="text-sm font-semibold text-verno-darker">
+                    {v.title}
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{v.text}</p>
                 </div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid gap-4">
-            {values.map((v) => (
-              <div
-                key={v.title}
-                className="rounded-2xl bg-verno-surface shadow p-6"
-              >
-                <div className="text-sm font-semibold text-verno-darker">
-                  {v.title}
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{v.text}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </RevealSection>
         </section>
 
-        <div className="mt-6 shrink-0 flex flex-wrap items-center gap-4 justify-between">
-          <p className="text-xs text-muted-foreground">
-            Switzerland-first mindset. Long-term partnerships with clubs.
-          </p>
-          <div className="flex gap-4">
-            {/*<a href="#contact" className="btn-primary">*/}
-            {/*  Contact*/}
-            {/*</a>*/}
-            <Link
-              to="/product#organization"
-              className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
-            >
-              Product overview
-            </Link>
+        <RevealSection stagger={100}>
+          <div className="mt-6 shrink-0 flex flex-wrap items-center gap-4 justify-between">
+            <p className="text-xs text-muted-foreground">
+              Switzerland-first mindset. Long-term partnerships with clubs.
+            </p>
+            <div className="flex gap-4">
+              <Link
+                to="/product#organization"
+                className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
+              >
+                Product overview
+              </Link>
+            </div>
           </div>
-        </div>
+        </RevealSection>
       </div>
     </div>
   )

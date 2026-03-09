@@ -195,4 +195,16 @@
     transform: scaleX(1);
     transform-origin: left;
   }
+
+  .reveal-section {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  .reveal-section[data-visible='false'] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .reveal-section[data-visible='true'] {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

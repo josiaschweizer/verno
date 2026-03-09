@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 
 interface RevealSectionProps {
   children: ReactNode
@@ -18,11 +18,17 @@ export default function RevealSection({
     const el = ref.current
     if (!el) return
 
+    let rafId1 = 0
+    let rafId2 = 0
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries
         if (entry?.isIntersecting) {
-          setVisible(true)
+          rafId1 = requestAnimationFrame(() => {
+            rafId2 = requestAnimationFrame(() => {
+              setVisible(true)
+            })
+          })
         }
       },
       {
@@ -32,19 +38,18 @@ export default function RevealSection({
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(rafId1)
+      cancelAnimationFrame(rafId2)
+    }
   }, [])
 
   return (
     <div
       ref={ref}
-      className={[
-        'transition-all duration-500 ease-out',
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      data-visible={visible}
+      className={['reveal-section', className].filter(Boolean).join(' ')}
       style={{
         transitionDelay: visible ? `${stagger}ms` : undefined,
       }}
