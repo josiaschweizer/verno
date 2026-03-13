@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react'
 import { Control, Controller, RegisterOptions } from 'react-hook-form'
 import {
   InputGroup,
@@ -49,7 +50,9 @@ export default function DomainInputField({
                 value={value ?? ''}
                 id={fieldId}
                 placeholder={placeholder}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange(e.target.value)
+                }
                 aria-invalid={fieldState?.error ? true : undefined}
               />
               <InputGroupAddon align="inline-end">

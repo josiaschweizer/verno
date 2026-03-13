@@ -61,7 +61,7 @@ export function createApiClient(config: {
     const contentType = res.headers.get('content-type') ?? ''
     const isJson = contentType.includes('application/json')
 
-    let payload: any = null
+    let payload: any
     if (isJson) {
       try {
         payload = await res.json()
