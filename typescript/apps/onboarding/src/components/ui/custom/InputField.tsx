@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler } from 'react'
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { InputTypes } from '@/types/ui/custom/InputTypes'
+import { Field, FieldDescription, FieldLabel } from 'components/ui/field'
+import { Input } from 'components/ui/input'
+import { InputTypes } from 'apps/onboarding/src/types/ui/custom/InputTypes'
 
 type Props = {
   fieldLabel?: string

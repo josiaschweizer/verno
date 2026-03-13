@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import RevealSection from '@/components/ui/RevealSection'
+import RevealSection from '../../../../../components/ui/RevealSection'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }

@@ -1,12 +1,12 @@
 import { Control, Controller, RegisterOptions } from 'react-hook-form'
-import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from '@/components/ui/input-group'
-import { Field, FieldLabel, FieldDescription } from '@/components/ui/field'
+} from '@verno/components/ui/input-group'
+import { Field, FieldLabel, FieldDescription } from '@verno/components/ui/field'
+import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 
 interface Props {
   baseDomain: string

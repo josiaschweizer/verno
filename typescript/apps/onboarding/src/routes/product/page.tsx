@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
-import RevealSection from '@/components/ui/RevealSection'
+import RevealSection from '../../../../../components/ui/RevealSection'
 import { tenantsApi } from '@/lib/api/tenantsApi'
 
 type PeopleView = 'participants' | 'users'

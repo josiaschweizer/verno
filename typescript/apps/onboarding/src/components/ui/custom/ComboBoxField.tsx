@@ -1,4 +1,4 @@
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
+import { Field, FieldDescription, FieldLabel } from 'components/ui/field'
 import {
   ComboboxContent,
   ComboboxEmpty,
@@ -7,9 +7,9 @@ import {
   ComboboxList,
   ComboboxRoot,
   ComboboxTrigger,
-} from '@/components/ui/combobox'
-import { ComboBoxItem } from '@/type/ComboBoxItem'
-import { cn } from '@/lib/utils'
+} from 'components/ui/combobox'
+import { ComboBoxItem } from 'apps/onboarding/src/type/ComboBoxItem'
+import { cn } from 'apps/onboarding/src/lib/utils'
 import { RefObject } from 'react'
 
 type Props = {

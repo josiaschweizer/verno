@@ -6,7 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../../../../../../components/ui/button'
 import StepOne from '../steps/StepOne'
 import StepTwo from '../steps/StepTwo'
 import StepThree from '../steps/StepThree'
