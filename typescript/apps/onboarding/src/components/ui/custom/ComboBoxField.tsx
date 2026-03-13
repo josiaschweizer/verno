@@ -1,4 +1,4 @@
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
+import { Field, FieldDescription, FieldLabel } from '@verno/components/ui/field'
 import {
   ComboboxContent,
   ComboboxEmpty,
@@ -7,9 +7,9 @@ import {
   ComboboxList,
   ComboboxRoot,
   ComboboxTrigger,
-} from '@/components/ui/combobox'
+} from '@verno/components/ui/combobox'
 import { ComboBoxItem } from '@/type/ComboBoxItem'
-import { cn } from '@/lib/utils'
+import { cn } from '@verno/lib/utils'
 import { RefObject } from 'react'
 
 type Props = {
@@ -46,7 +46,7 @@ export function ComboBoxField({
     <div className="relative w-full">
       <ComboboxRoot<ComboBoxItem>
         value={(value as ComboBoxItem) ?? null}
-        onValueChange={(v) => {
+        onValueChange={(v: ComboBoxItem | string | null) => {
           // v can be a ComboBoxItem or string depending on the underlying combobox impl
           if (v && typeof v === 'object' && 'value' in v) {
             onChange?.(v as ComboBoxItem)
@@ -64,8 +64,8 @@ export function ComboBoxField({
         }}
         items={options}
         disabled={disabled}
-        isItemEqualToValue={(a, b) =>
-          (a as ComboBoxItem)?.value === (b as ComboBoxItem)?.value
+        isItemEqualToValue={(a: ComboBoxItem, b: ComboBoxItem | null) =>
+          a?.value === b?.value
         }
       >
         <ComboboxInput

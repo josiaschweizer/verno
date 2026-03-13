@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from 'react'
-import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+import { Field, FieldDescription, FieldLabel } from '@verno/components/ui/field'
+import { Input } from '@verno/components/ui/input'
 import { InputTypes } from '@/types/ui/custom/InputTypes'
 
 type Props = {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import RevealSection from '@/components/ui/RevealSection'
+import RevealSection from '@verno/components/ui/RevealSection'
 
 export default function Home() {
   return (
@@ -13,51 +13,52 @@ export default function Home() {
           </RevealSection>
 
           <RevealSection stagger={80}>
-          <section className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-            <div>
-              <p className="text-base text-muted-foreground max-w-lg">
-                Verno helps sports clubs organize teams, courses and venues in
-                one clear system. No scattered tools. No chaos. Just structure.
-              </p>
+            <section className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+              <div>
+                <p className="text-base text-muted-foreground max-w-lg">
+                  Verno helps sports clubs organize teams, courses and venues in
+                  one clear system. No scattered tools. No chaos. Just
+                  structure.
+                </p>
 
-              <div className="mt-8 flex items-center gap-6">
-                <Link to="/product" className="btn-primary">
-                  Explore product
-                </Link>
+                <div className="mt-8 flex items-center gap-6">
+                  <Link to="/product" className="btn-primary">
+                    Explore product
+                  </Link>
 
-                <Link
-                  to="/company"
-                  className="link-underline-animated inline-flex items-center text-sm font-medium"
-                >
-                  About Verno
-                </Link>
+                  <Link
+                    to="/company"
+                    className="link-underline-animated inline-flex items-center text-sm font-medium"
+                  >
+                    About Verno
+                  </Link>
+                </div>
               </div>
-            </div>
 
-            <div className="rounded-3xl overflow-hidden shadow-lg">
-              <img
-                src="/landing-page-opi.jpg"
-                alt="Happy club manager using Verno"
-                className="w-full h-64 object-cover"
-              />
-            </div>
-          </section>
+              <div className="rounded-3xl overflow-hidden shadow-lg">
+                <img
+                  src="/landing-page-opi.jpg"
+                  alt="Happy club manager using Verno"
+                  className="w-full h-64 object-cover"
+                />
+              </div>
+            </section>
           </RevealSection>
         </div>
 
         <RevealSection stagger={120}>
-        <section className="border-t border-verno-surface py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
-          <p>
-            Switzerland-first infrastructure. Built for long-term club
-            operations.
-          </p>
+          <section className="border-t border-verno-surface py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
+            <p>
+              Switzerland-first infrastructure. Built for long-term club
+              operations.
+            </p>
 
-          <div className="flex items-center gap-8">
-            <span>Secure by default</span>
-            <span>Multi-tenant ready</span>
-            <span>Designed for real clubs</span>
-          </div>
-        </section>
+            <div className="flex items-center gap-8">
+              <span>Secure by default</span>
+              <span>Multi-tenant ready</span>
+              <span>Designed for real clubs</span>
+            </div>
+          </section>
         </RevealSection>
       </div>
     </main>

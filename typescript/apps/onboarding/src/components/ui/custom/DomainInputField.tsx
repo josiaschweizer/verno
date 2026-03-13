@@ -1,12 +1,13 @@
+import { ChangeEvent } from 'react'
 import { Control, Controller, RegisterOptions } from 'react-hook-form'
-import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from '@/components/ui/input-group'
-import { Field, FieldLabel, FieldDescription } from '@/components/ui/field'
+} from '@verno/components/ui/input-group'
+import { Field, FieldLabel, FieldDescription } from '@verno/components/ui/field'
+import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 
 interface Props {
   baseDomain: string
@@ -49,7 +50,9 @@ export default function DomainInputField({
                 value={value ?? ''}
                 id={fieldId}
                 placeholder={placeholder}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange(e.target.value)
+                }
                 aria-invalid={fieldState?.error ? true : undefined}
               />
               <InputGroupAddon align="inline-end">
