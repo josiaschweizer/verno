@@ -2,7 +2,7 @@ package ch.verno.server.service.extern.billing.token;
 
 import ch.verno.common.db.dto.billing.GeneratedBillingAccessTokenDto;
 import ch.verno.common.db.dto.table.billing.BillingAccessTokenDto;
-import ch.verno.common.db.service.extern.token.IBillingAccessTokenGeneratorService;
+import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenGeneratorService;
 import ch.verno.common.db.type.billing.BillingAccessTokenPurpose;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;

@@ -1,7 +1,7 @@
 package ch.verno.server.service.extern.billing;
 
 import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
-import ch.verno.common.db.service.extern.IBillingWebhookEventService;
+import ch.verno.common.db.service.extern.billing.IBillingWebhookEventService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;

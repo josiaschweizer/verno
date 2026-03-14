@@ -2,6 +2,7 @@ package ch.verno.server.service.extern.billing;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.service.extern.ITenantBillingService;
+import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.billing.TenantBillingEntity;
@@ -12,7 +13,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TenantBillingService implements ITenantBillingService {
@@ -84,13 +87,21 @@ public class TenantBillingService implements ITenantBillingService {
   @Override
   @Transactional(readOnly = true)
   public TenantBillingDto getTenantBillingByTenantId(@Nonnull final Long tenantId) {
-    final var foundByTenantId = repository.findByTenantId(tenantId);
+    final var foundByTenantId = getOptionalTenantBillingByTenantId(tenantId);
 
     if (foundByTenantId.isEmpty()) {
       throw new DBNotFoundException(DBNotFoundReason.TENANT_BILLING_BY_TENANT_ID_NOT_FOUND);
     }
 
-    return TenantBillingMapper.toDto(foundByTenantId.get());
+    return foundByTenantId.get();
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<TenantBillingDto> getOptionalTenantBillingByTenantId(@Nonnull final Long tenantId) {
+    final var foundByTenantId = repository.findByTenantId(tenantId);
+    return foundByTenantId.map(TenantBillingMapper::toDto);
   }
 
   @Nonnull
@@ -110,5 +121,29 @@ public class TenantBillingService implements ITenantBillingService {
       return createTenantBilling(dto);
     }
     return updateTenantBilling(dto);
+  }
+
+  @Override
+  @Transactional
+  public boolean hasTenantValidSubscription(@Nonnull final Long tenantId) {
+    final var foundById = repository.findByTenantId(tenantId);
+    if (foundById.isEmpty()) {
+      return false;
+    }
+
+    final var billing = TenantBillingMapper.toDto(foundById.get());
+    if (BillingSubscriptionStatus.ACTIVE.equalsFromString(billing.getSubscriptionStatus())) {
+      return true;
+    }
+
+    if (BillingSubscriptionStatus.TRIAL.equalsFromString(billing.getSubscriptionStatus())) {
+      return true;
+    }
+
+    if (BillingSubscriptionStatus.PAST_DUE.equalsFromString(billing.getSubscriptionStatus())) {
+      return billing.getGraceUntil() != null && billing.getGraceUntil().isAfter(OffsetDateTime.now());
+    }
+
+    return false;
   }
 }

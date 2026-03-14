@@ -1,6 +1,6 @@
 package ch.verno.api.endpoints.internal.report;
 
-import ch.verno.common.gate.servergate.ReportServerGate;
+import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.core.io.ByteArrayResource;

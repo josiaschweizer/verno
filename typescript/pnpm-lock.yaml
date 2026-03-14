@@ -138,6 +138,9 @@ importers:
 
   apps/payment-procedure:
     dependencies:
+      lucide-react:
+        specifier: ^0.563.0
+        version: 0.563.0(react@19.2.4)
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -3574,6 +3577,10 @@ snapshots:
   lucide-react@0.563.0(react@18.3.1):
     dependencies:
       react: 18.3.1
+
+  lucide-react@0.563.0(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   magic-string@0.30.21:
     dependencies:

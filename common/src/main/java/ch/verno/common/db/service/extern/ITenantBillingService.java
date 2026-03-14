@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ITenantBillingService {
 
@@ -20,8 +21,14 @@ public interface ITenantBillingService {
   TenantBillingDto getTenantBillingByTenantId(@Nonnull Long tenantId);
 
   @Nonnull
+  Optional<TenantBillingDto> getOptionalTenantBillingByTenantId(@Nonnull Long tenantId);
+
+  @Nonnull
   List<TenantBillingDto> getTenantBillings();
 
   @Nonnull
   TenantBillingDto saveTenantBilling(@Nonnull TenantBillingDto dto);
+
+  boolean hasTenantValidSubscription(@Nonnull Long tenantId);
+
 }

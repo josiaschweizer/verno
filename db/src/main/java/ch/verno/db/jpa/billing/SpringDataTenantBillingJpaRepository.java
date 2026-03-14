@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface SpringDataTenantBillingJpaRepository extends JpaRepository<TenantBillingEntity, Long> {
 
   @Nonnull
-  Optional<TenantBillingEntity> findByTenantId(@Nonnull Long tenantId);
+  Optional<TenantBillingEntity> findByTenant_Id(@Nonnull Long tenantId);
 
-  boolean existsByTenantId(@Nonnull Long tenantId);
+  boolean existsByTenant_Id(@Nonnull Long tenantId);
 
 }

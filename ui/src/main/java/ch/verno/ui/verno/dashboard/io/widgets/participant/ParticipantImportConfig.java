@@ -6,7 +6,7 @@ import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.server.io.importing.dto.DbField;

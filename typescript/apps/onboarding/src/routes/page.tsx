@@ -7,7 +7,7 @@ export default function Home() {
       <div className="mx-auto min-h-full max-w-6xl px-6 py-8 md:py-0 flex flex-col">
         <div className="flex-1 flex flex-col justify-center">
           <RevealSection>
-            <h1 className="text-4xl md:text-6xl font-semibold leading-tight underline decoration-white mb-10">
+            <h1 className="text-4xl md:text-6xl font-semibold leading-tight underline decoration-verno-accent underline-offset-4 decoration-3 mb-10">
               Club management, made calm.
             </h1>
           </RevealSection>
@@ -37,9 +37,9 @@ export default function Home() {
 
               <div className="rounded-3xl overflow-hidden shadow-lg">
                 <img
-                  src="/landing-page-opi.jpg"
+                  src="/landing-page-opi.png"
                   alt="Happy club manager using Verno"
-                  className="w-full h-64 object-cover"
+                  className="w-full h-64 object-cover object-top"
                 />
               </div>
             </section>
@@ -47,7 +47,7 @@ export default function Home() {
         </div>
 
         <RevealSection stagger={120}>
-          <section className="border-t border-verno-surface py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
+          <section className="border-t border-verno-accent/40 py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
             <p>
               Switzerland-first infrastructure. Built for long-term club
               operations.

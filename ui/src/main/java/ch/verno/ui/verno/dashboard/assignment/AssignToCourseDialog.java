@@ -14,7 +14,7 @@ import ch.verno.server.service.intern.ParticipantService;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

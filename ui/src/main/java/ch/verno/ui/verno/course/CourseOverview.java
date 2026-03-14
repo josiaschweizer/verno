@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.intern.ICourseScheduleService;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.ui.base.components.colorpicker.Colors;
-import ch.verno.publ.LumoUtility;
+import ch.verno.publ.VernoUtility;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
@@ -44,7 +44,7 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
     setSizeFull();
 
     final var weekCalendar = new VAWeekCalendar();
-    weekCalendar.getStyle().setPaddingTop(LumoUtility.LUMO_SPACE_M);
+    weekCalendar.getStyle().setPaddingTop(VernoUtility.LUMO_SPACE_M);
 
     weekCalendar.addWeekStartChangeListener(weekChange -> weekCalendar.setEvents(getEventsForWeek(weekChange)));
 

@@ -9,7 +9,7 @@ import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.servergate.ReportServerGate;
+import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;

@@ -13,31 +13,15 @@ import java.util.Objects;
 
 public class TenantBillingDto extends BaseDto {
 
-  @Nonnull
-  private String stripeCustomerId;
-
-  @Nonnull
-  private String stripeSubscriptionId;
-
-  @Nonnull
-  private String planKey;
-
-  @Nonnull
-  private String subscriptionStatus;
-
-  @Nonnull
-  private String paymentStatus;
-
-  @Nullable
-  private OffsetDateTime currentPeriodEnd;
-
-  @Nullable
-  private OffsetDateTime graceUntil;
-
+  @Nonnull private String stripeCustomerId;
+  @Nonnull private String stripeSubscriptionId;
+  @Nonnull private String planKey;
+  @Nonnull private String subscriptionStatus;
+  @Nonnull private String paymentStatus;
+  @Nullable private OffsetDateTime currentPeriodEnd;
+  @Nullable private OffsetDateTime graceUntil;
   private boolean hasValidPaymentMethod;
-
-  @Nonnull
-  private String lastWebhookEventId;
+  @Nonnull private String lastWebhookEventId;
 
   public TenantBillingDto() {
     setId(null);

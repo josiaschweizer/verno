@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.servergate.ServerGate;
+import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import ch.verno.ui.verno.dashboard.io.dto.ImportField;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;

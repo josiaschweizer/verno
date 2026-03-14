@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.security.api;
 
+import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,8 @@ public class ApiSecurityConfig {
             .authenticationManager(apiAuthenticationManager)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/v1/tenants", "/api/v1/tenants/**").authenticated()
+                    .requestMatchers(ApiUrl.BILLING, ApiUrl.BILLING + "/**").permitAll()
+                    .requestMatchers(ApiUrl.TENANTS, ApiUrl.TENANTS + "/**").authenticated()
                     .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults());

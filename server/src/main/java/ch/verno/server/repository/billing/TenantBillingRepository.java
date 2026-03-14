@@ -30,11 +30,11 @@ public class TenantBillingRepository {
 
   @Nonnull
   public Optional<TenantBillingEntity> findByTenantId(@Nonnull final Long tenantId) {
-    return jpaRepository.findByTenantId(tenantId);
+    return jpaRepository.findByTenant_Id(tenantId);
   }
 
   public boolean existsByTenantId(@Nonnull final Long tenantId) {
-    return jpaRepository.existsByTenantId(tenantId);
+    return jpaRepository.existsByTenant_Id(tenantId);
   }
 
   public boolean existsById(@Nonnull final Long id) {

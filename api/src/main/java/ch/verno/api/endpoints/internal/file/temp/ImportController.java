@@ -1,6 +1,6 @@
 package ch.verno.api.endpoints.internal.file.temp;
 
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;

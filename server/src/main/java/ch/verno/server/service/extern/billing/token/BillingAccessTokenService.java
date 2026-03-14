@@ -1,7 +1,7 @@
 package ch.verno.server.service.extern.billing.token;
 
 import ch.verno.common.db.dto.table.billing.BillingAccessTokenDto;
-import ch.verno.common.db.service.extern.token.IBillingAccessTokenService;
+import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
