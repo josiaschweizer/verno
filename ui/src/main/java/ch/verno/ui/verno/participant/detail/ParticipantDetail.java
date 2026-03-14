@@ -1,13 +1,13 @@
 package ch.verno.ui.verno.participant.detail;
 
+import ch.verno.common.db.service.intern.*;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.common.db.service.*;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;

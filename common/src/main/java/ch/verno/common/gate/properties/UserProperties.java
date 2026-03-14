@@ -1,13 +1,12 @@
 package ch.verno.common.gate.properties;
 
 import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

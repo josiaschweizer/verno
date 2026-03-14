@@ -3,7 +3,7 @@ package ch.verno.common.db.dto.table;
 import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

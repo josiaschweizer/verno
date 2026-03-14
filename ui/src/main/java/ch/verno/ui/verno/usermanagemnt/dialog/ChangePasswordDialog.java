@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
-import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.dialog.DialogSize;

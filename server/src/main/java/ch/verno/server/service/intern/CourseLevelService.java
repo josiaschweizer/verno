@@ -2,7 +2,7 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.filter.CourseLevelFilter;
-import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.server.mapper.CourseLevelMapper;

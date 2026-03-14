@@ -1,9 +1,9 @@
 package ch.verno.ui.base;
 
-import ch.verno.common.db.enums.mail.MailValidity;
-import ch.verno.common.db.service.IAppUserService;
-import ch.verno.common.db.service.IAppUserSettingService;
-import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.db.type.mail.MailValidity;
+import ch.verno.common.db.service.intern.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserSettingService;
+import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.event.ReloadNavigationBarEvent;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;

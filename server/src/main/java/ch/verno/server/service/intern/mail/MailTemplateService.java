@@ -1,7 +1,7 @@
 package ch.verno.server.service.intern.mail;
 
 import ch.verno.common.db.dto.table.mail.MailTemplateDto;
-import ch.verno.common.db.service.mail.IMailTemplateService;
+import ch.verno.common.db.service.intern.mail.IMailTemplateService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.tenant.TenantContext;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
-import ch.verno.common.db.enums.mail.MailValidity;
-import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.db.type.mail.MailValidity;
+import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.servergate.MailServerGate;
 import ch.verno.common.tenant.TenantContext;

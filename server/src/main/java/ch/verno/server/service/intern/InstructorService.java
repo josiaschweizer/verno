@@ -2,7 +2,7 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
-import ch.verno.common.db.service.IInstructorService;
+import ch.verno.common.db.service.intern.IInstructorService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.InstructorEntity;

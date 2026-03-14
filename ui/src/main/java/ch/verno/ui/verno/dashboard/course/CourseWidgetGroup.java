@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.course;
 
-import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.Refreshable;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

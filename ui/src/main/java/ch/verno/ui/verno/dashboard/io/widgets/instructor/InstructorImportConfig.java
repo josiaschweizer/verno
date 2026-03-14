@@ -3,7 +3,7 @@ package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.InstructorDto;
-import ch.verno.common.db.service.IInstructorService;
+import ch.verno.common.db.service.intern.IInstructorService;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;

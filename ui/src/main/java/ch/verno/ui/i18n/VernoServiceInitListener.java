@@ -1,7 +1,7 @@
 package ch.verno.ui.i18n;
 
-import ch.verno.common.db.service.IAppUserService;
-import ch.verno.common.db.service.IAppUserSettingService;
+import ch.verno.common.db.service.intern.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserSettingService;
 import ch.verno.ui.base.error.GlobalErrorHandler;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;

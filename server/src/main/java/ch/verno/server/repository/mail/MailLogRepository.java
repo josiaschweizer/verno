@@ -1,6 +1,6 @@
 package ch.verno.server.repository.mail;
 
-import ch.verno.common.db.enums.mail.MailLogStatus;
+import ch.verno.common.db.type.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.jpa.mail.SpringDataMailLogJpaRepository;
 import jakarta.annotation.Nonnull;

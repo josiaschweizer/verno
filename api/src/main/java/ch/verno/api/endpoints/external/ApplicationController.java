@@ -1,9 +1,9 @@
 package ch.verno.api.endpoints.external;
 
 import ch.verno.api.base.BaseController;
-import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.common.db.service.ICourseService;
-import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.db.service.intern.ICourseService;
+import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;

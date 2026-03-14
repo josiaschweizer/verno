@@ -4,7 +4,7 @@ import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.service.IParticipantService;
+import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.gate.servergate.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;

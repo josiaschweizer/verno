@@ -2,9 +2,9 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.response.DeleteResponseDto;
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseFilter;
-import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.CourseEntity;

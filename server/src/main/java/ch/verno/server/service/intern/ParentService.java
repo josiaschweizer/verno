@@ -1,7 +1,7 @@
 package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.ParentDto;
-import ch.verno.common.db.service.IParentService;
+import ch.verno.common.db.service.intern.IParentService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.ParentEntity;

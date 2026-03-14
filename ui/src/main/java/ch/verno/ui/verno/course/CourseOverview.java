@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.service.ICourseScheduleService;
-import ch.verno.common.db.service.ICourseService;
+import ch.verno.common.db.service.intern.ICourseScheduleService;
+import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.publ.LumoUtility;
 import ch.verno.publ.Routes;

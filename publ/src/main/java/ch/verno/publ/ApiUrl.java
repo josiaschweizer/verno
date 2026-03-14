@@ -18,6 +18,10 @@ public class ApiUrl {
   public static final String TENANTS = BASE_API + "/tenants";
   public static final String APPLICATION = BASE_API + "/application";
 
+  public static final String BILLING = BASE_API + "/billing";
+  public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";
+  public static final String BILLING_WEBHOOK = BILLING + "/webhook";
+
   public static final String COUNT = "/count";
 
   public static final String DISPOSITION_ATTACHMENT = "?disposition=attachment";
