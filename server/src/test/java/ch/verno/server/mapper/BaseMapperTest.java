@@ -1,10 +1,10 @@
 package ch.verno.server.mapper;
 
 import ch.verno.publ.Publ;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 
-import javax.annotation.Nonnull;
 import java.time.OffsetDateTime;
 
 public abstract class BaseMapperTest {

@@ -1,14 +1,14 @@
-package ch.verno.server.service.extern;
+package ch.verno.server.service.extern.billing.token;
 
 import ch.verno.common.db.dto.table.billing.BillingAccessTokenDto;
-import ch.verno.common.db.service.extern.IBillingAccessTokenService;
+import ch.verno.common.db.service.extern.token.IBillingAccessTokenService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.mapper.billing.BillingAccessTokenMapper;
-import ch.verno.server.repository.billing.BillingAccessTokenRepository;
 import ch.verno.server.repository.AppUserRepository;
+import ch.verno.server.repository.billing.BillingAccessTokenRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,16 +22,16 @@ import java.util.List;
 @Service
 public class BillingAccessTokenService implements IBillingAccessTokenService {
 
-  @Nonnull private final BillingAccessTokenRepository repository;
   @Nonnull private final AppUserRepository appUserRepository;
+  @Nonnull private final BillingAccessTokenRepository repository;
 
   @PersistenceContext
   private EntityManager entityManager;
 
-  public BillingAccessTokenService(@Nonnull final BillingAccessTokenRepository repository,
-                                   @Nonnull final AppUserRepository appUserRepository) {
-    this.repository = repository;
+  public BillingAccessTokenService(@Nonnull final AppUserRepository appUserRepository,
+                                   @Nonnull final BillingAccessTokenRepository repository) {
     this.appUserRepository = appUserRepository;
+    this.repository = repository;
   }
 
   @Nonnull

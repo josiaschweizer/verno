@@ -1,4 +1,4 @@
-package ch.verno.common.db.service.extern;
+package ch.verno.common.db.service.extern.token;
 
 import ch.verno.common.db.dto.table.billing.BillingAccessTokenDto;
 import jakarta.annotation.Nonnull;

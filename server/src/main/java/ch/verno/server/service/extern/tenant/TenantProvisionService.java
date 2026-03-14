@@ -1,4 +1,4 @@
-package ch.verno.server.service.extern;
+package ch.verno.server.service.extern.tenant;
 
 import ch.verno.common.api.dto.exernal.tenant.CreateTenantRequest;
 import ch.verno.common.api.dto.exernal.tenant.CreateTenantResponse;

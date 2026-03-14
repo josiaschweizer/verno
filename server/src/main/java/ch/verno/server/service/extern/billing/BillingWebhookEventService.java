@@ -1,4 +1,4 @@
-package ch.verno.server.service.extern;
+package ch.verno.server.service.extern.billing;
 
 import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
 import ch.verno.common.db.service.extern.IBillingWebhookEventService;

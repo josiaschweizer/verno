@@ -6,7 +6,7 @@ import ch.verno.common.api.dto.exernal.billing.tenant.CreateTenantBillingRespons
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
-import ch.verno.server.service.extern.TenantBillingService;
+import ch.verno.server.service.extern.billing.TenantBillingService;
 import jakarta.annotation.Nonnull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

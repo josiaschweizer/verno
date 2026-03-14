@@ -19,7 +19,7 @@ create table public.tenant_billing
     last_webhook_event_id      varchar(255),
 
     constraint fk_tenant_billing_tenant
-        foreign key (tenant_id) references public.tenant(id),
+        foreign key (tenant_id) references public.mandants(id),
 
     constraint uq_tenant_billing_tenant
         unique (tenant_id),
@@ -59,7 +59,7 @@ create table public.billing_access_token
     created_at    timestamptz not null default now(),
 
     constraint fk_billing_access_token_tenant
-        foreign key (tenant_id) references public.tenant(id),
+        foreign key (tenant_id) references public.mandants(id),
 
     constraint fk_billing_access_token_user
         foreign key (user_id) references public.app_user(id),

@@ -1,6 +1,6 @@
 package ch.verno.common.api.dto.exernal.billing.webhook;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public record CreateBillingWebhookEventRequest(
         @Nonnull String stripeEventId,

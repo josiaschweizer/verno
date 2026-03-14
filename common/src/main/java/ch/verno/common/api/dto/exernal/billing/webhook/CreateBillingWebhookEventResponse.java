@@ -1,6 +1,7 @@
 package ch.verno.common.api.dto.exernal.billing.webhook;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+
 import java.time.OffsetDateTime;
 
 public record CreateBillingWebhookEventResponse(

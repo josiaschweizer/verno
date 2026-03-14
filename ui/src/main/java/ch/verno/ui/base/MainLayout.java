@@ -53,7 +53,7 @@ public final class MainLayout extends AppLayout {
   @Nonnull private final IAppUserService appUserService;
   @Nonnull private final IAppUserSettingService appUserSettingService;
   @Nonnull private final IMailConfigService mailConfigService;
-  @Nonnull private final Scroller navBarScoller;
+  @Nonnull private final Scroller navBarScroller;
 
   @Nonnull private final List<MenuEntry> cachedMenuEntries;
 
@@ -69,12 +69,12 @@ public final class MainLayout extends AppLayout {
 
     cachedMenuEntries = MenuConfiguration.getMenuEntries();
 
-    navBarScoller = new Scroller();
-    navBarScoller.setContent(createSideNav());
+    navBarScroller = new Scroller();
+    navBarScroller.setContent(createSideNav());
 
     addToDrawer(
             createHeader(),
-            navBarScoller,
+            navBarScroller,
             createDrawerFooter());
 
     registerUtilityStyleClasses();
@@ -259,6 +259,6 @@ public final class MainLayout extends AppLayout {
       return;
     }
 
-    ui.access(() -> navBarScoller.setContent(createSideNav()));
+    ui.access(() -> navBarScroller.setContent(createSideNav()));
   }
 }
