@@ -2,6 +2,7 @@ package ch.verno.server.service.extern.billing;
 
 import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
 import ch.verno.common.db.service.extern.billing.IBillingWebhookEventService;
+import ch.verno.common.db.type.billing.BillingWebhookEventStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;
@@ -47,11 +48,9 @@ public class BillingWebhookEventService implements IBillingWebhookEventService {
   public BillingWebhookEventDto createBillingWebhookEvent(@Nonnull final BillingWebhookEventDto dto) {
     if (dto.getStripeEventId().isBlank()) {
       throw new IllegalStateException("stripeEventId must not be blank");
-    }
-    if (dto.getEventType().isBlank()) {
+    } else if (dto.getEventType().isBlank()) {
       throw new IllegalStateException("eventType must not be blank");
-    }
-    if (dto.getStatus().isBlank()) {
+    } else if (dto.getStatus().equals(BillingWebhookEventStatus.NONE)) {
       throw new IllegalStateException("status must not be blank");
     }
 
@@ -143,5 +142,15 @@ public class BillingWebhookEventService implements IBillingWebhookEventService {
       return createBillingWebhookEvent(dto);
     }
     return updateBillingWebhookEvent(dto);
+  }
+
+  @Override
+  @Transactional
+  public void markProcessed(@Nonnull String stripeEventId) {
+    final var dto = getBillingWebhookEventByStripeEventId(stripeEventId);
+    dto.setStatus(BillingWebhookEventStatus.PROCESSED);
+    dto.setProcessedAt(OffsetDateTime.now());
+
+    saveBillingWebhookEvent(dto);
   }
 }

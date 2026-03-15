@@ -107,6 +107,14 @@ public class TenantBillingService implements ITenantBillingService {
   @Nonnull
   @Override
   @Transactional(readOnly = true)
+  public Optional<TenantBillingDto> getOptionalTenantBillingByStripeCustomerId(@Nonnull final String stripeCustomerId) {
+    final var foundByStripeCustomerId = repository.findByStripeCustomerId(stripeCustomerId);
+    return foundByStripeCustomerId.map(TenantBillingMapper::toDto);
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
   public List<TenantBillingDto> getTenantBillings() {
     return repository.findAll().stream()
             .map(TenantBillingMapper::toDto)
@@ -132,15 +140,15 @@ public class TenantBillingService implements ITenantBillingService {
     }
 
     final var billing = TenantBillingMapper.toDto(foundById.get());
-    if (BillingSubscriptionStatus.ACTIVE.equalsFromString(billing.getSubscriptionStatus())) {
+    if (BillingSubscriptionStatus.ACTIVE.equals(billing.getSubscriptionStatus())) {
       return true;
     }
 
-    if (BillingSubscriptionStatus.TRIAL.equalsFromString(billing.getSubscriptionStatus())) {
+    if (BillingSubscriptionStatus.TRIAL.equals(billing.getSubscriptionStatus())) {
       return true;
     }
 
-    if (BillingSubscriptionStatus.PAST_DUE.equalsFromString(billing.getSubscriptionStatus())) {
+    if (BillingSubscriptionStatus.PAST_DUE.equals(billing.getSubscriptionStatus())) {
       return billing.getGraceUntil() != null && billing.getGraceUntil().isAfter(OffsetDateTime.now());
     }
 

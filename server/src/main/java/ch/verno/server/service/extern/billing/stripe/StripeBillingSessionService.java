@@ -1,8 +1,8 @@
-package ch.verno.server.service.extern.billing.session;
+package ch.verno.server.service.extern.billing.stripe;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.service.extern.ITenantBillingService;
-import ch.verno.common.db.service.extern.billing.session.IStripeBillingSessionService;
+import ch.verno.common.db.service.extern.billing.stripe.IStripeBillingSessionService;
 import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenResolverService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.properties.ApplicationPropertiesGate;
@@ -56,7 +56,7 @@ public class StripeBillingSessionService implements IStripeBillingSessionService
     final var stripePriceId = globalInterface.getEnvProperties().getEnv(VernoSecrets.ENV_STRIPE_PRICE_ID_BASIC_PACKAGE);
 
     try {
-      final var session = CheckoutSession.createSession(
+      final var session = CheckoutSessionUtil.createSession(
               checkoutSuccessUrl,
               checkoutCancelUrl,
               stripePriceId
@@ -83,7 +83,7 @@ public class StripeBillingSessionService implements IStripeBillingSessionService
     final var portalReturnUrl = applicationProperties.getPortalReturnUrl();
 
     try {
-      final var session = PortalSession.createPortalSession(
+      final var session = PortalSessionUtil.createPortalSession(
               billingDto,
               portalReturnUrl
       );

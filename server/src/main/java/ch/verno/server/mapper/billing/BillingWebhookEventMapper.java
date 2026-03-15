@@ -1,6 +1,7 @@
 package ch.verno.server.mapper.billing;
 
 import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
+import ch.verno.common.db.type.billing.BillingWebhookEventStatus;
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
@@ -21,7 +22,7 @@ public final class BillingWebhookEventMapper {
             entity.getId(),
             entity.getStripeEventId(),
             entity.getEventType(),
-            entity.getStatus(),
+            BillingWebhookEventStatus.fromKey(entity.getStatus()),
             entity.getProcessedAt(),
             entity.getCreatedAt(),
             entity.getPayloadJson() == null ? Publ.EMPTY_STRING : entity.getPayloadJson()
@@ -37,7 +38,7 @@ public final class BillingWebhookEventMapper {
     final var entity = new BillingWebhookEventEntity(
             dto.getStripeEventId(),
             dto.getEventType(),
-            dto.getStatus(),
+            dto.getStatus().getKey(),
             dto.getPayloadJson().isBlank() ? null : dto.getPayloadJson()
     );
 
@@ -55,7 +56,7 @@ public final class BillingWebhookEventMapper {
                                   @Nonnull final BillingWebhookEventDto dto) {
     entity.setStripeEventId(dto.getStripeEventId());
     entity.setEventType(dto.getEventType());
-    entity.setStatus(dto.getStatus());
+    entity.setStatus(dto.getStatus().getKey());
     entity.setProcessedAt(dto.getProcessedAt());
     entity.setPayloadJson(dto.getPayloadJson().isBlank() ? null : dto.getPayloadJson());
   }

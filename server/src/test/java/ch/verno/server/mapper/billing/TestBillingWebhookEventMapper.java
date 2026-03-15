@@ -19,7 +19,7 @@ public class TestBillingWebhookEventMapper extends BaseMapperTest {
     assertNullId(result.getId());
     assertEmptyString(result.getStripeEventId());
     assertEmptyString(result.getEventType());
-    assertEmptyString(result.getStatus());
+    assertEmptyString(result.getStatus().getKey());
     assertEmptyString(result.getPayloadJson());
   }
 
@@ -30,7 +30,7 @@ public class TestBillingWebhookEventMapper extends BaseMapperTest {
     dto.setId(5L);
     dto.setStripeEventId("evt_123");
     dto.setEventType("invoice.paid");
-    dto.setStatus(BillingWebhookEventStatus.RECEIVED.name());
+    dto.setStatus(BillingWebhookEventStatus.RECEIVED);
     dto.setPayloadJson("{\"id\":\"evt_123\"}");
     dto.setProcessedAt(UPDATED_AT);
     dto.setCreatedAt(CREATED_AT);
@@ -60,7 +60,7 @@ public class TestBillingWebhookEventMapper extends BaseMapperTest {
     final var dto = new BillingWebhookEventDto();
     dto.setStripeEventId("evt_new");
     dto.setEventType("invoice.payment_failed");
-    dto.setStatus(BillingWebhookEventStatus.FAILED.name());
+    dto.setStatus(BillingWebhookEventStatus.FAILED);
     dto.setProcessedAt(UPDATED_AT);
     dto.setPayloadJson("{\"failed\":true}");
 

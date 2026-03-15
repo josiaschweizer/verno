@@ -11,6 +11,9 @@ public interface SpringDataTenantBillingJpaRepository extends JpaRepository<Tena
   @Nonnull
   Optional<TenantBillingEntity> findByTenant_Id(@Nonnull Long tenantId);
 
+  @Nonnull
+  Optional<TenantBillingEntity> findByStripeCustomerId(@Nonnull String stripeCustomerId);
+
   boolean existsByTenant_Id(@Nonnull Long tenantId);
 
 }

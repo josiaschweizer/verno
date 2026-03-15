@@ -24,6 +24,9 @@ public interface ITenantBillingService {
   Optional<TenantBillingDto> getOptionalTenantBillingByTenantId(@Nonnull Long tenantId);
 
   @Nonnull
+  Optional<TenantBillingDto> getOptionalTenantBillingByStripeCustomerId(@Nonnull String stripeCustomerId);
+
+  @Nonnull
   List<TenantBillingDto> getTenantBillings();
 
   @Nonnull

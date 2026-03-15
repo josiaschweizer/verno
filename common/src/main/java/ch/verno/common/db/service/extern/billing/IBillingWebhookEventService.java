@@ -32,4 +32,5 @@ public interface IBillingWebhookEventService {
   @Nonnull
   BillingWebhookEventDto saveBillingWebhookEvent(@Nonnull BillingWebhookEventDto dto);
 
+  void markProcessed(@Nonnull String stripeEventId);
 }

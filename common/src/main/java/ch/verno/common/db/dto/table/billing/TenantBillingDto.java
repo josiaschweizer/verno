@@ -16,8 +16,8 @@ public class TenantBillingDto extends BaseDto {
   @Nonnull private String stripeCustomerId;
   @Nonnull private String stripeSubscriptionId;
   @Nonnull private String planKey;
-  @Nonnull private String subscriptionStatus;
-  @Nonnull private String paymentStatus;
+  @Nonnull private BillingSubscriptionStatus subscriptionStatus;
+  @Nonnull private BillingPaymentStatus paymentStatus;
   @Nullable private OffsetDateTime currentPeriodEnd;
   @Nullable private OffsetDateTime graceUntil;
   private boolean hasValidPaymentMethod;
@@ -28,8 +28,8 @@ public class TenantBillingDto extends BaseDto {
     this.stripeCustomerId = Publ.EMPTY_STRING;
     this.stripeSubscriptionId = Publ.EMPTY_STRING;
     this.planKey = BillingPlanKey.FREE.name();
-    this.subscriptionStatus = BillingSubscriptionStatus.INACTIVE.name();
-    this.paymentStatus = BillingPaymentStatus.UNPAID.name();
+    this.subscriptionStatus = BillingSubscriptionStatus.INACTIVE;
+    this.paymentStatus = BillingPaymentStatus.UNPAID;
     this.currentPeriodEnd = null;
     this.graceUntil = null;
     this.hasValidPaymentMethod = false;
@@ -40,8 +40,8 @@ public class TenantBillingDto extends BaseDto {
                           @Nonnull final String stripeCustomerId,
                           @Nonnull final String stripeSubscriptionId,
                           @Nonnull final String planKey,
-                          @Nonnull final String subscriptionStatus,
-                          @Nonnull final String paymentStatus,
+                          @Nonnull final BillingSubscriptionStatus subscriptionStatus,
+                          @Nonnull final BillingPaymentStatus paymentStatus,
                           @Nullable final OffsetDateTime currentPeriodEnd,
                           @Nullable final OffsetDateTime graceUntil,
                           final boolean hasValidPaymentMethod,
@@ -86,20 +86,20 @@ public class TenantBillingDto extends BaseDto {
   }
 
   @Nonnull
-  public String getSubscriptionStatus() {
+  public BillingSubscriptionStatus getSubscriptionStatus() {
     return subscriptionStatus;
   }
 
-  public void setSubscriptionStatus(@Nonnull final String subscriptionStatus) {
+  public void setSubscriptionStatus(@Nonnull final BillingSubscriptionStatus subscriptionStatus) {
     this.subscriptionStatus = subscriptionStatus;
   }
 
   @Nonnull
-  public String getPaymentStatus() {
+  public BillingPaymentStatus getPaymentStatus() {
     return paymentStatus;
   }
 
-  public void setPaymentStatus(@Nonnull final String paymentStatus) {
+  public void setPaymentStatus(@Nonnull final BillingPaymentStatus paymentStatus) {
     this.paymentStatus = paymentStatus;
   }
 

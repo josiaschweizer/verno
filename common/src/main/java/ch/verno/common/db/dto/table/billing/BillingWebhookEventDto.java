@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto.table.billing;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.db.type.billing.BillingWebhookEventStatus;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -17,7 +18,7 @@ public class BillingWebhookEventDto extends BaseDto {
   private String eventType;
 
   @Nonnull
-  private String status;
+  private BillingWebhookEventStatus status;
 
   @Nullable
   private OffsetDateTime processedAt;
@@ -32,16 +33,25 @@ public class BillingWebhookEventDto extends BaseDto {
     setId(null);
     this.stripeEventId = Publ.EMPTY_STRING;
     this.eventType = Publ.EMPTY_STRING;
-    this.status = Publ.EMPTY_STRING;
+    this.status = BillingWebhookEventStatus.NONE;
     this.processedAt = null;
     this.createdAt = null;
     this.payloadJson = Publ.EMPTY_STRING;
   }
 
+  public BillingWebhookEventDto(@Nonnull final String stripeEventId,
+                                @Nonnull final String eventType,
+                                @Nonnull final BillingWebhookEventStatus status,
+                                @Nullable final OffsetDateTime processedAt,
+                                @Nullable final OffsetDateTime createdAt,
+                                @Nonnull final String payloadJson) {
+    this(null, stripeEventId, eventType, status, processedAt, createdAt, payloadJson);
+  }
+
   public BillingWebhookEventDto(@Nullable final Long id,
                                 @Nonnull final String stripeEventId,
                                 @Nonnull final String eventType,
-                                @Nonnull final String status,
+                                @Nonnull final BillingWebhookEventStatus status,
                                 @Nullable final OffsetDateTime processedAt,
                                 @Nullable final OffsetDateTime createdAt,
                                 @Nonnull final String payloadJson) {
@@ -73,11 +83,11 @@ public class BillingWebhookEventDto extends BaseDto {
   }
 
   @Nonnull
-  public String getStatus() {
+  public BillingWebhookEventStatus getStatus() {
     return status;
   }
 
-  public void setStatus(@Nonnull final String status) {
+  public void setStatus(@Nonnull final BillingWebhookEventStatus status) {
     this.status = status;
   }
 

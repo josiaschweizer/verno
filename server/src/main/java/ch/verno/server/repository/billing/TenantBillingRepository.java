@@ -33,6 +33,11 @@ public class TenantBillingRepository {
     return jpaRepository.findByTenant_Id(tenantId);
   }
 
+  @Nonnull
+  public Optional<TenantBillingEntity> findByStripeCustomerId(@Nonnull final String stripeCustomerId) {
+    return jpaRepository.findByStripeCustomerId(stripeCustomerId);
+  }
+
   public boolean existsByTenantId(@Nonnull final Long tenantId) {
     return jpaRepository.existsByTenant_Id(tenantId);
   }

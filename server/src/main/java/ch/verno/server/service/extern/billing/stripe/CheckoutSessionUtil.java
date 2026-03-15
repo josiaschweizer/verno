@@ -1,14 +1,14 @@
-package ch.verno.server.service.extern.billing.session;
+package ch.verno.server.service.extern.billing.stripe;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.annotation.Nonnull;
 
-public class CheckoutSession {
+class CheckoutSessionUtil {
 
   @Nonnull
-  public static Session createSession(@Nonnull final String checkoutSuccessUrl,
+  static Session createSession(@Nonnull final String checkoutSuccessUrl,
                                @Nonnull final String checkoutCancelUrl,
                                @Nonnull final String stripePriceId) throws StripeException {
     final var params = SessionCreateParams.builder()

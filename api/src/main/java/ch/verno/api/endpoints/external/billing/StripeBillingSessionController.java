@@ -3,7 +3,7 @@ package ch.verno.api.endpoints.external.billing;
 import ch.verno.common.api.dto.exernal.billing.session.StartBillingSessionRequest;
 import ch.verno.common.api.dto.exernal.billing.session.StartBillingSessionResponse;
 import ch.verno.publ.ApiUrl;
-import ch.verno.server.service.extern.billing.session.StripeBillingSessionService;
+import ch.verno.server.service.extern.billing.stripe.StripeBillingSessionService;
 import jakarta.annotation.Nonnull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

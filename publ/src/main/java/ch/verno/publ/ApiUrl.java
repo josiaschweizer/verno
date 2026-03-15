@@ -31,5 +31,6 @@ public class ApiUrl {
   public static final String ENTRY_TOKEN = "entry?token=";
   public static final String RESOLVE_ACCESS_TOKEN = "/resolve";
   public static final String START_STRIPE_SESSION = "/start";
+  public static final String STRIP_WEBHOOK = "/stripe";
 
 }
