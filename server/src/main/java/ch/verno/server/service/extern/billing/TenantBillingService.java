@@ -5,6 +5,7 @@ import ch.verno.common.db.service.extern.ITenantBillingService;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.server.mapper.billing.TenantBillingMapper;
 import ch.verno.server.repository.billing.TenantBillingRepository;
@@ -35,6 +36,8 @@ public class TenantBillingService implements ITenantBillingService {
       throw new IllegalStateException("tenantId must not be null");
     }
 
+    TenantContext.set(tenantId);
+
     final var existingBilling = repository.findByTenantId(tenantId)
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.TENANT_BILLING_BY_TENANT_ID_NOT_FOUND));
 
@@ -47,20 +50,20 @@ public class TenantBillingService implements ITenantBillingService {
   @Override
   @Transactional
   public TenantBillingDto createTenantBilling(@Nonnull final TenantBillingDto dto) {
-    final var tenantId = dto.getTenantId();
-    if (tenantId == null) {
+    if (dto.getTenantId() == null) {
       throw new IllegalStateException("tenantId must not be null");
     }
 
-    try {
-      final TenantBillingEntity entity = TenantBillingMapper.toEntity(dto, tenantId);
-      if (entity == null) {
-        throw new IllegalStateException("TenantBillingDto must not be null");
-      }
+    final TenantBillingEntity entity = TenantBillingMapper.toEntity(dto, dto.getTenantId());
+    if (entity == null) {
+      throw new IllegalStateException("TenantBillingDto must not be null");
+    }
 
+    try {
+      TenantContext.set(entity.getTenant().getId());
       return TenantBillingMapper.toDto(repository.save(entity));
     } catch (DataIntegrityViolationException exception) {
-      final var existing = repository.findByTenantId(tenantId);
+      final var existing = repository.findByTenantId(dto.getTenantId());
 
       if (existing.isPresent()) {
         return updateTenantBilling(dto);

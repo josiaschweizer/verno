@@ -2,6 +2,7 @@ package ch.verno.server.mapper.billing;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
+import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
@@ -24,7 +25,7 @@ public final class TenantBillingMapper {
             entity.getId(),
             entity.getStripeCustomerId() == null ? Publ.EMPTY_STRING : entity.getStripeCustomerId(),
             entity.getStripeSubscriptionId() == null ? Publ.EMPTY_STRING : entity.getStripeSubscriptionId(),
-            entity.getPlanKey(),
+            BillingPlanKey.valueOf(entity.getPlanKey()),
             BillingSubscriptionStatus.fromKey(entity.getSubscriptionStatus()),
             BillingPaymentStatus.fromKey(entity.getPaymentStatus()),
             entity.getCurrentPeriodEnd(),
@@ -49,7 +50,7 @@ public final class TenantBillingMapper {
 
     final var entity = new TenantBillingEntity(
             TenantEntity.ref(tenantId),
-            dto.getPlanKey(),
+            dto.getPlanKey().name(),
             dto.getSubscriptionStatus().getKey(),
             dto.getPaymentStatus().getKey(),
             dto.isHasValidPaymentMethod()
@@ -72,7 +73,7 @@ public final class TenantBillingMapper {
                                   @Nonnull final TenantBillingDto dto) {
     entity.setStripeCustomerId(dto.getStripeCustomerId().isBlank() ? null : dto.getStripeCustomerId());
     entity.setStripeSubscriptionId(dto.getStripeSubscriptionId().isBlank() ? null : dto.getStripeSubscriptionId());
-    entity.setPlanKey(dto.getPlanKey());
+    entity.setPlanKey(dto.getPlanKey().name());
     entity.setSubscriptionStatus(dto.getSubscriptionStatus().getKey());
     entity.setPaymentStatus(dto.getPaymentStatus().getKey());
     entity.setCurrentPeriodEnd(dto.getCurrentPeriodEnd());

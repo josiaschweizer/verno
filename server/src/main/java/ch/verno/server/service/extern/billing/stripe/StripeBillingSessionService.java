@@ -36,30 +36,36 @@ public class StripeBillingSessionService implements IStripeBillingSessionService
 
     final var billingOptional = tenantBillingService.getOptionalTenantBillingByTenantId(tenantId);
 
+    final var dto = new SessionMetaDataDto(
+            String.valueOf(tenantId),
+            String.valueOf(userId)
+    );
+
     if (billingOptional.isEmpty()) {
-      return createCheckoutSession();
+      return createCheckoutSession(dto);
     }
 
     final var billing = billingOptional.get();
     if (billing.getStripeCustomerId().isBlank()) {
-      return createCheckoutSession();
+      return createCheckoutSession(dto);
     } else {
       return createPortalSession(billing);
     }
   }
 
   @Nonnull
-  private String createCheckoutSession() {
+  private String createCheckoutSession(@Nonnull final SessionMetaDataDto dto) {
     final var applicationProperties = globalInterface.getService(ApplicationPropertiesGate.class);
     final var checkoutSuccessUrl = applicationProperties.getCheckoutSuccessUrl();
     final var checkoutCancelUrl = applicationProperties.getCheckoutCancelUrl();
-    final var stripePriceId = globalInterface.getEnvProperties().getEnv(VernoSecrets.ENV_STRIPE_PRICE_ID_BASIC_PACKAGE);
+    final var stripePriceId = globalInterface.getEnvProperties().getEnv(VernoSecrets.ENV_STRIPE_PRICE_ID_BASIC_PACKAGE); //todo updaten mit user selection -> verno-99
 
     try {
       final var session = CheckoutSessionUtil.createSession(
               checkoutSuccessUrl,
               checkoutCancelUrl,
-              stripePriceId
+              stripePriceId,
+              dto
       );
 
       final var url = session.getUrl();

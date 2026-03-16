@@ -42,8 +42,8 @@ public class MainLayoutSideNavFactory {
 
   @Nonnull
   public Component createSideNavHeader() {
-    final var appLogo = new Image("/verno-logo.png", "Verno Logo");
-    appLogo.setHeight("36px");
+    final var appLogo = new Image("/verno-app.png", "Verno Logo");
+    appLogo.setHeight("48px");
     appLogo.addClassNames(LumoUtility.Padding.Top.MEDIUM);
     appLogo.addClassNames(LumoUtility.Padding.Bottom.MEDIUM);
 

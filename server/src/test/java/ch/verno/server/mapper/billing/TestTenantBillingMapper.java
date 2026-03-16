@@ -34,9 +34,9 @@ public class TestTenantBillingMapper extends BaseMapperTest {
     dto.setTenantId(22L);
     dto.setStripeCustomerId("cus_123");
     dto.setStripeSubscriptionId("sub_123");
-    dto.setPlanKey(BillingPlanKey.PRO.name());
-    dto.setSubscriptionStatus(BillingSubscriptionStatus.ACTIVE.name());
-    dto.setPaymentStatus(BillingPaymentStatus.PAID.name());
+    dto.setPlanKey(BillingPlanKey.PRO);
+    dto.setSubscriptionStatus(BillingSubscriptionStatus.ACTIVE);
+    dto.setPaymentStatus(BillingPaymentStatus.PAID);
     dto.setHasValidPaymentMethod(true);
     dto.setCurrentPeriodEnd(UPDATED_AT);
     dto.setGraceUntil(EXPIRES_AT);
@@ -72,9 +72,9 @@ public class TestTenantBillingMapper extends BaseMapperTest {
     final var dto = new TenantBillingDto();
     dto.setStripeCustomerId("cus_new");
     dto.setStripeSubscriptionId("sub_new");
-    dto.setPlanKey(BillingPlanKey.BASIC.name());
-    dto.setSubscriptionStatus(BillingSubscriptionStatus.PAST_DUE.name());
-    dto.setPaymentStatus(BillingPaymentStatus.FAILED.name());
+    dto.setPlanKey(BillingPlanKey.BASIC);
+    dto.setSubscriptionStatus(BillingSubscriptionStatus.PAST_DUE);
+    dto.setPaymentStatus(BillingPaymentStatus.FAILED);
     dto.setHasValidPaymentMethod(true);
     dto.setCurrentPeriodEnd(UPDATED_AT);
     dto.setGraceUntil(EXPIRES_AT);

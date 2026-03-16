@@ -32,4 +32,7 @@ public class VernoConstants {
   public static final Integer MAX_MAIL_BATCH_SIZE = 100;
   public static final Double MAIL_SEND_DELAY_MS = 500.0;
 
+  public static final String SESSION_STRIPE_PRICE_ID = "stripePriceId";
+  public static final String SESSION_USER_ID = "userId";
+  public static final String SESSION_TENANT_ID = "tenantId";
 }

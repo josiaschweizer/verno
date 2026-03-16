@@ -15,7 +15,7 @@ public class TenantBillingDto extends BaseDto {
 
   @Nonnull private String stripeCustomerId;
   @Nonnull private String stripeSubscriptionId;
-  @Nonnull private String planKey;
+  @Nonnull private BillingPlanKey planKey;
   @Nonnull private BillingSubscriptionStatus subscriptionStatus;
   @Nonnull private BillingPaymentStatus paymentStatus;
   @Nullable private OffsetDateTime currentPeriodEnd;
@@ -27,7 +27,7 @@ public class TenantBillingDto extends BaseDto {
     setId(null);
     this.stripeCustomerId = Publ.EMPTY_STRING;
     this.stripeSubscriptionId = Publ.EMPTY_STRING;
-    this.planKey = BillingPlanKey.FREE.name();
+    this.planKey = BillingPlanKey.FREE;
     this.subscriptionStatus = BillingSubscriptionStatus.INACTIVE;
     this.paymentStatus = BillingPaymentStatus.UNPAID;
     this.currentPeriodEnd = null;
@@ -39,7 +39,7 @@ public class TenantBillingDto extends BaseDto {
   public TenantBillingDto(@Nullable final Long id,
                           @Nonnull final String stripeCustomerId,
                           @Nonnull final String stripeSubscriptionId,
-                          @Nonnull final String planKey,
+                          @Nonnull final BillingPlanKey planKey,
                           @Nonnull final BillingSubscriptionStatus subscriptionStatus,
                           @Nonnull final BillingPaymentStatus paymentStatus,
                           @Nullable final OffsetDateTime currentPeriodEnd,
@@ -77,11 +77,11 @@ public class TenantBillingDto extends BaseDto {
   }
 
   @Nonnull
-  public String getPlanKey() {
+  public BillingPlanKey getPlanKey() {
     return planKey;
   }
 
-  public void setPlanKey(@Nonnull final String planKey) {
+  public void setPlanKey(@Nonnull final BillingPlanKey planKey) {
     this.planKey = planKey;
   }
 

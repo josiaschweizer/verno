@@ -5,6 +5,7 @@ import ch.verno.common.api.dto.exernal.billing.tenant.CreateTenantBillingRequest
 import ch.verno.common.api.dto.exernal.billing.tenant.CreateTenantBillingResponse;
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
+import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
@@ -30,7 +31,7 @@ public class TenantBillingController extends BaseController {
   public CreateTenantBillingResponse create(@RequestBody @Nonnull final CreateTenantBillingRequest req) {
     final var dto = new TenantBillingDto();
     dto.setTenantId(req.tenantId());
-    dto.setPlanKey(req.planKey());
+    dto.setPlanKey(BillingPlanKey.valueOf(req.planKey()));
     dto.setSubscriptionStatus(BillingSubscriptionStatus.fromKey(req.subscriptionStatus()));
     dto.setPaymentStatus(BillingPaymentStatus.fromKey(req.paymentStatus()));
     dto.setHasValidPaymentMethod(req.hasValidPaymentMethod());
@@ -40,7 +41,7 @@ public class TenantBillingController extends BaseController {
     return new CreateTenantBillingResponse(
             saved.getId() != null ? saved.getId() : Publ.ZERO_LONG,
             saved.getTenantId() != null ? saved.getTenantId() : Publ.ZERO_LONG,
-            saved.getPlanKey(),
+            saved.getPlanKey().name(),
             saved.getSubscriptionStatus().getKey(),
             saved.getPaymentStatus().getKey(),
             saved.isHasValidPaymentMethod(),
