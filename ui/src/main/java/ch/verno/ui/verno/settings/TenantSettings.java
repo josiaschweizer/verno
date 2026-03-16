@@ -10,6 +10,7 @@ import ch.verno.ui.verno.settings.panels.mail.MailSettings;
 import ch.verno.ui.verno.settings.panels.quantity.QuantitySetting;
 import ch.verno.ui.verno.settings.panels.report.ReportSetting;
 import ch.verno.ui.verno.settings.panels.shared.SharedSettings;
+import ch.verno.ui.verno.settings.panels.subscription.SubscriptionSettings;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -29,6 +30,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
   @Nonnull private final Lazy<ReportSetting> reportSetting;
   @Nonnull private final Lazy<CourseLevelSetting> courseLevelGridSetting;
   @Nonnull private final Lazy<MailSettings> mailSettings;
+  @Nonnull private final Lazy<SubscriptionSettings> subscriptionSettings;
 
   @Autowired
   public TenantSettings(@Nonnull final GlobalInterface globalInterface) {
@@ -37,6 +39,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
     this.reportSetting = Lazy.of(() -> new ReportSetting(globalInterface));
     this.courseLevelGridSetting = Lazy.of(() -> new CourseLevelSetting(globalInterface));
     this.mailSettings = Lazy.of(() -> new MailSettings(globalInterface));
+    this.subscriptionSettings = Lazy.of(() -> new SubscriptionSettings(globalInterface));
 
     initUI(globalInterface);
   }
@@ -49,7 +52,8 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
             sharedSetting.get(),
             reportSetting.get(),
             courseLevelGridSetting.get(),
-            mailSettings.get()
+            mailSettings.get(),
+            subscriptionSettings.get()
     );
   }
 

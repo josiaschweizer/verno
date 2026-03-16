@@ -220,6 +220,26 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
+  public VAComboBox<String> createComboBoxEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                                @Nonnull final Setter<DTO, String> valueSetter,
+                                                @Nonnull final Binder<DTO> binder,
+                                                @Nonnull final Optional<String> required,
+                                                @Nonnull final String label,
+                                                @Nonnull final List<String> options,
+                                                @Nonnull final ValueProvider<String, String> labelProvider) {
+    final var comboBox = new VAComboBox<String>(label);
+    comboBox.setWidthFull();
+
+    comboBox.setItems(options);
+    comboBox.setItemLabelGenerator(labelProvider::apply);
+    comboBox.setClearButtonVisible(true);
+
+    bindEntry(comboBox, valueProvider, valueSetter, binder, required);
+
+    return comboBox;
+  }
+
+  @Nonnull
   public <E extends Enum<E>> VAComboBox<E> createEnumComboBoxEntry(@Nonnull final ValueProvider<DTO, E> valueProvider,
                                                                    @Nonnull final Setter<DTO, E> valueSetter,
                                                                    @Nonnull final Binder<DTO> binder,

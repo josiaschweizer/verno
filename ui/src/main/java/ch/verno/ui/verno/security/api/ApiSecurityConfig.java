@@ -22,6 +22,9 @@ public class ApiSecurityConfig {
   public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final CorsConfigurationSource apiCorsSource,
                                             @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) throws Exception {
+    final var resolveBillingAccessToken = ApiUrl.BILLING_ACCESS_TOKEN + ApiUrl.RESOLVE_ACCESS_TOKEN;
+    final var startStripeSession = ApiUrl.BILLING_SESSION + ApiUrl.START_STRIPE_SESSION;
+
     http
             .securityMatcher("/api/**")
             .cors(cors -> cors.configurationSource(apiCorsSource))
@@ -29,7 +32,9 @@ public class ApiSecurityConfig {
             .authenticationManager(apiAuthenticationManager)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(ApiUrl.BILLING, ApiUrl.BILLING + "/**").permitAll()
+                    .requestMatchers(ApiUrl.BILLING_WEBHOOK, ApiUrl.BILLING_WEBHOOK + "/**").permitAll()
+                    .requestMatchers(resolveBillingAccessToken, resolveBillingAccessToken + "/**").permitAll()
+                    .requestMatchers(startStripeSession, startStripeSession + "/**").permitAll()
                     .requestMatchers(ApiUrl.TENANTS, ApiUrl.TENANTS + "/**").authenticated()
                     .anyRequest().authenticated()
             )

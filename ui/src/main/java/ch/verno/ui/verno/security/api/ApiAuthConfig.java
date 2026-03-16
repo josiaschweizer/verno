@@ -1,5 +1,7 @@
 package ch.verno.ui.verno.security.api;
 
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.VernoSecrets;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

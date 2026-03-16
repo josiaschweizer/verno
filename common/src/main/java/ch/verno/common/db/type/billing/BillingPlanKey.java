@@ -7,15 +7,18 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public enum BillingPlanKey {
-  FREE(Publ.EMPTY_STRING),
-  BASIC(VernoSecrets.ENV_STRIPE_PRICE_ID_BASIC_PACKAGE),
-  PRO(VernoSecrets.ENV_STRIPE_PRICE_ID_PRO_PACKAGE),
+  FREE(Publ.EMPTY_STRING, "shared.free"),
+  BASIC(VernoSecrets.ENV_STRIPE_PRICE_ID_BASIC_PACKAGE, "shared.basic"),
+  PRO(VernoSecrets.ENV_STRIPE_PRICE_ID_PRO_PACKAGE, "shared.pro"),
   ;
 
   @Nonnull private final String secretKey;
+  @Nonnull private final String planTranslationKey;
 
-  BillingPlanKey(@Nonnull final String secretKey) {
+  BillingPlanKey(@Nonnull final String secretKey,
+                 @Nonnull final String planTranslationKey) {
     this.secretKey = secretKey;
+    this.planTranslationKey = planTranslationKey;
   }
 
   @Nonnull
@@ -38,5 +41,10 @@ public enum BillingPlanKey {
   @Nonnull
   public String getSecretKey() {
     return secretKey;
+  }
+
+  @Nonnull
+  public String getPlanTranslationKey() {
+    return planTranslationKey;
   }
 }
