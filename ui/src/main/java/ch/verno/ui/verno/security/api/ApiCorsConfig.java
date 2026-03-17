@@ -19,6 +19,7 @@ public class ApiCorsConfig {
     config.setAllowedOrigins(List.of(
             "https://www.verno-app.ch",
             "https://verno-app.ch",
+            "https://payment.verno-app.ch",
             "http://localhost:5173"
     ));
 

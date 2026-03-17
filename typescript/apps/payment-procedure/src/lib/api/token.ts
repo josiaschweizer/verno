@@ -13,9 +13,6 @@ const client = createApiClient({
 
 export const billingTokensApi = {
   async resolveEntryToken(token: string) {
-    console.log('token', token)
-    console.log('base url', baseUrl)
-    console.log('client', client)
     return await client.request<ResolveBillingAccessTokenResponse>({
       method: 'POST',
       path: '/api/v1/billing/access-token/resolve',
