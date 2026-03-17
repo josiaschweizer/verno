@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.publ.ApiUrl;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;

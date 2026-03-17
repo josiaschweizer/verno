@@ -6,7 +6,6 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.ui.client.BaseApiClient;
-import com.vaadin.flow.component.charts.model.Global;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.core.io.ByteArrayResource;
