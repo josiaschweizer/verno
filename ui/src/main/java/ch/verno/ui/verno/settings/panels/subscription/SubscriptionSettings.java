@@ -7,6 +7,7 @@ import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.properties.ApplicationPropertiesGate;
+import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.publ.Publ;
@@ -93,9 +94,10 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
 
     final var navButton = new VAAnchorButton(
             VaadinIcon.EXTERNAL_LINK.create(),
-            globalInterface.getService(ApplicationPropertiesGate.class)
-                    .getSubscriptionOverviewUrl()
-                    + "payment/info"
+            UrlUtil.buildUrl(globalInterface.getService(ApplicationPropertiesGate.class)
+                            .getSubscriptionOverviewUrl(),
+                    "payment/info"
+            )
     );
     addActionButtons(navButton);
   }
