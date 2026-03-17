@@ -20,8 +20,6 @@ export default function EntryPage() {
       try {
         const result = await billingTokensApi.resolveEntryToken(token)
 
-        console.log('result', result)
-
         sessionStorage.setItem('billingEntryToken', token)
         sessionStorage.setItem('billingEntryContext', JSON.stringify(result))
 
