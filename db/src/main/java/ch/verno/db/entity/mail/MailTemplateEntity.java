@@ -1,6 +1,6 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.enums.mail.MailContentFormat;
+import ch.verno.common.db.type.mail.MailContentFormat;
 import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;

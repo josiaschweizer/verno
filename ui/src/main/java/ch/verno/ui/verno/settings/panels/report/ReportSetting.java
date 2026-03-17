@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.report;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.db.service.ITenantSettingService;
+import ch.verno.common.db.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;

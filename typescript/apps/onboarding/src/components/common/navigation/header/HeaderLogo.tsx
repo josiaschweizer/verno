@@ -6,9 +6,9 @@ export default function HeaderLogo() {
       <span className="sr-only">Verno</span>
 
       <img
-        src="/verno-logo.png"
+        src="/verno-app.png"
         alt="Verno logo"
-        className="h-8 w-auto"
+        className="h-26 w-auto"
         loading="lazy"
       />
 

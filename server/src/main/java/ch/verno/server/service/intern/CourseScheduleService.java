@@ -1,9 +1,9 @@
 package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
-import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseScheduleFilter;
-import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.db.service.intern.ICourseScheduleService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.lib.WeekKey;

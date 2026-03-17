@@ -1,8 +1,8 @@
 package ch.verno.common.db.dto.table.mail;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.db.enums.mail.MailValidity;
-import ch.verno.common.db.enums.mail.SmtpSecurity;
+import ch.verno.common.db.type.mail.MailValidity;
+import ch.verno.common.db.type.mail.SmtpSecurity;
 import ch.verno.common.lib.Base64Util;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;

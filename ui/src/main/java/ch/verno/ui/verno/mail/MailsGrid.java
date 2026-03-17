@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
-import ch.verno.common.db.enums.mail.MailValidity;
+import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.db.filter.MailLogFilter;
-import ch.verno.common.db.service.mail.IMailConfigService;
-import ch.verno.common.db.service.mail.IMailLogService;
+import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.db.service.intern.mail.IMailLogService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.format.Converter;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;

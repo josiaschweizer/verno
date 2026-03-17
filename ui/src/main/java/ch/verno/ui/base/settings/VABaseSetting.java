@@ -10,7 +10,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -107,6 +106,10 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
       binder.addStatusChangeListener(e -> binderStatusChanged());
       binder.addValueChangeListener(e -> binderValueChanged());
     }
+
+    if (isAlwaysReadOnly()) {
+      binder.setReadOnly(isAlwaysReadOnly());
+    }
   }
 
   protected final void setContent(@Nonnull final Component newContent) {
@@ -135,6 +138,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     throw new NotImplementedException("Save method not implemented");
   }
 
+  @Nonnull
   private Binder<T> createBinder() {
     return new Binder<>(getBeanType());
   }
@@ -145,5 +149,10 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   protected void binderValueChanged() {
     saveButton.setEnabled(binder.hasChanges() && binder.isValid());
+  }
+
+  protected boolean isAlwaysReadOnly() {
+    // to be overridden if setting panel should be read only
+    return false;
   }
 }

@@ -1,8 +1,8 @@
-import { Input } from '@/components/ui/input'
+import { Input } from '../../../../../../../components/ui/input'
 import { Control, Controller, useFormState } from 'react-hook-form'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import DomainInputField from '@/components/ui/custom/DomainInputField'
-import { Field, FieldLabel } from '@/components/ui/field'
+import { Field, FieldLabel } from '../../../../../../../components/ui/field'
 
 interface Props {
   control: Control<RegisterDialogFormData, any, any>

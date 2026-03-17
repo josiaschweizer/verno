@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
-import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.dialog.DialogSize;
-import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.DialogSize;
+import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.button.Button;

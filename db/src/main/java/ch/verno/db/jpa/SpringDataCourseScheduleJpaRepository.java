@@ -1,6 +1,6 @@
 package ch.verno.db.jpa;
 
-import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.db.entity.CourseScheduleEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.repository.JpaRepository;

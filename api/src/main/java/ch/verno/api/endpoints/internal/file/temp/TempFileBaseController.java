@@ -1,6 +1,6 @@
 package ch.verno.api.endpoints.internal.file.temp;
 
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import jakarta.annotation.Nonnull;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ContentDisposition;

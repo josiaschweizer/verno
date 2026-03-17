@@ -1,7 +1,7 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.enums.mail.MailValidity;
-import ch.verno.common.db.enums.mail.SmtpSecurity;
+import ch.verno.common.db.type.mail.MailValidity;
+import ch.verno.common.db.type.mail.SmtpSecurity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

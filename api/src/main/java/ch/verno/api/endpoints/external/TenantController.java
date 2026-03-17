@@ -1,10 +1,10 @@
 package ch.verno.api.endpoints.external;
 
 import ch.verno.api.base.BaseController;
-import ch.verno.common.api.dto.exernal.CreateTenantRequest;
+import ch.verno.common.api.dto.exernal.tenant.CreateTenantRequest;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
-import ch.verno.server.service.extern.TenantProvisionService;
+import ch.verno.server.service.extern.tenant.TenantProvisionService;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

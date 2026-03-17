@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.file.csv;
 
 import ch.verno.common.exceptions.io.ParseCsvException;
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import com.vaadin.flow.component.grid.Grid;

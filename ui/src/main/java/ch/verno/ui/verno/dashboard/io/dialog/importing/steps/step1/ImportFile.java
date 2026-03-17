@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.upload.VAFileUploadArea;
-import ch.verno.ui.base.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

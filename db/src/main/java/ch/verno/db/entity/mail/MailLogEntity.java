@@ -1,6 +1,6 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.enums.mail.MailLogStatus;
+import ch.verno.common.db.type.mail.MailLogStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;

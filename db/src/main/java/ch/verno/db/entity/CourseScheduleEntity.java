@@ -1,7 +1,7 @@
 package ch.verno.db.entity;
 
 import ch.verno.common.ui.base.components.colorpicker.Colors;
-import ch.verno.common.db.enums.CourseScheduleStatus;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;

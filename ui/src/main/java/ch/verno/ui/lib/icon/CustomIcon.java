@@ -1,6 +1,6 @@
 package ch.verno.ui.lib.icon;
 
-import ch.verno.publ.LumoUtility;
+import ch.verno.publ.VernoUtility;
 import ch.verno.publ.Publ;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.dom.Style;
@@ -96,7 +96,7 @@ public class CustomIcon extends Span {
   private void showErrorIcon() {
     setText("⚠");
     getStyle()
-            .setColor(LumoUtility.LUMO_ERROR_COLOR)
+            .setColor(VernoUtility.LUMO_ERROR_COLOR)
             .setFontSize("1.2em");
   }
 

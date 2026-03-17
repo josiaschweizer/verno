@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
-import ch.verno.common.db.enums.CourseScheduleStatus;
-import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.db.service.intern.ICourseScheduleService;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

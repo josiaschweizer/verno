@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.db.service.ICourseLevelService;
+import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.grid.BaseSettingDetail;

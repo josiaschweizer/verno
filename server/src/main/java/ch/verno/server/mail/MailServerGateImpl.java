@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.servergate.MailServerGate;
+import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;

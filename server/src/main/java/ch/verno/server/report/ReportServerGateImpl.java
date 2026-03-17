@@ -3,7 +3,7 @@ package ch.verno.server.report;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.api.dto.internal.file.temp.FileDto;
-import ch.verno.common.gate.servergate.ReportServerGate;
+import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.server.file.FileStorageHandler;
 import ch.verno.server.report.course.CourseReportUseCase;
 import ch.verno.server.report.participant.ParticipantReportUseCase;

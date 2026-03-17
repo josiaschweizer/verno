@@ -19,8 +19,14 @@ public enum DBNotFoundReason {
   MAIL_CONFIG_BY_TENANT_NOT_FOUND("Mail config not found for tenant: "),
   MAIL_LOG_BY_ID_NOT_FOUND("Mail log not found with id: "),
 
-  NOT_ABLE_TO_DELETE_ENTITY("Not able to delete entity with")
-  ;
+  TENANT_BILLING_BY_ID_NOT_FOUND("Tenant billing not found with id: "),
+  TENANT_BILLING_BY_TENANT_ID_NOT_FOUND("Tenant billing not found for tenant id: "),
+  BILLING_ACCESS_TOKEN_BY_ID_NOT_FOUND("Billing access token not found with id: "),
+  BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND("Billing access token not found for token hash: "),
+  BILLING_WEBHOOK_EVENT_BY_ID_NOT_FOUND("Billing webhook event not found with id: "),
+  BILLING_WEBHOOK_EVENT_BY_STRIPE_EVENT_ID_NOT_FOUND("Billing webhook event not found for Stripe event id: "),
+
+  NOT_ABLE_TO_DELETE_ENTITY("Not able to delete entity with");
 
   @Nonnull
   private final String message;

@@ -1,7 +1,7 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.db.dto.table.TenantDto;
-import ch.verno.common.db.service.ITenantService;
+import ch.verno.common.db.service.intern.ITenantService;
 import ch.verno.server.mapper.TenantMapper;
 import ch.verno.server.repository.TenantRepository;
 import jakarta.annotation.Nonnull;

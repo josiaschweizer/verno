@@ -1,9 +1,9 @@
 package ch.verno.server;
 
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.api.dto.internal.file.temp.FileDto;
-import ch.verno.common.gate.servergate.ServerGate;
+import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvSchema;
 import ch.verno.server.io.importing.SchemaResolver;
 import jakarta.annotation.Nonnull;

@@ -38,7 +38,7 @@ public class VaadinSecurityConfig {
             .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/error").permitAll()
-                    .requestMatchers("/verno-logo.png").permitAll()
+                    .requestMatchers("/verno-app.png").permitAll()
             )
             .with(VaadinSecurityConfigurer.vaadin(), configurer ->
                     configurer.loginView(LoginView.class)

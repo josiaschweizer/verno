@@ -1,7 +1,7 @@
 package ch.verno.common.db.dto.table.mail;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.db.enums.mail.MailLogStatus;
+import ch.verno.common.db.type.mail.MailLogStatus;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

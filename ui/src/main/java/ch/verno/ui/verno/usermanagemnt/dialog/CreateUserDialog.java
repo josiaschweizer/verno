@@ -1,14 +1,14 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
 import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.db.service.IAppUserService;
+import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.dialog.DialogSize;
-import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.DialogSize;
+import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
 import com.vaadin.flow.component.button.Button;

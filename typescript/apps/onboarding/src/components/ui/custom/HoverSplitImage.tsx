@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { X } from 'lucide-react' // or your preferred close icon
+import { X } from 'lucide-react'
 
 type HoverSplitImageProps = {
   lightSrc: string

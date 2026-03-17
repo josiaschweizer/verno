@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
-import ch.verno.common.db.service.ICourseScheduleService;
+import ch.verno.common.db.service.intern.ICourseScheduleService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleActivateWidget;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.ui.base.MainLayout;
 import ch.verno.publ.Routes;
+import ch.verno.ui.MainLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.login.LoginForm;

@@ -6,7 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../../../../../../components/ui/button'
 import StepOne from '../steps/StepOne'
 import StepTwo from '../steps/StepTwo'
 import StepThree from '../steps/StepThree'
@@ -20,7 +20,7 @@ import {
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { useForm, useWatch } from 'react-hook-form'
 import { tenantsApi } from '@/lib/api/tenantsApi'
-import { ApiError } from '@/lib/apiClient'
+import { ApiError } from '../../../../../../../lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
 
 interface Props {

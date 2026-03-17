@@ -1,13 +1,13 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
-import ch.verno.common.db.enums.mail.MailValidity;
-import ch.verno.common.db.service.mail.IMailConfigService;
+import ch.verno.common.db.type.mail.MailValidity;
+import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.servergate.MailServerGate;
+import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
-import ch.verno.ui.base.dialog.DialogSize;
-import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.DialogSize;
+import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestStatus;
 import com.vaadin.flow.component.UI;

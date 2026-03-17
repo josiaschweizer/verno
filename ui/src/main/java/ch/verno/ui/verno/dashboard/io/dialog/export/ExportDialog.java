@@ -1,11 +1,11 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
-import ch.verno.common.gate.servergate.TempFileServerGate;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.servergate.ServerGate;
+import ch.verno.common.gate.server.ServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
-import ch.verno.ui.base.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
 import com.vaadin.flow.component.button.Button;

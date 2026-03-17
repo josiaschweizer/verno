@@ -1,4 +1,4 @@
-import { createApiClient } from '@/lib/apiClient'
+import { createApiClient } from '@verno/lib/apiClient'
 
 export type CreateTenantRequest = {
   tenantKey: string
