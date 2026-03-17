@@ -36,9 +36,11 @@ public class StripeBillingSessionService implements IStripeBillingSessionService
 
     final var billingOptional = tenantBillingService.getOptionalTenantBillingByTenantId(tenantId);
 
+
     final var dto = new SessionMetaDataDto(
             String.valueOf(tenantId),
-            String.valueOf(userId)
+            String.valueOf(userId),
+            billingOptional.map(TenantBillingDto::getStripeCustomerId).orElse(null)
     );
 
     if (billingOptional.isEmpty()) {

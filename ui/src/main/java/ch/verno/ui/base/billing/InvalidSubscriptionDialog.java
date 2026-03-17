@@ -103,7 +103,7 @@ public class InvalidSubscriptionDialog extends VADialog {
   private String getRedirectLink() {
     final var currentUser = userProperties.getCurrentUser();
 
-    return billingAccessLinkService.createSubscriptionOverviewUrl(
+    return billingAccessLinkService.createSubscriptionUrlForCheckout(
             TenantContext.getRequired(),
             Optional.ofNullable(currentUser.getId()).orElse(Publ.ZERO_LONG)
     );

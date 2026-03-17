@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillingWebhookEventService implements IBillingWebhookEventService {
@@ -88,6 +89,14 @@ public class BillingWebhookEventService implements IBillingWebhookEventService {
   @Nonnull
   @Override
   @Transactional(readOnly = true)
+  public Optional<BillingWebhookEventDto> getOptionalBillingWebhookEventById(@Nonnull Long id) {
+    final var foundById = repository.findById(id);
+    return foundById.map(BillingWebhookEventMapper::toDto);
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
   public BillingWebhookEventDto getBillingWebhookEventByStripeEventId(@Nonnull final String stripeEventId) {
     final var foundByStripeEventId = repository.findByStripeEventId(stripeEventId);
 
@@ -96,6 +105,14 @@ public class BillingWebhookEventService implements IBillingWebhookEventService {
     }
 
     return BillingWebhookEventMapper.toDto(foundByStripeEventId.get());
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<BillingWebhookEventDto> getOptionalBillingWebhookEventByStripeEventId(@Nonnull final String stripeEventId) {
+    final var foundByStripeEventId = repository.findByStripeEventId(stripeEventId);
+    return foundByStripeEventId.map(BillingWebhookEventMapper::toDto);
   }
 
   @Nonnull
@@ -146,11 +163,39 @@ public class BillingWebhookEventService implements IBillingWebhookEventService {
 
   @Override
   @Transactional
+  public boolean isAlreadyProcessed(@Nonnull final String stripeEventId) {
+    final var existing = repository.findByStripeEventId(stripeEventId);
+
+    return existing.isPresent() &&
+            existing.get().getStatus().equals(BillingWebhookEventStatus.PROCESSED.name());
+  }
+
+  @Override
+  @Transactional
   public void markProcessed(@Nonnull String stripeEventId) {
     final var dto = getBillingWebhookEventByStripeEventId(stripeEventId);
     dto.setStatus(BillingWebhookEventStatus.PROCESSED);
     dto.setProcessedAt(OffsetDateTime.now());
 
     saveBillingWebhookEvent(dto);
+  }
+
+  @Override
+  @Transactional
+  public void markFailed(@Nonnull final String stripeEventId, @Nonnull final String message) {
+    final var dto = getBillingWebhookEventByStripeEventId(stripeEventId);
+    dto.setStatus(BillingWebhookEventStatus.FAILED);
+    dto.setProcessedAt(OffsetDateTime.now());
+    dto.setPayloadJson(message);
+
+    saveBillingWebhookEvent(dto);
+  }
+
+  @Override
+  @Transactional
+  public void resetToReceived(@Nonnull final String id) {
+    final var byId = getBillingWebhookEventByStripeEventId(id);
+    byId.setStatus(BillingWebhookEventStatus.RECEIVED);
+    saveBillingWebhookEvent(byId);
   }
 }

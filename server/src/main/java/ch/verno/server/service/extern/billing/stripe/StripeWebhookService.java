@@ -16,6 +16,7 @@ import ch.verno.publ.VernoSecrets;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoicePayment;
 import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
@@ -57,25 +58,39 @@ public class StripeWebhookService implements IStripeWebhookService {
       throw new IllegalArgumentException("Could not construct webhook event", exception);
     }
 
-    persistReceivedEvent(payload, event);
-
-    System.out.println(event.getType());
-    switch (event.getType()) {
-      case "checkout.session.completed" -> handleCheckoutSessionCompleted(event);
-      case "invoice.paid" -> handleInvoicePaid(event);
-      case "invoice.payment_failed" -> handleInvoicePaymentFailed(event);
-      case "customer.subscription.updated" -> handleSubscriptionUpdated(event);
-      case "customer.subscription.deleted" -> handleSubscriptionDeleted(event);
-      default -> {
-        // ignore for now
-      }
+    if (billingWebhookEventService.isAlreadyProcessed(event.getId())) {
+      return;
     }
 
-    billingWebhookEventService.markProcessed(event.getId());
+    persistReceivedEvent(payload, event);
+
+    try {
+      switch (event.getType()) {
+        case "checkout.session.completed" -> handleCheckoutSessionCompleted(event);
+        case "invoice.paid", "invoice.payment_succeeded" -> handleInvoicePaid(event);
+        case "invoice_payment.paid" -> handleInvoicePaymentPaid(event);
+        case "invoice.payment_failed" -> handleInvoicePaymentFailed(event);
+        case "customer.subscription.updated" -> handleSubscriptionUpdated(event);
+        case "customer.subscription.deleted" -> handleSubscriptionDeleted(event);
+        default -> {
+        }
+      }
+      billingWebhookEventService.markProcessed(event.getId());
+    } catch (Exception exception) {
+      billingWebhookEventService.markFailed(event.getId(), exception.getMessage());
+      throw exception;
+    }
   }
 
   private void persistReceivedEvent(@Nonnull final String payload,
                                     @Nonnull final Event event) {
+    final var existing = billingWebhookEventService.getOptionalBillingWebhookEventByStripeEventId(event.getId());
+
+    if (existing.isPresent()) {
+      billingWebhookEventService.resetToReceived(event.getId());
+      return;
+    }
+
     final var dto = new BillingWebhookEventDto(
             event.getId(),
             event.getType(),
@@ -145,6 +160,40 @@ public class StripeWebhookService implements IStripeWebhookService {
     tenantBillingService.saveTenantBilling(billing);
   }
 
+  private void handleInvoicePaymentPaid(@Nonnull final Event event) {
+    final var stripeObject = event.getDataObjectDeserializer().getObject().orElse(null);
+    if (!(stripeObject instanceof InvoicePayment invoicePayment)) {
+      return;
+    }
+
+    final var invoiceId = invoicePayment.getInvoice();
+    if (invoiceId == null) {
+      return;
+    }
+
+    final var invoice = invoicePayment.getInvoiceObject();
+    if (invoice == null) {
+      return;
+    }
+
+    final var customerId = invoice.getCustomer();
+    if (customerId == null) {
+      return;
+    }
+
+    final var billingOptional = tenantBillingService.getOptionalTenantBillingByStripeCustomerId(customerId);
+    if (billingOptional.isEmpty()) {
+      return;
+    }
+
+    final var billing = billingOptional.get();
+
+    billing.setPaymentStatus(BillingPaymentStatus.PAID);
+    billing.setHasValidPaymentMethod(true);
+
+    tenantBillingService.saveTenantBilling(billing);
+  }
+
   private void handleInvoicePaymentFailed(@Nonnull final Event event) {
     final var stripeObject = event.getDataObjectDeserializer().getObject().orElse(null);
     if (!(stripeObject instanceof Invoice invoice)) {
@@ -187,16 +236,28 @@ public class StripeWebhookService implements IStripeWebhookService {
     final var billing = billingOptional.get();
     final var subscriptionId = subscription.getId();
     if (subscriptionId != null && !subscriptionId.isBlank()) {
-      final var planKey = BillingPlanKey.resolvePlan(subscriptionId, globalInterface);
-
       billing.setStripeSubscriptionId(subscriptionId);
-      billing.setPlanKey(planKey);
+      billing.setPlanKey(resolvePlanKey(subscription));
     }
 
     final var subscriptionStatus = BillingSubscriptionStatus.fromStripeStatus(subscription.getStatus());
     billing.setSubscriptionStatus(subscriptionStatus);
 
     tenantBillingService.saveTenantBilling(billing);
+  }
+
+  @Nonnull
+  private BillingPlanKey resolvePlanKey(@Nonnull final Subscription subscription) {
+    final var items = subscription.getItems();
+    if (items == null || items.getData() == null || items.getData().isEmpty()) {
+      return BillingPlanKey.FREE;
+    }
+    final var price = items.getData().getFirst().getPrice();
+    if (price == null || price.getId() == null) {
+      return BillingPlanKey.FREE;
+    }
+
+    return BillingPlanKey.resolvePlan(price.getId(), globalInterface);
   }
 
   private void handleSubscriptionDeleted(@Nonnull final Event event) {
@@ -250,8 +311,8 @@ public class StripeWebhookService implements IStripeWebhookService {
       return Optional.empty();
     }
 
-    final var subscriptionId = metadata.get(VernoConstants.SESSION_STRIPE_PRICE_ID);
-    final var planKey = BillingPlanKey.resolvePlan(subscriptionId, globalInterface);
+    final var priceId = metadata.get(VernoConstants.SESSION_STRIPE_PRICE_ID);
+    final var planKey = BillingPlanKey.resolvePlan(priceId, globalInterface);
 
     final var newBilling = new TenantBillingDto();
     newBilling.setTenantId(tenantId);

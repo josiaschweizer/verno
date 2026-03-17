@@ -17,6 +17,7 @@ class CheckoutSessionUtil {
             .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
             .setSuccessUrl(checkoutSuccessUrl)
             .setCancelUrl(checkoutCancelUrl)
+            .setCustomer(metaData.customerId())
             .putMetadata(VernoConstants.SESSION_TENANT_ID, metaData.tenantId())
             .putMetadata(VernoConstants.SESSION_USER_ID, metaData.userId())
             .putMetadata(VernoConstants.SESSION_STRIPE_PRICE_ID, stripePriceId)

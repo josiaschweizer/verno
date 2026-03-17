@@ -5,6 +5,6 @@ import jakarta.annotation.Nonnull;
 public interface IBillingAccessLinkService {
 
   @Nonnull
-  String createSubscriptionOverviewUrl(@Nonnull Long tenantId,
-                                       @Nonnull  Long userId);
+  String createSubscriptionUrlForCheckout(@Nonnull Long tenantId,
+                                          @Nonnull  Long userId);
 }
