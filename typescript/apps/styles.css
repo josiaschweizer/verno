@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-/* include folders from outside the workspace */
 @source '../components';
 @source '../lib';
 

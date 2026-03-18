@@ -1,4 +1,3 @@
-// RegisterMultiStepDialog.tsx
 import { useEffect, useRef, useState } from 'react'
 import {
   Dialog,
@@ -6,7 +5,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
-import { Button } from '../../../../../../../components/ui/button'
+import { Button } from '@verno/components/ui/button'
 import StepOne from '../steps/StepOne'
 import StepTwo from '../steps/StepTwo'
 import StepThree from '../steps/StepThree'
@@ -20,8 +19,11 @@ import {
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { useForm, useWatch } from 'react-hook-form'
 import { tenantsApi } from '@/lib/api/tenantsApi'
-import { ApiError } from '../../../../../../../lib/apiClient'
+import { ApiError } from '@verno/lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
+import { useNavigate } from 'react-router-dom'
+import { PostReloadToast } from '@/types/ui/toast/PostReloadToast'
+import { POST_RELOAD_TOAST_KEY } from '@/components/layouts/RootLayout'
 
 interface Props {
   open: boolean
@@ -35,6 +37,7 @@ type SubmitErrorInfo = {
 }
 
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
+  const navigate = useNavigate()
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
@@ -176,8 +179,25 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         adminPassword: form.password,
       })
 
+      await new Promise((resolve) => setTimeout(resolve, 2500))
+
+      const postReloadToast: PostReloadToast = {
+        message: 'Tenant erfolgreich erstellt!',
+        description: 'Dein Tenant ist bereit.',
+        duration: 1000000,
+        link: {
+          label: 'Jetzt öffnen',
+          href: `https://${subdomain}.verno-app.ch`,
+        },
+      }
+
+      sessionStorage.setItem(
+        POST_RELOAD_TOAST_KEY,
+        JSON.stringify(postReloadToast),
+      )
+
       onClose()
-      window.location.reload()
+      navigate(0)
     } catch (e) {
       setSubmitError(resolveSubmitError(e))
     } finally {
