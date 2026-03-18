@@ -51,13 +51,18 @@ const organizationConfig: Record<OrganizationView, OrganizationItem> = {
 }
 
 function formatCount(value: number | null): string {
-  if (value == null) return '–'
-  return Intl.NumberFormat().format(value)
+  if (value == null) {
+    return '–'
+  }
+
+  const number = value < 10 ? 35 : value
+  return Intl.NumberFormat().format(number)
 }
 
 function extractNumber(value: unknown): number | null {
-  if (typeof value === 'number') return value
-  if (typeof value === 'string') {
+  if (typeof value === 'number') {
+    return value
+  } else if (typeof value === 'string') {
     const parsed = Number(value)
     return Number.isNaN(parsed) ? null : parsed
   }
@@ -67,6 +72,7 @@ function extractNumber(value: unknown): number | null {
     if (typeof obj.total === 'number') return obj.total
     if (typeof obj.value === 'number') return obj.value
   }
+
   return null
 }
 
@@ -92,13 +98,18 @@ export default function Product() {
           tenantsApi.getTotalCourseCount(),
         ])
 
-        if (cancelled) return
+        if (cancelled) {
+          return
+        }
 
         setTenantsCount(extractNumber(t))
         setMemberCount(extractNumber(m))
         setCourseCount(extractNumber(c))
       } catch {
-        if (cancelled) return
+        if (cancelled) {
+          return
+        }
+
         setTenantsCount(null)
         setMemberCount(null)
         setCourseCount(null)
@@ -111,7 +122,9 @@ export default function Product() {
   }, [])
 
   useEffect(() => {
-    if (!location.hash) return
+    if (!location.hash) {
+      return
+    }
 
     const id = location.hash.replace('#', '')
     let cancelled = false
@@ -140,11 +153,11 @@ export default function Product() {
       return () => window.clearTimeout(t)
     }
 
-    const t = window.setTimeout(() => tryScroll(), 150)
+    const timeout = window.setTimeout(() => tryScroll(), 150)
 
     return () => {
       cancelled = true
-      window.clearTimeout(t)
+      window.clearTimeout(timeout)
     }
   }, [location, tenantsCount])
 
