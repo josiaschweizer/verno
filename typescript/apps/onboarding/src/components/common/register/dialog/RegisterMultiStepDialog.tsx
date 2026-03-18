@@ -21,9 +21,8 @@ import { useForm, useWatch } from 'react-hook-form'
 import { tenantsApi } from '@/lib/api/tenantsApi'
 import { ApiError } from '@verno/lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
-import { useNavigate } from 'react-router-dom'
 import { PostReloadToast } from '@/types/ui/toast/PostReloadToast'
-import { POST_RELOAD_TOAST_KEY } from '@/components/layouts/RootLayout'
+import { toast } from 'sonner'
 
 interface Props {
   open: boolean
@@ -36,16 +35,26 @@ type SubmitErrorInfo = {
   details?: string[]
 }
 
+const PHASES = [
+  { label: 'Creating tenant...', sub: 'Setting up your workspace' },
+  { label: 'Provisioning...', sub: 'Configuring your database' },
+  { label: 'Almost there...', sub: 'Setting up your subdomain' },
+  {
+    label: 'Finalizing...',
+    sub: 'Applying last configurations',
+  },
+] as const
+
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
-  const navigate = useNavigate()
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const [submitting, setSubmitting] = useState(false)
+  const [submitPhase, setSubmitPhase] = useState<number | null>(null)
   const [submitError, setSubmitError] = useState<SubmitErrorInfo | null>(null)
   const [validatingNext, setValidatingNext] = useState(false)
 
-  const { control, handleSubmit, getValues, trigger, formState } =
+  const { control, handleSubmit, getValues, trigger, reset, formState } =
     useForm<RegisterDialogFormData>({
       mode: 'onChange',
       reValidateMode: 'onChange',
@@ -74,6 +83,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
     if (open) {
       setStep(0)
       setSubmitError(null)
+      setSubmitPhase(null)
+    } else {
+      reset()
     }
   }, [open])
 
@@ -109,38 +121,38 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
 
       if (code === 'TENANT_ALREADY_EXISTS') {
         return {
-          title: 'Tenant-Key bereits vergeben',
+          title: 'Tenant key already exists',
           message:
-            'Der Tenant-Key/Subdomain existiert bereits. Bitte wähle einen anderen Wert.',
+            'The tenant key/subdomain already exists. Please choose a different value.',
         }
       }
       if (code === 'VALIDATION_FAILED') {
         return {
-          title: 'Eingaben sind ungültig',
-          message: 'Bitte prüfe deine Eingaben und versuche es erneut.',
+          title: 'Invalid input',
+          message: 'Please review your input and try again.',
           details: Array.isArray(details) ? details : undefined,
         }
       }
       if (code === 'DATA_INTEGRITY_VIOLATION') {
         return {
-          title: 'Konflikt beim Speichern',
+          title: 'Conflict while saving',
           message:
-            'Ein Datenbank-Constraint wurde verletzt. Bitte prüfe deine Angaben und versuche es erneut.',
+            'A database constraint was violated. Please review your input and try again.',
           details: details ? [details] : message ? [message] : undefined,
         }
       }
       if (code === 'TENANT_PROVISION_FAILED') {
         return {
-          title: 'Tenant konnte nicht erstellt werden',
+          title: 'Failed to create tenant',
           message:
             message ??
-            'Beim Erstellen des Tenants ist ein Fehler aufgetreten. Bitte versuche es später erneut.',
+            'An error occurred while creating the tenant. Please try again later.',
         }
       }
 
       return {
-        title: status ? `Fehler ${status}` : 'Fehler',
-        message: message ?? 'Unbekannter Fehler',
+        title: status ? `Error ${status}` : 'Error',
+        message: message ?? 'Unknown error',
         details: details
           ? Array.isArray(details)
             ? details
@@ -149,14 +161,15 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       }
     }
 
-    if (e instanceof Error) return { title: 'Fehler', message: e.message }
-    return { title: 'Fehler', message: 'Unbekannter Fehler' }
+    if (e instanceof Error) return { title: 'Error', message: e.message }
+    return { title: 'Error', message: 'Unknown error' }
   }
 
   const onSubmit = handleSubmit(async (form) => {
     try {
       setSubmitting(true)
       setSubmitError(null)
+      setSubmitPhase(0)
 
       const preferredLanguage =
         typeof form.preferredLanguage === 'string'
@@ -179,26 +192,33 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         adminPassword: form.password,
       })
 
-      await new Promise((resolve) => setTimeout(resolve, 2500))
+      setSubmitPhase(1)
+      await new Promise((r) => setTimeout(r, 700))
+      setSubmitPhase(2)
+      await new Promise((r) => setTimeout(r, 700))
+      setSubmitPhase(3)
+      await new Promise((r) => setTimeout(r, 700))
 
-      const postReloadToast: PostReloadToast = {
-        message: 'Tenant erfolgreich erstellt!',
-        description: 'Dein Tenant ist bereit.',
-        duration: 1000000,
-        link: {
-          label: 'Jetzt öffnen',
-          href: `https://${subdomain}.verno-app.ch`,
-        },
-      }
-
-      sessionStorage.setItem(
-        POST_RELOAD_TOAST_KEY,
-        JSON.stringify(postReloadToast),
-      )
+      toast.success('Tenant successfully created!', {
+        duration: 10000,
+        description: (
+          <span className="flex flex-col gap-1">
+            <span>Your tenant is ready.</span>
+            <a
+              href={`https://${subdomain}.verno-app.ch`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline font-medium"
+            >
+              {'Open now'} →
+            </a>
+          </span>
+        ),
+      })
 
       onClose()
-      navigate(0)
     } catch (e) {
+      setSubmitPhase(null)
       setSubmitError(resolveSubmitError(e))
     } finally {
       setSubmitting(false)
@@ -217,6 +237,8 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       !errors.tenantName &&
       !errors.tenantSubdomain
   }
+
+  const isAnimating = submitting && submitPhase !== null
 
   return (
     <Dialog open={open} onClose={onClose} className="relative z-100">
@@ -260,11 +282,53 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                 />
               )}
               {step === 1 && <StepTwo control={control} readOnly={!open} />}
-              {step === 2 && <StepThree getValues={getValues} />}
+              {step === 2 && !isAnimating && (
+                <StepThree getValues={getValues} />
+              )}
+              {step === 2 && isAnimating && (
+                <div className="flex flex-col items-center justify-center gap-6 py-10">
+                  <div className="h-12 w-12 rounded-full border-2 border-verno-accent border-t-transparent animate-spin" />
+                  <div className="text-center">
+                    <p className="text-base font-medium">
+                      {PHASES[submitPhase!].label}
+                    </p>
+                    <p className="mt-1 text-sm text-verno-dark/60">
+                      {PHASES[submitPhase!].sub}
+                    </p>
+                  </div>
+                  <div className="flex w-full max-w-xs flex-col gap-2.5">
+                    {PHASES.map((phase, i) => (
+                      <div
+                        key={i}
+                        className={`flex items-center gap-3 text-sm transition-colors duration-300 ${
+                          i < submitPhase!
+                            ? 'text-verno-dark/40'
+                            : i === submitPhase!
+                              ? 'font-medium text-verno-dark'
+                              : 'text-verno-dark/20'
+                        }`}
+                      >
+                        <span
+                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs transition-all duration-300 ${
+                            i < submitPhase!
+                              ? 'border-verno-accent bg-verno-accent text-white'
+                              : i === submitPhase!
+                                ? 'border-verno-accent bg-verno-accent/15'
+                                : 'border-verno-dark/20'
+                          }`}
+                        >
+                          {i < submitPhase! ? '✓' : null}
+                        </span>
+                        {phase.label.replace('...', '')}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-6">
-              {step === 2 && submitError && (
+              {step === 2 && !isAnimating && submitError && (
                 <div className="mb-4">
                   <ErrorDisplay
                     title={submitError.title}
@@ -280,11 +344,16 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   <Button
                     variant="outline"
                     onClick={back}
-                    disabled={step === 0}
+                    disabled={step === 0 || isAnimating}
                   >
                     <ArrowLeftIcon className="h-5 w-5" /> Back
                   </Button>
-                  <Button variant="outline" className="ml-2" onClick={onClose}>
+                  <Button
+                    variant="outline"
+                    className="ml-2"
+                    onClick={onClose}
+                    disabled={isAnimating}
+                  >
                     <CircleSlash className="h-5 w-5" /> Cancel
                   </Button>
                 </div>
@@ -300,7 +369,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                     </Button>
                   ) : (
                     <Button onClick={onSubmit} disabled={submitting}>
-                      {submitting ? 'Creating...' : 'Finish'}{' '}
+                      {isAnimating ? PHASES[submitPhase!].label : 'Finish'}{' '}
                       <FlagIcon className="h-5 w-5" />
                     </Button>
                   )}

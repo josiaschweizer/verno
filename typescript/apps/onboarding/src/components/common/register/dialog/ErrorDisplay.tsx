@@ -51,7 +51,7 @@ export default function ErrorDisplay({
               type="button"
               onClick={onDismiss}
               className="rounded-md p-1.5 text-red-400 transition-colors hover:bg-red-100 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
-              aria-label="Fehler schließen"
+              aria-label="Close error"
             >
               <X className="h-4 w-4" />
             </button>
