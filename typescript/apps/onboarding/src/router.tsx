@@ -3,6 +3,7 @@ import RootLayout from './components/layouts/RootLayout'
 import Home from '@/routes/page'
 import Company from '@/routes/company/page'
 import Product from '@/routes/product/page'
+import Pricing from '@/routes/pricing/page'
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'company', element: <Company /> },
       { path: 'product', element: <Product /> },
+      { path: 'pricing', element: <Pricing /> },
     ],
   },
 ])

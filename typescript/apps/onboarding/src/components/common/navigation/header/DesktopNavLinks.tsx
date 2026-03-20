@@ -9,6 +9,13 @@ export default function DesktopNavLinks() {
       >
         Company
       </Link>
+
+      <Link
+        to="/pricing"
+        className="link-underline-animated text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
+      >
+        Pricing
+      </Link>
     </>
   )
 }
