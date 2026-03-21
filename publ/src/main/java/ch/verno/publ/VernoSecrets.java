@@ -15,5 +15,5 @@ public class VernoSecrets {
   public static final String SMTP_USER = "SMTP_USER";
   public static final String SMTP_PASS = "SMTP_PASS";
   public static final String SMTP_TLS = "SMTP_TLS";
-  public static final String SMTP_AUTH = "SMTP_AUTH";
+  public static final String SMTP_SECURITY = "SMTP_SECURITY";
 }

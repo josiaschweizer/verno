@@ -1,15 +1,22 @@
 import { createApiClient } from '@verno/lib/apiClient'
 
-export type SendEmailRequest = {}
+export type SendEmailRequest = {
+  from: string
+  to: string
+  subject: string
+  message: string
+}
 
-export type SendEmailResponse = {}
+export type SendEmailResponse = {
+  success?: boolean
+  message?: string
+}
 
-const env = (import.meta as any).env as any
+const env = import.meta.env
 
-const baseUrl =
-  (env.VITE_API_BASE_URL as string | undefined) || 'http://localhost:8080'
-const apiUser = (env.VITE_PROVISIONER_API_USER as string | undefined) || 'verno'
-const apiPass = (env.VITE_PROVISIONER_API_PASS as string | undefined) || 'verno'
+const baseUrl = env.VITE_API_BASE_URL || 'http://localhost:8080'
+const apiUser = env.VITE_PROVISIONER_API_USER || 'verno'
+const apiPass = env.VITE_PROVISIONER_API_PASS || 'verno'
 
 const client = createApiClient({
   baseUrl,
@@ -17,11 +24,11 @@ const client = createApiClient({
 })
 
 export const emailApi = {
-  async sendMessage(req: SendEmailRequest): Promise<SendEmailResponse> {
-    return await client.request<SendEmailResponse>({
+  sendMessage(payload: SendEmailRequest): Promise<SendEmailResponse> {
+    return client.request<SendEmailResponse>({
       method: 'POST',
       path: '/api/v1/email',
-      body: req,
+      body: payload,
     })
   },
 }

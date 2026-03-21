@@ -44,7 +44,7 @@ public class MailerUtil {
       smtpPort = Integer.parseInt(envProperties.getEnv(VernoSecrets.SMTP_PORT));
       smtpUser = envProperties.getEnv(VernoSecrets.SMTP_USER);
       smtpPassword = envProperties.getEnv(VernoSecrets.SMTP_PASS);
-      transportationStrategy = SmtpSecurity.fromString(envProperties.getEnv(VernoSecrets.SMTP_AUTH)).toTransportStrategy();
+      transportationStrategy = SmtpSecurity.fromString(envProperties.getEnv(VernoSecrets.SMTP_SECURITY)).toTransportStrategy();
     }else{
       smtpHost = Publ.EMPTY_STRING;
       smtpPort =  Publ.ZERO;

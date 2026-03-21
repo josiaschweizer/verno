@@ -23,8 +23,7 @@ export type CreateTenantResponse = {
 
 const env = (import.meta as any).env as any
 
-const baseUrl =
-  (env.VITE_API_BASE_URL as string | undefined) || 'http://localhost:8080'
+const baseUrl = env.VITE_API_BASE_URL || 'http://localhost:8080'
 const apiUser = (env.VITE_PROVISIONER_API_USER as string | undefined) || 'verno'
 const apiPass = (env.VITE_PROVISIONER_API_PASS as string | undefined) || 'verno'
 

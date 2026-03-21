@@ -12,8 +12,6 @@ import { toast } from 'sonner'
 import { ApiError } from '@verno/lib/apiClient'
 import { emailApi } from '@/lib/api/emailApi'
 
-// import { contactApi } from '@/lib/api/contactApi'
-
 interface Props {
   open: boolean
   onClose: () => void
@@ -32,6 +30,49 @@ type SubmitErrorInfo = {
   title: string
   message?: string
   details?: string[]
+}
+
+type ApiErrorDetails = {
+  title?: string
+  message?: string
+  details?: string[]
+}
+
+function buildContactMailSubject(form: GetInTouchDialogFormData): string {
+  const firstname = form.firstname.trim()
+  const lastname = form.lastname.trim()
+
+  return `New message from ${firstname} ${lastname}`
+}
+
+function buildContactMailMessage(form: GetInTouchDialogFormData): string {
+  const firstname = form.firstname.trim()
+  const lastname = form.lastname.trim()
+  const email = form.email.trim()
+  const phone = form.phone?.trim() || 'Not provided'
+  const company = form.company?.trim() || 'Not provided'
+  const message = form.message.trim()
+
+  return [
+    'Hello,',
+    '',
+    'You have received a new message through the Verno contact form.',
+    '',
+    'Contact information',
+    '────────────────────────',
+    `First name: ${firstname}`,
+    `Last name: ${lastname}`,
+    `Email: ${email}`,
+    `Phone: ${phone}`,
+    `Company: ${company}`,
+    '',
+    'Message',
+    '────────────────────────',
+    message,
+    '',
+    '────────────────────────',
+    'Sent from the Verno website contact form.',
+  ].join('\n')
 }
 
 export default function GetInTouchDialog({ open, onClose }: Props) {
@@ -67,23 +108,24 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
     }
   }, [open, reset])
 
-  const resolveSubmitError = (e: unknown): SubmitErrorInfo => {
-    if (e instanceof ApiError) {
-      const payload = e.details as any
+  const resolveSubmitError = (error: unknown): SubmitErrorInfo => {
+    if (error instanceof ApiError) {
+      const payload = error.details as ApiErrorDetails | undefined
+
       return {
         title: payload?.title ?? 'Failed to send message',
         message:
           payload?.message ??
-          e.message ??
+          error.message ??
           'Something went wrong while sending your message.',
         details: Array.isArray(payload?.details) ? payload.details : undefined,
       }
     }
 
-    if (e instanceof Error) {
+    if (error instanceof Error) {
       return {
         title: 'Failed to send message',
-        message: e.message,
+        message: error.message,
       }
     }
 
@@ -93,39 +135,24 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
     }
   }
 
-  const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL
+  const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL as string | undefined
 
   const onSubmit = handleSubmit(async (form) => {
     try {
       setSubmitting(true)
       setSubmitError(null)
 
-      const firstname = form.firstname.trim()
-      const lastname = form.lastname.trim()
-      const email = form.email.trim()
-      const phone = form.phone?.trim() || '-'
-      const company = form.company?.trim() || '-'
-      const userMessage = form.message.trim()
+      if (!CONTACT_EMAIL) {
+        throw new Error('Missing VITE_CONTACT_EMAIL configuration')
+      }
 
-      const fullMessage = `
-        New demo request
-        
-        Contact details
-        - First name: ${firstname}
-        - Last name: ${lastname}
-        - Email: ${email}
-        - Phone: ${phone}
-        - Company: ${company}
-        
-        Message
-        ${userMessage}
-        `.trim()
+      const email = form.email.trim()
 
       await emailApi.sendMessage({
         from: email,
         to: CONTACT_EMAIL,
-        subject: `Demo request from ${firstname} ${lastname}`,
-        message: fullMessage,
+        subject: buildContactMailSubject(form),
+        message: buildContactMailMessage(form),
       })
 
       toast.success('Request sent successfully!', {
@@ -133,8 +160,8 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
       })
 
       onClose()
-    } catch (e) {
-      setSubmitError(resolveSubmitError(e))
+    } catch (error) {
+      setSubmitError(resolveSubmitError(error))
     } finally {
       setSubmitting(false)
     }
