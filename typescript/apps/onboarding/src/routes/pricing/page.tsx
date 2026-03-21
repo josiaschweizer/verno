@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Button } from '@verno/components/ui/button'
 import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
 import RevealSection from '@verno/components/ui/RevealSection'
-import { toast } from 'sonner'
+import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 
 export default function VernoPricingPage() {
   const [registerOpen, setRegisterOpen] = useState(false)
+  const [demoOpen, setDemoOpen] = useState(false)
 
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker overflow-x-hidden">
@@ -127,14 +128,11 @@ export default function VernoPricingPage() {
                 </Button>
 
                 <Button
-                  asChild
                   variant="outline"
                   className="flex-1 rounded-xl border border-border bg-verno-bg px-5 py-3 text-sm font-normal text-verno-darker"
-                  onClick={() =>
-                    toast.warning("This feature isn't implemented yet")
-                  }
+                  onClick={() => setDemoOpen(true)}
                 >
-                  <p>Book a demo</p>
+                  Book a demo
                 </Button>
               </div>
             </div>
@@ -142,7 +140,7 @@ export default function VernoPricingPage() {
         </RevealSection>
       </section>
 
-      <section className="mx-auto max-w-3xl pb-20 px-4">
+      <section className="mx-auto max-w-3xl pb-20">
         <RevealSection stagger={120}>
           <div className="rounded-2xl bg-verno-surface p-6 shadow md:p-8">
             <h3 className="text-sm font-semibold text-verno-darker">FAQ</h3>
@@ -181,6 +179,8 @@ export default function VernoPricingPage() {
         open={registerOpen}
         onClose={() => setRegisterOpen(false)}
       />
+
+      <GetInTouchDialog open={demoOpen} onClose={() => setDemoOpen(false)} />
     </main>
   )
 }

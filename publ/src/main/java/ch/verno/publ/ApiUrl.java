@@ -17,6 +17,7 @@ public class ApiUrl {
   public static final String DEBUG = BASE_API + "/_debug";
   public static final String TENANTS = BASE_API + "/tenants";
   public static final String APPLICATION = BASE_API + "/application";
+  public static final String EMAIL = BASE_API + "/email";
 
   public static final String BILLING = BASE_API + "/billing";
   public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";

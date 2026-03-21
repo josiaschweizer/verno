@@ -8,6 +8,7 @@ import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.common.server.mail.MailConfigOptions;
 import ch.verno.lib.Lazy;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -44,4 +45,12 @@ public class MailServerGateImpl implements MailServerGate {
             course);
   }
 
+  @Override
+  public void sendMail(@Nonnull final String from,
+                       @Nonnull final String to,
+                       @Nonnull final String subject,
+                       @Nonnull final String content,
+                       @Nonnull final MailConfigOptions mailConfigOptions) {
+    mailHelper.get().sendMail(from, to, subject, content, mailConfigOptions);
+  }
 }

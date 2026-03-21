@@ -28,6 +28,17 @@ public enum SmtpSecurity {
     throw new IllegalArgumentException("Invalid SmtpSecurity id: " + id);
   }
 
+  @Nonnull
+  public static SmtpSecurity fromString(@Nonnull final String name) {
+    for (final var value : values()) {
+      if (value.name().equals(name)) {
+        return value;
+      }
+    }
+
+    throw new IllegalArgumentException("Invalid SmtpSecurity name: " + name);
+  }
+
   public long getId() {
     return id;
   }

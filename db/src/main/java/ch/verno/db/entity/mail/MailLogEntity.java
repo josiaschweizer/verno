@@ -3,8 +3,8 @@ package ch.verno.db.entity.mail;
 import ch.verno.common.db.type.mail.MailLogStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
-import ch.verno.db.entity.tenant.TenantScopedEntity;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -13,12 +13,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mail_log")
-@EntityListeners(TenantEntityListener.class)
-public class MailLogEntity extends TenantScopedEntity {
+public class MailLogEntity {
 
   @Id
   @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "mandant_id", updatable = false)
+  private TenantEntity tenant;
 
   @Column(nullable = false, length = 320)
   private String recipientEmail;
@@ -96,6 +99,15 @@ public class MailLogEntity extends TenantScopedEntity {
 
   public void setId(@Nonnull Long id) {
     this.id = id;
+  }
+
+  @Nullable
+  public TenantEntity getTenant() {
+    return tenant;
+  }
+
+  public void setTenant(@Nullable final TenantEntity tenant) {
+    this.tenant = tenant;
   }
 
   public String getRecipientEmail() {

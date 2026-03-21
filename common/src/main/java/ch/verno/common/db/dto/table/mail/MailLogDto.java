@@ -41,7 +41,7 @@ public class MailLogDto extends BaseDto {
   }
 
   public MailLogDto(@Nonnull final Long id,
-                    @Nonnull final Long tenantId,
+                    @Nullable final Long tenantId,
                     @Nonnull final String recipientEmail,
                     @Nonnull final String recipientName,
                     @Nonnull final String templateName,

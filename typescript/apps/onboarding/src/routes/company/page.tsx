@@ -1,11 +1,15 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import RevealSection from '../../../../../components/ui/RevealSection'
+import { Button } from '@verno/components/ui/button'
+import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
 
 export default function Company() {
+  const [contactOpen, setContactOpen] = useState(false)
+
   const stats = useMemo<Stat[]>(
     () => [
       { value: 'St. Gallen, Switzerland', label: 'Headquarters' },
@@ -93,7 +97,14 @@ export default function Company() {
             <p className="text-xs text-muted-foreground">
               Switzerland-first mindset. Long-term partnerships with clubs.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-8">
+              <button
+                onClick={() => setContactOpen(true)}
+                className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
+              >
+                Get in touch
+              </button>
+
               <Link
                 to="/product#organization"
                 className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
@@ -104,6 +115,11 @@ export default function Company() {
           </div>
         </RevealSection>
       </div>
+
+      <GetInTouchDialog
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+      />
     </div>
   )
 }
