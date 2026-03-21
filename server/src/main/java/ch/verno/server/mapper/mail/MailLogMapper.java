@@ -10,7 +10,7 @@ public final class MailLogMapper {
   public static MailLogDto toDto(@Nonnull final MailLogEntity entity) {
     return new MailLogDto(
             entity.getId(),
-            entity.getTenant().getId(),
+            entity.getTenant() != null ? entity.getTenant().getId() : null,
             entity.getRecipientEmail(),
             entity.getRecipientName(),
             entity.getTemplateName(),

@@ -21,7 +21,6 @@ import { useForm, useWatch } from 'react-hook-form'
 import { tenantsApi } from '@/lib/api/tenantsApi'
 import { ApiError } from '@verno/lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
-import { PostReloadToast } from '@/types/ui/toast/PostReloadToast'
 import { toast } from 'sonner'
 
 interface Props {

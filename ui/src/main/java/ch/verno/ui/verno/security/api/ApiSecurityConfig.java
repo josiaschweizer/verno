@@ -36,6 +36,7 @@ public class ApiSecurityConfig {
                     .requestMatchers(resolveBillingAccessToken, resolveBillingAccessToken + "/**").permitAll()
                     .requestMatchers(startStripeSession, startStripeSession + "/**").permitAll()
                     .requestMatchers(ApiUrl.TENANTS, ApiUrl.TENANTS + "/**").authenticated()
+                    .requestMatchers(ApiUrl.EMAIL, ApiUrl.EMAIL + "/**").authenticated()
                     .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults());

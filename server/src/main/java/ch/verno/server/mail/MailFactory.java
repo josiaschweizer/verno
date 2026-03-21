@@ -9,6 +9,7 @@ import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderUtil;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.common.server.mail.MailConfigOptions;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.simplejavamail.email.EmailBuilder;
@@ -70,17 +71,31 @@ public class MailFactory {
               placeHolderValues
       );
 
-      final var builder = EmailBuilder.startingBlank()
-              .from("Verno", fromEmail)
-              .to(participant.getEmail())
-              .withSubject(subject);
+      final var to = participant.getEmail();
+      sendMail(fromEmail, to, subject, content, MailConfigOptions.empty());
+    }
+  }
 
-      if (MailContentUtil.looksLikeHtml(content)) {
-        builder.withHTMLText(content);
-      } else {
-        builder.withPlainText(content);
-      }
+  public void sendMail(@Nonnull final String from,
+                       @Nonnull final String to,
+                       @Nonnull final String subject,
+                       @Nonnull final String content,
+                       @Nonnull final MailConfigOptions mailConfigOptions) {
+    final var builder = EmailBuilder.startingBlank()
+            .from(from)
+            .to(to)
+            .withSubject(subject);
 
+    if (MailContentUtil.looksLikeHtml(content)) {
+      builder.withHTMLText(content);
+    } else {
+      builder.withPlainText(content);
+    }
+
+    // we normally use the default mailer origin from tenant config -> but when coming from api we not always have this option (eg get in touch dialog from landing page)
+    if (mailConfigOptions.mailOrigin() != null) {
+      MailerUtil.sendMail(globalInterface, builder.buildEmail(), mailConfigOptions.mailOrigin());
+    } else {
       MailerUtil.sendMail(globalInterface, builder.buildEmail());
     }
   }
