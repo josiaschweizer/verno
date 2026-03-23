@@ -11,14 +11,14 @@ export default function VernoPricingPage() {
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker overflow-x-hidden">
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-6xl px-4 py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
           <RevealSection stagger={0}>
             <div className="mx-auto max-w-3xl text-center">
-              <h1 className="text-3xl md:text-4xl font-semibold text-verno-darker">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker">
                 Simple pricing for calm club management
               </h1>
 
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-3 sm:mt-4 text-sm text-muted-foreground">
                 Start with one clear package and get everything you need to run
                 your club in a modern and structured way.
               </p>
@@ -27,16 +27,16 @@ export default function VernoPricingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-12">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-12">
         <RevealSection stagger={60}>
           <div className="mx-auto">
-            <div className="mx-auto max-w-3xl rounded-2xl bg-verno-surface p-6 shadow md:p-8">
-              <div className="flex flex-col gap-6 border-b border-border pb-6 sm:flex-row sm:items-stretch sm:justify-between">
-                <div className="flex-1 rounded-xl bg-verno-surface-light px-5 py-4">
-                  <div className="inline-flex items-center rounded-full bg-verno-accent/10 px-3 py-1 text-sm text-verno-dark">
+            <div className="mx-auto max-w-3xl rounded-2xl bg-verno-surface p-4 sm:p-6 md:p-8 shadow">
+              <div className="flex flex-col gap-4 sm:gap-6 border-b border-border pb-4 sm:pb-6 sm:flex-row sm:items-stretch sm:justify-between">
+                <div className="flex-1 rounded-xl bg-verno-surface-light px-4 sm:px-5 py-4">
+                  <div className="inline-flex items-center rounded-full bg-verno-accent/10 px-3 py-1 text-xs sm:text-sm text-verno-dark">
                     Basic Package
                   </div>
-                  <h2 className="mt-4 text-2xl font-semibold text-verno-darker">
+                  <h2 className="mt-3 sm:mt-4 text-xl sm:text-2xl font-semibold text-verno-darker">
                     Everything essential to get started
                   </h2>
                   <p className="mt-2 text-sm text-muted-foreground">
@@ -45,28 +45,28 @@ export default function VernoPricingPage() {
                   </p>
                 </div>
 
-                <div className="flex-1 rounded-xl bg-verno-surface-light px-5 py-4">
+                <div className="flex-1 rounded-xl bg-verno-surface-light px-4 sm:px-5 py-4">
                   <div className="text-xs text-muted-foreground">
                     Starting at
                   </div>
                   <div className="mt-1 flex items-end gap-2">
-                    <span className="text-3xl font-semibold text-verno-darker">
+                    <span className="text-2xl sm:text-3xl font-semibold text-verno-darker">
                       CHF 25
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      / month
+                      / mo
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">per club</p>
                 </div>
               </div>
 
-              <div className="grid gap-8 pt-6 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 sm:gap-8 pt-4 sm:pt-6 md:grid-cols-2">
                 <div>
                   <h3 className="text-xs font-semibold uppercase text-muted-foreground">
                     Included
                   </h3>
-                  <ul className="mt-4 space-y-3 text-sm text-verno-dark">
+                  <ul className="mt-3 sm:mt-4 space-y-2 sm:space-y-3 text-sm text-verno-dark">
                     {[
                       'Member management',
                       'Team and role overview',
@@ -118,7 +118,7 @@ export default function VernoPricingPage() {
                 </div>
               </div>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button
                   onClick={() => setRegisterOpen(true)}
                   variant="outline"
@@ -140,9 +140,9 @@ export default function VernoPricingPage() {
         </RevealSection>
       </section>
 
-      <section className="mx-auto max-w-3xl pb-20">
+      <section className="mx-auto max-w-3xl px-4 sm:px-6 pb-16 sm:pb-20">
         <RevealSection stagger={120}>
-          <div className="rounded-2xl bg-verno-surface p-6 shadow md:p-8">
+          <div className="rounded-2xl bg-verno-surface p-4 sm:p-6 md:p-8 shadow">
             <h3 className="text-sm font-semibold text-verno-darker">FAQ</h3>
 
             <div className="mt-4 space-y-5 text-sm text-muted-foreground">

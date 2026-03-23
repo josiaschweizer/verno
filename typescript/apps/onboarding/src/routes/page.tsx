@@ -3,30 +3,30 @@ import RevealSection from '@verno/components/ui/RevealSection'
 
 export default function Home() {
   return (
-    <div className="h-full bg-verno-bg text-verno-darker -m-4 flex items-center">
-      <div className="mx-auto w-full max-w-6xl px-6">
+    <div className="h-full bg-verno-bg text-verno-darker flex items-center">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 sm:py-0">
         <RevealSection>
-          <h1 className="text-4xl md:text-6xl font-semibold leading-tight underline decoration-verno-accent underline-offset-4 decoration-3 mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight underline decoration-verno-accent underline-offset-4 decoration-3 mb-6 sm:mb-10">
             Club management, made calm.
           </h1>
         </RevealSection>
 
         <RevealSection stagger={80}>
-          <section className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-16 items-center">
             <div>
-              <p className="text-base text-muted-foreground max-w-lg">
+              <p className="text-sm sm:text-base text-muted-foreground max-w-lg">
                 Verno helps sports clubs organize teams, courses and venues in
                 one clear system. No scattered tools. No chaos. Just structure.
               </p>
 
-              <div className="mt-8 flex items-center gap-6">
-                <Link to="/product" className="btn-primary">
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                <Link to="/product" className="btn-primary w-full sm:w-auto text-center sm:text-left py-2.5 sm:py-0">
                   Explore product
                 </Link>
 
                 <Link
                   to="/company"
-                  className="link-underline-animated inline-flex items-center text-sm font-medium"
+                  className="link-underline-animated inline-flex justify-center sm:justify-start items-center text-sm font-medium py-2.5 sm:py-0"
                 >
                   About Verno
                 </Link>
@@ -47,11 +47,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="rounded-3xl overflow-hidden shadow-lg">
+            <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg">
               <img
                 src="/landing-page-opi.png"
                 alt="Happy club manager using Verno"
-                className="w-full h-64 object-cover object-top"
+                className="w-full h-48 sm:h-64 object-cover object-top"
               />
             </div>
           </section>

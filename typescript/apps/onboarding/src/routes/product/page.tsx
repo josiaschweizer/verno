@@ -170,18 +170,18 @@ export default function Product() {
 
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker overflow-x-hidden">
-      <div className="mx-auto max-w-6xl px-4 py-16 space-y-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 space-y-16 sm:space-y-24">
         <section aria-labelledby="verno-hero-title">
           <RevealSection stagger={0}>
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-center">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] md:gap-10 items-center">
               <div>
                 <h1
                   id="verno-hero-title"
-                  className="text-3xl md:text-4xl font-semibold text-verno-darker"
+                  className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker"
                 >
                   Verno for sports clubs
                 </h1>
-                <p className="mt-4 text-sm text-muted-foreground">
+                <p className="mt-3 sm:mt-4 text-sm text-muted-foreground">
                   Clear structure, schedules and membership overview for clubs
                   running teams, courses and venues.
                 </p>
