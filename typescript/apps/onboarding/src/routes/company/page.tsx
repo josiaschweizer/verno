@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import RevealSection from '../../../../../components/ui/RevealSection'
-import { Button } from '@verno/components/ui/button'
+import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 
 type Stat = { label: string; value: string }

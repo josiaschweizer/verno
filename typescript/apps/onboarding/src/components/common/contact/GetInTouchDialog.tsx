@@ -271,7 +271,7 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
                   <input
                     {...register('phone')}
                     className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="+41 79 123 45 67"
+                    placeholder="+41 77 432 06 26"
                   />
                 </div>
 

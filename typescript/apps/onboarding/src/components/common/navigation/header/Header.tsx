@@ -14,7 +14,7 @@ import {
   ChartBarIcon,
 } from '@heroicons/react/24/outline'
 
-import { Button } from '../../../../../../../components/ui/button'
+import { Button } from '@verno/components/ui/button'
 import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
 
 export interface Product {
