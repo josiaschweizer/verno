@@ -8,6 +8,8 @@ import { ChevronDownIcon } from 'lucide-react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import type { Product } from './Header'
+import HeaderLogo from './HeaderLogo'
+import { Button } from '@verno/components/ui/button'
 
 interface Props {
   products: Product[]
@@ -22,82 +24,90 @@ export default function MobileMenu({
 }: Props) {
   return (
     <>
-      <div className="fixed inset-0 z-50" />
-      <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-verno-bg p-6 sm:max-w-sm sm:ring-1 sm:ring-verno-accent/20">
+      <div className="fixed inset-0 z-40 bg-verno-dark/20 backdrop-blur-sm" />
+
+      <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-verno-bg px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-verno-accent/15">
         <div className="flex items-center justify-between">
-          <Link
-            to="/"
-            className="-m-1.5 p-1.5 flex items-center gap-2"
-            onClick={onClose}
-          >
-            <img
-              alt="Profile picture"
-              width={1}
-              height={1}
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              className={`w-10 h-10 rounded-md`}
-            />
-            <span className="text-verno-dark text-base font-semibold tracking-wide">
-              Verno
-            </span>
-          </Link>
+          <div onClick={onClose}>
+            <HeaderLogo />
+          </div>
+
           <button
             type="button"
             onClick={onClose}
-            className="-m-2.5 rounded-md p-2.5 text-verno-darker"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-verno-darker transition-colors hover:bg-verno-surface-light/40"
           >
             <span className="sr-only">Close menu</span>
             <XMarkIcon aria-hidden="true" className="size-6" />
           </button>
         </div>
 
-        <div className="mt-6 flow-root">
-          <div className="-my-6 divide-y divide-verno-surface-light/20">
-            <div className="space-y-2 py-6">
-              <Disclosure as="div" className="-mx-3">
-                <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20">
-                  Product
-                  <ChevronDownIcon
-                    aria-hidden="true"
-                    className="size-5 flex-none group-data-open:rotate-180 text-verno-darker/80"
-                  />
-                </DisclosureButton>
-                <DisclosurePanel className="mt-2 space-y-2">
-                  {products.map((item) => (
-                    <DisclosureButton
-                      key={item.name}
-                      as={Link}
-                      to={item.href}
-                      onClick={onClose}
-                      className="link-underline-animated block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
-                    >
-                      {item.name}
+        <div className="mt-8 flex flex-col">
+          <div className="border-t border-verno-surface-light/30 pt-6">
+            <div className="space-y-1">
+              <Disclosure as="div" className="rounded-xl">
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35">
+                      <span>Product</span>
+                      <ChevronDownIcon
+                        aria-hidden="true"
+                        className={`size-5 text-verno-darker/70 transition-transform ${
+                          open ? 'rotate-180' : ''
+                        }`}
+                      />
                     </DisclosureButton>
-                  ))}
-                </DisclosurePanel>
+
+                    <DisclosurePanel className="mt-1 space-y-1 pb-2">
+                      {products.map((item) => (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          onClick={onClose}
+                          className="block rounded-xl px-3 py-3 text-sm text-verno-darker transition-colors hover:bg-verno-surface-light/30"
+                        >
+                          <div className="font-medium text-verno-dark">
+                            {item.name}
+                          </div>
+                          <div className="mt-1 text-sm text-verno-darker/80">
+                            {item.description}
+                          </div>
+                        </Link>
+                      ))}
+                    </DisclosurePanel>
+                  </>
+                )}
               </Disclosure>
 
               <Link
                 to="/company"
                 onClick={onClose}
-                className="link-underline-animated -mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
+                className="block rounded-xl px-3 py-3 text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35"
               >
                 Company
               </Link>
-            </div>
 
-            <div className="py-6 space-y-3">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose()
-                  onRegisterOpen?.()
-                }}
-                className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-verno-dark hover:bg-verno-surface-light/20"
+              <Link
+                to="/pricing"
+                onClick={onClose}
+                className="block rounded-xl px-3 py-3 text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35"
               >
-                Get started <span aria-hidden="true">&rarr;</span>
-              </button>
+                Pricing
+              </Link>
             </div>
+          </div>
+
+          <div className="mt-8 border-t border-verno-surface-light/30 pt-6">
+            <Button
+              type="button"
+              onClick={() => {
+                onClose()
+                onRegisterOpen?.()
+              }}
+              className="w-full justify-center rounded-md"
+            >
+              Get started <span aria-hidden="true">&rarr;</span>
+            </Button>
           </div>
         </div>
       </DialogPanel>

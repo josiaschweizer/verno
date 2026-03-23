@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import RevealSection from '../../../../../components/ui/RevealSection'
-import { Button } from '@verno/components/ui/button'
+import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 
 type Stat = { label: string; value: string }
@@ -42,14 +41,14 @@ export default function Company() {
   )
 
   return (
-    <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden -m-4">
-      <div className="mx-auto min-h-full max-w-5xl px-4 pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
+    <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden">
+      <div className="mx-auto min-h-full max-w-5xl px-4 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
         <section className="space-y-6 md:space-y-8">
           <RevealSection>
-            <h1 className="text-3xl md:text-4xl font-semibold text-verno-darker">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker">
               About Verno
             </h1>
-            <p className="mt-2 text-sm md:text-base text-muted-foreground max-w-2xl">
+            <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
               Verno builds modern club software for teams, courses and venues.
               We help sports clubs replace scattered tools with one calm,
               reliable system for scheduling, memberships and everyday
@@ -58,13 +57,13 @@ export default function Company() {
           </RevealSection>
 
           <RevealSection stagger={50}>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {stats.map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-2xl bg-verno-surface shadow p-6"
+                  className="rounded-2xl bg-verno-surface shadow p-4 sm:p-6"
                 >
-                  <div className="text-lg md:text-xl font-semibold text-verno-darker">
+                  <div className="text-base sm:text-lg md:text-xl font-semibold text-verno-darker">
                     {s.value}
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">
@@ -93,21 +92,21 @@ export default function Company() {
         </section>
 
         <RevealSection stagger={100}>
-          <div className="mt-6 shrink-0 flex flex-wrap items-center gap-4 justify-between">
-            <p className="text-xs text-muted-foreground">
+          <div className="mt-6 sm:mt-8 shrink-0 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+            <p className="text-xs text-muted-foreground order-1 sm:order-2">
               Switzerland-first mindset. Long-term partnerships with clubs.
             </p>
-            <div className="flex gap-8">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 order-2 sm:order-1">
               <button
                 onClick={() => setContactOpen(true)}
-                className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
+                className="inline-flex justify-center sm:justify-start items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
               >
-                Get in touch
+                Get in touch <span aria-hidden="true">&rarr;</span>
               </button>
 
               <Link
                 to="/product#organization"
-                className="link-underline-animated inline-flex items-center text-sm font-medium text-verno-darker"
+                className="inline-flex justify-center sm:justify-start items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
               >
                 Product overview
               </Link>
