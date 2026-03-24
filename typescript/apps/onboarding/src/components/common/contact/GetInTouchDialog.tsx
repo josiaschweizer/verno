@@ -173,181 +173,190 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
     <Dialog
       open={open}
       onClose={submitting ? () => {} : onClose}
-      className="relative z-100"
+      className="relative z-[100]"
     >
-      <div className="fixed inset-0 z-100">
-        <DialogBackdrop className="fixed inset-0 bg-black/60" />
+      <DialogBackdrop className="fixed inset-0 z-[100] bg-black/60" />
 
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="relative z-101 w-full max-w-2xl rounded-2xl bg-verno-surface p-6 text-verno-dark shadow-xl">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <DialogTitle className="text-lg font-semibold">
-                  Get in touch
-                </DialogTitle>
-                <p className="mt-1 text-sm text-verno-darker/80">
-                  Send us your message and we will get back to you shortly.
-                </p>
-              </div>
+      <div className="fixed inset-0 z-[101] overflow-y-auto">
+        <div className="flex min-h-full items-start justify-center p-3 sm:p-4 md:items-center">
+          <DialogPanel className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-verno-surface text-verno-dark shadow-xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex flex-col">
+            <div className="shrink-0 p-5 sm:p-6 border-b border-verno-darker/10">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <DialogTitle className="text-lg font-semibold">
+                    Get in touch
+                  </DialogTitle>
+                  <p className="mt-1 text-sm text-verno-darker/80">
+                    Send us your message and we will get back to you shortly.
+                  </p>
+                </div>
 
-              <div className="ml-auto flex items-center gap-2">
-                <div className="flex items-center gap-1 p-2">
-                  <span
-                    className="h-2 w-12 rounded-full bg-verno-accent"
-                    aria-hidden
-                  />
+                <div className="ml-auto flex items-center gap-2">
+                  <div className="flex items-center gap-1 p-2">
+                    <span
+                      className="h-2 w-12 rounded-full bg-verno-accent"
+                      aria-hidden
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
               <div
                 ref={dialogContentRef}
-                className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2"
+                className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-6"
               >
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    First name
-                  </label>
-                  <input
-                    {...register('firstname', {
-                      required: 'First name is required',
-                    })}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="John"
-                  />
-                  {errors.firstname && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.firstname.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Last name
-                  </label>
-                  <input
-                    {...register('lastname', {
-                      required: 'Last name is required',
-                    })}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="Doe"
-                  />
-                  {errors.lastname && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.lastname.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    {...register('email', {
-                      required: 'Email is required',
-                      pattern: {
-                        value: /^\S+@\S+\.\S+$/,
-                        message: 'Please enter a valid email address',
-                      },
-                    })}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="john@company.com"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Phone
-                  </label>
-                  <input
-                    {...register('phone')}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="+41 77 432 06 26"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="mb-1 block text-sm font-medium">
-                    Company
-                  </label>
-                  <input
-                    {...register('company')}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="Your company"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <div className="mb-1 flex items-center justify-between">
-                    <label className="block text-sm font-medium">Message</label>
-                    <span className="text-xs text-verno-darker/60">
-                      {watchedMessage?.length ?? 0}/1000
-                    </span>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      First name
+                    </label>
+                    <input
+                      {...register('firstname', {
+                        required: 'First name is required',
+                      })}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="John"
+                    />
+                    {errors.firstname && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.firstname.message}
+                      </p>
+                    )}
                   </div>
 
-                  <textarea
-                    {...register('message', {
-                      required: 'Message is required',
-                      minLength: {
-                        value: 10,
-                        message: 'Message must be at least 10 characters',
-                      },
-                      maxLength: {
-                        value: 1000,
-                        message: 'Message must not exceed 1000 characters',
-                      },
-                    })}
-                    rows={6}
-                    className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                    placeholder="Tell us a bit about your request..."
-                  />
-                  {errors.message && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.message.message}
-                    </p>
-                  )}
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      Last name
+                    </label>
+                    <input
+                      {...register('lastname', {
+                        required: 'Last name is required',
+                      })}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="Doe"
+                    />
+                    {errors.lastname && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.lastname.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      {...register('email', {
+                        required: 'Email is required',
+                        pattern: {
+                          value: /^\S+@\S+\.\S+$/,
+                          message: 'Please enter a valid email address',
+                        },
+                      })}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="john@company.com"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      Phone
+                    </label>
+                    <input
+                      {...register('phone')}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="+41 77 432 06 26"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="mb-1 block text-sm font-medium">
+                      Company
+                    </label>
+                    <input
+                      {...register('company')}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="Your company"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <div className="mb-1 flex items-center justify-between">
+                      <label className="block text-sm font-medium">
+                        Message
+                      </label>
+                      <span className="text-xs text-verno-darker/60">
+                        {watchedMessage?.length ?? 0}/1000
+                      </span>
+                    </div>
+
+                    <textarea
+                      {...register('message', {
+                        required: 'Message is required',
+                        minLength: {
+                          value: 10,
+                          message: 'Message must be at least 10 characters',
+                        },
+                        maxLength: {
+                          value: 1000,
+                          message: 'Message must not exceed 1000 characters',
+                        },
+                      })}
+                      rows={6}
+                      className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
+                      placeholder="Tell us a bit about your request..."
+                    />
+                    {errors.message && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.message.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
+
+                {submitError && (
+                  <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <p className="font-medium">{submitError.title}</p>
+                    {submitError.message && (
+                      <p className="mt-1">{submitError.message}</p>
+                    )}
+                    {submitError.details?.length ? (
+                      <ul className="mt-2 list-disc pl-5">
+                        {submitError.details.map((detail) => (
+                          <li key={detail}>{detail}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                )}
               </div>
 
-              {submitError && (
-                <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  <p className="font-medium">{submitError.title}</p>
-                  {submitError.message && (
-                    <p className="mt-1">{submitError.message}</p>
-                  )}
-                  {submitError.details?.length ? (
-                    <ul className="mt-2 list-disc pl-5">
-                      {submitError.details.map((detail) => (
-                        <li key={detail}>{detail}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              )}
-
-              <div className="mt-6 flex items-center justify-between">
-                <div>
+              <div className="shrink-0 border-t border-verno-darker/10 px-5 py-4 sm:px-6">
+                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={onClose}
                     disabled={submitting}
+                    className="w-full sm:w-auto"
                   >
                     <CircleSlash className="h-5 w-5" /> Cancel
                   </Button>
-                </div>
 
-                <div className="flex items-center gap-2">
-                  <Button type="submit" disabled={!isValid || submitting}>
+                  <Button
+                    type="submit"
+                    disabled={!isValid || submitting}
+                    className="w-full sm:w-auto"
+                  >
                     {submitting ? 'Sending...' : 'Send message'}
                     {submitting ? (
                       <ArrowRightIcon className="h-5 w-5" />

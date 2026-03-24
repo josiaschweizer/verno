@@ -29,12 +29,12 @@ export default function StepOne({
 
   return (
     <div>
-      <h3 className="text-base font-medium">
+      <h3 className="text-base font-medium leading-6 sm:text-lg">
         Step 1 — Basic Data for Your Account
       </h3>
 
-      <div className="mt-4 space-y-2">
-        <div className="flex w-full gap-2">
+      <div className="mt-5 space-y-4 sm:space-y-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Controller
             name="firstname"
             control={control}
@@ -44,7 +44,7 @@ export default function StepOne({
                 placeholder="Firstname"
                 {...field}
                 disabled={readOnly}
-                className="flex-1"
+                className="w-full"
               />
             )}
           />
@@ -58,7 +58,7 @@ export default function StepOne({
                 placeholder="Lastname"
                 {...field}
                 disabled={readOnly}
-                className="flex-1"
+                className="w-full"
               />
             )}
           />
@@ -72,13 +72,13 @@ export default function StepOne({
                 placeholder="Username"
                 {...field}
                 disabled={readOnly}
-                className="flex-1"
+                className="w-full"
               />
             )}
           />
         </div>
 
-        <div className="flex w-full gap-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Controller
             name="email"
             control={control}
@@ -90,7 +90,7 @@ export default function StepOne({
               },
             }}
             render={({ field, fieldState }) => (
-              <div className="flex-1">
+              <div className="w-full">
                 <InputField
                   fieldLabel="E-Mail"
                   placeholder="E-Mail"
@@ -100,7 +100,7 @@ export default function StepOne({
                   required
                 />
                 {fieldState.error && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1.5 text-sm text-red-500">
                     {fieldState.error.message}
                   </p>
                 )}
@@ -118,16 +118,16 @@ export default function StepOne({
               },
             }}
             render={({ field, fieldState }) => (
-              <div className="flex-1">
+              <div className="w-full">
                 <InputField
                   fieldLabel="Phone"
                   placeholder="Phone"
                   {...field}
                   disabled={readOnly}
-                  className="flex-1"
+                  className="w-full"
                 />
                 {fieldState.error && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1.5 text-sm text-red-500">
                     {fieldState.error.message}
                   </p>
                 )}
@@ -140,15 +140,17 @@ export default function StepOne({
           name="preferredLanguage"
           control={control}
           render={({ field: { onChange, value } }) => (
-            <ComboBoxField
-              fieldId="preferredLanguage"
-              fieldLabel="Preferred Language"
-              options={languages}
-              value={(value ?? null) as any}
-              onChange={(v) => onChange(v ?? undefined)}
-              disabled={readOnly}
-              portalContainer={portalContainerRef}
-            />
+            <div className="w-full">
+              <ComboBoxField
+                fieldId="preferredLanguage"
+                fieldLabel="Preferred Language"
+                options={languages}
+                value={(value ?? null) as any}
+                onChange={(v) => onChange(v ?? undefined)}
+                disabled={readOnly}
+                portalContainer={portalContainerRef}
+              />
+            </div>
           )}
         />
 
@@ -163,7 +165,7 @@ export default function StepOne({
             },
           }}
           render={({ field, fieldState }) => (
-            <div>
+            <div className="w-full">
               <InputField
                 fieldLabel="Password"
                 type="password"
@@ -174,7 +176,7 @@ export default function StepOne({
                 required
               />
               {fieldState.error && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1.5 text-sm text-red-500">
                   {fieldState.error.message}
                 </p>
               )}
@@ -190,7 +192,7 @@ export default function StepOne({
             validate: validatePasswordMatch,
           }}
           render={({ field, fieldState }) => (
-            <div>
+            <div className="w-full">
               <InputField
                 fieldLabel="Confirm Password"
                 type="password"
@@ -201,7 +203,7 @@ export default function StepOne({
                 required
               />
               {fieldState.error && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1.5 text-sm text-red-500">
                   {fieldState.error.message}
                 </p>
               )}

@@ -70,6 +70,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         tenantKey: '',
       },
     })
+
   const { errors } = formState
 
   const watchedEmail = useWatch({ control, name: 'email' })
@@ -86,7 +87,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
     } else {
       reset()
     }
-  }, [open])
+  }, [open, reset])
 
   const next = async () => {
     setValidatingNext(true)
@@ -94,7 +95,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       let ok = true
 
       if (step === 0) {
-        ok = await trigger(['email', 'password'])
+        ok = await trigger(['email', 'password', 'confirmPassword'])
       } else if (step === 1) {
         ok = await trigger(['tenantName', 'tenantSubdomain'])
       }
@@ -125,6 +126,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
             'The tenant key/subdomain already exists. Please choose a different value.',
         }
       }
+
       if (code === 'VALIDATION_FAILED') {
         return {
           title: 'Invalid input',
@@ -132,6 +134,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
           details: Array.isArray(details) ? details : undefined,
         }
       }
+
       if (code === 'DATA_INTEGRITY_VIOLATION') {
         return {
           title: 'Conflict while saving',
@@ -140,6 +143,7 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
           details: details ? [details] : message ? [message] : undefined,
         }
       }
+
       if (code === 'TENANT_PROVISION_FAILED') {
         return {
           title: 'Failed to create tenant',
@@ -160,7 +164,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       }
     }
 
-    if (e instanceof Error) return { title: 'Error', message: e.message }
+    if (e instanceof Error) {
+      return { title: 'Error', message: e.message }
+    }
+
     return { title: 'Error', message: 'Unknown error' }
   }
 
@@ -207,9 +214,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               href={`https://${subdomain}.verno-app.ch`}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline font-medium"
+              className="font-medium underline"
             >
-              {'Open now'} →
+              Open now →
             </a>
           </span>
         ),
@@ -229,7 +236,8 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
     canContinue =
       Boolean(watchedEmail && watchedPassword && watchedPasswordConfirm) &&
       !errors.email &&
-      !errors.password
+      !errors.password &&
+      !errors.confirmPassword
   } else if (step === 1) {
     canContinue =
       Boolean(watchedTenantName && watchedTenantSubdomain) &&
@@ -240,38 +248,47 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const isAnimating = submitting && submitPhase !== null
 
   return (
-    <Dialog open={open} onClose={onClose} className="relative z-100">
-      <div className="fixed inset-0 z-100">
-        <DialogBackdrop className="fixed inset-0 bg-black/60" />
+    <Dialog
+      open={open}
+      onClose={isAnimating ? () => {} : onClose}
+      className="relative z-[100]"
+    >
+      <DialogBackdrop className="fixed inset-0 z-[100] bg-black/60" />
 
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="relative z-101 w-full max-w-2xl rounded-2xl bg-verno-surface p-6 text-verno-dark shadow-xl">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <DialogTitle className="text-lg font-semibold">
-                  Get Started
-                </DialogTitle>
-                <p className="mt-1 text-sm text-verno-darker/80">
-                  Follow the steps to create your tenant.
-                </p>
-              </div>
+      <div className="fixed inset-0 z-[101] overflow-y-auto overscroll-contain">
+        <div className="flex min-h-full items-start justify-center p-2 sm:p-4 md:items-center">
+          <DialogPanel className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-verno-surface text-verno-dark shadow-xl max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)]">
+            <div className="shrink-0 border-b border-verno-darker/10 px-4 py-4 sm:px-6 sm:py-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <DialogTitle className="text-lg font-semibold">
+                    Get Started
+                  </DialogTitle>
+                  <p className="mt-1 text-sm text-verno-darker/80">
+                    Follow the steps to create your tenant.
+                  </p>
+                </div>
 
-              <div className="ml-auto flex items-center gap-2">
-                <div className="flex items-center gap-1 p-2">
-                  {[0, 1, 2].map((i) => (
-                    <span
-                      key={i}
-                      className={`h-2 w-8 rounded-full transition-colors ${
-                        i === step ? 'bg-verno-accent' : 'bg-verno-darker/30'
-                      }`}
-                      aria-hidden
-                    />
-                  ))}
+                <div className="ml-auto flex shrink-0 items-center gap-2">
+                  <div className="flex items-center gap-1 p-1 sm:p-2">
+                    {[0, 1, 2].map((i) => (
+                      <span
+                        key={i}
+                        className={`h-2 w-6 rounded-full transition-colors sm:w-8 ${
+                          i === step ? 'bg-verno-accent' : 'bg-verno-darker/30'
+                        }`}
+                        aria-hidden
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div ref={dialogContentRef} className="mt-6 min-h-100">
+            <div
+              ref={dialogContentRef}
+              className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6"
+            >
               {step === 0 && (
                 <StepOne
                   control={control}
@@ -280,43 +297,48 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   portalContainerRef={dialogContentRef}
                 />
               )}
+
               {step === 1 && <StepTwo control={control} readOnly={!open} />}
+
               {step === 2 && !isAnimating && (
                 <StepThree getValues={getValues} />
               )}
+
               {step === 2 && isAnimating && (
-                <div className="flex flex-col items-center justify-center gap-6 py-10">
-                  <div className="h-12 w-12 rounded-full border-2 border-verno-accent border-t-transparent animate-spin" />
+                <div className="flex flex-col items-center justify-center gap-6 py-8 sm:py-10">
+                  <div className="h-12 w-12 animate-spin rounded-full border-2 border-verno-accent border-t-transparent" />
+
                   <div className="text-center">
                     <p className="text-base font-medium">
-                      {PHASES[submitPhase!].label}
+                      {PHASES[submitPhase].label}
                     </p>
                     <p className="mt-1 text-sm text-verno-dark/60">
-                      {PHASES[submitPhase!].sub}
+                      {PHASES[submitPhase].sub}
                     </p>
                   </div>
+
                   <div className="flex w-full max-w-xs flex-col gap-2.5">
                     {PHASES.map((phase, i) => (
                       <div
                         key={i}
                         className={`flex items-center gap-3 text-sm transition-colors duration-300 ${
-                          i < submitPhase!
+                          i < submitPhase
                             ? 'text-verno-dark/40'
-                            : i === submitPhase!
+                            : i === submitPhase
                               ? 'font-medium text-verno-dark'
                               : 'text-verno-dark/20'
                         }`}
                       >
                         <span
                           className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs transition-all duration-300 ${
-                            i < submitPhase!
+                            i < submitPhase
                               ? 'border-verno-accent bg-verno-accent text-white'
-                              : i === submitPhase!
+                              : i === submitPhase
                                 ? 'border-verno-accent bg-verno-accent/15'
                                 : 'border-verno-dark/20'
                           }`}
                         >
-                          {i < submitPhase! ? '✓' : null}
+                          {i < submitPhase ? '✓' : null}
                         </span>
                         {phase.label.replace('...', '')}
                       </div>
@@ -324,11 +346,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   </div>
                 </div>
               )}
-            </div>
 
-            <div className="mt-6">
               {step === 2 && !isAnimating && submitError && (
-                <div className="mb-4">
+                <div className="mt-4">
                   <ErrorDisplay
                     title={submitError.title}
                     message={submitError.message}
@@ -337,38 +357,52 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                   />
                 </div>
               )}
+            </div>
 
-              <div className="flex items-center justify-between">
-                <div>
+            <div
+              className="shrink-0 border-t border-verno-darker/10 px-4 py-4 sm:px-6"
+              style={{
+                paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+              }}
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Button
                     variant="outline"
                     onClick={back}
                     disabled={step === 0 || isAnimating}
+                    className="w-full sm:w-auto"
                   >
                     <ArrowLeftIcon className="h-5 w-5" /> Back
                   </Button>
+
                   <Button
                     variant="outline"
-                    className="ml-2"
                     onClick={onClose}
                     disabled={isAnimating}
+                    className="w-full sm:w-auto"
                   >
                     <CircleSlash className="h-5 w-5" /> Cancel
                   </Button>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex w-full sm:w-auto">
                   {step < 2 ? (
                     <Button
                       onClick={next}
                       disabled={validatingNext || !canContinue}
+                      className="w-full sm:w-auto"
                     >
-                      {validatingNext ? 'Validating...' : 'Continue'}{' '}
+                      {validatingNext ? 'Validating...' : 'Continue'}
                       <ArrowRightIcon className="h-5 w-5" />
                     </Button>
                   ) : (
-                    <Button onClick={onSubmit} disabled={submitting}>
-                      {isAnimating ? PHASES[submitPhase!].label : 'Finish'}{' '}
+                    <Button
+                      onClick={onSubmit}
+                      disabled={submitting}
+                      className="w-full sm:w-auto"
+                    >
+                      {isAnimating ? PHASES[submitPhase].label : 'Finish'}
                       <FlagIcon className="h-5 w-5" />
                     </Button>
                   )}
