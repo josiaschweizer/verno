@@ -74,6 +74,7 @@ public class TenantBillingEntity extends TenantScopedEntity {
     this.hasValidPaymentMethod = hasValidPaymentMethod;
   }
 
+  @Nonnull
   public static TenantBillingEntity createDefault(@Nonnull final TenantEntity tenant) {
     return new TenantBillingEntity(
             tenant,

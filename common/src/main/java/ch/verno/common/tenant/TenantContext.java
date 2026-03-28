@@ -12,6 +12,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Optional;
+
 public final class TenantContext {
 
   private static final Logger log = LoggerFactory.getLogger(TenantContext.class);
@@ -27,6 +29,11 @@ public final class TenantContext {
   @Nullable
   public static Long get() {
     return CURRENT.get();
+  }
+
+  @Nonnull
+  public static Long getOrDefault(@Nonnull final Long defaultId) {
+    return Optional.ofNullable(get()).orElse(defaultId);
   }
 
   @Nonnull

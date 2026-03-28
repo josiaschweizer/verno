@@ -9,6 +9,7 @@ import ch.verno.common.gate.properties.ApplicationPropertiesGate;
 import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.publ.ApiUrl;
 import ch.verno.server.service.extern.billing.TenantBillingService;
+import com.stripe.model.issuing.Cardholder;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,7 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
 
   @Nonnull
   @Override
-  public String createSubscriptionUrlForCheckout(@Nonnull final Long tenantId,
-                                                 @Nonnull final Long userId) {
+  public String createSubscriptionUrlForCheckout(@Nonnull final Long tenantId, @Nonnull final Long userId) {
     final var tenantBilling = tenantBillingService.getOptionalTenantBillingByTenantId(tenantId);
     final var tokenPurpose = tenantBilling.isPresent() ?
             BillingAccessTokenPurpose.UPDATE_PAYMENT_METHOD :

@@ -59,6 +59,24 @@ public class TenantBillingDto extends BaseDto {
   }
 
   @Nonnull
+  public static TenantBillingDto createDefaultDevDto(@Nonnull final Long tenantId) {
+    final var defaultDevDto = new TenantBillingDto(
+            null,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            BillingPlanKey.BASIC,
+            BillingSubscriptionStatus.ACTIVE,
+            BillingPaymentStatus.PAID,
+            OffsetDateTime.now().plusYears(5),
+            null,
+            true,
+            Publ.EMPTY_STRING
+    );
+    defaultDevDto.setTenantId(tenantId); // tenant id has for saving the dto
+    return defaultDevDto;
+  }
+
+  @Nonnull
   public String getStripeCustomerId() {
     return stripeCustomerId;
   }

@@ -1,21 +1,26 @@
 package ch.verno.ui.base.billing;
 
+import ch.verno.common.db.dto.table.billing.TenantBillingDto;
+import ch.verno.common.db.service.extern.ITenantBillingService;
 import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.gate.properties.ApplicationPropertiesGate;
 import ch.verno.common.gate.properties.UserPropertiesGate;
+import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VADialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ModalityMode;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -37,11 +42,15 @@ public class InvalidSubscriptionDialog extends VADialog {
   public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_CONTENT = "invalid-subscription-dialog-content";
 
   @Nonnull private final UserPropertiesGate userProperties;
+  @Nonnull private final ITenantBillingService tenantBillingService;
+  @Nonnull private final ApplicationPropertiesGate applicationProperties;
   @Nonnull private final IBillingAccessLinkService billingAccessLinkService;
 
 
   public InvalidSubscriptionDialog(@Nonnull final GlobalInterface globalInterface) {
     userProperties = globalInterface.getUserProperties();
+    tenantBillingService = globalInterface.getService(ITenantBillingService.class);
+    applicationProperties = globalInterface.getService(ApplicationPropertiesGate.class);
     billingAccessLinkService = globalInterface.getService(IBillingAccessLinkService.class);
 
     setCloseOnEsc(false);
@@ -65,31 +74,40 @@ public class InvalidSubscriptionDialog extends VADialog {
 
   @Nonnull
   private Component buildContent() {
-    final Icon warningIcon = VaadinIcon.WARNING.create();
+    final var warningIcon = VaadinIcon.WARNING.create();
     warningIcon.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_ICON);
 
-    final H3 headline = new H3(getTranslation("base.your.subscription.is.no.longer.valid"));
+    final var headline = new H3(getTranslation("base.your.subscription.is.no.longer.valid"));
     headline.getStyle().setMargin("0");
 
-    final Paragraph text = new Paragraph(getTranslation("base.to.continue.using.verno.please.review.your.billing.details.and.update.your.subscription"));
+    final var text = new Paragraph(getTranslation("base.to.continue.using.verno.please.review.your.billing.details.and.update.your.subscription"));
     text.getStyle().setMargin("0");
 
-    final Paragraph hint = new Paragraph(getTranslation("base.once.your.subscription.is.active.again.you.can.continue.as.usual"));
+    final var hint = new Paragraph(getTranslation("base.once.your.subscription.is.active.again.you.can.continue.as.usual"));
     hint.getStyle().setMargin("0");
     hint.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT);
 
-    final VAAnchorButton manageSubscriptionButton = new VAAnchorButton(
-            VaadinIcon.EXTERNAL_LINK.create(),
-            getTranslation("base.manage.subscription"),
-            getRedirectLink()
-    );
+    VAButton manageSubscriptionButton;
+    if (applicationProperties.getRunMode().equals(RunMode.DEV)) {
+      manageSubscriptionButton = new VAButton(
+              VaadinIcon.CREDIT_CARD.create(),
+              "DEV Mode - Create Dev Subscription - only for DEV Usage!!!",
+              e -> createDevSubscription()
+      );
+    } else {
+      manageSubscriptionButton = new VAAnchorButton(
+              VaadinIcon.EXTERNAL_LINK.create(),
+              getTranslation("base.manage.subscription"),
+              getRedirectLink()
+      );
+    }
 
     manageSubscriptionButton.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_BUTTON);
 
-    final Div textBlock = new Div(headline, text, hint);
+    final var textBlock = new Div(headline, text, hint);
     textBlock.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_TEXT);
 
-    final VerticalLayout content = new VerticalLayout(warningIcon, textBlock, manageSubscriptionButton);
+    final var content = new VerticalLayout(warningIcon, textBlock, manageSubscriptionButton);
     content.setPadding(false);
     content.setSpacing(false);
     content.setWidthFull();
@@ -107,6 +125,13 @@ public class InvalidSubscriptionDialog extends VADialog {
             TenantContext.getRequired(),
             Optional.ofNullable(currentUser.getId()).orElse(Publ.ZERO_LONG)
     );
+  }
+
+  private void createDevSubscription() {
+    final var currentTenantId = TenantContext.getOrDefault(Publ.ZERO_LONG);
+    tenantBillingService.createTenantBilling(TenantBillingDto.createDefaultDevDto(currentTenantId));
+
+    Optional.of(UI.getCurrent()).ifPresent(ui -> ui.refreshCurrentRoute(false));
   }
 
   @Nonnull

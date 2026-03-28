@@ -7,6 +7,7 @@ import ch.verno.db.entity.tenant.TenantFilters;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
+import ch.verno.server.properties.application.TenantProperties;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.FilterChain;
