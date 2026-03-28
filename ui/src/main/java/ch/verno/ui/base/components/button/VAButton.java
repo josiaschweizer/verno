@@ -35,4 +35,10 @@ public class VAButton extends Button {
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
     super(text, icon, listener);
   }
+
+  public VAButton(@Nonnull final Component icon,
+                  @Nonnull final String text,
+                  @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
+    super(text, icon, listener);
+  }
 }

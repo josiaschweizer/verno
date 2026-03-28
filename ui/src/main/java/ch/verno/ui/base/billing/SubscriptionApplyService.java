@@ -11,8 +11,10 @@ import java.util.Optional;
 @Service
 public class SubscriptionApplyService {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final ITenantBillingService tenantBillingService;
+  @Nonnull
+  private final GlobalInterface globalInterface;
+  @Nonnull
+  private final ITenantBillingService tenantBillingService;
 
   public SubscriptionApplyService(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;

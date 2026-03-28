@@ -1,8 +1,10 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
+import ch.verno.common.gate.properties.ApplicationPropertiesGate;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
+import ch.verno.server.properties.application.ApplicationProperties;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,16 +14,13 @@ import java.util.Optional;
 
 public class TenantResolver {
 
-  @Nonnull
-  private final TenantProperties props;
+  @Nonnull private final TenantService lookupService;
+  @Nonnull private final ApplicationPropertiesGate applicationProperties;
 
-  @Nonnull
-  private final TenantService lookupService;
-
-  public TenantResolver(@Nonnull final TenantProperties props,
-                        @Nonnull final TenantService lookupService) {
-    this.props = props;
+  public TenantResolver(@Nonnull final TenantService lookupService,
+                        @Nonnull final ApplicationPropertiesGate applicationProperties) {
     this.lookupService = lookupService;
+    this.applicationProperties = applicationProperties;
   }
 
   @Nonnull
@@ -37,13 +36,13 @@ public class TenantResolver {
       throw new TenantNotResolvedException("Unknown tenant slug: " + slug + " (host=" + host + ")");
     }
 
-    if (props.isAllowHeaderFallback()) {
-      final var header = request.getHeader(props.getHeaderName());
+    if (applicationProperties.isTenantAllowHeaderFallback()) {
+      final var header = request.getHeader(applicationProperties.getTenantHeaderName());
       if (header != null && !header.isBlank()) {
         try {
           return Optional.of(Long.parseLong(header.trim()));
         } catch (final NumberFormatException e) {
-          throw new TenantNotResolvedException("Invalid tenant header " + props.getHeaderName() + ": " + header, e);
+          throw new TenantNotResolvedException("Invalid tenant header " + applicationProperties.getTenantHeaderName() + ": " + header, e);
         }
       }
     }
@@ -66,7 +65,7 @@ public class TenantResolver {
       return parts.length >= 2 ? parts[0] : null;
     }
 
-    for (final var base : props.getBaseDomains()) {
+    for (final var base : applicationProperties.getTenantBaseDomains()) {
       final var baseLower = safeLower(base);
       if (baseLower.equals(VernoConstants.LOCALHOST)) {
         continue;

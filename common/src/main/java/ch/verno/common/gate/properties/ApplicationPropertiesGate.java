@@ -1,8 +1,14 @@
 package ch.verno.common.gate.properties;
 
+import ch.verno.common.lib.application.RunMode;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
+
 public interface ApplicationPropertiesGate {
+
+  @Nonnull
+  RunMode getRunMode();
 
   @Nonnull
   String getSubscriptionOverviewUrl();
@@ -16,4 +22,13 @@ public interface ApplicationPropertiesGate {
   @Nonnull
   String getPortalReturnUrl();
 
+  boolean isTenantEnabled();
+
+  @Nonnull
+  String getTenantHeaderName();
+
+  @Nonnull
+  List<String> getTenantBaseDomains();
+
+  boolean isTenantAllowHeaderFallback();
 }
