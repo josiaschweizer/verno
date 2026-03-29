@@ -2,6 +2,12 @@ package ch.verno.ui.base.components.filter;
 
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
+import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
+import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;
+import ch.verno.ui.base.shortcut.VAShortcut;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.component.ShortcutRegistration;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
@@ -9,11 +15,10 @@ import jakarta.annotation.Nullable;
 
 public class VASearchFilter extends CustomField<String> {
 
-  @Nonnull
-  private final VATextField textField;
+  @Nonnull private final VATextField textField;
+  @Nonnull private ShortcutRegistration focusShortcutRegistration;
 
-  @Nullable
-  private String currentValue;
+  @Nullable private String currentValue;
 
   public VASearchFilter() {
     this(null, null);
@@ -30,6 +35,7 @@ public class VASearchFilter extends CustomField<String> {
     textField = new VATextField();
     textField.setValueChangeMode(ValueChangeMode.EAGER);
     textField.setWidthFull();
+    textField.setClearButtonVisible(true);
 
     if (label != null) {
       textField.setLabel(label);
@@ -41,8 +47,6 @@ public class VASearchFilter extends CustomField<String> {
       textField.setPlaceholder(getTranslation("base.search"));
     }
 
-    textField.setClearButtonVisible(true);
-
     textField.addValueChangeListener(event -> {
       final var newValue = event.getValue();
       if (newValue == null || newValue.isEmpty()) {
@@ -52,6 +56,9 @@ public class VASearchFilter extends CustomField<String> {
       }
       setValue(currentValue);
     });
+    final var focusShortcut = new VAShortcut(Key.KEY_F, KeyModifier.ALT);
+    RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
+    textField.setSuffixComponent(ShortcutDisplayComponent.of(focusShortcut));
 
     add(textField);
   }

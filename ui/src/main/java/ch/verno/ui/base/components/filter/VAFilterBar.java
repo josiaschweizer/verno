@@ -57,7 +57,7 @@ public class VAFilterBar extends VerticalLayout {
     topBar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
 
     topBar.setFlexGrow(1, searchFilter);
-    toggleFiltersButton.addClassNames(LumoUtility.Margin.Right.SMALL);
+//    toggleFiltersButton.addClassNames(LumoUtility.Margin.Right.SMALL);
 
     advancedFiltersRow = new HorizontalLayout();
     advancedFiltersRow.setWidthFull();

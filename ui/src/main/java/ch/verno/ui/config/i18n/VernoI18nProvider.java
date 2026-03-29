@@ -1,4 +1,4 @@
-package ch.verno.ui.i18n;
+package ch.verno.ui.config.i18n;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;

@@ -1,4 +1,4 @@
-package ch.verno.ui.i18n;
+package ch.verno.ui.config.i18n;
 
 import jakarta.annotation.Nonnull;
 

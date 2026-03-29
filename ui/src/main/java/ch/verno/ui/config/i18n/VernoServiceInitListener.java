@@ -1,4 +1,4 @@
-package ch.verno.ui.i18n;
+package ch.verno.ui.config.i18n;
 
 import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.db.service.intern.IAppUserSettingService;

@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
-import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.db.filter.MailLogFilter;
 import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.db.service.intern.mail.IMailLogService;
+import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.format.Converter;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
@@ -93,7 +93,7 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
 
     columns.add(new ObjectGridColumn<>("recipientEmail", MailLogDto::getRecipientEmail, "Recipient Email", true));
     columns.add(new ObjectGridColumn<>("recipientName", MailLogDto::getRecipientName, "Recipient Name", true));
-    columns.add(new ObjectGridColumn<>("templateName", MailLogDto::getTemplateName, "Template", true));
+//    columns.add(new ObjectGridColumn<>("templateName", MailLogDto::getTemplateName, "Template", true));
     columns.add(new ObjectGridColumn<>("subject", MailLogDto::getSubject, "Subject", true));
     columns.add(new ObjectGridColumn<>("sentAt", mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), "Sent At", true));
     columns.add(new ObjectGridColumn<>("errorMessage", MailLogDto::getErrorMessage, "Error", false));
@@ -120,6 +120,12 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
       case FAILED -> new VABadgeLabel(badgeDisplayName, VABadgeLabelOptions.ERROR);
       case QUEUED -> new VABadgeLabel(badgeDisplayName, VABadgeLabelOptions.CONTRAST);
     };
+  }
+
+  @Nonnull
+  @Override
+  protected MailLogFilter withSearchText(@Nonnull final String searchText) {
+    return MailLogFilter.ofSearchText(searchText);
   }
 
   @Override

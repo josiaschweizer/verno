@@ -7,12 +7,31 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MailLogSpec extends BaseSpec<MailLogEntity, MailLogFilter> {
 
-
   @Override
-  public Specification<MailLogEntity> getSpecification(@Nonnull final MailLogFilter mailLogFilter) {
-    return (root, query, cb) -> cb.and(new ArrayList<Predicate>().toArray(new Predicate[0]));
+  public Specification<MailLogEntity> getSpecification(@Nonnull final MailLogFilter filter) {
+    return (root, query, cb) -> {
+
+      final List<Predicate> predicates = new ArrayList<>();
+
+      if (filter.searchText() != null && !filter.searchText().isBlank()) {
+        final var search = "%" + filter.searchText().toLowerCase() + "%";
+
+        predicates.add(cb.or(
+                cb.like(cb.lower(root.get("recipientEmail")), search),
+                cb.like(cb.lower(root.get("recipientName")), search),
+                cb.like(cb.lower(root.get("subject")), search),
+                cb.like(cb.lower(root.get("templateName")), search),
+                cb.like(cb.lower(root.get("content")), search),
+                cb.like(cb.lower(root.get("providerMessageId")), search),
+                cb.like(cb.lower(root.get("errorMessage")), search)
+        ));
+      }
+
+      return cb.and(predicates.toArray(new Predicate[0]));
+    };
   }
 }
