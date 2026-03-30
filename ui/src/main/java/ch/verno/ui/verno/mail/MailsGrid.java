@@ -91,12 +91,11 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   protected List<ObjectGridColumn<MailLogDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<MailLogDto>>();
 
-    columns.add(new ObjectGridColumn<>("recipientEmail", MailLogDto::getRecipientEmail, "Recipient Email", true));
-    columns.add(new ObjectGridColumn<>("recipientName", MailLogDto::getRecipientName, "Recipient Name", true));
-//    columns.add(new ObjectGridColumn<>("templateName", MailLogDto::getTemplateName, "Template", true));
-    columns.add(new ObjectGridColumn<>("subject", MailLogDto::getSubject, "Subject", true));
-    columns.add(new ObjectGridColumn<>("sentAt", mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), "Sent At", true));
-    columns.add(new ObjectGridColumn<>("errorMessage", MailLogDto::getErrorMessage, "Error", false));
+    columns.add(new ObjectGridColumn<>("recipientEmail", MailLogDto::getRecipientEmail, getTranslation("mail.recipient.email"), true));
+    columns.add(new ObjectGridColumn<>("recipientName", MailLogDto::getRecipientName, getTranslation("mail.recipient.name"), true));
+    columns.add(new ObjectGridColumn<>("subject", MailLogDto::getSubject, getTranslation("mail.subject"), true));
+    columns.add(new ObjectGridColumn<>("sentAt", mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), getTranslation("mail.sent.at"), true));
+    columns.add(new ObjectGridColumn<>("errorMessage", MailLogDto::getErrorMessage, getTranslation("base.error"), false));
 
     return columns;
   }
