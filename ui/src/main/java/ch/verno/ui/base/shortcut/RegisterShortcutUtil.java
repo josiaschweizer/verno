@@ -1,7 +1,7 @@
 package ch.verno.ui.base.shortcut;
 
-import ch.verno.ui.lib.os.Os;
-import ch.verno.ui.lib.os.OsUtil;
+import ch.verno.ui.lib.os.OS;
+import ch.verno.ui.lib.os.OSUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.ShortcutRegistration;
@@ -15,10 +15,21 @@ public class RegisterShortcutUtil {
   private RegisterShortcutUtil() {
   }
 
+  /**
+   * Registers a focus shortcut on the given focusable target.
+   *
+   * @param target the focusable target component the shortcut should be registered on
+   * @param shortcut the shortcut definition containing key and modifiers
+   * @return the created {@link ShortcutRegistration}
+   */
   @Nonnull
-  public static ShortcutRegistration addFocusShortcut(@Nonnull final Focusable<?> target,
-                                                      @Nonnull final VAShortcut shortcut) {
-    final var keyModifiers = getKeyModifiersAccordingToOS(shortcut.keyModifier());
+  public static ShortcutRegistration addFocusShortcut(
+          @Nonnull final Focusable<?> target,
+          @Nonnull final VAShortcut shortcut
+  ) {
+    final KeyModifier[] keyModifiers =
+            getKeyModifiersAccordingToOS(shortcut.keyModifier());
+
     return target.addFocusShortcut(
             shortcut.key(),
             keyModifiers
@@ -26,12 +37,14 @@ public class RegisterShortcutUtil {
   }
 
   @Nonnull
-  private static KeyModifier[] getKeyModifiersAccordingToOS(@Nullable final KeyModifier... keyModifier) {
+  private static KeyModifier[] getKeyModifiersAccordingToOS(
+          @Nullable final KeyModifier... keyModifier
+  ) {
     if (keyModifier == null || keyModifier.length == 0) {
       return new KeyModifier[0];
     }
 
-    final var os = OsUtil.getOs();
+    final OS os = OSUtil.getOs();
 
     return Arrays.stream(keyModifier)
             .map(modifier -> translateModifier(modifier, os))
@@ -39,28 +52,22 @@ public class RegisterShortcutUtil {
   }
 
   @Nonnull
-  private static KeyModifier translateModifier(@Nonnull final KeyModifier modifier,
-                                               @Nonnull final Os os) {
+  private static KeyModifier translateModifier(
+          @Nonnull final KeyModifier modifier,
+          @Nonnull final OS os
+  ) {
     return switch (modifier) {
-      case CONTROL -> {
-        if (os == Os.MAC) {
-          yield KeyModifier.META;
-        }
-        yield KeyModifier.CONTROL;
-      }
+      case CONTROL -> os == OS.MAC
+              ? KeyModifier.META
+              : KeyModifier.CONTROL;
 
-      case META -> {
-        if (os != Os.MAC) {
-          yield KeyModifier.CONTROL;
-        }
-        yield KeyModifier.META;
-      }
+      case META -> os != OS.MAC
+              ? KeyModifier.CONTROL
+              : KeyModifier.META;
 
       case SHIFT -> KeyModifier.SHIFT;
       case ALT -> KeyModifier.ALT;
-
       default -> modifier;
     };
   }
-
 }

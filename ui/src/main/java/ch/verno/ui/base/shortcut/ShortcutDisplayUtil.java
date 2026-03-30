@@ -1,8 +1,8 @@
 package ch.verno.ui.base.shortcut;
 
 import ch.verno.publ.Publ;
-import ch.verno.ui.lib.os.Os;
-import ch.verno.ui.lib.os.OsUtil;
+import ch.verno.ui.lib.os.OS;
+import ch.verno.ui.lib.os.OSUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import jakarta.annotation.Nonnull;
@@ -14,7 +14,7 @@ public class ShortcutDisplayUtil {
 
   @Nonnull
   public static String toDisplayString(@Nonnull final VAShortcut shortcut) {
-    final var os = OsUtil.getOs();
+    final var os = OSUtil.getOs();
 
     final var modifiers = shortcut.keyModifier() != null ?
             Arrays.stream(shortcut.keyModifier())
@@ -33,13 +33,13 @@ public class ShortcutDisplayUtil {
 
   @Nonnull
   private static String mapModifierToDisplay(@Nonnull final KeyModifier modifier,
-                                             @Nonnull final Os os) {
+                                             @Nonnull final OS os) {
     return switch (modifier) {
-      case META -> os == Os.MAC ? Publ.CMD_SIGN : "Meta";
-      case CONTROL -> os == Os.MAC ? Publ.CTRL_MAC_SIGN : "Ctrl";
+      case META -> os == OS.MAC ? Publ.CMD_SIGN : "Meta";
+      case CONTROL -> os == OS.MAC ? Publ.CTRL_MAC_SIGN : "Ctrl";
 
       case SHIFT -> Publ.SHIFT_SIGN;
-      case ALT -> os == Os.MAC ? Publ.OPTION_OPTION : "Alt";
+      case ALT -> os == OS.MAC ? Publ.OPTION_OPTION : "Alt";
 
       default -> modifier.name();
     };

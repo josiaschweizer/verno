@@ -28,11 +28,24 @@ public class VernoConstants {
 
   public static final String X_TENANT = "X-Mandant";
 
-
   public static final Integer MAX_MAIL_BATCH_SIZE = 100;
   public static final Double MAIL_SEND_DELAY_MS = 500.0;
 
   public static final String SESSION_STRIPE_PRICE_ID = "stripePriceId";
   public static final String SESSION_USER_ID = "userId";
   public static final String SESSION_TENANT_ID = "tenantId";
+
+  // OS Constants
+  public static final String IPHONE = "iphone";
+  public static final String IPAD = "ipad";
+  public static final String IPOD = "ipod";
+  public static final String IOS = "ios";
+  public static final String ANDROID = "android";
+  public static final String MOBILE = "mobile";
+  public static final String WINDOWS = "windows";
+  public static final String MAC_OS_X = "mac os x";
+  public static final String MACINTOSH = "macintosh";
+  public static final String DARWIN = "darwin";
+  public static final String X_11 = "x11";
+  public static final String LINUX = "linux";
 }

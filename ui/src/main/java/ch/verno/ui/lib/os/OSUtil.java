@@ -3,9 +3,9 @@ package ch.verno.ui.lib.os;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.annotation.Nonnull;
 
-public class OsUtil {
+public class OSUtil {
 
-  private OsUtil() {
+  private OSUtil() {
   }
 
   /**
@@ -15,15 +15,15 @@ public class OsUtil {
    * default is windows (is the default return from OS.getFromKey())
    */
   @Nonnull
-  public static Os getOs() {
+  public static OS getOs() {
     final var browser = VaadinSession.getCurrent().getBrowser();
 
     final var userAgent = browser.getUserAgent();
     if (userAgent == null || userAgent.isBlank()) {
-      return Os.getDefault();
+      return OS.getDefault();
     }
 
-    return Os.fromUserAgent(userAgent);
+    return OS.fromUserAgent(userAgent);
   }
 
 }

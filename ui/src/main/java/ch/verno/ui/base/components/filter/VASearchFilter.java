@@ -5,6 +5,7 @@ import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
 import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;
 import ch.verno.ui.base.shortcut.VAShortcut;
+import ch.verno.ui.lib.os.OSUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.ShortcutRegistration;
@@ -57,8 +58,10 @@ public class VASearchFilter extends CustomField<String> {
       setValue(currentValue);
     });
     final var focusShortcut = new VAShortcut(Key.KEY_F, KeyModifier.ALT);
-    RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
-    textField.setSuffixComponent(ShortcutDisplayComponent.of(focusShortcut));
+    if (!OSUtil.getOs().isMobile()) {
+      RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
+      textField.setSuffixComponent(ShortcutDisplayComponent.of(focusShortcut));
+    }
 
     add(textField);
   }
