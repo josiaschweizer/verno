@@ -3,7 +3,7 @@ import RevealSection from '@verno/components/ui/RevealSection'
 
 export default function Home() {
   return (
-    <div className="h-full bg-verno-bg text-verno-darker flex items-start md:items-center">
+    <div className="flex-1 bg-verno-bg text-verno-darker flex items-start md:items-center">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 md:py-0">
         <RevealSection>
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-16 items-start md:items-center">

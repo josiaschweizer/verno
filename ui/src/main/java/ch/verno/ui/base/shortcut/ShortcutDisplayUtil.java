@@ -1,7 +1,8 @@
 package ch.verno.ui.base.shortcut;
 
 import ch.verno.publ.Publ;
-import ch.verno.ui.lib.os.OS;
+import ch.verno.ui.lib.os.Os;
+import ch.verno.ui.lib.os.OsUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import jakarta.annotation.Nonnull;
@@ -13,14 +14,17 @@ public class ShortcutDisplayUtil {
 
   @Nonnull
   public static String toDisplayString(@Nonnull final VAShortcut shortcut) {
-    final var os = getOS();
-    final var modifiers = Arrays.stream(shortcut.keyModifier())
+    final var os = OsUtil.getOs();
+
+    final var modifiers = shortcut.keyModifier() != null ?
+            Arrays.stream(shortcut.keyModifier())
             .map(mod -> mapModifierToDisplay(mod, os))
-            .collect(Collectors.joining(" + "));
+            .collect(Collectors.joining(" + "))
+            : Publ.EMPTY_STRING;
 
     final var key = mapKeyToDisplay(shortcut.key());
 
-    if (modifiers.isEmpty()) {
+    if (modifiers.isBlank()) {
       return key;
     }
 
@@ -29,13 +33,13 @@ public class ShortcutDisplayUtil {
 
   @Nonnull
   private static String mapModifierToDisplay(@Nonnull final KeyModifier modifier,
-                                             @Nonnull final OS os) {
+                                             @Nonnull final Os os) {
     return switch (modifier) {
-      case META -> os == OS.MAC ? Publ.CMD_SIGN : "Meta";
-      case CONTROL -> os == OS.MAC ? Publ.CTRL_MAC_SIGN : "Ctrl";
+      case META -> os == Os.MAC ? Publ.CMD_SIGN : "Meta";
+      case CONTROL -> os == Os.MAC ? Publ.CTRL_MAC_SIGN : "Ctrl";
 
       case SHIFT -> Publ.SHIFT_SIGN;
-      case ALT -> os == OS.MAC ? Publ.OPTION_OPTION : "Alt";
+      case ALT -> os == Os.MAC ? Publ.OPTION_OPTION : "Alt";
 
       default -> modifier.name();
     };
@@ -66,11 +70,5 @@ public class ShortcutDisplayUtil {
                 : raw;
       }
     };
-  }
-
-  @Nonnull
-  private static OS getOS() {
-    final var osString = System.getProperty("os.name", Publ.EMPTY_STRING);
-    return OS.getFromKey(osString);
   }
 }

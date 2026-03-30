@@ -1,6 +1,7 @@
 package ch.verno.ui.base.shortcut;
 
-import ch.verno.ui.lib.os.OS;
+import ch.verno.ui.lib.os.Os;
+import ch.verno.ui.lib.os.OsUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.ShortcutRegistration;
@@ -30,7 +31,7 @@ public class RegisterShortcutUtil {
       return new KeyModifier[0];
     }
 
-    final var os = getOS();
+    final var os = OsUtil.getOs();
 
     return Arrays.stream(keyModifier)
             .map(modifier -> translateModifier(modifier, os))
@@ -38,24 +39,18 @@ public class RegisterShortcutUtil {
   }
 
   @Nonnull
-  private static OS getOS() {
-    final var osString = System.getProperty("os.name");
-    return OS.getFromKey(osString);
-  }
-
-  @Nonnull
   private static KeyModifier translateModifier(@Nonnull final KeyModifier modifier,
-                                               @Nonnull final OS os) {
+                                               @Nonnull final Os os) {
     return switch (modifier) {
       case CONTROL -> {
-        if (os == OS.MAC) {
+        if (os == Os.MAC) {
           yield KeyModifier.META;
         }
         yield KeyModifier.CONTROL;
       }
 
       case META -> {
-        if (os != OS.MAC) {
+        if (os != Os.MAC) {
           yield KeyModifier.CONTROL;
         }
         yield KeyModifier.META;
