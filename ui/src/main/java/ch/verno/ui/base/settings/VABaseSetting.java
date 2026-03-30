@@ -2,7 +2,9 @@ package ch.verno.ui.base.settings;
 
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.verno.settings.SettingEntryFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -25,7 +27,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   @Nonnull private final Div headerWrapper;
   @Nullable private VABadgeLabel headerBadge;
   @Nullable private Span actionButtonSpan;
-  @Nonnull protected Button saveButton;
+  @Nonnull protected VAButton saveButton;
 
   @Nonnull private final Div contentWrapper;
   @Nullable protected Component contentComponent;
@@ -59,7 +61,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   }
 
   private void addSaveButton(final boolean showSaveButton) {
-    saveButton = new Button(getTranslation("common.save"), e -> save());
+    saveButton = new VAButton(getTranslation("common.save"), e -> save());
     saveButton.setEnabled(false);
 
     if (showSaveButton) {
@@ -144,11 +146,21 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   }
 
   protected void binderStatusChanged() {
-    saveButton.setEnabled(binder.hasChanges() && binder.isValid());
+    updateSaveButtonStatus(binder.hasChanges() && binder.isValid());
   }
 
   protected void binderValueChanged() {
-    saveButton.setEnabled(binder.hasChanges() && binder.isValid());
+    updateSaveButtonStatus(binder.hasChanges() && binder.isValid());
+  }
+
+  private void updateSaveButtonStatus(final boolean enabled) {
+    if (!enabled) {
+      saveButton.setTooltipText("You have to enter all required fields to save your config");
+      saveButton.setEnabled(false);
+    } else {
+      saveButton.setTooltipText(Publ.EMPTY_STRING);
+      saveButton.setEnabled(true);
+    }
   }
 
   protected boolean isAlwaysReadOnly() {

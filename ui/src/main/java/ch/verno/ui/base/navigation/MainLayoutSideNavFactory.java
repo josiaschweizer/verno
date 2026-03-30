@@ -28,6 +28,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class MainLayoutSideNavFactory {
@@ -35,9 +36,14 @@ public class MainLayoutSideNavFactory {
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IMailConfigService mailConfigService;
 
+  @Nonnull private final List<MenuEntry> menuEntries;
+
   public MainLayoutSideNavFactory(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
     this.mailConfigService = globalInterface.getService(IMailConfigService.class);
+
+    menuEntries = MenuConfiguration.getMenuEntries();
+
   }
 
   @Nonnull
@@ -68,9 +74,7 @@ public class MainLayoutSideNavFactory {
     sideNav.addClassNames(LumoUtility.Margin.Horizontal.SMALL);
 
     final var itemsByOrder = new HashMap<MenuOrder, SideNavItem>();
-    final var cachedMenuEntries = MenuConfiguration.getMenuEntries();
-
-    cachedMenuEntries.stream()
+    menuEntries.stream()
             .filter(this::shouldShowMenuEntry)
             .sorted(Comparator.comparing(e -> MenuOrder.of(e.order())))
             .forEach(entry -> {

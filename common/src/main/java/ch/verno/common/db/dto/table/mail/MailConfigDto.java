@@ -65,6 +65,20 @@ public class MailConfigDto extends BaseDto {
     this.mailValidity = mailValidity;
   }
 
+  public boolean isEmpty() {
+    return fromName.isBlank()
+            && fromEmail.isBlank()
+            && (replyToEmail == null || replyToEmail.isBlank())
+            && (defaultBcc == null || defaultBcc.isBlank())
+            && smtpHost.isBlank()
+            && smtpPort == VernoConstants.DEFAULT_SMTP_PORT
+            && smtpUsername.isBlank()
+            && smtpPasswordB64.isBlank()
+            && smtpSecurity == SmtpSecurity.STARTTLS
+            && smtpAuth
+            && mailValidity == MailValidity.UNTESTED;
+  }
+
   @Nonnull
   public String getFromName() {
     return fromName;

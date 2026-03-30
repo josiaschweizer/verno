@@ -71,11 +71,19 @@ public final class MainLayout extends AppLayout {
   @Subscribe
   @SuppressWarnings("unused")
   private void reloadNavigationBar(@Nonnull final ReloadNavigationBarEvent event) {
-    final var ui = getUI().orElse(null);
-    if (ui == null) {
-      return;
-    }
+    getUI().ifPresent(ui -> {
+      if (!ui.isAttached()) {
+        return;
+      }
 
-    ui.access(() -> navBarScroller.setContent(sideNavFactory.createSideNav()));
+      ui.access(() -> {
+        try {
+          final var newSideNav = sideNavFactory.createSideNav();
+          navBarScroller.setContent(newSideNav);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+    });
   }
 }

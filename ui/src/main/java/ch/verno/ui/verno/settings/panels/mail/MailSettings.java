@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
 import ch.verno.common.db.dto.table.mail.MailConfigDto;
+import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.db.type.mail.SmtpSecurity;
-import ch.verno.common.db.service.intern.mail.IMailConfigService;
 import ch.verno.common.event.ReloadNavigationBarEvent;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
@@ -59,6 +59,8 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
     menu.setOpenOnClick(true);
 
     menu.addItem(getTranslation("setting.test.connection"), e -> {
+      save(); // save the current config to then load it into the dialog
+
       final var dialog = new TestConnectionDialog(globalInterface);
       dialog.addClosedListener(close -> {
         // refresh config after test connection dialog is closed, as the test dialog might update the mail validity
@@ -180,8 +182,13 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Override
   protected void binderValueChanged() {
     super.binderValueChanged();
+    applyBinderValues();
     updateEntity();
     updateHeaderBadge();
+  }
+
+  private void applyBinderValues() {
+    binder.writeBeanAsDraft(dto);
   }
 
   private void updateEntity() {
@@ -191,11 +198,17 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   }
 
   private void updateHeaderBadge() {
-    final var badge = switch (dto.getMailValidity()) {
-      case TESTED_VALID -> createValidHeaderBadge();
-      case TESTED_INVALID -> createInvalidHeaderBadge();
-      case UNTESTED -> createUntestedHeaderBadge();
-    };
+    VABadgeLabel badge;
+    if (dto.isEmpty()) {
+      badge = createNotConfiguredBadge();
+    } else {
+      badge = switch (dto.getMailValidity()) {
+        case TESTED_VALID -> createValidHeaderBadge();
+        case TESTED_INVALID -> createInvalidHeaderBadge();
+        case UNTESTED -> createUntestedHeaderBadge();
+      };
+
+    }
 
     setHeaderBadge(badge);
   }
@@ -217,5 +230,10 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Nonnull
   private VABadgeLabel createUntestedHeaderBadge() {
     return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.untested.configuration"), VABadgeLabelOptions.WARNING);
+  }
+
+  @Nonnull
+  private VABadgeLabel createNotConfiguredBadge() {
+    return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.not.configured"), VABadgeLabelOptions.NORMAL);
   }
 }
