@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.course;
 
-import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.db.service.intern.ICourseService;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.Refreshable;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,8 +10,8 @@ import jakarta.annotation.Nonnull;
 public class CourseWidgetGroup extends VerticalLayout implements Refreshable {
 
   @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final ICourseService courseService;
   @Nonnull private final CourseScheduleStatus status;
-  private final ICourseService courseService;
 
   public CourseWidgetGroup(@Nonnull final GlobalInterface globalInterface,
                            @Nonnull final CourseScheduleStatus status) {

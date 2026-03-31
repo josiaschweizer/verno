@@ -2,18 +2,20 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
+import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
-import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
+import ch.verno.ui.base.factory.SpanFactory;
+import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog2;
 import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
@@ -35,9 +37,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final Lazy<IMailConfigService> mailConfigService;
 
-  @Nonnull private List<ParticipantDto> participantsInCourse;
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
+  @Nonnull private List<ParticipantDto> participantsInCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
@@ -105,10 +107,10 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
-              final var dialog = new AssignToCourseDialog(
+              final var dialog = new AssignToCourseDialog2(
                       globalInterface,
-                      currentCourse.getId(),
-                      participantsInCourse.stream().map(ParticipantDto::getId).toList()
+                      currentCourse,
+                      participantsInCourse
               );
 
               dialog.addClosedListener(ev -> refresh());
@@ -147,6 +149,17 @@ public class CourseWidget extends VAAccordionWidgetBase {
           CourseWidget.this.participantsInCourse = participants;
           return participants.stream();
         }
+
+        @Nonnull
+        @Override
+        protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
+          final var actions = super.buildContextMenuActions(dto);
+          actions.add(ActionDef.create(
+                  SpanFactory.createSpan("Remove participant", VaadinIcon.TRASH),
+                  () -> removeParticipant(dto)
+          ));
+          return actions;
+        }
       };
 
       participantsGrid.getGrid().setAllRowsVisible(true);
@@ -154,6 +167,10 @@ public class CourseWidget extends VAAccordionWidgetBase {
     } else {
       add(new Text(getTranslation("shared.no.participants.assigned.to.this.course.yet")));
     }
+  }
+
+  private void removeParticipant(@Nonnull final ParticipantDto dto) {
+    System.out.println(dto);
   }
 
   @Override

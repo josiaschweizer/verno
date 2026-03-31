@@ -146,6 +146,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   }
 
   protected void initGrid() {
+    final var prefixComponentColumns = getPrefixComponentColumns();
+    prefixComponentColumns.forEach(this::addComponentColumn);
     final var columns = getColumns();
     columns.forEach(this::addColumn);
     final var componentColumns = getComponentColumns();
@@ -295,6 +297,12 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   @Nonnull
   protected abstract List<ObjectGridColumn<T>> getColumns();
+
+  @Nonnull
+  protected List<ComponentGridColumn<T>> getPrefixComponentColumns() {
+    // Default implementation returns an empty list of component columns -> to be implemented by subclasses if needed
+    return new ArrayList<>();
+  }
 
   @Nonnull
   protected List<ComponentGridColumn<T>> getComponentColumns() {
