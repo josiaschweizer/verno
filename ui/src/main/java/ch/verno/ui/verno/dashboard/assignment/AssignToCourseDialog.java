@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AssignToCourseDialog2 extends VADialog {
+public class AssignToCourseDialog extends VADialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IParticipantService participantService;
@@ -30,8 +30,8 @@ public class AssignToCourseDialog2 extends VADialog {
 
   @Nullable private ParticipantsGrid grid;
 
-  public AssignToCourseDialog2(@Nonnull final GlobalInterface globalInterface,
-                               @Nonnull final CourseDto currentCourse) {
+  public AssignToCourseDialog(@Nonnull final GlobalInterface globalInterface,
+                              @Nonnull final CourseDto currentCourse) {
     this.globalInterface = globalInterface;
     this.participantService = globalInterface.getService(IParticipantService.class);
     this.currentCourse = currentCourse;
@@ -57,7 +57,7 @@ public class AssignToCourseDialog2 extends VADialog {
         filter.setActive(true);
 
         final var items = super.fetch(query, filter).toList();
-        if (AssignToCourseDialog2.this.grid != null) {
+        if (AssignToCourseDialog.this.grid != null) {
           items.forEach(item -> {
             if (item.getCourses().contains(currentCourse)) {
               initiallySelectedParticipantIds.add(item.getId());

@@ -15,7 +15,7 @@ import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.base.factory.SpanFactory;
-import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog2;
+import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
@@ -109,7 +109,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
-              final var dialog = new AssignToCourseDialog2(
+              final var dialog = new AssignToCourseDialog(
                       globalInterface,
                       currentCourse
               );
