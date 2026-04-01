@@ -1,7 +1,9 @@
 package ch.verno.server.mapper.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.mail.MailLogEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import jakarta.annotation.Nonnull;
 
 public final class MailLogMapper {
@@ -35,6 +37,10 @@ public final class MailLogMapper {
 
   public static void updateEntity(@Nonnull final MailLogDto dto,
                                   @Nonnull final MailLogEntity entity) {
+    entity.setTenant(TenantContext.get() != null ?
+            TenantEntity.ref(TenantContext.getRequired()) :
+            null
+    );
     entity.setRecipientEmail(dto.getRecipientEmail());
     entity.setRecipientName(dto.getRecipientName());
     entity.setTemplateName(dto.getTemplateName());
