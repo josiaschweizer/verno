@@ -34,7 +34,6 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
     this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
   }
 
-
   @Nonnull
   @Override
   protected Stream<CourseScheduleDto> fetch(@Nonnull final Query<CourseScheduleDto, CourseScheduleFilter> query,
@@ -65,7 +64,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
     columns.add(new ObjectGridColumn<>("title", CourseScheduleDto::getTitle, getTranslation("shared.title"), true));
     columns.add(new ObjectGridColumn<>("first-week", dto -> !dto.getWeeks().isEmpty() ? dto.getWeeks().getFirst() : null, getTranslation("courseSchedule.first.week"), false));
     columns.add(new ObjectGridColumn<>("last-week", dto -> !dto.getWeeks().isEmpty() ? dto.getWeeks().getLast() : null, getTranslation("courseSchedule.last.week"), false));
-    columns.add(new ObjectGridColumn<>("weeks", CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"), true));
+    columns.add(new ObjectGridColumn<>("weeks", CourseScheduleDto::getWeeksAsString, getTranslation("courseSchedule.weeks"), false));
     return columns;
   }
 

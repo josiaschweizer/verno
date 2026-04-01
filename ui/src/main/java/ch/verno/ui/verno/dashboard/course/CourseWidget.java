@@ -2,17 +2,19 @@ package ch.verno.ui.verno.dashboard.course;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
+import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
+import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.email.CourseEmailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
@@ -24,6 +26,7 @@ import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -35,9 +38,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final Lazy<IMailConfigService> mailConfigService;
 
-  @Nonnull private List<ParticipantDto> participantsInCourse;
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
+  @Nonnull private List<ParticipantDto> participantsInCourse;
 
   public CourseWidget(@Nonnull final Long currentCourseId,
                       @Nonnull final GlobalInterface globalInterface) {
@@ -85,9 +88,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
         if (participantsInCourse.isEmpty()) {
           emailButton.setTooltipText(getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature"));
-        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE){
+        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE) {
           emailButton.setTooltipText(getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE));
-        }else {
+        } else {
           emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
         }
       }
@@ -100,15 +103,15 @@ public class CourseWidget extends VAAccordionWidgetBase {
       new CourseReportDialog(
               globalInterface,
               currentCourse,
-              participantsInCourse).open();
+              participantsInCourse)
+              .open();
     });
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
               final var dialog = new AssignToCourseDialog(
                       globalInterface,
-                      currentCourse.getId(),
-                      participantsInCourse.stream().map(ParticipantDto::getId).toList()
+                      currentCourse
               );
 
               dialog.addClosedListener(ev -> refresh());
@@ -147,6 +150,17 @@ public class CourseWidget extends VAAccordionWidgetBase {
           CourseWidget.this.participantsInCourse = participants;
           return participants.stream();
         }
+
+        @Nonnull
+        @Override
+        protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
+          final var actions = new ArrayList<ActionDef>();
+          actions.add(ActionDef.create(
+                  SpanFactory.createSpan("Remove participant from Course", VaadinIcon.TRASH),
+                  () -> removeParticipant(dto)
+          ));
+          return actions;
+        }
       };
 
       participantsGrid.getGrid().setAllRowsVisible(true);
@@ -154,6 +168,11 @@ public class CourseWidget extends VAAccordionWidgetBase {
     } else {
       add(new Text(getTranslation("shared.no.participants.assigned.to.this.course.yet")));
     }
+  }
+
+  private void removeParticipant(@Nonnull final ParticipantDto dto) {
+    participantService.removeCourse(dto.getId(), currentCourse);
+    refresh();
   }
 
   @Override

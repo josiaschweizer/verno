@@ -1,311 +1,127 @@
 package ch.verno.ui.verno.dashboard.assignment;
 
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.service.intern.ICourseService;
-import ch.verno.common.db.service.intern.ITenantSettingService;
+import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
-import ch.verno.server.service.intern.CourseService;
-import ch.verno.server.service.intern.TenantSettingService;
-import ch.verno.server.service.intern.ParticipantService;
-import ch.verno.ui.base.components.entry.combobox.VAComboBox;
-import ch.verno.ui.base.components.filter.VASearchFilter;
-import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.ui.base.components.button.VAButton;
+import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VADialog;
-import ch.verno.ui.lib.util.LayoutUtil;
+import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.Scroller;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.dom.Style;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@CssImport("./components/assignment/assignment.css")
 public class AssignToCourseDialog extends VADialog {
 
-  @Nonnull private final ICourseService courseService;
+  @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IParticipantService participantService;
-  @Nonnull private final ITenantSettingService tenantSettingService;
+  @Nonnull private final CourseDto currentCourse;
+  @Nonnull private final Set<Long> initiallySelectedParticipantIds;
 
-  @Nullable private final Long preSelectedCourseId;
-
-  @Nullable private CheckboxGroup<Long> participantsGroup;
-  @Nullable private VAComboBox<Long> courseComboBox;
-  @Nullable private Button saveButton;
-
-  @Nullable private String searchTerm;
-  @Nonnull private LinkedHashSet<Long> selectedParticipantIds;
-  @Nonnull private final LinkedHashSet<Long> unselectedParticipantIds;
-  @Nonnull private final Map<Long, String> participantItems;
-
-  private boolean suppressSelectionSync;
-
-  public AssignToCourseDialog(@Nonnull final GlobalInterface globalInterface) {
-    this(globalInterface, null, List.of());
-  }
+  @Nullable private ParticipantsGrid grid;
 
   public AssignToCourseDialog(@Nonnull final GlobalInterface globalInterface,
-                              @Nullable final Long preSelectedCourseId,
-                              @Nonnull final List<Long> preSelectedParticipantIds) {
-    this.courseService = globalInterface.getService(CourseService.class);
-    this.participantService = globalInterface.getService(ParticipantService.class);
-    this.tenantSettingService = globalInterface.getService(TenantSettingService.class);
-    this.preSelectedCourseId = preSelectedCourseId;
+                              @Nonnull final CourseDto currentCourse) {
+    this.globalInterface = globalInterface;
+    this.participantService = globalInterface.getService(IParticipantService.class);
+    this.currentCourse = currentCourse;
+    this.initiallySelectedParticipantIds = new HashSet<>();
 
-    this.selectedParticipantIds = new LinkedHashSet<>(preSelectedParticipantIds);
-    this.unselectedParticipantIds = new LinkedHashSet<>();
-    this.participantItems = new LinkedHashMap<>();
-
-    initUI(getTranslation("participant.assign.participants.to.course"));
+    initUI(getTranslation("participant.assign.participants"), DialogSize.BIG);
   }
 
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var left = createCourseLayout();
-    left.getElement().getStyle().setMinWidth("260px");
-    left.getElement().getStyle().set("flex", "1 1 260px");
-    final var right = createParticipantLayout();
-    right.getElement().getStyle().setMinWidth("260px");
-    right.getElement().getStyle().set("flex", "1 1 260px");
+    grid = new ParticipantsGrid(globalInterface, false, false) {
 
-    final var layout = new HorizontalLayout(left, right);
-    layout.setWidthFull();
+      @Override
+      public void createContextMenu() {
+        // override it empty so we don't have a context menu in this case
+      }
+
+      @Nonnull
+      @Override
+      protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
+                                             @Nonnull final ParticipantFilter filter) {
+        filter.setActive(true);
+
+        final var items = super.fetch(query, filter).toList();
+        if (AssignToCourseDialog.this.grid != null) {
+          items.forEach(item -> {
+            if (item.getCourses().contains(currentCourse)) {
+              initiallySelectedParticipantIds.add(item.getId());
+              grid.select(item);
+            }
+          });
+        }
+
+        return items.stream();
+      }
+    };
+    grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
+
+    final var layout = new HorizontalLayout(grid);
     layout.setHeightFull();
-    layout.setAlignItems(FlexComponent.Alignment.STRETCH);
-    layout.addClassNames(LumoUtility.Gap.XLARGE);
-    layout.getStyle().setFlexWrap(Style.FlexWrap.WRAP);
-
-    right.setHeightFull();
-    layout.setFlexGrow(1, left, right);
-
     return layout;
   }
 
   @Nonnull
   @Override
   protected Collection<Button> createActionButtons() {
-    saveButton = createSaveButton();
-    final var cancelButton = createCancelButton();
-    return List.of(cancelButton, saveButton);
+    return List.of(createCancelButton(), createSaveButton());
   }
 
   @Nonnull
-  private VerticalLayout createCourseLayout() {
-    final var title = createTitleSpan(getTranslation("course.course"));
-    courseComboBox = createCourseComboBox();
-
-    return LayoutUtil.createVertical(title, courseComboBox);
-  }
-
-  @Nonnull
-  private VerticalLayout createParticipantLayout() {
-    final var title = createTitleSpan(getTranslation("participant.participants"));
-    final var searchBar = new VASearchFilter(getTranslation("participant.search.participants"));
-    searchBar.addValueChangeListener(e -> searchChanged(e.getValue()));
-    final var participants = createParticipantsCheckboxGroup();
-
-    final var layout = LayoutUtil.createVertical(title, searchBar, participants);
-    layout.setFlexGrow(1, participants);
-    return layout;
-  }
-
-  @Nonnull
-  private Span createTitleSpan(@Nonnull final String titleLabel) {
-    final var title = new Span(titleLabel);
-    title.addClassNames("va-required");
-    title.addClassNames(LumoUtility.FontSize.MEDIUM, LumoUtility.FontWeight.SEMIBOLD);
-    return title;
-  }
-
-  private void searchChanged(@Nullable final String term) {
-    this.searchTerm = term == null ? null : term.trim();
-    applyParticipantFilterToUi();
-  }
-
-  private void applyParticipantFilterToUi() {
-    if (participantsGroup == null) {
-      return;
-    }
-
-    final var searchString = searchTerm == null ? Publ.EMPTY_STRING : searchTerm.toLowerCase(Locale.ROOT);
-
-    final var filtered = participantItems.entrySet().stream()
-            .filter(e -> searchString.isEmpty() || e.getValue().toLowerCase(Locale.ROOT).contains(searchString))
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toCollection(LinkedHashSet::new))
-            .stream()
-            .filter(this::filterForInvalidCourseLevel)
-            .sorted(Comparator.comparing(
-                    id -> participantItems.getOrDefault(id, ""),
-                    String.CASE_INSENSITIVE_ORDER
-            ))
-            .collect(Collectors.toCollection(LinkedHashSet::new));
-
-    selectedParticipantIds = selectedParticipantIds.stream()
-            .filter(this::filterForInvalidCourseLevel)
-            .collect(Collectors.toCollection(LinkedHashSet::new));
-    filtered.addAll(selectedParticipantIds);
-
-    suppressSelectionSync = true;
-    try {
-      participantsGroup.setItems(filtered);
-      participantsGroup.setValue(selectedParticipantIds);
-    } finally {
-      suppressSelectionSync = false;
-    }
-  }
-
-  private boolean filterForInvalidCourseLevel(@Nonnull final Long id) {
-    if (tenantSettingService.getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings() &&
-            courseComboBox != null &&
-            courseComboBox.getValue() != null) {
-      final var course = courseService.getCourseById(courseComboBox.getValue());
-      final var participant = participantService.getParticipantById(id);
-
-      for (final var courseLevel : course.getCourseLevels()) {
-        if (courseLevel.getId() != null &&
-                !participant.getCourseLevels().isEmpty() &&
-                participant.getCourseLevels().stream().map(CourseLevelDto::getId).toList().contains(courseLevel.getId())) {
-          return true;
-        }
-      }
-      return false;
-    }
-    return true;
-  }
-
-  @Nonnull
-  private Button createSaveButton() {
-    final var saveButton = new Button(getTranslation("common.save"));
-    saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    saveButton.setEnabled(false);
-    saveButton.addClickListener(event -> save());
-    return saveButton;
-  }
-
-  @Nonnull
-  private Button createCancelButton() {
-    final var button = new Button(getTranslation("shared.cancel"));
-    button.addClickListener(event -> close());
+  private VAButton createSaveButton() {
+    final var button = new VAButton(getTranslation("common.save"), e -> {
+      save();
+      close();
+    });
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     return button;
   }
 
-  private void updateSaveEnabled() {
-    if (saveButton == null || courseComboBox == null || participantsGroup == null) {
-      return;
-    }
-
-    final var courseOk = courseComboBox.getValue() != null;
-    final var participantsOk = !participantsGroup.getValue().isEmpty() || !unselectedParticipantIds.isEmpty();
-
-    saveButton.setEnabled(courseOk && participantsOk);
-  }
-
   private void save() {
-    if (courseComboBox == null) {
+    if (grid == null) {
       return;
     }
 
-    final var course = courseService.getCourseById(courseComboBox.getValue());
-    selectedParticipantIds.forEach(id -> {
-      final var participant = participantService.getParticipantById(id);
-      participant.addCourse(course);
-      participantService.updateParticipant(participant);
-    });
-    unselectedParticipantIds.forEach(id -> {
-      final var participant = participantService.getParticipantById(id);
-      participant.getCourses().removeIf(c -> Objects.equals(c.getId(), course.getId()));
-      participantService.updateParticipant(participant);
-    });
+    final var currentlySelectedIds = grid.getGrid()
+            .getSelectedItems()
+            .stream()
+            .map(ParticipantDto::getId)
+            .collect(Collectors.toSet());
 
-    NotificationFactory.showSuccessNotification(getTranslation("shared.assigned") + Publ.SPACE + selectedParticipantIds.size()
-            + Publ.SPACE
-            + getTranslation("shared.participants.to.course")
-            + Publ.SPACE
-            + Publ.SIMPLE_QUOTE
-            + course.getTitle()
-            + Publ.SIMPLE_QUOTE
-            + Publ.DOT);
-    close();
+    final var toAdd = new HashSet<>(currentlySelectedIds);
+    toAdd.removeAll(initiallySelectedParticipantIds);
+
+    final var toRemove = new HashSet<>(initiallySelectedParticipantIds);
+    toRemove.removeAll(currentlySelectedIds);
+
+    for (final var id : toAdd) {
+      participantService.addCourse(id, currentCourse);
+    }
+
+    for (final var id : toRemove) {
+      participantService.removeCourse(id, currentCourse);
+    }
   }
 
   @Nonnull
-  private VAComboBox<Long> createCourseComboBox() {
-    final var options = courseService.getAllCourses().stream()
-            .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
-
-    courseComboBox = new VAComboBox<>();
-    courseComboBox.setWidthFull();
-
-    courseComboBox.setItems(options.keySet());
-    courseComboBox.setItemLabelGenerator(id -> options.getOrDefault(id, String.valueOf(id)));
-    courseComboBox.setClearButtonVisible(true);
-    courseComboBox.setValue(preSelectedCourseId);
-
-    courseComboBox.addValueChangeListener(e -> {
-      applyParticipantFilterToUi();
-      updateSaveEnabled();
-    });
-    return courseComboBox;
-  }
-
-  @Nonnull
-  private Scroller createParticipantsCheckboxGroup() {
-    participantItems.clear();
-    participantService.getAllParticipants().stream()
-            .filter(ParticipantDto::isActive)
-            .forEach(p ->
-                    participantItems.put(p.getId(), p.getFullName())
-            );
-
-    participantsGroup = new CheckboxGroup<>();
-    participantsGroup.setItemLabelGenerator(id -> participantItems.getOrDefault(id, getTranslation("participant.participant") + Publ.SPACE + Publ.HASH + id));
-    participantsGroup.addClassName("participants-group");
-    participantsGroup.setWidthFull();
-
-    participantsGroup.addValueChangeListener(e -> {
-      if (suppressSelectionSync) {
-        return;
-      }
-
-      final var oldSelected = new LinkedHashSet<>(selectedParticipantIds);
-      final var newSelected = new LinkedHashSet<>(e.getValue());
-
-      final var deselected = oldSelected.stream()
-              .filter(id -> !newSelected.contains(id))
-              .toList();
-
-      final var selectedAgain = newSelected.stream()
-              .filter(id -> !oldSelected.contains(id))
-              .toList();
-
-      selectedParticipantIds = newSelected;
-      unselectedParticipantIds.addAll(deselected);
-      selectedAgain.forEach(unselectedParticipantIds::remove);
-
-      updateSaveEnabled();
-    });
-
-    applyParticipantFilterToUi();
-
-    final var scroller = new Scroller();
-    scroller.setWidthFull();
-    scroller.setHeightFull();
-    scroller.setContent(participantsGroup);
-    return scroller;
+  private VAButton createCancelButton() {
+    final var button = new VAButton(getTranslation("shared.cancel"));
+    button.addClickListener(e -> close());
+    return button;
   }
 }

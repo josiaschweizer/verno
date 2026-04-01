@@ -153,19 +153,30 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ObjectGridColumn<ParticipantDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<ParticipantDto>>();
-    columns.add(new ObjectGridColumn<>("lastname", ParticipantDto::getLastName, getTranslation("shared.last.name"), true));
-    columns.add(new ObjectGridColumn<>("firstname", ParticipantDto::getFirstName, getTranslation("shared.first.name"), true));
-    columns.add(new ObjectGridColumn<>("birthdate", ParticipantDto::getAgeFromBirthday, getTranslation("shared.age"), true));
-    columns.add(new ObjectGridColumn<>("email", ParticipantDto::getEmail, getTranslation("shared.e.mail"), true));
-    columns.add(new ObjectGridColumn<>("phone", ParticipantDto::getPhoneString, getTranslation("shared.phone"), true));
-    columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote, getTranslation("shared.note"), true));
-    columns.add(new ObjectGridColumn<>("courseLevels", dto -> joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
+    columns.add(new ObjectGridColumn<>("lastname", ParticipantDto::getLastName,
+            getTranslation("shared.last.name"), true));
+    columns.add(new ObjectGridColumn<>("firstname", ParticipantDto::getFirstName,
+            getTranslation("shared.first.name"), true));
+    columns.add(new ObjectGridColumn<>("birthdate", ParticipantDto::getAgeFromBirthday,
+            getTranslation("shared.age"), true));
+    columns.add(new ObjectGridColumn<>("email", ParticipantDto::getEmail,
+            getTranslation("shared.e.mail"), true));
+    columns.add(new ObjectGridColumn<>("phone", ParticipantDto::getPhoneString,
+            getTranslation("shared.phone"), true));
+    columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote,
+            getTranslation("shared.note"), true));
+    columns.add(new ObjectGridColumn<>("courseLevels", dto ->
+            joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
             getTranslation("courseLevel.course_level"), true));
-    columns.add(new ObjectGridColumn<>("courses", dto -> joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
+    columns.add(new ObjectGridColumn<>("courses", dto ->
+            joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
             getTranslation("course.course"), true));
-    columns.add(new ObjectGridColumn<>("parentOne", dto -> dto.getParentOne().displayName(), getTranslation("participant.parent_one"), true));
-    columns.add(new ObjectGridColumn<>("parentTwo", dto -> dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), true));
-    columns.add(new ObjectGridColumn<>("address", dto -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
+    columns.add(new ObjectGridColumn<>("parentOne", dto ->
+            dto.getParentOne().displayName(), getTranslation("participant.parent_one"), true));
+    columns.add(new ObjectGridColumn<>("parentTwo", dto ->
+            dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), true));
+    columns.add(new ObjectGridColumn<>("address", dto ->
+            dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
     return columns;
   }
 
