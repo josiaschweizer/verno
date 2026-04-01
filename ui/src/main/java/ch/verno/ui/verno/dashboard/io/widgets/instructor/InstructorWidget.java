@@ -14,12 +14,10 @@ import jakarta.annotation.Nonnull;
 public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final IInstructorService instructorService;
   private InstructorsGrid instructorGrid;
 
   public InstructorWidget(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
-    this.instructorService = globalInterface.getService(IInstructorService.class);
 
     build();
   }

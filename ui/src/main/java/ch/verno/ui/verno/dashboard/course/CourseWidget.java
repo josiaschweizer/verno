@@ -26,6 +26,7 @@ import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -87,9 +88,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
         if (participantsInCourse.isEmpty()) {
           emailButton.setTooltipText(getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature"));
-        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE){
+        } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE) {
           emailButton.setTooltipText(getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE));
-        }else {
+        } else {
           emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
         }
       }
@@ -102,15 +103,15 @@ public class CourseWidget extends VAAccordionWidgetBase {
       new CourseReportDialog(
               globalInterface,
               currentCourse,
-              participantsInCourse).open();
+              participantsInCourse)
+              .open();
     });
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
               final var dialog = new AssignToCourseDialog2(
                       globalInterface,
-                      currentCourse,
-                      participantsInCourse
+                      currentCourse
               );
 
               dialog.addClosedListener(ev -> refresh());
@@ -153,9 +154,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
         @Nonnull
         @Override
         protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
-          final var actions = super.buildContextMenuActions(dto);
+          final var actions = new ArrayList<ActionDef>();
           actions.add(ActionDef.create(
-                  SpanFactory.createSpan("Remove participant", VaadinIcon.TRASH),
+                  SpanFactory.createSpan("Remove participant from Course", VaadinIcon.TRASH),
                   () -> removeParticipant(dto)
           ));
           return actions;
@@ -170,7 +171,8 @@ public class CourseWidget extends VAAccordionWidgetBase {
   }
 
   private void removeParticipant(@Nonnull final ParticipantDto dto) {
-    System.out.println(dto);
+    participantService.removeCourse(dto.getId(), currentCourse);
+    refresh();
   }
 
   @Override

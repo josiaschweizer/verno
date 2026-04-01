@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.widget;
 
+import ch.verno.ui.base.components.has.sessionstorage.HasSessionStorage;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -10,11 +11,12 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 
 @CssImport("./components/widget/va-accordion-widget-base.css")
-public abstract class VAAccordionWidgetBase extends AccordionPanel {
+public abstract class VAAccordionWidgetBase extends AccordionPanel implements HasSessionStorage {
 
   protected VAAccordionWidgetBase() {
     setWidthFull();
@@ -23,6 +25,8 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel {
   protected final void build() {
     initSummary();
     initContent();
+    loadOpenState();
+    registerOpenStateListener();
   }
 
   private void initSummary() {
@@ -54,6 +58,33 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel {
 
   protected void refresh() {
     // can be overridden by subclasses
+  }
+
+  @Nonnull
+  @Override
+  public Element getStorageElement() {
+    return getElement();
+  }
+
+  @Nonnull
+  protected String getSessionStorageKey() {
+    return "opened";
+  }
+
+  protected void loadOpenState() {
+    loadFromSessionStorage(getSessionStorageKey(), value -> {
+      if (Boolean.parseBoolean(value)) {
+        setOpened(true);
+      }
+    });
+  }
+
+  protected void saveOpenState() {
+    saveToSessionStorage(getSessionStorageKey(), String.valueOf(isOpened()));
+  }
+
+  private void registerOpenStateListener() {
+    getElement().addPropertyChangeListener("opened", event -> saveOpenState());
   }
 
   @Nonnull

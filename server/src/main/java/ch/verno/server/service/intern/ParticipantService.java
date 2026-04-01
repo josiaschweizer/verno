@@ -208,4 +208,23 @@ public class ParticipantService implements IParticipantService {
             .map(ParticipantMapper::toDto)
             .toList();
   }
+
+  @Override
+  @Transactional
+  public void addCourse(@Nonnull final Long participantId,
+                        @Nonnull final CourseDto course) {
+    final var participant = getParticipantById(participantId);
+    participant.addCourse(course);
+    updateParticipant(participant);
+  }
+
+  @Override
+  @Transactional
+  public void removeCourse(@Nonnull final Long participantId,
+                           @Nonnull final CourseDto course) {
+    final var participant = getParticipantById(participantId);
+    final var courses = participant.getCourses();
+    courses.remove(course);
+    updateParticipant(participant);
+  }
 }

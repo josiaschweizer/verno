@@ -2,44 +2,48 @@ package ch.verno.ui.verno.dashboard.assignment;
 
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.components.contextmenu.ActionDef;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VADialog;
-import ch.verno.ui.base.pages.grid.ComponentGridColumn;
-import ch.verno.ui.base.pages.grid.GridColumnHelper;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AssignToCourseDialog2 extends VADialog {
 
   @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final IParticipantService participantService;
   @Nonnull private final CourseDto currentCourse;
+  @Nonnull private final Set<Long> initiallySelectedParticipantIds;
 
-  @Nonnull private final List<ParticipantDto> selectedParticipants;
+  @Nullable private ParticipantsGrid grid;
 
   public AssignToCourseDialog2(@Nonnull final GlobalInterface globalInterface,
-                               @Nonnull final CourseDto currentCourse,
-                               @Nonnull final List<ParticipantDto> selectedParticipants) {
+                               @Nonnull final CourseDto currentCourse) {
     this.globalInterface = globalInterface;
+    this.participantService = globalInterface.getService(IParticipantService.class);
     this.currentCourse = currentCourse;
-    this.selectedParticipants = selectedParticipants;
+    this.initiallySelectedParticipantIds = new HashSet<>();
 
-    initUI("Assign Participants", DialogSize.BIG);
+    initUI(getTranslation("participant.assign.participants"), DialogSize.BIG);
   }
-
 
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var grid = new ParticipantsGrid(globalInterface, false, false) {
-
+    grid = new ParticipantsGrid(globalInterface, false, false) {
 
       @Override
       public void createContextMenu() {
@@ -48,33 +52,76 @@ public class AssignToCourseDialog2 extends VADialog {
 
       @Nonnull
       @Override
-      protected List<ComponentGridColumn<ParticipantDto>> getPrefixComponentColumns() {
-        final var columns = super.getPrefixComponentColumns();
-        columns.add(GridColumnHelper.componentCol("selectionCheckbox", dto -> createSelectionCheckbox(dto), "Selektiert"));
-        return columns;
+      protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
+                                             @Nonnull final ParticipantFilter filter) {
+        filter.setActive(true);
+
+        final var items = super.fetch(query, filter).toList();
+        if (AssignToCourseDialog2.this.grid != null) {
+          items.forEach(item -> {
+            if (item.getCourses().contains(currentCourse)) {
+              initiallySelectedParticipantIds.add(item.getId());
+              grid.select(item);
+            }
+          });
+        }
+
+        return items.stream();
       }
     };
+    grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
 
-    return new HorizontalLayout(grid);
-  }
-
-  @Nonnull
-  private Checkbox createSelectionCheckbox(@Nonnull final ParticipantDto dto) {
-    final var checkbox = new Checkbox(false);
-    checkbox.setValue(dto.getCourses().contains(currentCourse));
-    checkbox.addValueChangeListener(value -> {
-      if (value.getValue()) {
-        selectedParticipants.add(dto);
-      } else {
-        selectedParticipants.remove(dto);
-      }
-    });
-    return checkbox;
+    final var layout = new HorizontalLayout(grid);
+    layout.setHeightFull();
+    return layout;
   }
 
   @Nonnull
   @Override
   protected Collection<Button> createActionButtons() {
-    return List.of();
+    return List.of(createCancelButton(), createSaveButton());
+  }
+
+  @Nonnull
+  private VAButton createSaveButton() {
+    final var button = new VAButton(getTranslation("common.save"), e -> {
+      save();
+      close();
+    });
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    return button;
+  }
+
+  private void save() {
+    if (grid == null) {
+      return;
+    }
+
+    final var currentlySelectedIds = grid.getGrid()
+            .getSelectedItems()
+            .stream()
+            .map(ParticipantDto::getId)
+            .collect(Collectors.toSet());
+
+    final var toAdd = new HashSet<>(currentlySelectedIds);
+    toAdd.removeAll(initiallySelectedParticipantIds);
+
+    final var toRemove = new HashSet<>(initiallySelectedParticipantIds);
+    toRemove.removeAll(currentlySelectedIds);
+
+    for (final var id : toAdd) {
+      participantService.addCourse(id, currentCourse);
+    }
+
+    for (final var id : toRemove) {
+      participantService.removeCourse(id, currentCourse);
+    }
+  }
+
+  @Nonnull
+  private VAButton createCancelButton() {
+    final var button = new VAButton(getTranslation("shared.cancel"));
+    button.addClickListener(e -> close());
+    return button;
   }
 }

@@ -42,4 +42,10 @@ public interface IParticipantService {
 
   @Nonnull
   List<ParticipantDto> findParticipantsByCourse(@Nonnull CourseDto course);
+
+  void addCourse(@Nonnull Long participantId,
+                 @Nonnull CourseDto course);
+
+  void removeCourse(@Nonnull Long participantId,
+                    @Nonnull CourseDto course);
 }

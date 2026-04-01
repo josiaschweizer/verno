@@ -36,15 +36,13 @@ public class CourseReport extends BaseReport<CourseReportDto> {
       processedHtml = templateEngine.process(getTemplate(), context);
     }
 
-
-
-    try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+    try (final var outputStream = new ByteArrayOutputStream()) {
       final var pdfBuilder = new PdfRendererBuilder();
       pdfBuilder.useFastMode();
       pdfBuilder.withHtmlContent(processedHtml, null);
-      pdfBuilder.toStream(out);
+      pdfBuilder.toStream(outputStream);
       pdfBuilder.run();
-      return out.toByteArray();
+      return outputStream.toByteArray();
     } catch (Exception e) {
       throw new PDFRendererException("Failed to render course report PDF", e);
     }
