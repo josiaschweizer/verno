@@ -1,33 +1,34 @@
 package ch.verno.ui.verno.dashboard.widgets;
 
-import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.db.service.intern.ICourseScheduleService;
+import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.dashboard.VASimpleBaseDashboardWidget;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleDialog;
+import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleDialog2;
 import jakarta.annotation.Nonnull;
 
 public class CourseScheduleFinishWidget extends VASimpleBaseDashboardWidget {
 
   public static final CourseScheduleStatus COURSE_SCHEDULE_STATUS = CourseScheduleStatus.ACTIVE;
 
-  public CourseScheduleFinishWidget(@Nonnull final ICourseScheduleService courseScheduleService) {
+  public CourseScheduleFinishWidget(@Nonnull final GlobalInterface globalInterface) {
     super("courseSchedule.finish.course.schedules",
             "courseSchedule.finish.course.schedules.that.have.reached.their.end.completed.course.schedules.will.no.longer.appear.in.the.list.of.active.course.schedules",
             "courseSchedule.finish.course.schedules"
     );
-    super.addActionButtonClickListener(event -> actionButtonClicked(courseScheduleService));
+    super.addActionButtonClickListener(event -> actionButtonClicked(globalInterface));
 
     setWidthFull();
   }
 
-  private void actionButtonClicked(@Nonnull final ICourseScheduleService courseScheduleService) {
-    final var courseSchedules = courseScheduleService.getCourseSchedulesByStatus(COURSE_SCHEDULE_STATUS);
+  private void actionButtonClicked(@Nonnull final GlobalInterface globalInterface) {
+    final var courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
 
-    if (courseSchedules.isEmpty()) {
+    if (courseScheduleService.getCourseSchedulesByStatus(COURSE_SCHEDULE_STATUS).isEmpty()) {
       NotificationFactory.showInfoNotification(getTranslation("courseSchedule.no.active.course.schedules.available.to.finish"));
     } else {
-      final var dialog = new CourseScheduleDialog(courseScheduleService, COURSE_SCHEDULE_STATUS, true);
+      final var dialog = new CourseScheduleDialog2(globalInterface, COURSE_SCHEDULE_STATUS, true);
       dialog.open();
     }
   }

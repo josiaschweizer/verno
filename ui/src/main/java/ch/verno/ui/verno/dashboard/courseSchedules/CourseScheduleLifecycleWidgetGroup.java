@@ -10,11 +10,10 @@ import jakarta.annotation.Nonnull;
 
 public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implements Refreshable {
 
-  @Nonnull
-  private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final GlobalInterface globalInterface;
 
   public CourseScheduleLifecycleWidgetGroup(@Nonnull final GlobalInterface globalInterface) {
-    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
+    this.globalInterface = globalInterface;
 
     setWidthFull();
 
@@ -22,8 +21,8 @@ public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implement
   }
 
   private void init() {
-    add(new CourseScheduleActivateWidget(courseScheduleService));
-    add(new CourseScheduleFinishWidget(courseScheduleService));
+    add(new CourseScheduleActivateWidget(globalInterface));
+    add(new CourseScheduleFinishWidget(globalInterface));
   }
 
   @Override

@@ -12,6 +12,7 @@ import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
@@ -45,11 +46,6 @@ public class AssignToCourseDialog extends VADialog {
   protected HorizontalLayout createContent() {
     grid = new ParticipantsGrid(globalInterface, false, false) {
 
-      @Override
-      public void createContextMenu() {
-        // override it empty so we don't have a context menu in this case
-      }
-
       @Nonnull
       @Override
       protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
@@ -68,11 +64,22 @@ public class AssignToCourseDialog extends VADialog {
 
         return items.stream();
       }
+
+      @Override
+      public void createContextMenu() {
+        // override it empty so we don't have a context menu in this case
+      }
+
+      @Override
+      protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<ParticipantDto> event) {
+        // override it empty so we don't have an option for navigation out of the dialog
+      }
     };
     grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
 
     final var layout = new HorizontalLayout(grid);
     layout.setHeightFull();
+    layout.expand(grid);
     return layout;
   }
 
