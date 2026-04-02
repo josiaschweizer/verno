@@ -6,7 +6,6 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.dashboard.VASimpleBaseDashboardWidget;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleDialog;
-import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleDialog2;
 import jakarta.annotation.Nonnull;
 
 public class CourseScheduleActivateWidget extends VASimpleBaseDashboardWidget {
@@ -29,7 +28,7 @@ public class CourseScheduleActivateWidget extends VASimpleBaseDashboardWidget {
       final var notificationMessage = getTranslation("courseSchedule.no.planned.course.schedules.available.there.are.currently.no.course.schedules.that.can.be.activated");
       NotificationFactory.showInfoNotification(notificationMessage);
     } else {
-      final var dialog = new CourseScheduleDialog2(globalInterface, COURSE_SCHEDULE_STATUS, false);
+      final var dialog = new CourseScheduleDialog(globalInterface, COURSE_SCHEDULE_STATUS, false);
       dialog.open();
     }
   }
