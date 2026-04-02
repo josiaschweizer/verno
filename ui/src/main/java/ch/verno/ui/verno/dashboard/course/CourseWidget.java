@@ -177,17 +177,24 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void refresh() {
+    final var oldParticipantsInCourse = participantsInCourse;
+
     if (participantsGrid == null) {
       participantsInCourse = participantService.findParticipants(
               ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null
               ));
-      return;
+    } else {
+      participantsGrid.setFilter(participantsGrid.getFilter());
+      participantsInCourse = participantsGrid.getGrid()
+              .getDataProvider()
+              .fetch(new Query<>())
+              .toList();
     }
 
-    participantsGrid.setFilter(participantsGrid.getFilter());
-    participantsInCourse = participantsGrid.getGrid()
-            .getDataProvider()
-            .fetch(new Query<>())
-            .toList();
+
+    if ((oldParticipantsInCourse.isEmpty() && !participantsInCourse.isEmpty()) ||
+            (!oldParticipantsInCourse.isEmpty() && participantsInCourse.isEmpty())) {
+      build();
+    }
   }
 }

@@ -11,11 +11,13 @@ import ch.verno.ui.base.pages.grid.ComponentGridColumn;
 import ch.verno.ui.base.pages.grid.ObjectGridColumn;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +31,15 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Nonnull
   private final ICourseScheduleService courseScheduleService;
 
+  @Autowired
   public CourseSchedulesGrid(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, CourseScheduleFilter.empty());
+    this(globalInterface, true, true);
+  }
+
+  public CourseSchedulesGrid(@Nonnull final GlobalInterface globalInterface,
+                             final boolean showGridToolbar,
+                             final boolean showFilterToolbar) {
+    super(globalInterface, CourseScheduleFilter.empty(), showGridToolbar, showFilterToolbar);
     this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
   }
 
@@ -91,11 +100,11 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
 
     final var span = new Span();
     span.getStyle()
-            .set("background-color", hexColor)
-            .set("width", "1rem")
-            .set("height", "1rem")
-            .set("border-radius", "50%")
-            .set("display", "inline-block");
+            .setBackgroundColor(hexColor)
+            .setWidth("1rem")
+            .setHeight("1rem")
+            .setBorderRadius("50%")
+            .setDisplay(Style.Display.INLINE_BLOCK);
 
     return span;
   }

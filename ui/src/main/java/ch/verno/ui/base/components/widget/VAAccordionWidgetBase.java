@@ -23,6 +23,8 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel implements Ha
   }
 
   protected final void build() {
+    removeAll();
+
     initSummary();
     initContent();
     loadOpenState();
@@ -68,7 +70,7 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel implements Ha
 
   @Nonnull
   protected String getSessionStorageKey() {
-    return "opened";
+    return this.getId().orElse(getTitleText());
   }
 
   protected void loadOpenState() {

@@ -1,8 +1,8 @@
 package ch.verno.server.spec;
 
 import ch.verno.common.db.filter.CourseScheduleFilter;
-import ch.verno.publ.Publ;
 import ch.verno.db.entity.CourseScheduleEntity;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.criteria.*;
@@ -20,7 +20,8 @@ public class CourseScheduleSpec {
 
       Join<CourseScheduleEntity, String> weeksJoin = null;
 
-      final var searchText = normalize(filter.searchText());
+
+      final var searchText = BaseSpec.normalize(filter.getSearchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
         final var pattern = "%" + searchText + "%";
@@ -37,14 +38,17 @@ public class CourseScheduleSpec {
         );
       }
 
-      if (filter.week() != null) {
+      if (filter.getWeek() != null) {
         query.distinct(true);
         if (weeksJoin == null) {
           weeksJoin = root.join("weeks", JoinType.INNER);
         }
 
-        final var weekAsString = String.valueOf(filter.week());
+        final var weekAsString = String.valueOf(filter.getWeek());
         predicates.add(cb.equal(weeksJoin, weekAsString));
+      }
+      if (filter.getStatus() != null) {
+        predicates.add(cb.equal(root.get("status"), filter.getStatus()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
@@ -56,13 +60,5 @@ public class CourseScheduleSpec {
                                      @Nonnull final Expression<?> path,
                                      @Nonnull final String pattern) {
     return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
-  }
-
-  @Nonnull
-  private static String normalize(@Nullable final String s) {
-    if (s == null) {
-      return Publ.EMPTY_STRING;
-    }
-    return s.trim().toLowerCase(Locale.ROOT);
   }
 }
