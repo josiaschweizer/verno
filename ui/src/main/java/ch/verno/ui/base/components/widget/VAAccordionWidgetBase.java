@@ -23,6 +23,8 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel implements Ha
   }
 
   protected final void build() {
+    removeAll();
+
     initSummary();
     initContent();
     loadOpenState();
