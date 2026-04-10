@@ -156,7 +156,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
         protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
           final var actions = new ArrayList<ActionDef>();
           actions.add(ActionDef.create(
-                  SpanFactory.createSpan("Remove participant from Course", VaadinIcon.TRASH),
+                  SpanFactory.createSpan(getTranslation("participant.remove.participant.from.course"), VaadinIcon.TRASH),
                   () -> removeParticipant(dto)
           ));
           return actions;

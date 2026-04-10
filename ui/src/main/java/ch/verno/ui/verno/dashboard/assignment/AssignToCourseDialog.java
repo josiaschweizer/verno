@@ -1,9 +1,11 @@
 package ch.verno.ui.verno.dashboard.assignment;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.IParticipantService;
+import ch.verno.common.db.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
@@ -18,7 +20,10 @@ import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +31,8 @@ public class AssignToCourseDialog extends VADialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IParticipantService participantService;
+  @Nonnull private final ITenantSettingService tenantSettingService;
+
   @Nonnull private final CourseDto currentCourse;
   @Nonnull private final Set<Long> initiallySelectedParticipantIds;
 
@@ -35,6 +42,8 @@ public class AssignToCourseDialog extends VADialog {
                               @Nonnull final CourseDto currentCourse) {
     this.globalInterface = globalInterface;
     this.participantService = globalInterface.getService(IParticipantService.class);
+    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
+
     this.currentCourse = currentCourse;
     this.initiallySelectedParticipantIds = new HashSet<>();
 
@@ -51,6 +60,13 @@ public class AssignToCourseDialog extends VADialog {
       protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
                                              @Nonnull final ParticipantFilter filter) {
         filter.setActive(true);
+        if (tenantSettingService.getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings()) {
+          filter.setCourseLevelIds(currentCourse.getCourseLevels()
+                  .stream()
+                  .map(BaseDto::getId)
+                  .collect(Collectors.toSet())
+          );
+        }
 
         final var items = super.fetch(query, filter).toList();
         if (AssignToCourseDialog.this.grid != null) {
@@ -72,7 +88,12 @@ public class AssignToCourseDialog extends VADialog {
 
       @Override
       protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<ParticipantDto> event) {
-        // override it empty so we don't have an option for navigation out of the dialog
+        final var clickedItem = event.getItem();
+        if (grid.getSelectionModel().isSelected(clickedItem)) {
+          grid.getSelectionModel().deselect(clickedItem);
+        } else {
+          grid.getSelectionModel().select(clickedItem);
+        }
       }
     };
     grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
