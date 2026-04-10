@@ -14,8 +14,12 @@ import jakarta.annotation.Nullable;
 @CssImport(CssImportConstants.VA_BUTTON)
 public class VAButton extends Button {
 
-  private boolean pseudoReadonly = false;
-  @Nullable private String readOnlyTooltip;
+  private static final String JS_CLICK_PARENT = "this.click()";
+  private static final String READONLY_CLASS_NAME = "va-button-readonly";
+
+  private boolean pseudoEnabled = true;
+  private boolean forwardClickToParent = false;
+  @Nullable private String disableTooltipText;
 
   public VAButton() {
     super();
@@ -60,17 +64,33 @@ public class VAButton extends Button {
     addClickListener(listener);
   }
 
-  public void setPseudoReadOnly(final boolean readonly,
-                                @Nonnull final String tooltipText) {
-    this.pseudoReadonly = readonly;
-    this.readOnlyTooltip = tooltipText;
+  public void removePseudoEnabled() {
+    pseudoEnabled = true;
+    forwardClickToParent = false;
+    disableTooltipText = null;
 
-    if (readonly) {
-      addClassName("va-button-readonly");
-      setTooltipText(tooltipText);
-    } else {
-      removeClassName("va-button-readonly");
+    removeClassName(READONLY_CLASS_NAME);
+    setTooltipText(Publ.EMPTY_STRING);
+  }
+
+  public void setPseudoEnabled(final boolean enabled,
+                               @Nonnull final String tooltipText) {
+    setPseudoEnabled(enabled, tooltipText, true);
+  }
+
+  public void setPseudoEnabled(final boolean enabled,
+                               @Nonnull final String tooltipText,
+                               final boolean forwardClickToParent) {
+    this.pseudoEnabled = enabled;
+    this.forwardClickToParent = forwardClickToParent;
+    this.disableTooltipText = enabled ? null : tooltipText;
+
+    if (enabled) {
+      removeClassName(READONLY_CLASS_NAME);
       setTooltipText(Publ.EMPTY_STRING);
+    } else {
+      addClassName(READONLY_CLASS_NAME);
+      setTooltipText(tooltipText);
     }
   }
 
@@ -79,10 +99,14 @@ public class VAButton extends Button {
     return addClickListener(listener, false);
   }
 
+  @Nonnull
   public Registration addClickListener(@Nonnull final ComponentEventListener<ClickEvent<Button>> listener,
-                                       final boolean ignorePseudoReadOnly) {
+                                       final boolean ignorePseudoDisabled) {
     return super.addClickListener(event -> {
-      if (pseudoReadonly && !ignorePseudoReadOnly) {
+      if (!pseudoEnabled && !ignorePseudoDisabled) {
+        if (forwardClickToParent) {
+          getParent().ifPresent(parent -> parent.getElement().executeJs(JS_CLICK_PARENT));
+        }
         return;
       }
 
@@ -90,12 +114,12 @@ public class VAButton extends Button {
     });
   }
 
-  public boolean isPseudoReadonly() {
-    return pseudoReadonly;
+  public boolean isPseudoEnabled() {
+    return pseudoEnabled;
   }
 
   @Nullable
-  public String getReadOnlyTooltip() {
-    return readOnlyTooltip;
+  public String getDisableTooltipText() {
+    return disableTooltipText;
   }
 }

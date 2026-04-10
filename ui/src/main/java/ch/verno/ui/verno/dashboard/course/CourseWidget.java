@@ -81,31 +81,32 @@ public class CourseWidget extends VAAccordionWidgetBase {
     if (mailConfigService.get().hasConfigForCurrentTenant()) {
       if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
               !participantsInCourse.isEmpty()) {
-        emailButton.setEnabled(true);
-        emailButton.setTooltipText(getTranslation("setting.send.email"));
+        emailButton.removePseudoEnabled();
       } else {
-        emailButton.setEnabled(false);
-
+        String tooltipText;
         if (participantsInCourse.isEmpty()) {
-          emailButton.setTooltipText(getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature"));
+          tooltipText = getTranslation("shared.no.participants.assigned.to.this.course.please.assign.participants.to.enable.this.feature");
         } else if (participantsInCourse.size() > VernoConstants.MAX_MAIL_BATCH_SIZE) {
-          emailButton.setTooltipText(getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE));
+          tooltipText = getTranslation("shared.verno.cannot.proccess.more.than.0.emails.at.once.please.reduce.the.number.of.participants.in.this.course.to.enable.this.feature.for.more.information.please.contact.support", VernoConstants.MAX_MAIL_BATCH_SIZE);
         } else {
-          emailButton.setTooltipText(getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings"));
+          tooltipText = getTranslation("setting.your.email.configuration.is.not.valid.please.check.your.settings");
         }
+
+        emailButton.setPseudoEnabled(false, tooltipText);
       }
     } else {
-      emailButton.setEnabled(false);
-      emailButton.setTooltipText(getTranslation("setting.please.set.up.your.email.configuration.in.the.settings.to.enable.this.feature"));
+      emailButton.setPseudoEnabled(false, getTranslation("setting.please.set.up.your.email.configuration.in.the.settings.to.enable.this.feature"));
     }
 
-    final var reportButton = createHeaderButton(getTranslation("setting.report"), VaadinIcon.FILE_TEXT, e -> {
-      new CourseReportDialog(
-              globalInterface,
-              currentCourse,
-              participantsInCourse)
-              .open();
-    });
+    final var reportButton = createHeaderButton(
+            getTranslation("setting.report"),
+            VaadinIcon.FILE_TEXT,
+            e -> new CourseReportDialog(
+                    globalInterface,
+                    currentCourse,
+                    participantsInCourse)
+                    .open()
+    );
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
