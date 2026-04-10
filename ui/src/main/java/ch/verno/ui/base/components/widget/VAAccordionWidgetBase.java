@@ -1,5 +1,7 @@
 package ch.verno.ui.base.components.widget;
 
+import ch.verno.publ.CssImportConstants;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.has.sessionstorage.HasSessionStorage;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -15,7 +17,7 @@ import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 
-@CssImport("./components/widget/va-accordion-widget-base.css")
+@CssImport(CssImportConstants.ACCORDION_WIDGET_BASE)
 public abstract class VAAccordionWidgetBase extends AccordionPanel implements HasSessionStorage {
 
   protected VAAccordionWidgetBase() {
@@ -90,10 +92,10 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel implements Ha
   }
 
   @Nonnull
-  protected final Button createHeaderButton(@Nonnull final String text,
-                                            @Nonnull final VaadinIcon icon,
-                                            @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
-    final var button = new Button(text, icon.create());
+  protected final VAButton createHeaderButton(@Nonnull final String text,
+                                              @Nonnull final VaadinIcon icon,
+                                              @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
+    final var button = new VAButton(text, icon.create());
     button.addClassName("va-acc-widget__header-button");
 
     button.getElement()

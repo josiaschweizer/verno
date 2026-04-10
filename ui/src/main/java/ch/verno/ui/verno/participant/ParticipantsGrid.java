@@ -12,6 +12,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
@@ -266,9 +267,10 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull
   @Override
   protected ViewToolbar createGridToolbar() {
-    final var gridToolbar = ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
-    final var participantReportDialogButton = new Button(getTranslation("shared.report"), VaadinIcon.FILE_TEXT.create());
+    final var participantReportDialogButton = new VAButton(getTranslation("shared.report"), VaadinIcon.FILE_TEXT.create());
     participantReportDialogButton.addClickListener(e -> createDialogButtonClick());
+
+    final var gridToolbar = ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
     gridToolbar.addActionButton(participantReportDialogButton, true);
     return gridToolbar;
   }
