@@ -17,7 +17,6 @@ export default function Terms() {
           account credentials.
         </p>
       </LegalSection>
-      di
       <LegalSection title="3. Acceptable use">
         <p>
           You agree not to misuse the service or use it for unlawful purposes.
