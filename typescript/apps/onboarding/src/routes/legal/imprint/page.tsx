@@ -1,7 +1,7 @@
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
 
-export function Imprint() {
+export default function Imprint() {
   return (
     <LegalPage title="Imprint">
       <LegalSection title="Provider">

@@ -1,7 +1,7 @@
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
 
-export function Terms() {
+export default function Terms() {
   return (
     <LegalPage title="Terms of Service">
       <p>These Terms of Service govern your use of Verno and its services.</p>
