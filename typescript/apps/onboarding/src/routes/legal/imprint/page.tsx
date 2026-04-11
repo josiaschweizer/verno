@@ -1,20 +1,26 @@
-export default function Imprint() {
+import LegalPage from '@/components/common/legal/LegalPage'
+import LegalSection from '@/components/common/legal/LegalSection'
+
+export function Imprint() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="text-3xl font-semibold mb-6">Imprint</h1>
-
-      <div className="space-y-4 text-muted-foreground text-sm">
-        <p>Verno</p>
-
+    <LegalPage title="Imprint">
+      <LegalSection title="Provider">
         <p>
-          Josia Schweizer <br />
-          Schwarzenbach 2178 <br />
-          9200 Gossau <br />
-          Schweiz
+          Verno
+          <br />
+          Josia Schweizer
+          <br />
+          Schwarzenbach 2178
+          <br />
+          9200 Gossau
+          <br />
+          Switzerland
         </p>
+      </LegalSection>
 
-        <p>Email: josia.schweizer@gmail.com</p>
-      </div>
-    </div>
+      <LegalSection title="Contact">
+        <p>josia.schweizer@gmail.com</p>
+      </LegalSection>
+    </LegalPage>
   )
 }
