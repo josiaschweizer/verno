@@ -53,9 +53,13 @@ export default function Privacy() {
 
       <LegalSection title="7. Contact">
         <p>
-          For any privacy-related requests, please contact:
-          <br />
-          josia.schweizer@gmail.com
+          For any privacy-related requests, please contact:{' '}
+          <a
+            href="mailto:josia.schweizer@gmail.com"
+            className="text-primary underline"
+          >
+            josia.schweizer@gmail.com
+          </a>
         </p>
       </LegalSection>
     </LegalPage>

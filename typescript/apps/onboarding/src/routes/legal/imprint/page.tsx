@@ -19,7 +19,14 @@ export default function Imprint() {
       </LegalSection>
 
       <LegalSection title="Contact">
-        <p>josia.schweizer@gmail.com</p>
+        <p>
+          <a
+            href="mailto:josia.schweizer@gmail.com"
+            className="text-primary underline"
+          >
+            josia.schweizer@gmail.com
+          </a>
+        </p>
       </LegalSection>
     </LegalPage>
   )

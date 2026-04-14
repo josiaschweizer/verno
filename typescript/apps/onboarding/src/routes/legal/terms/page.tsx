@@ -38,7 +38,14 @@ export default function Terms() {
         <p>We may update these terms at any time.</p>
       </LegalSection>
       <LegalSection title="7. Contact">
-        <p>josia.schweizer@gmail.com</p>
+        <p>
+          <a
+            href="mailto:josia.schweizer@gmail.com"
+            className="text-primary underline"
+          >
+            josia.schweizer@gmail.com
+          </a>
+        </p>
       </LegalSection>
     </LegalPage>
   )
