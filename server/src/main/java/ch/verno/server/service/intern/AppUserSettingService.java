@@ -99,9 +99,23 @@ public class AppUserSettingService implements IAppUserSettingService {
   @Override
   @Transactional
   public AppUserSettingDto saveAppUserSetting(@Nonnull final AppUserSettingDto dto) {
-    if (dto.getId() == null) {
-      return createAppUserSetting(dto);
+    final var existing = repository.findByUserId(dto.getUserId());
+
+    if (existing.isPresent()) {
+      AppUserSettingMapper.updateEntity(existing.get(), dto);
+      return AppUserSettingMapper.toDto(repository.save(existing.get()));
     }
-    return updateAppUserSetting(dto);
+
+    final var user = appUserRepository.findById(dto.getUserId())
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
+
+    final var entity = new AppUserSettingEntity(
+            user.getTenant(),
+            user,
+            dto.getTheme(),
+            dto.getLanguageTag()
+    );
+
+    return AppUserSettingMapper.toDto(repository.save(entity));
   }
 }
