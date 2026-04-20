@@ -1,4 +1,13 @@
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+WORKDIR /build
+
+COPY . .
+RUN mvn -pl ui -am clean package -DskipTests && \
+    cp ui/target/*.jar /build/app.jar
+
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY ui/target/ui-1.0-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+
+COPY --from=build /build/app.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
