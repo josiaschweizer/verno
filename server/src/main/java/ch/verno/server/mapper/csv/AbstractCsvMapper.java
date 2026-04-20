@@ -1,7 +1,8 @@
 package ch.verno.server.mapper.csv;
 
-import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
+import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.lib.StringSanitizer;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
@@ -29,7 +30,6 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
                                        @Nonnull final List<DbField<T>> stringFields,
                                        @Nonnull final List<DbFieldTyped<T, ?>> typedFields,
                                        @Nonnull final List<DbFieldNested<T, ?>> nestedFields) {
-
     final var saveables = new ArrayList<T>();
     final var errors = new ArrayList<CsvMappingRowError>();
 
@@ -42,17 +42,17 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
 
     for (int i = 0; i < csvRows.size(); i++) {
       final int rowIndex = i + 1;
-      final var row = csvRows.get(i).row();
+      final var row = normalizeHashMap(csvRows.get(i).row()); // we have to sanitize the input because of bom encoding
 
       final var target = newTarget();
       final var setKeys = new HashSet<String>();
 
       for (final var entry : mapping.entrySet()) {
-        final var csvColumn = entry.getKey();
+        final var csvColumn = StringSanitizer.cleanNullSave(entry.getKey());
         final var dbKey = entry.getValue();
 
         final var raw = row.get(csvColumn);
-        final var value = normalize(raw);
+        final var value = normalizeString(raw);
         if (value == null) {
           continue;
         }
@@ -128,7 +128,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
 
       final var nestedKey = dbKey.substring(prefix.length());
       final var raw = row.get(csvColumn);
-      final var value = normalize(raw);
+      final var value = normalizeString(raw);
 
       if (value == null) {
         continue;
@@ -225,14 +225,22 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
     return map;
   }
 
-
   @Nullable
-  protected final String normalize(@Nullable final String s) {
-    if (s == null) {
-      return null;
+  protected final String normalizeString(@Nullable final String s) {
+    return StringSanitizer.clean(s);
+  }
+
+  @Nonnull
+  private LinkedHashMap<String, String> normalizeHashMap(@Nonnull final Map<String, String> rawMap) {
+    final var cleanMap = new LinkedHashMap<String, String>();
+
+    for (final var rowEntry : rawMap.entrySet()) {
+      cleanMap.put(
+              StringSanitizer.cleanNullSave(rowEntry.getKey()),
+              rowEntry.getValue()
+      );
     }
 
-    final var trimed = s.trim();
-    return trimed.isEmpty() ? null : trimed;
+    return cleanMap;
   }
 }

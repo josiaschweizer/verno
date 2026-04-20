@@ -51,4 +51,11 @@ public class Publ {
   public static final String JPEG = "jpeg";
   public static final String PDF = "pdf";
   public static final String SVG = "svg";
+
+  public static final String BOM_ZWNBSP = "\uFEFF";
+  public static final String BOM = BOM_ZWNBSP;
+  public static final String ZWNBSP = BOM_ZWNBSP;
+  public static final String ZERO_WIDTH_SPACE = "\u200B";
+  public static final String ZERO_WIDTH_NON_JOINER = "\u200C";
+  public static final String ZERO_WIDTH_JOINER = "\u200D";
 }
