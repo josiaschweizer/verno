@@ -56,12 +56,10 @@ public class ImportDialog extends Dialog {
     createActionButtons().forEach(btn -> getFooter().add(btn));
   }
 
-  @NonNull
+  @Nonnull
   protected HorizontalLayout createContent() {
     contentLayout = new HorizontalLayout();
     contentLayout.setSizeFull();
-    contentLayout.setPadding(true);
-    contentLayout.setSpacing(true);
 
     updateContentByStep(DialogStep.ONE, contentLayout);
 
@@ -166,8 +164,7 @@ public class ImportDialog extends Dialog {
     final var content = first.get().content();
 
     contentLayout.removeAll();
-    contentLayout.add(content);
-    contentLayout.expand(content);
+    contentLayout.addAndExpand(content);
     content.onBecomeVisible();
 
     updateButtonVisibility();

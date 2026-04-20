@@ -1,14 +1,14 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.intern.IParticipantService;
-import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
-import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.common.gate.server.TempFileServerGate;
+import ch.verno.common.lib.csv.CsvUtil;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
@@ -128,9 +128,10 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @Nonnull
   @Override
   public ImportResult performImport(@Nonnull final String fileToken,
-                                             @Nonnull final Map<String, String> mapping) {
+                                    @Nonnull final Map<String, String> mapping) {
     final var fileServerGate = globalInterface.getService(TempFileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);
+    final var delimiter = CsvUtil.detectDelimiter(fileDto.pdfBytes());
     final var csvRows = fileServerGate.parseRows(fileDto);
 
     final var mapper = new ParticipantCsvMapper();
@@ -147,14 +148,19 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
     for (final var saveable : saveables) {
       processNestedEntities(saveable);
-      participantService.createParticipant(saveable);
+
+      try {
+        participantService.createParticipant(saveable);
+      } catch (Exception e) {
+        System.out.println(e);
+      }
     }
 
     if (!result.errors().isEmpty()) {
       final var errorCsvRows = new ArrayList<CsvMapDto>();
       for (final var error : result.errors()) {
         final var csvRow = csvRows.get(error.rowIndex() - 1);
-        csvRow.row().put("import_error", String.join(Publ.COMMA, error.message()));
+        csvRow.row().put("import_error", String.join(delimiter.toString(), error.message()));
         errorCsvRows.add(csvRow);
       }
 
