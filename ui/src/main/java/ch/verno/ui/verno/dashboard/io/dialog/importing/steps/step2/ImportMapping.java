@@ -3,8 +3,9 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
-import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.common.server.io.importing.CsvDelimiter;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.dashboard.io.dto.ImportField;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
@@ -29,6 +30,7 @@ public class ImportMapping<T> extends BaseDialogStep {
                        @Nonnull final ImportEntityConfig<T> entityConfig) {
     this.globalInterface = globalInterface;
     this.entityConfig = entityConfig;
+
     setSizeFull();
     setPadding(false);
     setSpacing(false);

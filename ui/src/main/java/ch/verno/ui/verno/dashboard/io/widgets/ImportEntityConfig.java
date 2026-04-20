@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface ImportEntityConfig<T> {
 
+  String IMPORT_ERROR_COLUMN_NAME = "import_error";
+
   @Nonnull
   List<DbField<T>> getDbFields();
 
@@ -22,5 +24,10 @@ public interface ImportEntityConfig<T> {
 
   @Nonnull
   ImportResult performImport(@Nonnull String fileToken, @Nonnull Map<String, String> mapping);
+
+  @Nonnull
+  default String getImportErrorColumnName() {
+    return IMPORT_ERROR_COLUMN_NAME;
+  }
 
 }

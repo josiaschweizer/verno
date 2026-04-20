@@ -1,21 +1,23 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.db.dto.table.AddressDto;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.service.intern.IInstructorService;
-import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
-import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.common.gate.server.TempFileServerGate;
+import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
+import ch.verno.server.mapper.csv.CsvMappingRowError;
 import ch.verno.server.mapper.csv.InstructorCsvMapper;
 import ch.verno.server.service.intern.AddressService;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
 import jakarta.annotation.Nonnull;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,9 @@ import java.util.Map;
 
 public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
-  @Nonnull
-  private final GlobalInterface globalInterface;
+  public static final String ERROR_UK_INSTRUCTOR_MANDANT_EMAIL = "uk_instructor_mandant_email";
+
+  @Nonnull private final GlobalInterface globalInterface;
 
   public InstructorImportConfig(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
@@ -95,16 +98,34 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     final var saveables = result.saveables();
     final var instructorService = globalInterface.getService(IInstructorService.class);
 
-    for (final var saveable : saveables) {
+    final var importErrors = new ArrayList<>(result.errors());
+
+    for (int i = 0; i < saveables.size(); i++) {
+      final var saveable = saveables.get(i);
+
       processNestedEntities(saveable);
-      instructorService.createInstructor(saveable);
+
+      try {
+        instructorService.createInstructor(saveable);
+      } catch (DataIntegrityViolationException e) {
+        importErrors.add(new CsvMappingRowError(
+                i + 1,
+                buildImportErrorMessage(saveable, e)
+        ));
+      } catch (Exception e) {
+        importErrors.add(new CsvMappingRowError(
+                i + 1,
+                TranslationHelper.getTranslation(globalInterface, "common.unerwarteter.fehler.beim.import.0", e.getMessage())
+        ));
+      }
     }
 
-    if (!result.errors().isEmpty()) {
+    if (!importErrors.isEmpty()) {
       final var errorCsvRows = new ArrayList<CsvMapDto>();
-      for (final var error : result.errors()) {
+
+      for (final var error : importErrors) {
         final var csvRow = csvRows.get(error.rowIndex() - 1);
-        csvRow.row().put("import_error", String.join(Publ.COMMA, error.message()));
+        csvRow.row().put(getImportErrorColumnName(), error.message());
         errorCsvRows.add(csvRow);
       }
 
@@ -114,6 +135,17 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     }
 
     return ImportResult.completeSuccessInstance();
+  }
+
+  @Nonnull
+  private String buildImportErrorMessage(@Nonnull final InstructorDto instructor,
+                                         @Nonnull final DataIntegrityViolationException e) {
+    final var message = e.getMostSpecificCause().getMessage();
+    if (message != null && message.contains(ERROR_UK_INSTRUCTOR_MANDANT_EMAIL)) {
+      return TranslationHelper.getTranslation(globalInterface, "common.instructor.mit.dieser.e.mail.existiert.bereits.0", instructor.getEmail());
+    }
+
+    return TranslationHelper.getTranslation(globalInterface, "common.datenbankfehler.beim.import.0", message);
   }
 
   private void processNestedEntities(@Nonnull final InstructorDto instructor) {

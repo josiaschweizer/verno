@@ -1,7 +1,10 @@
 package ch.verno.server.io.importing.csv;
 
-import ch.verno.common.exceptions.io.ParseCsvException;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
+import ch.verno.common.exceptions.io.ParseCsvException;
+import ch.verno.common.lib.csv.CsvUtil;
+import ch.verno.common.server.io.importing.CsvDelimiter;
+import ch.verno.lib.StringSanitizer;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -19,13 +22,22 @@ public final class CsvImportUtil {
 
   @Nonnull
   public static List<CsvMapDto> parseRows(@Nonnull final byte[] csvBytes) {
+    final var delimiter = CsvUtil.detectDelimiter(csvBytes);
+    return parseRows(csvBytes, delimiter);
+  }
+
+  @Nonnull
+  public static List<CsvMapDto> parseRows(@Nonnull final byte[] csvBytes,
+                                          @Nonnull final CsvDelimiter delimiter) {
     try (final var reader = new InputStreamReader(new ByteArrayInputStream(csvBytes), StandardCharsets.UTF_8);
          final var csvParser = CSVFormat.DEFAULT.builder()
+                 .setDelimiter(delimiter.getCharacter())
                  .setHeader()
                  .setSkipHeaderRecord(true)
                  .setTrim(true)
                  .build()
                  .parse(reader)) {
+
       final var headers = csvParser.getHeaderNames();
       final var rows = new ArrayList<CsvMapDto>();
 
@@ -33,7 +45,10 @@ public final class CsvImportUtil {
         final var row = new LinkedHashMap<String, String>();
 
         for (final var header : headers) {
-          row.put(header, record.isMapped(header) ? record.get(header) : null);
+          row.put(
+                  StringSanitizer.cleanNullSave(header),
+                  record.isMapped(header) ? record.get(header) : null
+          );
         }
 
         rows.add(new CsvMapDto(row));

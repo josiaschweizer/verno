@@ -11,8 +11,7 @@ public class ImportFile extends BaseDialogStep {
 
   private final VAFileUploadArea fileUpload;
 
-  @Nullable
-  private Runnable onFileUploadedListener;
+  @Nullable private Runnable onFileUploadedListener;
 
   public ImportFile(@Nonnull final GlobalInterface globalInterface) {
     setSizeFull();
@@ -29,8 +28,7 @@ public class ImportFile extends BaseDialogStep {
       }
     });
 
-    add(fileUpload);
-    expand(fileUpload);
+    addAndExpand(fileUpload);
   }
 
   public void setOnFileUploadedListener(@Nullable final Runnable listener) {
