@@ -7,6 +7,7 @@ import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2.ImportMapping;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
@@ -100,6 +101,7 @@ public class ImportDialog extends Dialog {
 
       updateContentByStep(nextStep, contentLayout);
     });
+    forwardButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     finishButton = new Button(getTranslation("shared.importing"), e -> {
       final var importMappingStep = steps.stream()
@@ -120,6 +122,7 @@ public class ImportDialog extends Dialog {
         }
       }
     });
+    finishButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     updateButtonVisibility();
 
