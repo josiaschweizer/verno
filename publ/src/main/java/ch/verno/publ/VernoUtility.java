@@ -5,6 +5,8 @@ public class VernoUtility {
   private VernoUtility(){
   }
 
+  public static final String LUMO_ZERO = "0";
+
   public static final String LUMO_SPACE_XS = "var(--lumo-space-xs)";
   public static final String LUMO_SPACE_S = "var(--lumo-space-s)";
   public static final String LUMO_SPACE_M = "var(--lumo-space-m)";
