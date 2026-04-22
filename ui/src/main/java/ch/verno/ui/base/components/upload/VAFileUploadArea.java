@@ -1,22 +1,23 @@
 package ch.verno.ui.base.components.upload;
 
 import ch.verno.common.gate.server.TempFileServerGate;
-import com.vaadin.flow.component.Text;
+import ch.verno.publ.VernoUtility;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.function.Consumer;
 
 @CssImport("./components/upload/va-file-upload-area.css")
 public class VAFileUploadArea extends VerticalLayout {
-
-  //TODO ANZEIGE AUF UI FUNKTIONIERT NICHT WIRKLCIH - FILE WIRD NACH DRAG & DROP ANGEZEIGT, HELP-TEXT NICHT & DRAUF CLICKEN FUNKTIONIERT AUCH NICHT RICHTIG
 
   @Nonnull
   private final TempFileServerGate tempFileServerGate;
@@ -28,91 +29,82 @@ public class VAFileUploadArea extends VerticalLayout {
   @Nonnull private final Div dropArea;
   @Nonnull private final Upload upload;
 
+  @Nullable private Consumer<String> onFileUploaded;
+  @Nullable private Runnable onFileRemoved;
+
   public VAFileUploadArea(@Nonnull final TempFileServerGate tempFileServerGate) {
     this.tempFileServerGate = tempFileServerGate;
 
     setSizeFull();
     setPadding(false);
     setSpacing(false);
+    getStyle().setMargin(VernoUtility.LUMO_ZERO)
+            .setGap(VernoUtility.LUMO_ZERO)
+            .setOverflow(Style.Overflow.HIDDEN);
 
     dropArea = new Div();
-    dropArea.setSizeFull();
     dropArea.addClassName("va-file-upload__drop");
-    dropArea.add(
-            new Span("Datei hierher ziehen"),
-            new Span("oder klicken, um eine Datei auszuwählen")
-    );
+    resetDropAreaContent();
 
     upload = new Upload();
     upload.addClassName("va-file-upload");
     upload.setSizeFull();
     upload.setAutoUpload(true);
     upload.setDropAllowed(true);
-    upload.getElement().setProperty("nodrop", false);
-
-    upload.getElement().executeJs(
-            "this.addEventListener('upload-success', () => {" +
-            "  const fileList = this.shadowRoot.querySelector('[part=\"file-list\"]');" +
-            "  if (fileList) fileList.style.display = 'none';" +
-            "});"
-    );
-
-    upload.setUploadButton(new Span());
-    upload.setDropLabel(dropArea);
-    upload.setDropLabelIcon(new Span());
+    upload.setMaxFiles(1);
+    upload.setUploadButton(dropArea);
 
     upload.setUploadHandler(event -> {
+      final var ui = UI.getCurrent();
+
       deleteTempIfPresent();
+
       originalFileName = event.getFileName();
       final byte[] bytes = readAllBytes(event.getInputStream());
       sizeBytes = bytes.length;
-      tempToken = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
-    });
 
-    upload.addAllFinishedListener(e -> {
-      if (tempToken != null && originalFileName != null) {
-        dropArea.removeAll();
-        dropArea.add(
-                new Span("Datei ausgewählt"),
-                new Div(new Text(originalFileName + " (" + sizeBytes + " bytes)")),
-                new Span("Klicken oder neue Datei ziehen zum Ersetzen")
-        );
+      final String stored;
+      try {
+        stored = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
+      } catch (Exception e) {
+        ui.access(this::resetUI);
+        return;
       }
+
+      tempToken = stored;
+
+      getUI().ifPresent(newUi ->
+              newUi.access(() -> {
+                refreshUI();
+                if (onFileUploaded != null && tempToken != null) {
+                  onFileUploaded.accept(tempToken);
+                }
+              })
+      );
     });
+    upload.addFileRejectedListener(e -> getUI().ifPresent(ui -> ui.access(this::resetUI)));
 
-    dropArea.getElement().executeJs(
-            "const dropArea = this;" +
-            "dropArea.addEventListener('click', (e) => {" +
-            "  e.stopPropagation();" +
-            "  const uploadEl = dropArea.closest('vaadin-upload');" +
-            "  if (uploadEl && uploadEl.shadowRoot) {" +
-            "    const fileInput = uploadEl.shadowRoot.querySelector('input[type=\"file\"]');" +
-            "    if (fileInput) {" +
-            "      fileInput.click();" +
-            "    }" +
-            "  }" +
-            "});"
-    );
-
-    add(upload);
-    expand(upload);
+    addAndExpand(upload);
   }
 
-  public void setMaxFileUpload(final int maxFileUpload){
-    upload.setMaxFiles(maxFileUpload);
-  }
-
-  public void setAcceptedFileTypes(@Nonnull final String... acceptedFileTypes) {
-    upload.setAcceptedFileTypes(acceptedFileTypes);
+  public void setAcceptedFileTypes(@Nonnull final String... types) {
+    upload.setAcceptedFileTypes(types);
   }
 
   public void setMaxFiles(final int maxFiles) {
     upload.setMaxFiles(maxFiles);
   }
 
-  @Nonnull
-  public Upload getUpload() {
-    return upload;
+  public void setMaxFileSizeBytes(final long maxBytes) {
+    upload.setMaxFileSize((int) maxBytes);
+  }
+
+  public void addFileUploadedListener(@Nonnull final Consumer<String> listener) {
+    this.onFileUploaded = listener;
+  }
+
+  public void addFileRemovedListener(@Nonnull final Runnable listener) {
+    this.onFileRemoved = listener;
   }
 
   public boolean hasFile() {
@@ -124,15 +116,6 @@ public class VAFileUploadArea extends VerticalLayout {
     return tempToken;
   }
 
-  @Nullable
-  public String getOriginalFileName() {
-    return originalFileName;
-  }
-
-  public long getSizeBytes() {
-    return sizeBytes;
-  }
-
   public void cleanup() {
     deleteTempIfPresent();
     resetUI();
@@ -140,14 +123,9 @@ public class VAFileUploadArea extends VerticalLayout {
 
   public void refreshUI() {
     if (hasFile() && originalFileName != null) {
-      dropArea.removeAll();
-      dropArea.add(
-              new Span("Datei ausgewählt"),
-              new Div(new Text(originalFileName + " (" + sizeBytes + " bytes)")),
-              new Span("Klicken oder neue Datei ziehen zum Ersetzen")
-      );
+      resetDropAreaContent();
     } else {
-      resetUI();
+      resetDropAreaContent();
     }
   }
 
@@ -155,17 +133,24 @@ public class VAFileUploadArea extends VerticalLayout {
     tempToken = null;
     originalFileName = null;
     sizeBytes = 0;
+    resetDropAreaContent();
+
+    if (onFileRemoved != null) {
+      onFileRemoved.run();
+    }
+  }
+
+  private void resetDropAreaContent() {
     dropArea.removeAll();
-    dropArea.add(
-            new Span("Datei hierher ziehen"),
-            new Span("oder klicken, um eine Datei auszuwählen")
-    );
+    dropArea.add(new Span(getTranslation("base.datei.ausgewahlt")));
+    dropArea.add(new Span(getTranslation("base.klicken.oder.neue.datei.ziehen.zum.ersetzen")));
   }
 
   private void deleteTempIfPresent() {
     if (tempToken == null) {
       return;
     }
+
     try {
       tempFileServerGate.delete(tempToken);
     } catch (Exception ignored) {
@@ -174,6 +159,7 @@ public class VAFileUploadArea extends VerticalLayout {
     }
   }
 
+  @Nonnull
   private byte[] readAllBytes(@Nonnull final InputStream in) {
     try (in; var out = new ByteArrayOutputStream()) {
       in.transferTo(out);
@@ -183,10 +169,21 @@ public class VAFileUploadArea extends VerticalLayout {
     }
   }
 
+  @Nonnull
   private String sanitizeFileName(@Nullable final String name) {
     if (name == null || name.isBlank()) {
       return "upload.bin";
     }
     return name.replaceAll("[^a-zA-Z0-9._-]", "_");
+  }
+
+  @Nonnull
+  private String formatSize(final long bytes) {
+    if (bytes < 1024) {
+      return bytes + " B";
+    } else if (bytes < 1024 * 1024) {
+      return String.format("%.1f KB", bytes / 1024.0);
+    }
+    return String.format("%.1f MB", bytes / (1024.0 * 1024));
   }
 }

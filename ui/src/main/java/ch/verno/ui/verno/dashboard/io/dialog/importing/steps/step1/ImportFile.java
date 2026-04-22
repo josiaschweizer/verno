@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
-import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.components.upload.VAFileUploadArea;
+import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.upload.VAFileUploadArea;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -11,34 +11,34 @@ public class ImportFile extends BaseDialogStep {
 
   private final VAFileUploadArea fileUpload;
 
-  @Nullable private Runnable onFileUploadedListener;
-
   public ImportFile(@Nonnull final GlobalInterface globalInterface) {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
+    getStyle().setMargin("0")
+            .setGap("0");
 
     fileUpload = new VAFileUploadArea(globalInterface.getService(TempFileServerGate.class));
     fileUpload.setAcceptedFileTypes(".csv");
-    fileUpload.setMaxFileUpload(1);
-
-    fileUpload.getUpload().addAllFinishedListener(event -> {
-      if (hasFile() && onFileUploadedListener != null) {
-        onFileUploadedListener.run();
-      }
-    });
+    fileUpload.setMaxFiles(1);
 
     addAndExpand(fileUpload);
   }
 
   public void setOnFileUploadedListener(@Nullable final Runnable listener) {
-    this.onFileUploadedListener = listener;
+    if (listener == null) {
+      fileUpload.addFileUploadedListener(token -> {
+      });
+    } else {
+      fileUpload.addFileUploadedListener(token -> listener.run());
+    }
   }
 
   public boolean hasFile() {
     return fileUpload.hasFile();
   }
 
+  @Nullable
   public String getTempToken() {
     return fileUpload.getTempToken();
   }
