@@ -32,6 +32,11 @@ public class ImportColumnMappingPanel extends VABaseColumnMappingPanel<ImportFie
   }
 
   @Override
+  protected boolean isFieldRequired(@Nonnull final ImportField field) {
+    return field.required();
+  }
+
+  @Override
   protected void onMappingChanged(@Nonnull final String csvColumn,
                                   @Nullable final String oldFieldKey,
                                   @Nullable final String newFieldKey) {

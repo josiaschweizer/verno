@@ -99,7 +99,6 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     final var instructorService = globalInterface.getService(IInstructorService.class);
 
     final var importErrors = new ArrayList<>(result.errors());
-
     for (int i = 0; i < saveables.size(); i++) {
       final var saveable = saveables.get(i);
 
@@ -122,7 +121,6 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
     if (!importErrors.isEmpty()) {
       final var errorCsvRows = new ArrayList<CsvMapDto>();
-
       for (final var error : importErrors) {
         final var csvRow = csvRows.get(error.rowIndex() - 1);
         csvRow.row().put(getImportErrorColumnName(), error.message());
@@ -131,6 +129,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
       final var errorFile = fileServerGate.parseRows(errorCsvRows, "instructor_import_errors.csv");
       final var token = fileServerGate.store(errorFile);
+
       return ImportResult.partialSuccess(token, errorFile.filename());
     }
 

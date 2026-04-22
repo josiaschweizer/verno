@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.mapping;
 
+import ch.verno.publ.Publ;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -15,12 +16,9 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
 
   public static final String IGNORE_KEY = "__IGNORE__";
 
-  public record MappingRow(@Nonnull String csvColumn,
-                           @Nullable String fieldKey) {
-  }
-
   @Nonnull private final Grid<MappingRow> grid;
   @Nonnull private final Map<String, String> selectionByCsvColumn;
+  @Nonnull private final List<TField> availableFields;
 
   @Nonnull private final String ignoreLabel;
   private final boolean allowDuplicates;
@@ -31,6 +29,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
                                      @Nonnull final String ignoreLabelKey) {
     this.selectionByCsvColumn = new LinkedHashMap<>();
     this.grid = new Grid<>(MappingRow.class, false);
+    this.availableFields = List.copyOf(availableFields);
 
     this.allowDuplicates = allowDuplicates;
     this.ignoreLabel = getTranslation(ignoreLabelKey);
@@ -45,7 +44,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
     rows.forEach(r -> selectionByCsvColumn.put(r.csvColumn(), null));
 
     final var dataProvider = new ListDataProvider<>(new ArrayList<>(rows));
-    buildGrid(availableFields);
+    buildGrid(this.availableFields);
     grid.setItems(dataProvider);
 
     getContent().setSizeFull();
@@ -79,11 +78,11 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
     options.add(FieldOption.ignore(ignoreLabel));
 
     for (final var field : availableFields) {
-      options.add(FieldOption.of(getFieldKey(field), getFieldLabel(field), field));
+      options.add(FieldOption.of(getFieldKey(field), buildFieldOptionLabel(field), field));
     }
 
     comboBox.setItems(options);
-    comboBox.setItemLabelGenerator(fieldOption -> getTranslation(fieldOption.label()));
+    comboBox.setItemLabelGenerator(FieldOption::label);
 
     final var selectedKey = selectionByCsvColumn.get(row.csvColumn());
     if (selectedKey != null) {
@@ -114,6 +113,35 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
   }
 
   @Nonnull
+  private String buildFieldOptionLabel(@Nonnull final TField field) {
+    final var label = getTranslation(getFieldLabel(field));
+    final var required = isFieldRequired(field);
+    final var alreadyFilled = isFieldAlreadyFilled(field);
+
+    if (required && alreadyFilled) {
+      return label
+              + Publ.SPACE
+              + Publ.REQUIRED_START
+              + Publ.SPACE
+              + Publ.LEFT_PARENTHESIS
+              + getTranslation("base.already.filled")
+              + Publ.RIGHT_PARENTHESIS;
+    } else if (required) {
+      return label
+              + Publ.SPACE
+              + Publ.REQUIRED_START;
+    } else if (alreadyFilled) {
+      return label
+              + Publ.SPACE
+              + Publ.LEFT_PARENTHESIS
+              + getTranslation("base.already.filled")
+              + Publ.RIGHT_PARENTHESIS;
+    }
+
+    return label;
+  }
+
+  @Nonnull
   public Map<String, String> getMapping() {
     return selectionByCsvColumn.entrySet().stream()
             .filter(e -> e.getValue() != null)
@@ -134,14 +162,26 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
 
     if (mapped.isEmpty()) {
       return false;
-    }
-
-    if (allowDuplicates) {
+    } else if (!allRequiredFieldsFilled()) {
+      return false;
+    } else if (allowDuplicates) {
       return true;
     }
 
     final var set = new HashSet<>(mapped);
     return set.size() == mapped.size();
+  }
+
+  private boolean allRequiredFieldsFilled() {
+    final var mappedFieldKeys = selectionByCsvColumn.values().stream()
+            .filter(Objects::nonNull)
+            .filter(v -> !IGNORE_KEY.equals(v))
+            .collect(Collectors.toSet());
+
+    return availableFields.stream()
+            .filter(this::isFieldRequired)
+            .map(this::getFieldKey)
+            .allMatch(mappedFieldKeys::contains);
   }
 
   public void setEnabled(boolean enabled) {
@@ -164,26 +204,15 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
   @Nonnull
   protected abstract String getFieldLabel(@Nonnull TField field);
 
+  protected abstract boolean isFieldRequired(@Nonnull TField field);
+
+  protected boolean isFieldAlreadyFilled(@Nonnull final TField field) {
+    return false;
+  }
+
   protected void onMappingChanged(@Nonnull final String csvColumn,
                                   @Nullable final String oldFieldKey,
                                   @Nullable final String newFieldKey) {
     // can be overridden by subclasses
-  }
-
-  public record FieldOption<T>(@Nonnull String key,
-                               @Nonnull String label,
-                               @Nullable T value) {
-
-    @Nonnull
-    public static <T> FieldOption<T> ignore(@Nonnull final String label) {
-      return new FieldOption<>(IGNORE_KEY, label, null);
-    }
-
-    @Nonnull
-    public static <T> FieldOption<T> of(@Nonnull final String key,
-                                        @Nonnull final String label,
-                                        @Nonnull final T value) {
-      return new FieldOption<>(key, label, value);
-    }
   }
 }

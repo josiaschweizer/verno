@@ -111,7 +111,7 @@ public class ImportMapping<T> extends BaseDialogStep {
   @Nonnull
   public Map<String, String> getMapping() {
     if (!panel.isValid()) {
-      NotificationFactory.showErrorNotification("Bitte alle erforderlichen Felder zuordnen.");
+      NotificationFactory.showErrorNotification(getTranslation("base.bitte.alle.erforderlichen.felder.zuordnen"));
       return Map.of();
     }
 
