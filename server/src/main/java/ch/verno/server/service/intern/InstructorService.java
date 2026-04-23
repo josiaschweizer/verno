@@ -5,12 +5,13 @@ import ch.verno.common.db.filter.InstructorFilter;
 import ch.verno.common.db.service.intern.IInstructorService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.publ.Publ;
-import ch.verno.common.tenant.TenantContext;
 import ch.verno.server.mapper.InstructorMapper;
 import ch.verno.server.repository.AddressRepository;
+import ch.verno.server.repository.CourseRepository;
 import ch.verno.server.repository.GenderRepository;
 import ch.verno.server.repository.InstructorRepository;
 import ch.verno.server.service.helper.ServiceHelper;
@@ -26,24 +27,22 @@ import java.util.List;
 @Service
 public class InstructorService implements IInstructorService {
 
-  @Nonnull
-  private final InstructorRepository instructorRepository;
-  @Nonnull
-  private final AddressRepository addressRepository;
-  @Nonnull
-  private final GenderRepository genderRepository;
+  @Nonnull private final InstructorRepository instructorRepository;
+  @Nonnull private final AddressRepository addressRepository;
+  @Nonnull private final GenderRepository genderRepository;
+  @Nonnull private final CourseRepository courseRepository;
 
-  @Nonnull
-  private final ServiceHelper serviceHelper;
-  @Nonnull
-  private final InstructorSpec instructorSpec;
+  @Nonnull private final ServiceHelper serviceHelper;
+  @Nonnull private final InstructorSpec instructorSpec;
 
   public InstructorService(@Nonnull final InstructorRepository instructorRepository,
                            @Nonnull final AddressRepository addressRepository,
-                           @Nonnull final GenderRepository genderRepository) {
+                           @Nonnull final GenderRepository genderRepository,
+                           @Nonnull final CourseRepository courseRepository) {
     this.instructorRepository = instructorRepository;
     this.addressRepository = addressRepository;
     this.genderRepository = genderRepository;
+    this.courseRepository = courseRepository;
 
     this.serviceHelper = new ServiceHelper();
     this.instructorSpec = new InstructorSpec();
@@ -118,6 +117,41 @@ public class InstructorService implements IInstructorService {
     return instructorRepository.findAll().stream()
             .map(InstructorMapper::toDto)
             .toList();
+  }
+
+  @Override
+  @Transactional
+  public void deleteInstructor(@Nonnull final InstructorDto instructorDto) {
+    deleteInstructor(instructorDto.getId());
+  }
+
+  @Override
+  @Transactional
+  public void deleteInstructor(@Nonnull final Long id) {
+    final var existing = instructorRepository.findById(id)
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, id));
+
+    if (isInstructorReferenced(id)) {
+      throw new IllegalStateException("Instructor cannot be deleted because it is still used by courses");
+    }
+
+    instructorRepository.delete(existing);
+  }
+
+  /**
+   * returns a boolean if the instructors id has any usage somewhere else like in a course as an instructor
+   *
+   * @param id instructor id
+   * @return true if instructor id is used as reference, false if non usage is on instructors id
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public boolean isInstructorReferenced(@Nonnull final Long id) {
+    if (!instructorRepository.existsById(id)) {
+      throw new DBNotFoundException(DBNotFoundReason.INSTRUCTOR_BY_ID_NOT_FOUND, id);
+    }
+
+    return courseRepository.existsByInstructorId(id);
   }
 
   @Nonnull

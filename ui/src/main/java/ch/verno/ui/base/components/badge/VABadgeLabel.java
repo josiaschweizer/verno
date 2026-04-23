@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.badge;
 
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.shared.Tooltip;
 import jakarta.annotation.Nonnull;
 
 public class VABadgeLabel extends Span {
@@ -10,5 +11,9 @@ public class VABadgeLabel extends Span {
                       @Nonnull final VABadgeLabelOptions option) {
     super(label);
     this.getElement().getThemeList().add(option.getTheme());
+  }
+
+  public void setTooltipText(@Nonnull final String text) {
+    Tooltip.forComponent(this).setText(text);
   }
 }

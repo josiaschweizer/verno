@@ -14,8 +14,7 @@ import java.util.Optional;
 @Repository
 public class CourseRepository {
 
-  @Nonnull
-  private final SpringDataCourseJpaRepository jpaRepository;
+  @Nonnull private final SpringDataCourseJpaRepository jpaRepository;
 
   public CourseRepository(@Nonnull final SpringDataCourseJpaRepository jpaRepository) {
     this.jpaRepository = jpaRepository;
@@ -42,6 +41,10 @@ public class CourseRepository {
 
   public void delete(@Nonnull final CourseEntity course) {
     jpaRepository.delete(course);
+  }
+
+  public boolean existsByInstructorId(@Nonnull final Long id){
+    return jpaRepository.existsByInstructor_Id(id);
   }
 
   @Nonnull
