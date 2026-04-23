@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tenant_billing", schema = "public")
@@ -37,6 +38,10 @@ public class TenantBillingEntity extends TenantScopedEntity {
   @Nonnull
   @Column(name = "plan_key", nullable = false)
   private String planKey;
+
+  @Nonnull
+  @Column(name = "licence_option", nullable = false)
+  private List<String> licenceOption;
 
   @Nonnull
   @Column(name = "subscription_status", nullable = false)
