@@ -120,7 +120,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Nonnull
   @Override
-  protected List<ActionDef> buildContextMenuActions(@Nonnull ParticipantDto dto) {
+  protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
     final var actions = new ArrayList<ActionDef>();
 
     if (dto.isActive()) {

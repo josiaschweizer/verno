@@ -14,8 +14,7 @@ import java.util.Optional;
 @Repository
 public class InstructorRepository {
 
-  @Nonnull
-  private final SpringDataInstructorJpaRepository jpaRepository;
+  @Nonnull private final SpringDataInstructorJpaRepository jpaRepository;
 
   public InstructorRepository(@Nonnull final SpringDataInstructorJpaRepository jpaRepository) {
     this.jpaRepository = jpaRepository;
@@ -24,6 +23,10 @@ public class InstructorRepository {
   @Nonnull
   public Optional<InstructorEntity> findById(@Nonnull final Long id) {
     return jpaRepository.findById(id);
+  }
+
+  public boolean existsById(@Nonnull final Long id) {
+    return jpaRepository.existsById(id);
   }
 
   @Nonnull
@@ -39,6 +42,14 @@ public class InstructorRepository {
 
   public long count(@Nonnull final Specification<InstructorEntity> spec) {
     return jpaRepository.count(spec);
+  }
+
+  public void deleteById(@Nonnull final Long id) {
+    jpaRepository.deleteById(id);
+  }
+
+  public void delete(@Nonnull final InstructorEntity entity) {
+    jpaRepository.delete(entity);
   }
 
   @Nonnull

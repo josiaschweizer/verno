@@ -1,6 +1,8 @@
 package ch.verno.ui.base.components.contextmenu;
 
+import ch.verno.ui.base.factory.SpanFactory;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import jakarta.annotation.Nonnull;
 
 public final class ActionDef {
@@ -15,6 +17,21 @@ public final class ActionDef {
     this.component = component;
     this.runnable = runnable;
     this.enabled = enabled;
+  }
+
+  @Nonnull
+  public static ActionDef create(@Nonnull final String text,
+                                 @Nonnull final VaadinIcon icon,
+                                 @Nonnull final Runnable runnable) {
+    return new ActionDef(SpanFactory.createSpan(text, icon), runnable, true);
+  }
+
+  @Nonnull
+  public static ActionDef create(@Nonnull final String text,
+                                 @Nonnull final VaadinIcon icon,
+                                 @Nonnull final Runnable runnable,
+                                 final boolean enabled) {
+    return new ActionDef(SpanFactory.createSpan(text, icon), runnable, enabled);
   }
 
   @Nonnull
