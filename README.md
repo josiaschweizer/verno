@@ -342,5 +342,3 @@ See [LICENSE.md](LICENSE.md) for license information.
 ## Support
 
 For issues, questions, or contributions, please refer to the project repository.
-
-github test
