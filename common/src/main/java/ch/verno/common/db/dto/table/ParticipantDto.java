@@ -1,8 +1,8 @@
 package ch.verno.common.db.dto.table;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -15,43 +15,22 @@ import java.util.Objects;
 
 public class ParticipantDto extends BaseDto {
 
-  @Nonnull
-  private String firstName;
+  @Nonnull private String firstName;
+  @Nonnull private String lastName;
+  @Nullable private LocalDate birthdate;
 
-  @Nonnull
-  private String lastName;
-
-  @Nullable
-  private LocalDate birthdate;
-
-  @Nonnull
-  private GenderDto gender;
-
-  @Nonnull
-  private String email;
-
-  @Nonnull
-  private PhoneNumber phone;
-
-  @Nonnull
-  private String note;
-
+  @Nonnull private GenderDto gender;
+  @Nonnull private String email;
+  @Nonnull private PhoneNumber phone;
+  @Nonnull private String note;
   private boolean active;
+  @Nonnull private List<CourseLevelDto> courseLevels;
+  @Nonnull private List<CourseDto> courses;
+  @Nonnull private AddressDto address;
 
-  @Nonnull
-  private List<CourseLevelDto> courseLevels;
-
-  @Nonnull
-  private List<CourseDto> courses;
-
-  @Nonnull
-  private AddressDto address;
-
-  @Nonnull
-  private ParentDto parentOne;
-
-  @Nonnull
-  private ParentDto parentTwo;
+  @Nonnull private ParentDto parentOne;
+  @Nonnull private ParentDto parentTwo;
+  @Nonnull private List<ParticipantDto> siblings;
 
   public ParticipantDto() {
     setId(null);
@@ -68,6 +47,7 @@ public class ParticipantDto extends BaseDto {
     this.address = AddressDto.empty();
     this.parentOne = ParentDto.empty();
     this.parentTwo = ParentDto.empty();
+    this.siblings = new ArrayList<>();
   }
 
   public ParticipantDto(@Nullable final Long id,
@@ -83,7 +63,8 @@ public class ParticipantDto extends BaseDto {
                         @Nonnull final List<CourseLevelDto> courseLevel,
                         @Nonnull final AddressDto address,
                         @Nonnull final ParentDto parentOne,
-                        @Nonnull final ParentDto parentTwo) {
+                        @Nonnull final ParentDto parentTwo,
+                        @Nonnull final List<ParticipantDto> siblings) {
     setId(id);
     this.firstName = firstName;
     this.lastName = lastName;
@@ -98,6 +79,7 @@ public class ParticipantDto extends BaseDto {
     this.address = address;
     this.parentOne = parentOne;
     this.parentTwo = parentTwo;
+    this.siblings = siblings;
   }
 
   public boolean isEmpty() {
@@ -114,7 +96,8 @@ public class ParticipantDto extends BaseDto {
             && courseLevels.isEmpty()
             && address.isEmpty()
             && parentOne.isEmpty()
-            && parentTwo.isEmpty();
+            && parentTwo.isEmpty()
+            && siblings.isEmpty();
   }
 
   @Nonnull
@@ -270,6 +253,15 @@ public class ParticipantDto extends BaseDto {
 
   public void setParentTwo(@Nonnull final ParentDto parentTwo) {
     this.parentTwo = parentTwo;
+  }
+
+  @Nonnull
+  public List<ParticipantDto> getSiblings() {
+    return siblings;
+  }
+
+  public void setSiblings(@Nonnull final List<ParticipantDto> siblings) {
+    this.siblings = siblings;
   }
 
   @Override

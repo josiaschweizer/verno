@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ParticipantService implements IParticipantService {
@@ -56,10 +58,9 @@ public class ParticipantService implements IParticipantService {
     this.participantSpec = new ParticipantSpec();
   }
 
-  @Nonnull
   @Override
   @Transactional
-  public ParticipantDto createParticipant(@Nonnull final ParticipantDto participant) {
+  public void createParticipant(@Nonnull final ParticipantDto participant) {
     final var tenant = TenantEntity.ref(TenantContext.getRequired());
     final var entity = new ParticipantEntity(
             tenant,
@@ -75,13 +76,12 @@ public class ParticipantService implements IParticipantService {
     );
 
     final var savedParticipant = saveParticipant(participant, entity);
-    return ParticipantMapper.toDto(savedParticipant);
+    ParticipantMapper.toDto(savedParticipant);
   }
 
-  @Nonnull
   @Override
   @Transactional
-  public ParticipantDto updateParticipant(@Nonnull final ParticipantDto participant) {
+  public void updateParticipant(@Nonnull final ParticipantDto participant) {
     if (participant.getId() == null || participant.getId() == 0) {
       throw new IllegalArgumentException("Participant ID is required for update");
     }
@@ -101,7 +101,7 @@ public class ParticipantService implements IParticipantService {
     existing.setActive(participant.isActive());
 
     final var savedParticipantEntity = saveParticipant(participant, existing);
-    return ParticipantMapper.toDto(savedParticipantEntity);
+    ParticipantMapper.toDto(savedParticipantEntity);
   }
 
   @Nonnull
@@ -133,6 +133,14 @@ public class ParticipantService implements IParticipantService {
     existing.setAddress(serviceHelper.saveOrUpdateAddress(addressRepository, participantDto.getAddress()));
     existing.setParentOne(serviceHelper.saveOrUpdateParent(parentRepository, genderRepository, addressRepository, participantDto.getParentOne()));
     existing.setParentTwo(serviceHelper.saveOrUpdateParent(parentRepository, genderRepository, addressRepository, participantDto.getParentTwo()));
+
+    final var siblings = participantDto.getSiblings().stream()
+            .filter(sibling -> sibling.getId() != null)
+            .filter(sibling -> !sibling.getId().equals(existing.getId()))
+            .map(sibling -> ParticipantEntity.ref(sibling.getId()))
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    existing.setSiblings(siblings);
 
     return participantRepository.save(existing);
   }

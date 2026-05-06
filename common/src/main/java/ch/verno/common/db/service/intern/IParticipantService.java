@@ -11,11 +11,9 @@ import java.util.Optional;
 
 public interface IParticipantService {
 
-  @Nonnull
-  ParticipantDto createParticipant(@Nonnull ParticipantDto participant);
+  void createParticipant(@Nonnull ParticipantDto participant);
 
-  @Nonnull
-  ParticipantDto updateParticipant(@Nonnull ParticipantDto participant);
+  void updateParticipant(@Nonnull ParticipantDto participant);
 
   ParticipantDto disableParticipant(@Nonnull final ParticipantDto participant,
                                     final boolean disabled);

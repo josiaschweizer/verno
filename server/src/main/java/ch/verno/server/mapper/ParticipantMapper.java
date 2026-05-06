@@ -1,5 +1,7 @@
 package ch.verno.server.mapper;
 
+import ch.verno.common.db.dto.table.AddressDto;
+import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.publ.Publ;
@@ -9,6 +11,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public final class ParticipantMapper {
   private ParticipantMapper() {
@@ -36,7 +39,10 @@ public final class ParticipantMapper {
             entity.getCourseLevels().stream().map(CourseLevelMapper::toDto).toList(),
             AddressMapper.toDto(entity.getAddress()),
             ParentMapper.toDto(entity.getParentOne()),
-            ParentMapper.toDto(entity.getParentTwo())
+            ParentMapper.toDto(entity.getParentTwo()),
+            entity.getSiblings().stream()
+                    .map(ParticipantMapper::toSimpleDto)
+                    .toList()
     );
 
     if (entity.getTenant() != null) {
@@ -44,6 +50,37 @@ public final class ParticipantMapper {
     }
 
     return dto;
+  }
+
+  /**
+   * maps a participant entity to a participant dto but only with the most important fields. This is used to avoid circular references when mapping siblings.
+   *
+   * @param entity participant entity which gets mapped to a dto
+   * @return participant dto
+   */
+  @Nonnull
+  public static ParticipantDto toSimpleDto(@Nullable final ParticipantEntity entity) {
+    if (entity == null) {
+      return new ParticipantDto();
+    }
+
+    return new ParticipantDto(
+            entity.getId(),
+            entity.getFirstname() == null ? Publ.EMPTY_STRING : entity.getFirstname(),
+            entity.getLastname() == null ? Publ.EMPTY_STRING : entity.getLastname(),
+            entity.getBirthdate(),
+            GenderMapper.toDto(entity.getGender()),
+            entity.getEmail() == null ? Publ.EMPTY_STRING : entity.getEmail(),
+            entity.getPhone() == null ? PhoneNumber.empty() : PhoneNumber.fromString(entity.getPhone()),
+            entity.getNote() == null ? Publ.EMPTY_STRING : entity.getNote(),
+            entity.isActive(),
+            List.of(),
+            List.of(),
+            AddressDto.empty(),
+            ParentDto.empty(),
+            ParentDto.empty(),
+            List.of()
+    );
   }
 
   @Nullable
