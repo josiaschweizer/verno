@@ -144,13 +144,11 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     return new Binder<>(ParticipantDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final ParticipantDto bean) {
     participantService.createParticipant(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final ParticipantDto bean) {
     participantService.updateParticipant(bean);
@@ -198,7 +196,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     participantLayout.add(createParticipantInfoLayout());
     participantLayout.add(createParticipantContactLayout());
     participantLayout.add(createParticipantCourseLayout());
-    participantLayout.add(createParticipantNoteLayout());
+    participantLayout.add(createParticipantAdditionalInfoLayout());
     return participantLayout;
   }
 
@@ -291,7 +289,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   }
 
   @Nonnull
-  private HorizontalLayout createParticipantNoteLayout() {
+  private VerticalLayout createParticipantAdditionalInfoLayout() {
     final var note = entryFactory.createTextAreaEntry(
             ParticipantDto::getNote,
             ParticipantDto::setNote,
@@ -299,8 +297,21 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             Optional.empty(),
             getTranslation("shared.note")
     );
+    final var sibling = entryFactory.createMultiSelectComboBoxEntry(
+            ParticipantDto::getSiblings,
+            ParticipantDto::setSiblings,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("participant.geschwister"),
+            participantService.getAllParticipants()
+                    .stream()
+                    .filter(participant -> !getBinder().getBean().equals(participant))
+                    .filter(participant -> participant.isActive())
+                    .toList(),
+            dto -> dto.getFirstName() + Publ.SPACE + dto.getLastName()
+    );
 
-    return LayoutUtil.createHorizontal(note);
+    return LayoutUtil.createVertical(note, sibling);
   }
 
   @Nonnull

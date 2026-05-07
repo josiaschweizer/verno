@@ -77,6 +77,14 @@ public class ParticipantEntity extends TenantScopedEntity {
   @JoinColumn(name = "parent_two")
   private ParentEntity parentTwo;
 
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "participant_sibling",
+          joinColumns = @JoinColumn(name = "participant_id"),
+          inverseJoinColumns = @JoinColumn(name = "sibling_id")
+  )
+  private List<ParticipantEntity> siblings = new ArrayList<>();
+
   protected ParticipantEntity() {
     // JPA
   }
@@ -97,6 +105,13 @@ public class ParticipantEntity extends TenantScopedEntity {
     this.phone = phone;
     this.note = note;
     this.active = active;
+  }
+
+  @Nonnull
+  public static ParticipantEntity ref(@Nonnull final Long id) {
+    final var entity = new ParticipantEntity();
+    entity.setId(id);
+    return entity;
   }
 
   public Long getId() {
@@ -219,5 +234,13 @@ public class ParticipantEntity extends TenantScopedEntity {
 
   public void setParentTwo(final ParentEntity parentTwo) {
     this.parentTwo = parentTwo;
+  }
+
+  public List<ParticipantEntity> getSiblings() {
+    return siblings;
+  }
+
+  public void setSiblings(final List<ParticipantEntity> siblings) {
+    this.siblings = siblings;
   }
 }
