@@ -68,9 +68,7 @@ public class ParticipantService implements IParticipantService {
             ServiceHelper.safeString(participant.getLastName()),
             participant.getBirthdate() != null ? participant.getBirthdate() : LocalDate.now(),
             ServiceHelper.safeString(participant.getEmail()),
-            !participant.getPhone().isEmpty()
-                    ? participant.getPhone().toString()
-                    : Publ.EMPTY_STRING,
+            !participant.getPhone().isEmpty() ? participant.getPhone().toString() : Publ.EMPTY_STRING,
             ServiceHelper.safeString(participant.getNote()),
             participant.isActive()
     );
@@ -93,10 +91,7 @@ public class ParticipantService implements IParticipantService {
     existing.setLastname(ServiceHelper.safeString(participant.getLastName()));
     existing.setBirthdate(participant.getBirthdate() != null ? participant.getBirthdate() : LocalDate.now());
     existing.setEmail(ServiceHelper.safeString(participant.getEmail()));
-    existing.setPhone(!participant.getPhone().isEmpty()
-            ? participant.getPhone().toString()
-            : Publ.EMPTY_STRING
-    );
+    existing.setPhone(!participant.getPhone().isEmpty() ? participant.getPhone().toString() : Publ.EMPTY_STRING);
     existing.setNote(ServiceHelper.safeString(participant.getNote()));
     existing.setActive(participant.isActive());
 
@@ -136,13 +131,40 @@ public class ParticipantService implements IParticipantService {
 
     final var siblings = participantDto.getSiblings().stream()
             .filter(sibling -> sibling.getId() != null)
-            .filter(sibling -> !sibling.getId().equals(existing.getId()))
-            .map(sibling -> ParticipantEntity.ref(sibling.getId()))
+            .filter(sibling -> existing.getId() == null || !sibling.getId().equals(existing.getId()))
+            .map(sibling -> participantRepository.findById(sibling.getId())
+                    .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, sibling.getId())))
             .collect(Collectors.toCollection(ArrayList::new));
 
-    existing.setSiblings(siblings);
+    syncSiblings(existing, siblings);
 
     return participantRepository.save(existing);
+  }
+
+  private void syncSiblings(@Nonnull final ParticipantEntity existing,
+                            @Nonnull final List<ParticipantEntity> siblings) {
+    final var oldSiblings = new ArrayList<>(existing.getSiblings());
+    existing.setSiblings(siblings);
+
+    final var saved = participantRepository.save(existing);
+
+    for (final var oldSibling : oldSiblings) {
+      if (!siblings.contains(oldSibling)) {
+        oldSibling.getSiblings().remove(saved);
+      }
+    }
+
+    for (final var sibling : siblings) {
+      if (!sibling.getSiblings().contains(saved)) {
+        sibling.getSiblings().add(saved);
+      }
+    }
+
+    final var affectedSiblings = new ArrayList<ParticipantEntity>();
+    affectedSiblings.addAll(oldSiblings);
+    affectedSiblings.addAll(siblings);
+
+    participantRepository.saveAll(affectedSiblings);
   }
 
   @Nonnull

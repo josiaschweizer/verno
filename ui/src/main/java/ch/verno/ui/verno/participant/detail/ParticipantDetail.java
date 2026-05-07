@@ -302,10 +302,11 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             ParticipantDto::setSiblings,
             getBinder(),
             Optional.empty(),
-            "Geschwister",
+            getTranslation("participant.geschwister"),
             participantService.getAllParticipants()
                     .stream()
                     .filter(participant -> !getBinder().getBean().equals(participant))
+                    .filter(participant -> participant.isActive())
                     .toList(),
             dto -> dto.getFirstName() + Publ.SPACE + dto.getLastName()
     );
