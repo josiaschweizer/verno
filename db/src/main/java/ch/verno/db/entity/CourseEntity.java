@@ -53,6 +53,7 @@ public class CourseEntity extends TenantScopedEntity {
   @JoinColumn(name = "course_schedule_id", nullable = false)
   private CourseScheduleEntity courseSchedule;
 
+  @Nonnull
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(
           name = "course_weekday",
@@ -99,23 +100,34 @@ public class CourseEntity extends TenantScopedEntity {
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
                       @Nullable final CourseScheduleEntity courseSchedule,
-                      @Nonnull final List<DayOfWeek> weekdays,
+                      @Nullable final List<DayOfWeek> weekdays,
                       @Nullable final LocalTime startTime,
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
-                      @Nonnull final List<InstructorEntity> secondaryInstructors,
+                      @Nullable final List<InstructorEntity> secondaryInstructors,
                       @Nonnull final String note) {
     setTenant(tenant);
+
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-    this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
+
+    this.courseLevels = courseLevels != null
+            ? new ArrayList<>(courseLevels)
+            : new ArrayList<>();
     this.courseSchedule = courseSchedule;
-    this.weekdays = weekdays;
+
+    this.weekdays = weekdays != null
+            ? new ArrayList<>(weekdays)
+            : new ArrayList<>();
     this.startTime = startTime;
     this.endTime = endTime;
+
     this.instructor = instructor;
-    this.secondaryInstructors = secondaryInstructors;
+    this.secondaryInstructors = secondaryInstructors != null
+            ? new ArrayList<>(secondaryInstructors)
+            : new ArrayList<>();
+
     this.note = note;
   }
 
