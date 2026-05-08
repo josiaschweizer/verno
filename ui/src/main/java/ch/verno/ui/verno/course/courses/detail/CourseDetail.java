@@ -27,6 +27,8 @@ import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -225,7 +227,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
     final var instructors = instructorService.getAllInstructors();
     final var instructorOptions = instructors.stream()
-            .collect(Collectors.toMap(InstructorDto::getId, InstructorDto::displayName));
+            .sorted(Comparator.comparing(InstructorDto::displayName))
+            .collect(Collectors.toMap(
+                    InstructorDto::getId,
+                    InstructorDto::displayName,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
 
     final var instructorEntry = entryFactory.createComboBoxEntry(
             dto -> dto.getInstructor() != null ? dto.getInstructor().getId() : null,
