@@ -41,6 +41,7 @@ public final class CourseMapper {
             entity.getStartTime(),
             entity.getEndTime(),
             InstructorMapper.toDto(entity.getInstructor()),
+            entity.getSecondaryInstructors().stream().map(InstructorMapper::toDto).toList(),
             entity.getNote()
     );
 
@@ -69,6 +70,10 @@ public final class CourseMapper {
             dto.getStartTime(),
             dto.getEndTime(),
             InstructorMapper.toEntity(dto.getInstructor(), tenantId),
+            dto.getSecondaryInstructors()
+                    .stream()
+                    .map(instructor -> InstructorMapper.toEntity(instructor, tenantId))
+                    .toList(),
             dto.getNote()
     );
 

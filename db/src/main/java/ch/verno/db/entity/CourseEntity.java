@@ -77,6 +77,16 @@ public class CourseEntity extends TenantScopedEntity {
   private InstructorEntity instructor;
 
   @Nonnull
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "course_secondary_instructor",
+          joinColumns = @JoinColumn(name = "course_id"),
+          inverseJoinColumns = @JoinColumn(name = "instructor_id")
+  )
+  @OrderColumn(name = "sort_index")
+  private List<InstructorEntity> secondaryInstructors;
+
+  @Nonnull
   @Column(name = "note", columnDefinition = "TEXT")
   private String note;
 
@@ -93,6 +103,7 @@ public class CourseEntity extends TenantScopedEntity {
                       @Nullable final LocalTime startTime,
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
+                      @Nonnull final List<InstructorEntity> secondaryInstructors,
                       @Nonnull final String note) {
     setTenant(tenant);
     this.title = title;
@@ -104,6 +115,7 @@ public class CourseEntity extends TenantScopedEntity {
     this.startTime = startTime;
     this.endTime = endTime;
     this.instructor = instructor;
+    this.secondaryInstructors = secondaryInstructors;
     this.note = note;
   }
 
@@ -208,6 +220,16 @@ public class CourseEntity extends TenantScopedEntity {
 
   public void setInstructor(@Nullable final InstructorEntity instructor) {
     this.instructor = instructor;
+  }
+
+  @Nonnull
+  public List<InstructorEntity> getSecondaryInstructors() {
+    return secondaryInstructors;
+  }
+
+  public void setSecondaryInstructors(@Nonnull final List<InstructorEntity> secondaryInstructors) {
+    this.secondaryInstructors.clear();
+    this.secondaryInstructors.addAll(secondaryInstructors);
   }
 
   @Nonnull

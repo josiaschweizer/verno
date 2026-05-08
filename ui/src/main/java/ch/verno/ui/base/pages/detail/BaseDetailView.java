@@ -232,10 +232,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull
   protected abstract Binder<T> createBinder();
 
-  @Nonnull
   protected abstract void createBean(@Nonnull final T bean);
 
-  @Nonnull
   protected abstract void updateBean(@Nonnull final T bean);
 
   @Nonnull
