@@ -2,8 +2,8 @@ package ch.verno.common.gate;
 
 import ch.verno.common.db.dto.table.TenantDto;
 import ch.verno.common.db.service.intern.ITenantService;
-import ch.verno.common.gate.properties.EnvProperties;
-import ch.verno.common.gate.properties.UserProperties;
+import ch.verno.common.properties.env.EnvProvider;
+import ch.verno.common.properties.UserProperties;
 import ch.verno.common.tenant.TenantContext;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.i18n.I18NProvider;
@@ -77,10 +77,10 @@ public class GlobalInterface {
 
 
   @Nonnull
-  public EnvProperties getEnvProperties() {
-    return (EnvProperties) cached.computeIfAbsent(
-            EnvProperties.class,
-            cls -> context.getBean(EnvProperties.class)
+  public EnvProvider getEnvProperties() {
+    return (EnvProvider) cached.computeIfAbsent(
+            EnvProvider.class,
+            cls -> context.getBean(EnvProvider.class)
     );
   }
 

@@ -4,11 +4,11 @@ import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.service.extern.ITenantBillingService;
 import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.ApplicationProperties;
-import ch.verno.common.gate.properties.UserProperties;
+import ch.verno.common.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
+import ch.verno.server.properties.application.VernoApplicationConfigProviderImpl;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
@@ -43,14 +43,14 @@ public class InvalidSubscriptionDialog extends VADialog {
 
   @Nonnull private final UserProperties userProperties;
   @Nonnull private final ITenantBillingService tenantBillingService;
-  @Nonnull private final ApplicationProperties applicationProperties;
+  @Nonnull private final VernoApplicationConfigProviderImpl applicationConfig;
   @Nonnull private final IBillingAccessLinkService billingAccessLinkService;
 
 
   public InvalidSubscriptionDialog(@Nonnull final GlobalInterface globalInterface) {
     userProperties = globalInterface.getUserProperties();
     tenantBillingService = globalInterface.getService(ITenantBillingService.class);
-    applicationProperties = globalInterface.getService(ApplicationProperties.class);
+    applicationConfig = globalInterface.getService(VernoApplicationConfigProviderImpl.class);
     billingAccessLinkService = globalInterface.getService(IBillingAccessLinkService.class);
 
     setCloseOnEsc(false);
@@ -88,7 +88,7 @@ public class InvalidSubscriptionDialog extends VADialog {
     hint.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT);
 
     VAButton manageSubscriptionButton;
-    if (applicationProperties.getRunMode().equals(RunMode.DEV)) {
+    if (applicationConfig.getRunMode().equals(RunMode.DEV)) {
       manageSubscriptionButton = new VAButton(
               VaadinIcon.CREDIT_CARD.create(),
               "DEV Mode - Create Dev Subscription - only for DEV Usage!!!",
