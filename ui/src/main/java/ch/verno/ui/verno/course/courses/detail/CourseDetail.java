@@ -251,7 +251,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             CourseDto::setSecondaryInstructors,
             getBinder(),
             Optional.empty(),
-            "Zusätzliche Kursleiter",
+            getTranslation("shared.zusatzliche.kursleiter"),
             instructors,
             InstructorDto::displayName
     );
