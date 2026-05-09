@@ -19,4 +19,6 @@ public interface IParentService {
   @Nonnull
   List<ParentDto> getParents();
 
+  void deleteById(@Nonnull Long id);
+
 }
