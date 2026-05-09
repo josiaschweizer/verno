@@ -84,6 +84,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
   protected List<ObjectGridColumn<AppUserDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<AppUserDto>>();
     columns.add(GridColumnHelper.objectCol("username", AppUserDto::getUsername, getTranslation("shared.username"), true));
+    columns.add(GridColumnHelper.objectCol("email", AppUserDto::getEmail, getTranslation("shared.e.mail"), false));
     return columns;
   }
 

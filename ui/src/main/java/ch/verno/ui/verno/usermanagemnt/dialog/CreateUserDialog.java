@@ -57,6 +57,7 @@ public class CreateUserDialog extends VADialog {
     final var userLayout = new UserLayout(globalInterface, entryFactory);
 
     if (formMode != FormMode.CREATE) {
+      setHeaderTitle(getTranslation("shared.update.existing.application.user"));
       userLayout.setPasswordReadOnly("shared.password.can.only.be.changed.via.the.change.password.dialog.via.grid.right.click.change.password");
     }
 

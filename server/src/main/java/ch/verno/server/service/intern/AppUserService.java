@@ -128,6 +128,7 @@ public class AppUserService implements IAppUserService {
     entity.setLastname(user.getLastname());
     entity.setEmail(user.getEmail());
     entity.setRole(user.getRole().getRole());
+    entity.setActive(user.isActive());
 
     if (!user.getPasswordHash().isBlank()) {
       entity.setPasswordHash(user.getPasswordHash());
