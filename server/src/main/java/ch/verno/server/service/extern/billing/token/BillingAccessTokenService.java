@@ -74,8 +74,7 @@ public class BillingAccessTokenService implements IBillingAccessTokenService {
       throw new IllegalStateException("expiresAt must not be null");
     }
 
-    appUserRepository.findById(userId)
-            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
+    appUserRepository.findById(userId).orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
 
     try {
       final var userRef = entityManager.getReference(AppUserEntity.class, userId);

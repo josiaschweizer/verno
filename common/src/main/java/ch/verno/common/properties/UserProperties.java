@@ -1,11 +1,11 @@
-package ch.verno.common.gate.properties;
+package ch.verno.common.properties;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public interface UserPropertiesGate {
+public interface UserProperties {
 
   @Nonnull
   Optional<AppUserDto> getOptionalCurrentUser();

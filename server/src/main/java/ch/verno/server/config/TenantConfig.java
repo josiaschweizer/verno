@@ -1,10 +1,9 @@
 package ch.verno.server.config;
 
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
-import ch.verno.server.properties.application.ApplicationProperties;
+import ch.verno.common.properties.configprovider.VernoTenantConfigProvider;
+import ch.verno.server.properties.application.VernoTenantConfigProviderImpl;
 import ch.verno.server.repository.TenantRepository;
 import ch.verno.server.tenant.TenantFilter;
-import ch.verno.server.properties.application.TenantProperties;
 import ch.verno.server.tenant.TenantResolver;
 import ch.verno.server.tenant.TenantService;
 import jakarta.annotation.Nonnull;
@@ -23,13 +22,13 @@ public class TenantConfig {
   }
 
   @Bean
-  public TenantResolver tenantResolver(@Nonnull final ApplicationPropertiesGate applicationProperties,
+  public TenantResolver tenantResolver(@Nonnull final VernoTenantConfigProvider tenantConfigProvider,
                                        @Nonnull final TenantService lookupService) {
-    return new TenantResolver(lookupService, applicationProperties);
+    return new TenantResolver(lookupService, tenantConfigProvider);
   }
 
   @Bean
-  public FilterRegistrationBean<TenantFilter> tenantFilter(@Nonnull final TenantProperties props,
+  public FilterRegistrationBean<TenantFilter> tenantFilter(@Nonnull final VernoTenantConfigProviderImpl props,
                                                            @Nonnull final TenantResolver resolver,
                                                            @Nonnull final EntityManager entityManager) {
     final var bean = new FilterRegistrationBean<TenantFilter>();

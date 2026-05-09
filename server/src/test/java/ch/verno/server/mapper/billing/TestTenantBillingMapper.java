@@ -6,6 +6,7 @@ import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.lib.New;
 import ch.verno.server.mapper.BaseMapperTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +67,8 @@ public class TestTenantBillingMapper extends BaseMapperTest {
             BillingPlanKey.FREE.name(),
             BillingSubscriptionStatus.INACTIVE.name(),
             BillingPaymentStatus.UNPAID.name(),
-            false
+            false,
+            New.arrayList()
     );
 
     final var dto = new TenantBillingDto();

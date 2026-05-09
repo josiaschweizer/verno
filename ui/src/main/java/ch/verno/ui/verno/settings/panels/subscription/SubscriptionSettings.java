@@ -6,8 +6,8 @@ import ch.verno.common.db.type.billing.BillingPaymentStatus;
 import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
 import ch.verno.common.lib.url.UrlUtil;
+import ch.verno.common.properties.configprovider.VernoBillingConfigProvider;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.publ.Publ;
@@ -94,18 +94,17 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
 
     final var navButton = new VAAnchorButton(
             VaadinIcon.EXTERNAL_LINK.create(),
-            UrlUtil.buildUrl(globalInterface.getService(ApplicationPropertiesGate.class)
-                            .getSubscriptionOverviewUrl(),
+            UrlUtil.buildUrl(globalInterface.getService(VernoBillingConfigProvider.class).getSubscriptionOverviewUrl(),
                     "payment/info"
             )
     );
     addActionButtons(navButton);
   }
 
-  private void loadDto(final @Nonnull GlobalInterface globalInterface) {
+  private void loadDto(@Nonnull final GlobalInterface globalInterface) {
     final var currentTenant = Optional.ofNullable(TenantContext.get()).orElse(Publ.ZERO_LONG);
     final var tenantBillingService = globalInterface.getService(ITenantBillingService.class);
-    dto = tenantBillingService.getTenantBillingByTenantId(currentTenant);
+    this.dto = tenantBillingService.getTenantBillingByTenantId(currentTenant);
   }
 
   @Nonnull

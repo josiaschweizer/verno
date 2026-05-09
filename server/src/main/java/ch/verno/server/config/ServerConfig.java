@@ -1,6 +1,6 @@
 package ch.verno.server.config;
 
-import ch.verno.server.properties.application.TenantProperties;
+import ch.verno.server.properties.application.VernoTenantConfigProviderImpl;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableConfigurationProperties(TenantProperties.class)
+@EnableConfigurationProperties(VernoTenantConfigProviderImpl.class)
 public class ServerConfig {
 
   @Bean

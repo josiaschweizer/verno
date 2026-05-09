@@ -1,9 +1,9 @@
-package ch.verno.common.gate.properties;
+package ch.verno.common.properties.env;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public interface EnvPropertiesGate {
+public interface EnvProvider {
 
   @Nonnull
   String getEnv(@Nonnull String key);

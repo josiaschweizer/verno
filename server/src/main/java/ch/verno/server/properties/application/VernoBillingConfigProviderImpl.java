@@ -1,5 +1,6 @@
 package ch.verno.server.properties.application;
 
+import ch.verno.common.properties.configprovider.VernoBillingConfigProvider;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @ConfigurationProperties(prefix = "verno.billing")
-public class BillingProperties {
+public class VernoBillingConfigProviderImpl implements VernoBillingConfigProvider {
 
   @Nullable private String subscriptionOverviewUrl;
   @Nullable private String checkoutCancelUrl;
@@ -18,6 +19,7 @@ public class BillingProperties {
   @Nullable private String portalReturnUrl;
 
   @Nonnull
+  @Override
   public String getSubscriptionOverviewUrl() {
     return Optional.ofNullable(subscriptionOverviewUrl).orElse(Publ.EMPTY_STRING);
   }
@@ -27,6 +29,7 @@ public class BillingProperties {
   }
 
   @Nonnull
+  @Override
   public String getCheckoutCancelUrl() {
     return Optional.ofNullable(checkoutCancelUrl).orElse(Publ.EMPTY_STRING);
   }
@@ -36,6 +39,7 @@ public class BillingProperties {
   }
 
   @Nonnull
+  @Override
   public String getCheckoutSuccessUrl() {
     return Optional.ofNullable(checkoutSuccessUrl).orElse(Publ.EMPTY_STRING);
   }
@@ -45,6 +49,7 @@ public class BillingProperties {
   }
 
   @Nonnull
+  @Override
   public String getPortalReturnUrl() {
     return Optional.ofNullable(portalReturnUrl).orElse(Publ.EMPTY_STRING);
   }

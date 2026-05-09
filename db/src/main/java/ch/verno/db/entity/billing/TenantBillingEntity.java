@@ -6,10 +6,12 @@ import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.New;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tenant_billing", schema = "public")
@@ -37,6 +39,15 @@ public class TenantBillingEntity extends TenantScopedEntity {
   @Nonnull
   @Column(name = "plan_key", nullable = false)
   private String planKey;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+          name = "tenant_billing_licence_option",
+          schema = "public",
+          joinColumns = @JoinColumn(name = "tenant_billing_id")
+  )
+  @Column(name = "licence_option", nullable = false)
+  private List<String> additionalLicenceOptions;
 
   @Nonnull
   @Column(name = "subscription_status", nullable = false)
@@ -66,12 +77,14 @@ public class TenantBillingEntity extends TenantScopedEntity {
                              @Nonnull final String planKey,
                              @Nonnull final String subscriptionStatus,
                              @Nonnull final String paymentStatus,
-                             final boolean hasValidPaymentMethod) {
+                             final boolean hasValidPaymentMethod,
+                             @Nonnull final List<String> additionalLicenceOptions) {
     setTenant(tenant);
     this.planKey = planKey;
     this.subscriptionStatus = subscriptionStatus;
     this.paymentStatus = paymentStatus;
     this.hasValidPaymentMethod = hasValidPaymentMethod;
+    this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
   @Nonnull
@@ -81,7 +94,8 @@ public class TenantBillingEntity extends TenantScopedEntity {
             BillingPlanKey.FREE.name(),
             BillingSubscriptionStatus.INACTIVE.name(),
             BillingPaymentStatus.UNPAID.name(),
-            false
+            false,
+            New.arrayList()
     );
   }
 
@@ -139,6 +153,15 @@ public class TenantBillingEntity extends TenantScopedEntity {
 
   public void setPlanKey(@Nonnull final String planKey) {
     this.planKey = planKey;
+  }
+
+  @Nonnull
+  public List<String> getAdditionalLicenceOptions() {
+    return additionalLicenceOptions;
+  }
+
+  public void setAdditionalLicenceOptions(@Nonnull final List<String> additionalLicenceOptions) {
+    this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
   @Nonnull

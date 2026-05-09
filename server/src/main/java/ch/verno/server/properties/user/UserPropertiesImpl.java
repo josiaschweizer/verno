@@ -3,7 +3,7 @@ package ch.verno.server.properties.user;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.UserPropertiesGate;
+import ch.verno.common.properties.UserProperties;
 import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserPropertiesGateImpl implements UserPropertiesGate {
+public class UserPropertiesImpl implements UserProperties {
 
   @Nonnull private final GlobalInterface globalInterface;
 
-  public UserPropertiesGateImpl(@Nonnull final GlobalInterface globalInterface) {
+  public UserPropertiesImpl(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
   }
 
@@ -61,6 +61,10 @@ public class UserPropertiesGateImpl implements UserPropertiesGate {
     return found.get();
   }
 
+  /**
+   * logout current user and redirect to login page
+   *
+   */
   @Override
   public void logout() {
     final var ui = UI.getCurrent();

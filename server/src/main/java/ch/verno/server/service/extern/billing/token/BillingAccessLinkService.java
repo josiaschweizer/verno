@@ -5,11 +5,10 @@ import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService
 import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenGeneratorService;
 import ch.verno.common.db.type.billing.BillingAccessTokenPurpose;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
 import ch.verno.common.lib.url.UrlUtil;
+import ch.verno.common.properties.configprovider.VernoBillingConfigProvider;
 import ch.verno.publ.ApiUrl;
 import ch.verno.server.service.extern.billing.TenantBillingService;
-import com.stripe.model.issuing.Cardholder;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
     tenantBillingService = globalInterface.getService(TenantBillingService.class);
     billingAccessTokenGeneratorService = globalInterface.getService(IBillingAccessTokenGeneratorService.class);
 
-    subscriptionOverviewUrl = globalInterface.getService(ApplicationPropertiesGate.class).getSubscriptionOverviewUrl();
+    subscriptionOverviewUrl = globalInterface.getService(VernoBillingConfigProvider.class).getSubscriptionOverviewUrl();
   }
 
   @Nonnull

@@ -1,5 +1,6 @@
 package ch.verno.server.properties.application;
 
+import ch.verno.common.properties.configprovider.VernoApplicationConfigProvider;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -10,12 +11,12 @@ import java.util.Optional;
 
 @Component
 @ConfigurationProperties(prefix = "verno.application")
-public class ApplicationProperties {
+public class VernoApplicationConfigProviderImpl implements VernoApplicationConfigProvider {
 
-    @Nullable
-    private String runMode;
+  @Nullable private String runMode;
 
     @Nonnull
+    @Override
     public String getRunMode() {
         return Optional.ofNullable(runMode).orElse(Publ.EMPTY_STRING);
     }
