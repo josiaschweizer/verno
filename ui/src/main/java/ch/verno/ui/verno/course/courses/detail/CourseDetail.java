@@ -8,7 +8,10 @@ import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.db.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
-import ch.verno.server.service.intern.*;
+import ch.verno.server.service.intern.CourseLevelService;
+import ch.verno.server.service.intern.CourseScheduleService;
+import ch.verno.server.service.intern.CourseService;
+import ch.verno.server.service.intern.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -27,8 +30,7 @@ import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,13 +115,11 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     return new Binder<>(CourseDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final CourseDto bean) {
     courseService.createCourse(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final CourseDto bean) {
     courseService.updateCourse(bean);
@@ -158,14 +158,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   }
 
   @Nonnull
-  private HorizontalLayout createInfoLayout() {
+  private VerticalLayout createInfoLayout() {
     final var titleEntry = entryFactory.createTextField(
             CourseDto::getTitle,
             CourseDto::setTitle,
             getBinder(),
             Optional.of(getTranslation("shared.title.is.required")),
             getTranslation("shared.title"));
-
     //todo default value from user settings
     final var capacityEntry = entryFactory.createNumberEntry(
             courseDto -> courseDto.getCapacity() != null ? courseDto.getCapacity().doubleValue() : null,
@@ -192,11 +191,21 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getBinder(),
             Optional.empty(),
             getTranslation("course.end.time"));
+    final var color = entryFactory.createColorPickerEntry(
+            CourseDto::getColor,
+            CourseDto::setColor,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("shared.color")
+    );
 
-    return LayoutUtil.createHorizontal(titleEntry, capacityEntry, location, startTime, endTime);
+    final var topLayout = LayoutUtil.createHorizontal(titleEntry, capacityEntry, location);
+    final var bottomLayout = LayoutUtil.createHorizontal(startTime, endTime, color);
+    return LayoutUtil.createVertical(topLayout, bottomLayout);
   }
 
-  private HorizontalLayout createCourseLayout() {
+  @Nonnull
+  private VerticalLayout createCourseLayout() {
     final var courseSchedules = courseScheduleService.getAllCourseSchedules();
     final var courseScheduleOptions = courseSchedules.stream()
             .collect(Collectors.toMap(CourseScheduleDto::getId, CourseScheduleDto::getTitle));
@@ -223,11 +232,18 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             CourseLevelDto::displayName
     );
 
-    final var instructors = instructorService.getAllInstructors();
-    final var instructorOptions = instructors.stream()
-            .collect(Collectors.toMap(InstructorDto::getId, InstructorDto::displayName));
+    final List<InstructorDto> instructors = instructorService.getAllInstructors().stream()
+            .sorted(Comparator.comparing(InstructorDto::displayName))
+            .toList();
+    final LinkedHashMap<Long, String> instructorOptions = instructors.stream()
+            .collect(Collectors.toMap(
+                    InstructorDto::getId,
+                    InstructorDto::displayName,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
 
-    final var instructorEntry = entryFactory.createComboBoxEntry(
+    final var primaryInstructorEntry = entryFactory.createComboBoxEntry(
             dto -> dto.getInstructor() != null ? dto.getInstructor().getId() : null,
             (dto, value) -> dto.setInstructor(value == null ?
                     null :
@@ -238,7 +254,19 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             instructorOptions
     );
 
-    return LayoutUtil.createHorizontal(courseScheduleEntry, courseLevelEntry, instructorEntry);
+    final var secondaryInstructorsEntry = entryFactory.createMultiSelectComboBoxEntry(
+            CourseDto::getSecondaryInstructors,
+            CourseDto::setSecondaryInstructors,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("shared.zusatzliche.kursleiter"),
+            instructors,
+            InstructorDto::displayName
+    );
+
+    final var topLayout = LayoutUtil.createHorizontal(courseScheduleEntry, courseLevelEntry);
+    final var bottomLayout = LayoutUtil.createHorizontal(primaryInstructorEntry, secondaryInstructorsEntry);
+    return LayoutUtil.createVertical(topLayout, bottomLayout);
   }
 
   @Nonnull

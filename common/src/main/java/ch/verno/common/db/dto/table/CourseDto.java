@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto.table;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -12,35 +13,22 @@ import java.util.Objects;
 
 public class CourseDto extends BaseDto {
 
-  @Nonnull
-  private String title;
+  @Nonnull private String title;
+  @Nullable private Integer capacity;
+  @Nonnull private String location;
 
-  @Nullable
-  private Integer capacity;
+  @Nonnull private List<CourseLevelDto> courseLevels;
+  @Nullable private CourseScheduleDto courseSchedule;
 
-  @Nonnull
-  private String location;
+  @Nonnull private List<DayOfWeek> weekdays;
+  @Nullable private LocalTime startTime;
+  @Nullable private LocalTime endTime;
 
-  @Nonnull
-  private List<CourseLevelDto> courseLevels;
+  @Nullable private InstructorDto instructor;
+  @Nonnull private List<InstructorDto> secondaryInstructors;
 
-  @Nullable
-  private CourseScheduleDto courseSchedule;
-
-  @Nonnull
-  private List<DayOfWeek> weekdays;
-
-  @Nullable
-  private LocalTime startTime;
-
-  @Nullable
-  private LocalTime endTime;
-
-  @Nullable
-  private InstructorDto instructor;
-
-  @Nonnull
-  private String note;
+  @Nonnull private String note;
+  @Nonnull private String color;
 
   public CourseDto() {
     this(
@@ -54,7 +42,9 @@ public class CourseDto extends BaseDto {
             null,
             null,
             null,
-            Publ.EMPTY_STRING
+            List.of(),
+            Publ.EMPTY_STRING,
+            Colors.PRIMARY_COLOR
     );
   }
 
@@ -68,7 +58,9 @@ public class CourseDto extends BaseDto {
                    @Nullable final LocalTime startTime,
                    @Nullable final LocalTime endTime,
                    @Nullable final InstructorDto instructor,
-                   @Nonnull final String note) {
+                   @Nonnull final List<InstructorDto> secondaryInstructors,
+                   @Nonnull final String note,
+                   @Nonnull final String color) {
     super.setId(id);
     this.title = title;
     this.capacity = capacity;
@@ -79,7 +71,9 @@ public class CourseDto extends BaseDto {
     this.startTime = startTime;
     this.endTime = endTime;
     this.instructor = instructor;
+    this.secondaryInstructors = secondaryInstructors;
     this.note = note;
+    this.color = color;
   }
 
   public static CourseDto empty() {
@@ -99,7 +93,9 @@ public class CourseDto extends BaseDto {
             && this.startTime == null
             && this.endTime == null
             && (this.instructor == null || this.instructor.isEmpty())
-            && this.note.isEmpty();
+            && this.secondaryInstructors.isEmpty()
+            && this.note.isEmpty()
+            && this.color.isEmpty();
   }
 
   @Nonnull
@@ -109,6 +105,11 @@ public class CourseDto extends BaseDto {
 
   public void setTitle(@Nonnull final String title) {
     this.title = title;
+  }
+
+  @Nonnull
+  public String displayName() {
+    return title;
   }
 
   @Nullable
@@ -249,6 +250,15 @@ public class CourseDto extends BaseDto {
   }
 
   @Nonnull
+  public List<InstructorDto> getSecondaryInstructors() {
+    return secondaryInstructors;
+  }
+
+  public void setSecondaryInstructors(@Nonnull final List<InstructorDto> secondaryInstructors) {
+    this.secondaryInstructors = secondaryInstructors;
+  }
+
+  @Nonnull
   public String getNote() {
     return note;
   }
@@ -258,8 +268,12 @@ public class CourseDto extends BaseDto {
   }
 
   @Nonnull
-  public String displayName() {
-    return title;
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(@Nonnull final String color) {
+    this.color = color;
   }
 
   @Override

@@ -2,14 +2,14 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.response.DeleteResponseDto;
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.db.filter.CourseFilter;
 import ch.verno.common.db.service.intern.ICourseService;
+import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.CourseEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.common.tenant.TenantContext;
 import ch.verno.server.mapper.CourseMapper;
 import ch.verno.server.repository.*;
 import ch.verno.server.service.helper.ServiceHelper;
@@ -71,7 +71,12 @@ public class CourseService implements ICourseService {
             courseDto.getStartTime(),
             courseDto.getEndTime(),
             serviceHelper.resolveInstructor(instructorRepository, courseDto.getInstructor()),
-            courseDto.getNote()
+            courseDto.getSecondaryInstructors()
+                    .stream()
+                    .map(dto -> serviceHelper.resolveInstructor(instructorRepository, dto))
+                    .toList(),
+            courseDto.getNote(),
+            courseDto.getColor()
     );
 
     entity.setId(null);
@@ -97,21 +102,22 @@ public class CourseService implements ICourseService {
     existing.setStartTime(courseDto.getStartTime());
     existing.setEndTime(courseDto.getEndTime());
     existing.setNote(courseDto.getNote());
+    existing.setColor(courseDto.getColor());
 
     final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
-//    if (levels.isEmpty()) {
-//      throw new IllegalArgumentException("At least one course level is required");
-//    }
-
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
-    if (schedule == null) {
-      throw new IllegalArgumentException("Course schedule is required");
-    }
 
     existing.setCourseLevels(levels);
     existing.setCourseSchedule(schedule);
     existing.setWeekdays(courseDto.getWeekdays());
+
     existing.setInstructor(serviceHelper.resolveInstructor(instructorRepository, courseDto.getInstructor()));
+    final var secondaryInstructorEntities = courseDto
+            .getSecondaryInstructors()
+            .stream()
+            .map(dto -> serviceHelper.resolveInstructor(instructorRepository, dto))
+            .toList();
+    existing.setSecondaryInstructors(secondaryInstructorEntities);
 
     final var saved = courseRepository.save(existing);
     return CourseMapper.toDto(saved);
@@ -133,16 +139,11 @@ public class CourseService implements ICourseService {
   @Override
   @Transactional
   public List<CourseDto> getCoursesByCourseScheduleId(@Nonnull final Long courseScheduleId) {
-    final var courses = courseRepository.findAll().stream()
+    return courseRepository.findAll().stream()
             .filter(dto -> dto.getCourseSchedule() != null)
             .filter(dto -> dto.getCourseSchedule().getId().equals(courseScheduleId))
             .map(CourseMapper::toDto)
             .toList();
-//    return courseRepository.findByCourseScheduleId(courseScheduleId).stream()
-//            .map(CourseMapper::toDto)
-//            .toList();
-
-    return courses;
   }
 
   @Nonnull

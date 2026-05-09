@@ -5,6 +5,7 @@ import ch.verno.common.db.filter.CourseLevelFilter;
 import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.db.entity.CourseLevelEntity;
 import ch.verno.server.mapper.CourseLevelMapper;
 import ch.verno.server.repository.CourseLevelRepository;
 import ch.verno.server.spec.CourseLevelSpec;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -88,7 +90,10 @@ public class CourseLevelService implements ICourseLevelService {
   @Override
   @Transactional(readOnly = true)
   public List<CourseLevelDto> getAllCourseLevels() {
-    return courseLevelRepository.findAll().stream().map(CourseLevelMapper::toDto).toList();
+    return courseLevelRepository.findAll().stream()
+            .sorted(Comparator.comparing(CourseLevelEntity::getSortingOrder))
+            .map(CourseLevelMapper::toDto)
+            .toList();
   }
 
   @Nonnull

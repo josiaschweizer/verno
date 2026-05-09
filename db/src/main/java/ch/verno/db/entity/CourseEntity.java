@@ -53,6 +53,7 @@ public class CourseEntity extends TenantScopedEntity {
   @JoinColumn(name = "course_schedule_id", nullable = false)
   private CourseScheduleEntity courseSchedule;
 
+  @Nonnull
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(
           name = "course_weekday",
@@ -77,8 +78,22 @@ public class CourseEntity extends TenantScopedEntity {
   private InstructorEntity instructor;
 
   @Nonnull
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "course_secondary_instructor",
+          joinColumns = @JoinColumn(name = "course_id"),
+          inverseJoinColumns = @JoinColumn(name = "instructor_id")
+  )
+  @OrderColumn(name = "sort_index")
+  private List<InstructorEntity> secondaryInstructors;
+
+  @Nonnull
   @Column(name = "note", columnDefinition = "TEXT")
   private String note;
+
+  @Nullable
+  @Column(name = "color", length = 16)
+  private String color;
 
   protected CourseEntity() {
   }
@@ -89,22 +104,37 @@ public class CourseEntity extends TenantScopedEntity {
                       @Nonnull final String location,
                       @Nullable final List<CourseLevelEntity> courseLevels,
                       @Nullable final CourseScheduleEntity courseSchedule,
-                      @Nonnull final List<DayOfWeek> weekdays,
+                      @Nullable final List<DayOfWeek> weekdays,
                       @Nullable final LocalTime startTime,
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
-                      @Nonnull final String note) {
+                      @Nullable final List<InstructorEntity> secondaryInstructors,
+                      @Nonnull final String note,
+                      @Nullable final String color) {
     setTenant(tenant);
+
     this.title = title;
     this.capacity = capacity;
     this.location = location;
-    this.courseLevels = courseLevels != null ? courseLevels : new ArrayList<>();
+
+    this.courseLevels = courseLevels != null
+            ? new ArrayList<>(courseLevels)
+            : new ArrayList<>();
     this.courseSchedule = courseSchedule;
-    this.weekdays = weekdays;
+
+    this.weekdays = weekdays != null
+            ? new ArrayList<>(weekdays)
+            : new ArrayList<>();
     this.startTime = startTime;
     this.endTime = endTime;
+
     this.instructor = instructor;
+    this.secondaryInstructors = secondaryInstructors != null
+            ? new ArrayList<>(secondaryInstructors)
+            : new ArrayList<>();
+
     this.note = note;
+    this.color = color;
   }
 
   @Nonnull
@@ -211,11 +241,30 @@ public class CourseEntity extends TenantScopedEntity {
   }
 
   @Nonnull
+  public List<InstructorEntity> getSecondaryInstructors() {
+    return secondaryInstructors;
+  }
+
+  public void setSecondaryInstructors(@Nonnull final List<InstructorEntity> secondaryInstructors) {
+    this.secondaryInstructors.clear();
+    this.secondaryInstructors.addAll(secondaryInstructors);
+  }
+
+  @Nonnull
   public String getNote() {
     return note;
   }
 
   public void setNote(@Nonnull final String note) {
     this.note = note;
+  }
+
+  @Nullable
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(@Nullable final String color) {
+    this.color = color;
   }
 }

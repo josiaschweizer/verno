@@ -39,6 +39,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -144,13 +145,11 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     return new Binder<>(ParticipantDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final ParticipantDto bean) {
     participantService.createParticipant(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final ParticipantDto bean) {
     participantService.updateParticipant(bean);
@@ -198,7 +197,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     participantLayout.add(createParticipantInfoLayout());
     participantLayout.add(createParticipantContactLayout());
     participantLayout.add(createParticipantCourseLayout());
-    participantLayout.add(createParticipantNoteLayout());
+    participantLayout.add(createParticipantAdditionalInfoLayout());
     return participantLayout;
   }
 
@@ -291,7 +290,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   }
 
   @Nonnull
-  private HorizontalLayout createParticipantNoteLayout() {
+  private VerticalLayout createParticipantAdditionalInfoLayout() {
     final var note = entryFactory.createTextAreaEntry(
             ParticipantDto::getNote,
             ParticipantDto::setNote,
@@ -300,7 +299,26 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             getTranslation("shared.note")
     );
 
-    return LayoutUtil.createHorizontal(note);
+    final var siblings = participantService.getAllParticipants()
+            .stream()
+            .filter(participant -> !getBinder().getBean().equals(participant))
+            .filter(participant -> participant.isActive())
+            .toList();
+    final var siblingEntry = entryFactory.createMultiSelectComboBoxEntry(
+            ParticipantDto::getSiblings,
+            ParticipantDto::setSiblings,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("participant.geschwister"),
+            siblings,
+            dto -> dto.getFirstName() + Publ.SPACE + dto.getLastName()
+    );
+    if (siblings.isEmpty()){
+      siblingEntry.setEnabled(false);
+      siblingEntry.setHelperText(getTranslation("participant.there.are.no.participants.to.select.as.siblings"));
+    }
+
+    return LayoutUtil.createVertical(note, siblingEntry);
   }
 
   @Nonnull

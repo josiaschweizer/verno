@@ -92,4 +92,9 @@ public class ParentService implements IParentService {
     final var entity = new ParentEntity(TenantEntity.ref(tenantId), firstname, lastname, email, phone);
     return ParentMapper.toDto(parentRepository.save(entity));
   }
+
+  @Override
+  public void deleteById(@Nonnull final Long id) {
+     parentRepository.deleteById(id);
+  }
 }

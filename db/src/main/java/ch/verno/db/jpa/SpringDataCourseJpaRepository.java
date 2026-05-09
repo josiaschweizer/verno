@@ -12,6 +12,8 @@ public interface SpringDataCourseJpaRepository extends
         JpaSpecificationExecutor<CourseEntity> {
 
   @Nonnull
-  List<CourseEntity> findByCourseSchedule_Id(Long courseLevelId);
+  List<CourseEntity> findByCourseSchedule_Id(@Nonnull Long courseLevelId);
+
+  boolean existsByInstructor_Id(@Nonnull Long instructorId);
 
 }

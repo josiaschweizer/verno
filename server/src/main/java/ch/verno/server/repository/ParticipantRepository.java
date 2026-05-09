@@ -69,6 +69,10 @@ public class ParticipantRepository {
     return jpaRepository.save(participant);
   }
 
+  public List<ParticipantEntity> saveAll(@Nonnull final List<ParticipantEntity> participants) {
+    return jpaRepository.saveAll(participants);
+  }
+
   public ParticipantEntity update(@Nonnull final ParticipantEntity participant) {
     if (participant.getId() != null) {
       return update(participant.getId(), participant);
@@ -85,5 +89,9 @@ public class ParticipantRepository {
 
     participant.setId(id);
     return jpaRepository.save(participant);
+  }
+
+  public void deleteById(@Nonnull final Long id) {
+    jpaRepository.deleteById(id);
   }
 }

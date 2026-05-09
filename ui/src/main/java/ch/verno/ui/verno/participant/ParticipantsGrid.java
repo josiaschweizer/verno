@@ -3,10 +3,12 @@ package ch.verno.ui.verno.participant;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
+import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.db.service.intern.ICourseService;
+import ch.verno.common.db.service.intern.IParentService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ReportServerGate;
@@ -38,10 +40,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,8 +51,9 @@ import java.util.stream.Stream;
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 
   @Nonnull private final IParticipantService participantService;
-  @Nonnull private final ICourseService courseService;
   @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IParentService parentService;
   @Nonnull private final ReportServerGate reportServerGate;
 
   public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface,
@@ -62,8 +62,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     super(globalInterface, ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
-    this.courseService = globalInterface.getService(ICourseService.class);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.parentService = globalInterface.getService(IParentService.class);
     this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
@@ -72,8 +73,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     super(globalInterface, ParticipantFilter.empty(), true, true);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
-    this.courseService = globalInterface.getService(ICourseService.class);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.parentService = globalInterface.getService(IParentService.class);
     this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
@@ -120,7 +122,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Nonnull
   @Override
-  protected List<ActionDef> buildContextMenuActions(@Nonnull ParticipantDto dto) {
+  protected List<ActionDef> buildContextMenuActions(@Nonnull final ParticipantDto dto) {
     final var actions = new ArrayList<ActionDef>();
 
     if (dto.isActive()) {
@@ -135,7 +137,25 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
       ));
     }
 
+    actions.add(ActionDef.create(getTranslation("participant.delete.participant"), VaadinIcon.TRASH, () -> deleteParticipant(dto)));
+
     return actions;
+  }
+
+  private void deleteParticipant(@Nonnull final ParticipantDto dto) {
+    if (participantService.deleteParticipant(dto.getId())) {
+      deleteParent(dto.getParentOne());
+      deleteParent(dto.getParentTwo());
+
+      refreshGrid();
+    }
+  }
+
+  private void deleteParent(@Nonnull final ParentDto dto) {
+    final var id = dto.getId();
+    if (id != null && id > 0) {
+      parentService.deleteById(id);
+    }
   }
 
   private void disableItem(@Nonnull final ParticipantDto dto) {
@@ -154,21 +174,24 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ObjectGridColumn<ParticipantDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<ParticipantDto>>();
-    columns.add(new ObjectGridColumn<>("lastname", ParticipantDto::getLastName,
-            getTranslation("shared.last.name"), true));
     columns.add(new ObjectGridColumn<>("firstname", ParticipantDto::getFirstName,
             getTranslation("shared.first.name"), true));
+    columns.add(new ObjectGridColumn<>("lastname", ParticipantDto::getLastName,
+            getTranslation("shared.last.name"), true));
     columns.add(new ObjectGridColumn<>("birthdate", ParticipantDto::getAgeFromBirthday,
             getTranslation("shared.age"), true));
+    columns.add(new ObjectGridColumn<>("courseLevels", dto ->
+            joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
+            getTranslation("courseLevel.course_level"), true));
+    columns.add(new ObjectGridColumn<>("siblings", dto ->
+            joinDisplayNamesFromList(dto.getSiblings(), ParticipantDto::getDisplayName),
+            getTranslation("participant.geschwister"), true));
+    columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote,
+            getTranslation("shared.note"), true));
     columns.add(new ObjectGridColumn<>("email", ParticipantDto::getEmail,
             getTranslation("shared.e.mail"), true));
     columns.add(new ObjectGridColumn<>("phone", ParticipantDto::getPhoneString,
             getTranslation("shared.phone"), true));
-    columns.add(new ObjectGridColumn<>("note", ParticipantDto::getNote,
-            getTranslation("shared.note"), true));
-    columns.add(new ObjectGridColumn<>("courseLevels", dto ->
-            joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
-            getTranslation("courseLevel.course_level"), true));
     columns.add(new ObjectGridColumn<>("courses", dto ->
             joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
             getTranslation("course.course"), true));
@@ -243,7 +266,12 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             getTranslation("filter.course_filter"));
 
     final var courseLevels = courseLevelService.getAllCourseLevels().stream()
-            .collect(Collectors.toMap(BaseDto::getId, CourseLevelDto::getName));
+            .collect(Collectors.toMap(
+                    BaseDto::getId,
+                    CourseLevelDto::getName,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
     final var courseLevelFilter = filterEntryFactory.createMultiSelectComboboxFilter(
             ParticipantFilter::getCourseLevelIds,
             ParticipantFilter::setCourseLevelIds,

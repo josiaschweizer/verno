@@ -21,6 +21,12 @@ public interface IInstructorService {
   @Nonnull
   List<InstructorDto> getAllInstructors();
 
+  void deleteInstructor(@Nonnull final InstructorDto instructorDto);
+
+  void deleteInstructor(@Nonnull final Long id);
+
+  boolean isInstructorReferenced(@Nonnull Long id);
+
   @Nonnull
   List<InstructorDto> findInstructors(@Nonnull InstructorFilter filter,
                                       int offset,

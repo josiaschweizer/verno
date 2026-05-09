@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.service.intern.ICourseScheduleService;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.ui.base.components.colorpicker.Colors;
-import ch.verno.publ.VernoUtility;
 import ch.verno.publ.Routes;
+import ch.verno.publ.VernoUtility;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -57,7 +57,6 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
   @Nonnull
   private List<WeekCalendarEventDto> getEventsForWeek(@Nonnull final LocalDate weekStart) {
     final var monday = weekStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
     final var courseScheduleByWeek = courseScheduleService.getCourseScheduleByWeek(monday);
 
     final var courses = new ArrayList<CourseDto>();
@@ -91,9 +90,7 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
         final var start = LocalDateTime.of(date, startTime);
         final var end = LocalDateTime.of(date, endTime);
-        final var color = course.getCourseSchedule() != null ?
-                course.getCourseSchedule().getColor() :
-                Colors.PRIMARY_COLOR;
+        final var color = getColor(course);
 
         events.add(new WeekCalendarEventDto(
                 course.getTitle(),
@@ -108,8 +105,20 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
     return events;
   }
 
+  @Nonnull
   @Override
   public String getPageTitle() {
     return getTranslation("course.course");
+  }
+
+  @Nonnull
+  private String getColor(@Nonnull final CourseDto course) {
+    if (!course.getColor().isEmpty()) {
+      return course.getColor();
+    } else if (course.getCourseSchedule() != null) {
+      return course.getCourseSchedule().getColor(); // a course schedule always has a color (at least the primary color)
+    }
+
+    return Colors.PRIMARY_COLOR;
   }
 }

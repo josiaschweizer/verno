@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ParticipantService implements IParticipantService {
@@ -56,10 +58,9 @@ public class ParticipantService implements IParticipantService {
     this.participantSpec = new ParticipantSpec();
   }
 
-  @Nonnull
   @Override
   @Transactional
-  public ParticipantDto createParticipant(@Nonnull final ParticipantDto participant) {
+  public void createParticipant(@Nonnull final ParticipantDto participant) {
     final var tenant = TenantEntity.ref(TenantContext.getRequired());
     final var entity = new ParticipantEntity(
             tenant,
@@ -67,21 +68,18 @@ public class ParticipantService implements IParticipantService {
             ServiceHelper.safeString(participant.getLastName()),
             participant.getBirthdate() != null ? participant.getBirthdate() : LocalDate.now(),
             ServiceHelper.safeString(participant.getEmail()),
-            !participant.getPhone().isEmpty()
-                    ? participant.getPhone().toString()
-                    : Publ.EMPTY_STRING,
+            !participant.getPhone().isEmpty() ? participant.getPhone().toString() : Publ.EMPTY_STRING,
             ServiceHelper.safeString(participant.getNote()),
             participant.isActive()
     );
 
     final var savedParticipant = saveParticipant(participant, entity);
-    return ParticipantMapper.toDto(savedParticipant);
+    ParticipantMapper.toDto(savedParticipant);
   }
 
-  @Nonnull
   @Override
   @Transactional
-  public ParticipantDto updateParticipant(@Nonnull final ParticipantDto participant) {
+  public void updateParticipant(@Nonnull final ParticipantDto participant) {
     if (participant.getId() == null || participant.getId() == 0) {
       throw new IllegalArgumentException("Participant ID is required for update");
     }
@@ -93,15 +91,12 @@ public class ParticipantService implements IParticipantService {
     existing.setLastname(ServiceHelper.safeString(participant.getLastName()));
     existing.setBirthdate(participant.getBirthdate() != null ? participant.getBirthdate() : LocalDate.now());
     existing.setEmail(ServiceHelper.safeString(participant.getEmail()));
-    existing.setPhone(!participant.getPhone().isEmpty()
-            ? participant.getPhone().toString()
-            : Publ.EMPTY_STRING
-    );
+    existing.setPhone(!participant.getPhone().isEmpty() ? participant.getPhone().toString() : Publ.EMPTY_STRING);
     existing.setNote(ServiceHelper.safeString(participant.getNote()));
     existing.setActive(participant.isActive());
 
     final var savedParticipantEntity = saveParticipant(participant, existing);
-    return ParticipantMapper.toDto(savedParticipantEntity);
+    ParticipantMapper.toDto(savedParticipantEntity);
   }
 
   @Nonnull
@@ -134,7 +129,42 @@ public class ParticipantService implements IParticipantService {
     existing.setParentOne(serviceHelper.saveOrUpdateParent(parentRepository, genderRepository, addressRepository, participantDto.getParentOne()));
     existing.setParentTwo(serviceHelper.saveOrUpdateParent(parentRepository, genderRepository, addressRepository, participantDto.getParentTwo()));
 
+    final var siblings = participantDto.getSiblings().stream()
+            .filter(sibling -> sibling.getId() != null)
+            .filter(sibling -> existing.getId() == null || !sibling.getId().equals(existing.getId()))
+            .map(sibling -> participantRepository.findById(sibling.getId())
+                    .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, sibling.getId())))
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    syncSiblings(existing, siblings);
+
     return participantRepository.save(existing);
+  }
+
+  private void syncSiblings(@Nonnull final ParticipantEntity existing,
+                            @Nonnull final List<ParticipantEntity> siblings) {
+    final var oldSiblings = new ArrayList<>(existing.getSiblings());
+    existing.setSiblings(siblings);
+
+    final var saved = participantRepository.save(existing);
+
+    for (final var oldSibling : oldSiblings) {
+      if (!siblings.contains(oldSibling)) {
+        oldSibling.getSiblings().remove(saved);
+      }
+    }
+
+    for (final var sibling : siblings) {
+      if (!sibling.getSiblings().contains(saved)) {
+        sibling.getSiblings().add(saved);
+      }
+    }
+
+    final var affectedSiblings = new ArrayList<ParticipantEntity>();
+    affectedSiblings.addAll(oldSiblings);
+    affectedSiblings.addAll(siblings);
+
+    participantRepository.saveAll(affectedSiblings);
   }
 
   @Nonnull
@@ -191,6 +221,12 @@ public class ParticipantService implements IParticipantService {
   @Transactional(readOnly = true)
   public int countParticipants(@Nonnull final ParticipantFilter filter) {
     return Math.toIntExact(participantRepository.count(participantSpec.getSpecification(filter)));
+  }
+
+  @Override
+  public boolean deleteParticipant(@Nonnull final Long id) {
+    participantRepository.deleteById(id);
+    return participantRepository.findById(id).isEmpty();
   }
 
   @Nonnull

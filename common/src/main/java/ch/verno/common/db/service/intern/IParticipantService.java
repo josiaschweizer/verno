@@ -11,11 +11,9 @@ import java.util.Optional;
 
 public interface IParticipantService {
 
-  @Nonnull
-  ParticipantDto createParticipant(@Nonnull ParticipantDto participant);
+  void createParticipant(@Nonnull ParticipantDto participant);
 
-  @Nonnull
-  ParticipantDto updateParticipant(@Nonnull ParticipantDto participant);
+  void updateParticipant(@Nonnull ParticipantDto participant);
 
   ParticipantDto disableParticipant(@Nonnull final ParticipantDto participant,
                                     final boolean disabled);
@@ -39,6 +37,8 @@ public interface IParticipantService {
                                         @Nonnull List<QuerySortOrder> sortOrders);
 
   int countParticipants(@Nonnull ParticipantFilter filter);
+
+  boolean deleteParticipant(@Nonnull Long id);
 
   @Nonnull
   List<ParticipantDto> findParticipantsByCourse(@Nonnull CourseDto course);

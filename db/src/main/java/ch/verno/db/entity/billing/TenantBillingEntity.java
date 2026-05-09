@@ -39,9 +39,14 @@ public class TenantBillingEntity extends TenantScopedEntity {
   @Column(name = "plan_key", nullable = false)
   private String planKey;
 
-  @Nonnull
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+          name = "tenant_billing_licence_option",
+          schema = "public",
+          joinColumns = @JoinColumn(name = "tenant_billing_id")
+  )
   @Column(name = "licence_option", nullable = false)
-  private List<String> licenceOption;
+  private List<String> additionalLicenceOptions;
 
   @Nonnull
   @Column(name = "subscription_status", nullable = false)
@@ -144,6 +149,15 @@ public class TenantBillingEntity extends TenantScopedEntity {
 
   public void setPlanKey(@Nonnull final String planKey) {
     this.planKey = planKey;
+  }
+
+  @Nonnull
+  public List<String> getAdditionalLicenceOptions() {
+    return additionalLicenceOptions;
+  }
+
+  public void setAdditionalLicenceOptions(@Nonnull final List<String> additionalLicenceOptions) {
+    this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
   @Nonnull

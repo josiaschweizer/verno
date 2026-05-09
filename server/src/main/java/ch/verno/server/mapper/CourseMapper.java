@@ -4,12 +4,14 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.db.entity.CourseEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class CourseMapper {
 
@@ -41,7 +43,9 @@ public final class CourseMapper {
             entity.getStartTime(),
             entity.getEndTime(),
             InstructorMapper.toDto(entity.getInstructor()),
-            entity.getNote()
+            entity.getSecondaryInstructors().stream().map(InstructorMapper::toDto).toList(),
+            entity.getNote(),
+            Optional.ofNullable(entity.getColor()).orElse(Publ.EMPTY_STRING)
     );
 
     if (entity.getTenant() != null) {
@@ -69,7 +73,12 @@ public final class CourseMapper {
             dto.getStartTime(),
             dto.getEndTime(),
             InstructorMapper.toEntity(dto.getInstructor(), tenantId),
-            dto.getNote()
+            dto.getSecondaryInstructors()
+                    .stream()
+                    .map(instructor -> InstructorMapper.toEntity(instructor, tenantId))
+                    .toList(),
+            dto.getNote(),
+            dto.getColor()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {
