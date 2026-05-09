@@ -27,7 +27,6 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import net.sf.jasperreports.engine.util.ObjectUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -225,9 +224,10 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             CourseLevelDto::displayName
     );
 
-    final var instructors = instructorService.getAllInstructors();
-    final var instructorOptions = instructors.stream()
+    final List<InstructorDto> instructors = instructorService.getAllInstructors().stream()
             .sorted(Comparator.comparing(InstructorDto::displayName))
+            .toList();
+    final LinkedHashMap<Long, String> instructorOptions = instructors.stream()
             .collect(Collectors.toMap(
                     InstructorDto::getId,
                     InstructorDto::displayName,
