@@ -6,9 +6,11 @@ import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.ICourseService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.db.type.billing.BillingLicenceOption;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailTemplateType;
+import ch.verno.common.properties.BillingProperties;
 import ch.verno.lib.Lazy;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
@@ -37,6 +39,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final IParticipantService participantService;
   @Nonnull private final Lazy<IMailConfigService> mailConfigService;
+  @Nonnull private final Lazy<BillingProperties> billingProperties;
 
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
@@ -48,6 +51,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     participantService = globalInterface.getService(IParticipantService.class);
     mailConfigService = Lazy.of(() -> globalInterface.getService(IMailConfigService.class));
+    billingProperties = Lazy.of(() -> globalInterface.getService(BillingProperties.class));
 
     final var courseService = globalInterface.getService(ICourseService.class);
     currentCourse = courseService.getCourseById(currentCourseId);
@@ -107,6 +111,9 @@ public class CourseWidget extends VAAccordionWidgetBase {
                     participantsInCourse)
                     .open()
     );
+    if (!billingProperties.get().isOptionLicenced(BillingLicenceOption.REPORT)) {
+      reportButton.setPseudoEnabled(false, getTranslation("shared.the.report.option.is.not.licensed.for.your.tenant.please.contact.your.tenant.administrator.to.enable.this.feature"));
+    }
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {

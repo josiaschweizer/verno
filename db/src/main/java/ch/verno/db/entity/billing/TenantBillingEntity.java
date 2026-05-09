@@ -6,6 +6,7 @@ import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.New;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -76,12 +77,14 @@ public class TenantBillingEntity extends TenantScopedEntity {
                              @Nonnull final String planKey,
                              @Nonnull final String subscriptionStatus,
                              @Nonnull final String paymentStatus,
-                             final boolean hasValidPaymentMethod) {
+                             final boolean hasValidPaymentMethod,
+                             @Nonnull final List<String> additionalLicenceOptions) {
     setTenant(tenant);
     this.planKey = planKey;
     this.subscriptionStatus = subscriptionStatus;
     this.paymentStatus = paymentStatus;
     this.hasValidPaymentMethod = hasValidPaymentMethod;
+    this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
   @Nonnull
@@ -91,7 +94,8 @@ public class TenantBillingEntity extends TenantScopedEntity {
             BillingPlanKey.FREE.name(),
             BillingSubscriptionStatus.INACTIVE.name(),
             BillingPaymentStatus.UNPAID.name(),
-            false
+            false,
+            New.arrayList()
     );
   }
 

@@ -23,4 +23,13 @@ public class New {
     return list;
   }
 
+  @SafeVarargs
+  public static <T> ArrayList<T> arrayList(List<T>... lists) {
+    final var list = new ArrayList<T>();
+    for (final var l : lists) {
+      list.addAll(l);
+    }
+    return list;
+  }
+
 }

@@ -1,14 +1,18 @@
 package ch.verno.common.db.dto.table.billing;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.db.type.billing.BillingLicenceOption;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
 import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
+import ch.verno.lib.New;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class TenantBillingDto extends BaseDto {
@@ -22,6 +26,7 @@ public class TenantBillingDto extends BaseDto {
   @Nullable private OffsetDateTime graceUntil;
   private boolean hasValidPaymentMethod;
   @Nonnull private String lastWebhookEventId;
+  @Nonnull private List<BillingLicenceOption> additionalLicenceOptions;
 
   public TenantBillingDto() {
     setId(null);
@@ -34,6 +39,7 @@ public class TenantBillingDto extends BaseDto {
     this.graceUntil = null;
     this.hasValidPaymentMethod = false;
     this.lastWebhookEventId = Publ.EMPTY_STRING;
+    this.additionalLicenceOptions = New.arrayList();
   }
 
   public TenantBillingDto(@Nullable final Long id,
@@ -45,7 +51,8 @@ public class TenantBillingDto extends BaseDto {
                           @Nullable final OffsetDateTime currentPeriodEnd,
                           @Nullable final OffsetDateTime graceUntil,
                           final boolean hasValidPaymentMethod,
-                          @Nonnull final String lastWebhookEventId) {
+                          @Nonnull final String lastWebhookEventId,
+                          @Nonnull final List<BillingLicenceOption> additionalLicenceOptions) {
     setId(id);
     this.stripeCustomerId = stripeCustomerId;
     this.stripeSubscriptionId = stripeSubscriptionId;
@@ -56,6 +63,7 @@ public class TenantBillingDto extends BaseDto {
     this.graceUntil = graceUntil;
     this.hasValidPaymentMethod = hasValidPaymentMethod;
     this.lastWebhookEventId = lastWebhookEventId;
+    this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
   @Nonnull
@@ -70,8 +78,10 @@ public class TenantBillingDto extends BaseDto {
             OffsetDateTime.now().plusYears(5),
             null,
             true,
-            Publ.EMPTY_STRING
+            Publ.EMPTY_STRING,
+            Arrays.stream(BillingLicenceOption.values()).toList()
     );
+
     defaultDevDto.setTenantId(tenantId); // tenant id has for saving the dto
     return defaultDevDto;
   }
@@ -148,6 +158,22 @@ public class TenantBillingDto extends BaseDto {
   }
 
   @Nonnull
+  public List<BillingLicenceOption> getAdditionalLicenceOptions() {
+    return additionalLicenceOptions;
+  }
+
+  @Nonnull
+  public List<String> getAdditionalStringLicenceOptions() {
+    return additionalLicenceOptions.stream()
+            .map(BillingLicenceOption::name)
+            .toList();
+  }
+
+  public void setAdditionalLicenceOptions(@Nonnull final List<BillingLicenceOption> additionalLicenceOptions) {
+    this.additionalLicenceOptions = additionalLicenceOptions;
+  }
+
+  @Nonnull
   public String getLastWebhookEventId() {
     return lastWebhookEventId;
   }
@@ -157,8 +183,8 @@ public class TenantBillingDto extends BaseDto {
   }
 
   public boolean isActiveBilling() {
-    return BillingSubscriptionStatus.ACTIVE.name().equals(subscriptionStatus)
-            || BillingSubscriptionStatus.TRIAL.name().equals(subscriptionStatus);
+    return BillingSubscriptionStatus.ACTIVE.equals(subscriptionStatus) ||
+            BillingSubscriptionStatus.TRIAL.equals(subscriptionStatus);
   }
 
   @Override

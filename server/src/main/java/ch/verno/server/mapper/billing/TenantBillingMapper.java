@@ -1,6 +1,7 @@
 package ch.verno.server.mapper.billing;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
+import ch.verno.common.db.type.billing.BillingLicenceOption;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
 import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
@@ -31,7 +32,10 @@ public final class TenantBillingMapper {
             entity.getCurrentPeriodEnd(),
             entity.getGraceUntil(),
             entity.isHasValidPaymentMethod(),
-            entity.getLastWebhookEventId() == null ? Publ.EMPTY_STRING : entity.getLastWebhookEventId()
+            entity.getLastWebhookEventId() == null ? Publ.EMPTY_STRING : entity.getLastWebhookEventId(),
+            entity.getAdditionalLicenceOptions().stream()
+                    .map(BillingLicenceOption::valueOf)
+                    .toList()
     );
 
     if (entity.getTenant() != null) {
@@ -53,7 +57,8 @@ public final class TenantBillingMapper {
             dto.getPlanKey().name(),
             dto.getSubscriptionStatus().getKey(),
             dto.getPaymentStatus().getKey(),
-            dto.isHasValidPaymentMethod()
+            dto.isHasValidPaymentMethod(),
+            dto.getAdditionalStringLicenceOptions()
     );
 
     if (dto.getId() != null && dto.getId() != 0) {
