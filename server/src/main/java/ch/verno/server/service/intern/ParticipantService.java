@@ -223,6 +223,12 @@ public class ParticipantService implements IParticipantService {
     return Math.toIntExact(participantRepository.count(participantSpec.getSpecification(filter)));
   }
 
+  @Override
+  public boolean deleteParticipant(@Nonnull final Long id) {
+    participantRepository.deleteById(id);
+    return participantRepository.findById(id).isEmpty();
+  }
+
   @Nonnull
   @Override
   @Transactional(readOnly = true)

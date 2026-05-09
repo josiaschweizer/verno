@@ -12,25 +12,25 @@ import java.util.Optional;
 public class ParentRepository {
 
   @Nonnull
-  private final SpringDataParentJpaRepository springDataParentJpaRepository;
+  private final SpringDataParentJpaRepository jpaRepository;
 
-  public ParentRepository(@Nonnull final SpringDataParentJpaRepository springDataParentJpaRepository) {
-    this.springDataParentJpaRepository = springDataParentJpaRepository;
+  public ParentRepository(@Nonnull final SpringDataParentJpaRepository jpaRepository) {
+    this.jpaRepository = jpaRepository;
   }
 
   @Nonnull
   public Optional<ParentEntity> findById(@Nonnull final Long id, @Nonnull final Long tenantId) {
-    return springDataParentJpaRepository.findByIdAndTenant_Id(id, tenantId);
+    return jpaRepository.findByIdAndTenant_Id(id, tenantId);
   }
 
   @Nonnull
   public List<ParentEntity> findAll(@Nonnull final Long tenantId) {
-    return springDataParentJpaRepository.findAllByTenant_Id(tenantId);
+    return jpaRepository.findAllByTenant_Id(tenantId);
   }
 
   @Nonnull
   public ParentEntity save(@Nonnull final ParentEntity entity) {
-    return springDataParentJpaRepository.save(entity);
+    return jpaRepository.save(entity);
   }
 
   @Nonnull
@@ -39,8 +39,12 @@ public class ParentRepository {
                                              @Nonnull final String lastname,
                                              @Nonnull final String email,
                                              @Nonnull final String phone) {
-    return springDataParentJpaRepository.findByTenant_IdAndFirstnameAndLastnameAndEmailAndPhone(
+    return jpaRepository.findByTenant_IdAndFirstnameAndLastnameAndEmailAndPhone(
             tenantId, firstname, lastname, email, phone
     );
+  }
+
+  public void deleteById(@Nonnull final Long id) {
+    jpaRepository.deleteById(id);
   }
 }

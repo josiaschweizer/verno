@@ -1,9 +1,9 @@
 package ch.verno.ui.base.components.entry.twooption;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import com.vaadin.flow.component.button.Button;
+import ch.verno.ui.base.components.button.VAButton;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.customfield.CustomField;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
@@ -12,13 +12,12 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@CssImport("./components/va-two-option-entry.css")
 public class VATwoOptionEntry<T> extends CustomField<T> {
 
   @Nonnull
-  private final Button leftButton;
+  private final VAButton leftButton;
   @Nonnull
-  private final Button rightButton;
+  private final VAButton rightButton;
 
   @Nonnull
   private final T leftValue;
@@ -36,8 +35,8 @@ public class VATwoOptionEntry<T> extends CustomField<T> {
 
     setLabel(label);
 
-    leftButton = new Button(itemLabelProvider.apply(leftValue));
-    rightButton = new Button(itemLabelProvider.apply(rightValue));
+    leftButton = new VAButton(itemLabelProvider.apply(leftValue));
+    rightButton = new VAButton(itemLabelProvider.apply(rightValue));
 
     final var layout = new HorizontalLayout(leftButton, rightButton);
     layout.setWidthFull();
@@ -71,8 +70,20 @@ public class VATwoOptionEntry<T> extends CustomField<T> {
     final boolean leftSelected = value != null && isValueEqual(value, leftValue);
     final boolean rightSelected = value != null && isValueEqual(value, rightValue);
 
-    leftButton.getElement().getClassList().set("two-option-selected", leftSelected);
-    rightButton.getElement().getClassList().set("two-option-selected", rightSelected);
+
+    updateButtonStyle(leftButton, leftSelected);
+    updateButtonStyle(rightButton, rightSelected);
+  }
+
+  private void updateButtonStyle(@Nonnull final VAButton button,
+                                 final boolean selected) {
+    if (selected) {
+//      button.removeThemeVariants(ButtonVariant.LUMO_);
+      button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    } else {
+      button.removeThemeVariants(ButtonVariant.LUMO_PRIMARY);
+//      button.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+    }
   }
 
   private boolean isValueEqual(@Nonnull final T value1,

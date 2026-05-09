@@ -3,10 +3,12 @@ package ch.verno.ui.verno.participant;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseLevelDto;
+import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.db.service.intern.ICourseService;
+import ch.verno.common.db.service.intern.IParentService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ReportServerGate;
@@ -49,8 +51,9 @@ import java.util.stream.Stream;
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 
   @Nonnull private final IParticipantService participantService;
-  @Nonnull private final ICourseService courseService;
   @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final ICourseService courseService;
+  @Nonnull private final IParentService parentService;
   @Nonnull private final ReportServerGate reportServerGate;
 
   public ParticipantsGrid(@Nonnull final GlobalInterface globalInterface,
@@ -59,8 +62,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     super(globalInterface, ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
-    this.courseService = globalInterface.getService(ICourseService.class);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.parentService = globalInterface.getService(IParentService.class);
     this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
@@ -69,8 +73,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     super(globalInterface, ParticipantFilter.empty(), true, true);
 
     this.participantService = globalInterface.getService(IParticipantService.class);
-    this.courseService = globalInterface.getService(ICourseService.class);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseService = globalInterface.getService(ICourseService.class);
+    this.parentService = globalInterface.getService(IParentService.class);
     this.reportServerGate = globalInterface.getGate(ReportServerGate.class);
   }
 
@@ -132,7 +137,25 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
       ));
     }
 
+    actions.add(ActionDef.create(getTranslation("participant.delete.participant"), VaadinIcon.TRASH, () -> deleteParticipant(dto)));
+
     return actions;
+  }
+
+  private void deleteParticipant(@Nonnull final ParticipantDto dto) {
+    if (participantService.deleteParticipant(dto.getId())) {
+      deleteParent(dto.getParentOne());
+      deleteParent(dto.getParentTwo());
+
+      refreshGrid();
+    }
+  }
+
+  private void deleteParent(@Nonnull final ParentDto dto) {
+    final var id = dto.getId();
+    if (id != null && id > 0) {
+      parentService.deleteById(id);
+    }
   }
 
   private void disableItem(@Nonnull final ParticipantDto dto) {

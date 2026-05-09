@@ -38,6 +38,8 @@ public interface IParticipantService {
 
   int countParticipants(@Nonnull ParticipantFilter filter);
 
+  boolean deleteParticipant(@Nonnull Long id);
+
   @Nonnull
   List<ParticipantDto> findParticipantsByCourse(@Nonnull CourseDto course);
 

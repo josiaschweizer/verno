@@ -90,4 +90,8 @@ public class ParticipantRepository {
     participant.setId(id);
     return jpaRepository.save(participant);
   }
+
+  public void deleteById(@Nonnull final Long id) {
+    jpaRepository.deleteById(id);
+  }
 }
