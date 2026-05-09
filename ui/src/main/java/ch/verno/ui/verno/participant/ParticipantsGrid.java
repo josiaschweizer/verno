@@ -38,10 +38,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -243,7 +240,12 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             getTranslation("filter.course_filter"));
 
     final var courseLevels = courseLevelService.getAllCourseLevels().stream()
-            .collect(Collectors.toMap(BaseDto::getId, CourseLevelDto::getName));
+            .collect(Collectors.toMap(
+                    BaseDto::getId,
+                    CourseLevelDto::getName,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
     final var courseLevelFilter = filterEntryFactory.createMultiSelectComboboxFilter(
             ParticipantFilter::getCourseLevelIds,
             ParticipantFilter::setCourseLevelIds,
