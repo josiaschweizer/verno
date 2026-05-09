@@ -1,6 +1,7 @@
 package ch.verno.ui.base.components.upload;
 
 import ch.verno.common.gate.server.TempFileServerGate;
+import ch.verno.publ.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -14,10 +15,20 @@ import jakarta.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.function.Consumer;
 
 @CssImport("./components/upload/va-file-upload-area.css")
 public class VAFileUploadArea extends VerticalLayout {
+
+  private static final String DROP_AREA_CLASSNAME = "va-file-upload-drop";
+  private static final String UPLOAD_CLASSNAME = "va-file-upload";
+
+  public static final String FORMAT_SIZE_KB = "%.1f KB";
+  public static final String FORMAT_SIZE_MB = "%.1f MB";
+  public static final String FORMAT_SIZE_BYTES = " B";
+  public static final String SANITIZE_REGEX = "[^a-zA-Z0-9._-]";
+  public static final String UPLOAD_JS_FUNCTION = "this.files = []; this.requestContentUpdate && this.requestContentUpdate();";
 
   @Nonnull
   private final TempFileServerGate tempFileServerGate;
@@ -38,21 +49,24 @@ public class VAFileUploadArea extends VerticalLayout {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
-    getStyle().setMargin(VernoUtility.LUMO_ZERO)
+
+    getStyle()
+            .setMargin(VernoUtility.LUMO_ZERO)
             .setGap(VernoUtility.LUMO_ZERO)
             .setOverflow(Style.Overflow.HIDDEN);
 
     dropArea = new Div();
-    dropArea.addClassName("va-file-upload__drop");
-    resetDropAreaContent();
+    dropArea.addClassName(DROP_AREA_CLASSNAME);
 
     upload = new Upload();
-    upload.addClassName("va-file-upload");
+    upload.addClassName(UPLOAD_CLASSNAME);
     upload.setSizeFull();
     upload.setAutoUpload(true);
     upload.setDropAllowed(true);
     upload.setMaxFiles(1);
     upload.setUploadButton(dropArea);
+
+    resetDropAreaContent();
 
     upload.setUploadHandler(event -> {
       final var ui = UI.getCurrent();
@@ -60,38 +74,59 @@ public class VAFileUploadArea extends VerticalLayout {
       deleteTempIfPresent();
 
       originalFileName = event.getFileName();
+
       final byte[] bytes = readAllBytes(event.getInputStream());
       sizeBytes = bytes.length;
 
       final String stored;
+
       try {
         stored = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
       } catch (Exception e) {
-        ui.access(this::resetUI);
+        ui.access(() -> resetUI(true));
         return;
       }
 
       tempToken = stored;
-
       getUI().ifPresent(newUi ->
               newUi.access(() -> {
                 refreshUI();
+
                 if (onFileUploaded != null && tempToken != null) {
                   onFileUploaded.accept(tempToken);
                 }
               })
       );
     });
-    upload.addFileRejectedListener(e -> getUI().ifPresent(ui -> ui.access(this::resetUI)));
+
+    upload.addFileRejectedListener(e ->
+            getUI().ifPresent(ui ->
+                    ui.access(() ->
+                            resetUI(true)
+                    )
+            )
+    );
+    upload.addFileRemovedListener(e ->
+            getUI().ifPresent(ui ->
+                    ui.access(() -> {
+                      deleteTempIfPresent();
+                      resetUI(true);
+                    })
+            )
+    );
 
     addAndExpand(upload);
   }
 
   public void setAcceptedFileTypes(@Nonnull final String... types) {
     upload.setAcceptedFileTypes(types);
+    resetDropAreaContent();
   }
 
   public void setMaxFiles(final int maxFiles) {
+    if (maxFiles > 1){
+      throw new RuntimeException("VAFileUploadArea only supports a maximum of 1 file for now (see https://josiaschweizer.youtrack.cloud/issue/verno-147/VAFileUploadArea-support-more-than-one-file)");
+    }
     upload.setMaxFiles(maxFiles);
   }
 
@@ -118,32 +153,59 @@ public class VAFileUploadArea extends VerticalLayout {
 
   public void cleanup() {
     deleteTempIfPresent();
-    resetUI();
+    resetUI(false);
   }
 
   public void refreshUI() {
-    if (hasFile() && originalFileName != null) {
-      resetDropAreaContent();
-    } else {
-      resetDropAreaContent();
-    }
+    resetDropAreaContent();
   }
 
-  private void resetUI() {
+  private void resetUI(final boolean fireRemoveListener) {
     tempToken = null;
     originalFileName = null;
     sizeBytes = 0;
+
+    upload.getElement().executeJs(UPLOAD_JS_FUNCTION);
+
     resetDropAreaContent();
 
-    if (onFileRemoved != null) {
+    if (fireRemoveListener && onFileRemoved != null) {
       onFileRemoved.run();
     }
   }
 
   private void resetDropAreaContent() {
     dropArea.removeAll();
-    dropArea.add(new Span(getTranslation("base.datei.ausgewahlt")));
-    dropArea.add(new Span(getTranslation("base.klicken.oder.neue.datei.ziehen.zum.ersetzen")));
+
+    if (hasFile() && originalFileName != null) {
+      dropArea.add(new Span(originalFileName));
+      dropArea.add(new Span(formatSize(sizeBytes)));
+      dropArea.add(new Span(
+              getTranslation("base.klicken.oder.neue.datei.ziehen.zum.ersetzen")
+      ));
+
+      return;
+    }
+
+    dropArea.add(new Span(getTranslation("base.datei.hochladen")));
+    dropArea.add(new Span(getTranslation("base.klicken.oder.datei.hierher.ziehen")));
+
+    if (!upload.getAcceptedFileTypes().isEmpty()) {
+      final var acceptedFileTypesText =
+              String.join(Publ.COMMA + Publ.SPACE, upload.getAcceptedFileTypes());
+
+      final var span = new Span();
+
+      span.getElement().setProperty(
+              "innerHTML",
+              MessageFormat.format(
+                      getTranslation("base.erlaubte.datentypen.0"),
+                      "<i>" + acceptedFileTypesText + "</i>"
+              )
+      );
+
+      dropArea.add(span);
+    }
   }
 
   private void deleteTempIfPresent() {
@@ -174,16 +236,18 @@ public class VAFileUploadArea extends VerticalLayout {
     if (name == null || name.isBlank()) {
       return "upload.bin";
     }
-    return name.replaceAll("[^a-zA-Z0-9._-]", "_");
+
+    return name.replaceAll(SANITIZE_REGEX, Publ.UNDERSCORE);
   }
 
   @Nonnull
   private String formatSize(final long bytes) {
     if (bytes < 1024) {
-      return bytes + " B";
+      return bytes + FORMAT_SIZE_BYTES;
     } else if (bytes < 1024 * 1024) {
-      return String.format("%.1f KB", bytes / 1024.0);
+      return String.format(FORMAT_SIZE_KB, bytes / 1024.0);
     }
-    return String.format("%.1f MB", bytes / (1024.0 * 1024));
+
+    return String.format(FORMAT_SIZE_MB, bytes / (1024.0 * 1024));
   }
 }
