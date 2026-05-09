@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public interface UserPropertiesGate {
+public interface UserProperties {
 
   @Nonnull
   Optional<AppUserDto> getOptionalCurrentUser();

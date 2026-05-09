@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public interface ApplicationPropertiesGate {
+public interface ApplicationProperties {
 
   @Nonnull
   RunMode getRunMode();
@@ -31,4 +31,5 @@ public interface ApplicationPropertiesGate {
   List<String> getTenantBaseDomains();
 
   boolean isTenantAllowHeaderFallback();
+
 }

@@ -1,7 +1,6 @@
 package ch.verno.server.config;
 
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
-import ch.verno.server.properties.application.ApplicationProperties;
+import ch.verno.common.gate.properties.ApplicationProperties;
 import ch.verno.server.repository.TenantRepository;
 import ch.verno.server.tenant.TenantFilter;
 import ch.verno.server.properties.application.TenantProperties;
@@ -23,7 +22,7 @@ public class TenantConfig {
   }
 
   @Bean
-  public TenantResolver tenantResolver(@Nonnull final ApplicationPropertiesGate applicationProperties,
+  public TenantResolver tenantResolver(@Nonnull final ApplicationProperties applicationProperties,
                                        @Nonnull final TenantService lookupService) {
     return new TenantResolver(lookupService, applicationProperties);
   }

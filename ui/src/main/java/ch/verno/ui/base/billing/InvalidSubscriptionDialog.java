@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.table.billing.TenantBillingDto;
 import ch.verno.common.db.service.extern.ITenantBillingService;
 import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
-import ch.verno.common.gate.properties.UserPropertiesGate;
+import ch.verno.common.gate.properties.ApplicationProperties;
+import ch.verno.common.gate.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
@@ -41,16 +41,16 @@ public class InvalidSubscriptionDialog extends VADialog {
   public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_TEXT = "invalid-subscription-dialog-text";
   public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_CONTENT = "invalid-subscription-dialog-content";
 
-  @Nonnull private final UserPropertiesGate userProperties;
+  @Nonnull private final UserProperties userProperties;
   @Nonnull private final ITenantBillingService tenantBillingService;
-  @Nonnull private final ApplicationPropertiesGate applicationProperties;
+  @Nonnull private final ApplicationProperties applicationProperties;
   @Nonnull private final IBillingAccessLinkService billingAccessLinkService;
 
 
   public InvalidSubscriptionDialog(@Nonnull final GlobalInterface globalInterface) {
     userProperties = globalInterface.getUserProperties();
     tenantBillingService = globalInterface.getService(ITenantBillingService.class);
-    applicationProperties = globalInterface.getService(ApplicationPropertiesGate.class);
+    applicationProperties = globalInterface.getService(ApplicationProperties.class);
     billingAccessLinkService = globalInterface.getService(IBillingAccessLinkService.class);
 
     setCloseOnEsc(false);

@@ -1,10 +1,9 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
+import ch.verno.common.gate.properties.ApplicationProperties;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
-import ch.verno.server.properties.application.ApplicationProperties;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,10 +14,10 @@ import java.util.Optional;
 public class TenantResolver {
 
   @Nonnull private final TenantService lookupService;
-  @Nonnull private final ApplicationPropertiesGate applicationProperties;
+  @Nonnull private final ApplicationProperties applicationProperties;
 
   public TenantResolver(@Nonnull final TenantService lookupService,
-                        @Nonnull final ApplicationPropertiesGate applicationProperties) {
+                        @Nonnull final ApplicationProperties applicationProperties) {
     this.lookupService = lookupService;
     this.applicationProperties = applicationProperties;
   }

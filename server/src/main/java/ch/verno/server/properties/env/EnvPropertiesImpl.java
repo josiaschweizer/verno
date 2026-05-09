@@ -1,7 +1,7 @@
 package ch.verno.server.properties.env;
 
 import ch.verno.common.exceptions.lib.EnvironmentVariableNotFound;
-import ch.verno.common.gate.properties.EnvPropertiesGate;
+import ch.verno.common.gate.properties.EnvProperties;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -11,11 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class EnvPropertiesGateImpl implements EnvPropertiesGate {
+public class EnvPropertiesImpl implements EnvProperties {
 
   @Nonnull private final Dotenv dotEnv;
 
-  public EnvPropertiesGateImpl() {
+  public EnvPropertiesImpl() {
     // Find project root by looking for pom.xml or .env file
     final var directory = findProjectRoot();
 

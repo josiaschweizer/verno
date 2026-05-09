@@ -1,7 +1,7 @@
 package ch.verno.server.properties.application;
 
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.ApplicationPropertiesGate;
+import ch.verno.common.gate.properties.ApplicationProperties;
 import ch.verno.common.lib.application.RunMode;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ApplicationPropertiesGateImpl implements ApplicationPropertiesGate {
+public class ApplicationPropertiesImpl implements ApplicationProperties {
 
   @Nonnull
   private final TenantProperties tenantProperties;
   @Nonnull
   private final BillingProperties billingProperties;
   @Nonnull
-  private final ApplicationProperties applicationProperties;
+  private final ch.verno.server.properties.application.ApplicationProperties applicationProperties;
 
-  public ApplicationPropertiesGateImpl(@Nonnull final GlobalInterface globalInterface) {
+  public ApplicationPropertiesImpl(@Nonnull final GlobalInterface globalInterface) {
     tenantProperties = globalInterface.getService(TenantProperties.class);
     billingProperties = globalInterface.getService(BillingProperties.class);
-    applicationProperties = globalInterface.getService(ApplicationProperties.class);
+    applicationProperties = globalInterface.getService(ch.verno.server.properties.application.ApplicationProperties.class);
   }
 
   @Nonnull
