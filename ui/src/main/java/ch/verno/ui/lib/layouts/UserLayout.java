@@ -96,6 +96,7 @@ public class UserLayout {
     }
     if (!passwordDisabledReasonKey.isBlank()) {
       password.setReadOnly(true);
+      password.setRevealButtonVisible(false); // hide the reveal button so the user cannot see the password (used e.g. in edit user when the password is just the hash of the pw...)
       password.setTooltipText(TranslationHelper.getTranslation(globalInterface, passwordDisabledReasonKey));
     }
 
