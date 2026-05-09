@@ -1,7 +1,7 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
-import ch.verno.common.gate.properties.ApplicationProperties;
+import ch.verno.common.properties.configprovider.VernoTenantConfigProvider;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import jakarta.annotation.Nonnull;
@@ -14,12 +14,12 @@ import java.util.Optional;
 public class TenantResolver {
 
   @Nonnull private final TenantService lookupService;
-  @Nonnull private final ApplicationProperties applicationProperties;
+  @Nonnull private final VernoTenantConfigProvider tenantConfigProvider;
 
   public TenantResolver(@Nonnull final TenantService lookupService,
-                        @Nonnull final ApplicationProperties applicationProperties) {
+                        @Nonnull final VernoTenantConfigProvider tenantConfigProvider) {
     this.lookupService = lookupService;
-    this.applicationProperties = applicationProperties;
+    this.tenantConfigProvider = tenantConfigProvider;
   }
 
   @Nonnull
@@ -35,13 +35,13 @@ public class TenantResolver {
       throw new TenantNotResolvedException("Unknown tenant slug: " + slug + " (host=" + host + ")");
     }
 
-    if (applicationProperties.isTenantAllowHeaderFallback()) {
-      final var header = request.getHeader(applicationProperties.getTenantHeaderName());
+    if (tenantConfigProvider.isAllowHeaderFallback()) {
+      final var header = request.getHeader(tenantConfigProvider.getHeaderName());
       if (header != null && !header.isBlank()) {
         try {
           return Optional.of(Long.parseLong(header.trim()));
         } catch (final NumberFormatException e) {
-          throw new TenantNotResolvedException("Invalid tenant header " + applicationProperties.getTenantHeaderName() + ": " + header, e);
+          throw new TenantNotResolvedException("Invalid tenant header " + tenantConfigProvider.getHeaderName() + ": " + header, e);
         }
       }
     }
@@ -64,7 +64,7 @@ public class TenantResolver {
       return parts.length >= 2 ? parts[0] : null;
     }
 
-    for (final var base : applicationProperties.getTenantBaseDomains()) {
+    for (final var base : tenantConfigProvider.getBaseDomains()) {
       final var baseLower = safeLower(base);
       if (baseLower.equals(VernoConstants.LOCALHOST)) {
         continue;

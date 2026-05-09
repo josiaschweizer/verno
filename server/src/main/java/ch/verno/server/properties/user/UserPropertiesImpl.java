@@ -3,7 +3,7 @@ package ch.verno.server.properties.user;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.properties.UserProperties;
+import ch.verno.common.properties.UserProperties;
 import ch.verno.publ.Routes;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
@@ -61,6 +61,10 @@ public class UserPropertiesImpl implements UserProperties {
     return found.get();
   }
 
+  /**
+   * logout current user and redirect to login page
+   *
+   */
   @Override
   public void logout() {
     final var ui = UI.getCurrent();

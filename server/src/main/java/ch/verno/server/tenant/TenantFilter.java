@@ -7,7 +7,7 @@ import ch.verno.db.entity.tenant.TenantFilters;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
-import ch.verno.server.properties.application.TenantProperties;
+import ch.verno.server.properties.application.VernoTenantConfigProviderImpl;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.FilterChain;
@@ -22,11 +22,11 @@ import java.util.Optional;
 
 public class TenantFilter extends OncePerRequestFilter {
 
-  @Nonnull private final TenantProperties props;
+  @Nonnull private final VernoTenantConfigProviderImpl props;
   @Nonnull private final TenantResolver resolver;
   @Nonnull private final EntityManager entityManager;
 
-  public TenantFilter(@Nonnull final TenantProperties props,
+  public TenantFilter(@Nonnull final VernoTenantConfigProviderImpl props,
                       @Nonnull final TenantResolver resolver,
                       @Nonnull final EntityManager entityManager) {
     this.props = props;
