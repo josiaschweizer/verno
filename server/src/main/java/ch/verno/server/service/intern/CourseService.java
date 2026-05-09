@@ -75,7 +75,8 @@ public class CourseService implements ICourseService {
                     .stream()
                     .map(dto -> serviceHelper.resolveInstructor(instructorRepository, dto))
                     .toList(),
-            courseDto.getNote()
+            courseDto.getNote(),
+            courseDto.getColor()
     );
 
     entity.setId(null);
@@ -101,6 +102,7 @@ public class CourseService implements ICourseService {
     existing.setStartTime(courseDto.getStartTime());
     existing.setEndTime(courseDto.getEndTime());
     existing.setNote(courseDto.getNote());
+    existing.setColor(courseDto.getColor());
 
     final var levels = serviceHelper.resolveCourseLevels(courseLevelRepository, courseDto.getCourseLevels());
     final var schedule = serviceHelper.resolveCourseSchedule(courseScheduleRepository, courseDto.getCourseSchedule());
@@ -137,16 +139,11 @@ public class CourseService implements ICourseService {
   @Override
   @Transactional
   public List<CourseDto> getCoursesByCourseScheduleId(@Nonnull final Long courseScheduleId) {
-    final var courses = courseRepository.findAll().stream()
+    return courseRepository.findAll().stream()
             .filter(dto -> dto.getCourseSchedule() != null)
             .filter(dto -> dto.getCourseSchedule().getId().equals(courseScheduleId))
             .map(CourseMapper::toDto)
             .toList();
-//    return courseRepository.findByCourseScheduleId(courseScheduleId).stream()
-//            .map(CourseMapper::toDto)
-//            .toList();
-
-    return courses;
   }
 
   @Nonnull

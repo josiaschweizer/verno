@@ -91,6 +91,10 @@ public class CourseEntity extends TenantScopedEntity {
   @Column(name = "note", columnDefinition = "TEXT")
   private String note;
 
+  @Nullable
+  @Column(name = "color", length = 16)
+  private String color;
+
   protected CourseEntity() {
   }
 
@@ -105,7 +109,8 @@ public class CourseEntity extends TenantScopedEntity {
                       @Nullable final LocalTime endTime,
                       @Nullable final InstructorEntity instructor,
                       @Nullable final List<InstructorEntity> secondaryInstructors,
-                      @Nonnull final String note) {
+                      @Nonnull final String note,
+                      @Nullable final String color) {
     setTenant(tenant);
 
     this.title = title;
@@ -129,6 +134,7 @@ public class CourseEntity extends TenantScopedEntity {
             : new ArrayList<>();
 
     this.note = note;
+    this.color = color;
   }
 
   @Nonnull
@@ -251,5 +257,14 @@ public class CourseEntity extends TenantScopedEntity {
 
   public void setNote(@Nonnull final String note) {
     this.note = note;
+  }
+
+  @Nullable
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(@Nullable final String color) {
+    this.color = color;
   }
 }

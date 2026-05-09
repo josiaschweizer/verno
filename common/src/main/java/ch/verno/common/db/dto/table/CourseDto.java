@@ -1,6 +1,7 @@
 package ch.verno.common.db.dto.table;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -27,6 +28,7 @@ public class CourseDto extends BaseDto {
   @Nonnull private List<InstructorDto> secondaryInstructors;
 
   @Nonnull private String note;
+  @Nonnull private String color;
 
   public CourseDto() {
     this(
@@ -41,7 +43,8 @@ public class CourseDto extends BaseDto {
             null,
             null,
             List.of(),
-            Publ.EMPTY_STRING
+            Publ.EMPTY_STRING,
+            Colors.PRIMARY_COLOR
     );
   }
 
@@ -56,7 +59,8 @@ public class CourseDto extends BaseDto {
                    @Nullable final LocalTime endTime,
                    @Nullable final InstructorDto instructor,
                    @Nonnull final List<InstructorDto> secondaryInstructors,
-                   @Nonnull final String note) {
+                   @Nonnull final String note,
+                   @Nonnull final String color) {
     super.setId(id);
     this.title = title;
     this.capacity = capacity;
@@ -69,6 +73,7 @@ public class CourseDto extends BaseDto {
     this.instructor = instructor;
     this.secondaryInstructors = secondaryInstructors;
     this.note = note;
+    this.color = color;
   }
 
   public static CourseDto empty() {
@@ -89,7 +94,8 @@ public class CourseDto extends BaseDto {
             && this.endTime == null
             && (this.instructor == null || this.instructor.isEmpty())
             && this.secondaryInstructors.isEmpty()
-            && this.note.isEmpty();
+            && this.note.isEmpty()
+            && this.color.isEmpty();
   }
 
   @Nonnull
@@ -99,6 +105,11 @@ public class CourseDto extends BaseDto {
 
   public void setTitle(@Nonnull final String title) {
     this.title = title;
+  }
+
+  @Nonnull
+  public String displayName() {
+    return title;
   }
 
   @Nullable
@@ -257,8 +268,12 @@ public class CourseDto extends BaseDto {
   }
 
   @Nonnull
-  public String displayName() {
-    return title;
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(@Nonnull final String color) {
+    this.color = color;
   }
 
   @Override
