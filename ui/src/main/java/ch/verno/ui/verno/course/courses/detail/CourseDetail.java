@@ -158,14 +158,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   }
 
   @Nonnull
-  private HorizontalLayout createInfoLayout() {
+  private VerticalLayout createInfoLayout() {
     final var titleEntry = entryFactory.createTextField(
             CourseDto::getTitle,
             CourseDto::setTitle,
             getBinder(),
             Optional.of(getTranslation("shared.title.is.required")),
             getTranslation("shared.title"));
-
     //todo default value from user settings
     final var capacityEntry = entryFactory.createNumberEntry(
             courseDto -> courseDto.getCapacity() != null ? courseDto.getCapacity().doubleValue() : null,
@@ -192,8 +191,17 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getBinder(),
             Optional.empty(),
             getTranslation("course.end.time"));
+    final var color = entryFactory.createColorPickerEntry(
+            CourseDto::getColor,
+            CourseDto::setColor,
+            getBinder(),
+            Optional.empty(),
+            getTranslation("shared.color")
+    );
 
-    return LayoutUtil.createHorizontal(titleEntry, capacityEntry, location, startTime, endTime);
+    final var topLayout = LayoutUtil.createHorizontal(titleEntry, capacityEntry, location);
+    final var bottomLayout = LayoutUtil.createHorizontal(startTime, endTime, color);
+    return LayoutUtil.createVertical(topLayout, bottomLayout);
   }
 
   @Nonnull

@@ -21,6 +21,8 @@ import java.util.function.Consumer;
 @CssImport("./components/upload/va-file-upload-area.css")
 public class VAFileUploadArea extends VerticalLayout {
 
+  // TODO: FIX MAX FILE = 1 -> setMaxFiles throw RuntimeException => component should support more than 1 file (see https://josiaschweizer.youtrack.cloud/issue/verno-147/VAFileUploadArea-support-more-than-one-file)
+
   private static final String DROP_AREA_CLASSNAME = "va-file-upload-drop";
   private static final String UPLOAD_CLASSNAME = "va-file-upload";
 
