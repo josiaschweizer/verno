@@ -119,6 +119,19 @@ public class ParticipantDto extends BaseDto {
   }
 
   @Nonnull
+  public String getDisplayName() {
+    if (firstName.isEmpty() && lastName.isEmpty()) {
+      return Publ.EMPTY_STRING;
+    } else if (firstName.isEmpty()) {
+      return lastName;
+    } else if (lastName.isEmpty()) {
+      return firstName;
+    } else {
+      return firstName + Publ.SPACE + lastName;
+    }
+  }
+
+  @Nonnull
   public String getFullName() {
     return firstName + Publ.SPACE + lastName;
   }
