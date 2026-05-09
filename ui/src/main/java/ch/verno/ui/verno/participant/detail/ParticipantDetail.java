@@ -39,6 +39,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -297,21 +298,27 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             Optional.empty(),
             getTranslation("shared.note")
     );
-    final var sibling = entryFactory.createMultiSelectComboBoxEntry(
+
+    final var siblings = participantService.getAllParticipants()
+            .stream()
+            .filter(participant -> !getBinder().getBean().equals(participant))
+            .filter(participant -> participant.isActive())
+            .toList();
+    final var siblingEntry = entryFactory.createMultiSelectComboBoxEntry(
             ParticipantDto::getSiblings,
             ParticipantDto::setSiblings,
             getBinder(),
             Optional.empty(),
             getTranslation("participant.geschwister"),
-            participantService.getAllParticipants()
-                    .stream()
-                    .filter(participant -> !getBinder().getBean().equals(participant))
-                    .filter(participant -> participant.isActive())
-                    .toList(),
+            siblings,
             dto -> dto.getFirstName() + Publ.SPACE + dto.getLastName()
     );
+    if (siblings.isEmpty()){
+      siblingEntry.setEnabled(false);
+      siblingEntry.setHelperText(getTranslation("participant.there.are.no.participants.to.select.as.siblings"));
+    }
 
-    return LayoutUtil.createVertical(note, sibling);
+    return LayoutUtil.createVertical(note, siblingEntry);
   }
 
   @Nonnull
