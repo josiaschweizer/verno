@@ -59,8 +59,12 @@ public class AppUserRepository {
     return jpaRepository.save(user);
   }
 
-
   public void flush() {
     jpaRepository.flush();
+  }
+
+  public boolean existsByUsernameAndTenantId(@Nonnull String username,
+                                             @Nonnull Long tenantId) {
+    return jpaRepository.existsByUsernameAndTenantId(username, tenantId);
   }
 }

@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: verno-postgres
+    environment:
+      POSTGRES_DB: verno
+      POSTGRES_USER: verno
+      POSTGRES_PASSWORD: verno
+    ports:
+      - "5432:5432"
+    volumes:
+      - verno-postgres-data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: verno-app
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/verno
+      SPRING_DATASOURCE_USERNAME: verno
+      SPRING_DATASOURCE_PASSWORD: verno
+    ports:
+      - "8080:8080"
+
+volumes:
+  verno-postgres-data:

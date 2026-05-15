@@ -88,7 +88,7 @@ public class InvalidSubscriptionDialog extends VADialog {
     hint.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT);
 
     VAButton manageSubscriptionButton;
-    if (applicationConfig.getRunMode().equals(RunMode.DEV)) {
+    if (RunMode.fromKey(applicationConfig.getRunMode()).equals(RunMode.DEV)) {
       manageSubscriptionButton = new VAButton(
               VaadinIcon.CREDIT_CARD.create(),
               "DEV Mode - Create Dev Subscription - only for DEV Usage!!!",
