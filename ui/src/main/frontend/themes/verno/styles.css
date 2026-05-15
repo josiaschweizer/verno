@@ -1,5 +1,3 @@
-@import "../../components/va-two-option-entry.css";
-
 html, body {
     --lumo-required-field-indicator: "*";
     --lumo-required-field-indicator-color: red;

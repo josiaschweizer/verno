@@ -16,7 +16,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "ch.verno.db.entity")
 @StyleSheet(Lumo.STYLESHEET)
 @StyleSheet(Lumo.UTILITY_STYLESHEET)
-@StyleSheet("styles.css")
 @Theme("verno") //todo change to non-theme usage -> theme is deprecated since vaadin25
 public class Application implements AppShellConfigurator {
 

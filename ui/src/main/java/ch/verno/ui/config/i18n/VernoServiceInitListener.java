@@ -20,11 +20,11 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
   private static final Logger LOG = LoggerFactory.getLogger(VernoServiceInitListener.class);
 
-  private final ApplicationContext applicationContext;
+  @Nonnull private final ApplicationContext applicationContext;
 
   // Use ApplicationContext so we don't require the IAppUserService/IAppUserSettingService
   // beans to be present at construction time (avoids hard dependency on server module).
-  public VernoServiceInitListener(final ApplicationContext applicationContext) {
+  public VernoServiceInitListener(@Nonnull final ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
