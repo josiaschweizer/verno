@@ -1,5 +1,6 @@
 package ch.verno.ui.base.components.notification;
 
+import ch.verno.publ.CssImportConstants;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -9,7 +10,7 @@ import com.vaadin.flow.component.notification.Notification;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-@CssImport("./components/notification/va-notification.css")
+@CssImport(CssImportConstants.VA_NOTIFICATION)
 public class VANotification extends Notification {
 
   public enum NotificationType {

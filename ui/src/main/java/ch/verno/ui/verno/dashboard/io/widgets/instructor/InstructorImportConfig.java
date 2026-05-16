@@ -17,6 +17,7 @@ import ch.verno.server.service.intern.AddressService;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
@@ -25,7 +26,18 @@ import java.util.Map;
 
 public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
-  public static final String ERROR_UK_INSTRUCTOR_MANDANT_EMAIL = "uk_instructor_mandant_email";
+  @NonNls public static final String FIRSTNAME = "firstname";
+  @NonNls public static final String LASTNAME = "lastname";
+  @NonNls public static final String EMAIL = "email";
+  @NonNls public static final String PHONE = "phone";
+  @NonNls public static final String ADDRESS = "address";
+  @NonNls public static final String STREET = "street";
+  @NonNls public static final String ZIP_CODE = "zip-code";
+  @NonNls public static final String HOUSE_NUMBER = "house-number";
+  @NonNls public static final String CITY = "city";
+  @NonNls public static final String COUNTRY = "country";
+
+  @NonNls public static final String ERROR_UK_INSTRUCTOR_MANDANT_EMAIL = "uk_instructor_mandant_email";
 
   @Nonnull private final GlobalInterface globalInterface;
 
@@ -37,17 +49,18 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   @Override
   public List<DbField<InstructorDto>> getDbFields() {
     return List.of(
-            new DbField<>("firstname", "shared.first.name", InstructorDto::setFirstName, true),
-            new DbField<>("lastname", "shared.last.name", InstructorDto::setLastName, true),
-            new DbField<>("email", "shared.e.mail", InstructorDto::setEmail, true)
+            new DbField<>(FIRSTNAME, "shared.first.name", InstructorDto::setFirstName, true),
+            new DbField<>(LASTNAME, "shared.last.name", InstructorDto::setLastName, true),
+            new DbField<>(EMAIL, "shared.e.mail", InstructorDto::setEmail, true)
     );
   }
 
+  @Nonnull
   @Override
   public List<DbFieldTyped<InstructorDto, ?>> getTypedDbFields() {
     return List.of(
             new DbFieldTyped<>(
-                    "phone",
+                    PHONE,
                     "shared.telefon",
                     PhoneNumber::fromString,
                     InstructorDto::setPhone,
@@ -56,25 +69,26 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     );
   }
 
+  @Nonnull
   @Override
   public List<DbFieldNested<InstructorDto, ?>> getNestedDbFields() {
-    return List.of(
-            new DbFieldNested<>(
-                    "address",
-                    "shared.address",
-                    AddressDto::new,
-                    InstructorDto::setAddress,
-                    List.of(
-                            new DbField<>("street", "shared.street", AddressDto::setStreet, false),
-                            new DbField<>("houseNumber", "shared.house.number", AddressDto::setHouseNumber, false),
-                            new DbField<>("zipCode", "shared.zip.code", AddressDto::setZipCode, false),
-                            new DbField<>("city", "shared.city", AddressDto::setCity, false),
-                            new DbField<>("country", "shared.country", AddressDto::setCountry, false)
-                    ),
-                    List.of(),
-                    false
-            )
+    final var address = new DbFieldNested<>(
+            ADDRESS,
+            "shared.address",
+            AddressDto::new,
+            InstructorDto::setAddress,
+            List.of(
+                    new DbField<>(STREET, "shared.street", AddressDto::setStreet, false),
+                    new DbField<>(HOUSE_NUMBER, "shared.house.number", AddressDto::setHouseNumber, false),
+                    new DbField<>(ZIP_CODE, "shared.zip.code", AddressDto::setZipCode, false),
+                    new DbField<>(CITY, "shared.city", AddressDto::setCity, false),
+                    new DbField<>(COUNTRY, "shared.country", AddressDto::setCountry, false)
+            ),
+            List.of(),
+            false
     );
+
+    return List.of(address);
   }
 
   @Nonnull
@@ -101,7 +115,6 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     final var importErrors = new ArrayList<>(result.errors());
     for (int i = 0; i < saveables.size(); i++) {
       final var saveable = saveables.get(i);
-
       processNestedEntities(saveable);
 
       try {
