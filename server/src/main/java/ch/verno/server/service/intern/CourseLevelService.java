@@ -19,14 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseLevelService implements ICourseLevelService {
 
-  @Nonnull
-  private final CourseLevelRepository courseLevelRepository;
-  @Nonnull
-  private final CourseLevelSpec courseLevelSpec;
+  @Nonnull private final CourseLevelRepository courseLevelRepository;
+  @Nonnull private final CourseLevelSpec courseLevelSpec;
 
   public CourseLevelService(@Nonnull final CourseLevelRepository courseLevelRepository) {
     this.courseLevelRepository = courseLevelRepository;
@@ -86,6 +85,15 @@ public class CourseLevelService implements ICourseLevelService {
     return CourseLevelMapper.toDto(courseLevelOptional.get());
   }
 
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<CourseLevelDto> getCourseLevelByCode(@Nonnull final String code) {
+    final var courseLevelOptional = courseLevelRepository.findByCode(code);
+    return courseLevelOptional.map(CourseLevelMapper::toDto);
+  }
+
   @Nonnull
   @Override
   @Transactional(readOnly = true)
@@ -108,13 +116,13 @@ public class CourseLevelService implements ICourseLevelService {
             ? Sort.unsorted()
             : Sort.by(
             sortOrders.stream()
-                    .map(order -> new Sort.Order(
-                            order.getDirection() == SortDirection.ASCENDING
-                                    ? Sort.Direction.ASC
-                                    : Sort.Direction.DESC,
-                            order.getSorted()
-                    ))
-                    .toList()
+            .map(order -> new Sort.Order(
+                    order.getDirection() == SortDirection.ASCENDING
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                    order.getSorted()
+            ))
+            .toList()
     );
 
     final var pageable = PageRequest.of(page, limit, sort);

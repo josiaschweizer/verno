@@ -2,9 +2,13 @@ package ch.verno.server.mapper.csv;
 
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.lib.StringSanitizer;
+import ch.verno.publ.Publ;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
+import ch.verno.server.io.importing.dto.DbFieldRelation;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -12,6 +16,12 @@ import jakarta.annotation.Nullable;
 import java.util.*;
 
 public abstract class AbstractCsvMapper<T extends BaseDto> {
+
+  @Nonnull private final GlobalInterface globalInterface;
+
+  public AbstractCsvMapper(@Nonnull final GlobalInterface globalInterface) {
+    this.globalInterface = globalInterface;
+  }
 
   @Nonnull
   protected abstract T newTarget();
@@ -21,7 +31,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
                                        @Nonnull final Map<String, String> mapping,
                                        @Nonnull final List<DbField<T>> stringFields,
                                        @Nonnull final List<DbFieldTyped<T, ?>> typedFields) {
-    return map(csvRows, mapping, stringFields, typedFields, Collections.emptyList());
+    return map(csvRows, mapping, stringFields, typedFields, Collections.emptyList(), Collections.emptyList());
   }
 
   @Nonnull
@@ -30,19 +40,31 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
                                        @Nonnull final List<DbField<T>> stringFields,
                                        @Nonnull final List<DbFieldTyped<T, ?>> typedFields,
                                        @Nonnull final List<DbFieldNested<T, ?>> nestedFields) {
+    return map(csvRows, mapping, stringFields, typedFields, nestedFields, Collections.emptyList());
+  }
+
+  @Nonnull
+  public final CsvMappingResult<T> map(@Nonnull final List<CsvMapDto> csvRows,
+                                       @Nonnull final Map<String, String> mapping,
+                                       @Nonnull final List<DbField<T>> stringFields,
+                                       @Nonnull final List<DbFieldTyped<T, ?>> typedFields,
+                                       @Nonnull final List<DbFieldNested<T, ?>> nestedFields,
+                                       @Nonnull final List<DbFieldRelation<T, ?>> relationFields) {
     final var saveables = new ArrayList<T>();
     final var errors = new ArrayList<CsvMappingRowError>();
 
     final var stringFieldByKey = indexStringFields(stringFields);
     final var typedFieldByKey = indexTypedFields(typedFields);
+    final var relationFieldByKey = indexRelationFields(relationFields);
 
     final var requiredKeys = new HashSet<String>();
     stringFields.stream().filter(DbField::required).forEach(f -> requiredKeys.add(f.key()));
     typedFields.stream().filter(DbFieldTyped::required).forEach(f -> requiredKeys.add(f.key()));
+    relationFields.stream().filter(DbFieldRelation::required).forEach(f -> requiredKeys.add(f.key()));
 
     for (int i = 0; i < csvRows.size(); i++) {
       final int rowIndex = i + 1;
-      final var row = normalizeHashMap(csvRows.get(i).row()); // we have to sanitize the input because of bom encoding
+      final var row = normalizeHashMap(csvRows.get(i).row());
 
       final var target = newTarget();
       final var setKeys = new HashSet<String>();
@@ -69,11 +91,16 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
           if (tf != null) {
             applyTyped(tf, target, value);
             setKeys.add(dbKey);
+            continue;
           }
 
+          final var rf = relationFieldByKey.get(dbKey);
+          if (rf != null) {
+            applyRelation(rf, target, value);
+            setKeys.add(dbKey);
+          }
         } catch (Exception ex) {
-          errors.add(new CsvMappingRowError(rowIndex,
-                  "Fehler bei Feld '" + dbKey + "': " + ex.getMessage()));
+          errors.add(new CsvMappingRowError(rowIndex, TranslationHelper.getTranslation(globalInterface, "server.fehler.bei.feld.0.1", dbKey, ex.getMessage())));
         }
       }
 
@@ -81,8 +108,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
         try {
           processAndApplyNestedField(nestedField, target, mapping, row, rowIndex, errors);
         } catch (Exception ex) {
-          errors.add(new CsvMappingRowError(rowIndex,
-                  "Fehler bei verschachteltem Feld '" + nestedField.prefix() + "': " + ex.getMessage()));
+          errors.add(new CsvMappingRowError(rowIndex, TranslationHelper.getTranslation(globalInterface, "server.fehler.bei.verschachteltem.feld.0.1", nestedField.prefix(), ex.getMessage())));
         }
       }
 
@@ -91,8 +117,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
               .toList();
 
       if (!missing.isEmpty()) {
-        errors.add(new CsvMappingRowError(rowIndex,
-                "Pflichtfelder fehlen: " + String.join(", ", missing)));
+        errors.add(new CsvMappingRowError(rowIndex, TranslationHelper.getTranslation(globalInterface, "server.pflichtfelder.fehlen.0", String.join(", ", missing))));
         continue;
       }
 
@@ -108,8 +133,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
                                    @Nonnull final Map<String, String> row,
                                    final int rowIndex,
                                    @Nonnull final List<CsvMappingRowError> errors) {
-
-    final var prefix = nestedField.prefix() + ".";
+    final var prefix = nestedField.prefix() + Publ.DOT;
     final var nestedEntity = nestedField.nestedFactory().get();
 
     final var stringFieldByKey = indexStringFields(nestedField.nestedStringFields());
@@ -119,7 +143,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
     boolean hasAnyValue = false;
 
     for (final var entry : mapping.entrySet()) {
-      final var csvColumn = entry.getKey();
+      final var csvColumn = StringSanitizer.cleanNullSave(entry.getKey());
       final var dbKey = entry.getValue();
 
       if (!dbKey.startsWith(prefix)) {
@@ -150,17 +174,14 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
           setKeys.add(nestedKey);
         }
       } catch (Exception ex) {
-        errors.add(new CsvMappingRowError(rowIndex,
-                "Fehler bei Feld '" + dbKey + "': " + ex.getMessage()));
+        errors.add(new CsvMappingRowError(rowIndex, TranslationHelper.getTranslation(globalInterface, "server.fehler.bei.feld.0.1", dbKey, ex.getMessage())));
       }
     }
 
-    // If no values were set, return null
     if (!hasAnyValue) {
       return null;
     }
 
-    // Check required fields for nested entity
     if (nestedField.required()) {
       final var requiredKeys = new HashSet<String>();
       nestedField.nestedStringFields().stream()
@@ -175,8 +196,7 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
               .toList();
 
       if (!missing.isEmpty()) {
-        errors.add(new CsvMappingRowError(rowIndex,
-                "Pflichtfelder für '" + nestedField.prefix() + "' fehlen: " + String.join(", ", missing)));
+        errors.add(new CsvMappingRowError(rowIndex, TranslationHelper.getTranslation(globalInterface, "server.pflichtfelder.fur.0.fehlen.1", nestedField.prefix(), String.join(", ", missing))));
         return null;
       }
     }
@@ -204,11 +224,18 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
     ((DbFieldTyped<T, Object>) field).setter().accept(target, parsed);
   }
 
+  @SuppressWarnings("unchecked")
+  private static <T> void applyRelation(@Nonnull final DbFieldRelation<T, ?> field,
+                                        @Nonnull final T target,
+                                        @Nonnull final String raw) {
+    final var resolved = ((DbFieldRelation<T, Object>) field).resolver().apply(raw);
+    ((DbFieldRelation<T, Object>) field).setter().accept(target, resolved);
+  }
 
   @Nonnull
   private static <T> Map<String, DbField<T>> indexStringFields(@Nonnull final List<DbField<T>> fields) {
     final var map = new HashMap<String, DbField<T>>();
-    for (var field : fields) {
+    for (final var field : fields) {
       map.put(field.key(), field);
     }
 
@@ -218,6 +245,16 @@ public abstract class AbstractCsvMapper<T extends BaseDto> {
   @Nonnull
   private static <T> Map<String, DbFieldTyped<T, ?>> indexTypedFields(@Nonnull final List<DbFieldTyped<T, ?>> fields) {
     final var map = new HashMap<String, DbFieldTyped<T, ?>>();
+    for (final var field : fields) {
+      map.put(field.key(), field);
+    }
+
+    return map;
+  }
+
+  @Nonnull
+  private static <T> Map<String, DbFieldRelation<T, ?>> indexRelationFields(@Nonnull final List<DbFieldRelation<T, ?>> fields) {
+    final var map = new HashMap<String, DbFieldRelation<T, ?>>();
     for (final var field : fields) {
       map.put(field.key(), field);
     }

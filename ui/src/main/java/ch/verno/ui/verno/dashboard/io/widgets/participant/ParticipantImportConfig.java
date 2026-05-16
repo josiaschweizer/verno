@@ -2,8 +2,10 @@ package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.db.dto.table.AddressDto;
+import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.common.db.service.intern.ICourseLevelService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.TempFileServerGate;
@@ -12,6 +14,7 @@ import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.lib.New;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
+import ch.verno.server.io.importing.dto.DbFieldRelation;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
 import ch.verno.server.mapper.csv.CsvMappingRowError;
 import ch.verno.server.mapper.csv.ParticipantCsvMapper;
@@ -43,13 +46,16 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @NonNls public static final String COUNTRY = "country";
   @NonNls public static final String PARENT_ONE = "parent-one";
   @NonNls public static final String PARENT_TWO = "parent-two";
+  @NonNls public static final String COURSE_LEVEL = "course-level";
 
   @NonNls public static final String ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
 
   @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final ICourseLevelService courseLevelService;
 
   public ParticipantImportConfig(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
+    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
   }
 
   @Nonnull
@@ -150,19 +156,34 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
   @Nonnull
   @Override
+  public List<DbFieldRelation<ParticipantDto, ?>> getRelationFields() {
+    final var courseLevel = new DbFieldRelation<>(
+            COURSE_LEVEL,
+            "courseLevel.course_level",
+            code -> courseLevelService.getCourseLevelByCode(code).orElse(null),
+            ParticipantDto::addCourseLevel,
+            false
+    );
+
+    return New.arrayList(courseLevel);
+  }
+
+  @Nonnull
+  @Override
   public ImportResult performImport(@Nonnull final String fileToken,
                                     @Nonnull final Map<String, String> mapping) {
     final var fileServerGate = globalInterface.getService(TempFileServerGate.class);
     final var fileDto = fileServerGate.loadFile(fileToken);
     final var csvRows = fileServerGate.parseRows(fileDto);
 
-    final var mapper = new ParticipantCsvMapper();
+    final var mapper = new ParticipantCsvMapper(globalInterface);
     final var result = mapper.map(
             csvRows,
             mapping,
             getDbFields(),
             getTypedDbFields(),
-            getNestedDbFields()
+            getNestedDbFields(),
+            getRelationFields()
     );
 
     final var saveables = result.saveables();

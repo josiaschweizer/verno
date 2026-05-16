@@ -14,8 +14,7 @@ import java.util.Optional;
 @Repository
 public class CourseLevelRepository {
 
-  @Nonnull
-  private final SpringDataCourseLevelJpaRepository jpaRepository;
+  @Nonnull private final SpringDataCourseLevelJpaRepository jpaRepository;
 
   public CourseLevelRepository(@Nonnull final SpringDataCourseLevelJpaRepository jpaRepository) {
     this.jpaRepository = jpaRepository;
@@ -35,6 +34,11 @@ public class CourseLevelRepository {
   public Page<CourseLevelEntity> findAll(@Nonnull final Specification<CourseLevelEntity> spec,
                                     @Nonnull final Pageable pageable) {
     return jpaRepository.findAll(spec, pageable);
+  }
+
+  @Nonnull
+  public Optional<CourseLevelEntity> findByCode(@Nonnull final String code){
+    return jpaRepository.findByCode(code);
   }
 
   public long count(@Nonnull final Specification<CourseLevelEntity> spec) {

@@ -3,20 +3,26 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
-import ch.verno.common.server.io.importing.CsvDelimiter;
+import ch.verno.lib.New;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.base.components.notification.inline.VAInlineNotificationTheme;
 import ch.verno.ui.verno.dashboard.io.dto.ImportField;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
+import com.vaadin.flow.function.ValueProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ImportMapping<T> extends BaseDialogStep {
+
+  @NonNls public static final String RELATION_POST_FIX = Publ.SPACE + Publ.REQUIRED_STAR + "relation";
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final ImportEntityConfig<T> entityConfig;
@@ -57,34 +63,69 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   private void initUI(@Nonnull final List<String> csvHeaders) {
     final var allFields = collectAllFields();
+    final var inlineNotification = createInfoInlineNotification();
     panel = new ImportColumnMappingPanel(csvHeaders, allFields);
 
     if (onValidationChangedListener != null) {
       panel.addValidationChangeListener(() -> onValidationChangedListener.run());
     }
 
-    add(panel);
+    setSpacing(true);
+    add(inlineNotification, panel);
+  }
+
+  @Nonnull
+  private VAInlineNotification createInfoInlineNotification() {
+    final var notification = new VAInlineNotification(VAInlineNotificationTheme.WARNING);
+    notification.setTitle("Import Mapping");
+    notification.setDescription("DB-Felder, die mit *relation gekennzeichnet sind, verweisen auf andere Datensätze. Diese Felder sind anfälliger für Importfehler und sollten besonders sorgfältig zugeordnet werden.");
+    return notification;
   }
 
   @Nonnull
   private List<ImportField> collectAllFields() {
-    final var fields = new ArrayList<ImportField>();
+    final var fields = New.<ImportField>arrayList();
 
+    fields.addAll(getDbFields());
+    fields.addAll(getTypedDbFields());
+    fields.addAll(getNestedFields());
+    fields.addAll(getRelationFields());
+
+    return fields;
+  }
+
+  @Nonnull
+  private List<ImportField> getDbFields() {
+    final var fields = New.<ImportField>arrayList();
     for (final var field : entityConfig.getDbFields()) {
       fields.add(new ImportField(field.key(), getTranslation(field.label()), field.required()));
     }
 
+    return fields;
+  }
+
+  @Nonnull
+  private List<ImportField> getTypedDbFields() {
+    final var fields = New.<ImportField>arrayList();
     for (final var field : entityConfig.getTypedDbFields()) {
       fields.add(new ImportField(field.key(), getTranslation(field.label()), field.required()));
     }
 
+    return fields;
+  }
+
+  @Nonnull
+  private List<ImportField> getNestedFields() {
+    final var labelSpace = Publ.SPACE + Publ.MINUS + Publ.SPACE;
+
+    final var fields = New.<ImportField>arrayList();
     for (final var nestedField : entityConfig.getNestedDbFields()) {
-      final var prefix = nestedField.prefix() + ".";
+      final var prefix = nestedField.prefix() + Publ.DOT;
 
       for (final var field : nestedField.nestedStringFields()) {
         fields.add(new ImportField(
                 prefix + field.key(),
-                getTranslation(nestedField.label()) + " - " + getTranslation(field.label()),
+                getTranslation(nestedField.label()) + labelSpace + getTranslation(field.label()),
                 nestedField.required() && field.required()
         ));
       }
@@ -92,10 +133,25 @@ public class ImportMapping<T> extends BaseDialogStep {
       for (final var field : nestedField.nestedTypedFields()) {
         fields.add(new ImportField(
                 prefix + field.key(),
-                getTranslation(nestedField.label()) + " - " + getTranslation(field.label()),
+                getTranslation(nestedField.label()) + labelSpace + getTranslation(field.label()),
                 nestedField.required() && field.required()
         ));
       }
+    }
+
+    return fields;
+  }
+
+  @Nonnull
+  private List<ImportField> getRelationFields() {
+    final var fields = New.<ImportField>arrayList();
+
+    for (final var relationField : entityConfig.getRelationFields()) {
+      fields.add(new ImportField(
+              relationField.key(),
+              getTranslation(relationField.label()) + RELATION_POST_FIX,
+              relationField.required()
+      ));
     }
 
     return fields;

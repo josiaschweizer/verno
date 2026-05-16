@@ -15,6 +15,7 @@ public enum I18nBundles {
   COURSE_SCHEDULE("courseSchedule", "i18n.courseSchedule"),
 
   BASE("base", "i18n.base"),
+  SERVER("server", "i18n.server"),
 
   COMMON("common", "i18n.common"),
   FILTER("filter", "i18n.filter"),

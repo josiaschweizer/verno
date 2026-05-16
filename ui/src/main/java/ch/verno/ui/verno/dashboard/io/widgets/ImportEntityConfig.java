@@ -1,8 +1,10 @@
 package ch.verno.ui.verno.dashboard.io.widgets;
 
+import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;
 import ch.verno.server.io.importing.dto.DbFieldTyped;
+import ch.verno.server.io.importing.dto.DbFieldRelation;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -22,6 +24,11 @@ public interface ImportEntityConfig<T> {
 
   @Nonnull
   default List<DbFieldNested<T, ?>> getNestedDbFields() {
+    return Collections.emptyList();
+  }
+
+  @Nonnull
+  default List<DbFieldRelation<T, ?>> getRelationFields() {
     return Collections.emptyList();
   }
 

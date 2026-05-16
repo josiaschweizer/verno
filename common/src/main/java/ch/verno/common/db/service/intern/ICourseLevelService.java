@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.table.CourseLevelDto;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICourseLevelService {
 
@@ -18,4 +19,7 @@ public interface ICourseLevelService {
 
   @Nonnull
   List<CourseLevelDto> getAllCourseLevels();
+
+  @Nonnull
+  Optional<CourseLevelDto> getCourseLevelByCode(@Nonnull String code);
 }

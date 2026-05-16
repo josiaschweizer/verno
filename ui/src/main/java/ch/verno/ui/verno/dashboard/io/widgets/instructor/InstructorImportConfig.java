@@ -100,7 +100,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     final var fileDto = fileServerGate.loadFile(fileToken);
     final var csvRows = fileServerGate.parseRows(fileDto);
 
-    final var mapper = new InstructorCsvMapper();
+    final var mapper = new InstructorCsvMapper(globalInterface);
     final var result = mapper.map(
             csvRows,
             mapping,

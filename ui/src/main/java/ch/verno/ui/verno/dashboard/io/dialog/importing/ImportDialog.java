@@ -26,13 +26,13 @@ public class ImportDialog extends Dialog {
   @Nullable private Button forwardButton;
   @Nullable private Button finishButton;
 
-  private DialogStep currentStep;
+  private ImportDialogStep currentStep;
 
   public ImportDialog(@Nonnull final GlobalInterface globalInterface,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig<?> entityConfig) {
     steps = new ArrayList<>();
-    currentStep = DialogStep.ZERO;
+    currentStep = ImportDialogStep.ZERO;
 
     final var importFileStep = new ImportFile(globalInterface);
     final var importMappingStep = new ImportMapping<>(globalInterface, entityConfig);
@@ -40,8 +40,8 @@ public class ImportDialog extends Dialog {
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);
 
-    steps.add(new DialogStepDto(DialogStep.ONE, importFileStep));
-    steps.add(new DialogStepDto(DialogStep.TWO, importMappingStep));
+    steps.add(new DialogStepDto(ImportDialogStep.ONE, importFileStep));
+    steps.add(new DialogStepDto(ImportDialogStep.TWO, importMappingStep));
 
     initUI(dialogTitle);
   }
@@ -62,7 +62,7 @@ public class ImportDialog extends Dialog {
     contentLayout = new HorizontalLayout();
     contentLayout.setSizeFull();
 
-    updateContentByStep(DialogStep.ONE, contentLayout);
+    updateContentByStep(ImportDialogStep.ONE, contentLayout);
 
     return contentLayout;
   }
@@ -77,15 +77,15 @@ public class ImportDialog extends Dialog {
         return;
       }
 
-      final var nextStep = DialogStep.addSteps(currentStep, 1);
+      final var nextStep = ImportDialogStep.addSteps(currentStep, 1);
 
-      if (currentStep == DialogStep.ONE && nextStep == DialogStep.TWO) {
+      if (currentStep == ImportDialogStep.ONE && nextStep == ImportDialogStep.TWO) {
         final var importFileStep = steps.stream()
-                .filter(s -> s.step() == DialogStep.ONE)
+                .filter(s -> s.step() == ImportDialogStep.ONE)
                 .findFirst();
 
         final var importMappingStep = steps.stream()
-                .filter(s -> s.step() == DialogStep.TWO)
+                .filter(s -> s.step() == ImportDialogStep.TWO)
                 .findFirst();
 
         if (importFileStep.isPresent() && importMappingStep.isPresent()) {
@@ -101,11 +101,11 @@ public class ImportDialog extends Dialog {
 
       updateContentByStep(nextStep, contentLayout);
     });
-    forwardButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+    forwardButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     finishButton = new Button(getTranslation("shared.importing"), e -> {
       final var importMappingStep = steps.stream()
-              .filter(s -> s.step() == DialogStep.TWO)
+              .filter(s -> s.step() == ImportDialogStep.TWO)
               .findFirst();
 
       if (importMappingStep.isPresent()) {
@@ -154,7 +154,7 @@ public class ImportDialog extends Dialog {
     finishButton.setEnabled(content.isValid());
   }
 
-  protected void updateContentByStep(@Nonnull final DialogStep stepIndex,
+  protected void updateContentByStep(@Nonnull final ImportDialogStep stepIndex,
                                      @Nonnull final HorizontalLayout contentLayout) {
     final var first = steps.stream()
             .filter(s -> s.step() == stepIndex)

@@ -15,7 +15,7 @@ public class ImportColumnMappingPanel extends VABaseColumnMappingPanel<ImportFie
 
   public ImportColumnMappingPanel(@Nonnull final List<String> csvColumns,
                                   @Nonnull final List<ImportField> fields) {
-    super(csvColumns, fields, true, "shared.ignorieren");
+    super(csvColumns, fields, "shared.ignorieren", true);
     validationChangeListeners = new ArrayList<>();
   }
 
