@@ -215,6 +215,10 @@ public class ParticipantDto extends BaseDto {
     this.courseLevels = new ArrayList<>(courseLevels);
   }
 
+  public void addCourseLevel(@Nonnull final CourseLevelDto courseLevel) {
+    this.courseLevels.add(courseLevel);
+  }
+
   @Nonnull
   public String getCourseLevelsAsString() {
     final var names = new ArrayList<String>();

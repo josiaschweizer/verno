@@ -27,7 +27,7 @@ public class Publ {
   public static final String MINUS = "−";
   public static final String LEFT_SINGLE_ANGLE_QUOTATION_MARK = "‹";
   public static final String RIGHT_SINGLE_ANGLE_QUOTATION_MARK = "›";
-  public static final String REQUIRED_START = "*";
+  public static final String REQUIRED_STAR = "*";
 
   public static final String CMD_SIGN = "\u2318";
   public static final String CTRL_MAC_SIGN = "\u2303";

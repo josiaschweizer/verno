@@ -1,6 +1,7 @@
 package ch.verno.ui.base.components.mapping;
 
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -8,31 +9,30 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
 
-  public static final String IGNORE_KEY = "__IGNORE__";
+  @NonNls public static final String IGNORE_KEY = "__IGNORE__";
+
+  private final boolean allowDuplicates;
+  @Nonnull private final String ignoreLabel;
+  @Nonnull private final List<TField> availableFields;
+  @Nonnull private final Map<String, String> selectionByCsvColumn;
 
   @Nonnull private final Grid<MappingRow> grid;
-  @Nonnull private final Map<String, String> selectionByCsvColumn;
-  @Nonnull private final List<TField> availableFields;
-
-  @Nonnull private final String ignoreLabel;
-  private final boolean allowDuplicates;
 
   protected VABaseColumnMappingPanel(@Nonnull final List<String> csvColumns,
                                      @Nonnull final List<TField> availableFields,
-                                     final boolean allowDuplicates,
-                                     @Nonnull final String ignoreLabelKey) {
-    this.selectionByCsvColumn = new LinkedHashMap<>();
-    this.grid = new Grid<>(MappingRow.class, false);
-    this.availableFields = List.copyOf(availableFields);
-
+                                     @Nonnull final String ignoreLabelKey,
+                                     final boolean allowDuplicates) {
     this.allowDuplicates = allowDuplicates;
     this.ignoreLabel = getTranslation(ignoreLabelKey);
+    this.availableFields = List.copyOf(availableFields);
+    this.selectionByCsvColumn = new LinkedHashMap<>();
 
     final var rows = csvColumns.stream()
             .filter(Objects::nonNull)
@@ -44,7 +44,9 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
     rows.forEach(r -> selectionByCsvColumn.put(r.csvColumn(), null));
 
     final var dataProvider = new ListDataProvider<>(new ArrayList<>(rows));
-    buildGrid(this.availableFields);
+
+    this.grid = new Grid<>(MappingRow.class, false);
+    buildGrid(availableFields);
     grid.setItems(dataProvider);
 
     getContent().setSizeFull();
@@ -64,7 +66,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
             .setAutoWidth(true)
             .setFlexGrow(1);
 
-    grid.getStyle().set("min-height", "0");
+    grid.getStyle().setMinHeight(VernoUtility.LUMO_ZERO);
   }
 
   private ComboBox<FieldOption<TField>> buildFieldCombo(@Nonnull final MappingRow row,
@@ -121,7 +123,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
     if (required && alreadyFilled) {
       return label
               + Publ.SPACE
-              + Publ.REQUIRED_START
+              + Publ.REQUIRED_STAR
               + Publ.SPACE
               + Publ.LEFT_PARENTHESIS
               + getTranslation("base.already.filled")
@@ -129,7 +131,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
     } else if (required) {
       return label
               + Publ.SPACE
-              + Publ.REQUIRED_START;
+              + Publ.REQUIRED_STAR;
     } else if (alreadyFilled) {
       return label
               + Publ.SPACE

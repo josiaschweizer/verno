@@ -2,17 +2,15 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
 import jakarta.annotation.Nonnull;
 
-public enum DialogStep {
+public enum ImportDialogStep {
   ZERO(0),
   ONE(1),
   TWO(2),
-  THREE(3),
-  FOUR(4),
   ;
 
   private final int stepNumber;
 
-  DialogStep(final int stepNumber) {
+  ImportDialogStep(final int stepNumber) {
     this.stepNumber = stepNumber;
   }
 
@@ -21,9 +19,9 @@ public enum DialogStep {
   }
 
   @Nonnull
-  public static DialogStep addSteps(final DialogStep currentStep, final int stepsToAdd) {
+  public static ImportDialogStep addSteps(final ImportDialogStep currentStep, final int stepsToAdd) {
     int newStepNumber = currentStep.getStepNumber() + stepsToAdd;
-    for (DialogStep step : DialogStep.values()) {
+    for (ImportDialogStep step : ImportDialogStep.values()) {
       if (step.getStepNumber() == newStepNumber) {
         return step;
       }

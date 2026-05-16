@@ -14,8 +14,7 @@ import java.util.ResourceBundle;
 public final class VernoI18nProvider implements I18NProvider {
 
   private static final String DEFAULT_BUNDLE_BASE = "i18n.messages";
-  private static final List<Locale> PROVIDED =
-          List.of(Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH);
+  private static final List<Locale> PROVIDED = List.of(Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH);
 
   @Nonnull
   @Override
@@ -56,9 +55,7 @@ public final class VernoI18nProvider implements I18NProvider {
     try {
       final var bundle = ResourceBundle.getBundle(DEFAULT_BUNDLE_BASE, locale);
       final var pattern = bundle.getString(key);
-      return (params == null || params.length == 0)
-              ? pattern
-              : MessageFormat.format(pattern, params);
+      return (params == null || params.length == 0) ? pattern : MessageFormat.format(pattern, params);
     } catch (MissingResourceException ignored) {
       return key;
     }
