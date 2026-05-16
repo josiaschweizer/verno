@@ -63,6 +63,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
   }
 
+  @Nonnull
   @Override
   public List<DbFieldTyped<ParticipantDto, ?>> getTypedDbFields() {
     return List.of(
@@ -83,67 +84,68 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
   }
 
+  @Nonnull
   @Override
   public List<DbFieldNested<ParticipantDto, ?>> getNestedDbFields() {
-    return List.of(
-            new DbFieldNested<>(
-                    ADDRESS,
-                    "shared.address",
-                    AddressDto::new,
-                    ParticipantDto::setAddress,
-                    List.of(
-                            new DbField<>(STREET, "shared.street", AddressDto::setStreet, false),
-                            new DbField<>(HOUSE_NUMBER, "shared.house.number", AddressDto::setHouseNumber, false),
-                            new DbField<>(ZIP_CODE, "shared.zip.code", AddressDto::setZipCode, false),
-                            new DbField<>(CITY, "shared.city", AddressDto::setCity, false),
-                            new DbField<>(COUNTRY, "shared.country", AddressDto::setCountry, false)
-                    ),
-                    List.of(),
-                    false
+    final var address = new DbFieldNested<>(
+            ADDRESS,
+            "shared.address",
+            AddressDto::new,
+            ParticipantDto::setAddress,
+            List.of(
+                    new DbField<>(STREET, "shared.street", AddressDto::setStreet, false),
+                    new DbField<>(HOUSE_NUMBER, "shared.house.number", AddressDto::setHouseNumber, false),
+                    new DbField<>(ZIP_CODE, "shared.zip.code", AddressDto::setZipCode, false),
+                    new DbField<>(CITY, "shared.city", AddressDto::setCity, false),
+                    new DbField<>(COUNTRY, "shared.country", AddressDto::setCountry, false)
             ),
-            new DbFieldNested<>(
-                    PARENT_ONE,
-                    "participant.parent_one",
-                    ParentDto::new,
-                    ParticipantDto::setParentOne,
-                    List.of(
-                            new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
-                            new DbField<>(LASTNAME, "shared.last.name", ParentDto::setLastName, false),
-                            new DbField<>(EMAIL, "shared.e.mail", ParentDto::setEmail, false)
-                    ),
-                    List.of(
-                            new DbFieldTyped<>(
-                                    PHONE,
-                                    "shared.telefon",
-                                    PhoneNumber::fromString,
-                                    ParentDto::setPhone,
-                                    false
-                            )
-                    ),
-                    false
-            ),
-            new DbFieldNested<>(
-                    PARENT_TWO,
-                    "participant.parent_two",
-                    ParentDto::new,
-                    ParticipantDto::setParentTwo,
-                    List.of(
-                            new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
-                            new DbField<>(LASTNAME, "shared.last.name", ParentDto::setLastName, false),
-                            new DbField<>(EMAIL, "shared.e.mail", ParentDto::setEmail, false)
-                    ),
-                    List.of(
-                            new DbFieldTyped<>(
-                                    PHONE,
-                                    "shared.telefon",
-                                    PhoneNumber::fromString,
-                                    ParentDto::setPhone,
-                                    false
-                            )
-                    ),
-                    false
-            )
+            List.of(),
+            false
     );
+    final var parentOne = new DbFieldNested<>(
+            PARENT_ONE,
+            "participant.parent_one",
+            ParentDto::new,
+            ParticipantDto::setParentOne,
+            List.of(
+                    new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
+                    new DbField<>(LASTNAME, "shared.last.name", ParentDto::setLastName, false),
+                    new DbField<>(EMAIL, "shared.e.mail", ParentDto::setEmail, false)
+            ),
+            List.of(
+                    new DbFieldTyped<>(
+                            PHONE,
+                            "shared.telefon",
+                            PhoneNumber::fromString,
+                            ParentDto::setPhone,
+                            false
+                    )
+            ),
+            false
+    );
+    final var parentTwo = new DbFieldNested<>(
+            PARENT_TWO,
+            "participant.parent_two",
+            ParentDto::new,
+            ParticipantDto::setParentTwo,
+            List.of(
+                    new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
+                    new DbField<>(LASTNAME, "shared.last.name", ParentDto::setLastName, false),
+                    new DbField<>(EMAIL, "shared.e.mail", ParentDto::setEmail, false)
+            ),
+            List.of(
+                    new DbFieldTyped<>(
+                            PHONE,
+                            "shared.telefon",
+                            PhoneNumber::fromString,
+                            ParentDto::setPhone,
+                            false
+                    )
+            ),
+            false
+    );
+
+    return List.of(address, parentOne, parentTwo);
   }
 
   @Nonnull
