@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.db.entity.GenderEntity;
 import ch.verno.server.mapper.GenderMapper;
 import ch.verno.server.repository.GenderRepository;
 import jakarta.annotation.Nonnull;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GenderService implements IGenderService {
@@ -38,6 +40,15 @@ public class GenderService implements IGenderService {
   @Transactional(readOnly = true)
   public List<GenderDto> getAllGenders() {
     return genderRepository.findAll().stream().map(GenderMapper::toDto).toList();
+  }
+
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<GenderDto> getGenderByName(@Nonnull final String name) {
+    final var gender = genderRepository.findByName(name);
+    return gender.map(GenderMapper::toDto);
   }
 
 }

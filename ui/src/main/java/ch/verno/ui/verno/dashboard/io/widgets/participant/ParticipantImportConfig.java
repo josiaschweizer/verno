@@ -6,6 +6,7 @@ import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.service.intern.ICourseLevelService;
+import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.db.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.TempFileServerGate;
@@ -47,15 +48,18 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @NonNls public static final String PARENT_ONE = "parent-one";
   @NonNls public static final String PARENT_TWO = "parent-two";
   @NonNls public static final String COURSE_LEVEL = "course-level";
+  @NonNls public static final String GENDER = "gender";
 
   @NonNls public static final String ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final IGenderService genderService;
 
   public ParticipantImportConfig(@Nonnull final GlobalInterface globalInterface) {
     this.globalInterface = globalInterface;
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.genderService = globalInterface.getService(IGenderService.class);
   }
 
   @Nonnull
@@ -164,8 +168,15 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
             ParticipantDto::addCourseLevel,
             false
     );
+    final var gender = new DbFieldRelation<>(
+            GENDER,
+            "shared.gender",
+            genderName -> genderService.getGenderByName(genderName).orElse(null),
+            ParticipantDto::setGender,
+            false
+    );
 
-    return New.arrayList(courseLevel);
+    return New.arrayList(courseLevel, gender);
   }
 
   @Nonnull
