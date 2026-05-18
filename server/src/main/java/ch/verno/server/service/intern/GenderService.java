@@ -4,6 +4,7 @@ import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.lib.gender.GenderUtil;
 import ch.verno.db.entity.GenderEntity;
 import ch.verno.server.mapper.GenderMapper;
 import ch.verno.server.repository.GenderRepository;
@@ -47,7 +48,8 @@ public class GenderService implements IGenderService {
   @Override
   @Transactional(readOnly = true)
   public Optional<GenderDto> getGenderByName(@Nonnull final String name) {
-    final var gender = genderRepository.findByName(name);
+    final var internalName = GenderUtil.translateToInternalGender(name);
+    final var gender = genderRepository.findByName(internalName);
     return gender.map(GenderMapper::toDto);
   }
 
