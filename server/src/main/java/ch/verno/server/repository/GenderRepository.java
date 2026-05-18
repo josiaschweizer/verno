@@ -11,24 +11,28 @@ import java.util.Optional;
 @Repository
 public class GenderRepository {
 
-  @Nonnull
-  private final SpringDataGenderJpaRepository springDataGenderJpaRepository;
+  @Nonnull private final SpringDataGenderJpaRepository jpaRepository;
 
-  public GenderRepository(@Nonnull final SpringDataGenderJpaRepository springDataGenderJpaRepository) {
-    this.springDataGenderJpaRepository = springDataGenderJpaRepository;
+  public GenderRepository(@Nonnull final SpringDataGenderJpaRepository jpaRepository) {
+    this.jpaRepository = jpaRepository;
   }
 
   @Nonnull
   public Optional<GenderEntity> findById(@Nonnull final Long id) {
-    return springDataGenderJpaRepository.findById(id);
+    return jpaRepository.findById(id);
+  }
+
+  @Nonnull
+  public Optional<GenderEntity> findByName(@Nonnull String name) {
+    return jpaRepository.findByName(name);
   }
 
   @Nonnull
   public List<GenderEntity> findAll() {
-    return springDataGenderJpaRepository.findAll();
+    return jpaRepository.findAll();
   }
 
   public void save(@Nonnull final GenderEntity entity) {
-    springDataGenderJpaRepository.save(entity);
+    jpaRepository.save(entity);
   }
 }

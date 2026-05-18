@@ -1,0 +1,1 @@
+./cloud-sql-proxy keen-jigsaw-482516-e6:europe-west6:verno-sql --port 5432
