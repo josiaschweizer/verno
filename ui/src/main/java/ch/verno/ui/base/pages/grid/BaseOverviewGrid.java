@@ -5,6 +5,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
+import ch.verno.ui.base.components.emptystate.VAEmptyState;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
 import ch.verno.ui.base.components.filter.VAFilterBar;
 import ch.verno.ui.base.components.grid.GridActionRoles;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -99,6 +101,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     if (showFilterToolbar) {
       componentsToAdd.add(filterBar);
     }
+
     componentsToAdd.add(grid);
     add(componentsToAdd);
   }
@@ -154,6 +157,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     componentColumns.forEach(this::addComponentColumn);
 
     grid.addItemDoubleClickListener(this::onGridItemDoubleClick);
+    grid.setEmptyStateComponent(createEmptyState());
+
     setDefaultSorting();
     dataProvider.setFilter(filter);
   }
@@ -329,5 +334,18 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   protected void refreshGrid() {
     grid.getDataProvider().refreshAll();
+  }
+
+  @Nonnull
+  protected VAEmptyState createEmptyState() {
+    final var emptyState = new VAEmptyState();
+    emptyState.setHeightFull();
+    emptyState.setBorderless(true);
+
+    emptyState.setIcon(VaadinIcon.ROCKET);
+    emptyState.setTitle(getTranslation("base.no.0.found", getGridObjectName()));
+    emptyState.setDescription(getTranslation("base.erstelle.oben.rechts.einen.neuen.record.oder.passe.die.filter.an"));
+
+    return emptyState;
   }
 }
