@@ -5,6 +5,7 @@ import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.UserActionBadge;
+import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -104,9 +105,9 @@ public class ViewToolbarFactory {
   }
 
   @Nonnull
-  private static Button createButton(@Nonnull final GlobalInterface globalInterface) {
+  private static VAButton createButton(@Nonnull final GlobalInterface globalInterface) {
     final var translation = TranslationHelper.getTranslation(globalInterface, "common.new");
-    return new Button(translation, VaadinIcon.PLUS.create());
+    return new VAButton(translation, VaadinIcon.PLUS.create());
   }
 
   private static void applyUserBadgeToToolbar(@Nonnull final GlobalInterface globalInterface,
