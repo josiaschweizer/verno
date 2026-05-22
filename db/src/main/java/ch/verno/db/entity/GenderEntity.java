@@ -1,5 +1,7 @@
 package ch.verno.db.entity;
 
+import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.db.entity.tenant.TenantScopedEntity;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -8,7 +10,8 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "gender", schema = "public")
-public class GenderEntity {
+@EntityListeners(TenantEntityListener.class)
+public class GenderEntity extends TenantScopedEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
