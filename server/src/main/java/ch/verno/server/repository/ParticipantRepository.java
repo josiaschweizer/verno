@@ -64,11 +64,12 @@ public class ParticipantRepository {
     return jpaRepository.count(spec);
   }
 
-
+  @Nonnull
   public ParticipantEntity save(@Nonnull final ParticipantEntity participant) {
     return jpaRepository.save(participant);
   }
 
+  @Nonnull
   public List<ParticipantEntity> saveAll(@Nonnull final List<ParticipantEntity> participants) {
     return jpaRepository.saveAll(participants);
   }
