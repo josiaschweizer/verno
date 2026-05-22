@@ -35,10 +35,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.hibernate.annotations.SortComparator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -303,6 +305,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             .stream()
             .filter(participant -> !getBinder().getBean().equals(participant))
             .filter(participant -> participant.isActive())
+            .sorted(Comparator.comparing(ParticipantDto::getDisplayName))
             .toList();
     final var siblingEntry = entryFactory.createMultiSelectComboBoxEntry(
             ParticipantDto::getSiblings,
