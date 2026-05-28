@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.settings.panels.report;
 
+import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.db.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
@@ -28,8 +29,6 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull private final ITenantSettingService tenantSettingService;
   @Nonnull private final FileApiClient fileApiClient;
 
-  @Nonnull private final EntryFactory<TenantSettingDto> entryFactory;
-
   public ReportSetting(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface, TITLE_KEY, true);
 
@@ -37,7 +36,6 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
     this.fileApiClient = new FileApiClient(globalInterface, "http://localhost:8080"); //todo erweitern um die url nicht zu hardcoden
 
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
   }
 
   @Nonnull

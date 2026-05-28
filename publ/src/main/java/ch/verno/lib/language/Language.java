@@ -1,6 +1,8 @@
-package ch.verno.lib;
+package ch.verno.lib.language;
 
 import jakarta.annotation.Nonnull;
+
+import java.util.Locale;
 
 public enum Language {
   AF("af"), // Afrikaans
@@ -80,6 +82,11 @@ public enum Language {
   }
 
   @Nonnull
+  public static Language of(@Nonnull String code) {
+    return fromCode(code);
+  }
+
+  @Nonnull
   public static Language fromCode(@Nonnull String code) {
     for (Language lang : Language.values()) {
       if (lang.getCode().equalsIgnoreCase(code)) {
@@ -94,4 +101,10 @@ public enum Language {
   public String getCode() {
     return code;
   }
+
+  @Nonnull
+  public Locale getLocale() {
+    return Locale.forLanguageTag(getCode());
+  }
+
 }

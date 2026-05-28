@@ -1,7 +1,7 @@
 package ch.verno.common.db.dto.table;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -10,23 +10,13 @@ import java.util.Objects;
 
 public class ParentDto extends BaseDto {
 
-  @Nonnull
-  private String firstName;
+  @Nonnull private String firstName;
+  @Nonnull private String lastName;
+  @Nonnull private String email;
+  @Nonnull private PhoneNumber phone;
 
-  @Nonnull
-  private String lastName;
-
-  @Nonnull
-  private String email;
-
-  @Nonnull
-  private PhoneNumber phone;
-
-  @Nonnull
-  private GenderDto gender;
-
-  @Nonnull
-  private AddressDto address;
+  @Nonnull private GenderDto gender;
+  @Nonnull private AddressDto address;
 
   public ParentDto() {
     setId(null);

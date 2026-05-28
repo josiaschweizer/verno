@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.settings.panels.theme;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.lib.language.Language;
 import jakarta.annotation.Nonnull;
 
 import java.util.Locale;
@@ -10,11 +11,11 @@ public class UISettingDto extends BaseDto {
   private boolean darkModeEnabled;
 
   @Nonnull
-  private Locale language;
+  private Locale locale;
 
-  public UISettingDto(@Nonnull final Locale language) {
+  public UISettingDto(@Nonnull final Locale locale) {
     this.darkModeEnabled = false;
-    this.language = language;
+    this.locale = locale;
   }
 
   public boolean isDarkModeEnabled() {
@@ -26,11 +27,16 @@ public class UISettingDto extends BaseDto {
   }
 
   @Nonnull
-  public Locale getLanguage() {
-    return language;
+  public Locale getLocale() {
+    return locale;
   }
 
-  public void setLanguage(@Nonnull final Locale language) {
-    this.language = language;
+  @Nonnull
+  public Language getLanguage() {
+    return Language.of(locale.toLanguageTag());
+  }
+
+  public void setLocale(@Nonnull final Locale locale) {
+    this.locale = locale;
   }
 }

@@ -28,8 +28,21 @@ public class TextRepository {
   }
 
   @Nonnull
-  public Optional<TextEntity> findByIdentifier(@Nonnull String identifier) {
+  public List<TextEntity> findByIdentifier(@Nonnull String identifier) {
     return jpaRepository.findByIdentifier(identifier);
+  }
+
+  @Nonnull
+  public List<TextEntity> findByIdentifierAndSubIdentifier(@Nonnull String identifier,
+                                                           @Nonnull String subIdentifier) {
+    return jpaRepository.findByIdentifierAndSubIdentifier(identifier, subIdentifier);
+  }
+
+  @Nonnull
+  public Optional<TextEntity> findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull String identifier,
+                                                                              @Nonnull String subIdentifier,
+                                                                              @Nonnull String languageCode) {
+    return jpaRepository.findByIdentifierAndSubIdentifierAndLanguageCode(identifier, subIdentifier, languageCode);
   }
 
   @Nonnull

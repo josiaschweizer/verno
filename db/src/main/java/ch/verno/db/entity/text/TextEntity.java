@@ -2,10 +2,11 @@ package ch.verno.db.entity.text;
 
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
-import ch.verno.lib.Language;
+import ch.verno.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
+import javax.annotation.Nullable;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -20,6 +21,10 @@ public class TextEntity extends TenantScopedEntity {
   @Nonnull
   @Column(name = "identifier", nullable = false)
   private String identifier;
+
+  @Nullable
+  @Column(name = "sub_identifier")
+  private String subIdentifier;
 
   @Nonnull
   @Column(name = "language_code", nullable = false)
@@ -44,7 +49,15 @@ public class TextEntity extends TenantScopedEntity {
   public TextEntity(@Nonnull String identifier,
                     @Nonnull String languageCode,
                     @Nonnull String text) {
+    this(identifier, null, languageCode, text);
+  }
+
+  public TextEntity(@Nonnull String identifier,
+                    @Nonnull String subIdentifier,
+                    @Nonnull String languageCode,
+                    @Nonnull String text) {
     this.identifier = identifier;
+    this.subIdentifier = subIdentifier;
     this.languageCode = languageCode;
     this.text = text;
   }
@@ -64,6 +77,15 @@ public class TextEntity extends TenantScopedEntity {
 
   public void setIdentifier(@Nonnull final String identifier) {
     this.identifier = identifier;
+  }
+
+  @Nullable
+  public String getSubIdentifier() {
+    return subIdentifier;
+  }
+
+  public void setSubIdentifier(@Nullable final String subIdentifier) {
+    this.subIdentifier = subIdentifier;
   }
 
   @Nonnull

@@ -1,13 +1,12 @@
 package ch.verno.server.mapper;
 
 import ch.verno.common.db.dto.table.AppUserSettingDto;
+import ch.verno.common.tenant.TenantContext;
+import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.db.entity.setting.AppUserSettingEntity;
-import ch.verno.common.tenant.TenantContext;
+import ch.verno.lib.language.Language;
 import jakarta.annotation.Nonnull;
-
-import java.util.Locale;
 
 public final class AppUserSettingMapper {
 
@@ -20,7 +19,7 @@ public final class AppUserSettingMapper {
             entity.getId(),
             entity.getUser().getId(),
             entity.getTheme(),
-            Locale.of(entity.getLanguageTag())
+            Language.of(entity.getLanguageTag())
     );
 
     if (entity.getUser() != null && entity.getUser().getTenant() != null) {

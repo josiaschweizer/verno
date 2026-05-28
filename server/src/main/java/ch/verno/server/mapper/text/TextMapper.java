@@ -10,6 +10,7 @@ public class TextMapper {
   public static TextDto toDto(@Nonnull TextEntity entity) {
     return new TextDto(
             entity.getIdentifier(),
+            entity.getSubIdentifier(),
             entity.getLanguage(),
             entity.getText()
     );
@@ -19,6 +20,7 @@ public class TextMapper {
   public static TextEntity toEntity(@Nonnull TextDto dto) {
     return new TextEntity(
             dto.getIdentifier(),
+            dto.getSubIdentifier(),
             dto.getLanguage().getCode(),
             dto.getText()
     );

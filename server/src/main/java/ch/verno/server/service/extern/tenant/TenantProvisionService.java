@@ -3,13 +3,19 @@ package ch.verno.server.service.extern.tenant;
 import ch.verno.common.api.dto.exernal.tenant.CreateTenantRequest;
 import ch.verno.common.api.dto.exernal.tenant.CreateTenantResponse;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
+import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.service.intern.IAppUserSettingService;
+import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.exceptions.server.service.TenantAlreadyExistsException;
 import ch.verno.common.exceptions.server.service.TenantProvisionFailedException;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.gender.Gender;
+import ch.verno.common.lib.gender.GenderConstants;
+import ch.verno.common.lib.gender.GenderUtil;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.user.AppUserEntity;
+import ch.verno.lib.language.Language;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import ch.verno.server.repository.AppUserRepository;
@@ -21,22 +27,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class TenantProvisionService {
 
-  @Nonnull private final IAppUserSettingService appUserSettingService;
-  @Nonnull private final AppUserRepository appUserRepository;
-  @Nonnull private final TenantRepository tenantRepository;
   @Nonnull private final PasswordEncoder passwordEncoder;
+  @Nonnull private final TenantRepository tenantRepository;
+  @Nonnull private final AppUserRepository appUserRepository;
+
+  @Nonnull private final IGenderService genderService;
+  @Nonnull private final IAppUserSettingService appUserSettingService;
 
   @PersistenceContext
   private EntityManager em;
 
   public TenantProvisionService(@Nonnull final GlobalInterface globalInterface) {
-    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
-    this.appUserRepository = globalInterface.getService(AppUserRepository.class);
-    this.tenantRepository = globalInterface.getService(TenantRepository.class);
     this.passwordEncoder = globalInterface.getPasswordEncoder();
+    this.tenantRepository = globalInterface.getService(TenantRepository.class);
+    this.appUserRepository = globalInterface.getService(AppUserRepository.class);
+
+    this.genderService = globalInterface.getService(IGenderService.class);
+    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
   }
 
   @Transactional(rollbackFor = Exception.class)
@@ -50,6 +62,8 @@ public class TenantProvisionService {
 
     final var newUser = saveUser(request, savedTenant);
     saveAppUserSetting(request, newUser);
+
+    saveNewGenders(request.preferredLanguage());
 
     return new CreateTenantResponse(newTenantId, request.tenantKey(), request.subdomain(), false, VernoConstants.STATUS_CREATED);
   }
@@ -103,6 +117,27 @@ public class TenantProvisionService {
     dto.setLanguageTag(request.preferredLanguage());
 
     appUserSettingService.saveAppUserSetting(dto);
+  }
+
+  private void saveNewGenders(@Nonnull String preferredLanguage) {
+    final var userLanguage = Language.of(preferredLanguage);
+    final var genders = getGenders(userLanguage);
+
+    for (final var gender : genders) {
+      genderService.createGender(gender);
+    }
+  }
+
+  private List<GenderDto> getGenders(@Nonnull Language userLanguage) {
+    final var male = GenderDto.empty();
+    male.setName(GenderConstants.INTERNAL_MALE);
+    male.setDescription(GenderUtil.getDescriptionFromLanguage(Gender.MALE, userLanguage));
+
+    final var female = GenderDto.empty();
+    female.setName(GenderConstants.INTERNAL_FEMALE);
+    female.setDescription(GenderUtil.getDescriptionFromLanguage(Gender.FEMALE, userLanguage));
+
+    return List.of(male, female);
   }
 
   public long getCountOfTenants() {

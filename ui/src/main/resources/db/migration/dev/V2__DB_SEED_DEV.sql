@@ -287,3 +287,42 @@ WHERE NOT EXISTS (
   AND pcl.participant_id = p.id
   AND pcl.course_level_id = (SELECT id FROM public.course_level WHERE mandant_id = 8888 AND code = 'DEMO-1' LIMIT 1)
     );
+
+
+INSERT INTO public.app_user (
+    mandant_id,
+    username,
+    password_hash,
+    role
+)
+VALUES (
+           7777,
+           'admin',
+           '$2a$10$g4uddGu3LIP3u/twzuJvQu9Urz988R7SlBu6BvrC5C/XwssWH0DdO',
+           'ADMIN'
+       )
+ON CONFLICT (mandant_id, username) DO UPDATE
+    SET password_hash = EXCLUDED.password_hash,
+        role = EXCLUDED.role;
+
+DELETE FROM public.app_user_settings s
+    USING public.app_user u
+WHERE s.user_id = u.id
+  AND s.mandant_id = 7777
+  AND u.mandant_id = 7777
+  AND u.username = 'admin';
+
+INSERT INTO public.app_user_settings (
+    mandant_id,
+    user_id,
+    theme,
+    language_tag
+)
+SELECT
+    7777,
+    u.id,
+    'default',
+    'de'
+FROM public.app_user u
+WHERE u.mandant_id = 7777
+  AND u.username = 'admin';

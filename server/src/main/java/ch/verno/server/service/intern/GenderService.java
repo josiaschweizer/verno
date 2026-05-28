@@ -1,11 +1,15 @@
 package ch.verno.server.service.intern;
 
+import ch.verno.common.db.constants.text.TextConstants;
 import ch.verno.common.db.dto.table.GenderDto;
+import ch.verno.common.db.dto.table.text.TextDto;
 import ch.verno.common.db.service.intern.IGenderService;
+import ch.verno.common.db.service.intern.ITextService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.gender.GenderUtil;
-import ch.verno.db.entity.GenderEntity;
+import ch.verno.lib.language.Language;
 import ch.verno.server.mapper.GenderMapper;
 import ch.verno.server.repository.GenderRepository;
 import jakarta.annotation.Nonnull;
@@ -13,15 +17,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class GenderService implements IGenderService {
 
   @Nonnull private final GenderRepository genderRepository;
+  @Nonnull private final ITextService textService;
 
-  public GenderService(@Nonnull final GenderRepository genderRepository) {
-    this.genderRepository = genderRepository;
+  public GenderService(@Nonnull GlobalInterface globalInterface) {
+    this.genderRepository = globalInterface.getService(GenderRepository.class);
+    this.textService = globalInterface.getService(ITextService.class);
   }
 
   @Nonnull
@@ -40,9 +47,13 @@ public class GenderService implements IGenderService {
   @Override
   @Transactional(readOnly = true)
   public List<GenderDto> getAllGenders() {
-    return genderRepository.findAll().stream().map(GenderMapper::toDto).toList();
+    return genderRepository.findAll()
+            .stream()
+            .map(entity -> {
+              final var userTranslation = getUserTranslation(entity.getName());
+              return GenderMapper.toDto(entity, userTranslation);
+            }).toList();
   }
-
 
   @Nonnull
   @Override
@@ -51,6 +62,18 @@ public class GenderService implements IGenderService {
     final var internalName = GenderUtil.translateToInternalGender(name);
     final var gender = genderRepository.findByName(internalName);
     return gender.map(GenderMapper::toDto);
+  }
+
+  @Override
+  @Transactional
+  public void createGender(@Nonnull GenderDto genderDto) {
+    genderRepository.save(GenderMapper.toEntity(genderDto));
+  }
+
+  @Nonnull
+  private Map<Language, TextDto> getUserTranslation(@Nonnull String entityName) {
+    final var identifier = TextConstants.GENDER_IDENTIFIER;
+    return textService.findByIdentifierSubIdentifierMap(identifier, entityName);
   }
 
 }

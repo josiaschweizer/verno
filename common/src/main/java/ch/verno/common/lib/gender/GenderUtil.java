@@ -1,15 +1,12 @@
 package ch.verno.common.lib.gender;
 
+import ch.verno.lib.language.Language;
 import ch.verno.lib.New;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 public class GenderUtil {
-
-  @NonNls public static final String INTERNAL_MALE = "Male";
-  @NonNls public static final String INTERNAL_FEMALE = "Female";
 
   @Nonnull
   public static String translateToInternalGender(@Nonnull String name) {
@@ -18,13 +15,13 @@ public class GenderUtil {
 
     for (final var maleName : maleGenderName) {
       if (maleName.equalsIgnoreCase(name)) {
-        return INTERNAL_MALE;
+        return GenderConstants.INTERNAL_MALE;
       }
     }
 
     for (final var femaleName : femaleGenderName) {
       if (femaleName.equalsIgnoreCase(name)) {
-        return INTERNAL_FEMALE;
+        return GenderConstants.INTERNAL_FEMALE;
       }
     }
 
@@ -32,18 +29,36 @@ public class GenderUtil {
   }
 
   @Nonnull
+  public static String getDescriptionFromLanguage(@Nonnull Gender gender,
+                                                  @Nonnull Language language) {
+    if (gender.equals(Gender.MALE)) {
+      return switch (language) {
+        case DE -> GenderConstants.MALE_GERMAN;
+        case FR -> GenderConstants.MALE_FRENCH;
+        default -> GenderConstants.INTERNAL_MALE;
+      };
+    } else {
+      return switch (language) {
+        case DE -> GenderConstants.FEMALE_GERMAN;
+        case FR -> GenderConstants.FEMALE_FRENCH;
+        default -> GenderConstants.INTERNAL_FEMALE;
+      };
+    }
+  }
+
+  @Nonnull
   private static List<String> getMaleGenderNames() {
     final var list = New.<String>arrayList();
 
     // Internal / technical
-    list.add(INTERNAL_MALE);
+    list.add(GenderConstants.INTERNAL_MALE);
     list.add("Male");
     list.add("MALE");
     list.add("M");
     list.add("m");
 
     // Deutsch
-    list.add("Männlich");
+    list.add(GenderConstants.MALE_GERMAN);
     list.add("männlich");
     list.add("Maennlich");
     list.add("maennlich");
@@ -63,7 +78,7 @@ public class GenderUtil {
     list.add("männlicher Kontakt");
 
     // Französisch
-    list.add("Masculin");
+    list.add(GenderConstants.MALE_FRENCH);
     list.add("masculin");
     list.add("Homme");
     list.add("homme");
@@ -101,7 +116,7 @@ public class GenderUtil {
     final var list = New.<String>arrayList();
 
     // Internal / technical
-    list.add(INTERNAL_FEMALE);
+    list.add(GenderConstants.INTERNAL_FEMALE);
     list.add("Female");
     list.add("FEMALE");
     list.add("F");
@@ -110,7 +125,7 @@ public class GenderUtil {
     list.add("w");
 
     // Deutsch
-    list.add("Weiblich");
+    list.add(GenderConstants.FEMALE_GERMAN);
     list.add("weiblich");
     list.add("Frau");
     list.add("frau");
@@ -130,7 +145,7 @@ public class GenderUtil {
     list.add("weibliche Kontaktperson");
 
     // Französisch
-    list.add("Féminin");
+    list.add(GenderConstants.FEMALE_FRENCH);
     list.add("féminin");
     list.add("Feminin");
     list.add("feminin");

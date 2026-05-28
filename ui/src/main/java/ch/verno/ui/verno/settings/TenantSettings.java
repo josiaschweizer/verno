@@ -6,6 +6,7 @@ import ch.verno.publ.Routes;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.base.settings.VABaseSettingsPage;
 import ch.verno.ui.verno.settings.panels.courselevel.CourseLevelSetting;
+import ch.verno.ui.verno.settings.panels.gender.GenderSetting;
 import ch.verno.ui.verno.settings.panels.mail.MailSettings;
 import ch.verno.ui.verno.settings.panels.quantity.QuantitySetting;
 import ch.verno.ui.verno.settings.panels.report.ReportSetting;
@@ -29,6 +30,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
   @Nonnull private final Lazy<QuantitySetting> quantitySetting;
   @Nonnull private final Lazy<ReportSetting> reportSetting;
   @Nonnull private final Lazy<CourseLevelSetting> courseLevelGridSetting;
+  @Nonnull private final Lazy<GenderSetting> genderSetting;
   @Nonnull private final Lazy<MailSettings> mailSettings;
   @Nonnull private final Lazy<SubscriptionSettings> subscriptionSettings;
 
@@ -38,6 +40,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
     this.quantitySetting = Lazy.of(() -> new QuantitySetting(globalInterface));
     this.reportSetting = Lazy.of(() -> new ReportSetting(globalInterface));
     this.courseLevelGridSetting = Lazy.of(() -> new CourseLevelSetting(globalInterface));
+    this.genderSetting = Lazy.of(() -> new GenderSetting(globalInterface));
     this.mailSettings = Lazy.of(() -> new MailSettings(globalInterface));
     this.subscriptionSettings = Lazy.of(() -> new SubscriptionSettings(globalInterface));
 
@@ -52,6 +55,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
             sharedSetting.get(),
             reportSetting.get(),
             courseLevelGridSetting.get(),
+            genderSetting.get(),
             mailSettings.get(),
             subscriptionSettings.get()
     );

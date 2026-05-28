@@ -16,4 +16,5 @@ public interface IGenderService {
 
   Optional<GenderDto> getGenderByName(@Nonnull String name);
 
+  void createGender(@Nonnull GenderDto genderDto);
 }

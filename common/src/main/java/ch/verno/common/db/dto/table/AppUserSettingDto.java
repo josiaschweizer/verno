@@ -1,25 +1,24 @@
 package ch.verno.common.db.dto.table;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-
-import java.util.Locale;
 
 public class AppUserSettingDto extends BaseDto {
 
   @Nonnull private Long userId;
   @Nullable private String theme;
-  @Nonnull private Locale language;
+  @Nonnull private Language language;
 
   public AppUserSettingDto() {
     this.userId = 0L;
-    this.language = Locale.forLanguageTag("de");
+    this.language = Language.DE;
   }
 
   public AppUserSettingDto(@Nonnull final Long userId,
                            @Nonnull final String theme,
-                           @Nonnull final Locale language) {
+                           @Nonnull final Language language) {
     this.userId = userId;
     this.theme = theme;
     this.language = language;
@@ -28,11 +27,11 @@ public class AppUserSettingDto extends BaseDto {
   public AppUserSettingDto(@Nullable final Long id,
                            @Nonnull final Long userId,
                            @Nullable final String theme,
-                           @Nullable final Locale language) {
+                           @Nullable final Language language) {
     setId(id);
     this.userId = userId;
     this.theme = theme;
-    this.language = language != null ? language : Locale.forLanguageTag("de");
+    this.language = language != null ? language : Language.DE;
   }
 
   @Nonnull
@@ -54,22 +53,22 @@ public class AppUserSettingDto extends BaseDto {
   }
 
   @Nonnull
-  public Locale getLanguage() {
+  public Language getLanguage() {
     return language;
   }
 
-  public void setLanguage(@Nullable final Locale language) {
-    this.language = language != null ? language : Locale.forLanguageTag("de");
+  public void setLanguage(@Nullable final Language language) {
+    this.language = language != null ? language : Language.DE;
   }
 
   @Nonnull
   public String getLanguageTag() {
-    return language.toLanguageTag();
+    return language.getCode();
   }
 
   public void setLanguageTag(@Nullable final String languageTag) {
     this.language = (languageTag == null || languageTag.isBlank())
-            ? Locale.forLanguageTag("de")
-            : Locale.forLanguageTag(languageTag);
+            ? Language.DE
+            : Language.of(languageTag);
   }
 }
