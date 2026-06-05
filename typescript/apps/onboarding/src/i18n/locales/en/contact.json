@@ -1,0 +1,193 @@
+{
+  "errorDisplay": {
+    "closeError": "Close error"
+  },
+  "dialog": {
+    "title": "Get Started",
+    "subtitle": "Follow the steps to create your tenant.",
+    "buttons": {
+      "back": "Back",
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "validating": "Validating...",
+      "finish": "Finish"
+    },
+    "phases": {
+      "creatingTenant": {
+        "label": "Creating tenant...",
+        "sub": "Setting up your workspace"
+      },
+      "provisioning": {
+        "label": "Provisioning...",
+        "sub": "Configuring your database"
+      },
+      "almostThere": {
+        "label": "Almost there...",
+        "sub": "Setting up your subdomain"
+      },
+      "finalizing": {
+        "label": "Finalizing...",
+        "sub": "Applying last configurations"
+      }
+    },
+    "toast": {
+      "successTitle": "Tenant successfully created!",
+      "successDescription": "Your tenant is ready.",
+      "openNow": "Open now ?"
+    },
+    "errors": {
+      "tenantAlreadyExists": {
+        "title": "Tenant key already exists",
+        "message": "The tenant key/subdomain already exists. Please choose a different value."
+      },
+      "validationFailed": {
+        "title": "Invalid input",
+        "message": "Please review your input and try again."
+      },
+      "dataIntegrityViolation": {
+        "title": "Conflict while saving",
+        "message": "A database constraint was violated. Please review your input and try again."
+      },
+      "tenantProvisionFailed": {
+        "title": "Failed to create tenant",
+        "message": "An error occurred while creating the tenant. Please try again later."
+      },
+      "genericTitle": "Error",
+      "unknown": "Unknown error",
+      "failedTitle": "Failed to send message",
+      "failedMessage": "Something went wrong while sending your message.",
+      "missingContactEmail": "Missing Contact Email configuration"
+    }
+  },
+  "stepOne": {
+    "title": "Step 1 - Basic Data for Your Account",
+    "fields": {
+      "firstname": "Firstname",
+      "lastname": "Lastname",
+      "username": "Username",
+      "email": "E-Mail",
+      "phone": "Phone",
+      "preferredLanguage": "Preferred Language",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "placeholders": {
+      "firstname": "Firstname",
+      "lastname": "Lastname",
+      "username": "Username",
+      "email": "E-Mail",
+      "phone": "Phone",
+      "password": "Enter your password",
+      "confirmPassword": "Confirm your password"
+    },
+    "languages": {
+      "de": "German",
+      "en": "English",
+      "fr": "French"
+    },
+    "validation": {
+      "emailRequired": "E-Mail is required",
+      "invalidEmail": "Invalid e-mail address",
+      "onlyNumbers": "Only numbers are allowed",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match"
+    }
+  },
+  "stepTwo": {
+    "title": "Step 2 - Tenant Configuration",
+    "fields": {
+      "displayName": "Display name",
+      "url": "URL"
+    },
+    "placeholders": {
+      "tenantDisplayName": "Tenant Display Name"
+    },
+    "validation": {
+      "displayNameRequired": "Display name is required",
+      "subdomainRequired": "Subdomain is required"
+    }
+  },
+  "stepThree": {
+    "title": "Step 3 - Overview",
+    "empty": "?",
+    "fields": {
+      "firstname": "Firstname",
+      "lastname": "Lastname",
+      "username": "Username",
+      "email": "E-Mail",
+      "url": "URL",
+      "displayName": "Display Name"
+    }
+  },
+  "getInTouchDialog": {
+    "mail": {
+      "subject": "New message from {{firstname}} {{lastname}}",
+      "message": {
+        "greeting": "Hello,",
+        "intro": "You have received a new message through the Verno contact form.",
+        "contactInformation": "Contact information",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "company": "Company",
+        "notProvided": "Not provided",
+        "message": "Message",
+        "footer": "Sent from the Verno website contact form."
+      }
+    },
+    "dialog": {
+      "title": "Get in touch",
+      "subtitle": "Send us your message and we will get back to you shortly."
+    },
+    "form": {
+      "fields": {
+        "firstname": {
+          "label": "First name",
+          "placeholder": "John"
+        },
+        "lastname": {
+          "label": "Last name",
+          "placeholder": "Doe"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "john@company.com"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "+41 77 432 06 26"
+        },
+        "company": {
+          "label": "Company",
+          "placeholder": "Your company"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Tell us a bit about your request...",
+          "counter": "{{count}}/1000"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "send": "Send message",
+        "sending": "Sending..."
+      },
+      "validation": {
+        "firstnameRequired": "First name is required",
+        "lastnameRequired": "Last name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "messageRequired": "Message is required",
+        "messageMinLength": "Message must be at least 10 characters",
+        "messageMaxLength": "Message must not exceed 1000 characters"
+      }
+    },
+    "toast": {
+      "successTitle": "Request sent successfully!",
+      "successDescription": "We will get back to you shortly."
+    }
+  }
+}

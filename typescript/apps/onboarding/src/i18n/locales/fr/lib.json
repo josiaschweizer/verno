@@ -1,0 +1,53 @@
+{
+  "copyright": "© {{year}} Verno",
+  "links": {
+    "imprint": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
+  },
+  "language": {
+    "label": "Langue",
+    "de": "Deutsch",
+    "en": "English",
+    "fr": "Français"
+  },
+  "header": {
+    "aria": {
+      "globalNavigation": "Navigation principale"
+    },
+    "logo": {
+      "label": "Verno",
+      "alt": "Logo Verno"
+    },
+    "mobile": {
+      "openMainMenu": "Ouvrir le menu principal",
+      "closeMenu": "Fermer le menu"
+    },
+    "navigation": {
+      "product": "Produit",
+      "company": "Entreprise",
+      "pricing": "Tarifs"
+    },
+    "actions": {
+      "getStarted": "Commencer"
+    },
+    "product": {
+      "organization": {
+        "name": "Organisation",
+        "description": "Gérer les membres, les moniteurs, les rôles et la structure"
+      },
+      "scheduling": {
+        "name": "Planification & cours",
+        "description": "Planifier les cours, les entraînements et les horaires au même endroit"
+      },
+      "participants": {
+        "name": "Participants & adhésions",
+        "description": "Suivre les participants, les adhésions et les statuts"
+      },
+      "reporting": {
+        "name": "Rapports & analyses",
+        "description": "Obtenir rapidement des analyses claires, des rapports et des exports"
+      }
+    }
+  }
+}

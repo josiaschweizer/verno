@@ -1,5 +1,5 @@
-// ErrorDisplay.tsx
 import { AlertCircle, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface ErrorDisplayProps {
   title: string
@@ -14,6 +14,8 @@ export default function ErrorDisplay({
   details,
   onDismiss,
 }: ErrorDisplayProps) {
+  const { t } = useTranslation('contact')
+
   return (
     <div className="w-full animate-in fade-in slide-in-from-top-2 duration-300">
       <div className="w-full rounded-lg border border-red-200 bg-linear-to-br from-red-50 to-red-50/50 shadow-sm">
@@ -39,7 +41,7 @@ export default function ErrorDisplay({
                     className="flex items-start gap-2 text-sm text-red-800/90"
                   >
                     <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-red-400" />
-                    Y<span className="flex-1">{detail}</span>
+                    <span className="flex-1">{detail}</span>
                   </li>
                 ))}
               </ul>
@@ -51,7 +53,7 @@ export default function ErrorDisplay({
               type="button"
               onClick={onDismiss}
               className="rounded-md p-1.5 text-red-400 transition-colors hover:bg-red-100 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
-              aria-label="Close error"
+              aria-label={t('errorDisplay.closeError')}
             >
               <X className="h-4 w-4" />
             </button>

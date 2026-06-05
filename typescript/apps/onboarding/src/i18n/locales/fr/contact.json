@@ -1,0 +1,193 @@
+{
+  "errorDisplay": {
+    "closeError": "Fermer l?erreur"
+  },
+  "dialog": {
+    "title": "Commencer",
+    "subtitle": "Suis les étapes pour créer ton mandant.",
+    "buttons": {
+      "back": "Retour",
+      "cancel": "Annuler",
+      "continue": "Continuer",
+      "validating": "Validation...",
+      "finish": "Terminer"
+    },
+    "phases": {
+      "creatingTenant": {
+        "label": "Création du mandant...",
+        "sub": "Configuration de ton espace de travail"
+      },
+      "provisioning": {
+        "label": "Provisionnement...",
+        "sub": "Configuration de ta base de données"
+      },
+      "almostThere": {
+        "label": "Presque terminé...",
+        "sub": "Configuration de ton sous-domaine"
+      },
+      "finalizing": {
+        "label": "Finalisation...",
+        "sub": "Application des dernières configurations"
+      }
+    },
+    "toast": {
+      "successTitle": "Mandant créé avec succès !",
+      "successDescription": "Ton mandant est prêt.",
+      "openNow": "Ouvrir maintenant ?"
+    },
+    "errors": {
+      "tenantAlreadyExists": {
+        "title": "La clé du mandant existe déjà",
+        "message": "La clé du mandant ou le sous-domaine existe déjà. Choisis une autre valeur."
+      },
+      "validationFailed": {
+        "title": "Saisie invalide",
+        "message": "Vérifie tes saisies et réessaie."
+      },
+      "dataIntegrityViolation": {
+        "title": "Conflit lors de l?enregistrement",
+        "message": "Une contrainte de base de données a été violée. Vérifie tes saisies et réessaie."
+      },
+      "tenantProvisionFailed": {
+        "title": "Impossible de créer le mandant",
+        "message": "Une erreur est survenue lors de la création du mandant. Réessaie plus tard."
+      },
+      "genericTitle": "Erreur",
+      "unknown": "Erreur inconnue",
+      "failedTitle": "Le message n’a pas pu être envoyé",
+      "failedMessage": "Une erreur est survenue lors de l’envoi de votre message.",
+      "missingContactEmail": "Configuration Contact Email manquante"
+    }
+  },
+  "stepOne": {
+    "title": "Étape 1 - Données de base pour ton compte",
+    "fields": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d?utilisateur",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "preferredLanguage": "Langue préférée",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "placeholders": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d?utilisateur",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "password": "Saisis ton mot de passe",
+      "confirmPassword": "Confirme ton mot de passe"
+    },
+    "languages": {
+      "de": "Allemand",
+      "en": "Anglais",
+      "fr": "Français"
+    },
+    "validation": {
+      "emailRequired": "L'e-mail est obligatoire",
+      "invalidEmail": "Adresse e-mail invalide",
+      "onlyNumbers": "Seuls les chiffres sont autorisés",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "confirmPasswordRequired": "Confirme ton mot de passe",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+  "stepTwo": {
+    "title": "Étape 2 - Configuration du mandant",
+    "fields": {
+      "displayName": "Nom affiché",
+      "url": "URL"
+    },
+    "placeholders": {
+      "tenantDisplayName": "Nom affiché du mandant"
+    },
+    "validation": {
+      "displayNameRequired": "Le nom affiché est obligatoire",
+      "subdomainRequired": "Le sous-domaine est obligatoire"
+    }
+  },
+  "stepThree": {
+    "title": "Étape 3 - Aperçu",
+    "empty": "?",
+    "fields": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "E-mail",
+      "url": "URL",
+      "displayName": "Nom affiché"
+    }
+  },
+  "getInTouchDialog": {
+    "mail": {
+      "subject": "Nouveau message de {{firstname}} {{lastname}}",
+      "message": {
+        "greeting": "Bonjour,",
+        "intro": "Vous avez reçu un nouveau message via le formulaire de contact Verno.",
+        "contactInformation": "Informations de contact",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "company": "Entreprise",
+        "notProvided": "Non indiqué",
+        "message": "Message",
+        "footer": "Envoyé depuis le formulaire de contact du site web Verno."
+      }
+    },
+    "dialog": {
+      "title": "Nous contacter",
+      "subtitle": "Envoyez-nous votre message et nous vous répondrons rapidement."
+    },
+    "form": {
+      "fields": {
+        "firstname": {
+          "label": "Prénom",
+          "placeholder": "Jean"
+        },
+        "lastname": {
+          "label": "Nom",
+          "placeholder": "Dupont"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "jean@entreprise.ch"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "+41 77 432 06 26"
+        },
+        "company": {
+          "label": "Entreprise",
+          "placeholder": "Votre entreprise"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Décrivez brièvement votre demande...",
+          "counter": "{{count}}/1000"
+        }
+      },
+      "buttons": {
+        "cancel": "Annuler",
+        "send": "Envoyer le message",
+        "sending": "Envoi en cours..."
+      },
+      "validation": {
+        "firstnameRequired": "Le prénom est obligatoire",
+        "lastnameRequired": "Le nom est obligatoire",
+        "emailRequired": "L’e-mail est obligatoire",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "messageRequired": "Le message est obligatoire",
+        "messageMinLength": "Le message doit contenir au moins 10 caractères",
+        "messageMaxLength": "Le message ne doit pas dépasser 1000 caractères"
+      }
+    },
+    "toast": {
+      "successTitle": "Demande envoyée avec succès !",
+      "successDescription": "Nous vous répondrons rapidement."
+    }
+  }
+}

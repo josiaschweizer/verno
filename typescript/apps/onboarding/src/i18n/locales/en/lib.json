@@ -1,0 +1,53 @@
+{
+  "copyright": "© {{year}} Verno",
+  "links": {
+    "imprint": "Imprint",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "language": {
+    "label": "Language",
+    "de": "Deutsch",
+    "en": "English",
+    "fr": "Français"
+  },
+  "header": {
+    "aria": {
+      "globalNavigation": "Global navigation"
+    },
+    "logo": {
+      "label": "Verno",
+      "alt": "Verno logo"
+    },
+    "mobile": {
+      "openMainMenu": "Open main menu",
+      "closeMenu": "Close menu"
+    },
+    "navigation": {
+      "product": "Product",
+      "company": "Company",
+      "pricing": "Pricing"
+    },
+    "actions": {
+      "getStarted": "Get started"
+    },
+    "product": {
+      "organization": {
+        "name": "Organization",
+        "description": "Manage members, instructors, roles and structure"
+      },
+      "scheduling": {
+        "name": "Scheduling & Courses",
+        "description": "Plan courses, trainings and schedules in one place"
+      },
+      "participants": {
+        "name": "Participants & Memberships",
+        "description": "Keep track of participants, memberships and statuses"
+      },
+      "reporting": {
+        "name": "Reporting & Insights",
+        "description": "Get clear insights, reports and exports instantly"
+      }
+    }
+  }
+}

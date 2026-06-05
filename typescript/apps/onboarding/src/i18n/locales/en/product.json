@@ -1,0 +1,115 @@
+{
+  "organizationConfig": {
+    "courseSchedules": {
+      "title": "Schedules",
+      "caption": "Plan weeks and sessions with clarity.",
+      "alt": "Course schedules overview"
+    },
+    "courses": {
+      "title": "Courses",
+      "caption": "Capacity, levels, weekdays and times in one place.",
+      "alt": "Courses overview"
+    },
+    "instructors": {
+      "title": "Instructors",
+      "caption": "Contacts and assignments, always up to date.",
+      "alt": "Instructors overview"
+    },
+    "participants": {
+      "title": "Participants",
+      "caption": "Search, statuses and direct links to courses.",
+      "alt": "Participants overview"
+    }
+  },
+  "common": {
+    "keyPoints": "Key points",
+    "hoverCompare": "Hover to compare light and dark mode."
+  },
+  "hero": {
+    "title": "Verno for sports clubs",
+    "text1": "Clear structure, schedules and membership overview for clubs running teams, courses and venues.",
+    "text2": "Built for coordinators, coaches and club managers who want a calm, reliable system for everyday operations.",
+    "imageAlt": "Dashboard with course sections, participant tables and quick actions",
+    "caption": "Dashboard overview with course sections, sortable tables and quick actions. Hover to compare light and dark mode."
+  },
+  "organization": {
+    "title": "Organization",
+    "subtitle": "Keep clubs, teams and venues organized.",
+    "text1": "Designed for clubs with many teams and locations.",
+    "text2": "A shared structure that stays consistent across seasons.",
+    "keyPoints": [
+      "Clear club and team hierarchy",
+      "Shared directory for venues and contacts",
+      "Templates for seasons and programs"
+    ]
+  },
+  "scheduling": {
+    "title": "Scheduling & Courses",
+    "subtitle": "Plan training, matches and courses clearly.",
+    "text1": "Built for weekly training, fixtures and multi-week courses.",
+    "text2": "Coaches can see where they are needed and when.",
+    "keyPoints": [
+      "Calendar views for teams and venues",
+      "Sessions with instructors and capacity",
+      "Filters for training, games and events"
+    ],
+    "imageAlt": "Weekly schedules overview",
+    "caption": "Weekly timetable with a clear hour grid, week navigation and color-coded sessions. Hover to compare light and dark mode."
+  },
+  "participants": {
+    "title": "Participants & Memberships",
+    "subtitle": "Keep players, guardians and staff aligned.",
+    "text1": "Profiles, guardians and team roles in one place.",
+    "text2": "See who is active and where they train.",
+    "keyPoints": [
+      "Profiles for participants and guardians",
+      "Membership status by team or season",
+      "Integrated user and role administration"
+    ],
+    "participantsOverview": "Participants overview",
+    "rolesUsers": "Roles & users",
+    "participants": "Participants",
+    "rolesAndUsers": "Roles & Users",
+    "participantsAlt": "Participants overview table with search, filters and status badges",
+    "usersAlt": "User administration overview with roles and create-user dialog",
+    "participantsCaption": "Fast search, sortable columns and clear active/inactive status.",
+    "usersCaption": "Role-based access with a streamlined user creation flow."
+  },
+  "mailing": {
+    "title": "Mail Delivery & Communication",
+    "subtitle": "Reach participants, guardians and instructors quickly.",
+    "text1": "Send targeted emails for course updates, reminders and important club communication.",
+    "text2": "Keep templates, recipients and delivery history in one structured place.",
+    "keyPoints": [
+      "Email templates for recurring communication",
+      "Send to courses, groups or selected recipients",
+      "Delivery logs with status and error visibility"
+    ],
+    "imageAlt": "Mail overview with templates, recipients and delivery log",
+    "caption": "Manage templates, send messages to the right audience and review delivery history. Hover to compare light and dark mode."
+  },
+  "reporting": {
+    "title": "Reporting & Insights",
+    "subtitle": "Track participation and capacity trends.",
+    "text1": "Simple metrics to understand attendance patterns and resource usage across your organization.",
+    "text2": "Export data for board meetings and season planning.",
+    "keyPoints": [
+      "Attendance and enrollment tracking",
+      "Venue and resource utilization",
+      "Season-over-season comparisons"
+    ],
+    "stats": {
+      "activeClubs": "Active clubs",
+      "totalParticipants": "Total participants",
+      "runningCourses": "Running courses"
+    },
+    "attendanceOverview": "Attendance overview",
+    "lastSixMonths": "Last 6 months",
+    "months": ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+    "caption": "Metrics showing club activity, participation and course demand."
+  },
+  "cta": {
+    "title": "Start with one season and grow",
+    "text": "Begin with a single team or venue, then expand as your staff get comfortable."
+  }
+}

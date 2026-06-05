@@ -1,0 +1,16 @@
+{
+  "hero": {
+    "title": "Vereinsverwaltung, entspannt gemacht.",
+    "description": "Verno hilft Sportvereinen, Teams, Kurse und Standorte in einem klaren System zu organisieren. Keine verstreuten Tools. Kein Chaos. Nur Struktur.",
+    "imageAlt": "Zufriedener Vereinsmanager nutzt Verno"
+  },
+  "badges": {
+    "secureByDefault": "Standardmässig sicher",
+    "switzerlandFirst": "Schweiz-zentrierte Infrastruktur",
+    "designedForClubs": "Für echte Vereine entwickelt"
+  },
+  "actions": {
+    "exploreProduct": "Produkt entdecken",
+    "aboutVerno": "Über Verno"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "errorDisplay": {
+    "closeError": "Fehler schliessen"
+  },
+  "dialog": {
+    "title": "Loslegen",
+    "subtitle": "Folge den Schritten, um deinen Mandanten zu erstellen.",
+    "buttons": {
+      "back": "Zurück",
+      "cancel": "Abbrechen",
+      "continue": "Weiter",
+      "validating": "Wird geprüft...",
+      "finish": "Abschliessen"
+    },
+    "phases": {
+      "creatingTenant": {
+        "label": "Mandant wird erstellt...",
+        "sub": "Dein Arbeitsbereich wird eingerichtet"
+      },
+      "provisioning": {
+        "label": "Bereitstellung läuft...",
+        "sub": "Deine Datenbank wird konfiguriert"
+      },
+      "almostThere": {
+        "label": "Fast geschafft...",
+        "sub": "Deine Subdomain wird eingerichtet"
+      },
+      "finalizing": {
+        "label": "Abschluss läuft...",
+        "sub": "Letzte Konfigurationen werden angewendet"
+      }
+    },
+    "toast": {
+      "successTitle": "Mandant erfolgreich erstellt!",
+      "successDescription": "Dein Mandant ist bereit.",
+      "openNow": "Jetzt öffnen →"
+    },
+    "errors": {
+      "tenantAlreadyExists": {
+        "title": "Mandantenschlüssel existiert bereits",
+        "message": "Der Mandantenschlüssel bzw. die Subdomain existiert bereits. Bitte wähle einen anderen Wert."
+      },
+      "validationFailed": {
+        "title": "Ungültige Eingabe",
+        "message": "Bitte überprüfe deine Eingaben und versuche es erneut."
+      },
+      "dataIntegrityViolation": {
+        "title": "Konflikt beim Speichern",
+        "message": "Eine Datenbankeinschränkung wurde verletzt. Bitte überprüfe deine Eingaben und versuche es erneut."
+      },
+      "tenantProvisionFailed": {
+        "title": "Mandant konnte nicht erstellt werden",
+        "message": "Beim Erstellen des Mandanten ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      },
+      "genericTitle": "Fehler",
+      "unknown": "Unbekannter Fehler",
+      "failedTitle": "Nachricht konnte nicht gesendet werden",
+      "failedMessage": "Beim Senden deiner Nachricht ist etwas schiefgelaufen.",
+      "missingContactEmail": "Kontakt Email Konfiguration fehlt"
+    }
+  },
+  "stepOne": {
+    "title": "Schritt 1 - Grunddaten für dein Konto",
+    "fields": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "preferredLanguage": "Bevorzugte Sprache",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen"
+    },
+    "placeholders": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "password": "Gib dein Passwort ein",
+      "confirmPassword": "Bestätige dein Passwort"
+    },
+    "languages": {
+      "de": "Deutsch",
+      "en": "Englisch",
+      "fr": "Französisch"
+    },
+    "validation": {
+      "emailRequired": "E-Mail ist erforderlich",
+      "invalidEmail": "Ungültige E-Mail-Adresse",
+      "onlyNumbers": "Es sind nur Zahlen erlaubt",
+      "passwordRequired": "Passwort ist erforderlich",
+      "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "confirmPasswordRequired": "Bitte bestätige dein Passwort",
+      "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein"
+    }
+  },
+  "stepTwo": {
+    "title": "Schritt 2 - Mandanten-Konfiguration",
+    "fields": {
+      "displayName": "Anzeigename",
+      "url": "URL"
+    },
+    "placeholders": {
+      "tenantDisplayName": "Mandanten-Anzeigename"
+    },
+    "validation": {
+      "displayNameRequired": "Anzeigename ist erforderlich",
+      "subdomainRequired": "Subdomain ist erforderlich"
+    }
+  },
+  "stepThree": {
+    "title": "Schritt 3 - Übersicht",
+    "empty": "?",
+    "fields": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "url": "URL",
+      "displayName": "Anzeigename"
+    }
+  },
+  "getInTouchDialog": {
+    "mail": {
+      "subject": "Neue Nachricht von {{firstname}} {{lastname}}",
+      "message": {
+        "greeting": "Hallo,",
+        "intro": "Du hast eine neue Nachricht über das Verno-Kontaktformular erhalten.",
+        "contactInformation": "Kontaktinformationen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "company": "Unternehmen",
+        "notProvided": "Nicht angegeben",
+        "message": "Nachricht",
+        "footer": "Gesendet über das Kontaktformular der Verno-Website."
+      }
+    },
+    "dialog": {
+      "title": "Kontakt aufnehmen",
+      "subtitle": "Sende uns deine Nachricht und wir melden uns in Kürze bei dir."
+    },
+    "form": {
+      "fields": {
+        "firstname": {
+          "label": "Vorname",
+          "placeholder": "Max"
+        },
+        "lastname": {
+          "label": "Nachname",
+          "placeholder": "Muster"
+        },
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "max@firma.ch"
+        },
+        "phone": {
+          "label": "Telefon",
+          "placeholder": "+41 77 432 06 26"
+        },
+        "company": {
+          "label": "Unternehmen",
+          "placeholder": "Dein Unternehmen"
+        },
+        "message": {
+          "label": "Nachricht",
+          "placeholder": "Erzähle uns kurz, worum es bei deiner Anfrage geht...",
+          "counter": "{{count}}/1000"
+        }
+      },
+      "buttons": {
+        "cancel": "Abbrechen",
+        "send": "Nachricht senden",
+        "sending": "Wird gesendet..."
+      },
+      "validation": {
+        "firstnameRequired": "Vorname ist erforderlich",
+        "lastnameRequired": "Nachname ist erforderlich",
+        "emailRequired": "E-Mail ist erforderlich",
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "messageRequired": "Nachricht ist erforderlich",
+        "messageMinLength": "Die Nachricht muss mindestens 10 Zeichen lang sein",
+        "messageMaxLength": "Die Nachricht darf höchstens 1000 Zeichen lang sein"
+      }
+    },
+    "toast": {
+      "successTitle": "Anfrage erfolgreich gesendet!",
+      "successDescription": "Wir melden uns in Kürze bei dir."
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "Des prix simples pour une gestion de club sereine",
+    "description": "Commencez avec une offre claire et obtenez tout ce dont vous avez besoin pour gérer votre club de manière moderne et structurée."
+  },
+  "plan": {
+    "badge": "Pack Basic",
+    "title": "Tout l’essentiel pour commencer",
+    "description": "Idéal pour les clubs qui souhaitent un système clair et fiable, sans complexité inutile.",
+    "price": {
+      "label": "À partir de",
+      "amount": "CHF 25",
+      "period": "/ mois",
+      "note": "par club"
+    }
+  },
+  "included": {
+    "title": "Inclus",
+    "items": [
+      "Gestion des membres",
+      "Vue d’ensemble des équipes et des rôles",
+      "Outils de communication centralisés",
+      "Tableau de bord d’administration moderne",
+      "Design responsive",
+      "Accès cloud sécurisé"
+    ]
+  },
+  "why": {
+    "title": "Pourquoi cette offre",
+    "items": [
+      {
+        "title": "Une offre claire",
+        "text": "Pas de tarifs confus. Une seule offre simple."
+      },
+      {
+        "title": "Facile à comprendre",
+        "text": "Parfait pendant que le produit continue d’évoluer."
+      },
+      {
+        "title": "Une première impression soignée",
+        "text": "Une apparence moderne qui inspire immédiatement confiance."
+      }
+    ]
+  },
+  "buttons": {
+    "getStarted": "Commencer",
+    "bookDemo": "Réserver une démo"
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "question": "Puis-je résilier à tout moment ?",
+        "answer": "Oui, vous pouvez résilier à tout moment."
+      },
+      {
+        "question": "Le support est-il inclus ?",
+        "answer": "Oui, le support de base est inclus."
+      },
+      {
+        "question": "Les prix peuvent-ils changer plus tard ?",
+        "answer": "Nous nous réservons le droit d’introduire de nouvelles offres et de modifier les offres existantes, y compris leurs prix et les fonctionnalités incluses, à tout moment."
+      }
+    ]
+  }
+}

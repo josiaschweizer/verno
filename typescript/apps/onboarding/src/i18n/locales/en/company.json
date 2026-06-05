@@ -1,0 +1,45 @@
+{
+  "stats": {
+    "headquarters": {
+      "value": "St. Gallen, Switzerland",
+      "label": "Headquarters"
+    },
+    "focus": {
+      "value": "Sports clubs & Sport Schools",
+      "label": "Focus"
+    },
+    "dataBoundary": {
+      "value": "CH-first",
+      "label": "Data boundary"
+    },
+    "team": {
+      "value": "Small team",
+      "label": "Built with care (and yes, we hate programming typescript)"
+    }
+  },
+  "values": {
+    "clarity": {
+      "title": "Clarity over complexity",
+      "text": "We design calm workflows that stay consistent across teams, seasons and venues."
+    },
+    "trust": {
+      "title": "Trust and stability",
+      "text": "Reliable foundations, secure defaults and predictable operations for everyday use."
+    },
+    "realClubs": {
+      "title": "Built for real clubs",
+      "text": "Verno is shaped by the day-to-day needs of coordinators, coaches and administrators."
+    }
+  },
+  "hero": {
+    "title": "About Verno",
+    "description": "Verno builds modern club software for teams, courses and venues. We help sports clubs replace scattered tools with one calm, reliable system for scheduling, memberships and everyday coordination."
+  },
+  "footer": {
+    "text": "Switzerland-first mindset. Long-term partnerships with clubs."
+  },
+  "buttons": {
+    "getInTouch": "Get in touch",
+    "productOverview": "Product overview"
+  }
+}

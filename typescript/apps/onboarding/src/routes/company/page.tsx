@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 import { Button } from '@verno/components/ui/button'
@@ -8,52 +9,59 @@ type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
 
 export default function Company() {
+  const { t } = useTranslation('company')
   const [contactOpen, setContactOpen] = useState(false)
 
   const stats = useMemo<Stat[]>(
     () => [
-      { value: 'St. Gallen, Switzerland', label: 'Headquarters' },
-      { value: 'Sports clubs & Sport Schools', label: 'Focus' },
-      { value: 'CH-first', label: 'Data boundary' },
       {
-        value: 'Small team',
-        label: 'Built with care (and yes, we hate programming typescript)',
+        value: t('stats.headquarters.value'),
+        label: t('stats.headquarters.label'),
+      },
+      {
+        value: t('stats.focus.value'),
+        label: t('stats.focus.label'),
+      },
+      {
+        value: t('stats.dataBoundary.value'),
+        label: t('stats.dataBoundary.label'),
+      },
+      {
+        value: t('stats.team.value'),
+        label: t('stats.team.label'),
       },
     ],
-    [],
+    [t],
   )
 
   const values = useMemo<Value[]>(
     () => [
       {
-        title: 'Clarity over complexity',
-        text: 'We design calm workflows that stay consistent across teams, seasons and venues.',
+        title: t('values.clarity.title'),
+        text: t('values.clarity.text'),
       },
       {
-        title: 'Trust and stability',
-        text: 'Reliable foundations, secure defaults and predictable operations for everyday use.',
+        title: t('values.trust.title'),
+        text: t('values.trust.text'),
       },
       {
-        title: 'Built for real clubs',
-        text: 'Verno is shaped by the day-to-day needs of coordinators, coaches and administrators.',
+        title: t('values.realClubs.title'),
+        text: t('values.realClubs.text'),
       },
     ],
-    [],
+    [t],
   )
 
   return (
     <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden">
-      <div className="mx-auto min-h-full max-w-5xl px-4 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
+      <div className="mx-auto min-h-full max-w-6xl px-6 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
         <section className="space-y-6 md:space-y-8">
           <RevealSection>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker">
-              About Verno
+              {t('hero.title')}
             </h1>
             <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
-              Verno builds modern club software for teams, courses and venues.
-              We help sports clubs replace scattered tools with one calm,
-              reliable system for scheduling, memberships and everyday
-              coordination.
+              {t('hero.description')}
             </p>
           </RevealSection>
 
@@ -95,18 +103,18 @@ export default function Company() {
         <RevealSection stagger={100}>
           <div className="mt-6 sm:mt-8 shrink-0 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
             <p className="text-xs text-muted-foreground order-1 sm:order-2">
-              Switzerland-first mindset. Long-term partnerships with clubs.
+              {t('footer.text')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 order-2 sm:order-1">
               <Button onClick={() => setContactOpen(true)}>
-                Get in touch <span aria-hidden="true">&rarr;</span>
+                {t('buttons.getInTouch')} <span aria-hidden="true">&rarr;</span>
               </Button>
 
               <Link
                 to="/product#organization"
                 className="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
               >
-                Product overview
+                {t('buttons.productOverview')}
               </Link>
             </div>
           </div>

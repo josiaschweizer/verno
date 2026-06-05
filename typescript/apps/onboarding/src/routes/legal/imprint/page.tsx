@@ -1,30 +1,33 @@
+import { useTranslation } from 'react-i18next'
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
 
 export default function Imprint() {
+  const { t } = useTranslation('legal')
+
   return (
-    <LegalPage title="Imprint">
-      <LegalSection title="Provider">
+    <LegalPage title={t('imprint.title')}>
+      <LegalSection title={t('imprint.provider.title')}>
         <p>
-          Verno
+          {t('imprint.provider.name')}
           <br />
-          Josia Schweizer
+          {t('imprint.provider.owner')}
           <br />
-          Schwarzenbach 2178
+          {t('imprint.provider.street')}
           <br />
-          9200 Gossau
+          {t('imprint.provider.city')}
           <br />
-          Switzerland
+          {t('imprint.provider.country')}
         </p>
       </LegalSection>
 
-      <LegalSection title="Contact">
+      <LegalSection title={t('imprint.contact.title')}>
         <p>
           <a
-            href="mailto:josia.schweizer@verno-app.ch"
+            href={`mailto:${t('imprint.contact.email')}`}
             className="text-primary underline"
           >
-            josia.schweizer@verno-app.ch
+            {t('imprint.contact.email')}
           </a>
         </p>
       </LegalSection>

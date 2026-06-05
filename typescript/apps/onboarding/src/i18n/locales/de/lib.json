@@ -1,0 +1,53 @@
+{
+  "copyright": "© {{year}} Verno",
+  "links": {
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "terms": "AGB"
+  },
+  "language": {
+    "label": "Sprache",
+    "de": "Deutsch",
+    "en": "English",
+    "fr": "Français"
+  },
+  "header": {
+    "aria": {
+      "globalNavigation": "Hauptnavigation"
+    },
+    "logo": {
+      "label": "Verno",
+      "alt": "Verno Logo"
+    },
+    "mobile": {
+      "openMainMenu": "Hauptmenü öffnen",
+      "closeMenu": "Menü schliessen"
+    },
+    "navigation": {
+      "product": "Produkt",
+      "company": "Unternehmen",
+      "pricing": "Preise"
+    },
+    "actions": {
+      "getStarted": "Loslegen"
+    },
+    "product": {
+      "organization": {
+        "name": "Organisation",
+        "description": "Mitglieder, Kursleiter, Rollen und Strukturen verwalten"
+      },
+      "scheduling": {
+        "name": "Planung & Kurse",
+        "description": "Kurse, Trainings und Zeitpläne an einem Ort planen"
+      },
+      "participants": {
+        "name": "Teilnehmer & Mitgliedschaften",
+        "description": "Teilnehmer, Mitgliedschaften und Status im Blick behalten"
+      },
+      "reporting": {
+        "name": "Auswertungen & Einblicke",
+        "description": "Klare Einblicke, Berichte und Exporte sofort erhalten"
+      }
+    }
+  }
+}

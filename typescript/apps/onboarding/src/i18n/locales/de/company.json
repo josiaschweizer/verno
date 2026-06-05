@@ -1,0 +1,45 @@
+{
+  "stats": {
+    "headquarters": {
+      "value": "St. Gallen, Schweiz",
+      "label": "Hauptsitz"
+    },
+    "focus": {
+      "value": "Sportvereine & Sportschulen",
+      "label": "Fokus"
+    },
+    "dataBoundary": {
+      "value": "CH-first",
+      "label": "Datenstandort"
+    },
+    "team": {
+      "value": "Kleines Team",
+      "label": "Mit Sorgfalt entwickelt (und ja, wir hassen TypeScript)"
+    }
+  },
+  "values": {
+    "clarity": {
+      "title": "Klarheit statt Komplexität",
+      "text": "Wir entwickeln ruhige Arbeitsabläufe, die über Teams, Saisons und Standorte hinweg konsistent bleiben."
+    },
+    "trust": {
+      "title": "Vertrauen und Stabilität",
+      "text": "Zuverlässige Grundlagen, sichere Standardeinstellungen und vorhersehbarer Betrieb für den Alltag."
+    },
+    "realClubs": {
+      "title": "Für echte Vereine gebaut",
+      "text": "Verno orientiert sich an den täglichen Bedürfnissen von Koordinatoren, Trainern und Administratoren."
+    }
+  },
+  "hero": {
+    "title": "Über Verno",
+    "description": "Verno entwickelt moderne Vereinssoftware für Teams, Kurse und Standorte. Wir helfen Sportvereinen dabei, verstreute Tools durch ein ruhiges, zuverlässiges System für Planung, Mitgliedschaften und die tägliche Koordination zu ersetzen."
+  },
+  "footer": {
+    "text": "Schweiz-first-Mindset. Langfristige Partnerschaften mit Vereinen."
+  },
+  "buttons": {
+    "getInTouch": "Kontakt aufnehmen",
+    "productOverview": "Produktübersicht"
+  }
+}

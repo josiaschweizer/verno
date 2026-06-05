@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "Simple pricing for calm club management",
+    "description": "Start with one clear package and get everything you need to run your club in a modern and structured way."
+  },
+  "plan": {
+    "badge": "Basic Package",
+    "title": "Everything essential to get started",
+    "description": "Ideal for clubs that want a clean and reliable system without unnecessary complexity.",
+    "price": {
+      "label": "Starting at",
+      "amount": "CHF 25",
+      "period": "/ mo",
+      "note": "per club"
+    }
+  },
+  "included": {
+    "title": "Included",
+    "items": [
+      "Member management",
+      "Team and role overview",
+      "Central communication tools",
+      "Modern admin dashboard",
+      "Responsive design",
+      "Secure cloud access"
+    ]
+  },
+  "why": {
+    "title": "Why this plan",
+    "items": [
+      {
+        "title": "One clear package",
+        "text": "No confusing pricing. Just one simple offer."
+      },
+      {
+        "title": "Fast to understand",
+        "text": "Perfect while the product is still evolving."
+      },
+      {
+        "title": "Clean first impression",
+        "text": "Looks modern and builds trust immediately."
+      }
+    ]
+  },
+  "buttons": {
+    "getStarted": "Get started",
+    "bookDemo": "Book a demo"
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "question": "Can I cancel anytime?",
+        "answer": "Yes, you can cancel at any time."
+      },
+      {
+        "question": "Is support included?",
+        "answer": "Yes, basic support is included."
+      },
+      {
+        "question": "Can pricing change later?",
+        "answer": "We reserve the right to introduce new plans and to modify existing plans, including their pricing and included features, at any time."
+      }
+    ]
+  }
+}

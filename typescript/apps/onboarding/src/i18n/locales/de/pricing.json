@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "Einfache Preise für ruhige Vereinsverwaltung",
+    "description": "Starte mit einem klaren Paket und erhalte alles, was du brauchst, um deinen Verein modern und strukturiert zu führen."
+  },
+  "plan": {
+    "badge": "Basic-Paket",
+    "title": "Alles Wichtige für den Einstieg",
+    "description": "Ideal für Vereine, die ein sauberes und zuverlässiges System ohne unnötige Komplexität möchten.",
+    "price": {
+      "label": "Ab",
+      "amount": "CHF 25",
+      "period": "/ Monat",
+      "note": "pro Verein"
+    }
+  },
+  "included": {
+    "title": "Enthalten",
+    "items": [
+      "Mitgliederverwaltung",
+      "Team- und Rollenübersicht",
+      "Zentrale Kommunikationswerkzeuge",
+      "Modernes Admin-Dashboard",
+      "Responsives Design",
+      "Sicherer Cloud-Zugriff"
+    ]
+  },
+  "why": {
+    "title": "Warum dieses Paket",
+    "items": [
+      {
+        "title": "Ein klares Paket",
+        "text": "Keine verwirrenden Preise. Einfach ein klares Angebot."
+      },
+      {
+        "title": "Schnell verständlich",
+        "text": "Perfekt, solange sich das Produkt noch weiterentwickelt."
+      },
+      {
+        "title": "Sauberer erster Eindruck",
+        "text": "Wirkt modern und schafft sofort Vertrauen."
+      }
+    ]
+  },
+  "buttons": {
+    "getStarted": "Loslegen",
+    "bookDemo": "Demo buchen"
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "question": "Kann ich jederzeit kündigen?",
+        "answer": "Ja, du kannst jederzeit kündigen."
+      },
+      {
+        "question": "Ist Support enthalten?",
+        "answer": "Ja, Basic-Support ist enthalten."
+      },
+      {
+        "question": "Können sich die Preise später ändern?",
+        "answer": "Wir behalten uns das Recht vor, jederzeit neue Pakete einzuführen und bestehende Pakete anzupassen, einschliesslich deren Preise und enthaltener Funktionen."
+      }
+    ]
+  }
+}

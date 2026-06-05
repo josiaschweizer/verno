@@ -1,26 +1,28 @@
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { UseFormGetValues } from 'react-hook-form'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   getValues: UseFormGetValues<RegisterDialogFormData>
 }
 
-const overviewFields = [
-  { key: 'firstname' as const, label: 'Firstname' },
-  { key: 'lastname' as const, label: 'Lastname' },
-  { key: 'username' as const, label: 'Username' },
-  { key: 'email' as const, label: 'E-Mail' },
-  { key: 'tenantSubdomain' as const, label: 'URL' },
-  { key: 'tenantName' as const, label: 'Display Name' },
-] as const
-
 export function StepThree({ getValues }: Props) {
+  const { t } = useTranslation('contact')
   const values = getValues()
+
+  const overviewFields = [
+    { key: 'firstname' as const, label: t('stepThree.fields.firstname') },
+    { key: 'lastname' as const, label: t('stepThree.fields.lastname') },
+    { key: 'username' as const, label: t('stepThree.fields.username') },
+    { key: 'email' as const, label: t('stepThree.fields.email') },
+    { key: 'tenantSubdomain' as const, label: t('stepThree.fields.url') },
+    { key: 'tenantName' as const, label: t('stepThree.fields.displayName') },
+  ] as const
 
   return (
     <div>
-      <h3 className="text-base font-medium">Step 3 — Overview</h3>
+      <h3 className="text-base font-medium">{t('stepThree.title')}</h3>
 
       <div className="mt-4">
         <div className="rounded-xl border border-verno-darker/20 bg-verno-surface p-4">
@@ -35,8 +37,8 @@ export function StepThree({ getValues }: Props) {
                 </dt>
                 <dd className="text-sm text-verno-dark">
                   {key === 'username'
-                    ? (resolveUsername(values) ?? '—')
-                    : (values[key] ?? '—')}
+                    ? (resolveUsername(values) ?? t('stepThree.empty'))
+                    : (values[key] ?? t('stepThree.empty'))}
                 </dd>
               </div>
             ))}

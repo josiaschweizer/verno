@@ -33,7 +33,7 @@ export default function MenuPopover({ title, products }: Props) {
           <div className="p-4">
             {products.map((item) => (
               <div
-                key={item.name}
+                key={item.href}
                 className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-verno-surface-light/20"
               >
                 <div className="flex size-11 flex-none items-center justify-center rounded-lg bg-verno-bg/60 group-hover:bg-verno-bg">
@@ -42,6 +42,7 @@ export default function MenuPopover({ title, products }: Props) {
                     className="size-6 text-verno-darker group-hover:text-verno-dark"
                   />
                 </div>
+
                 <div className="flex-auto">
                   <CloseButton
                     as={Link}
@@ -51,6 +52,7 @@ export default function MenuPopover({ title, products }: Props) {
                     {item.name}
                     <span className="absolute inset-0" />
                   </CloseButton>
+
                   <p className="mt-1 text-verno-darker/80">
                     {item.description}
                   </p>

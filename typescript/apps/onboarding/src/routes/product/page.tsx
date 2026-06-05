@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
 import RevealSection from '@verno/components/ui/RevealSection'
 import { tenantsApi } from '@/lib/api/tenantsApi'
@@ -19,37 +20,6 @@ type OrganizationItem = {
   darkSrc: string
 }
 
-const organizationConfig: Record<OrganizationView, OrganizationItem> = {
-  courseSchedules: {
-    title: 'Schedules',
-    caption: 'Plan weeks and sessions with clarity.',
-    alt: 'Course schedules overview',
-    lightSrc: '/course-schedules-light.png',
-    darkSrc: '/course-schedules.png',
-  },
-  courses: {
-    title: 'Courses',
-    caption: 'Capacity, levels, weekdays and times in one place.',
-    alt: 'Courses overview',
-    lightSrc: '/courses-light.png',
-    darkSrc: '/courses.png',
-  },
-  instructors: {
-    title: 'Instructors',
-    caption: 'Contacts and assignments, always up to date.',
-    alt: 'Instructors overview',
-    lightSrc: '/instructors-light.png',
-    darkSrc: '/instructors.png',
-  },
-  participants: {
-    title: 'Participants',
-    caption: 'Search, statuses and direct links to courses.',
-    alt: 'Participants overview',
-    lightSrc: '/participants-light.png',
-    darkSrc: '/participants.png',
-  },
-}
-
 function formatCount(value: number | null): string {
   if (value == null) {
     return '–'
@@ -66,6 +36,7 @@ function extractNumber(value: unknown): number | null {
     const parsed = Number(value)
     return Number.isNaN(parsed) ? null : parsed
   }
+
   if (value && typeof value === 'object' && !Array.isArray(value)) {
     const obj = value as Record<string, unknown>
     if (typeof obj.count === 'number') return obj.count
@@ -77,7 +48,44 @@ function extractNumber(value: unknown): number | null {
 }
 
 export default function Product() {
+  const { t } = useTranslation('product')
   const location = useLocation()
+
+  const organizationConfig = useMemo<
+    Record<OrganizationView, OrganizationItem>
+  >(
+    () => ({
+      courseSchedules: {
+        title: t('organizationConfig.courseSchedules.title'),
+        caption: t('organizationConfig.courseSchedules.caption'),
+        alt: t('organizationConfig.courseSchedules.alt'),
+        lightSrc: '/course-schedules-light.png',
+        darkSrc: '/course-schedules.png',
+      },
+      courses: {
+        title: t('organizationConfig.courses.title'),
+        caption: t('organizationConfig.courses.caption'),
+        alt: t('organizationConfig.courses.alt'),
+        lightSrc: '/courses-light.png',
+        darkSrc: '/courses.png',
+      },
+      instructors: {
+        title: t('organizationConfig.instructors.title'),
+        caption: t('organizationConfig.instructors.caption'),
+        alt: t('organizationConfig.instructors.alt'),
+        lightSrc: '/instructors-light.png',
+        darkSrc: '/instructors.png',
+      },
+      participants: {
+        title: t('organizationConfig.participants.title'),
+        caption: t('organizationConfig.participants.caption'),
+        alt: t('organizationConfig.participants.alt'),
+        lightSrc: '/participants-light.png',
+        darkSrc: '/participants.png',
+      },
+    }),
+    [t],
+  )
 
   const [peopleView, setPeopleView] = useState<PeopleView>('participants')
   const [organizationView, setOrganizationView] =
@@ -86,6 +94,30 @@ export default function Product() {
   const [tenantsCount, setTenantsCount] = useState<number | null>(null)
   const [memberCount, setMemberCount] = useState<number | null>(null)
   const [courseCount, setCourseCount] = useState<number | null>(null)
+
+  const organizationKeyPoints = t('organization.keyPoints', {
+    returnObjects: true,
+  }) as string[]
+
+  const schedulingKeyPoints = t('scheduling.keyPoints', {
+    returnObjects: true,
+  }) as string[]
+
+  const participantsKeyPoints = t('participants.keyPoints', {
+    returnObjects: true,
+  }) as string[]
+
+  const mailingKeyPoints = t('mailing.keyPoints', {
+    returnObjects: true,
+  }) as string[]
+
+  const reportingKeyPoints = t('reporting.keyPoints', {
+    returnObjects: true,
+  }) as string[]
+
+  const reportingMonths = t('reporting.months', {
+    returnObjects: true,
+  }) as string[]
 
   useEffect(() => {
     let cancelled = false
@@ -149,8 +181,8 @@ export default function Product() {
       }
 
       const delay = 50 + attempt * 100
-      const t = window.setTimeout(() => tryScroll(attempt + 1), delay)
-      return () => window.clearTimeout(t)
+      const timeout = window.setTimeout(() => tryScroll(attempt + 1), delay)
+      return () => window.clearTimeout(timeout)
     }
 
     const timeout = window.setTimeout(() => tryScroll(), 150)
@@ -163,7 +195,7 @@ export default function Product() {
 
   const activeOrganization = useMemo(
     () => organizationConfig[organizationView],
-    [organizationView],
+    [organizationConfig, organizationView],
   )
 
   const showReporting = tenantsCount != null && tenantsCount > 1
@@ -179,15 +211,13 @@ export default function Product() {
                   id="verno-hero-title"
                   className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker"
                 >
-                  Verno for sports clubs
+                  {t('hero.title')}
                 </h1>
                 <p className="mt-3 sm:mt-4 text-sm text-muted-foreground">
-                  Clear structure, schedules and membership overview for clubs
-                  running teams, courses and venues.
+                  {t('hero.text1')}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Built for coordinators, coaches and club managers who want a
-                  calm, reliable system for everyday operations.
+                  {t('hero.text2')}
                 </p>
               </div>
 
@@ -196,14 +226,13 @@ export default function Product() {
                   <HoverSplitImage
                     lightSrc="/dashboard-light.png"
                     darkSrc="/dashboard.png"
-                    alt="Dashboard with course sections, participant tables and quick actions"
+                    alt={t('hero.imageAlt')}
                     className="h-full"
                     initialSplit={0.6}
                   />
                 </div>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Dashboard overview with course sections, sortable tables and
-                  quick actions. Hover to compare light and dark mode.
+                  {t('hero.caption')}
                 </p>
               </div>
             </div>
@@ -218,26 +247,26 @@ export default function Product() {
                   id="organization-title"
                   className="text-2xl font-semibold text-verno-darker"
                 >
-                  Organization
+                  {t('organization.title')}
                 </h2>
                 <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
-                  Keep clubs, teams and venues organized.
+                  {t('organization.subtitle')}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Designed for clubs with many teams and locations.
+                  {t('organization.text1')}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  A shared structure that stays consistent across seasons.
+                  {t('organization.text2')}
                 </p>
 
                 <div className="mt-4">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Key points
+                    {t('common.keyPoints')}
                   </p>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                    <li>• Clear club and team hierarchy</li>
-                    <li>• Shared directory for venues and contacts</li>
-                    <li>• Templates for seasons and programs</li>
+                    {organizationKeyPoints.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -255,10 +284,18 @@ export default function Product() {
                     }
                     className="md:hidden text-xs rounded-lg bg-verno-bg border border-border px-3 py-1.5 text-verno-darker focus:outline-none focus:ring-2 focus:ring-ring"
                   >
-                    <option value="courseSchedules">Schedules</option>
-                    <option value="courses">Courses</option>
-                    <option value="instructors">Instructors</option>
-                    <option value="participants">Participants</option>
+                    {(
+                      [
+                        'courseSchedules',
+                        'courses',
+                        'instructors',
+                        'participants',
+                      ] as OrganizationView[]
+                    ).map((view) => (
+                      <option key={view} value={view}>
+                        {organizationConfig[view].title}
+                      </option>
+                    ))}
                   </select>
 
                   <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
@@ -299,8 +336,7 @@ export default function Product() {
                 </div>
 
                 <p className="mt-3 text-xs text-muted-foreground">
-                  {activeOrganization.caption} Hover to compare light and dark
-                  mode.
+                  {activeOrganization.caption} {t('common.hoverCompare')}
                 </p>
               </div>
             </div>
@@ -315,26 +351,26 @@ export default function Product() {
                   id="scheduling-title"
                   className="text-2xl font-semibold text-verno-darker"
                 >
-                  Scheduling &amp; Courses
+                  {t('scheduling.title')}
                 </h2>
                 <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
-                  Plan training, matches and courses clearly.
+                  {t('scheduling.subtitle')}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Built for weekly training, fixtures and multi-week courses.
+                  {t('scheduling.text1')}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Coaches can see where they are needed and when.
+                  {t('scheduling.text2')}
                 </p>
 
                 <div className="mt-4">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Key points
+                    {t('common.keyPoints')}
                   </p>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                    <li>• Calendar views for teams and venues</li>
-                    <li>• Sessions with instructors and capacity</li>
-                    <li>• Filters for training, games and events</li>
+                    {schedulingKeyPoints.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -344,14 +380,13 @@ export default function Product() {
                   <HoverSplitImage
                     lightSrc="/calendar-view-light.png"
                     darkSrc="/calendar-view.png"
-                    alt="Weekly schedules overview"
+                    alt={t('scheduling.imageAlt')}
                     className="h-full"
                     initialSplit={0.6}
                   />
                 </div>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Weekly timetable with a clear hour grid, week navigation and
-                  color-coded sessions. Hover to compare light and dark mode.
+                  {t('scheduling.caption')}
                 </p>
               </div>
             </div>
@@ -366,26 +401,26 @@ export default function Product() {
                   id="participants-title"
                   className="text-2xl font-semibold text-verno-darker"
                 >
-                  Participants &amp; Memberships
+                  {t('participants.title')}
                 </h2>
                 <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
-                  Keep players, guardians and staff aligned.
+                  {t('participants.subtitle')}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Profiles, guardians and team roles in one place.
+                  {t('participants.text1')}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  See who is active and where they train.
+                  {t('participants.text2')}
                 </p>
 
                 <div className="mt-4">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Key points
+                    {t('common.keyPoints')}
                   </p>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                    <li>• Profiles for participants and guardians</li>
-                    <li>• Membership status by team or season</li>
-                    <li>• Integrated user and role administration</li>
+                    {participantsKeyPoints.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -394,8 +429,8 @@ export default function Product() {
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <p className="text-xs text-verno-darker shrink-0">
                     {peopleView === 'participants'
-                      ? 'Participants overview'
-                      : 'Roles & users'}
+                      ? t('participants.participantsOverview')
+                      : t('participants.rolesUsers')}
                   </p>
 
                   <select
@@ -405,8 +440,12 @@ export default function Product() {
                     }
                     className="md:hidden text-xs rounded-lg bg-verno-bg border border-border px-3 py-1.5 text-verno-darker focus:outline-none focus:ring-2 focus:ring-ring"
                   >
-                    <option value="participants">Participants</option>
-                    <option value="users">Roles &amp; Users</option>
+                    <option value="participants">
+                      {t('participants.participants')}
+                    </option>
+                    <option value="users">
+                      {t('participants.rolesAndUsers')}
+                    </option>
                   </select>
 
                   <div className="hidden md:inline-flex rounded-xl bg-verno-bg p-1 shrink-0">
@@ -420,7 +459,7 @@ export default function Product() {
                           : 'text-muted-foreground hover:text-verno-darker',
                       ].join(' ')}
                     >
-                      Participants
+                      {t('participants.participants')}
                     </button>
                     <button
                       type="button"
@@ -432,7 +471,7 @@ export default function Product() {
                           : 'text-muted-foreground hover:text-verno-darker',
                       ].join(' ')}
                     >
-                      Roles &amp; Users
+                      {t('participants.rolesAndUsers')}
                     </button>
                   </div>
                 </div>
@@ -442,7 +481,7 @@ export default function Product() {
                     <HoverSplitImage
                       lightSrc="/participants-list-light.png"
                       darkSrc="/participants-list.png"
-                      alt="Participants overview table with search, filters and status badges"
+                      alt={t('participants.participantsAlt')}
                       className="h-full"
                       initialSplit={0.6}
                     />
@@ -450,7 +489,7 @@ export default function Product() {
                     <HoverSplitImage
                       lightSrc="/user-administration-light.png"
                       darkSrc="/user-administration.png"
-                      alt="User administration overview with roles and create-user dialog"
+                      alt={t('participants.usersAlt')}
                       className="h-full"
                       initialSplit={0.6}
                     />
@@ -459,9 +498,9 @@ export default function Product() {
 
                 <p className="mt-3 text-xs text-muted-foreground">
                   {peopleView === 'participants'
-                    ? 'Fast search, sortable columns and clear active/inactive status.'
-                    : 'Role-based access with a streamlined user creation flow.'}{' '}
-                  Hover to compare light and dark mode.
+                    ? t('participants.participantsCaption')
+                    : t('participants.usersCaption')}{' '}
+                  {t('common.hoverCompare')}
                 </p>
               </div>
             </div>
@@ -476,28 +515,26 @@ export default function Product() {
                   id="mailing-title"
                   className="text-2xl font-semibold text-verno-darker"
                 >
-                  Mail Delivery &amp; Communication
+                  {t('mailing.title')}
                 </h2>
                 <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
-                  Reach participants, guardians and instructors quickly.
+                  {t('mailing.subtitle')}
                 </p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Send targeted emails for course updates, reminders and
-                  important club communication.
+                  {t('mailing.text1')}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Keep templates, recipients and delivery history in one
-                  structured place.
+                  {t('mailing.text2')}
                 </p>
 
                 <div className="mt-4">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Key points
+                    {t('common.keyPoints')}
                   </p>
                   <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                    <li>• Email templates for recurring communication</li>
-                    <li>• Send to courses, groups or selected recipients</li>
-                    <li>• Delivery logs with status and error visibility</li>
+                    {mailingKeyPoints.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -507,15 +544,14 @@ export default function Product() {
                   <HoverSplitImage
                     lightSrc="/mail-overview-light.png"
                     darkSrc="/mail-overview.png"
-                    alt="Mail overview with templates, recipients and delivery log"
+                    alt={t('mailing.imageAlt')}
                     className="w-full h-full"
                     initialSplit={0.6}
                     objectFit="contain"
                   />
                 </div>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Manage templates, send messages to the right audience and
-                  review delivery history. Hover to compare light and dark mode.
+                  {t('mailing.caption')}
                 </p>
               </div>
             </div>
@@ -531,27 +567,26 @@ export default function Product() {
                     id="reporting-title"
                     className="text-2xl font-semibold text-verno-darker"
                   >
-                    Reporting &amp; Insights
+                    {t('reporting.title')}
                   </h2>
                   <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
-                    Track participation and capacity trends.
+                    {t('reporting.subtitle')}
                   </p>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Simple metrics to understand attendance patterns and
-                    resource usage across your organization.
+                    {t('reporting.text1')}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Export data for board meetings and season planning.
+                    {t('reporting.text2')}
                   </p>
 
                   <div className="mt-4">
                     <p className="text-xs uppercase text-muted-foreground">
-                      Key points
+                      {t('common.keyPoints')}
                     </p>
                     <ul className="mt-2 space-y-1 text-sm text-verno-dark">
-                      <li>• Attendance and enrollment tracking</li>
-                      <li>• Venue and resource utilization</li>
-                      <li>• Season-over-season comparisons</li>
+                      {reportingKeyPoints.map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -564,7 +599,7 @@ export default function Product() {
                           {formatCount(tenantsCount)}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          Active clubs
+                          {t('reporting.stats.activeClubs')}
                         </div>
                       </div>
 
@@ -573,7 +608,7 @@ export default function Product() {
                           {formatCount(memberCount)}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          Total participants
+                          {t('reporting.stats.totalParticipants')}
                         </div>
                       </div>
 
@@ -582,7 +617,7 @@ export default function Product() {
                           {formatCount(courseCount)}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          Running courses
+                          {t('reporting.stats.runningCourses')}
                         </div>
                       </div>
                     </div>
@@ -590,17 +625,17 @@ export default function Product() {
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-transparent">
                       <div className="flex items-center justify-between mb-3">
                         <p className="text-xs text-verno-darker">
-                          Attendance overview
+                          {t('reporting.attendanceOverview')}
                         </p>
                         <span className="text-xs text-muted-foreground">
-                          Last 6 months
+                          {t('reporting.lastSixMonths')}
                         </span>
                       </div>
 
                       <div className="flex items-end justify-between gap-2 h-32">
                         {[65, 78, 82, 75, 88, 92].map((height, i) => (
                           <div
-                            key={i}
+                            key={reportingMonths[i]}
                             className="flex-1 flex flex-col items-center gap-2"
                           >
                             <div className="w-full flex items-end justify-center h-full">
@@ -610,7 +645,7 @@ export default function Product() {
                               />
                             </div>
                             <span className="text-xs text-muted-foreground">
-                              {['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'][i]}
+                              {reportingMonths[i]}
                             </span>
                           </div>
                         ))}
@@ -619,8 +654,7 @@ export default function Product() {
                   </div>
 
                   <p className="mt-3 text-xs text-muted-foreground">
-                    Metrics showing club activity, participation and course
-                    demand.
+                    {t('reporting.caption')}
                   </p>
                 </div>
               </div>
@@ -636,11 +670,10 @@ export default function Product() {
                   id="closing-cta-title"
                   className="text-xl font-semibold text-verno-darker"
                 >
-                  Start with one season and grow
+                  {t('cta.title')}
                 </h2>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Begin with a single team or venue, then expand as your staff
-                  get comfortable.
+                  {t('cta.text')}
                 </p>
               </div>
             </div>
