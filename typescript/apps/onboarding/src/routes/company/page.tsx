@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
+import { Button } from '@verno/components/ui/button'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
@@ -97,16 +98,13 @@ export default function Company() {
               Switzerland-first mindset. Long-term partnerships with clubs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 order-2 sm:order-1">
-              <button
-                onClick={() => setContactOpen(true)}
-                className="inline-flex justify-center sm:justify-start items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
-              >
+              <Button onClick={() => setContactOpen(true)}>
                 Get in touch <span aria-hidden="true">&rarr;</span>
-              </button>
+              </Button>
 
               <Link
                 to="/product#organization"
-                className="inline-flex justify-center sm:justify-start items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
+                className="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium text-verno-darker border border-verno-accent/30 hover:bg-verno-surface-light transition-colors active:bg-verno-surface-light/70"
               >
                 Product overview
               </Link>

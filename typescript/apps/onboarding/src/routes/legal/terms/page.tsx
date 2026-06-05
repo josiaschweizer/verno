@@ -40,10 +40,10 @@ export default function Terms() {
       <LegalSection title="7. Contact">
         <p>
           <a
-            href="mailto:josia.schweizer@gmail.com"
+            href="mailto:josia.schweizer@verno-app.ch"
             className="text-primary underline"
           >
-            josia.schweizer@gmail.com
+            josia.schweizer@verno-app.ch
           </a>
         </p>
       </LegalSection>
