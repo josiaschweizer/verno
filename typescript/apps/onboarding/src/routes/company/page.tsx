@@ -43,7 +43,7 @@ export default function Company() {
 
   return (
     <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden">
-      <div className="mx-auto min-h-full max-w-5xl px-4 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
+      <div className="mx-auto min-h-full max-w-6xl px-6 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
         <section className="space-y-6 md:space-y-8">
           <RevealSection>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker">

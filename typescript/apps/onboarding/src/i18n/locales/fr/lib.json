@@ -1,0 +1,14 @@
+{
+  "copyright": "© {{year}} Verno",
+  "links": {
+    "imprint": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
+  },
+  "language": {
+    "label": "Langue",
+    "de": "Deutsch",
+    "en": "English",
+    "fr": "Français"
+  }
+}

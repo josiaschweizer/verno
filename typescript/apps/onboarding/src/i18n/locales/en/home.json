@@ -1,0 +1,16 @@
+{
+  "hero": {
+    "title": "Club management, made calm.",
+    "description": "Verno helps sports clubs organize teams, courses and venues in one clear system. No scattered tools. No chaos. Just structure.",
+    "imageAlt": "Happy club manager using Verno"
+  },
+  "badges": {
+    "secureByDefault": "Secure by default",
+    "switzerlandFirst": "Switzerland-first infrastructure",
+    "designedForClubs": "Designed for real clubs"
+  },
+  "actions": {
+    "exploreProduct": "Explore product",
+    "aboutVerno": "About Verno"
+  }
+}
