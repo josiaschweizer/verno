@@ -42,7 +42,10 @@ export default function Home() {
               </div>
 
               <div className="order-4 mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                <Link to="/product" className="btn-primary w-full sm:w-auto">
+                <Link
+                  to="/product"
+                  className="btn-primary w-full sm:w-auto justify-center"
+                >
                   {t('actions.exploreProduct')}
                 </Link>
 
