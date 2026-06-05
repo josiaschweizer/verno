@@ -7,62 +7,70 @@ export default function Home() {
 
   return (
     <div className="flex-1 bg-verno-bg text-verno-darker flex items-start md:items-center">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 md:py-0">
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-6 py-12 sm:py-14 md:py-0">
         <RevealSection>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-16 items-start md:items-center">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-12 md:gap-16 items-start md:items-center">
             <div className="flex flex-col">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight underline decoration-verno-accent underline-offset-4 decoration-3 mb-6 sm:mb-10">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight underline decoration-verno-accent underline-offset-4 decoration-3 mb-8 sm:mb-10">
                 {t('hero.title')}
               </h1>
 
-              <p className="text-sm sm:text-base text-muted-foreground max-w-lg order-1">
+              <p className="order-1 max-w-lg text-base leading-7 text-muted-foreground sm:text-base sm:leading-7">
                 {t('hero.description')}
               </p>
 
-              <div className="order-2 mt-6 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg md:hidden">
+              <div className="order-2 mt-8 overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl md:hidden">
                 <img
                   src="/landing-page-opi.png"
                   alt={t('hero.imageAlt')}
-                  className="w-full h-48 object-cover object-top"
+                  className="h-56 w-full object-cover object-top sm:h-64"
                 />
               </div>
 
-              <div className="order-3 mt-6 flex flex-wrap gap-2">
-                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-3 py-1 text-xs font-medium text-verno-darker">
+              <div className="order-3 mt-8 flex flex-wrap gap-3">
+                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-4 py-1.5 text-xs font-medium text-verno-darker">
                   {t('badges.secureByDefault')}
                 </span>
 
-                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-3 py-1 text-xs font-medium text-verno-darker">
+                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-4 py-1.5 text-xs font-medium text-verno-darker">
                   {t('badges.switzerlandFirst')}
                 </span>
 
-                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-3 py-1 text-xs font-medium text-verno-darker">
+                <span className="inline-flex items-center rounded-full border border-verno-accent/20 bg-verno-accent/10 px-4 py-1.5 text-xs font-medium text-verno-darker">
                   {t('badges.designedForClubs')}
                 </span>
               </div>
 
-              <div className="order-4 mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+              <div className="order-4 mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-center sm:gap-6">
                 <Link
                   to="/product"
-                  className="btn-primary w-full sm:w-auto justify-center"
+                  className="btn-primary w-full justify-center py-3 sm:w-auto sm:py-2"
                 >
                   {t('actions.exploreProduct')}
                 </Link>
 
                 <Link
                   to="/company"
-                  className="link-underline-animated inline-flex justify-center sm:justify-start items-center text-sm font-medium py-2.5 sm:py-0"
+                  className="group inline-flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-verno-darker/80 transition-colors hover:text-verno-darker sm:justify-start sm:py-0"
                 >
-                  {t('actions.aboutVerno')}
+                  <span className="relative">
+                    {t('actions.aboutVerno')}
+
+                    <span className="absolute -bottom-0.5 left-0 hidden h-px w-full origin-left scale-x-0 bg-verno-accent transition-transform duration-300 group-hover:scale-x-100 sm:block" />
+                  </span>
+
+                  <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+                    →
+                  </span>
                 </Link>
               </div>
             </div>
 
-            <div className="hidden md:block rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg">
+            <div className="hidden overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl md:block">
               <img
                 src="/landing-page-opi.png"
                 alt={t('hero.imageAlt')}
-                className="w-full h-64 lg:h-80 object-cover object-top"
+                className="h-64 w-full object-cover object-top lg:h-80"
               />
             </div>
           </section>
