@@ -21,14 +21,14 @@ public class MailerUtil {
 
   @Nonnull
   public static Mailer createMailer(@Nonnull final GlobalInterface globalInterface,
-                                    @Nonnull final ch.verno.common.server.mail.MailOrigin mailOrigin) {
+                                    @Nonnull final MailOrigin mailOrigin) {
     String smtpHost;
     int smtpPort;
     String smtpUser;
     String smtpPassword;
     TransportStrategy transportationStrategy;
 
-    if (mailOrigin == ch.verno.common.server.mail.MailOrigin.TENANT_CONFIG) {
+    if (mailOrigin == MailOrigin.TENANT_CONFIG) {
       final var mailConfigService = globalInterface.getService(IMailConfigService.class);
       final var mailConfig = mailConfigService.getConfigForCurrentTenant();
 
@@ -37,7 +37,7 @@ public class MailerUtil {
       smtpUser = mailConfig.getSmtpUsername();
       smtpPassword = mailConfig.getDecodedSmtpPassword();
       transportationStrategy = mailConfig.getSmtpSecurity().toTransportStrategy();
-    } else if (mailOrigin == ch.verno.common.server.mail.MailOrigin.ENV) {
+    } else if (mailOrigin == MailOrigin.ENV) {
       final var envProperties = globalInterface.getEnvProperties();
 
       smtpHost = envProperties.getEnv(VernoSecrets.SMTP_HOST);
@@ -45,9 +45,9 @@ public class MailerUtil {
       smtpUser = envProperties.getEnv(VernoSecrets.SMTP_USER);
       smtpPassword = envProperties.getEnv(VernoSecrets.SMTP_PASS);
       transportationStrategy = SmtpSecurity.fromString(envProperties.getEnv(VernoSecrets.SMTP_SECURITY)).toTransportStrategy();
-    }else{
+    } else {
       smtpHost = Publ.EMPTY_STRING;
-      smtpPort =  Publ.ZERO;
+      smtpPort = Publ.ZERO;
       smtpUser = Publ.EMPTY_STRING;
       smtpPassword = Publ.EMPTY_STRING;
       transportationStrategy = TransportStrategy.SMTP_TLS;
