@@ -3,7 +3,8 @@ import { InputField } from '@/components/ui/custom/InputField'
 import RegisterDialogFormData from '@/interfaces/register/RegisterDialogFormData'
 import { Control, Controller } from 'react-hook-form'
 import { ComboBoxItem } from '@/type/ComboBoxItem'
-import { RefObject } from 'react'
+import { RefObject, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   control: Control<RegisterDialogFormData, any, any>
@@ -18,19 +19,25 @@ export default function StepOne({
   readOnly,
   portalContainerRef,
 }: Props) {
-  const validatePasswordMatch = (value: string) =>
-    value === getValues('password') || 'Passwords do not match'
+  const { t } = useTranslation('register')
 
-  const languages: ComboBoxItem[] = [
-    { label: 'German', value: 'de' },
-    { label: 'English', value: 'en' },
-    { label: 'French', value: 'fr' },
-  ]
+  const validatePasswordMatch = (value: string) =>
+    value === getValues('password') ||
+    t('stepOne.validation.passwordsDoNotMatch')
+
+  const languages: ComboBoxItem[] = useMemo(
+    () => [
+      { label: t('stepOne.languages.de'), value: 'de' },
+      { label: t('stepOne.languages.en'), value: 'en' },
+      { label: t('stepOne.languages.fr'), value: 'fr' },
+    ],
+    [t],
+  )
 
   return (
     <div>
       <h3 className="text-base font-medium leading-6 sm:text-lg">
-        Step 1 — Basic Data for Your Account
+        {t('stepOne.title')}
       </h3>
 
       <div className="mt-5 space-y-4 sm:space-y-5">
@@ -40,8 +47,8 @@ export default function StepOne({
             control={control}
             render={({ field }) => (
               <InputField
-                fieldLabel="Firstname"
-                placeholder="Firstname"
+                fieldLabel={t('stepOne.fields.firstname')}
+                placeholder={t('stepOne.placeholders.firstname')}
                 {...field}
                 disabled={readOnly}
                 className="w-full"
@@ -54,8 +61,8 @@ export default function StepOne({
             control={control}
             render={({ field }) => (
               <InputField
-                fieldLabel="Lastname"
-                placeholder="Lastname"
+                fieldLabel={t('stepOne.fields.lastname')}
+                placeholder={t('stepOne.placeholders.lastname')}
                 {...field}
                 disabled={readOnly}
                 className="w-full"
@@ -68,8 +75,8 @@ export default function StepOne({
             control={control}
             render={({ field }) => (
               <InputField
-                fieldLabel="Username"
-                placeholder="Username"
+                fieldLabel={t('stepOne.fields.username')}
+                placeholder={t('stepOne.placeholders.username')}
                 {...field}
                 disabled={readOnly}
                 className="w-full"
@@ -83,17 +90,17 @@ export default function StepOne({
             name="email"
             control={control}
             rules={{
-              required: 'E-Mail is required',
+              required: t('stepOne.validation.emailRequired'),
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'Invalid e-mail address',
+                message: t('stepOne.validation.invalidEmail'),
               },
             }}
             render={({ field, fieldState }) => (
               <div className="w-full">
                 <InputField
-                  fieldLabel="E-Mail"
-                  placeholder="E-Mail"
+                  fieldLabel={t('stepOne.fields.email')}
+                  placeholder={t('stepOne.placeholders.email')}
                   {...field}
                   disabled={readOnly}
                   className="w-full"
@@ -114,14 +121,14 @@ export default function StepOne({
             rules={{
               pattern: {
                 value: /^\d+$/,
-                message: 'Only numbers are allowed',
+                message: t('stepOne.validation.onlyNumbers'),
               },
             }}
             render={({ field, fieldState }) => (
               <div className="w-full">
                 <InputField
-                  fieldLabel="Phone"
-                  placeholder="Phone"
+                  fieldLabel={t('stepOne.fields.phone')}
+                  placeholder={t('stepOne.placeholders.phone')}
                   {...field}
                   disabled={readOnly}
                   className="w-full"
@@ -143,7 +150,7 @@ export default function StepOne({
             <div className="w-full">
               <ComboBoxField
                 fieldId="preferredLanguage"
-                fieldLabel="Preferred Language"
+                fieldLabel={t('stepOne.fields.preferredLanguage')}
                 options={languages}
                 value={(value ?? null) as any}
                 onChange={(v) => onChange(v ?? undefined)}
@@ -158,18 +165,18 @@ export default function StepOne({
           name="password"
           control={control}
           rules={{
-            required: 'Password is required',
+            required: t('stepOne.validation.passwordRequired'),
             minLength: {
               value: 8,
-              message: 'Password must be at least 8 characters',
+              message: t('stepOne.validation.passwordMinLength'),
             },
           }}
           render={({ field, fieldState }) => (
             <div className="w-full">
               <InputField
-                fieldLabel="Password"
+                fieldLabel={t('stepOne.fields.password')}
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t('stepOne.placeholders.password')}
                 {...field}
                 disabled={readOnly}
                 className="w-full"
@@ -188,15 +195,15 @@ export default function StepOne({
           name="confirmPassword"
           control={control}
           rules={{
-            required: 'Please confirm your password',
+            required: t('stepOne.validation.confirmPasswordRequired'),
             validate: validatePasswordMatch,
           }}
           render={({ field, fieldState }) => (
             <div className="w-full">
               <InputField
-                fieldLabel="Confirm Password"
+                fieldLabel={t('stepOne.fields.confirmPassword')}
                 type="password"
-                placeholder="Confirm your password"
+                placeholder={t('stepOne.placeholders.confirmPassword')}
                 {...field}
                 disabled={readOnly}
                 className="w-full"

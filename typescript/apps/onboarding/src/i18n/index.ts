@@ -10,6 +10,10 @@ import deLib from './locales/de/lib.json'
 import enLib from './locales/en/lib.json'
 import frLib from './locales/fr/lib.json'
 
+import deRegister from './locales/de/register.json'
+import enRegister from './locales/en/register.json'
+import frRegister from './locales/fr/register.json'
+
 export default i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -18,14 +22,17 @@ export default i18n
       de: {
         home: deHome,
         lib: deLib,
+        register: deRegister,
       },
       en: {
         home: enHome,
         lib: enLib,
+        register: enRegister,
       },
       fr: {
         home: frHome,
         lib: frLib,
+        register: frRegister,
       },
     },
     fallbackLng: 'de',

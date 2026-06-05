@@ -1,0 +1,121 @@
+{
+  "errorDisplay": {
+    "closeError": "Fehler schliessen"
+  },
+  "dialog": {
+    "title": "Loslegen",
+    "subtitle": "Folge den Schritten, um deinen Mandanten zu erstellen.",
+    "buttons": {
+      "back": "Zurück",
+      "cancel": "Abbrechen",
+      "continue": "Weiter",
+      "validating": "Wird geprüft...",
+      "finish": "Abschliessen"
+    },
+    "phases": {
+      "creatingTenant": {
+        "label": "Mandant wird erstellt...",
+        "sub": "Dein Arbeitsbereich wird eingerichtet"
+      },
+      "provisioning": {
+        "label": "Bereitstellung läuft...",
+        "sub": "Deine Datenbank wird konfiguriert"
+      },
+      "almostThere": {
+        "label": "Fast geschafft...",
+        "sub": "Deine Subdomain wird eingerichtet"
+      },
+      "finalizing": {
+        "label": "Abschluss läuft...",
+        "sub": "Letzte Konfigurationen werden angewendet"
+      }
+    },
+    "toast": {
+      "successTitle": "Mandant erfolgreich erstellt!",
+      "successDescription": "Dein Mandant ist bereit.",
+      "openNow": "Jetzt öffnen →"
+    },
+    "errors": {
+      "tenantAlreadyExists": {
+        "title": "Mandantenschlüssel existiert bereits",
+        "message": "Der Mandantenschlüssel bzw. die Subdomain existiert bereits. Bitte wähle einen anderen Wert."
+      },
+      "validationFailed": {
+        "title": "Ungültige Eingabe",
+        "message": "Bitte überprüfe deine Eingaben und versuche es erneut."
+      },
+      "dataIntegrityViolation": {
+        "title": "Konflikt beim Speichern",
+        "message": "Eine Datenbankeinschränkung wurde verletzt. Bitte überprüfe deine Eingaben und versuche es erneut."
+      },
+      "tenantProvisionFailed": {
+        "title": "Mandant konnte nicht erstellt werden",
+        "message": "Beim Erstellen des Mandanten ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+      },
+      "genericTitle": "Fehler",
+      "unknown": "Unbekannter Fehler"
+    }
+  },
+  "stepOne": {
+    "title": "Schritt 1 - Grunddaten für dein Konto",
+    "fields": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "preferredLanguage": "Bevorzugte Sprache",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen"
+    },
+    "placeholders": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "password": "Gib dein Passwort ein",
+      "confirmPassword": "Bestätige dein Passwort"
+    },
+    "languages": {
+      "de": "Deutsch",
+      "en": "Englisch",
+      "fr": "Französisch"
+    },
+    "validation": {
+      "emailRequired": "E-Mail ist erforderlich",
+      "invalidEmail": "Ungültige E-Mail-Adresse",
+      "onlyNumbers": "Es sind nur Zahlen erlaubt",
+      "passwordRequired": "Passwort ist erforderlich",
+      "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "confirmPasswordRequired": "Bitte bestätige dein Passwort",
+      "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein"
+    }
+  },
+  "stepTwo": {
+    "title": "Schritt 2 - Mandanten-Konfiguration",
+    "fields": {
+      "displayName": "Anzeigename",
+      "url": "URL"
+    },
+    "placeholders": {
+      "tenantDisplayName": "Mandanten-Anzeigename"
+    },
+    "validation": {
+      "displayNameRequired": "Anzeigename ist erforderlich",
+      "subdomainRequired": "Subdomain ist erforderlich"
+    }
+  },
+  "stepThree": {
+    "title": "Schritt 3 - Übersicht",
+    "empty": "?",
+    "fields": {
+      "firstname": "Vorname",
+      "lastname": "Nachname",
+      "username": "Benutzername",
+      "email": "E-Mail",
+      "url": "URL",
+      "displayName": "Anzeigename"
+    }
+  }
+}

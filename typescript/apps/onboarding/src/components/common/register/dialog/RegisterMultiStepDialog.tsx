@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -22,6 +22,7 @@ import { tenantsApi } from '@/lib/api/tenantsApi'
 import { ApiError } from '@verno/lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   open: boolean
@@ -34,17 +35,8 @@ type SubmitErrorInfo = {
   details?: string[]
 }
 
-const PHASES = [
-  { label: 'Creating tenant...', sub: 'Setting up your workspace' },
-  { label: 'Provisioning...', sub: 'Configuring your database' },
-  { label: 'Almost there...', sub: 'Setting up your subdomain' },
-  {
-    label: 'Finalizing...',
-    sub: 'Applying last configurations',
-  },
-] as const
-
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
+  const { t } = useTranslation('register')
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
@@ -52,6 +44,29 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
   const [submitPhase, setSubmitPhase] = useState<number | null>(null)
   const [submitError, setSubmitError] = useState<SubmitErrorInfo | null>(null)
   const [validatingNext, setValidatingNext] = useState(false)
+
+  const phases = useMemo(
+    () =>
+      [
+        {
+          label: t('dialog.phases.creatingTenant.label'),
+          sub: t('dialog.phases.creatingTenant.sub'),
+        },
+        {
+          label: t('dialog.phases.provisioning.label'),
+          sub: t('dialog.phases.provisioning.sub'),
+        },
+        {
+          label: t('dialog.phases.almostThere.label'),
+          sub: t('dialog.phases.almostThere.sub'),
+        },
+        {
+          label: t('dialog.phases.finalizing.label'),
+          sub: t('dialog.phases.finalizing.sub'),
+        },
+      ] as const,
+    [t],
+  )
 
   const { control, handleSubmit, getValues, trigger, reset, formState } =
     useForm<RegisterDialogFormData>({
@@ -62,7 +77,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
         lastname: '',
         email: '',
         phone: '',
-        preferredLanguage: { label: 'German', value: 'de' },
+        preferredLanguage: {
+          label: t('stepOne.languages.de'),
+          value: 'de',
+        },
         password: '',
         confirmPassword: '',
         tenantName: '',
@@ -121,41 +139,39 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
 
       if (code === 'TENANT_ALREADY_EXISTS') {
         return {
-          title: 'Tenant key already exists',
-          message:
-            'The tenant key/subdomain already exists. Please choose a different value.',
+          title: t('dialog.errors.tenantAlreadyExists.title'),
+          message: t('dialog.errors.tenantAlreadyExists.message'),
         }
       }
 
       if (code === 'VALIDATION_FAILED') {
         return {
-          title: 'Invalid input',
-          message: 'Please review your input and try again.',
+          title: t('dialog.errors.validationFailed.title'),
+          message: t('dialog.errors.validationFailed.message'),
           details: Array.isArray(details) ? details : undefined,
         }
       }
 
       if (code === 'DATA_INTEGRITY_VIOLATION') {
         return {
-          title: 'Conflict while saving',
-          message:
-            'A database constraint was violated. Please review your input and try again.',
+          title: t('dialog.errors.dataIntegrityViolation.title'),
+          message: t('dialog.errors.dataIntegrityViolation.message'),
           details: details ? [details] : message ? [message] : undefined,
         }
       }
 
       if (code === 'TENANT_PROVISION_FAILED') {
         return {
-          title: 'Failed to create tenant',
-          message:
-            message ??
-            'An error occurred while creating the tenant. Please try again later.',
+          title: t('dialog.errors.tenantProvisionFailed.title'),
+          message: message ?? t('dialog.errors.tenantProvisionFailed.message'),
         }
       }
 
       return {
-        title: status ? `Error ${status}` : 'Error',
-        message: message ?? 'Unknown error',
+        title: status
+          ? `${t('dialog.errors.genericTitle')} ${status}`
+          : t('dialog.errors.genericTitle'),
+        message: message ?? t('dialog.errors.unknown'),
         details: details
           ? Array.isArray(details)
             ? details
@@ -165,10 +181,16 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
     }
 
     if (e instanceof Error) {
-      return { title: 'Error', message: e.message }
+      return {
+        title: t('dialog.errors.genericTitle'),
+        message: e.message,
+      }
     }
 
-    return { title: 'Error', message: 'Unknown error' }
+    return {
+      title: t('dialog.errors.genericTitle'),
+      message: t('dialog.errors.unknown'),
+    }
   }
 
   const onSubmit = handleSubmit(async (form) => {
@@ -205,18 +227,18 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       setSubmitPhase(3)
       await new Promise((r) => setTimeout(r, 700))
 
-      toast.success('Tenant successfully created!', {
+      toast.success(t('dialog.toast.successTitle'), {
         duration: 10000,
         description: (
           <span className="flex flex-col gap-1">
-            <span>Your tenant is ready.</span>
+            <span>{t('dialog.toast.successDescription')}</span>
             <a
               href={`https://${subdomain}.verno-app.ch`}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium underline"
             >
-              Open now →
+              {t('dialog.toast.openNow')}
             </a>
           </span>
         ),
@@ -262,10 +284,10 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <DialogTitle className="text-lg font-semibold">
-                    Get Started
+                    {t('dialog.title')}
                   </DialogTitle>
                   <p className="mt-1 text-sm text-verno-darker/80">
-                    Follow the steps to create your tenant.
+                    {t('dialog.subtitle')}
                   </p>
                 </div>
 
@@ -304,21 +326,21 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                 <StepThree getValues={getValues} />
               )}
 
-              {step === 2 && isAnimating && (
+              {step === 2 && isAnimating && submitPhase !== null && (
                 <div className="flex flex-col items-center justify-center gap-6 py-8 sm:py-10">
                   <div className="h-12 w-12 animate-spin rounded-full border-2 border-verno-accent border-t-transparent" />
 
                   <div className="text-center">
                     <p className="text-base font-medium">
-                      {PHASES[submitPhase].label}
+                      {phases[submitPhase].label}
                     </p>
                     <p className="mt-1 text-sm text-verno-dark/60">
-                      {PHASES[submitPhase].sub}
+                      {phases[submitPhase].sub}
                     </p>
                   </div>
 
                   <div className="flex w-full max-w-xs flex-col gap-2.5">
-                    {PHASES.map((phase, i) => (
+                    {phases.map((phase, i) => (
                       <div
                         key={i}
                         className={`flex items-center gap-3 text-sm transition-colors duration-300 ${
@@ -373,7 +395,8 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                     disabled={step === 0 || isAnimating}
                     className="w-full sm:w-auto"
                   >
-                    <ArrowLeftIcon className="h-5 w-5" /> Back
+                    <ArrowLeftIcon className="h-5 w-5" />
+                    {t('dialog.buttons.back')}
                   </Button>
 
                   <Button
@@ -382,7 +405,8 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                     disabled={isAnimating}
                     className="w-full sm:w-auto"
                   >
-                    <CircleSlash className="h-5 w-5" /> Cancel
+                    <CircleSlash className="h-5 w-5" />
+                    {t('dialog.buttons.cancel')}
                   </Button>
                 </div>
 
@@ -393,7 +417,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                       disabled={validatingNext || !canContinue}
                       className="w-full sm:w-auto"
                     >
-                      {validatingNext ? 'Validating...' : 'Continue'}
+                      {validatingNext
+                        ? t('dialog.buttons.validating')
+                        : t('dialog.buttons.continue')}
                       <ArrowRightIcon className="h-5 w-5" />
                     </Button>
                   ) : (
@@ -402,7 +428,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
                       disabled={submitting}
                       className="w-full sm:w-auto"
                     >
-                      {isAnimating ? PHASES[submitPhase].label : 'Finish'}
+                      {isAnimating && submitPhase !== null
+                        ? phases[submitPhase].label
+                        : t('dialog.buttons.finish')}
                       <FlagIcon className="h-5 w-5" />
                     </Button>
                   )}

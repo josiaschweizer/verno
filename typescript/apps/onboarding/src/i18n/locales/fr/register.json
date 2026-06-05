@@ -1,0 +1,121 @@
+{
+  "errorDisplay": {
+    "closeError": "Fermer l?erreur"
+  },
+  "dialog": {
+    "title": "Commencer",
+    "subtitle": "Suis les étapes pour créer ton mandant.",
+    "buttons": {
+      "back": "Retour",
+      "cancel": "Annuler",
+      "continue": "Continuer",
+      "validating": "Validation...",
+      "finish": "Terminer"
+    },
+    "phases": {
+      "creatingTenant": {
+        "label": "Création du mandant...",
+        "sub": "Configuration de ton espace de travail"
+      },
+      "provisioning": {
+        "label": "Provisionnement...",
+        "sub": "Configuration de ta base de données"
+      },
+      "almostThere": {
+        "label": "Presque terminé...",
+        "sub": "Configuration de ton sous-domaine"
+      },
+      "finalizing": {
+        "label": "Finalisation...",
+        "sub": "Application des dernières configurations"
+      }
+    },
+    "toast": {
+      "successTitle": "Mandant créé avec succès !",
+      "successDescription": "Ton mandant est prêt.",
+      "openNow": "Ouvrir maintenant ?"
+    },
+    "errors": {
+      "tenantAlreadyExists": {
+        "title": "La clé du mandant existe déjà",
+        "message": "La clé du mandant ou le sous-domaine existe déjà. Choisis une autre valeur."
+      },
+      "validationFailed": {
+        "title": "Saisie invalide",
+        "message": "Vérifie tes saisies et réessaie."
+      },
+      "dataIntegrityViolation": {
+        "title": "Conflit lors de l?enregistrement",
+        "message": "Une contrainte de base de données a été violée. Vérifie tes saisies et réessaie."
+      },
+      "tenantProvisionFailed": {
+        "title": "Impossible de créer le mandant",
+        "message": "Une erreur est survenue lors de la création du mandant. Réessaie plus tard."
+      },
+      "genericTitle": "Erreur",
+      "unknown": "Erreur inconnue"
+    }
+  },
+  "stepOne": {
+    "title": "Étape 1 - Données de base pour ton compte",
+    "fields": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d?utilisateur",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "preferredLanguage": "Langue préférée",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "placeholders": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d?utilisateur",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "password": "Saisis ton mot de passe",
+      "confirmPassword": "Confirme ton mot de passe"
+    },
+    "languages": {
+      "de": "Allemand",
+      "en": "Anglais",
+      "fr": "Français"
+    },
+    "validation": {
+      "emailRequired": "L'e-mail est obligatoire",
+      "invalidEmail": "Adresse e-mail invalide",
+      "onlyNumbers": "Seuls les chiffres sont autorisés",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "confirmPasswordRequired": "Confirme ton mot de passe",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+  "stepTwo": {
+    "title": "Étape 2 - Configuration du mandant",
+    "fields": {
+      "displayName": "Nom affiché",
+      "url": "URL"
+    },
+    "placeholders": {
+      "tenantDisplayName": "Nom affiché du mandant"
+    },
+    "validation": {
+      "displayNameRequired": "Le nom affiché est obligatoire",
+      "subdomainRequired": "Le sous-domaine est obligatoire"
+    }
+  },
+  "stepThree": {
+    "title": "Étape 3 - Aperçu",
+    "empty": "?",
+    "fields": {
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "E-mail",
+      "url": "URL",
+      "displayName": "Nom affiché"
+    }
+  }
+}
