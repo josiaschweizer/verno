@@ -156,12 +156,18 @@
 
 @layer base {
   html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  html,
   body {
-    height: 100%;
     overflow-x: hidden;
   }
 
   body {
+    margin: 0;
     @apply bg-verno-bg text-verno-darker antialiased;
   }
 
@@ -201,11 +207,14 @@
 
   .reveal-section {
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    will-change: opacity, transform;
   }
+
   .reveal-section[data-visible='false'] {
     opacity: 0;
     transform: translateY(24px);
   }
+
   .reveal-section[data-visible='true'] {
     opacity: 1;
     transform: translateY(0);
