@@ -40,7 +40,7 @@ type ApiErrorDetails = {
 }
 
 export default function GetInTouchDialog({ open, onClose }: Props) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const [submitting, setSubmitting] = useState(false)

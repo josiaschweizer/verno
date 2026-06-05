@@ -19,7 +19,7 @@ export default function StepOne({
   readOnly,
   portalContainerRef,
 }: Props) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
 
   const validatePasswordMatch = (value: string) =>
     value === getValues('password') ||

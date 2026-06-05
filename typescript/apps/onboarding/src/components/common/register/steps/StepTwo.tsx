@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function StepTwo({ control, readOnly }: Props) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
 
   return (
     <div>

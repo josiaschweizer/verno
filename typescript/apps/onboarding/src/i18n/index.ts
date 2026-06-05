@@ -10,9 +10,9 @@ import deLib from './locales/de/lib.json'
 import enLib from './locales/en/lib.json'
 import frLib from './locales/fr/lib.json'
 
-import deRegister from './locales/de/register.json'
-import enRegister from './locales/en/register.json'
-import frRegister from './locales/fr/register.json'
+import deContact from './locales/de/contact.json'
+import enContact from './locales/en/contact.json'
+import frContact from './locales/fr/contact.json'
 
 export default i18n
   .use(LanguageDetector)
@@ -22,17 +22,17 @@ export default i18n
       de: {
         home: deHome,
         lib: deLib,
-        register: deRegister,
+        contact: deContact,
       },
       en: {
         home: enHome,
         lib: enLib,
-        register: enRegister,
+        contact: enContact,
       },
       fr: {
         home: frHome,
         lib: frLib,
-        register: frRegister,
+        contact: frContact,
       },
     },
     fallbackLng: 'de',

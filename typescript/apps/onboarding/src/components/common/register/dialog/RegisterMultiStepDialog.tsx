@@ -36,7 +36,7 @@ type SubmitErrorInfo = {
 }
 
 export default function RegisterMultiStepDialog({ open, onClose }: Props) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
   const [step, setStep] = useState<number>(0)
   const dialogContentRef = useRef<HTMLDivElement>(null)
 

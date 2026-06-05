@@ -14,7 +14,7 @@ export default function ErrorDisplay({
   details,
   onDismiss,
 }: ErrorDisplayProps) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
 
   return (
     <div className="w-full animate-in fade-in slide-in-from-top-2 duration-300">

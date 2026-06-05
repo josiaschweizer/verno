@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function StepThree({ getValues }: Props) {
-  const { t } = useTranslation('register')
+  const { t } = useTranslation('contact')
   const values = getValues()
 
   const overviewFields = [
