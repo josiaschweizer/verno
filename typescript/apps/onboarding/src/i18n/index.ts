@@ -26,6 +26,10 @@ import dePricing from './locales/de/pricing.json'
 import enPricing from './locales/en/pricing.json'
 import frPricing from './locales/fr/pricing.json'
 
+import deProduct from './locales/de/product.json'
+import enProduct from './locales/en/product.json'
+import frProduct from './locales/fr/product.json'
+
 export default i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -38,6 +42,7 @@ export default i18n
         company: deCompany,
         legal: deLegal,
         pricing: dePricing,
+        product: deProduct,
       },
       en: {
         home: enHome,
@@ -46,6 +51,7 @@ export default i18n
         company: enCompany,
         legal: enLegal,
         pricing: enPricing,
+        product: enProduct,
       },
       fr: {
         home: frHome,
@@ -54,6 +60,7 @@ export default i18n
         company: frCompany,
         legal: frLegal,
         pricing: frPricing,
+        product: frProduct,
       },
     },
     fallbackLng: 'de',

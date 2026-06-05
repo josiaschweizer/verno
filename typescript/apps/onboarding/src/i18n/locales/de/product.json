@@ -1,0 +1,115 @@
+{
+  "organizationConfig": {
+    "courseSchedules": {
+      "title": "Zeitpläne",
+      "caption": "Plane Wochen und Lektionen übersichtlich.",
+      "alt": "Übersicht der Kurszeitpläne"
+    },
+    "courses": {
+      "title": "Kurse",
+      "caption": "Kapazität, Stufen, Wochentage und Zeiten an einem Ort.",
+      "alt": "Kursübersicht"
+    },
+    "instructors": {
+      "title": "Trainer",
+      "caption": "Kontakte und Einsätze immer aktuell.",
+      "alt": "Trainerübersicht"
+    },
+    "participants": {
+      "title": "Teilnehmer",
+      "caption": "Suche, Status und direkte Links zu Kursen.",
+      "alt": "Teilnehmerübersicht"
+    }
+  },
+  "common": {
+    "keyPoints": "Kernpunkte",
+    "hoverCompare": "Zum Vergleichen von Light- und Dark-Mode darüberfahren."
+  },
+  "hero": {
+    "title": "Verno für Sportvereine",
+    "text1": "Klare Struktur, Zeitpläne und Mitgliederübersicht für Vereine mit Teams, Kursen und Standorten.",
+    "text2": "Entwickelt für Koordinatoren, Trainer und Vereinsverantwortliche, die ein ruhiges und zuverlässiges System für den Alltag möchten.",
+    "imageAlt": "Dashboard mit Kursbereichen, Teilnehmertabellen und Schnellaktionen",
+    "caption": "Dashboard-Übersicht mit Kursbereichen, sortierbaren Tabellen und Schnellaktionen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
+  },
+  "organization": {
+    "title": "Organisation",
+    "subtitle": "Vereine, Teams und Standorte sauber organisiert.",
+    "text1": "Entwickelt für Vereine mit vielen Teams und Standorten.",
+    "text2": "Eine gemeinsame Struktur, die über Saisons hinweg konsistent bleibt.",
+    "keyPoints": [
+      "Klare Vereins- und Teamhierarchie",
+      "Gemeinsames Verzeichnis für Standorte und Kontakte",
+      "Vorlagen für Saisons und Programme"
+    ]
+  },
+  "scheduling": {
+    "title": "Planung & Kurse",
+    "subtitle": "Trainings, Spiele und Kurse klar planen.",
+    "text1": "Entwickelt für wöchentliches Training, Spiele und mehrwöchige Kurse.",
+    "text2": "Trainer sehen, wo und wann sie gebraucht werden.",
+    "keyPoints": [
+      "Kalenderansichten für Teams und Standorte",
+      "Lektionen mit Trainern und Kapazitäten",
+      "Filter für Trainings, Spiele und Events"
+    ],
+    "imageAlt": "Übersicht der Wochenplanung",
+    "caption": "Wochenplan mit klarem Stundenraster, Wochennavigation und farblich markierten Lektionen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
+  },
+  "participants": {
+    "title": "Teilnehmer & Mitgliedschaften",
+    "subtitle": "Spieler, Erziehungsberechtigte und Mitarbeitende auf dem gleichen Stand halten.",
+    "text1": "Profile, Erziehungsberechtigte und Teamrollen an einem Ort.",
+    "text2": "Sieh, wer aktiv ist und wo trainiert wird.",
+    "keyPoints": [
+      "Profile für Teilnehmer und Erziehungsberechtigte",
+      "Mitgliedschaftsstatus nach Team oder Saison",
+      "Integrierte Benutzer- und Rollenverwaltung"
+    ],
+    "participantsOverview": "Teilnehmerübersicht",
+    "rolesUsers": "Rollen & Benutzer",
+    "participants": "Teilnehmer",
+    "rolesAndUsers": "Rollen & Benutzer",
+    "participantsAlt": "Teilnehmerübersicht mit Suche, Filtern und Status-Badges",
+    "usersAlt": "Benutzerverwaltung mit Rollen und Dialog zum Erstellen von Benutzern",
+    "participantsCaption": "Schnelle Suche, sortierbare Spalten und klarer Aktiv-/Inaktiv-Status.",
+    "usersCaption": "Rollenbasierter Zugriff mit einfachem Ablauf zum Erstellen von Benutzern."
+  },
+  "mailing": {
+    "title": "Mailversand & Kommunikation",
+    "subtitle": "Teilnehmer, Erziehungsberechtigte und Trainer schnell erreichen.",
+    "text1": "Versende gezielte E-Mails für Kursupdates, Erinnerungen und wichtige Vereinskommunikation.",
+    "text2": "Vorlagen, Empfänger und Versandhistorie an einem strukturierten Ort.",
+    "keyPoints": [
+      "E-Mail-Vorlagen für wiederkehrende Kommunikation",
+      "Versand an Kurse, Gruppen oder ausgewählte Empfänger",
+      "Versandprotokolle mit Status und Fehlerübersicht"
+    ],
+    "imageAlt": "Mailübersicht mit Vorlagen, Empfängern und Versandprotokoll",
+    "caption": "Vorlagen verwalten, Nachrichten an die richtige Zielgruppe senden und die Versandhistorie prüfen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
+  },
+  "reporting": {
+    "title": "Auswertungen & Einblicke",
+    "subtitle": "Teilnahme- und Kapazitätstrends verfolgen.",
+    "text1": "Einfache Kennzahlen, um Anwesenheitsmuster und Ressourcennutzung in deiner Organisation zu verstehen.",
+    "text2": "Daten für Vorstandssitzungen und Saisonplanung exportieren.",
+    "keyPoints": [
+      "Anwesenheits- und Anmeldetracking",
+      "Nutzung von Standorten und Ressourcen",
+      "Vergleiche zwischen Saisons"
+    ],
+    "stats": {
+      "activeClubs": "Aktive Vereine",
+      "totalParticipants": "Teilnehmer insgesamt",
+      "runningCourses": "Laufende Kurse"
+    },
+    "attendanceOverview": "Anwesenheitsübersicht",
+    "lastSixMonths": "Letzte 6 Monate",
+    "months": ["Sep", "Okt", "Nov", "Dez", "Jan", "Feb"],
+    "caption": "Kennzahlen zu Vereinsaktivität, Teilnahme und Kursnachfrage."
+  },
+  "cta": {
+    "title": "Mit einer Saison starten und wachsen",
+    "text": "Beginne mit einem einzelnen Team oder Standort und erweitere danach, sobald sich dein Team eingearbeitet hat."
+  }
+}
