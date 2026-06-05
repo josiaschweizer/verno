@@ -1,0 +1,86 @@
+{
+  "imprint": {
+    "title": "Imprint",
+    "provider": {
+      "title": "Provider",
+      "name": "Verno",
+      "owner": "Josia Schweizer",
+      "street": "Schwarzenbach 2178",
+      "city": "9200 Gossau",
+      "country": "Switzerland"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "josia.schweizer@verno-app.ch"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "This Privacy Policy describes how Verno collects, uses and processes personal data when using our website and services.",
+    "sections": {
+      "dataWeCollect": {
+        "title": "1. Data we collect",
+        "text": "We may collect personal information such as your name, email address, and account-related data when you register or use our service."
+      },
+      "purpose": {
+        "title": "2. Purpose of processing",
+        "text": "We process your data to provide and improve our services, manage user accounts, and ensure security and stability."
+      },
+      "hosting": {
+        "title": "3. Hosting and infrastructure",
+        "text": "Our services are hosted in Switzerland (Google Cloud, europe-west6). Data is stored and processed within Switzerland."
+      },
+      "thirdParty": {
+        "title": "4. Third-party services",
+        "text": "We may use third-party services such as hosting providers and infrastructure services. These providers process data on our behalf."
+      },
+      "security": {
+        "title": "5. Data security",
+        "text": "We implement appropriate technical and organizational measures to protect your data."
+      },
+      "rights": {
+        "title": "6. Your rights",
+        "text": "You have the right to request access, correction, or deletion of your personal data."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "text": "For any privacy-related requests, please contact:",
+        "email": "josia.schweizer@verno-app.ch"
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "intro": "These Terms of Service govern your use of Verno and its services.",
+    "sections": {
+      "scope": {
+        "title": "1. Scope",
+        "text": "Verno provides software for managing clubs, teams, and related operations."
+      },
+      "accounts": {
+        "title": "2. User accounts",
+        "text": "Users are responsible for maintaining the confidentiality of their account credentials."
+      },
+      "acceptableUse": {
+        "title": "3. Acceptable use",
+        "text": "You agree not to misuse the service or use it for unlawful purposes."
+      },
+      "availability": {
+        "title": "4. Availability",
+        "text": "We strive to provide a reliable service but do not guarantee uninterrupted availability."
+      },
+      "liability": {
+        "title": "5. Limitation of liability",
+        "text": "Verno is provided \"as is\". We are not liable for indirect or consequential damages."
+      },
+      "changes": {
+        "title": "6. Changes",
+        "text": "We may update these terms at any time."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "email": "josia.schweizer@verno-app.ch"
+      }
+    }
+  }
+}

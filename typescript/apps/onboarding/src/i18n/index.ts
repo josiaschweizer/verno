@@ -14,6 +14,18 @@ import deContact from './locales/de/contact.json'
 import enContact from './locales/en/contact.json'
 import frContact from './locales/fr/contact.json'
 
+import deCompany from './locales/de/company.json'
+import enCompany from './locales/en/company.json'
+import frCompany from './locales/fr/company.json'
+
+import deLegal from './locales/de/legal.json'
+import enLegal from './locales/en/legal.json'
+import frLegal from './locales/fr/legal.json'
+
+import dePricing from './locales/de/pricing.json'
+import enPricing from './locales/en/pricing.json'
+import frPricing from './locales/fr/pricing.json'
+
 export default i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -23,16 +35,25 @@ export default i18n
         home: deHome,
         lib: deLib,
         contact: deContact,
+        company: deCompany,
+        legal: deLegal,
+        pricing: dePricing,
       },
       en: {
         home: enHome,
         lib: enLib,
         contact: enContact,
+        company: enCompany,
+        legal: enLegal,
+        pricing: enPricing,
       },
       fr: {
         home: frHome,
         lib: frLib,
         contact: frContact,
+        company: frCompany,
+        legal: frLegal,
+        pricing: frPricing,
       },
     },
     fallbackLng: 'de',

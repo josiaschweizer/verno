@@ -1,0 +1,86 @@
+{
+  "imprint": {
+    "title": "Mentions légales",
+    "provider": {
+      "title": "Prestataire",
+      "name": "Verno",
+      "owner": "Josia Schweizer",
+      "street": "Schwarzenbach 2178",
+      "city": "9200 Gossau",
+      "country": "Suisse"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "josia.schweizer@verno-app.ch"
+    }
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "intro": "Cette politique de confidentialité décrit comment Verno collecte, utilise et traite les données personnelles lors de l’utilisation de notre site web et de nos services.",
+    "sections": {
+      "dataWeCollect": {
+        "title": "1. Données que nous collectons",
+        "text": "Nous pouvons collecter des informations personnelles telles que votre nom, votre adresse e-mail et des données liées à votre compte lorsque vous vous inscrivez ou utilisez notre service."
+      },
+      "purpose": {
+        "title": "2. Finalité du traitement",
+        "text": "Nous traitons vos données afin de fournir et d’améliorer nos services, de gérer les comptes utilisateurs et d’assurer la sécurité et la stabilité."
+      },
+      "hosting": {
+        "title": "3. Hébergement et infrastructure",
+        "text": "Nos services sont hébergés en Suisse (Google Cloud, europe-west6). Les données sont stockées et traitées en Suisse."
+      },
+      "thirdParty": {
+        "title": "4. Services tiers",
+        "text": "Nous pouvons utiliser des services tiers tels que des fournisseurs d’hébergement et des services d’infrastructure. Ces prestataires traitent les données pour notre compte."
+      },
+      "security": {
+        "title": "5. Sécurité des données",
+        "text": "Nous mettons en place des mesures techniques et organisationnelles appropriées pour protéger vos données."
+      },
+      "rights": {
+        "title": "6. Vos droits",
+        "text": "Vous avez le droit de demander l’accès, la rectification ou la suppression de vos données personnelles."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "text": "Pour toute demande relative à la protection des données, veuillez nous contacter à l’adresse suivante :",
+        "email": "josia.schweizer@verno-app.ch"
+      }
+    }
+  },
+  "terms": {
+    "title": "Conditions d’utilisation",
+    "intro": "Ces conditions d’utilisation régissent votre utilisation de Verno et de ses services.",
+    "sections": {
+      "scope": {
+        "title": "1. Champ d’application",
+        "text": "Verno fournit un logiciel pour gérer les clubs, les équipes et les opérations associées."
+      },
+      "accounts": {
+        "title": "2. Comptes utilisateurs",
+        "text": "Les utilisateurs sont responsables de la confidentialité de leurs identifiants de compte."
+      },
+      "acceptableUse": {
+        "title": "3. Utilisation acceptable",
+        "text": "Vous acceptez de ne pas utiliser le service de manière abusive ni à des fins illégales."
+      },
+      "availability": {
+        "title": "4. Disponibilité",
+        "text": "Nous nous efforçons de fournir un service fiable, mais nous ne garantissons pas une disponibilité ininterrompue."
+      },
+      "liability": {
+        "title": "5. Limitation de responsabilité",
+        "text": "Verno est fourni \"tel quel\". Nous ne sommes pas responsables des dommages indirects ou consécutifs."
+      },
+      "changes": {
+        "title": "6. Modifications",
+        "text": "Nous pouvons mettre à jour ces conditions à tout moment."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "email": "josia.schweizer@verno-app.ch"
+      }
+    }
+  }
+}
