@@ -20,57 +20,78 @@ export function HoverSplitImage({
   showHandle = true,
   objectFit = 'cover',
 }: HoverSplitImageProps) {
-  const ref = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const dialogRef = useRef<HTMLDialogElement | null>(null)
+  const dialogInnerRef = useRef<HTMLDivElement | null>(null)
+  const isDragging = useRef(false)
   const [split, setSplit] = useState<number>(initialSplit)
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [dialogSplit, setDialogSplit] = useState<number>(initialSplit)
 
   const clipStyle = useMemo(() => {
     const right = Math.max(0, Math.min(1, 1 - split)) * 100
     return { clipPath: `inset(0 ${right}% 0 0)` }
   }, [split])
 
+  const dialogClipStyle = useMemo(() => {
+    const right = Math.max(0, Math.min(1, 1 - dialogSplit)) * 100
+    return { clipPath: `inset(0 ${right}% 0 0)` }
+  }, [dialogSplit])
+
   function updateFromEvent(e: React.MouseEvent) {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const next = rect.width > 0 ? x / rect.width : initialSplit
-    setSplit(Math.max(0, Math.min(1, next)))
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    setSplit(Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)))
   }
 
-  function reset() {
-    setSplit(initialSplit)
+  function updateDialogSplitFromEvent(e: React.MouseEvent) {
+    if (!dialogInnerRef.current) return
+    const rect = dialogInnerRef.current.getBoundingClientRect()
+    setDialogSplit(
+      Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)),
+    )
   }
 
-  function openFullscreen() {
-    setIsFullscreen(true)
-    setSplit(initialSplit)
+  function handleDialogMouseDown(e: React.MouseEvent) {
+    isDragging.current = true
+    updateDialogSplitFromEvent(e)
   }
 
-  function closeFullscreen() {
-    setIsFullscreen(false)
-    setSplit(initialSplit)
+  function handleDialogMouseMove(e: React.MouseEvent) {
+    if (!isDragging.current) return
+    updateDialogSplitFromEvent(e)
+  }
+
+  function handleDialogMouseUp() {
+    isDragging.current = false
+  }
+
+  function openDialog() {
+    setDialogSplit(initialSplit)
+    dialogRef.current?.showModal()
+  }
+
+  function closeDialog() {
+    dialogRef.current?.close()
   }
 
   useEffect(() => {
-    if (!isFullscreen) return
-
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        closeFullscreen()
-      }
+    const dialog = dialogRef.current
+    if (!dialog) return
+    const handleClose = () => {
+      setDialogSplit(initialSplit)
+      isDragging.current = false
     }
-
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [isFullscreen])
+    dialog.addEventListener('close', handleClose)
+    return () => dialog.removeEventListener('close', handleClose)
+  }, [initialSplit])
 
   return (
     <>
       <div
-        ref={ref}
+        ref={containerRef}
         onMouseMove={updateFromEvent}
-        onMouseLeave={reset}
-        onClick={openFullscreen}
+        onMouseLeave={() => setSplit(initialSplit)}
+        onClick={openDialog}
         className={[
           'relative w-full overflow-hidden rounded-xl',
           'bg-verno-bg cursor-pointer',
@@ -83,7 +104,6 @@ export function HoverSplitImage({
           className={`block w-full h-full object-${objectFit} select-none pointer-events-none`}
           draggable={false}
         />
-
         <div className="absolute inset-0" style={clipStyle}>
           <img
             src={darkSrc}
@@ -93,7 +113,6 @@ export function HoverSplitImage({
             draggable={false}
           />
         </div>
-
         {showHandle && (
           <div
             aria-hidden="true"
@@ -101,41 +120,47 @@ export function HoverSplitImage({
             style={{ left: `${split * 100}%` }}
           />
         )}
-
         <div className="absolute inset-0 ring-1 ring-black/5 pointer-events-none" />
       </div>
 
-      {isFullscreen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-          onClick={closeFullscreen}
-        >
-          <button
-            onClick={closeFullscreen}
-            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-            aria-label="Close fullscreen"
-          >
-            <X className="w-6 h-6" />
-          </button>
+      <dialog
+        ref={dialogRef}
+        onClick={(e) => {
+          if (e.target === dialogRef.current) closeDialog()
+        }}
+        className="m-0 p-3 w-screen h-screen max-w-none max-h-none bg-transparent backdrop:bg-black/90"
+      >
+        <div className="flex flex-col w-full h-full gap-2">
+          <div className="flex justify-end shrink-0">
+            <button
+              onClick={closeDialog}
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              aria-label="Vollbild schliessen"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
 
           <div
-            className="relative w-full h-full max-w-7xl max-h-[90vh] overflow-hidden rounded-lg"
-            onClick={(e) => e.stopPropagation()}
-            onMouseMove={updateFromEvent}
+            ref={dialogInnerRef}
+            onMouseDown={handleDialogMouseDown}
+            onMouseMove={handleDialogMouseMove}
+            onMouseUp={handleDialogMouseUp}
+            onMouseLeave={handleDialogMouseUp}
+            className="relative w-full min-h-0 flex-1 overflow-hidden cursor-col-resize select-none rounded-xl"
           >
             <img
               src={lightSrc}
               alt={alt}
-              className="block w-full h-full object-contain select-none pointer-events-none"
+              className="block w-full h-full object-contain pointer-events-none"
               draggable={false}
             />
-
-            <div className="absolute inset-0" style={clipStyle}>
+            <div className="absolute inset-0" style={dialogClipStyle}>
               <img
                 src={darkSrc}
                 alt=""
                 aria-hidden="true"
-                className="block w-full h-full object-contain select-none pointer-events-none"
+                className="block w-full h-full object-contain pointer-events-none"
                 draggable={false}
               />
             </div>
@@ -144,7 +169,7 @@ export function HoverSplitImage({
               <div
                 aria-hidden="true"
                 className="absolute top-0 bottom-0 w-0.5 bg-white/80 shadow-lg pointer-events-none"
-                style={{ left: `${split * 100}%` }}
+                style={{ left: `${dialogSplit * 100}%` }}
               >
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center">
                   <div className="flex gap-0.5">
@@ -154,16 +179,18 @@ export function HoverSplitImage({
                 </div>
               </div>
             )}
+          </div>
 
-            <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded-full bg-black/50 text-white text-sm font-medium pointer-events-none">
+          <div className="flex justify-between items-center shrink-0 px-1">
+            <span className="px-3 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium">
               Light Mode
-            </div>
-            <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-white/20 text-white text-sm font-medium pointer-events-none">
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium">
               Dark Mode
-            </div>
+            </span>
           </div>
         </div>
-      )}
+      </dialog>
     </>
   )
 }
