@@ -53,7 +53,10 @@
         "message": "Une erreur est survenue lors de la création du mandant. Réessaie plus tard."
       },
       "genericTitle": "Erreur",
-      "unknown": "Erreur inconnue"
+      "unknown": "Erreur inconnue",
+      "failedTitle": "Le message n’a pas pu être envoyé",
+      "failedMessage": "Une erreur est survenue lors de l’envoi de votre message.",
+      "missingContactEmail": "Configuration Contact Email manquante"
     }
   },
   "stepOne": {
@@ -116,6 +119,75 @@
       "email": "E-mail",
       "url": "URL",
       "displayName": "Nom affiché"
+    }
+  },
+  "getInTouchDialog": {
+    "mail": {
+      "subject": "Nouveau message de {{firstname}} {{lastname}}",
+      "message": {
+        "greeting": "Bonjour,",
+        "intro": "Vous avez reçu un nouveau message via le formulaire de contact Verno.",
+        "contactInformation": "Informations de contact",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "company": "Entreprise",
+        "notProvided": "Non indiqué",
+        "message": "Message",
+        "footer": "Envoyé depuis le formulaire de contact du site web Verno."
+      }
+    },
+    "dialog": {
+      "title": "Nous contacter",
+      "subtitle": "Envoyez-nous votre message et nous vous répondrons rapidement."
+    },
+    "form": {
+      "fields": {
+        "firstname": {
+          "label": "Prénom",
+          "placeholder": "Jean"
+        },
+        "lastname": {
+          "label": "Nom",
+          "placeholder": "Dupont"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "jean@entreprise.ch"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "+41 77 432 06 26"
+        },
+        "company": {
+          "label": "Entreprise",
+          "placeholder": "Votre entreprise"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Décrivez brièvement votre demande...",
+          "counter": "{{count}}/1000"
+        }
+      },
+      "buttons": {
+        "cancel": "Annuler",
+        "send": "Envoyer le message",
+        "sending": "Envoi en cours..."
+      },
+      "validation": {
+        "firstnameRequired": "Le prénom est obligatoire",
+        "lastnameRequired": "Le nom est obligatoire",
+        "emailRequired": "L’e-mail est obligatoire",
+        "emailInvalid": "Veuillez saisir une adresse e-mail valide",
+        "messageRequired": "Le message est obligatoire",
+        "messageMinLength": "Le message doit contenir au moins 10 caractères",
+        "messageMaxLength": "Le message ne doit pas dépasser 1000 caractères"
+      }
+    },
+    "toast": {
+      "successTitle": "Demande envoyée avec succès !",
+      "successDescription": "Nous vous répondrons rapidement."
     }
   }
 }

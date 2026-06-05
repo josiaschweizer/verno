@@ -11,6 +11,7 @@ import { ArrowRightIcon, CircleSlash, SendIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { ApiError } from '@verno/lib/apiClient'
 import { emailApi } from '@/lib/api/emailApi'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   open: boolean
@@ -38,44 +39,8 @@ type ApiErrorDetails = {
   details?: string[]
 }
 
-function buildContactMailSubject(form: GetInTouchDialogFormData): string {
-  const firstname = form.firstname.trim()
-  const lastname = form.lastname.trim()
-
-  return `New message from ${firstname} ${lastname}`
-}
-
-function buildContactMailMessage(form: GetInTouchDialogFormData): string {
-  const firstname = form.firstname.trim()
-  const lastname = form.lastname.trim()
-  const email = form.email.trim()
-  const phone = form.phone?.trim() || 'Not provided'
-  const company = form.company?.trim() || 'Not provided'
-  const message = form.message.trim()
-
-  return [
-    'Hello,',
-    '',
-    'You have received a new message through the Verno contact form.',
-    '',
-    'Contact information',
-    '────────────────────────',
-    `First name: ${firstname}`,
-    `Last name: ${lastname}`,
-    `Email: ${email}`,
-    `Phone: ${phone}`,
-    `Company: ${company}`,
-    '',
-    'Message',
-    '────────────────────────',
-    message,
-    '',
-    '────────────────────────',
-    'Sent from the Verno website contact form.',
-  ].join('\n')
-}
-
 export default function GetInTouchDialog({ open, onClose }: Props) {
+  const { t } = useTranslation('register')
   const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const [submitting, setSubmitting] = useState(false)
@@ -108,30 +73,72 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
     }
   }, [open, reset])
 
+  const buildContactMailSubject = (form: GetInTouchDialogFormData): string => {
+    const firstname = form.firstname.trim()
+    const lastname = form.lastname.trim()
+
+    return t('getInTouchDialog.mail.subject', {
+      firstname,
+      lastname,
+    })
+  }
+
+  const buildContactMailMessage = (form: GetInTouchDialogFormData): string => {
+    const firstname = form.firstname.trim()
+    const lastname = form.lastname.trim()
+    const email = form.email.trim()
+    const phone =
+      form.phone?.trim() || t('getInTouchDialog.mail.message.notProvided')
+    const company =
+      form.company?.trim() || t('getInTouchDialog.mail.message.notProvided')
+    const message = form.message.trim()
+
+    return [
+      t('getInTouchDialog.mail.message.greeting'),
+      '',
+      t('getInTouchDialog.mail.message.intro'),
+      '',
+      t('getInTouchDialog.mail.message.contactInformation'),
+      '---',
+      `${t('getInTouchDialog.mail.message.firstName')}: ${firstname}`,
+      `${t('getInTouchDialog.mail.message.lastName')}: ${lastname}`,
+      `${t('getInTouchDialog.mail.message.email')}: ${email}`,
+      `${t('getInTouchDialog.mail.message.phone')}: ${phone}`,
+      `${t('getInTouchDialog.mail.message.company')}: ${company}`,
+      '',
+      t('getInTouchDialog.mail.message.message'),
+      '---',
+      message,
+      '',
+      '---',
+      t('getInTouchDialog.mail.message.footer'),
+    ].join('\n')
+  }
+
   const resolveSubmitError = (error: unknown): SubmitErrorInfo => {
     if (error instanceof ApiError) {
       const payload = error.details as ApiErrorDetails | undefined
 
       return {
-        title: payload?.title ?? 'Failed to send message',
+        title: payload?.title ?? t('getInTouchDialog.errors.failedTitle'),
         message:
           payload?.message ??
           error.message ??
-          'Something went wrong while sending your message.',
+          t('getInTouchDialog.errors.failedMessage'),
         details: Array.isArray(payload?.details) ? payload.details : undefined,
       }
     }
 
     if (error instanceof Error) {
       return {
-        title: 'Failed to send message',
+        title: t('getInTouchDialog.errors.failedTitle'),
         message: error.message,
       }
     }
 
     return {
-      title: 'Failed to send message',
-      message: 'Unknown error',
+      title: t('getInTouchDialog.errors.failedTitle'),
+      message: t('getInTouchDialog.errors.unknown'),
     }
   }
 
@@ -143,7 +150,7 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
       setSubmitError(null)
 
       if (!CONTACT_EMAIL) {
-        throw new Error('Missing VITE_CONTACT_EMAIL configuration')
+        throw new Error(t('getInTouchDialog.errors.missingContactEmail'))
       }
 
       const email = form.email.trim()
@@ -155,8 +162,8 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
         message: buildContactMailMessage(form),
       })
 
-      toast.success('Request sent successfully!', {
-        description: 'We will get back to you shortly.',
+      toast.success(t('getInTouchDialog.toast.successTitle'), {
+        description: t('getInTouchDialog.toast.successDescription'),
       })
 
       onClose()
@@ -184,10 +191,10 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <DialogTitle className="text-lg font-semibold">
-                    Get in touch
+                    {t('getInTouchDialog.dialog.title')}
                   </DialogTitle>
                   <p className="mt-1 text-sm text-verno-darker/80">
-                    Send us your message and we will get back to you shortly.
+                    {t('getInTouchDialog.dialog.subtitle')}
                   </p>
                 </div>
 
@@ -210,14 +217,18 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-1 block text-sm font-medium">
-                      First name
+                      {t('getInTouchDialog.form.fields.firstname.label')}
                     </label>
                     <input
                       {...register('firstname', {
-                        required: 'First name is required',
+                        required: t(
+                          'getInTouchDialog.form.validation.firstnameRequired',
+                        ),
                       })}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="John"
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.firstname.placeholder',
+                      )}
                     />
                     {errors.firstname && (
                       <p className="mt-1 text-sm text-red-600">
@@ -228,14 +239,18 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
 
                   <div>
                     <label className="mb-1 block text-sm font-medium">
-                      Last name
+                      {t('getInTouchDialog.form.fields.lastname.label')}
                     </label>
                     <input
                       {...register('lastname', {
-                        required: 'Last name is required',
+                        required: t(
+                          'getInTouchDialog.form.validation.lastnameRequired',
+                        ),
                       })}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="Doe"
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.lastname.placeholder',
+                      )}
                     />
                     {errors.lastname && (
                       <p className="mt-1 text-sm text-red-600">
@@ -246,19 +261,25 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
 
                   <div>
                     <label className="mb-1 block text-sm font-medium">
-                      Email
+                      {t('getInTouchDialog.form.fields.email.label')}
                     </label>
                     <input
                       type="email"
                       {...register('email', {
-                        required: 'Email is required',
+                        required: t(
+                          'getInTouchDialog.form.validation.emailRequired',
+                        ),
                         pattern: {
                           value: /^\S+@\S+\.\S+$/,
-                          message: 'Please enter a valid email address',
+                          message: t(
+                            'getInTouchDialog.form.validation.emailInvalid',
+                          ),
                         },
                       })}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="john@company.com"
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.email.placeholder',
+                      )}
                     />
                     {errors.email && (
                       <p className="mt-1 text-sm text-red-600">
@@ -269,51 +290,65 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
 
                   <div>
                     <label className="mb-1 block text-sm font-medium">
-                      Phone
+                      {t('getInTouchDialog.form.fields.phone.label')}
                     </label>
                     <input
                       {...register('phone')}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="+41 77 432 06 26"
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.phone.placeholder',
+                      )}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium">
-                      Company
+                      {t('getInTouchDialog.form.fields.company.label')}
                     </label>
                     <input
                       {...register('company')}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="Your company"
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.company.placeholder',
+                      )}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <div className="mb-1 flex items-center justify-between">
                       <label className="block text-sm font-medium">
-                        Message
+                        {t('getInTouchDialog.form.fields.message.label')}
                       </label>
                       <span className="text-xs text-verno-darker/60">
-                        {watchedMessage?.length ?? 0}/1000
+                        {t('getInTouchDialog.form.fields.message.counter', {
+                          count: watchedMessage?.length ?? 0,
+                        })}
                       </span>
                     </div>
 
                     <textarea
                       {...register('message', {
-                        required: 'Message is required',
+                        required: t(
+                          'getInTouchDialog.form.validation.messageRequired',
+                        ),
                         minLength: {
                           value: 10,
-                          message: 'Message must be at least 10 characters',
+                          message: t(
+                            'getInTouchDialog.form.validation.messageMinLength',
+                          ),
                         },
                         maxLength: {
                           value: 1000,
-                          message: 'Message must not exceed 1000 characters',
+                          message: t(
+                            'getInTouchDialog.form.validation.messageMaxLength',
+                          ),
                         },
                       })}
                       rows={6}
                       className="w-full rounded-xl border border-verno-darker/15 bg-white px-3 py-2.5 outline-none transition focus:border-verno-accent"
-                      placeholder="Tell us a bit about your request..."
+                      placeholder={t(
+                        'getInTouchDialog.form.fields.message.placeholder',
+                      )}
                     />
                     {errors.message && (
                       <p className="mt-1 text-sm text-red-600">
@@ -349,7 +384,8 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
                     disabled={submitting}
                     className="w-full sm:w-auto"
                   >
-                    <CircleSlash className="h-5 w-5" /> Cancel
+                    <CircleSlash className="h-5 w-5" />
+                    {t('getInTouchDialog.form.buttons.cancel')}
                   </Button>
 
                   <Button
@@ -357,7 +393,10 @@ export default function GetInTouchDialog({ open, onClose }: Props) {
                     disabled={!isValid || submitting}
                     className="w-full sm:w-auto"
                   >
-                    {submitting ? 'Sending...' : 'Send message'}
+                    {submitting
+                      ? t('getInTouchDialog.form.buttons.sending')
+                      : t('getInTouchDialog.form.buttons.send')}
+
                     {submitting ? (
                       <ArrowRightIcon className="h-5 w-5" />
                     ) : (

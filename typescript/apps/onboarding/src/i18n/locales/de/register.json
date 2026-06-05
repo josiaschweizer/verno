@@ -53,7 +53,10 @@
         "message": "Beim Erstellen des Mandanten ist ein Fehler aufgetreten. Bitte versuche es später erneut."
       },
       "genericTitle": "Fehler",
-      "unknown": "Unbekannter Fehler"
+      "unknown": "Unbekannter Fehler",
+      "failedTitle": "Nachricht konnte nicht gesendet werden",
+      "failedMessage": "Beim Senden deiner Nachricht ist etwas schiefgelaufen.",
+      "missingContactEmail": "Kontakt Email Konfiguration fehlt"
     }
   },
   "stepOne": {
@@ -116,6 +119,75 @@
       "email": "E-Mail",
       "url": "URL",
       "displayName": "Anzeigename"
+    }
+  },
+  "getInTouchDialog": {
+    "mail": {
+      "subject": "Neue Nachricht von {{firstname}} {{lastname}}",
+      "message": {
+        "greeting": "Hallo,",
+        "intro": "Du hast eine neue Nachricht über das Verno-Kontaktformular erhalten.",
+        "contactInformation": "Kontaktinformationen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "company": "Unternehmen",
+        "notProvided": "Nicht angegeben",
+        "message": "Nachricht",
+        "footer": "Gesendet über das Kontaktformular der Verno-Website."
+      }
+    },
+    "dialog": {
+      "title": "Kontakt aufnehmen",
+      "subtitle": "Sende uns deine Nachricht und wir melden uns in Kürze bei dir."
+    },
+    "form": {
+      "fields": {
+        "firstname": {
+          "label": "Vorname",
+          "placeholder": "Max"
+        },
+        "lastname": {
+          "label": "Nachname",
+          "placeholder": "Muster"
+        },
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "max@firma.ch"
+        },
+        "phone": {
+          "label": "Telefon",
+          "placeholder": "+41 77 432 06 26"
+        },
+        "company": {
+          "label": "Unternehmen",
+          "placeholder": "Dein Unternehmen"
+        },
+        "message": {
+          "label": "Nachricht",
+          "placeholder": "Erzähle uns kurz, worum es bei deiner Anfrage geht...",
+          "counter": "{{count}}/1000"
+        }
+      },
+      "buttons": {
+        "cancel": "Abbrechen",
+        "send": "Nachricht senden",
+        "sending": "Wird gesendet..."
+      },
+      "validation": {
+        "firstnameRequired": "Vorname ist erforderlich",
+        "lastnameRequired": "Nachname ist erforderlich",
+        "emailRequired": "E-Mail ist erforderlich",
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "messageRequired": "Nachricht ist erforderlich",
+        "messageMinLength": "Die Nachricht muss mindestens 10 Zeichen lang sein",
+        "messageMaxLength": "Die Nachricht darf höchstens 1000 Zeichen lang sein"
+      }
+    },
+    "toast": {
+      "successTitle": "Anfrage erfolgreich gesendet!",
+      "successDescription": "Wir melden uns in Kürze bei dir."
     }
   }
 }
