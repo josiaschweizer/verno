@@ -1,8 +1,9 @@
 'use client'
 
-import { ComponentType, SVGProps, useState } from 'react'
+import { ComponentType, SVGProps, useMemo, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid'
+import { useTranslation } from 'react-i18next'
 import MenuPopover from './MenuPopover'
 import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenu from './MobileMenu'
@@ -24,41 +25,45 @@ export interface Product {
   icon: ComponentType<SVGProps<SVGSVGElement>>
 }
 
-const product: Product[] = [
-  {
-    name: 'Organization',
-    description: 'Manage members, instructors, roles and structure',
-    href: '/product#organization',
-    icon: FolderIcon,
-  },
-  {
-    name: 'Scheduling & Courses',
-    description: 'Plan courses, trainings and schedules in one place',
-    href: '/product#scheduling',
-    icon: CalendarDaysIcon,
-  },
-  {
-    name: 'Participants & Memberships',
-    description: 'Keep track of participants, memberships and statuses',
-    href: '/product#participants',
-    icon: UsersIcon,
-  },
-  {
-    name: 'Reporting & Insights',
-    description: 'Get clear insights, reports and exports instantly',
-    href: '/product#reporting',
-    icon: ChartBarIcon,
-  },
-]
-
 export default function Header() {
+  const { t } = useTranslation('lib')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [registerOpen, setRegisterOpen] = useState(false)
+
+  const products: Product[] = useMemo(
+    () => [
+      {
+        name: t('header.product.organization.name'),
+        description: t('header.product.organization.description'),
+        href: '/product#organization',
+        icon: FolderIcon,
+      },
+      {
+        name: t('header.product.scheduling.name'),
+        description: t('header.product.scheduling.description'),
+        href: '/product#scheduling',
+        icon: CalendarDaysIcon,
+      },
+      {
+        name: t('header.product.participants.name'),
+        description: t('header.product.participants.description'),
+        href: '/product#participants',
+        icon: UsersIcon,
+      },
+      {
+        name: t('header.product.reporting.name'),
+        description: t('header.product.reporting.description'),
+        href: '/product#reporting',
+        icon: ChartBarIcon,
+      },
+    ],
+    [t],
+  )
 
   return (
     <header>
       <nav
-        aria-label="global"
+        aria-label={t('header.aria.globalNavigation')}
         className="mx-auto flex max-w-6xl items-center justify-between p-6 lg:px-6"
       >
         <div className="flex lg:flex-1">
@@ -71,13 +76,16 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-verno-dark"
           >
-            <span className="sr-only">Open main menu</span>
+            <span className="sr-only">{t('header.mobile.openMainMenu')}</span>
             <Bars3Icon aria-hidden className="size-6" />
           </Button>
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
-          <MenuPopover title="Product" products={product} />
+          <MenuPopover
+            title={t('header.navigation.product')}
+            products={products}
+          />
           <DesktopNavLinks />
         </div>
 
@@ -87,7 +95,8 @@ export default function Header() {
             onClick={() => setRegisterOpen(true)}
             className="rounded-md"
           >
-            Get started <span aria-hidden="true">&rarr;</span>
+            {t('header.actions.getStarted')}{' '}
+            <span aria-hidden="true">&rarr;</span>
           </Button>
         </div>
       </nav>
@@ -98,7 +107,7 @@ export default function Header() {
         className="lg:hidden"
       >
         <MobileMenu
-          products={product}
+          products={products}
           onClose={() => setMobileMenuOpen(false)}
           onRegisterOpen={() => {
             setMobileMenuOpen(false)

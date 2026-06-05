@@ -1,20 +1,23 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export default function DesktopNavLinks() {
+  const { t } = useTranslation('lib')
+
   return (
     <>
       <Link
         to="/company"
         className="link-underline-animated text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
       >
-        Company
+        {t('header.navigation.company')}
       </Link>
 
       <Link
         to="/pricing"
         className="link-underline-animated text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
       >
-        Pricing
+        {t('header.navigation.pricing')}
       </Link>
     </>
   )

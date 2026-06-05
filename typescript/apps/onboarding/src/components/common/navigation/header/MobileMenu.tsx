@@ -7,6 +7,7 @@ import {
 import { ChevronDownIcon } from 'lucide-react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import type { Product } from './Header'
 import HeaderLogo from './HeaderLogo'
 import { Button } from '@verno/components/ui/button'
@@ -22,6 +23,8 @@ export default function MobileMenu({
   onClose,
   onRegisterOpen,
 }: Props) {
+  const { t } = useTranslation('lib')
+
   return (
     <>
       <div className="fixed inset-0 z-40 bg-verno-dark/20 backdrop-blur-sm" />
@@ -37,7 +40,7 @@ export default function MobileMenu({
             onClick={onClose}
             className="inline-flex h-10 w-10 items-center justify-center rounded-md text-verno-darker transition-colors hover:bg-verno-surface-light/40"
           >
-            <span className="sr-only">Close menu</span>
+            <span className="sr-only">{t('header.mobile.closeMenu')}</span>
             <XMarkIcon aria-hidden="true" className="size-6" />
           </button>
         </div>
@@ -49,7 +52,7 @@ export default function MobileMenu({
                 {({ open }) => (
                   <>
                     <DisclosureButton className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35">
-                      <span>Product</span>
+                      <span>{t('header.navigation.product')}</span>
                       <ChevronDownIcon
                         aria-hidden="true"
                         className={`size-5 text-verno-darker/70 transition-transform ${
@@ -61,7 +64,7 @@ export default function MobileMenu({
                     <DisclosurePanel className="mt-1 space-y-1 pb-2">
                       {products.map((item) => (
                         <Link
-                          key={item.name}
+                          key={item.href}
                           to={item.href}
                           onClick={onClose}
                           className="block rounded-xl px-3 py-3 text-sm text-verno-darker transition-colors hover:bg-verno-surface-light/30"
@@ -84,7 +87,7 @@ export default function MobileMenu({
                 onClick={onClose}
                 className="block rounded-xl px-3 py-3 text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35"
               >
-                Company
+                {t('header.navigation.company')}
               </Link>
 
               <Link
@@ -92,7 +95,7 @@ export default function MobileMenu({
                 onClick={onClose}
                 className="block rounded-xl px-3 py-3 text-base font-medium text-verno-dark transition-colors hover:bg-verno-surface-light/35"
               >
-                Pricing
+                {t('header.navigation.pricing')}
               </Link>
             </div>
           </div>
@@ -106,7 +109,8 @@ export default function MobileMenu({
               }}
               className="w-full justify-center rounded-md"
             >
-              Get started <span aria-hidden="true">&rarr;</span>
+              {t('header.actions.getStarted')}{' '}
+              <span aria-hidden="true">&rarr;</span>
             </Button>
           </div>
         </div>
