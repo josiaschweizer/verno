@@ -108,9 +108,7 @@ public class ParticipantService implements IParticipantService {
       throw new IllegalArgumentException("Participant ID is required to disable/enable");
     }
 
-    final var existing = participantRepository.findById(participant.getId())
-            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participant.getId()));
-
+    final var existing = participantRepository.findById(participant.getId()).orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.PARTICIPANT_BY_ID_NOT_FOUND, participant.getId()));
     existing.setActive(!disabled);
 
     final var savedParticipantEntity = participantRepository.save(existing);

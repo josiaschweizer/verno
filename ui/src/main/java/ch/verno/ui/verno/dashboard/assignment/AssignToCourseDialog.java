@@ -9,7 +9,7 @@ import ch.verno.common.db.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AssignToCourseDialog extends VADialog {
+public class AssignToCourseDialog extends VAAbstractDialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IParticipantService participantService;

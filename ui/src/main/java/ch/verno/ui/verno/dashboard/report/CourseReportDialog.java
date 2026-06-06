@@ -6,7 +6,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -18,7 +18,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class CourseReportDialog extends VADialog {
+public class CourseReportDialog extends VAAbstractDialog {
 
 
   @Nonnull private final ReportServerGate reportServerGate;

@@ -1,25 +1,24 @@
 package ch.verno.ui.verno.settings.panels.gender;
 
 import ch.verno.common.db.service.intern.IGenderService;
-import ch.verno.common.db.service.intern.ITextService;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
+
 public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
-  @Nonnull private final ITextService textService;
   @Nonnull private final IGenderService genderService;
 
   public GenderSetting(@Nonnull GlobalInterface globalInterface) {
     super(globalInterface, "Test", true);
 
-    this.textService = globalInterface.getService(ITextService.class);
     this.genderService = globalInterface.getService(IGenderService.class);
 
     loadGenderSettings();
@@ -28,29 +27,54 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
   private void loadGenderSettings() {
     final var genders = genderService.getAllGenders();
 
-    this.dto = new GenderSettingDto(genders);
+    this.dto = new GenderSettingDto(getCurrentUserLanguage(), genders);
   }
 
   @Nonnull
   @Override
   protected Component createContent() {
     final var layout = new VerticalLayout();
+    layout.setPadding(false);
+    layout.setMargin(false);
     layout.setSizeFull();
 
+    final var currentUserLanguage = getCurrentUserLanguage();
+    final var configuredLanguages = getConfiguredLanguages();
+
     for (final var genderDto : dto.getGender()) {
-      final var multiLanguageField = new VAMultiLanguageField(
-              globalInterface.getUserProperties().getCurrentUserSetting().getLanguage()
-      );
-      genderDto.setUserDisplayTexts(genderDto.getUserDisplayTexts());
+      final var multiLanguageField = new VAMultiLanguageField(currentUserLanguage, configuredLanguages);
+      binder.forField(multiLanguageField)
+              .bind(
+                      dto -> dto.getDisplayTexts(genderDto),
+                      (value, fieldValue) -> dto.setDisplayTexts(genderDto.getName(), fieldValue)
+              );
+
       layout.add(multiLanguageField);
     }
 
     return layout;
   }
 
+  @Nonnull
+  private List<Language> getConfiguredLanguages() {
+    final var languages = New.<Language>arrayList();
+    languages.add(Language.DE);
+    languages.add(Language.EN);
+    languages.add(Language.FR);
+    return languages;
+  }
+
   @Override
   protected void save() {
-    super.save();
+    if (binder.writeBeanIfValid(dto)) {
+      saveGenders();
+    }
+  }
+
+  private void saveGenders() {
+    for (final var genderDto : dto.getGender()) {
+      genderService.saveGender(genderDto);
+    }
   }
 
   @Nonnull

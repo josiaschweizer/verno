@@ -1,15 +1,57 @@
 package ch.verno.common.lib.gender;
 
-import ch.verno.lib.language.Language;
 import ch.verno.lib.New;
+import ch.verno.lib.language.Language;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class GenderUtil {
 
+  /**
+   * Returns the gender for the given internal gender name.
+   *
+   * @param internalName the internal gender name, for example {@code MALE} or {@code FEMALE}
+   * @return the matching gender
+   * @throws IllegalStateException if no matching gender exists
+   */
   @Nonnull
-  public static String translateToInternalGender(@Nonnull String name) {
+  public static Gender getGenderFromInternalName(@Nonnull final String internalName) {
+    for (final var value : Gender.values()) {
+      if (value.name().equalsIgnoreCase(internalName)) {
+        return value;
+      }
+    }
+
+    throw new IllegalStateException("Unknown internal name: " + internalName);
+  }
+
+  /**
+   * Returns the gender for the given translated or user-facing name.
+   *
+   * @param name the gender name to resolve
+   * @return the matching gender, or {@code null} if no gender could be resolved
+   */
+  @Nullable
+  public static Gender getGenderFromName(@Nonnull final String name) {
+    if (getMaleGenderNames().contains(name)) {
+      return Gender.MALE;
+    } else if (getFemaleGenderNames().contains(name)) {
+      return Gender.FEMALE;
+    }
+
+    return null;
+  }
+
+  /**
+   * Converts a translated or user-facing gender name to the internal gender name.
+   *
+   * @param name the gender name to translate
+   * @return the internal gender name, or the original name if no match was found
+   */
+  @Nonnull
+  public static String translateToInternalGender(@Nonnull final String name) {
     final var maleGenderName = getMaleGenderNames();
     final var femaleGenderName = getFemaleGenderNames();
 
@@ -28,9 +70,16 @@ public class GenderUtil {
     return name;
   }
 
+  /**
+   * Returns the gender description in the requested language.
+   *
+   * @param gender the gender to describe
+   * @param language the language used for the description
+   * @return the translated gender description
+   */
   @Nonnull
-  public static String getDescriptionFromLanguage(@Nonnull Gender gender,
-                                                  @Nonnull Language language) {
+  public static String getDescriptionFromLanguage(@Nonnull final Gender gender,
+                                                  @Nonnull final Language language) {
     if (gender.equals(Gender.MALE)) {
       return switch (language) {
         case DE -> GenderConstants.MALE_GERMAN;
@@ -46,6 +95,11 @@ public class GenderUtil {
     }
   }
 
+  /**
+   * Returns all supported male gender names.
+   *
+   * @return known male gender names in different languages and formats
+   */
   @Nonnull
   private static List<String> getMaleGenderNames() {
     final var list = New.<String>arrayList();
@@ -111,6 +165,11 @@ public class GenderUtil {
     return list;
   }
 
+  /**
+   * Returns all supported female gender names.
+   *
+   * @return known female gender names in different languages and formats
+   */
   @Nonnull
   private static List<String> getFemaleGenderNames() {
     final var list = New.<String>arrayList();

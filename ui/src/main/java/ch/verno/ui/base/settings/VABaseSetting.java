@@ -169,7 +169,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   private void updateSaveButtonStatus(final boolean enabled) {
     if (!enabled) {
-      saveButton.setTooltipText("You have to enter all required fields to save your config");
+      saveButton.setTooltipText("You have to enter all required fields to save your config"); //TODO  translation
       saveButton.setEnabled(false);
     } else {
       saveButton.setTooltipText(Publ.EMPTY_STRING);

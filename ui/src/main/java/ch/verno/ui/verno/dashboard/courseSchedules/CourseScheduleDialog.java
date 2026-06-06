@@ -7,7 +7,7 @@ import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.course.courseschedule.CourseSchedulesGrid;
 import com.vaadin.flow.component.button.Button;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class CourseScheduleDialog extends VADialog {
+public class CourseScheduleDialog extends VAAbstractDialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final ICourseScheduleService courseScheduleService;

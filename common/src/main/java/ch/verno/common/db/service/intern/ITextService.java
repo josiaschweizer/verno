@@ -31,11 +31,16 @@ public interface ITextService {
   @Nonnull
   TextDto findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull String identifier,
                                                           @Nonnull String subIdentifier,
-                                                          @Nonnull String languageCode);
+                                                          @Nonnull Language language);
+
+  void saveMultiple(@Nonnull List<TextDto> textDtos);
 
   void save(@Nonnull TextDto textDto);
 
   @Nonnull
   TextDto update(@Nonnull Long id,
                  @Nonnull TextDto textDto);
+
+  @Nonnull
+  TextDto create(@Nonnull TextDto textDto);
 }

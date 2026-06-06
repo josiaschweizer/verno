@@ -12,7 +12,7 @@ import ch.verno.server.properties.application.VernoApplicationConfigProviderImpl
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.UI;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 @CssImport("./apps/invalid-subscription/invalid-subscription-dialog.css")
-public class InvalidSubscriptionDialog extends VADialog {
+public class InvalidSubscriptionDialog extends VAAbstractDialog {
 
   public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG = "invalid-subscription-dialog";
   public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_ICON = "invalid-subscription-dialog-icon";

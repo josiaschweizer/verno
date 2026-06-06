@@ -124,10 +124,11 @@ public class TenantProvisionService {
     final var genders = getGenders(userLanguage);
 
     for (final var gender : genders) {
-      genderService.createGender(gender);
+      genderService.saveGender(gender);
     }
   }
 
+  @Nonnull
   private List<GenderDto> getGenders(@Nonnull Language userLanguage) {
     final var male = GenderDto.empty();
     male.setName(GenderConstants.INTERNAL_MALE);

@@ -2,6 +2,7 @@ package ch.verno.server.repository;
 
 import ch.verno.db.entity.text.TextEntity;
 import ch.verno.db.jpa.text.SpringDataTextJpaRepository;
+import ch.verno.lib.language.Language;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
@@ -39,10 +40,10 @@ public class TextRepository {
   }
 
   @Nonnull
-  public Optional<TextEntity> findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull String identifier,
-                                                                              @Nonnull String subIdentifier,
-                                                                              @Nonnull String languageCode) {
-    return jpaRepository.findByIdentifierAndSubIdentifierAndLanguageCode(identifier, subIdentifier, languageCode);
+  public Optional<TextEntity> findByIdentifierAndSubIdentifierAndLanguage(@Nonnull String identifier,
+                                                                          @Nonnull String subIdentifier,
+                                                                          @Nonnull Language language) {
+    return jpaRepository.findByIdentifierAndSubIdentifierAndLanguageCode(identifier, subIdentifier, language.getCode());
   }
 
   @Nonnull

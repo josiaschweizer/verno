@@ -7,7 +7,7 @@ import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.lib.icon.CustomIconConstants;
-import ch.verno.ui.lib.icon.CustomIconUtil;
+import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.lib.icon.CustomIcons;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -160,7 +160,7 @@ public class MainLayoutSideNavFactory {
       return new Icon(icon);
     } else {
       final var customIcon = CustomIcons.of(icon);
-      return CustomIconUtil.create(customIcon);
+      return IconUtil.create(customIcon);
     }
   }
 }

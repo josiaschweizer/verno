@@ -9,6 +9,10 @@ import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.gender.GenderUtil;
+import ch.verno.common.tenant.TenantContext;
+import ch.verno.db.entity.GenderEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
 import ch.verno.server.mapper.GenderMapper;
 import ch.verno.server.repository.GenderRepository;
@@ -66,14 +70,41 @@ public class GenderService implements IGenderService {
 
   @Override
   @Transactional
-  public void createGender(@Nonnull GenderDto genderDto) {
-    genderRepository.save(GenderMapper.toEntity(genderDto));
+  public void saveGender(@Nonnull GenderDto genderDto) {
+    saveGenderEntity(genderDto);
+
+    if (genderDto.getUserDisplayTexts() != null) {
+      saveUserTranslations(genderDto.getUserDisplayTexts());
+    }
+  }
+
+  private void saveGenderEntity(@Nonnull final GenderDto genderDto) {
+    final GenderEntity entity;
+    if (genderDto.getId() == null || genderDto.getId() == 0) {
+      entity = GenderEntity.empty();
+      entity.setTenant(TenantEntity.ref(TenantContext.getRequired()));
+    } else {
+      entity = genderRepository.findById(genderDto.getId()).orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.getId()));
+    }
+
+    entity.setName(genderDto.getName());
+    entity.setDescription(genderDto.getDescription());
+    genderRepository.save(entity);
   }
 
   @Nonnull
-  private Map<Language, TextDto> getUserTranslation(@Nonnull String entityName) {
+  private Map<Language, TextDto> getUserTranslation(@Nonnull final String entityName) {
     final var identifier = TextConstants.GENDER_IDENTIFIER;
     return textService.findByIdentifierSubIdentifierMap(identifier, entityName);
+  }
+
+  private void saveUserTranslations(@Nonnull final Map<Language, TextDto> displayTexts) {
+    final var texts = New.<TextDto>arrayList();
+    displayTexts.forEach(((language, textDto) -> texts.add(textDto)));
+
+    if (!texts.isEmpty()) {
+      textService.saveMultiple(texts);
+    }
   }
 
 }

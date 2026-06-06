@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.instructor.detail;
 
+import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.db.service.intern.IInstructorService;
@@ -23,15 +24,16 @@ import org.jspecify.annotations.NonNull;
 @Menu(order = 2.1, icon = "vaadin:academy-cap", title = "shared.instructor.detail")
 public class InstructorDetail extends BaseDetailView<InstructorDto> implements HasDynamicTitle {
 
-  @Nonnull
-  private final IInstructorService instructorService;
-  @Nonnull
-  private final IGenderService genderService;
+  @Nonnull private final IInstructorService instructorService;
+  @Nonnull private final IGenderService genderService;
+  @Nonnull private final AppUserSettingDto userSettingDto;
 
   public InstructorDetail(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface);
+
     this.instructorService = globalInterface.getService(IInstructorService.class);
     this.genderService = globalInterface.getService(IGenderService.class);
+    this.userSettingDto = globalInterface.getUserProperties().getCurrentUserSetting();
 
     super.setShowPaddingAroundDetail(true);
   }
@@ -60,13 +62,11 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
     return new Binder<>(InstructorDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final InstructorDto bean) {
     instructorService.createInstructor(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final InstructorDto bean) {
     instructorService.updateInstructor(bean);
@@ -117,7 +117,9 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             InstructorDto::getGender,
             InstructorDto::setGender,
             getBinder(),
-            genderService.getAllGenders());
+            genderService.getAllGenders(),
+            userSettingDto.getLanguage()
+    );
 
     return LayoutUtil.createHorizontal(firstname, lastname, gender);
   }

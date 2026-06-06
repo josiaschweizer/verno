@@ -2,10 +2,7 @@ package ch.verno.common.lib.gender;
 
 import org.jetbrains.annotations.NonNls;
 
-public class GenderConstants {
-
-  @NonNls public static final String INTERNAL_MALE = "Male";
-  @NonNls public static final String INTERNAL_FEMALE = "Female";
+public class GenderConstants extends InternalGenderConstants {
 
   @NonNls public static final String MALE_ENGLISH = "Male";
   @NonNls public static final String MALE_GERMAN = "Männlich";

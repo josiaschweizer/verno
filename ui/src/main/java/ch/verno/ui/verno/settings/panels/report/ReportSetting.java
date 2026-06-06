@@ -98,7 +98,10 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
       }
     }
 
-    return new VerticalLayout(courseReportName, courseReportFileUpload);
+    final var layout = new VerticalLayout(courseReportName, courseReportFileUpload);
+    layout.setPadding(false);
+    layout.setMargin(false);
+    return layout;
   }
 
   @Nonnull

@@ -105,28 +105,55 @@ public class TextService implements ITextService {
   @Transactional(readOnly = true)
   public TextDto findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull String identifier,
                                                                  @Nonnull String subIdentifier,
-                                                                 @Nonnull String languageCode) {
-    final var foundOptional = textRepository.findByIdentifierAndSubIdentifierAndLanguageCode(identifier, subIdentifier, languageCode);
+                                                                 @Nonnull Language language) {
+    final var foundOptional = textRepository.findByIdentifierAndSubIdentifierAndLanguage(identifier, subIdentifier, language);
     return foundOptional.map(TextMapper::toDto).orElseGet(TextDto::empty);
   }
 
   @Override
   @Transactional
+  public void saveMultiple(@Nonnull final List<TextDto> textDtos) {
+    for (final var textDto : textDtos) {
+      save(textDto);
+    }
+  }
+
+  @Override
+  @Transactional
   public void save(@Nonnull TextDto textDto) {
-    textRepository.save(TextMapper.toEntity(textDto));
+    final var existing = textRepository.findByIdentifierAndSubIdentifierAndLanguage(
+            textDto.getIdentifier(),
+            textDto.getSubIdentifier(),
+            textDto.getLanguage()
+    );
+
+    if (existing.isEmpty()) {
+      create(textDto);
+    } else {
+      update(existing.get().getId(), textDto);
+    }
   }
 
   @Nonnull
   @Override
   @Transactional
-  public TextDto update(@Nonnull Long id,
-                        @Nonnull TextDto textDto) {
+  public TextDto update(@Nonnull final Long id,
+                        @Nonnull final TextDto textDto) {
     final var existing = getEntityById(id);
 
     existing.setIdentifier(textDto.getIdentifier());
+    existing.setSubIdentifier(textDto.getSubIdentifier());
     existing.setText(textDto.getText());
     existing.setLanguageCode(textDto.getLanguage().getCode());
 
     return TextMapper.toDto(textRepository.save(existing));
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public TextDto create(@Nonnull final TextDto textDto) {
+    final var saveResult = textRepository.save(TextMapper.toEntity(textDto));
+    return TextMapper.toDto(saveResult);
   }
 }

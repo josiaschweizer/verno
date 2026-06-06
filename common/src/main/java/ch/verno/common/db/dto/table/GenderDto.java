@@ -69,6 +69,15 @@ public class GenderDto extends BaseDto {
     this.userDisplayTexts = userDisplayTexts;
   }
 
+  @Nonnull
+  public String getTranslation(@Nonnull Language language) {
+    final var textDto = userDisplayTexts.get(language);
+    if (textDto == null) {
+      return Publ.EMPTY_STRING;
+    }
+    return textDto.getText();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
