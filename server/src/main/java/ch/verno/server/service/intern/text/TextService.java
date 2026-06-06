@@ -4,6 +4,8 @@ import ch.verno.common.db.dto.table.text.TextDto;
 import ch.verno.common.db.service.intern.ITextService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.tenant.TenantContext;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.text.TextEntity;
 import ch.verno.lib.language.Language;
 import ch.verno.server.mapper.text.TextMapper;
@@ -140,11 +142,7 @@ public class TextService implements ITextService {
   public TextDto update(@Nonnull final Long id,
                         @Nonnull final TextDto textDto) {
     final var existing = getEntityById(id);
-
-    existing.setIdentifier(textDto.getIdentifier());
-    existing.setSubIdentifier(textDto.getSubIdentifier());
-    existing.setText(textDto.getText());
-    existing.setLanguageCode(textDto.getLanguage().getCode());
+    TextMapper.updateEntity(existing, textDto);
 
     return TextMapper.toDto(textRepository.save(existing));
   }
@@ -153,7 +151,26 @@ public class TextService implements ITextService {
   @Override
   @Transactional
   public TextDto create(@Nonnull final TextDto textDto) {
-    final var saveResult = textRepository.save(TextMapper.toEntity(textDto));
-    return TextMapper.toDto(saveResult);
+    final var entity = TextMapper.toNewEntity(
+            textDto,
+            TenantEntity.ref(TenantContext.getRequired())
+    );
+
+    return TextMapper.toDto(textRepository.save(entity));
+  }
+
+  @Override
+  @Transactional
+  public void delete(@Nonnull final TextDto dto) {
+    if (dto.getId() != null && dto.getId() > 0) {
+      delete(dto.getId());
+    }
+  }
+
+  @Override
+  @Transactional
+  public void delete(@Nonnull final Long id) {
+    final var entity = getEntityById(id);
+    textRepository.delete(entity);
   }
 }

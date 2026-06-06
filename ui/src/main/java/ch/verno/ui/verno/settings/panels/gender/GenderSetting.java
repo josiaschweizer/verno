@@ -4,8 +4,10 @@ import ch.verno.common.db.service.intern.IGenderService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
+import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.base.settings.VABaseSetting;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
@@ -17,7 +19,7 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
   @Nonnull private final IGenderService genderService;
 
   public GenderSetting(@Nonnull GlobalInterface globalInterface) {
-    super(globalInterface, "Test", true);
+    super(globalInterface, "Gender Settings", true); //TODO translation
 
     this.genderService = globalInterface.getService(IGenderService.class);
 
@@ -26,8 +28,17 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
   private void loadGenderSettings() {
     final var genders = genderService.getAllGenders();
-
     this.dto = new GenderSettingDto(getCurrentUserLanguage(), genders);
+  }
+
+  @Override
+  protected void onAttach(@Nonnull final AttachEvent attachEvent) {
+    super.onAttach(attachEvent);
+
+    if (dto.hasMissingUserDisplayTexts()){
+      saveButton.setEnabled(true);
+      saveButton.setTooltipText(Publ.EMPTY_STRING);
+    }
   }
 
   @Nonnull

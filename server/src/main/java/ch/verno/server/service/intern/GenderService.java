@@ -71,25 +71,41 @@ public class GenderService implements IGenderService {
   @Override
   @Transactional
   public void saveGender(@Nonnull GenderDto genderDto) {
-    saveGenderEntity(genderDto);
+    if (genderDto.getId() == null) {
+      createGender(genderDto);
+    } else {
+      updateGender(genderDto.getId(), genderDto);
+    }
 
     if (genderDto.getUserDisplayTexts() != null) {
-      saveUserTranslations(genderDto.getUserDisplayTexts());
+      saveUserTranslations(genderDto);
     }
   }
 
-  private void saveGenderEntity(@Nonnull final GenderDto genderDto) {
-    final GenderEntity entity;
-    if (genderDto.getId() == null || genderDto.getId() == 0) {
-      entity = GenderEntity.empty();
-      entity.setTenant(TenantEntity.ref(TenantContext.getRequired()));
-    } else {
-      entity = genderRepository.findById(genderDto.getId()).orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.GENDER_BY_ID_NOT_FOUND, genderDto.getId()));
-    }
 
-    entity.setName(genderDto.getName());
-    entity.setDescription(genderDto.getDescription());
-    genderRepository.save(entity);
+  @Nonnull
+  @Override
+  @Transactional
+  public GenderDto createGender(@Nonnull final GenderDto genderDto) {
+    final var entity = GenderMapper.toNewEntity(
+            genderDto,
+            TenantEntity.ref(TenantContext.getRequired())
+    );
+
+    return GenderMapper.toDto(genderRepository.save(entity));
+  }
+
+  @Nonnull
+  @Override
+  @Transactional
+  public GenderDto updateGender(@Nonnull final Long id,
+                                @Nonnull final GenderDto genderDto) {
+    final var existing = getGenderEntityById(id);
+    existing.setName(genderDto.getName());
+    existing.setDescription(genderDto.getDescription());
+
+    final var saved = genderRepository.save(existing);
+    return GenderMapper.toDto(saved);
   }
 
   @Nonnull
@@ -98,13 +114,39 @@ public class GenderService implements IGenderService {
     return textService.findByIdentifierSubIdentifierMap(identifier, entityName);
   }
 
-  private void saveUserTranslations(@Nonnull final Map<Language, TextDto> displayTexts) {
+  private void saveUserTranslations(@Nonnull final GenderDto genderDto) {
+    if (genderDto.getId() != null) {
+      deletePotentialTranslations(genderDto);
+    }
+    if (genderDto.getUserDisplayTexts() == null || genderDto.getUserDisplayTexts().isEmpty()) {
+      return;
+    }
+
+    Map<Language, TextDto> displayTexts = genderDto.getUserDisplayTexts();
     final var texts = New.<TextDto>arrayList();
     displayTexts.forEach(((language, textDto) -> texts.add(textDto)));
 
     if (!texts.isEmpty()) {
       textService.saveMultiple(texts);
     }
+  }
+
+  private void deletePotentialTranslations(@Nonnull final GenderDto genderDto) {
+    final var oldTranslations = getUserTranslation(genderDto.getName());
+    if (!oldTranslations.isEmpty()) {
+      final var newTranslations = genderDto.getUserDisplayTexts();
+      oldTranslations.forEach((language, text) -> {
+        if (!newTranslations.containsKey(language)) {
+          textService.delete(text);
+        }
+      });
+    }
+  }
+
+  @Nonnull
+  private GenderEntity getGenderEntityById(@Nonnull final Long id) {
+    return genderRepository.findById(id)
+            .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.GENDER_BY_ID_NOT_FOUND, id));
   }
 
 }

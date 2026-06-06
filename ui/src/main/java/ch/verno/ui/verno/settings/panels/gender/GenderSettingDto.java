@@ -10,7 +10,6 @@ import ch.verno.lib.language.Language;
 import ch.verno.lib.language.LanguageUtil;
 import jakarta.annotation.Nonnull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -46,13 +45,17 @@ public class GenderSettingDto extends BaseDto {
   @Nonnull
   public Map<Language, String> getDisplayTexts(@Nonnull final GenderDto genderDto) {
     final var texts = New.<Language, String>hashMap();
+
     final var genderTextDtos = genderDto.getUserDisplayTexts();
-    if (genderTextDtos == null || genderTextDtos.isEmpty()) {
-      final var languageDescription = GenderUtil.getDescriptionFromLanguage(GenderUtil.getGenderFromInternalName(genderDto.getName()), currentUserLanguage);
-      texts.put(currentUserLanguage, languageDescription);
-    } else {
+    if (genderTextDtos != null && !genderTextDtos.isEmpty()) {
       genderTextDtos.forEach((lang, text) -> texts.put(lang, text.getText()));
+      return texts;
     }
+
+    final var gender = GenderUtil.getGenderFromInternalName(genderDto.getName());
+    final var languageDescription = GenderUtil.getDescriptionFromLanguage(gender, currentUserLanguage);
+
+    texts.put(currentUserLanguage, languageDescription);
 
     return texts;
   }
@@ -74,6 +77,16 @@ public class GenderSettingDto extends BaseDto {
       texts.put(lang, textDto);
     });
     return texts;
+  }
+
+  public boolean hasMissingUserDisplayTexts() {
+    for (final var gender : genders) {
+      if (gender.getUserDisplayTexts() == null || gender.getUserDisplayTexts().isEmpty()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

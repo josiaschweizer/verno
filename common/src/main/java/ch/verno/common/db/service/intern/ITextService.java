@@ -43,4 +43,8 @@ public interface ITextService {
 
   @Nonnull
   TextDto create(@Nonnull TextDto textDto);
+
+  void delete(@Nonnull Long id);
+
+  void delete(@Nonnull TextDto dto);
 }

@@ -3,6 +3,7 @@ package ch.verno.server.mapper;
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.text.TextDto;
 import ch.verno.db.entity.GenderEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.lib.language.Language;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
@@ -35,19 +36,19 @@ public final class GenderMapper {
     );
   }
 
-  @Nullable
+  @Nonnull
   public static GenderEntity toEntity(@Nullable final GenderDto dto) {
-    if (dto == null || dto.isEmpty()) {
-      return null;
-    }
-
     final var entity = new GenderEntity(dto.getName(), dto.getDescription());
+    entity.setId(dto.getId());
 
-    if (dto.getId() != null && dto.getId() != 0) {
-      entity.setId(dto.getId());
-    } else {
-      entity.setId(null);
-    }
+    return entity;
+  }
+
+  @Nonnull
+  public static GenderEntity toNewEntity(@Nonnull final GenderDto dto,
+                                         @Nonnull final TenantEntity tenantEntity) {
+    final var entity = new GenderEntity(dto.getName(), dto.getDescription());
+    entity.setTenant(tenantEntity);
 
     return entity;
   }

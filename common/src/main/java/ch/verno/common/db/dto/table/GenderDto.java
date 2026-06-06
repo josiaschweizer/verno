@@ -65,15 +65,15 @@ public class GenderDto extends BaseDto {
     return userDisplayTexts;
   }
 
-  public void setUserDisplayTexts(@Nullable Map<Language, TextDto> userDisplayTexts) {
+  public void setUserDisplayTexts(@Nullable final Map<Language, TextDto> userDisplayTexts) {
     this.userDisplayTexts = userDisplayTexts;
   }
 
   @Nonnull
-  public String getTranslation(@Nonnull Language language) {
+  public String getTranslation(@Nonnull final Language language) {
     final var textDto = userDisplayTexts.get(language);
     if (textDto == null) {
-      return Publ.EMPTY_STRING;
+      return description; // use description as fallback
     }
     return textDto.getText();
   }
