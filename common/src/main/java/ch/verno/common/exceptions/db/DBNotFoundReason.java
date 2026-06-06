@@ -18,6 +18,7 @@ public enum DBNotFoundReason {
   MAIL_TEMPLATE_BY_KEY_NOT_FOUND("Mail template not found with key: "),
   MAIL_CONFIG_BY_TENANT_NOT_FOUND("Mail config not found for tenant: "),
   MAIL_LOG_BY_ID_NOT_FOUND("Mail log not found with id: "),
+  TEXT_BY_ID_NOT_FOUND("Text not found with id: "),
 
   TENANT_BILLING_BY_ID_NOT_FOUND("Tenant billing not found with id: "),
   TENANT_BILLING_BY_TENANT_ID_NOT_FOUND("Tenant billing not found for tenant id: "),

@@ -27,10 +27,8 @@ import java.util.List;
 @Service
 public class CourseScheduleService implements ICourseScheduleService {
 
-  @Nonnull
-  private final CourseScheduleRepository courseScheduleRepository;
-  @Nonnull
-  private final CourseScheduleSpec courseScheduleSpec;
+  @Nonnull private final CourseScheduleRepository courseScheduleRepository;
+  @Nonnull private final CourseScheduleSpec courseScheduleSpec;
 
   @PersistenceContext
   private EntityManager entityManager;

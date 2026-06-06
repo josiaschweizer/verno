@@ -7,7 +7,7 @@ import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestStatus;
 import com.vaadin.flow.component.UI;
@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
-public class TestConnectionDialog extends VADialog {
+public class TestConnectionDialog extends VAAbstractDialog {
 
   @Nonnull private final GlobalInterface globalInterface;
 

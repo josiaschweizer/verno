@@ -1,14 +1,11 @@
 package ch.verno.ui.verno.participant.detail;
 
+import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.service.intern.*;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.db.dto.table.GenderDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.type.CourseScheduleStatus;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
@@ -35,13 +32,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.hibernate.annotations.SortComparator;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,6 +51,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull private final ICourseService courseService;
   @Nonnull private final ITenantSettingService tenantSettingService;
 
+  @Nonnull private final AppUserSettingDto userSettingDto;
+
   public ParticipantDetail(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface);
 
@@ -64,6 +61,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
     this.courseService = globalInterface.getService(ICourseService.class);
     this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
+
+    this.userSettingDto = globalInterface.getUserProperties().getCurrentUserSetting();
 
     super.setShowPaddingAroundDetail(true);
   }
@@ -123,6 +122,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     }
     return getTranslation("participant.enable.participant");
   }
+
   @Nonnull
   @Override
   protected String getDetailPageName() {
@@ -221,7 +221,9 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             ParticipantDto::getGender,
             ParticipantDto::setGender,
             getBinder(),
-            genderService.getAllGenders());
+            genderService.getAllGenders(),
+            userSettingDto.getLanguage()
+    );
 
     return LayoutUtil.createHorizontal(firstNameEntry, lastNameEntry, birthdateEntry, genderEntry);
   }
@@ -316,7 +318,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             siblings,
             dto -> dto.getFirstName() + Publ.SPACE + dto.getLastName()
     );
-    if (siblings.isEmpty()){
+    if (siblings.isEmpty()) {
       siblingEntry.setEnabled(false);
       siblingEntry.setHelperText(getTranslation("participant.there.are.no.participants.to.select.as.siblings"));
     }
@@ -421,7 +423,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             genderGetter,
             genderSetter,
             getBinder(),
-            genderService.getAllGenders()
+            genderService.getAllGenders(),
+            userSettingDto.getLanguage()
     );
 
     final var emailEntry = entryFactory.createEmailEntry(

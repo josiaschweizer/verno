@@ -5,7 +5,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ServerGate;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
 import com.vaadin.flow.component.button.Button;
@@ -18,7 +18,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class ExportDialog<T> extends VADialog {
+public class ExportDialog<T> extends VAAbstractDialog {
 
   @Nonnull private final ServerGate serverGate;
   @Nonnull private final TempFileServerGate tempFileServerGate;

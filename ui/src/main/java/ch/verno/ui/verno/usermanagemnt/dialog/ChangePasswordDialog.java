@@ -4,7 +4,7 @@ import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.button.Button;
@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class ChangePasswordDialog extends VADialog {
+public class ChangePasswordDialog extends VAAbstractDialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IAppUserService appUserService;

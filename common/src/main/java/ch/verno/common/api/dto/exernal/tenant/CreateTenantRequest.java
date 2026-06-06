@@ -6,7 +6,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CreateTenantRequest(
-        @NotBlank @Size(max = 128) String tenantName,
+
+        @NotBlank
+        @Size(max = 128)
+        String tenantName,
 
         @NotBlank
         @Size(min = 3, max = 64)
@@ -24,8 +27,21 @@ public record CreateTenantRequest(
 
         @Size(max = 255) String adminFirstname,
         @Size(max = 255) String adminLastname,
-        @NotBlank @Size(max = 255) String adminUsername,
-        @NotBlank @Email @Size(max = 255) String adminEmail,
-        @NotBlank @Size(max = 128) String adminDisplayName,
-        @NotBlank @Size(min = 8, max = 128) String adminPassword
+
+        @NotBlank
+        @Size(max = 255)
+        String adminUsername,
+
+        @NotBlank
+        @Email
+        @Size(max = 255)
+        String adminEmail,
+
+        @NotBlank
+        @Size(max = 128)
+        String adminDisplayName,
+
+        @NotBlank
+        @Size(min = 8, max = 128)
+        String adminPassword
 ) {}

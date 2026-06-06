@@ -1,10 +1,13 @@
 package ch.verno.ui.base.settings;
 
 import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.gate.GlobalInterface;
+import ch.verno.publ.CssImportConstants;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.button.VAButton;
+import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.verno.settings.SettingEntryFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -16,9 +19,16 @@ import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NonNls;
 
-@CssImport("./components/setting/va-base-setting.css")
+@CssImport(CssImportConstants.VA_BASE_SETTING)
 public abstract class VABaseSetting<T extends BaseDto> extends Div {
+
+  @NonNls public static final String SETTING_CARD_CONTENT_CLASSNAME = "setting-card-content";
+  @NonNls public static final String SETTING_CARD_ACTION_BUTTON_CLASSNAME = "setting-card-action-button";
+  @NonNls public static final String SETTING_CARD_CLASSNAME = "setting-card";
+  @NonNls public static final String SETTING_CARD_HEADER_CLASSNAME = "setting-card-header";
+  @NonNls public static final String SETTING_CARD_TITLE_CLASSNAME = "setting-card-title";
 
   @Nonnull protected final GlobalInterface globalInterface;
   @Nonnull protected final Binder<T> binder;
@@ -32,24 +42,28 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   @Nonnull private final Div contentWrapper;
   @Nullable protected Component contentComponent;
 
-  @Nonnull
-  public final SettingEntryFactory<T> settingEntryFactory;
+  @Nonnull public final SettingEntryFactory<T> settingEntryFactory;
+  @Nonnull protected final EntryFactory<TenantSettingDto> entryFactory;
 
   protected VABaseSetting(@Nonnull final GlobalInterface globalInterface,
                           @Nonnull final String titleKey,
                           final boolean showSaveButton) {
     this.globalInterface = globalInterface;
+
     this.settingEntryFactory = new SettingEntryFactory<>();
+    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+
     this.dto = createNewBeanInstance();
     this.binder = createBinder();
 
-    addClassName("setting-card");
+
+    addClassName(SETTING_CARD_CLASSNAME);
 
     headerWrapper = new Div();
-    headerWrapper.addClassName("setting-card-header");
+    headerWrapper.addClassName(SETTING_CARD_HEADER_CLASSNAME);
 
     final var titleSpan = new Span(getTranslation(titleKey));
-    titleSpan.addClassName("setting-card-title");
+    titleSpan.addClassName(SETTING_CARD_TITLE_CLASSNAME);
 
     headerWrapper.add(titleSpan);
     add(headerWrapper);
@@ -76,7 +90,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     }
 
     actionButtonSpan = new Span();
-    actionButtonSpan.addClassName("setting-card-action-button");
+    actionButtonSpan.addClassName(SETTING_CARD_ACTION_BUTTON_CLASSNAME);
 
     for (final var actionButton : actionButtons) {
       actionButtonSpan.add(actionButton);
@@ -124,7 +138,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   }
 
   public void setCardDefaultHeight() {
-    contentWrapper.addClassName("setting-card-content");
+    contentWrapper.addClassName(SETTING_CARD_CONTENT_CLASSNAME);
   }
 
   @Nonnull
@@ -155,7 +169,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
 
   private void updateSaveButtonStatus(final boolean enabled) {
     if (!enabled) {
-      saveButton.setTooltipText("You have to enter all required fields to save your config");
+      saveButton.setTooltipText("You have to enter all required fields to save your config"); //TODO  translation
       saveButton.setEnabled(false);
     } else {
       saveButton.setTooltipText(Publ.EMPTY_STRING);

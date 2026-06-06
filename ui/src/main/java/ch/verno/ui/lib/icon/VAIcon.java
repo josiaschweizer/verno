@@ -1,10 +1,13 @@
 package ch.verno.ui.lib.icon;
 
-import ch.verno.publ.VernoUtility;
 import ch.verno.publ.Publ;
+import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,15 +15,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class CustomIcon extends Span {
+public class VAIcon extends Span {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CustomIcon.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VAIcon.class);
 
-  private static final String RESOURCE_PREFIX = "META-INF/resources/";
-  private static final String DEFAULT_COLOR = "var(--lumo-contrast-60pct)";
+  @NonNls private static final String RESOURCE_PREFIX = "META-INF/resources/";
+  @NonNls private static final String DEFAULT_COLOR = "var(--lumo-contrast-60pct)";
+  @NonNls public static final String CONFIGURE_SVG_ELEMENT_JS = """
+          const svg = this.querySelector('svg');
+          if (svg) {
+            svg.style.width = $0;
+            svg.style.height = $0;
+            svg.style.display = 'block';
+          }
+          """;
 
-  public CustomIcon(@Nonnull final String path, @Nonnull final String size) {
+  public VAIcon(@Nonnull final String path, @Nonnull final String size) {
     initializeIcon(path, size);
+  }
+
+  public VAIcon(@Nonnull final VaadinIcon icon, @Nonnull final String size) {
+    initializeIcon(icon.create(), size);
   }
 
   private void initializeIcon(@Nonnull final String path, @Nonnull final String size) {
@@ -41,9 +56,21 @@ public class CustomIcon extends Span {
     }
   }
 
+  private void initializeIcon(@Nonnull final Icon icon, @Nonnull final String size) {
+    removeAll();
+    add(icon);
+
+    configureStyling(size);
+    icon.getStyle()
+            .setWidth(size)
+            .setHeight(size)
+            .setDisplay(Style.Display.BLOCK);
+
+    icon.setColor(DEFAULT_COLOR);
+  }
+
   private void configureStyling(@Nonnull final String size) {
-    getStyle()
-            .setDisplay(Style.Display.INLINE_FLEX)
+    getStyle().setDisplay(Style.Display.INLINE_FLEX)
             .setAlignItems(Style.AlignItems.CENTER)
             .setJustifyContent(Style.JustifyContent.CENTER)
             .setWidth(size)
@@ -52,17 +79,7 @@ public class CustomIcon extends Span {
   }
 
   private void configureSvgElement(@Nonnull final String size) {
-    getElement().executeJs(
-            """
-                    const svg = this.querySelector('svg');
-                    if (svg) {
-                      svg.style.width = $0;
-                      svg.style.height = $0;
-                      svg.style.display = 'block';
-                    }
-                    """,
-            size
-    );
+    getElement().executeJs(CONFIGURE_SVG_ELEMENT_JS, size);
   }
 
   @Nonnull

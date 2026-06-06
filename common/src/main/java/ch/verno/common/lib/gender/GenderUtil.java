@@ -1,49 +1,118 @@
 package ch.verno.common.lib.gender;
 
 import ch.verno.lib.New;
-import org.jetbrains.annotations.NonNls;
+import ch.verno.lib.language.Language;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class GenderUtil {
 
-  @NonNls public static final String INTERNAL_MALE = "Male";
-  @NonNls public static final String INTERNAL_FEMALE = "Female";
-
+  /**
+   * Returns the gender for the given internal gender name.
+   *
+   * @param internalName the internal gender name, for example {@code MALE} or {@code FEMALE}
+   * @return the matching gender
+   * @throws IllegalStateException if no matching gender exists
+   */
   @Nonnull
-  public static String translateToInternalGender(@Nonnull String name) {
+  public static Gender getGenderFromInternalName(@Nonnull final String internalName) {
+    for (final var value : Gender.values()) {
+      if (value.name().equalsIgnoreCase(internalName)) {
+        return value;
+      }
+    }
+
+    throw new IllegalStateException("Unknown internal name: " + internalName);
+  }
+
+  /**
+   * Returns the gender for the given translated or user-facing name.
+   *
+   * @param name the gender name to resolve
+   * @return the matching gender, or {@code null} if no gender could be resolved
+   */
+  @Nullable
+  public static Gender getGenderFromName(@Nonnull final String name) {
+    if (getMaleGenderNames().contains(name)) {
+      return Gender.MALE;
+    } else if (getFemaleGenderNames().contains(name)) {
+      return Gender.FEMALE;
+    }
+
+    return null;
+  }
+
+  /**
+   * Converts a translated or user-facing gender name to the internal gender name.
+   *
+   * @param name the gender name to translate
+   * @return the internal gender name, or the original name if no match was found
+   */
+  @Nonnull
+  public static String translateToInternalGender(@Nonnull final String name) {
     final var maleGenderName = getMaleGenderNames();
     final var femaleGenderName = getFemaleGenderNames();
 
     for (final var maleName : maleGenderName) {
       if (maleName.equalsIgnoreCase(name)) {
-        return INTERNAL_MALE;
+        return GenderConstants.INTERNAL_MALE;
       }
     }
 
     for (final var femaleName : femaleGenderName) {
       if (femaleName.equalsIgnoreCase(name)) {
-        return INTERNAL_FEMALE;
+        return GenderConstants.INTERNAL_FEMALE;
       }
     }
 
     return name;
   }
 
+  /**
+   * Returns the gender description in the requested language.
+   *
+   * @param gender the gender to describe
+   * @param language the language used for the description
+   * @return the translated gender description
+   */
+  @Nonnull
+  public static String getDescriptionFromLanguage(@Nonnull final Gender gender,
+                                                  @Nonnull final Language language) {
+    if (gender.equals(Gender.MALE)) {
+      return switch (language) {
+        case DE -> GenderConstants.MALE_GERMAN;
+        case FR -> GenderConstants.MALE_FRENCH;
+        default -> GenderConstants.INTERNAL_MALE;
+      };
+    } else {
+      return switch (language) {
+        case DE -> GenderConstants.FEMALE_GERMAN;
+        case FR -> GenderConstants.FEMALE_FRENCH;
+        default -> GenderConstants.INTERNAL_FEMALE;
+      };
+    }
+  }
+
+  /**
+   * Returns all supported male gender names.
+   *
+   * @return known male gender names in different languages and formats
+   */
   @Nonnull
   private static List<String> getMaleGenderNames() {
     final var list = New.<String>arrayList();
 
     // Internal / technical
-    list.add(INTERNAL_MALE);
+    list.add(GenderConstants.INTERNAL_MALE);
     list.add("Male");
     list.add("MALE");
     list.add("M");
     list.add("m");
 
     // Deutsch
-    list.add("Männlich");
+    list.add(GenderConstants.MALE_GERMAN);
     list.add("männlich");
     list.add("Maennlich");
     list.add("maennlich");
@@ -63,7 +132,7 @@ public class GenderUtil {
     list.add("männlicher Kontakt");
 
     // Französisch
-    list.add("Masculin");
+    list.add(GenderConstants.MALE_FRENCH);
     list.add("masculin");
     list.add("Homme");
     list.add("homme");
@@ -96,12 +165,17 @@ public class GenderUtil {
     return list;
   }
 
+  /**
+   * Returns all supported female gender names.
+   *
+   * @return known female gender names in different languages and formats
+   */
   @Nonnull
   private static List<String> getFemaleGenderNames() {
     final var list = New.<String>arrayList();
 
     // Internal / technical
-    list.add(INTERNAL_FEMALE);
+    list.add(GenderConstants.INTERNAL_FEMALE);
     list.add("Female");
     list.add("FEMALE");
     list.add("F");
@@ -110,7 +184,7 @@ public class GenderUtil {
     list.add("w");
 
     // Deutsch
-    list.add("Weiblich");
+    list.add(GenderConstants.FEMALE_GERMAN);
     list.add("weiblich");
     list.add("Frau");
     list.add("frau");
@@ -130,7 +204,7 @@ public class GenderUtil {
     list.add("weibliche Kontaktperson");
 
     // Französisch
-    list.add("Féminin");
+    list.add(GenderConstants.FEMALE_FRENCH);
     list.add("féminin");
     list.add("Feminin");
     list.add("feminin");

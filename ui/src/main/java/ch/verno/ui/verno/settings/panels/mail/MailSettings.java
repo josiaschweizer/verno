@@ -35,11 +35,11 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   public MailSettings(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface, TITLE_KEY, true);
 
-    mailConfigService = globalInterface.getService(IMailConfigService.class);
-    entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
+    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
 
     if (mailConfigService.hasConfigForCurrentTenant()) {
-      dto = mailConfigService.getConfigForCurrentTenant();
+      this.dto = mailConfigService.getConfigForCurrentTenant();
     }
   }
 

@@ -2,6 +2,8 @@ package ch.verno.ui.config.i18n;
 
 import ch.verno.common.db.service.intern.IAppUserService;
 import ch.verno.common.db.service.intern.IAppUserSettingService;
+import ch.verno.lib.language.Language;
+import ch.verno.lib.language.LanguageUtil;
 import ch.verno.ui.base.error.GlobalErrorHandler;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 @Component
@@ -37,7 +40,8 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
     event.getSource().addUIInitListener(uiEvent -> {
       final var ui = uiEvent.getUI();
 
-      final var locale = loadLocaleFromDatabase();
+      final var language = loadLanguageFromDatabase();
+      final var locale = Locale.forLanguageTag(language.getCode());
       ui.setLocale(locale);
 
       final var session = ui.getSession();
@@ -48,10 +52,10 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
   }
 
   @Nonnull
-  private Locale loadLocaleFromDatabase() {
+  private Language loadLanguageFromDatabase() {
     final var currentUser = getCurrentUser();
     if (currentUser == null) {
-      return Locale.GERMAN;
+      return LanguageUtil.getDefaultLanguage();
     }
 
     try {
@@ -60,12 +64,12 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
       // If either service implementation is not available, fallback to default locale
       if (appUserService == null || appUserSettingService == null) {
-        return Locale.GERMAN;
+        return LanguageUtil.getDefaultLanguage();
       }
 
       final var appUserOptional = appUserService.findByUserName(currentUser.getUsername());
       if (appUserOptional.isEmpty() || appUserOptional.get().getId() == null) {
-        return Locale.GERMAN;
+        return LanguageUtil.getDefaultLanguage();
       }
 
       final var appUser = appUserOptional.get();
@@ -76,15 +80,17 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
       // Fallback to default
     }
 
-    return Locale.GERMAN;
+    return LanguageUtil.getDefaultLanguage();
   }
 
+  @Nullable
   private User getCurrentUser() {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
     LOG.debug("VernoServiceInitListener.getCurrentUser: authentication={} thread={}", authentication, Thread.currentThread().getName());
     if (authentication != null && authentication.getPrincipal() instanceof User) {
       return (User) authentication.getPrincipal();
     }
+
     return null;
   }
 }

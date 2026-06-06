@@ -12,7 +12,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.async.BackgroundExecutor;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.mail.SendMailPopup;
 import com.vaadin.flow.component.AttachEvent;
@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractEmailDialog extends VADialog {
+public abstract class AbstractEmailDialog extends VAAbstractDialog {
 
   @Nonnull private final IMailTemplateService mailTemplateService;
   @Nonnull protected final Lazy<MailServerGate> mailServerGate;

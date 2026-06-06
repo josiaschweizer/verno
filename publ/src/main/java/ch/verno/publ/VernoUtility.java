@@ -21,4 +21,6 @@ public class VernoUtility {
 
   @NonNls public static final String LUMO_ERROR_COLOR = "var(--lumo-error-color)";
 
+  @NonNls public static final String SEVEN_HUNDRED_PX_REM = "43.75rem";
+
 }

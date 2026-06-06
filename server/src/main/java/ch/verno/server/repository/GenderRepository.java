@@ -32,7 +32,8 @@ public class GenderRepository {
     return jpaRepository.findAll();
   }
 
-  public void save(@Nonnull final GenderEntity entity) {
-    jpaRepository.save(entity);
+  @Nonnull
+  public GenderEntity save(@Nonnull final GenderEntity entity) {
+    return jpaRepository.save(entity);
   }
 }

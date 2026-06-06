@@ -3,8 +3,8 @@ package ch.verno.lib;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class New {
@@ -37,4 +37,15 @@ public class New {
     return list;
   }
 
+  @Nonnull
+  public static <K, V> HashMap<K, V> hashMap() {
+    return new HashMap<>();
+  }
+
+  @Nonnull
+  public static <K, V> HashMap<K, V> hashMap(@Nonnull final K key, @Nonnull final V value) {
+    final var map = new HashMap<K, V>();
+    map.put(key, value);
+    return map;
+  }
 }

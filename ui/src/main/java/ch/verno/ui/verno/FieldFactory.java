@@ -2,6 +2,7 @@ package ch.verno.ui.verno;
 
 import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.lib.language.Language;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
@@ -91,13 +92,14 @@ public class FieldFactory<T> {
   public VATwoOptionEntry<GenderDto> createGenderField(@Nonnull final ValueProvider<T, GenderDto> valueProvider,
                                                        @Nonnull final Setter<T, GenderDto> valueSetter,
                                                        @Nonnull final Binder<T> binder,
-                                                       @Nonnull final List<GenderDto> genderOptions) {
+                                                       @Nonnull final List<GenderDto> genderOptions,
+                                                       @Nonnull final Language currentUserLanguage) {
     return entryFactory.createGenderEntry(
             valueProvider,
             valueSetter,
             binder,
             genderOptions,
-            GenderDto::getName,
+            genderDto -> genderDto.getTranslation(currentUserLanguage),
             Optional.empty(),
             getTranslation("shared.gender")
     );

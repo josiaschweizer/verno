@@ -8,7 +8,7 @@ import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
 import com.vaadin.flow.component.button.Button;
@@ -20,7 +20,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class CreateUserDialog extends VADialog {
+public class CreateUserDialog extends VAAbstractDialog {
 
   @Nonnull private final GlobalInterface globalInterface;
   @Nonnull private final IAppUserService appUserService;

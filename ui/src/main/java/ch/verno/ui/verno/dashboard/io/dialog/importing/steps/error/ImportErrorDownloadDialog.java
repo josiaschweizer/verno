@@ -3,7 +3,7 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error;
 import ch.verno.publ.ApiUrl;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VADialog;
+import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -15,7 +15,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class ImportErrorDownloadDialog extends VADialog {
+public class ImportErrorDownloadDialog extends VAAbstractDialog {
 
   @Nonnull private final String errorFileToken;
   @Nonnull private final String fileName;
