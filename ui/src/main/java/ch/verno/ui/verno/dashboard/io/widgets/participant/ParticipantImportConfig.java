@@ -2,12 +2,11 @@ package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.db.dto.table.AddressDto;
-import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.db.dto.table.ParentDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.service.intern.ICourseLevelService;
-import ch.verno.common.db.service.intern.IGenderService;
-import ch.verno.common.db.service.intern.IParticipantService;
+import ch.verno.common.server.service.intern.ICourseLevelService;
+import ch.verno.common.server.service.intern.IGenderService;
+import ch.verno.common.server.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.lib.i18n.TranslationHelper;

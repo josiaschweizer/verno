@@ -1,9 +1,9 @@
 package ch.verno.server.service.extern.billing.stripe;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.service.extern.ITenantBillingService;
-import ch.verno.common.db.service.extern.billing.stripe.IStripeBillingSessionService;
-import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenResolverService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.billing.stripe.IStripeBillingSessionService;
+import ch.verno.common.server.service.extern.billing.token.IBillingAccessTokenResolverService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.properties.configprovider.VernoBillingConfigProvider;
 import ch.verno.publ.VernoSecrets;

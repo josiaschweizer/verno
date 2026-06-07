@@ -29,7 +29,8 @@
       "pricing": "Preise"
     },
     "actions": {
-      "getStarted": "Loslegen"
+      "getStarted": "Loslegen",
+      "login": "Einloggen"
     },
     "product": {
       "organization": {

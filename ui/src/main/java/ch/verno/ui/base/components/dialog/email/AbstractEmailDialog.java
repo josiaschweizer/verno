@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.dialog.email;
 
 import ch.verno.common.db.dto.table.mail.MailTemplateDto;
-import ch.verno.common.db.service.intern.mail.IMailTemplateService;
+import ch.verno.common.server.service.intern.mail.IMailTemplateService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.lib.mail.MailContentDto;

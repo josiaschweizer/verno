@@ -1,6 +1,6 @@
 package ch.verno.ui.base.billing;
 
-import ch.verno.common.db.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;

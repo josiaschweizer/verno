@@ -2,7 +2,7 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.file.FileDownload;
 import ch.verno.common.db.dto.file.StoredFile;
-import ch.verno.common.db.service.intern.IFileStorageService;
+import ch.verno.common.server.service.intern.IFileStorageService;
 import ch.verno.db.entity.file.StoredFileEntity;
 import ch.verno.db.storage.ObjectStorage;
 import ch.verno.publ.Publ;

@@ -1,15 +1,13 @@
 package ch.verno.ui.verno.settings.panels.report;
 
-import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.db.service.intern.ITenantSettingService;
+import ch.verno.common.server.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.settings.VABaseSetting;
 import ch.verno.ui.client.file.FileApiClient;
 import com.vaadin.flow.component.Component;

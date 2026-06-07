@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.subscription;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
 import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;

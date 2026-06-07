@@ -1,7 +1,7 @@
 package ch.verno.api.endpoints.external.billing;
 
 import ch.verno.api.base.BaseController;
-import ch.verno.common.db.service.extern.billing.stripe.IStripeWebhookService;
+import ch.verno.common.server.service.extern.billing.stripe.IStripeWebhookService;
 import ch.verno.publ.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.ResponseEntity;

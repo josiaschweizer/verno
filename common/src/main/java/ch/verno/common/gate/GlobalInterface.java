@@ -1,7 +1,7 @@
 package ch.verno.common.gate;
 
 import ch.verno.common.db.dto.table.TenantDto;
-import ch.verno.common.db.service.intern.ITenantService;
+import ch.verno.common.server.service.intern.ITenantService;
 import ch.verno.common.properties.env.EnvProvider;
 import ch.verno.common.properties.UserProperties;
 import ch.verno.common.tenant.TenantContext;

@@ -2,8 +2,8 @@ package ch.verno.server.properties.user;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
-import ch.verno.common.db.service.intern.IAppUserService;
-import ch.verno.common.db.service.intern.IAppUserSettingService;
+import ch.verno.common.server.service.intern.IAppUserService;
+import ch.verno.common.server.service.intern.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.properties.UserProperties;
 import ch.verno.lib.Lazy;

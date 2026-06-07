@@ -1,7 +1,7 @@
 package ch.verno.server.mail;
 
-import ch.verno.common.db.service.intern.mail.IMailConfigService;
-import ch.verno.common.db.service.intern.mail.IMailLogService;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
+import ch.verno.common.server.service.intern.mail.IMailLogService;
 import ch.verno.common.db.type.mail.SmtpSecurity;
 import ch.verno.common.exceptions.server.mail.SendMailException;
 import ch.verno.common.gate.GlobalInterface;

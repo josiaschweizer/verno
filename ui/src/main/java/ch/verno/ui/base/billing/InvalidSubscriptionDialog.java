@@ -1,8 +1,8 @@
 package ch.verno.ui.base.billing;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.service.extern.ITenantBillingService;
-import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.billing.token.IBillingAccessLinkService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;

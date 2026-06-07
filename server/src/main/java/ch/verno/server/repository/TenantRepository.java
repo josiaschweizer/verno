@@ -44,6 +44,11 @@ public class TenantRepository {
   }
 
   @Nonnull
+  public Optional<Long> findIdByName(@Nonnull final String name){
+    return repository.findByIdName(name);
+  }
+
+  @Nonnull
   public Long nextId() {
     return repository.nextId();
   }

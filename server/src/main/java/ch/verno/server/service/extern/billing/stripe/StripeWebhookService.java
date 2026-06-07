@@ -2,9 +2,9 @@ package ch.verno.server.service.extern.billing.stripe;
 
 import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.service.extern.ITenantBillingService;
-import ch.verno.common.db.service.extern.billing.IBillingWebhookEventService;
-import ch.verno.common.db.service.extern.billing.stripe.IStripeWebhookService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.billing.IBillingWebhookEventService;
+import ch.verno.common.server.service.extern.billing.stripe.IStripeWebhookService;
 import ch.verno.common.db.type.billing.BillingPaymentStatus;
 import ch.verno.common.db.type.billing.BillingPlanKey;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;

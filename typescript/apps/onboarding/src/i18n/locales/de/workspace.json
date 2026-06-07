@@ -1,0 +1,46 @@
+{
+  "dialog": {
+    "title": "Arbeitsbereich öffnen",
+    "subtitle": "Gib deinen Mandanten-Namen ein, um deine Verno-Umgebung zu starten.",
+    "buttons": {
+      "cancel": "Abbrechen",
+      "open": "Öffnen",
+      "submitting": "Wird gestartet..."
+    },
+    "errors": {
+      "genericTitle": "Arbeitsbereich konnte nicht geöffnet werden",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten.",
+      "tenantNotFound": {
+        "title": "Mandant nicht gefunden",
+        "message": "Es gibt keinen Mandanten mit dem eingegebenen Namen."
+      }
+    }
+  },
+  "fields": {
+    "tenantName": {
+      "label": "Mandanten-Name",
+      "placeholder": "Dein Mandanten-Name",
+      "errors": {
+        "required": "Bitte gib deinen Mandanten-Namen ein."
+      }
+    }
+  },
+  "startPage": {
+    "title": "Arbeitsbereich wird gestartet",
+    "description": "Deine Verno-Umgebung wird vorbereitet. Das kann einen Moment dauern, wenn der Server gerade aus dem Ruhezustand startet.",
+    "tenantLabel": "Mandant",
+    "sessionLabel": "Start-Session",
+    "statusText": "Server wird vorbereitet",
+    "emptyValue": "Nicht vorhanden",
+    "buttons": {
+      "openWorkspace": "Arbeitsbereich öffnen",
+      "backHome": "Zurück zur Startseite"
+    },
+    "errors": {
+      "missingTenant": {
+        "title": "Mandant fehlt",
+        "message": "Die Seite wurde ohne Mandanten-Information geöffnet."
+      }
+    }
+  }
+}

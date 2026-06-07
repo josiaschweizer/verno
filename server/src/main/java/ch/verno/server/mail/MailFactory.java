@@ -3,7 +3,7 @@ package ch.verno.server.mail;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.placeholder.PlaceholderUtil;

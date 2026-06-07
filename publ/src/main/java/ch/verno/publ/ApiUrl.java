@@ -18,6 +18,7 @@ public class ApiUrl {
   public static final String TENANTS = BASE_API + "/tenants";
   public static final String APPLICATION = BASE_API + "/application";
   public static final String EMAIL = BASE_API + "/email";
+  public static final String WORKSPACE = BASE_API + "/workspace";
 
   public static final String BILLING = BASE_API + "/billing";
   public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";
@@ -34,4 +35,5 @@ public class ApiUrl {
   public static final String START_STRIPE_SESSION = "/start";
   public static final String STRIP_WEBHOOK = "/stripe";
 
+  public static final String WORKSPACE_START = "/start";
 }

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.db.service.intern.ICourseLevelService;
+import ch.verno.common.server.service.intern.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.grid.BaseSettingGrid;
 import com.vaadin.flow.function.ValueProvider;

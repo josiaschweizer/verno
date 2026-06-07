@@ -1,7 +1,7 @@
 package ch.verno.server.service.extern.billing;
 
 import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
 import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;

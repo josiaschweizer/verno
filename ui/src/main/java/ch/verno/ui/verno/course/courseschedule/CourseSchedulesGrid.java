@@ -2,7 +2,7 @@ package ch.verno.ui.verno.course.courseschedule;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.filter.CourseScheduleFilter;
-import ch.verno.common.db.service.intern.ICourseScheduleService;
+import ch.verno.common.server.service.intern.ICourseScheduleService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.grid.GridActionRoles;

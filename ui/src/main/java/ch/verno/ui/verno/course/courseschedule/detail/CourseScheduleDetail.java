@@ -2,8 +2,8 @@ package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.type.CourseScheduleStatus;
-import ch.verno.common.db.service.intern.ICourseScheduleService;
-import ch.verno.common.db.service.intern.ITenantSettingService;
+import ch.verno.common.server.service.intern.ICourseScheduleService;
+import ch.verno.common.server.service.intern.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;

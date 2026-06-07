@@ -1,0 +1,46 @@
+{
+  "dialog": {
+    "title": "Open workspace",
+    "subtitle": "Enter your tenant name to start your Verno environment.",
+    "buttons": {
+      "cancel": "Cancel",
+      "open": "Open",
+      "submitting": "Starting..."
+    },
+    "errors": {
+      "genericTitle": "Workspace could not be opened",
+      "unknown": "An unknown error occurred.",
+      "tenantNotFound": {
+        "title": "Tenant not found",
+        "message": "There is no tenant with the entered name."
+      }
+    }
+  },
+  "fields": {
+    "tenantName": {
+      "label": "Tenant name",
+      "placeholder": "Your tenant name",
+      "errors": {
+        "required": "Please enter your tenant name."
+      }
+    }
+  },
+  "startPage": {
+    "title": "Workspace is starting",
+    "description": "Your Verno environment is being prepared. This may take a moment if the server is waking up from sleep mode.",
+    "tenantLabel": "Tenant",
+    "sessionLabel": "Start session",
+    "statusText": "Preparing server",
+    "emptyValue": "Not available",
+    "buttons": {
+      "openWorkspace": "Open workspace",
+      "backHome": "Back to homepage"
+    },
+    "errors": {
+      "missingTenant": {
+        "title": "Tenant missing",
+        "message": "This page was opened without tenant information."
+      }
+    }
+  }
+}

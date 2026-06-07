@@ -2,10 +2,10 @@ package ch.verno.ui.verno.course.courses.detail;
 
 import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.common.db.service.intern.ICourseLevelService;
-import ch.verno.common.db.service.intern.ICourseScheduleService;
-import ch.verno.common.db.service.intern.ICourseService;
-import ch.verno.common.db.service.intern.IInstructorService;
+import ch.verno.common.server.service.intern.ICourseLevelService;
+import ch.verno.common.server.service.intern.ICourseScheduleService;
+import ch.verno.common.server.service.intern.ICourseService;
+import ch.verno.common.server.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.server.service.intern.CourseLevelService;
