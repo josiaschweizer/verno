@@ -2,8 +2,8 @@ package ch.verno.ui.verno.instructor.detail;
 
 import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.dto.table.InstructorDto;
-import ch.verno.common.db.service.intern.IGenderService;
-import ch.verno.common.db.service.intern.IInstructorService;
+import ch.verno.common.server.service.intern.IGenderService;
+import ch.verno.common.server.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;

@@ -1,7 +1,7 @@
 package ch.verno.ui.lib.layouts;
 
 import ch.verno.common.db.role.Role;
-import ch.verno.common.db.service.intern.IAppUserService;
+import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.i18n.TranslationHelper;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;

@@ -1,7 +1,7 @@
 package ch.verno.server.tenant;
 
 import ch.verno.common.db.dto.table.TenantDto;
-import ch.verno.common.db.service.intern.ITenantService;
+import ch.verno.common.server.service.intern.tenant.ITenantService;
 import ch.verno.server.mapper.TenantMapper;
 import ch.verno.server.repository.TenantRepository;
 import jakarta.annotation.Nonnull;
@@ -13,13 +13,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TenantService implements ITenantService {
 
-  @Nonnull
-  private final TenantRepository tenantRepository;
+  @Nonnull private final TenantRepository tenantRepository;
 
-  private final Map<String, Long> cacheBySlug = new ConcurrentHashMap<>();
+  @Nonnull private final Map<String, Long> cacheBySlug;
+  @Nonnull private final Map<String, Long> cacheByName;
 
   public TenantService(@Nonnull final TenantRepository tenantRepository) {
     this.tenantRepository = tenantRepository;
+
+    this.cacheBySlug = new ConcurrentHashMap<>();
+    this.cacheByName = new ConcurrentHashMap<>();
   }
 
   @Nonnull
@@ -33,6 +36,19 @@ public class TenantService implements ITenantService {
 
     final var idOpt = tenantRepository.findIdBySlug(key);
     idOpt.ifPresent(id -> cacheBySlug.put(key, id));
+    return idOpt;
+  }
+
+  @Nonnull
+  @Override
+  public Optional<Long> findTenantIdByName(@Nonnull final String name) {
+    final var cached = cacheByName.get(name);
+    if (cached != null) {
+      return Optional.of(cached);
+    }
+
+    final var idOpt = tenantRepository.findIdByName(name);
+    idOpt.ifPresent(id -> cacheByName.put(name, id));
     return idOpt;
   }
 

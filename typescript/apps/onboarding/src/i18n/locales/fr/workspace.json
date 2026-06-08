@@ -1,0 +1,66 @@
+{
+  "dialog": {
+    "title": "Ouvrir l’espace de travail",
+    "subtitle": "Saisissez le nom de votre mandant pour démarrer votre environnement Verno.",
+    "buttons": {
+      "cancel": "Annuler",
+      "open": "Ouvrir",
+      "submitting": "Démarrage..."
+    },
+    "errors": {
+      "genericTitle": "Impossible d’ouvrir l’espace de travail",
+      "unknown": "Une erreur inconnue s’est produite.",
+      "tenantNotFound": {
+        "title": "Mandant introuvable",
+        "message": "Il n’existe aucun mandant avec le nom saisi."
+      }
+    }
+  },
+  "fields": {
+    "tenantName": {
+      "label": "Nom du mandant",
+      "placeholder": "Nom de votre mandant",
+      "errors": {
+        "required": "Veuillez saisir le nom de votre mandant."
+      }
+    }
+  },
+  "startPage": {
+    "title": "Démarrage de l’espace de travail",
+    "readyTitle": "L’espace de travail est prêt",
+    "failedTitle": "L’espace de travail n’a pas pu démarrer",
+    "description": "Votre environnement Verno est en cours de préparation. Cela peut prendre un moment si le serveur sort de veille.",
+    "tenantLabel": "Mandant",
+    "sessionLabel": "Session de démarrage",
+    "statusLabel": "Statut",
+    "statusText": "Préparation du serveur",
+    "readyStatusText": "Le serveur est prêt",
+    "failedStatusText": "Échec du démarrage",
+    "emptyValue": "Non disponible",
+    "status": {
+      "STARTING": "Démarrage en cours",
+      "READY": "Prêt",
+      "FAILED": "Échec",
+      "EXPIRED": "Expiré"
+    },
+    "buttons": {
+      "openWorkspace": "Ouvrir l’espace de travail",
+      "backHome": "Retour à la page d’accueil",
+      "waiting": "Veuillez patienter..."
+    },
+    "errors": {
+      "missingTenant": {
+        "title": "Mandant manquant",
+        "message": "La page a été ouverte sans information de mandant."
+      },
+      "sessionNotFound": {
+        "title": "Session de démarrage introuvable",
+        "message": "La session de démarrage est introuvable ou a expiré."
+      },
+      "statusFailed": {
+        "title": "Impossible de récupérer le statut",
+        "message": "Le statut n’a pas pu être récupéré."
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "dialog": {
+    "title": "Open workspace",
+    "subtitle": "Enter your tenant name to start your Verno environment.",
+    "buttons": {
+      "cancel": "Cancel",
+      "open": "Open",
+      "submitting": "Starting..."
+    },
+    "errors": {
+      "genericTitle": "Workspace could not be opened",
+      "unknown": "An unknown error occurred.",
+      "tenantNotFound": {
+        "title": "Tenant not found",
+        "message": "There is no tenant with the entered name."
+      }
+    }
+  },
+  "fields": {
+    "tenantName": {
+      "label": "Tenant name",
+      "placeholder": "Your tenant name",
+      "errors": {
+        "required": "Please enter your tenant name."
+      }
+    }
+  },
+  "startPage": {
+    "title": "Workspace is starting",
+    "readyTitle": "Workspace is ready",
+    "failedTitle": "Workspace could not be started",
+    "description": "Your Verno environment is being prepared. This may take a moment if the server is waking up from sleep mode.",
+    "tenantLabel": "Tenant",
+    "sessionLabel": "Start session",
+    "statusLabel": "Status",
+    "statusText": "Preparing server",
+    "readyStatusText": "Server is ready",
+    "failedStatusText": "Startup failed",
+    "emptyValue": "Not available",
+    "status": {
+      "STARTING": "Starting",
+      "READY": "Ready",
+      "FAILED": "Failed",
+      "EXPIRED": "Expired"
+    },
+    "buttons": {
+      "openWorkspace": "Open workspace",
+      "backHome": "Back to homepage",
+      "waiting": "Please wait..."
+    },
+    "errors": {
+      "missingTenant": {
+        "title": "Tenant missing",
+        "message": "This page was opened without tenant information."
+      },
+      "sessionNotFound": {
+        "title": "Start session not found",
+        "message": "The start session was not found or has expired."
+      },
+      "statusFailed": {
+        "title": "Could not fetch status",
+        "message": "The status could not be fetched."
+      }
+    }
+  }
+}

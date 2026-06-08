@@ -1,7 +1,7 @@
 package ch.verno.server.service.intern.text;
 
 import ch.verno.common.db.dto.table.text.TextDto;
-import ch.verno.common.db.service.intern.ITextService;
+import ch.verno.common.server.service.intern.ITextService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.tenant.TenantContext;

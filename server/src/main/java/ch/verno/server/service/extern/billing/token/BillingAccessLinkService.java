@@ -1,8 +1,8 @@
 package ch.verno.server.service.extern.billing.token;
 
-import ch.verno.common.db.service.extern.ITenantBillingService;
-import ch.verno.common.db.service.extern.billing.token.IBillingAccessLinkService;
-import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenGeneratorService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.billing.token.IBillingAccessLinkService;
+import ch.verno.common.server.service.extern.billing.token.IBillingAccessTokenGeneratorService;
 import ch.verno.common.db.type.billing.BillingAccessTokenPurpose;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.url.UrlUtil;
@@ -41,7 +41,7 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
             tokenPurpose
     );
 
-    return UrlUtil.buildUrl(subscriptionOverviewUrl, ApiUrl.ENTRY_TOKEN + generatedToken.getRawToken());
+    return UrlUtil.buildUrl(subscriptionOverviewUrl, ApiUrl.ENTRY_TOKEN + generatedToken.rawToken());
   }
 
   @Nonnull
@@ -54,6 +54,6 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
             tokenPurpose
     );
 
-    return subscriptionOverviewUrl + ApiUrl.ENTRY_TOKEN + generatedToken.getRawToken();
+    return subscriptionOverviewUrl + ApiUrl.ENTRY_TOKEN + generatedToken.rawToken();
   }
 }

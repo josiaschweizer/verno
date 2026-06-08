@@ -29,7 +29,8 @@
       "pricing": "Tarifs"
     },
     "actions": {
-      "getStarted": "Commencer"
+      "getStarted": "Commencer",
+      "login": "Se connecter"
     },
     "product": {
       "organization": {

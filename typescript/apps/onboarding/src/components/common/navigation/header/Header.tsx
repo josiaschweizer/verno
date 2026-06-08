@@ -3,20 +3,22 @@
 import { ComponentType, SVGProps, useMemo, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid'
+import {
+  ArrowRightStartOnRectangleIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
+  FolderIcon,
+  UsersIcon,
+} from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
 import MenuPopover from './MenuPopover'
 import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenu from './MobileMenu'
 import HeaderLogo from './HeaderLogo'
-import {
-  FolderIcon,
-  CalendarDaysIcon,
-  UsersIcon,
-  ChartBarIcon,
-} from '@heroicons/react/24/outline'
 
 import { Button } from '@verno/components/ui/button'
 import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
+import StartWorkspaceDialog from '@/components/common/tenantstart/TenantStartDialog'
 
 export interface Product {
   name: string
@@ -28,6 +30,7 @@ export interface Product {
 export default function Header() {
   const { t } = useTranslation('lib')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [startWorkspace, setStartWorkspace] = useState(false)
   const [registerOpen, setRegisterOpen] = useState(false)
 
   const products: Product[] = useMemo(
@@ -89,7 +92,17 @@ export default function Header() {
           <DesktopNavLinks />
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-3">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setStartWorkspace(true)}
+            className="rounded-md gap-2"
+          >
+            {t('header.actions.login')}
+            <ArrowRightStartOnRectangleIcon className="size-4" />
+          </Button>
+
           <Button
             size="sm"
             onClick={() => setRegisterOpen(true)}
@@ -116,6 +129,10 @@ export default function Header() {
         />
       </Dialog>
 
+      <_StartWorkspaceDialogRenderer
+        open={startWorkspace}
+        onClose={() => setStartWorkspace(false)}
+      />
       <_RegisterDialogRenderer
         open={registerOpen}
         onClose={() => setRegisterOpen(false)}
@@ -132,4 +149,14 @@ function _RegisterDialogRenderer({
   onClose: () => void
 }) {
   return <RegisterMultiStepDialog open={open} onClose={onClose} />
+}
+
+function _StartWorkspaceDialogRenderer({
+  open,
+  onClose,
+}: {
+  open: boolean
+  onClose: () => void
+}) {
+  return <StartWorkspaceDialog open={open} onClose={onClose} />
 }

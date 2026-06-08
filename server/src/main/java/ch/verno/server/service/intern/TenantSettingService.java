@@ -2,7 +2,7 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.defaultdto.DefaultTenantSettingDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.db.service.intern.ITenantSettingService;
+import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.setting.TenantSettingEntity;

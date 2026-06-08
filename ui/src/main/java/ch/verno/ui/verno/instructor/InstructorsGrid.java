@@ -2,7 +2,7 @@ package ch.verno.ui.verno.instructor;
 
 import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.db.filter.InstructorFilter;
-import ch.verno.common.db.service.intern.IInstructorService;
+import ch.verno.common.server.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.publ.Routes;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
 import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.db.service.intern.IAppUserService;
+import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.publ.Publ;

@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
-import ch.verno.common.db.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;

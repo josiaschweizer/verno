@@ -1,7 +1,7 @@
 package ch.verno.server.service.extern.billing.token;
 
 import ch.verno.common.db.dto.table.billing.BillingAccessTokenDto;
-import ch.verno.common.db.service.extern.billing.token.IBillingAccessTokenResolverService;
+import ch.verno.common.server.service.extern.billing.token.IBillingAccessTokenResolverService;
 import ch.verno.common.db.type.billing.BillingAccessTokenPurpose;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;

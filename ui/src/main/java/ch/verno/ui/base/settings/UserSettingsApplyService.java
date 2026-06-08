@@ -1,6 +1,6 @@
 package ch.verno.ui.base.settings;
 
-import ch.verno.common.db.service.intern.IAppUserSettingService;
+import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Publ;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;

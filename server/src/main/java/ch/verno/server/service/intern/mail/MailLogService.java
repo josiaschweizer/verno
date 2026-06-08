@@ -2,7 +2,7 @@ package ch.verno.server.service.intern.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
 import ch.verno.common.db.filter.MailLogFilter;
-import ch.verno.common.db.service.intern.mail.IMailLogService;
+import ch.verno.common.server.service.intern.mail.IMailLogService;
 import ch.verno.common.db.type.mail.MailLogStatus;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;

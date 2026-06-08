@@ -1,6 +1,6 @@
 package ch.verno.ui.base.navigation;
 
-import ch.verno.common.db.service.intern.mail.IMailConfigService;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.i18n.TranslationHelper;

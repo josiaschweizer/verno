@@ -1,6 +1,6 @@
 package ch.verno.server.properties.billing;
 
-import ch.verno.common.db.service.extern.ITenantBillingService;
+import ch.verno.common.server.service.extern.ITenantBillingService;
 import ch.verno.common.db.type.billing.BillingLicenceOption;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.properties.BillingProperties;

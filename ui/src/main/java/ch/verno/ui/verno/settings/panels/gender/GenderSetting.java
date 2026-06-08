@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.settings.panels.gender;
 
-import ch.verno.common.db.service.intern.IGenderService;
+import ch.verno.common.server.service.intern.IGenderService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
