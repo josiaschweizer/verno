@@ -41,7 +41,7 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
             tokenPurpose
     );
 
-    return UrlUtil.buildUrl(subscriptionOverviewUrl, ApiUrl.ENTRY_TOKEN + generatedToken.getRawToken());
+    return UrlUtil.buildUrl(subscriptionOverviewUrl, ApiUrl.ENTRY_TOKEN + generatedToken.rawToken());
   }
 
   @Nonnull
@@ -54,6 +54,6 @@ public class BillingAccessLinkService implements IBillingAccessLinkService {
             tokenPurpose
     );
 
-    return subscriptionOverviewUrl + ApiUrl.ENTRY_TOKEN + generatedToken.getRawToken();
+    return subscriptionOverviewUrl + ApiUrl.ENTRY_TOKEN + generatedToken.rawToken();
   }
 }

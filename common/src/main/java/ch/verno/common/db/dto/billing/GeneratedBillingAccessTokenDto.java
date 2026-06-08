@@ -6,29 +6,8 @@ import jakarta.annotation.Nullable;
 
 import java.time.OffsetDateTime;
 
-public class GeneratedBillingAccessTokenDto {
-
-  @Nonnull
-  private final String rawToken;
-
-  @Nonnull
-  private final BillingAccessTokenDto billingAccessToken;
-
-  public GeneratedBillingAccessTokenDto(@Nonnull final String rawToken,
-                                        @Nonnull final BillingAccessTokenDto billingAccessToken) {
-    this.rawToken = rawToken;
-    this.billingAccessToken = billingAccessToken;
-  }
-
-  @Nonnull
-  public String getRawToken() {
-    return rawToken;
-  }
-
-  @Nonnull
-  public BillingAccessTokenDto getBillingAccessToken() {
-    return billingAccessToken;
-  }
+public record GeneratedBillingAccessTokenDto(@Nonnull String rawToken,
+                                             @Nonnull BillingAccessTokenDto billingAccessToken) {
 
   @Nullable
   public OffsetDateTime getExpiresAt() {

@@ -4,7 +4,7 @@ import ch.verno.common.api.dto.exernal.tenant.CreateTenantRequest;
 import ch.verno.common.api.dto.exernal.tenant.CreateTenantResponse;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.db.dto.table.GenderDto;
-import ch.verno.common.server.service.intern.IAppUserSettingService;
+import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.common.server.service.intern.IGenderService;
 import ch.verno.common.exceptions.server.service.TenantAlreadyExistsException;
 import ch.verno.common.exceptions.server.service.TenantProvisionFailedException;

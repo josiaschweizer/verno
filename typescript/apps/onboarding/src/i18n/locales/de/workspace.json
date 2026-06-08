@@ -27,19 +27,39 @@
   },
   "startPage": {
     "title": "Arbeitsbereich wird gestartet",
+    "readyTitle": "Arbeitsbereich ist bereit",
+    "failedTitle": "Arbeitsbereich konnte nicht gestartet werden",
     "description": "Deine Verno-Umgebung wird vorbereitet. Das kann einen Moment dauern, wenn der Server gerade aus dem Ruhezustand startet.",
     "tenantLabel": "Mandant",
     "sessionLabel": "Start-Session",
+    "statusLabel": "Status",
     "statusText": "Server wird vorbereitet",
+    "readyStatusText": "Server ist bereit",
+    "failedStatusText": "Start fehlgeschlagen",
     "emptyValue": "Nicht vorhanden",
+    "status": {
+      "STARTING": "Wird gestartet",
+      "READY": "Bereit",
+      "FAILED": "Fehlgeschlagen",
+      "EXPIRED": "Abgelaufen"
+    },
     "buttons": {
       "openWorkspace": "Arbeitsbereich öffnen",
-      "backHome": "Zurück zur Startseite"
+      "backHome": "Zurück zur Startseite",
+      "waiting": "Bitte warten..."
     },
     "errors": {
       "missingTenant": {
         "title": "Mandant fehlt",
         "message": "Die Seite wurde ohne Mandanten-Information geöffnet."
+      },
+      "sessionNotFound": {
+        "title": "Start-Session nicht gefunden",
+        "message": "Die Start-Session wurde nicht gefunden oder ist abgelaufen."
+      },
+      "statusFailed": {
+        "title": "Status konnte nicht abgefragt werden",
+        "message": "Der Status konnte nicht abgefragt werden."
       }
     }
   }

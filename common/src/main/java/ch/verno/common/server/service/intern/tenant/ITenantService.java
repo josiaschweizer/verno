@@ -1,4 +1,4 @@
-package ch.verno.common.server.service.intern;
+package ch.verno.common.server.service.intern.tenant;
 
 import ch.verno.common.db.dto.table.TenantDto;
 import jakarta.annotation.Nonnull;

@@ -27,19 +27,39 @@
   },
   "startPage": {
     "title": "Démarrage de l’espace de travail",
+    "readyTitle": "L’espace de travail est prêt",
+    "failedTitle": "L’espace de travail n’a pas pu démarrer",
     "description": "Votre environnement Verno est en cours de préparation. Cela peut prendre un moment si le serveur sort de veille.",
     "tenantLabel": "Mandant",
     "sessionLabel": "Session de démarrage",
+    "statusLabel": "Statut",
     "statusText": "Préparation du serveur",
+    "readyStatusText": "Le serveur est prêt",
+    "failedStatusText": "Échec du démarrage",
     "emptyValue": "Non disponible",
+    "status": {
+      "STARTING": "Démarrage en cours",
+      "READY": "Prêt",
+      "FAILED": "Échec",
+      "EXPIRED": "Expiré"
+    },
     "buttons": {
       "openWorkspace": "Ouvrir l’espace de travail",
-      "backHome": "Retour à la page d’accueil"
+      "backHome": "Retour à la page d’accueil",
+      "waiting": "Veuillez patienter..."
     },
     "errors": {
       "missingTenant": {
         "title": "Mandant manquant",
         "message": "La page a été ouverte sans information de mandant."
+      },
+      "sessionNotFound": {
+        "title": "Session de démarrage introuvable",
+        "message": "La session de démarrage est introuvable ou a expiré."
+      },
+      "statusFailed": {
+        "title": "Impossible de récupérer le statut",
+        "message": "Le statut n’a pas pu être récupéré."
       }
     }
   }

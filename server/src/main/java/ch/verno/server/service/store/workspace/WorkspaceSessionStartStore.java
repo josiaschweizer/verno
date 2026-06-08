@@ -1,6 +1,6 @@
 package ch.verno.server.service.store.workspace;
 
-import ch.verno.common.server.service.extern.workspace.IWorkspaceSessionStartStore;
+import ch.verno.common.server.service.store.workspace.IWorkspaceSessionStartStore;
 import ch.verno.common.server.service.store.workspace.WorkspaceStartSession;
 import ch.verno.common.server.service.store.workspace.WorkspaceStartStatus;
 import jakarta.annotation.Nonnull;
@@ -33,15 +33,15 @@ public class WorkspaceSessionStartStore implements IWorkspaceSessionStartStore {
   }
 
   @Override
-  public void updateStatus(@Nonnull final String startSessionId,
+  public Optional<WorkspaceStartSession> updateStatus(@Nonnull final String startSessionId,
                            @Nonnull final WorkspaceStartStatus status,
                            @Nullable final String message) {
     final var existing = sessions.get(startSessionId);
     if (existing == null) {
-      return;
+      return Optional.empty();
     }
 
-    sessions.put(startSessionId, new WorkspaceStartSession(
+    final var updatedSession = new WorkspaceStartSession(
             existing.startSessionId(),
             existing.tenantId(),
             existing.tenantName(),
@@ -51,6 +51,9 @@ public class WorkspaceSessionStartStore implements IWorkspaceSessionStartStore {
             message,
             existing.createdAt(),
             Instant.now()
-    ));
+    );
+
+    sessions.put(startSessionId, updatedSession);
+    return Optional.of(updatedSession);
   }
 }

@@ -36,8 +36,8 @@ public class TestBillingAccessTokenGeneratorService extends BaseBillingServiceTe
     );
 
     Assertions.assertNotNull(result);
-    assertNotBlank(result.getRawToken());
-    Assertions.assertEquals(savedDto, result.getBillingAccessToken());
+    assertNotBlank(result.rawToken());
+    Assertions.assertEquals(savedDto, result.billingAccessToken());
 
     final var captor = ArgumentCaptor.forClass(BillingAccessTokenDto.class);
     Mockito.verify(billingAccessTokenService).createBillingAccessToken(captor.capture());
@@ -49,7 +49,7 @@ public class TestBillingAccessTokenGeneratorService extends BaseBillingServiceTe
 
     Assertions.assertNotNull(persistedDto.getExpiresAt());
     assertNotBlank(persistedDto.getTokenHash());
-    Assertions.assertNotEquals(result.getRawToken(), persistedDto.getTokenHash());
+    Assertions.assertNotEquals(result.rawToken(), persistedDto.getTokenHash());
   }
 
   @Test

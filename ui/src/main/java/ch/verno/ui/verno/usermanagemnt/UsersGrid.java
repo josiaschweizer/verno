@@ -3,7 +3,7 @@ package ch.verno.ui.verno.usermanagemnt;
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.filter.AppUserFilter;
 import ch.verno.common.db.role.Role;
-import ch.verno.common.server.service.intern.IAppUserService;
+import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;

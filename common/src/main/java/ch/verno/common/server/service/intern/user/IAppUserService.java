@@ -1,4 +1,4 @@
-package ch.verno.common.server.service.intern;
+package ch.verno.common.server.service.intern.user;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.filter.AppUserFilter;

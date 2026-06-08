@@ -5,7 +5,7 @@ import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.db.filter.ParticipantFilter;
 import ch.verno.common.server.service.intern.IParticipantService;
-import ch.verno.common.server.service.intern.ITenantSettingService;
+import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;

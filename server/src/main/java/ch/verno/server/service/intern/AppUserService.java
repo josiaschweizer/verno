@@ -2,7 +2,7 @@ package ch.verno.server.service.intern;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.filter.AppUserFilter;
-import ch.verno.common.server.service.intern.IAppUserService;
+import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.common.tenant.TenantContext;

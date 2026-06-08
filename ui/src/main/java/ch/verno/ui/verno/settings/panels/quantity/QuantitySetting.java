@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings.panels.quantity;
 
 import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.server.service.intern.ITenantSettingService;
+import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;

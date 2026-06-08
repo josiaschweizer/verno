@@ -27,19 +27,39 @@
   },
   "startPage": {
     "title": "Workspace is starting",
+    "readyTitle": "Workspace is ready",
+    "failedTitle": "Workspace could not be started",
     "description": "Your Verno environment is being prepared. This may take a moment if the server is waking up from sleep mode.",
     "tenantLabel": "Tenant",
     "sessionLabel": "Start session",
+    "statusLabel": "Status",
     "statusText": "Preparing server",
+    "readyStatusText": "Server is ready",
+    "failedStatusText": "Startup failed",
     "emptyValue": "Not available",
+    "status": {
+      "STARTING": "Starting",
+      "READY": "Ready",
+      "FAILED": "Failed",
+      "EXPIRED": "Expired"
+    },
     "buttons": {
       "openWorkspace": "Open workspace",
-      "backHome": "Back to homepage"
+      "backHome": "Back to homepage",
+      "waiting": "Please wait..."
     },
     "errors": {
       "missingTenant": {
         "title": "Tenant missing",
         "message": "This page was opened without tenant information."
+      },
+      "sessionNotFound": {
+        "title": "Start session not found",
+        "message": "The start session was not found or has expired."
+      },
+      "statusFailed": {
+        "title": "Could not fetch status",
+        "message": "The status could not be fetched."
       }
     }
   }

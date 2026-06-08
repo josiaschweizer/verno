@@ -2,8 +2,8 @@ package ch.verno.ui.verno.settings.panels.theme;
 
 import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.dto.table.AppUserSettingDto;
-import ch.verno.common.server.service.intern.IAppUserService;
-import ch.verno.common.server.service.intern.IAppUserSettingService;
+import ch.verno.common.server.service.intern.user.IAppUserService;
+import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.language.Language;
 import ch.verno.ui.base.settings.VABaseSetting;
