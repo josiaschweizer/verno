@@ -2,6 +2,7 @@ package ch.verno.publ;
 
 import org.jetbrains.annotations.NonNls;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class ApiUrl {
 
   @NonNls private static final String API = "/api";
@@ -16,11 +17,9 @@ public class ApiUrl {
   @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL + BASE_API + "/temp-file/export";
   @NonNls public static final String FILES = INTERNAL + BASE_API + "/files";
 
-  @NonNls public static final String DEBUG = BASE_API + "/_debug";
   @NonNls public static final String TENANTS = BASE_API + "/tenants";
   @NonNls public static final String APPLICATION = BASE_API + "/application";
   @NonNls public static final String EMAIL = BASE_API + "/email";
-  @NonNls public static final String WORKSPACE = BASE_API + "/workspace";
 
   @NonNls public static final String BILLING = BASE_API + "/billing";
   @NonNls public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";
@@ -37,7 +36,4 @@ public class ApiUrl {
   @NonNls public static final String START_STRIPE_SESSION = "/start";
   @NonNls public static final String STRIP_WEBHOOK = "/stripe";
 
-  @NonNls public static final String WORKSPACE_START = "/start";
-  @NonNls public static final String WORKSPACE_SESSION_STATUS = WORKSPACE_START + "/{startSessionId}/status";
-  @NonNls public static final String WORKSPACE_SESSION_EVENTS = WORKSPACE_START + "/{startSessionId}/events";
 }

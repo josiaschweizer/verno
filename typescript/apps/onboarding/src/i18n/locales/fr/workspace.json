@@ -11,15 +11,15 @@
       "genericTitle": "Impossible d’ouvrir l’espace de travail",
       "unknown": "Une erreur inconnue s’est produite.",
       "tenantNotFound": {
-        "title": "Mandant introuvable",
-        "message": "Il n’existe aucun mandant avec le nom saisi."
+        "title": "Mandant inaccessible",
+        "message": "Veuillez vérifier le nom du mandant saisi et réessayer."
       }
     }
   },
   "fields": {
     "tenantName": {
       "label": "Nom du mandant",
-      "placeholder": "Nom de votre mandant",
+      "placeholder": "p. ex. demo",
       "errors": {
         "required": "Veuillez saisir le nom de votre mandant."
       }
@@ -31,8 +31,8 @@
     "failedTitle": "L’espace de travail n’a pas pu démarrer",
     "description": "Votre environnement Verno est en cours de préparation. Cela peut prendre un moment si le serveur sort de veille.",
     "tenantLabel": "Mandant",
-    "sessionLabel": "Session de démarrage",
     "statusLabel": "Statut",
+    "attemptLabel": "Tentative",
     "statusText": "Préparation du serveur",
     "readyStatusText": "Le serveur est prêt",
     "failedStatusText": "Échec du démarrage",
@@ -53,13 +53,9 @@
         "title": "Mandant manquant",
         "message": "La page a été ouverte sans information de mandant."
       },
-      "sessionNotFound": {
-        "title": "Session de démarrage introuvable",
-        "message": "La session de démarrage est introuvable ou a expiré."
-      },
       "statusFailed": {
-        "title": "Impossible de récupérer le statut",
-        "message": "Le statut n’a pas pu être récupéré."
+        "title": "Impossible d’atteindre le mandant",
+        "message": "Le mandant n’a pas pu être démarré ou atteint."
       }
     }
   }

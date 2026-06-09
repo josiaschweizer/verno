@@ -11,15 +11,15 @@
       "genericTitle": "Workspace could not be opened",
       "unknown": "An unknown error occurred.",
       "tenantNotFound": {
-        "title": "Tenant not found",
-        "message": "There is no tenant with the entered name."
+        "title": "Tenant unreachable",
+        "message": "Please check the entered tenant name and try again."
       }
     }
   },
   "fields": {
     "tenantName": {
       "label": "Tenant name",
-      "placeholder": "Your tenant name",
+      "placeholder": "e.g. demo",
       "errors": {
         "required": "Please enter your tenant name."
       }
@@ -31,8 +31,8 @@
     "failedTitle": "Workspace could not be started",
     "description": "Your Verno environment is being prepared. This may take a moment if the server is waking up from sleep mode.",
     "tenantLabel": "Tenant",
-    "sessionLabel": "Start session",
     "statusLabel": "Status",
+    "attemptLabel": "Attempt",
     "statusText": "Preparing server",
     "readyStatusText": "Server is ready",
     "failedStatusText": "Startup failed",
@@ -53,13 +53,9 @@
         "title": "Tenant missing",
         "message": "This page was opened without tenant information."
       },
-      "sessionNotFound": {
-        "title": "Start session not found",
-        "message": "The start session was not found or has expired."
-      },
       "statusFailed": {
-        "title": "Could not fetch status",
-        "message": "The status could not be fetched."
+        "title": "Tenant could not be reached",
+        "message": "The tenant could not be started or reached."
       }
     }
   }

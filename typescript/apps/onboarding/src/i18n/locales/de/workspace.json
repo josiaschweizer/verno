@@ -11,15 +11,15 @@
       "genericTitle": "Arbeitsbereich konnte nicht geöffnet werden",
       "unknown": "Ein unbekannter Fehler ist aufgetreten.",
       "tenantNotFound": {
-        "title": "Mandant nicht gefunden",
-        "message": "Es gibt keinen Mandanten mit dem eingegebenen Namen."
+        "title": "Mandant nicht erreichbar",
+        "message": "Bitte prüfe den eingegebenen Mandanten-Namen und versuche es erneut."
       }
     }
   },
   "fields": {
     "tenantName": {
       "label": "Mandanten-Name",
-      "placeholder": "Dein Mandanten-Name",
+      "placeholder": "z. B. demo",
       "errors": {
         "required": "Bitte gib deinen Mandanten-Namen ein."
       }
@@ -31,8 +31,8 @@
     "failedTitle": "Arbeitsbereich konnte nicht gestartet werden",
     "description": "Deine Verno-Umgebung wird vorbereitet. Das kann einen Moment dauern, wenn der Server gerade aus dem Ruhezustand startet.",
     "tenantLabel": "Mandant",
-    "sessionLabel": "Start-Session",
     "statusLabel": "Status",
+    "attemptLabel": "Versuch",
     "statusText": "Server wird vorbereitet",
     "readyStatusText": "Server ist bereit",
     "failedStatusText": "Start fehlgeschlagen",
@@ -53,13 +53,9 @@
         "title": "Mandant fehlt",
         "message": "Die Seite wurde ohne Mandanten-Information geöffnet."
       },
-      "sessionNotFound": {
-        "title": "Start-Session nicht gefunden",
-        "message": "Die Start-Session wurde nicht gefunden oder ist abgelaufen."
-      },
       "statusFailed": {
-        "title": "Status konnte nicht abgefragt werden",
-        "message": "Der Status konnte nicht abgefragt werden."
+        "title": "Mandant konnte nicht erreicht werden",
+        "message": "Der Mandant konnte nicht gestartet oder erreicht werden."
       }
     }
   }

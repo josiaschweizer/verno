@@ -13,14 +13,18 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@verno/components/ui/button'
 import { workspaceApi, type WorkspaceStartStatus } from '@/lib/api/workspaceApi'
 
+const POLL_INTERVAL_MS = 2000
+const REQUEST_TIMEOUT_MS = 5000
+const MAX_ATTEMPTS = 30
+
 export default function WorkspaceStartPage() {
   const { t } = useTranslation('workspace')
   const [searchParams] = useSearchParams()
 
-  const session = searchParams.get('session')
   const tenant = searchParams.get('tenant')
 
   const [status, setStatus] = useState<WorkspaceStartStatus>('STARTING')
+  const [attempt, setAttempt] = useState(0)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
 
   const tenantUrl = useMemo(() => {
@@ -28,44 +32,64 @@ export default function WorkspaceStartPage() {
       return null
     }
 
-    return `https://${tenant}.verno-app.ch`
+    return workspaceApi.buildWorkspaceUrl(tenant)
   }, [tenant])
 
   useEffect(() => {
-    if (!session) {
+    if (!tenantUrl) {
+      setStatus('FAILED')
+      setStatusMessage(t('startPage.errors.missingTenant.message'))
       return
     }
 
-    const controller = new AbortController()
+    let cancelled = false
+    let timeoutId: number | undefined
+    let currentAttempt = 0
 
-    workspaceApi.subscribeWorkspaceStartStatus({
-      startSessionId: session,
-      signal: controller.signal,
-      onStatus: (event) => {
-        setStatus(event.status)
-        setStatusMessage(event.message ?? null)
+    const ping = async () => {
+      if (cancelled) {
+        return
+      }
 
-        if (event.status === 'READY') {
-          controller.abort()
-          window.location.href = event.redirectUrl
-          return
-        }
+      currentAttempt += 1
+      setAttempt(currentAttempt)
 
-        if (event.status === 'FAILED' || event.status === 'EXPIRED') {
-          controller.abort()
-        }
-      },
-      onError: () => {
-        controller.abort()
+      const isReady = await workspaceApi.pingWorkspace(
+        tenantUrl,
+        REQUEST_TIMEOUT_MS,
+      )
+
+      if (cancelled) {
+        return
+      }
+
+      if (isReady) {
+        setStatus('READY')
+        setStatusMessage(t('startPage.readyStatusText'))
+
+        window.location.href = tenantUrl
+        return
+      }
+
+      if (currentAttempt >= MAX_ATTEMPTS) {
         setStatus('FAILED')
         setStatusMessage(t('startPage.errors.statusFailed.message'))
-      },
-    })
+        return
+      }
+
+      timeoutId = window.setTimeout(ping, POLL_INTERVAL_MS)
+    }
+
+    ping()
 
     return () => {
-      controller.abort()
+      cancelled = true
+
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
     }
-  }, [session, t])
+  }, [tenantUrl, t])
 
   const openWorkspace = () => {
     if (!tenantUrl) {
@@ -152,20 +176,6 @@ export default function WorkspaceStartPage() {
                 </div>
               </div>
 
-              {session && (
-                <div>
-                  <p className="text-sm font-medium text-verno-darker/55">
-                    {t('startPage.sessionLabel')}
-                  </p>
-
-                  <div className="mt-2 rounded-2xl border border-verno-darker/10 bg-verno-bg px-5 py-4">
-                    <p className="break-all font-mono text-sm text-verno-darker/70">
-                      {session}
-                    </p>
-                  </div>
-                </div>
-              )}
-
               <div>
                 <p className="text-sm font-medium text-verno-darker/55">
                   {t('startPage.statusLabel')}
@@ -174,6 +184,18 @@ export default function WorkspaceStartPage() {
                 <div className="mt-2 rounded-2xl border border-verno-darker/10 bg-verno-bg px-5 py-4">
                   <p className="text-sm font-medium text-verno-darker">
                     {t(`startPage.status.${status}`)}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-verno-darker/55">
+                  {t('startPage.attemptLabel')}
+                </p>
+
+                <div className="mt-2 rounded-2xl border border-verno-darker/10 bg-verno-bg px-5 py-4">
+                  <p className="text-sm text-verno-darker/70">
+                    {attempt} / {MAX_ATTEMPTS}
                   </p>
                 </div>
               </div>
@@ -205,7 +227,7 @@ export default function WorkspaceStartPage() {
               <Button
                 type="button"
                 onClick={openWorkspace}
-                disabled={!tenantUrl || status === 'STARTING'}
+                disabled={!tenantUrl}
                 className="w-full whitespace-nowrap sm:w-auto"
               >
                 {status === 'STARTING'

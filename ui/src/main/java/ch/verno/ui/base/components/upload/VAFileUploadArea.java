@@ -1,6 +1,7 @@
 package ch.verno.ui.base.components.upload;
 
 import ch.verno.common.gate.server.TempFileServerGate;
+import ch.verno.publ.CssImportConstants;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.UI;
@@ -12,25 +13,26 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.function.Consumer;
 
-@CssImport("./components/upload/va-file-upload-area.css")
+@CssImport(CssImportConstants.VA_FILE_UPLOAD_AREA)
 public class VAFileUploadArea extends VerticalLayout {
 
   // TODO: FIX MAX FILE = 1 -> setMaxFiles throw RuntimeException => component should support more than 1 file (see https://josiaschweizer.youtrack.cloud/issue/verno-147/VAFileUploadArea-support-more-than-one-file)
 
-  private static final String DROP_AREA_CLASSNAME = "va-file-upload-drop";
-  private static final String UPLOAD_CLASSNAME = "va-file-upload";
+  @NonNls private static final String DROP_AREA_CLASSNAME = "va-file-upload-drop";
+  @NonNls private static final String UPLOAD_CLASSNAME = "va-file-upload";
 
-  public static final String FORMAT_SIZE_KB = "%.1f KB";
-  public static final String FORMAT_SIZE_MB = "%.1f MB";
-  public static final String FORMAT_SIZE_BYTES = " B";
-  public static final String SANITIZE_REGEX = "[^a-zA-Z0-9._-]";
-  public static final String UPLOAD_JS_FUNCTION = "this.files = []; this.requestContentUpdate && this.requestContentUpdate();";
+  @NonNls public static final String FORMAT_SIZE_KB = "%.1f KB";
+  @NonNls public static final String FORMAT_SIZE_MB = "%.1f MB";
+  @NonNls public static final String FORMAT_SIZE_BYTES = " B";
+  @NonNls public static final String SANITIZE_REGEX = "[^a-zA-Z0-9._-]";
+  @NonNls public static final String UPLOAD_JS_FUNCTION = "this.files = []; this.requestContentUpdate && this.requestContentUpdate();";
 
   @Nonnull
   private final TempFileServerGate tempFileServerGate;
@@ -74,14 +76,12 @@ public class VAFileUploadArea extends VerticalLayout {
       final var ui = UI.getCurrent();
 
       deleteTempIfPresent();
-
       originalFileName = event.getFileName();
 
-      final byte[] bytes = readAllBytes(event.getInputStream());
+      final var bytes = readAllBytes(event.getInputStream());
       sizeBytes = bytes.length;
 
       final String stored;
-
       try {
         stored = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
       } catch (Exception e) {
@@ -129,6 +129,7 @@ public class VAFileUploadArea extends VerticalLayout {
     if (maxFiles > 1){
       throw new RuntimeException("VAFileUploadArea only supports a maximum of 1 file for now (see https://josiaschweizer.youtrack.cloud/issue/verno-147/VAFileUploadArea-support-more-than-one-file)");
     }
+
     upload.setMaxFiles(maxFiles);
   }
 
