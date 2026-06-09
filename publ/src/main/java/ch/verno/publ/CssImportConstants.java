@@ -2,6 +2,7 @@ package ch.verno.publ;
 
 import org.jetbrains.annotations.NonNls;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class CssImportConstants {
 
   // components

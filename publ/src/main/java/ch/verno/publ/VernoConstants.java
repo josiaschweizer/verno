@@ -3,6 +3,7 @@ package ch.verno.publ;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.http.MediaType;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class VernoConstants {
 
   private VernoConstants() {

@@ -55,35 +55,23 @@ export default function StartWorkspaceDialog({ open, onClose }: Props) {
     }
   }, [open, reset])
 
-  const onSubmit = handleSubmit(async (form) => {
-    try {
-      setSubmitting(true)
-      setSubmitError(null)
+  const onSubmit = handleSubmit((form) => {
+    setSubmitting(true)
+    setSubmitError(null)
 
-      const response = await workspaceApi.startWorkspace({
-        tenantName: form.tenantName,
-      })
+    const tenantName = workspaceApi.normalizeTenantName(form.tenantName)
 
-      if (!response.startSessionId) {
-        setSubmitError({
-          title: t('dialog.errors.tenantNotFound.title'),
-          message: t('dialog.errors.tenantNotFound.message'),
-        })
-
-        return
-      }
-
-      window.location.href =
-        `/workspace-starting?session=${encodeURIComponent(response.startSessionId)}` +
-        `&tenant=${encodeURIComponent(response.tenantSlug)}`
-    } catch (e) {
+    if (!tenantName) {
       setSubmitError({
-        title: t('dialog.errors.genericTitle'),
-        message: e instanceof Error ? e.message : t('dialog.errors.unknown'),
+        title: t('dialog.errors.tenantNotFound.title'),
+        message: t('dialog.errors.tenantNotFound.message'),
       })
-    } finally {
+
       setSubmitting(false)
+      return
     }
+
+    window.location.href = `/workspace-starting?tenant=${encodeURIComponent(tenantName)}`
   })
 
   return (
