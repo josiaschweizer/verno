@@ -10,6 +10,7 @@ public class CssImportConstants {
   @NonNls public static final String ACCORDION_WIDGET_BASE = "./components/widget/va-accordion-widget-base.css";
   @NonNls public static final String VA_EMPTY_STATE = "./components/emptystate/va-empty-state.css";
   @NonNls public static final String VA_MULTI_LANGUAGE_FIELD = "./components/multilanguage/va-multi-language-field.css";
+  @NonNls public static final String VA_FILE_UPLOAD_AREA = "./components/upload/va-file-upload-area.css";
 
   @NonNls public static final String VA_NOTIFICATION = "./components/notification/va-notification.css";
   @NonNls public static final String VA_INLINE_NOTIFICATION = "./components/notification/inline/va-inline-notification.css";
