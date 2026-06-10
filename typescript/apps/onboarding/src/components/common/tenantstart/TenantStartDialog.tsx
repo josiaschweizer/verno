@@ -83,7 +83,7 @@ export default function StartWorkspaceDialog({ open, onClose }: Props) {
       <DialogBackdrop className="fixed inset-0 z-[100] bg-black/60" />
 
       <div className="fixed inset-0 z-[101] overflow-y-auto overscroll-contain">
-        <div className="flex min-h-full items-start justify-center p-2 sm:p-4 md:items-center">
+        <div className="flex min-h-dvh items-center justify-center p-2 sm:p-4">
           <DialogPanel className="relative flex w-full max-w-md flex-col overflow-hidden rounded-2xl bg-verno-surface text-verno-dark shadow-xl max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)]">
             <div className="shrink-0 border-b border-verno-darker/10 px-4 py-4 sm:px-6 sm:py-5">
               <div className="min-w-0">
