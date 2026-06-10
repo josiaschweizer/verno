@@ -227,7 +227,7 @@ export default function WorkspaceStartPage() {
               <Button
                 type="button"
                 onClick={openWorkspace}
-                disabled={!tenantUrl}
+                disabled={!tenantUrl || status !== 'READY'}
                 className="w-full whitespace-nowrap sm:w-auto"
               >
                 {status === 'STARTING'
