@@ -5,7 +5,10 @@ import {
   DisclosurePanel,
 } from '@headlessui/react'
 import { ChevronDownIcon } from 'lucide-react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowRightStartOnRectangleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { Product } from './Header'
@@ -16,12 +19,14 @@ interface Props {
   products: Product[]
   onClose: () => void
   onRegisterOpen?: () => void
+  onStartWorkspace?: () => void
 }
 
 export default function MobileMenu({
   products,
   onClose,
   onRegisterOpen,
+  onStartWorkspace,
 }: Props) {
   const { t } = useTranslation('lib')
 
@@ -100,7 +105,19 @@ export default function MobileMenu({
             </div>
           </div>
 
-          <div className="mt-8 border-t border-verno-surface-light/30 pt-6">
+          <div className="mt-8 border-t border-verno-surface-light/30 pt-6 space-y-6">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                onClose()
+                onStartWorkspace?.()
+              }}
+              className="w-full justify-center rounded-md"
+            >
+              {t('header.actions.login')}
+              <ArrowRightStartOnRectangleIcon className="size-4" />
+            </Button>
             <Button
               type="button"
               onClick={() => {

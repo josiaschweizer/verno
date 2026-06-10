@@ -30,7 +30,7 @@ export interface Product {
 export default function Header() {
   const { t } = useTranslation('lib')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [startWorkspace, setStartWorkspace] = useState(false)
+  const [startWorkspaceOpen, setStartWorkspaceOpen] = useState(false)
   const [registerOpen, setRegisterOpen] = useState(false)
 
   const products: Product[] = useMemo(
@@ -96,7 +96,7 @@ export default function Header() {
           <Button
             size="sm"
             variant="ghost"
-            onClick={() => setStartWorkspace(true)}
+            onClick={() => setStartWorkspaceOpen(true)}
             className="rounded-md gap-2"
           >
             {t('header.actions.login')}
@@ -126,12 +126,16 @@ export default function Header() {
             setMobileMenuOpen(false)
             setRegisterOpen(true)
           }}
+          onStartWorkspace={() => {
+            setMobileMenuOpen(false)
+            setStartWorkspaceOpen(true)
+          }}
         />
       </Dialog>
 
       <_StartWorkspaceDialogRenderer
-        open={startWorkspace}
-        onClose={() => setStartWorkspace(false)}
+        open={startWorkspaceOpen}
+        onClose={() => setStartWorkspaceOpen(false)}
       />
       <_RegisterDialogRenderer
         open={registerOpen}
