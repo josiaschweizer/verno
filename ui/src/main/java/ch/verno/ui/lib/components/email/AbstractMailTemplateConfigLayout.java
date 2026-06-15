@@ -1,62 +1,45 @@
-package ch.verno.ui.lib.components.email.dialog;
+package ch.verno.ui.lib.components.email;
 
 import ch.verno.common.db.dto.table.mail.MailTemplateDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.common.lib.mail.MailContentDto;
 import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.common.lib.mail.placeholder.Placeholder;
 import ch.verno.common.server.service.intern.mail.IMailTemplateService;
-import ch.verno.common.tenant.TenantContext;
-import ch.verno.lib.Lazy;
 import ch.verno.publ.VernoUtility;
-import ch.verno.server.async.BackgroundExecutor;
-import ch.verno.ui.base.components.dialog.DialogSize;
-import ch.verno.ui.base.components.dialog.VAAbstractDialog;
-import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.lib.mail.SendMailPopup;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractEmailDialog extends VAAbstractDialog {
+public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHorizontalLayout> {
 
   @Nonnull private final IMailTemplateService mailTemplateService;
-  @Nonnull protected final Lazy<MailServerGate> mailServerGate;
-  @Nonnull protected final Binder<MailTemplateDto> binder;
   @Nonnull private final EntryFactory<MailTemplateDto> entryFactory;
   @Nonnull private final MailTemplateType mailTemplateType;
 
+  @Nonnull protected final Binder<MailTemplateDto> binder;
+
   @Nullable private TextArea selectedTextArea;
 
-  private boolean isCanceled; // is used to not save the template if the user canceled the dialog
-
-  public AbstractEmailDialog(@Nonnull final GlobalInterface globalInterface,
-                             @Nonnull final MailTemplateType mailTemplateType) {
+  public AbstractMailTemplateConfigLayout(@Nonnull final GlobalInterface globalInterface,
+                                          @Nonnull final MailTemplateType mailTemplateType) {
     this.mailTemplateService = globalInterface.getService(IMailTemplateService.class);
-    this.mailServerGate = Lazy.of(() -> globalInterface.getService(MailServerGate.class));
-    this.binder = new Binder<>(MailTemplateDto.class);
     this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
     this.mailTemplateType = mailTemplateType;
+    this.binder = new Binder<>(MailTemplateDto.class);
 
     initBinder();
-    initUI(getTranslation("setting.send.email"), DialogSize.BIG);
-
-    this.selectedTextArea = null;
-    this.isCanceled = false;
+    initLayout();
   }
 
   private void initBinder() {
@@ -67,25 +50,31 @@ public abstract class AbstractEmailDialog extends VAAbstractDialog {
     }
   }
 
-  @Nonnull
-  @Override
-  protected HorizontalLayout createContent() {
+  private void initLayout() {
     final var emailSubject = entryFactory.createTextAreaEntry(
-            MailTemplateDto::getSubject, MailTemplateDto::setSubject, binder,
+            MailTemplateDto::getSubject,
+            MailTemplateDto::setSubject,
+            binder,
             Optional.of(getTranslation("setting.email.subject.is.required")),
             getTranslation("setting.email.subject")
     );
     emailSubject.setWidthFull();
     emailSubject.addFocusListener(e -> selectedTextArea = emailSubject);
-    emailSubject.setPlaceholder(getTranslation("setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"));
+    emailSubject.setPlaceholder(getTranslation(
+            "setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"
+    ));
 
     final var emailContent = entryFactory.createTextAreaEntry(
-            MailTemplateDto::getContent, MailTemplateDto::setContent, binder,
+            MailTemplateDto::getContent,
+            MailTemplateDto::setContent,
+            binder,
             Optional.of(getTranslation("setting.email.content.is.required")),
             getTranslation("setting.email.content")
     );
     emailContent.addFocusListener(e -> selectedTextArea = emailContent);
-    emailContent.setPlaceholder(getTranslation("setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"));
+    emailContent.setPlaceholder(getTranslation(
+            "setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"
+    ));
     emailContent.setSizeFull();
 
     final var emailLayout = new VerticalLayout(emailSubject, emailContent);
@@ -98,60 +87,28 @@ public abstract class AbstractEmailDialog extends VAAbstractDialog {
     placeholderLayout.setWidth(null);
     placeholderLayout.setFlexShrink(0);
 
-    final var contentLayout = new HorizontalLayout(emailLayout, placeholderLayout);
+    final var contentLayout = getContent();
+    contentLayout.add(emailLayout, placeholderLayout);
     contentLayout.setSizeFull();
     contentLayout.setPadding(false);
     contentLayout.setSpacing(true);
     contentLayout.setFlexGrow(1, emailLayout);
     contentLayout.setFlexGrow(0, placeholderLayout);
+  }
 
-    return contentLayout;
+  public boolean isValid() {
+    return binder.isValid();
   }
 
   @Nonnull
-  @Override
-  protected Collection<Button> createActionButtons() {
-    return List.of(
-            new Button(getTranslation("shared.cancel"), e -> {
-              this.isCanceled = true;
-              close();
-            }),
-            createSendButton()
-    );
+  public MailTemplateDto getBean() {
+    return binder.getBean();
   }
 
-  public void sendEmail() {
-    if (!binder.isValid()) {
-      return;
-    }
-
-    close();
+  public void saveTemplate() {
     final var bean = binder.getBean();
-    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
 
-    final var ui = UI.getCurrent();
-    if (ui == null) {
-      executeSend(mailContent);
-      return;
-    }
-
-    final var popup = new SendMailPopup(getTranslation("shared.send"), getTranslation("setting.send.email"));
-    popup.openAndRunAsync(
-            ui,
-            TenantContext.getRequired(),
-            BackgroundExecutor.getInstance().getExecutorService(),
-            () -> executeSend(mailContent),
-            () -> NotificationFactory.showSuccessNotification(getTranslation("mail.e.mail.s.sent.successfully")),
-            () -> NotificationFactory.showErrorNotification(getTranslation("mail.e.mail.s.sent.failed"))
-    );
-  }
-
-  @Override
-  public void close() {
-    super.close();
-
-    final var bean = binder.getBean();
-    if (!isCanceled && mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
+    if (mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
       final var template = mailTemplateService.getTemplateByKey(mailTemplateType.getKey());
       template.setSubject(bean.getSubject());
       template.setContent(bean.getContent());
@@ -159,6 +116,10 @@ public abstract class AbstractEmailDialog extends VAAbstractDialog {
     } else {
       mailTemplateService.upsertTemplate(bean);
     }
+  }
+
+  public void addStatusChangeListener(@Nonnull final Runnable listener) {
+    binder.addStatusChangeListener(e -> listener.run());
   }
 
   @Nonnull
@@ -178,16 +139,6 @@ public abstract class AbstractEmailDialog extends VAAbstractDialog {
     return new VerticalLayout(createPlaceholderButtons().toArray(new Component[0]));
   }
 
-  @Nonnull
-  private Button createSendButton() {
-    final var btn = new Button(getTranslation("shared.send"));
-    btn.setEnabled(binder.isValid());
-    binder.addStatusChangeListener(e -> btn.setEnabled(binder.isValid()));
-    btn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    btn.addClickListener(e -> sendEmail());
-    return btn;
-  }
-
   @Override
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     final var bean = binder.getBean();
@@ -198,7 +149,4 @@ public abstract class AbstractEmailDialog extends VAAbstractDialog {
 
   @Nonnull
   protected abstract List<Button> createPlaceholderButtons();
-
-  protected abstract void executeSend(@Nonnull MailContentDto mailContent);
-
 }

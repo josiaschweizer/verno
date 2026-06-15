@@ -1,3 +1,7 @@
+vaadin-button[theme~='xs'] {
+    --lumo-button-size: var(--lumo-size-xs);
+}
+
 .va-button-readonly {
     opacity: 0.55;
     cursor: default;

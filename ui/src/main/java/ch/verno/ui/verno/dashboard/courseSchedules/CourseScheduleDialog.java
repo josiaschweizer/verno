@@ -137,9 +137,4 @@ public class CourseScheduleDialog extends VAAbstractDialog {
     NotificationFactory.showSuccessNotification(getTranslation(getTranslation("courseSchedule.course.schedules.updated.successfully.0.course.schedules.were.updated", selectedItems.size())));
     close();
   }
-
-  @Nonnull
-  private VAButton createCancelButton() {
-    return new VAButton(getTranslation("shared.cancel"), e -> close());
-  }
 }

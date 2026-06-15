@@ -2,6 +2,8 @@ html, body {
     --lumo-required-field-indicator: "*";
     --lumo-required-field-indicator-color: red;
     --vaadin-notification-viewport-inset: var(--lumo-space-s);
+
+    --lumo-icon-size-xs: 1rem;
 }
 
 :root {
