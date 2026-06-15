@@ -2,7 +2,7 @@ package ch.verno.ui.verno.settings.panels.courselevel;
 
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.settings.grid.BaseGridDetailSetting;
+import ch.verno.ui.lib.settings.grid.BaseGridDetailSetting;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jspecify.annotations.NonNull;

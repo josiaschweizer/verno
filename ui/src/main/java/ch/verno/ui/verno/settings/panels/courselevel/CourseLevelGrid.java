@@ -3,7 +3,7 @@ package ch.verno.ui.verno.settings.panels.courselevel;
 import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.server.service.intern.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.settings.grid.BaseSettingGrid;
+import ch.verno.ui.lib.settings.grid.BaseSettingGrid;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;

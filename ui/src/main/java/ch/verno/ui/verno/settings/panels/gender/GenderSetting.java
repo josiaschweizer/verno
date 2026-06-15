@@ -6,7 +6,7 @@ import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

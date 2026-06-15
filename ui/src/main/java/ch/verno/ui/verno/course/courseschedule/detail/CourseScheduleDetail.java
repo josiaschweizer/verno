@@ -7,7 +7,7 @@ import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

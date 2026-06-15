@@ -10,7 +10,7 @@ import ch.verno.common.lib.mail.placeholder.Placeholder;
 import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
 import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
 import ch.verno.publ.Publ;
-import ch.verno.ui.base.components.dialog.email.AbstractEmailDialog;
+import ch.verno.ui.lib.components.email.dialog.AbstractEmailDialog;
 import com.vaadin.flow.component.button.Button;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

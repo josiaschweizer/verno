@@ -2,8 +2,8 @@ package ch.verno.ui.verno.settings;
 
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
-import ch.verno.ui.base.settings.VABaseSetting;
-import ch.verno.ui.base.settings.VABaseSettingsPage;
+import ch.verno.ui.lib.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSettingsPage;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
 import ch.verno.ui.verno.settings.panels.user.PersonalInformation;
 import com.vaadin.flow.router.HasDynamicTitle;

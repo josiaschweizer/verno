@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public interface IMailTemplateService {
+
   @Nonnull
   MailTemplateDto upsertTemplate(@Nonnull MailTemplateDto dto);
 

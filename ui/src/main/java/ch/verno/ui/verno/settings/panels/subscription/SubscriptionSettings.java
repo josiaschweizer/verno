@@ -14,7 +14,7 @@ import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;

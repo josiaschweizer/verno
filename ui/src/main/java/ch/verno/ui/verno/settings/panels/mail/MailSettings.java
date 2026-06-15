@@ -10,7 +10,7 @@ import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.event.bus.ViewEventBus;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.AttachEvent;

@@ -67,6 +67,10 @@ public class VAEmptyState extends Composite<VerticalLayout> implements HasTheme 
     setSlotContent(descriptionSlot, description);
   }
 
+  public void removeDescriptions() {
+    descriptionSlot.removeAll();
+  }
+
   public void setAction(@Nonnull Component action) {
     setSlotContent(actionSlot, action);
   }

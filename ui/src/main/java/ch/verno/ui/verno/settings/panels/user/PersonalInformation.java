@@ -8,7 +8,7 @@ import ch.verno.common.ui.dto.UserDtoUnhashedPw;
 import ch.verno.publ.Publ;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.layouts.UserLayout;
 import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
 import com.vaadin.flow.component.AttachEvent;

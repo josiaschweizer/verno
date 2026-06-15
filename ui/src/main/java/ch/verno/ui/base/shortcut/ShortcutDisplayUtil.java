@@ -1,8 +1,8 @@
 package ch.verno.ui.base.shortcut;
 
 import ch.verno.publ.Publ;
-import ch.verno.ui.lib.os.OS;
-import ch.verno.ui.lib.os.OSUtil;
+import ch.verno.ui.base.os.OS;
+import ch.verno.ui.base.os.OSUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import jakarta.annotation.Nonnull;

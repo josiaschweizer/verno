@@ -30,7 +30,7 @@ public class VAButton extends Button {
     super(text);
   }
 
-  private VAButton(@Nonnull final Component component) {
+  protected VAButton(@Nonnull final Component component) {
     super(component);
   }
 
@@ -63,20 +63,6 @@ public class VAButton extends Button {
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
     super(text, icon);
     addClickListener(listener);
-  }
-
-  /**
-   * create an icon only button - still needs a tooltip text for a11y
-   * @param icon the component which is on the button
-   * @param tooltipText tooltip text required for a11y describing the button
-   * @return a instance of VAButton
-   */
-  @Nonnull
-  public static VAButton iconOnly(@Nonnull final VAIcon icon,
-                                  @Nonnull final String tooltipText){
-    final var button = new VAButton(icon);
-    button.setTooltipText(tooltipText);
-    return button;
   }
 
   public void removePseudoEnabled() {

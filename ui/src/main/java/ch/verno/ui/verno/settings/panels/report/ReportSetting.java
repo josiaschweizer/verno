@@ -8,7 +8,7 @@ import ch.verno.publ.Publ;
 import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.client.file.FileApiClient;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;

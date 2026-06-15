@@ -12,7 +12,7 @@ import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
-import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;

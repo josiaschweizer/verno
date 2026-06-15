@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.defaultdto.DefaultTenantSettingDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.setting.TenantSettingEntity;
+import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.server.mapper.TenantSettingMapper;
 import ch.verno.server.repository.TenantSettingRepository;
 import jakarta.annotation.Nonnull;
@@ -14,28 +14,36 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class TenantSettingService implements ITenantSettingService {
 
-  @Nonnull
-  private final TenantSettingRepository repo;
+  @PersistenceContext private EntityManager em;
+  @Nonnull private final TenantSettingRepository repository;
 
-  @PersistenceContext
-  private EntityManager em;
-
-  public TenantSettingService(@Nonnull final TenantSettingRepository repo) {
-    this.repo = repo;
+  public TenantSettingService(@Nonnull final TenantSettingRepository repository) {
+    this.repository = repository;
   }
 
   @Nonnull
   @Override
   @Transactional(readOnly = true)
   public TenantSettingDto getCurrentTenantSettingOrDefault() {
-    final long tenantId = TenantContext.getRequired();
+    return getCurrentTenantSetting()
+            .orElseGet(() ->
+                    DefaultTenantSettingDto.getDefault(TenantContext.getRequired())
+            );
+  }
 
-    return repo.findById(tenantId)
-            .map(TenantSettingMapper::toDto)
-            .orElseGet(() -> DefaultTenantSettingDto.getDefault(tenantId));
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<TenantSettingDto> getCurrentTenantSetting() {
+    final var tenantId = TenantContext.getRequired();
+
+    return repository.findById(tenantId)
+            .map(TenantSettingMapper::toDto);
   }
 
   @Nonnull
@@ -44,7 +52,7 @@ public class TenantSettingService implements ITenantSettingService {
   public TenantSettingDto getOrCreateCurrentTenantSetting(@Nonnull final TenantSettingDto defaultDto) {
     final long tenantId = TenantContext.getRequired();
 
-    return repo.findById(tenantId)
+    return repository.findById(tenantId)
             .map(TenantSettingMapper::toDto)
             .orElseGet(() -> saveCurrentTenantSetting(DefaultTenantSettingDto.getDefault(tenantId)));
   }
@@ -56,7 +64,7 @@ public class TenantSettingService implements ITenantSettingService {
     final long tenantId = TenantContext.getRequired();
     final TenantEntity tenantRef = em.getReference(TenantEntity.class, tenantId);
 
-    final TenantSettingEntity entity = repo.findById(tenantId)
+    final TenantSettingEntity entity = repository.findById(tenantId)
             .orElseGet(() -> new TenantSettingEntity(
                     tenantRef,
                     dto.getCourseDaysPerSchedule(),
@@ -75,7 +83,7 @@ public class TenantSettingService implements ITenantSettingService {
 
     TenantSettingMapper.updateEntity(dto, entity);
 
-    final var saved = repo.save(entity);
+    final var saved = repository.save(entity);
     return TenantSettingMapper.toDto(saved);
   }
 }

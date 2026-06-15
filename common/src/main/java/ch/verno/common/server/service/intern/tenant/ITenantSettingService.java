@@ -3,6 +3,8 @@ package ch.verno.common.server.service.intern.tenant;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
 public interface ITenantSettingService {
 
   /**
@@ -11,6 +13,15 @@ public interface ITenantSettingService {
    */
   @Nonnull
   TenantSettingDto getCurrentTenantSettingOrDefault();
+
+  /**
+   * Returns an optional of the settings of the current tenant (TenantContext).
+   * If non exists, the Optional.empty() is returned
+   * NOTE: normally {@code getCurrentTenantSettingOrDefault} should be used - except for
+   *
+   */
+  @Nonnull
+  Optional<TenantSettingDto> getCurrentTenantSetting();
 
   /**
    * Returns the settings of the current tenant (TenantContext).
