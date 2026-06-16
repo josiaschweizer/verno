@@ -2,18 +2,18 @@ package ch.verno.ui.verno.course.courses.detail;
 
 import ch.verno.common.db.dto.table.*;
 import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.server.service.intern.ICourseLevelService;
 import ch.verno.common.server.service.intern.ICourseScheduleService;
 import ch.verno.common.server.service.intern.ICourseService;
 import ch.verno.common.server.service.intern.IInstructorService;
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.server.service.intern.CourseLevelService;
 import ch.verno.server.service.intern.CourseScheduleService;
 import ch.verno.server.service.intern.CourseService;
 import ch.verno.server.service.intern.InstructorService;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.util.LayoutUtil;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.vaadin.flow.component.html.Span;
@@ -301,9 +301,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var title = new Span(getTranslation("course.participants.in.this.course"));
     title.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
-    final var participantsGrid = new ParticipantsGrid(globalInterface,
-            false,
-            false) {
+    final var participantsGrid = new ParticipantsGrid(globalInterface, false, false) {
 
       @Nonnull
       @Override
@@ -312,6 +310,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
         if (getBinder().getBean() != null && getBinder().getBean().getId() != null) {
           filter.setCourseIds(Set.of(getBinder().getBean().getId()));
         }
+
         return super.fetch(query, filter);
       }
     };

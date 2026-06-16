@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.CourseLevelDto;
 import ch.verno.common.server.service.intern.ICourseLevelService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
-import ch.verno.ui.base.settings.grid.BaseSettingDetail;
+import ch.verno.ui.lib.settings.grid.BaseSettingDetail;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;

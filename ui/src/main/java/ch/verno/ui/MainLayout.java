@@ -2,10 +2,10 @@ package ch.verno.ui;
 
 import ch.verno.common.event.ReloadNavigationBarEvent;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.billing.SubscriptionApplyService;
+import ch.verno.ui.lib.billing.SubscriptionApplyService;
 import ch.verno.ui.base.components.notification.NotificationStyles;
 import ch.verno.ui.base.navigation.MainLayoutSideNavFactory;
-import ch.verno.ui.base.settings.UserSettingsApplyService;
+import ch.verno.ui.lib.settings.UserSettingsApplyService;
 import ch.verno.ui.lib.event.bus.ViewEventBus;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.flow.component.AttachEvent;

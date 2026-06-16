@@ -1,5 +1,6 @@
 package ch.verno.ui.lib.icon;
 
+import ch.verno.lib.annotation.RestrictedTo;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.html.Span;
@@ -30,11 +31,13 @@ public class VAIcon extends Span {
           }
           """;
 
-  public VAIcon(@Nonnull final String path, @Nonnull final String size) {
+  @RestrictedTo(IconUtil.class)
+  protected VAIcon(@Nonnull final String path, @Nonnull final String size) {
     initializeIcon(path, size);
   }
 
-  public VAIcon(@Nonnull final VaadinIcon icon, @Nonnull final String size) {
+  @RestrictedTo(IconUtil.class)
+  protected VAIcon(@Nonnull final VaadinIcon icon, @Nonnull final String size) {
     initializeIcon(icon.create(), size);
   }
 

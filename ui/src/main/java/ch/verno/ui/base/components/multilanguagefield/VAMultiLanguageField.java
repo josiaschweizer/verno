@@ -5,6 +5,7 @@ import ch.verno.lib.language.Language;
 import ch.verno.publ.CssImportConstants;
 import ch.verno.publ.Publ;
 import ch.verno.publ.VernoUtility;
+import ch.verno.ui.base.components.button.ButtonBuilder;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.VADialog;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
@@ -84,7 +85,7 @@ public class VAMultiLanguageField extends CustomField<Map<Language, String>> {
 
   @Nonnull
   private VAButton configureButton() {
-    final var editButton = VAButton.iconOnly(IconUtil.create(VaadinIcon.GLOBE), "Edit");
+    final var editButton = ButtonBuilder.iconOnly(IconUtil.create(VaadinIcon.GLOBE), "Edit");
     editButton.addClassName(BUTTON_CLASSNAME);
     editButton.addClickListener(event -> dialog.open());
     return editButton;

@@ -1,31 +1,26 @@
 package ch.verno.common.db.dto.table;
 
-import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.common.db.dto.YearWeekDto;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.ui.base.components.colorpicker.Colors;
 import ch.verno.publ.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class CourseScheduleDto extends BaseDto {
 
-  @Nonnull
-  private OffsetDateTime createdAt;
-
   @Nonnull private String title;
   @Nonnull private CourseScheduleStatus status;
   @Nonnull private String color;
   @Nonnull private List<YearWeekDto> weeks;
 
-  public CourseScheduleDto() {
+  private CourseScheduleDto() {
     setId(null);
-    this.createdAt = OffsetDateTime.now();
     this.title = Publ.EMPTY_STRING;
     this.status = CourseScheduleStatus.PLANNED;
     this.color = Colors.PRIMARY_COLOR;
@@ -33,13 +28,11 @@ public class CourseScheduleDto extends BaseDto {
   }
 
   public CourseScheduleDto(@Nullable final Long id,
-                           @Nonnull final OffsetDateTime createdAt,
                            @Nonnull final String title,
                            @Nonnull final String color,
                            @Nonnull final CourseScheduleStatus status,
                            @Nonnull final List<YearWeekDto> weeks) {
     setId(id);
-    this.createdAt = createdAt;
     this.title = title;
     this.status = status;
     this.color = color;
@@ -57,15 +50,6 @@ public class CourseScheduleDto extends BaseDto {
             && title.isEmpty()
             && status == CourseScheduleStatus.PLANNED
             && weeks.isEmpty();
-  }
-
-  @Nonnull
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(@Nonnull final OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
   }
 
   @Nonnull

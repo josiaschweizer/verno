@@ -145,11 +145,4 @@ public class AssignToCourseDialog extends VAAbstractDialog {
       participantService.removeCourse(id, currentCourse);
     }
   }
-
-  @Nonnull
-  private VAButton createCancelButton() {
-    final var button = new VAButton(getTranslation("shared.cancel"));
-    button.addClickListener(e -> close());
-    return button;
-  }
 }

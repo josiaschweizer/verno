@@ -2,21 +2,24 @@ package ch.verno.ui.base.components.button;
 
 import ch.verno.publ.CssImportConstants;
 import ch.verno.publ.Publ;
-import ch.verno.ui.lib.icon.VAIcon;
+import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.shared.Registration;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 @CssImport(CssImportConstants.VA_BUTTON)
 public class VAButton extends Button {
 
-  private static final String JS_CLICK_PARENT = "this.click()";
-  private static final String READONLY_CLASS_NAME = "va-button-readonly";
+  @NonNls private static final String JS_CLICK_PARENT = "this.click()";
+  @NonNls private static final String READONLY_CLASS_NAME = "va-button-readonly";
 
   private boolean pseudoEnabled = true;
   private boolean forwardClickToParent = false;
@@ -30,13 +33,14 @@ public class VAButton extends Button {
     super(text);
   }
 
-  private VAButton(@Nonnull final Component component) {
+  protected VAButton(@Nonnull final Component component) {
     super(component);
   }
 
   public VAButton(@Nonnull final String text,
-                  @Nonnull final Component component) {
-    super(text, component);
+                  @Nonnull final Component icon) {
+    super();
+    setContent(text, icon);
   }
 
   public VAButton(@Nonnull final String text,
@@ -54,29 +58,31 @@ public class VAButton extends Button {
   public VAButton(@Nonnull final String text,
                   @Nonnull final Component icon,
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
-    super(text, icon);
+    super();
+    setContent(text, icon);
     addClickListener(listener);
   }
 
   public VAButton(@Nonnull final Component icon,
                   @Nonnull final String text,
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
-    super(text, icon);
+    super();
+    setContent(text, icon);
     addClickListener(listener);
   }
 
-  /**
-   * create an icon only button - still needs a tooltip text for a11y
-   * @param icon the component which is on the button
-   * @param tooltipText tooltip text required for a11y describing the button
-   * @return a instance of VAButton
-   */
-  @Nonnull
-  public static VAButton iconOnly(@Nonnull final VAIcon icon,
-                                  @Nonnull final String tooltipText){
-    final var button = new VAButton(icon);
-    button.setTooltipText(tooltipText);
-    return button;
+  protected void setContent(@Nonnull final String text,
+                          @Nonnull final Component icon) {
+    final var label = new Span(text);
+    final var content = new Span(icon, label);
+    content.getStyle()
+            .setDisplay(Style.Display.INLINE_FLEX)
+            .setAlignItems(Style.AlignItems.CENTER)
+            .setJustifyContent(Style.JustifyContent.CENTER)
+            .setGap(VernoUtility.LUMO_SPACE_S)
+            .setLineHeight(VernoUtility.LINE_HEIGHT_THREE);
+
+    setIcon(content); //TODO remove hacky setIcon with text
   }
 
   public void removePseudoEnabled() {

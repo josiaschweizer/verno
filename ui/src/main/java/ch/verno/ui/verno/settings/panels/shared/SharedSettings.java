@@ -3,7 +3,7 @@ package ch.verno.ui.verno.settings.panels.shared;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.settings.VABaseSetting;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;

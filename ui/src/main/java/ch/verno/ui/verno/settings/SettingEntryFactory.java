@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.settings;
 
 import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.ui.base.settings.fields.VABaseBooleanSetting;
-import ch.verno.ui.base.settings.fields.VABaseComboBoxSetting;
-import ch.verno.ui.base.settings.fields.VABaseQuantitySetting;
-import ch.verno.ui.base.settings.fields.VABaseToggleSetting;
+import ch.verno.ui.lib.settings.fields.VABaseBooleanSetting;
+import ch.verno.ui.lib.settings.fields.VABaseComboBoxSetting;
+import ch.verno.ui.lib.settings.fields.VABaseQuantitySetting;
+import ch.verno.ui.lib.settings.fields.VABaseToggleSetting;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;

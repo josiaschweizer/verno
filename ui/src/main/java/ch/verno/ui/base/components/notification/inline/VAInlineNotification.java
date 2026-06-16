@@ -22,6 +22,9 @@ public class VAInlineNotification extends Composite<VerticalLayout> {
   @NonNls public static final String DESCRIPTION_CLASSNAME = "va-inline-notification-description";
   @NonNls public static final String ACTIONS_CLASSNAME = "va-inline-notification-actions";
 
+  @NonNls private static final String ACTIONS_BELOW_CONTENT_CLASSNAME = "actions-below-content";
+  @NonNls private static final String ACTIONS_RIGHT_CENTERED_CLASSNAME = "actions-right-centered";
+
   @Nonnull private final HorizontalLayout headerLayout;
 
   @Nonnull private final Div iconSlot;
@@ -31,19 +34,20 @@ public class VAInlineNotification extends Composite<VerticalLayout> {
   @Nonnull private final HorizontalLayout actionSlot;
 
   @Nonnull private VAInlineNotificationTheme theme;
+  @Nonnull private VAInlineNotificationActionAlignment actionAlignment = VAInlineNotificationActionAlignment.BELOW_CONTENT;
 
   public VAInlineNotification() {
     this(VAInlineNotificationTheme.INFO);
   }
 
   public VAInlineNotification(@Nonnull final VAInlineNotificationTheme theme) {
-    headerLayout = new HorizontalLayout();
+    this.headerLayout = new HorizontalLayout();
 
-    iconSlot = new Div();
-    contentSlot = new VerticalLayout();
-    titleSlot = new Div();
-    descriptionSlot = new Div();
-    actionSlot = new HorizontalLayout();
+    this.iconSlot = new Div();
+    this.contentSlot = new VerticalLayout();
+    this.titleSlot = new Div();
+    this.descriptionSlot = new Div();
+    this.actionSlot = new HorizontalLayout();
 
     this.theme = theme;
 
@@ -59,13 +63,25 @@ public class VAInlineNotification extends Composite<VerticalLayout> {
     contentSlot.addClassName(CONTENT_CLASSNAME);
     actionSlot.addClassName(ACTIONS_CLASSNAME);
 
-    contentSlot.add(titleSlot, descriptionSlot, actionSlot);
-    headerLayout.add(iconSlot, contentSlot);
+    contentSlot.add(titleSlot, descriptionSlot);
+    headerLayout.add(iconSlot, contentSlot, actionSlot);
 
     getContent().add(headerLayout);
 
     descriptionSlot.setVisible(false);
     actionSlot.setVisible(false);
+
+    setActionAlignment(actionAlignment);
+  }
+
+  public void setActionAlignment(@Nonnull final VAInlineNotificationActionAlignment actionAlignment) {
+    this.actionAlignment = actionAlignment;
+
+    getContent().removeClassNames(
+            ACTIONS_BELOW_CONTENT_CLASSNAME,
+            ACTIONS_RIGHT_CENTERED_CLASSNAME
+    );
+    getContent().addClassName(actionAlignment.getClassName());
   }
 
   public void setTheme(@Nonnull final VAInlineNotificationTheme theme) {
@@ -115,5 +131,22 @@ public class VAInlineNotification extends Composite<VerticalLayout> {
   public void clearActions() {
     actionSlot.removeAll();
     actionSlot.setVisible(false);
+  }
+
+
+  public enum VAInlineNotificationActionAlignment {
+    BELOW_CONTENT(ACTIONS_BELOW_CONTENT_CLASSNAME),
+    RIGHT_CENTERED(ACTIONS_RIGHT_CENTERED_CLASSNAME);
+
+    @Nonnull private final String className;
+
+    VAInlineNotificationActionAlignment(@Nonnull final String className) {
+      this.className = className;
+    }
+
+    @Nonnull
+    public String getClassName() {
+      return className;
+    }
   }
 }

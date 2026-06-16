@@ -22,7 +22,9 @@ public class Routes {
   @NonNls public static final String USER_SETTINGS = SETTINGS + "/user";
   @NonNls public static final String TENANT_SETTINGS = SETTINGS + "/mandant";
   @NonNls public static final String APP_USERS = "app-users";
-  @NonNls public static final String MAIL_LOG = "mail-log";
+  @NonNls public static final String MAIL = "mail";
+  @NonNls public static final String MAIL_LOG = MAIL + "/log";
+  @NonNls public static final String MAIL_TEST = MAIL + "/test";
 
   @NonNls public static final String DETAIL = "/detail";
 

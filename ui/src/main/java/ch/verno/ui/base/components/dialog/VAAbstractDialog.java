@@ -1,6 +1,10 @@
 package ch.verno.ui.base.components.dialog;
 
 import ch.verno.publ.VernoUtility;
+import ch.verno.ui.base.components.button.VAButton;
+import ch.verno.ui.lib.icon.CustomIcons;
+import ch.verno.ui.lib.icon.IconUtil;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -8,6 +12,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public abstract class VAAbstractDialog extends Dialog {
 
@@ -45,5 +50,19 @@ public abstract class VAAbstractDialog extends Dialog {
 
   @Nonnull
   protected abstract Collection<Button> createActionButtons();
+
+  @Nonnull
+  protected VAButton createCancelButton() {
+    final var button = new VAButton(getTranslation("shared.cancel"));
+    button.addClickListener(e -> close());
+    return button;
+  }
+
+  @Nonnull
+  protected VAButton createSaveButton(@Nonnull final Consumer<ClickEvent<Button>> action) {
+    final var button = new VAButton(getTranslation("shared.save"), IconUtil.creatExtraSmall(CustomIcons.SAVE));
+    button.addClickListener(action::accept);
+    return button;
+  }
 
 }

@@ -1,7 +1,7 @@
 package ch.verno.ui.base.shortcut;
 
-import ch.verno.ui.lib.os.OS;
-import ch.verno.ui.lib.os.OSUtil;
+import ch.verno.ui.base.os.OS;
+import ch.verno.ui.base.os.OSUtil;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.ShortcutRegistration;

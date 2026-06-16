@@ -2,9 +2,9 @@ package ch.verno.server.service.intern.mail;
 
 import ch.verno.common.db.dto.table.mail.MailConfigDto;
 import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.exceptions.db.DBNotFoundException;
 import ch.verno.common.exceptions.db.DBNotFoundReason;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
@@ -13,6 +13,8 @@ import ch.verno.server.repository.mail.MailConfigRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class MailConfigService implements IMailConfigService {
@@ -69,6 +71,15 @@ public class MailConfigService implements IMailConfigService {
             ));
 
     return MailConfigMapper.toDto(entity);
+  }
+
+  @Nonnull
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<MailConfigDto> getOptionalConfigForCurrentTenant() {
+    final var tenantId = TenantContext.getRequired();
+    return mailConfigRepository.findByTenantId(tenantId)
+            .map(MailConfigMapper::toDto);
   }
 
   @Override

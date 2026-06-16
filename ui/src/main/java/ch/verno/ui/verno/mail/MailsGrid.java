@@ -2,20 +2,33 @@ package ch.verno.ui.verno.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
 import ch.verno.common.db.filter.MailLogFilter;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.server.service.intern.mail.IMailLogService;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.format.Converter;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
+import ch.verno.common.server.service.intern.mail.IMailLogService;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.lib.New;
+import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
+import ch.verno.publ.VernoUtility;
 import ch.verno.server.service.intern.mail.MailLogService;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
-import ch.verno.ui.base.pages.grid.BaseOverviewGrid;
-import ch.verno.ui.base.pages.grid.ComponentGridColumn;
-import ch.verno.ui.base.pages.grid.ObjectGridColumn;
+import ch.verno.ui.base.components.button.ButtonBuilder;
+import ch.verno.ui.base.components.emptystate.VAEmptyState;
+import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
+import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
+import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
+import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.verno.mail.testmail.TestMailTemplatePage;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Menu;
@@ -25,6 +38,7 @@ import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -57,16 +71,12 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
       if (!mailConfigService.hasConfigForCurrentTenant()) {
         return false;
       }
+
       final var mailConfig = mailConfigService.getConfigForCurrentTenant();
       return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
     } catch (Exception e) {
       return false;
     }
-  }
-
-  @Override
-  protected void initGrid() {
-    super.initGrid();
   }
 
   @Nonnull
@@ -135,5 +145,53 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   @Override
   protected void onGridItemDoubleClick(@Nonnull final ItemDoubleClickEvent<MailLogDto> event) {
     // override the default behavior of re-navigating to the detail view on double click
+  }
+
+  @Nonnull
+  @Override
+  protected HashMap<Integer, Component> getCustomComponents() {
+    final var map = New.<Integer, Component>hashMap();
+    map.put(Publ.ONE, getEmailTestLayout());
+    return map;
+  }
+
+  @Nonnull
+  private VerticalLayout getEmailTestLayout() {
+    final var button = ButtonBuilder.iconVerticalView(
+            IconUtil.create(VaadinIcon.EXTERNAL_LINK),
+            "External Link to Mail Configuration",
+            TestMailTemplatePage.class
+    );
+
+    final var notification = new VAInlineNotification();
+    notification.setActionAlignment(VAInlineNotification.VAInlineNotificationActionAlignment.RIGHT_CENTERED);
+    notification.setTitle("Test Emails");
+    notification.setDescription("Test your Email Texts and your Email Configuration.");
+    notification.setActions(button);
+
+    final var layout = new VerticalLayout(notification);
+    layout.getStyle().setPaddingTop(VernoUtility.LUMO_SPACE_XS);
+    layout.getStyle().setPaddingRight(VernoUtility.LUMO_SPACE_XS);
+    layout.getStyle().setPaddingBottom(VernoUtility.LUMO_SPACE_NONE);
+    layout.getStyle().setPaddingLeft(VernoUtility.LUMO_SPACE_XS);
+    return layout;
+  }
+
+  @Nonnull
+  @Override
+  protected VAEmptyState createEmptyState() {
+    final var emptyState = super.createEmptyState();
+    emptyState.removeDescriptions();
+    return emptyState;
+  }
+
+  @Override
+  protected void setDefaultSorting() {
+    final var sentAtCol = columnsByKey.get("sentAt");
+    if (sentAtCol == null) {
+      return;
+    }
+
+    grid.sort(List.of(new GridSortOrder<>(sentAtCol, SortDirection.DESCENDING)));
   }
 }

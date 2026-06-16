@@ -17,6 +17,7 @@
         <module>report</module>
         <module>publ</module>
         <module>api</module>
+        <module>arch</module>
     </modules>
 
     <parent>

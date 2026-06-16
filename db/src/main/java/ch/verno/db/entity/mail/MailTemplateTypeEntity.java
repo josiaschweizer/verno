@@ -16,6 +16,7 @@ public class MailTemplateTypeEntity {
   private String key;
 
   protected MailTemplateTypeEntity() {
+    // JPA
   }
 
   public MailTemplateTypeEntity(@Nonnull final String key) {

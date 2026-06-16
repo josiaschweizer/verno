@@ -17,7 +17,8 @@ public class MailLogSpec extends BaseSpec<MailLogEntity, MailLogFilter> {
 
       final List<Predicate> predicates = new ArrayList<>();
 
-      if (filter.searchText() != null && !filter.searchText().isBlank()) {
+      final var searchText = normalize(filter.searchText());
+      if (!searchText.isBlank()) {
         final var search = "%" + filter.searchText().toLowerCase() + "%";
 
         predicates.add(cb.or(

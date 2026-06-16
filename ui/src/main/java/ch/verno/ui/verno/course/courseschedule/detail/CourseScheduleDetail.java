@@ -2,12 +2,13 @@ package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.db.dto.table.CourseScheduleDto;
 import ch.verno.common.db.type.CourseScheduleStatus;
+import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.server.service.intern.ICourseScheduleService;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
+import ch.verno.ui.lib.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 @PermitAll
 @Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
-@Menu(order = 3.21, icon = "vaadin:calendar-envelope", title = "courseSchedule.course.schedule.detail")
+@Menu(order = 3.21, icon = VaadinIconConstants.CALENDAR_ENVELOPE, title = "courseSchedule.course.schedule.detail")
 public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> implements HasDynamicTitle {
 
   @Nonnull
@@ -122,13 +123,11 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
     return new Binder<>(CourseScheduleDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final CourseScheduleDto bean) {
     courseScheduleService.createCourseSchedule(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final CourseScheduleDto bean) {
     courseScheduleService.updateCourseSchedule(bean);
@@ -143,7 +142,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
   @Nonnull
   @Override
   protected CourseScheduleDto newBeanInstance() {
-    return new CourseScheduleDto();
+    return CourseScheduleDto.empty();
   }
 
   @Override
