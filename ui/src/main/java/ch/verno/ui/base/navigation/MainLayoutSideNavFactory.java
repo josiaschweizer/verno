@@ -1,14 +1,14 @@
 package ch.verno.ui.base.navigation;
 
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.publ.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.lib.icon.CustomIconConstants;
-import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.lib.icon.CustomIcons;
+import ch.verno.ui.lib.icon.IconUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.charts.model.Cursor;
@@ -144,7 +144,7 @@ public class MainLayoutSideNavFactory {
             ? new SideNavItem(title, menuEntry.path(), createIcon(menuEntry))
             : new SideNavItem(title, menuEntry.path());
 
-    if (menuEntry.path() != null && menuEntry.path().contains("/detail")) {
+    if (menuEntry.path() != null && menuEntry.path().contains(Routes.DETAIL)) {
       item.setMatchNested(true);
     }
 
