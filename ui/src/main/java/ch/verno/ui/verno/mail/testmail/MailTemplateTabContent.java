@@ -30,6 +30,8 @@ public class MailTemplateTabContent {
   @Nonnull private final VAVerticalLayout layout;
   @Nullable private CourseMailTemplateConfigLayout templateLayout;
 
+  @Nullable private TestMailTemplateDialog testMailTemplateDialog;
+
   public MailTemplateTabContent(@Nonnull final GlobalInterface globalInterface,
                                 @Nonnull final MailTemplateTypeMapping mapping) {
     this.globalInterface = globalInterface;
@@ -110,8 +112,8 @@ public class MailTemplateTabContent {
   }
 
   private void testMail() {
-    final var dialog = new TestMailTemplateDialog(this::sendEmail);
-    dialog.open();
+    this.testMailTemplateDialog = new TestMailTemplateDialog(this::sendEmail);
+    testMailTemplateDialog.open();
   }
 
   private void sendEmail(@Nonnull final String recipient) {
@@ -137,6 +139,10 @@ public class MailTemplateTabContent {
     );
 
     NotificationFactory.showSuccessNotification(TranslationHelper.getTranslation(globalInterface, "mail.email.sent.successfully"));
+
+    if (testMailTemplateDialog != null) {
+      testMailTemplateDialog.close();
+    }
   }
 
   public void saveTemplate() {
