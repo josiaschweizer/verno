@@ -71,7 +71,7 @@ public class VAButton extends Button {
     addClickListener(listener);
   }
 
-  private void setContent(@Nonnull final String text,
+  protected void setContent(@Nonnull final String text,
                           @Nonnull final Component icon) {
     final var label = new Span(text);
     final var content = new Span(icon, label);

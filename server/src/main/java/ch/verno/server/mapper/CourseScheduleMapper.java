@@ -21,7 +21,6 @@ public final class CourseScheduleMapper {
 
     final var dto = new CourseScheduleDto(
             entity.getId(),
-            entity.getCreatedAt(),
             entity.getTitle(),
             entity.getColor(),
             entity.getStatus(),

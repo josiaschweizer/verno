@@ -11,10 +11,12 @@ import ch.verno.ui.base.factory.EntryFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -27,6 +29,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
   @Nonnull private final EntryFactory<MailTemplateDto> entryFactory;
   @Nonnull private final MailTemplateType mailTemplateType;
 
+  @Nullable private MailTemplateDto template;
   @Nonnull protected final Binder<MailTemplateDto> binder;
 
   @Nullable private TextArea selectedTextArea;
@@ -38,16 +41,8 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
     this.mailTemplateType = mailTemplateType;
     this.binder = new Binder<>(MailTemplateDto.class);
 
-    initBinder();
     initLayout();
-  }
-
-  private void initBinder() {
-    if (mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
-      binder.setBean(mailTemplateService.getTemplateByKey(mailTemplateType.getKey()));
-    } else {
-      binder.setBean(new MailTemplateDto(mailTemplateType.getKey()));
-    }
+    initBinder();
   }
 
   private void initLayout() {
@@ -96,26 +91,56 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
     contentLayout.setFlexGrow(0, placeholderLayout);
   }
 
+  private void initBinder() {
+    binder.setChangeDetectionEnabled(true);
+
+    if (mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
+      template = mailTemplateService.getTemplateByKey(mailTemplateType.getKey());
+    } else {
+      template = new MailTemplateDto(mailTemplateType.getKey());
+    }
+
+    binder.readBean(template);
+  }
+
+  public void addBinderValueChangeListener(@Nonnull final HasValue.ValueChangeListener<HasValue.ValueChangeEvent<?>> event) {
+    binder.addValueChangeListener(event);
+  }
+
   public boolean isValid() {
     return binder.isValid();
   }
 
+  public boolean hasChanges() {
+    return binder.hasChanges();
+  }
+
   @Nonnull
   public MailTemplateDto getBean() {
-    return binder.getBean();
+    final var bean = new MailTemplateDto(mailTemplateType.getKey());
+
+    try {
+      binder.writeBean(bean);
+    } catch (ValidationException e) {
+      throw new IllegalStateException("Mail template is invalid.", e);
+    }
+
+    return bean;
   }
 
   public void saveTemplate() {
-    final var bean = binder.getBean();
-
-    if (mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
-      final var template = mailTemplateService.getTemplateByKey(mailTemplateType.getKey());
-      template.setSubject(bean.getSubject());
-      template.setContent(bean.getContent());
-      mailTemplateService.upsertTemplate(template);
-    } else {
-      mailTemplateService.upsertTemplate(bean);
+    if (!binder.isValid() || template == null) {
+      return;
     }
+
+    try {
+      binder.writeBean(template);
+    } catch (ValidationException e) {
+      return;
+    }
+
+    mailTemplateService.upsertTemplate(template);
+    binder.readBean(template); // read template dto so we no longer have changes
   }
 
   public void addStatusChangeListener(@Nonnull final Runnable listener) {

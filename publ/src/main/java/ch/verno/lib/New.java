@@ -2,13 +2,27 @@ package ch.verno.lib;
 
 import jakarta.annotation.Nonnull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class New {
 
+  @Nonnull
+  public static <T> List<T> list() {
+    return arrayList();
+  }
+
+  @Nonnull
+  public static <T> List<T> list(@Nonnull final T item) {
+    return arrayList(item);
+  }
+
+  @Nonnull
+  @SafeVarargs
+  public static <T> List<T> list(@Nonnull final T... items) {
+    return arrayList(items);
+  }
+
+  @Nonnull
   public static <T> ArrayList<T> arrayList() {
     return new ArrayList<>();
   }
@@ -35,6 +49,16 @@ public class New {
       list.addAll(l);
     }
     return list;
+  }
+
+  @Nonnull
+  public static <K, V> Map<K, V> map() {
+    return hashMap();
+  }
+
+  @Nonnull
+  public static <K, V> Map<K, V> map(@Nonnull final K key, @Nonnull final V value) {
+    return hashMap(key, value);
   }
 
   @Nonnull

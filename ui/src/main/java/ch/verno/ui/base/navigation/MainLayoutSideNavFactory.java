@@ -63,7 +63,7 @@ public class MainLayoutSideNavFactory {
     header.setAlignItems(FlexComponent.Alignment.CENTER);
     header.getStyle().setCursor(Cursor.POINTER.toString());
 
-    header.addClickListener(event -> UI.getCurrent().navigate(""));
+    header.addClickListener(event -> UI.getCurrent().navigate(Publ.EMPTY_STRING));
 
     return header;
   }

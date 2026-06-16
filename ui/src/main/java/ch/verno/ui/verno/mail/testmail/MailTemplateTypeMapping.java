@@ -6,21 +6,16 @@ import ch.verno.common.lib.mail.MailTemplateType;
 import jakarta.annotation.Nonnull;
 
 public enum MailTemplateTypeMapping {
-  WELCOME(
-          MailTemplateType.WELCOME,
-          "mail.welcome.email",
-          "mail.this.email.is.sent.automatically.when.a.participant.is.added.or.registered"
-  ),
   COURSE_INVITE(
           MailTemplateType.COURSE_INVITE,
           "mail.course.invitation",
           "mail.this.email.is.sent.when.a.participant.is.invited.to.a.course"
-  ),
+  )/*,
   COURSE_REMINDER(
           MailTemplateType.COURSE_REMINDER,
           "mail.course.reminder",
           "mail.this.email.is.sent.before.a.course.starts.to.remind.participants.about.the.upcoming.course"
-  );
+  )*/;
 
   @Nonnull private final MailTemplateType mailTemplateType;
   @Nonnull private final String nameKey;
