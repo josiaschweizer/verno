@@ -1,11 +1,11 @@
 package ch.verno.ui.lib.pages.detail;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.injection.Injector;
 import ch.verno.ui.verno.FieldFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
 
   @Nonnull private final Binder<T> binder;
   @Nonnull protected EntryFactory<T> entryFactory;
@@ -47,13 +47,13 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull public FormMode formMode;
   @Nullable protected FormMode pendingFormMode;
 
-  protected BaseDetailView(@Nonnull final GlobalInterface globalInterface) {
-    this(globalInterface, true);
+  protected BaseDetailView(@Nonnull final Injector injector) {
+    this(injector, true);
   }
 
-  protected BaseDetailView(@Nonnull final GlobalInterface globalInterface,
+  protected BaseDetailView(@Nonnull final Injector injector,
                            final boolean showHeaderToolbar) {
-    this.globalInterface = globalInterface;
+    this.injector = injector;
     this.showHeaderToolbar = showHeaderToolbar;
 
     this.saveButton = new Button(getTranslation("common.save"));
@@ -62,8 +62,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
     this.formMode = getDefaultFormMode();
     this.binder = createBinder();
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
-    this.fieldFactory = new FieldFactory<>(entryFactory, globalInterface.getI18NProvider());
+    this.entryFactory = new EntryFactory<>(injector.getI18NProvider());
+    this.fieldFactory = new FieldFactory<>(entryFactory, injector.getI18NProvider());
   }
 
   @Override
@@ -103,7 +103,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   @Nonnull
   protected ViewToolbarResult createViewToolbar() {
-    final var result = ViewToolbarFactory.createDetailToolbar(globalInterface, getDetailPageName(), getDetailRoute());
+    final var result = ViewToolbarFactory.createDetailToolbar(injector, getDetailPageName(), getDetailRoute());
 
     if (result.createButton() != null) {
       result.createButton().addClickListener(this::onCreateButtonClick);

@@ -4,7 +4,7 @@ import ch.verno.common.server.service.intern.IGenderService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.New;
 import ch.verno.lib.language.Language;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import com.vaadin.flow.component.AttachEvent;

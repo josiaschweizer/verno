@@ -2,7 +2,7 @@ package ch.verno.ui.lib.billing;
 
 import ch.verno.common.server.service.extern.ITenantBillingService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 

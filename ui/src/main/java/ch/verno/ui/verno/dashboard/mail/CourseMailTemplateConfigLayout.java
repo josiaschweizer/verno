@@ -1,11 +1,11 @@
 package ch.verno.ui.verno.dashboard.mail;
 
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.mail.MailTemplateType;
-import ch.verno.common.lib.mail.placeholder.Placeholder;
-import ch.verno.common.lib.mail.placeholder.PlaceholderValue;
-import ch.verno.common.lib.mail.placeholder.context.CourseMailPlaceholderContext;
-import ch.verno.publ.Publ;
+import ch.verno.contract.mail.MailTemplateType;
+import ch.verno.contract.mail.placeholder.Placeholder;
+import ch.verno.contract.mail.placeholder.PlaceholderValue;
+import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.lib.Publ;
 import ch.verno.ui.lib.components.email.AbstractMailTemplateConfigLayout;
 import com.vaadin.flow.component.button.Button;
 import jakarta.annotation.Nonnull;

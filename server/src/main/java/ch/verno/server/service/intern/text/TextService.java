@@ -1,77 +1,50 @@
 package ch.verno.server.service.intern.text;
 
-import ch.verno.common.db.dto.table.text.TextDto;
-import ch.verno.common.server.service.intern.ITextService;
-import ch.verno.common.exceptions.db.DBNotFoundException;
-import ch.verno.common.exceptions.db.DBNotFoundReason;
-import ch.verno.common.tenant.TenantContext;
-import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.contract.dto.table.text.TextDto;
 import ch.verno.db.entity.text.TextEntity;
+import ch.verno.lib.Publ;
 import ch.verno.lib.language.Language;
+import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.text.TextMapper;
-import ch.verno.server.repository.TextRepository;
+import ch.verno.server.repository.text.TextRepository;
+import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class TextService implements ITextService {
+@Transactional
+public class TextService extends AbstractEntityService<
+        TextEntity,
+        TextDto,
+        TextRepository,
+        TextMapper> {
 
-  @Nonnull private final TextRepository textRepository;
-
-  public TextService(@Nonnull TextRepository textRepository) {
-    this.textRepository = textRepository;
+  public TextService(@Nonnull final ServerBean bean) {
+    super(bean.get(TextRepository.class), bean.get(TextMapper.class));
   }
 
   @Nonnull
-  @Override
   @Transactional(readOnly = true)
-  public List<TextDto> findAll() {
-    return textRepository.findAll()
+  public List<TextDto> findByIdentifier(@Nonnull final String identifier) {
+    return getRepository()
+            .findByIdentifier(identifier)
             .stream()
-            .map(TextMapper::toDto)
+            .map(getMapper()::toSimpleDto)
             .toList();
   }
 
   @Nonnull
-  @Override
   @Transactional(readOnly = true)
-  public TextDto getById(@Nonnull Long id) {
-    return TextMapper.toDto(getEntityById(id));
-  }
-
-  @Nonnull
-  private TextEntity getEntityById(@Nonnull Long id) {
-    final var byId = textRepository.findById(id);
-    if (byId.isEmpty()) {
-      throw new DBNotFoundException(DBNotFoundReason.TEXT_BY_ID_NOT_FOUND, id);
-    }
-
-    return byId.get();
-  }
-
-  @Nonnull
-  @Override
-  @Transactional(readOnly = true)
-  public List<TextDto> findByIdentifier(@Nonnull String identifier) {
-    return textRepository.findByIdentifier(identifier)
+  public Map<Language, TextDto> findByIdentifierMap(@Nonnull final String identifier) {
+    return findByIdentifier(identifier)
             .stream()
-            .map(TextMapper::toDto)
-            .toList();
-  }
-
-  @Nonnull
-  @Override
-  @Transactional(readOnly = true)
-  public Map<Language, TextDto> findByIdentifierMap(@Nonnull String identifier) {
-    return textRepository.findByIdentifier(identifier)
-            .stream()
-            .map(TextMapper::toDto)
             .collect(Collectors.toMap(
                     TextDto::getLanguage,
                     Function.identity()
@@ -79,23 +52,22 @@ public class TextService implements ITextService {
   }
 
   @Nonnull
-  @Override
   @Transactional(readOnly = true)
-  public List<TextDto> findByIdentifierSubIdentifier(@Nonnull String identifier, @Nonnull String subIdentifier) {
-    return textRepository.findByIdentifierAndSubIdentifier(identifier, subIdentifier)
+  public List<TextDto> findByIdentifierSubIdentifier(@Nonnull final String identifier,
+                                                     @Nonnull final String subIdentifier) {
+    return getRepository()
+            .findByIdentifierAndSubIdentifier(identifier, subIdentifier)
             .stream()
-            .map(TextMapper::toDto)
+            .map(getMapper()::toSimpleDto)
             .toList();
   }
 
   @Nonnull
-  @Override
   @Transactional(readOnly = true)
-  public Map<Language, TextDto> findByIdentifierSubIdentifierMap(@Nonnull String identifier,
-                                                                 @Nonnull String subIdentifier) {
-    return textRepository.findByIdentifierAndSubIdentifier(identifier, subIdentifier)
+  public Map<Language, TextDto> findByIdentifierSubIdentifierMap(@Nonnull final String identifier,
+                                                                 @Nonnull final String subIdentifier) {
+    return findByIdentifierSubIdentifier(identifier, subIdentifier)
             .stream()
-            .map(TextMapper::toDto)
             .collect(Collectors.toMap(
                     TextDto::getLanguage,
                     Function.identity()
@@ -103,74 +75,35 @@ public class TextService implements ITextService {
   }
 
   @Nonnull
-  @Override
   @Transactional(readOnly = true)
-  public TextDto findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull String identifier,
-                                                                 @Nonnull String subIdentifier,
-                                                                 @Nonnull Language language) {
-    final var foundOptional = textRepository.findByIdentifierAndSubIdentifierAndLanguage(identifier, subIdentifier, language);
-    return foundOptional.map(TextMapper::toDto).orElseGet(TextDto::empty);
+  public Optional<TextDto> findByIdentifierAndSubIdentifierAndLanguageCode(@Nonnull final String identifier,
+                                                                           @Nonnull final String subIdentifier,
+                                                                           @Nonnull final Language language) {
+    return getRepository()
+            .findByIdentifierAndSubIdentifierAndLanguage(
+                    identifier,
+                    subIdentifier,
+                    language
+            )
+            .map(getMapper()::toSimpleDto);
   }
 
-  @Override
   @Transactional
   public void saveMultiple(@Nonnull final List<TextDto> textDtos) {
-    for (final var textDto : textDtos) {
-      save(textDto);
-    }
-  }
-
-  @Override
-  @Transactional
-  public void save(@Nonnull TextDto textDto) {
-    final var existing = textRepository.findByIdentifierAndSubIdentifierAndLanguage(
-            textDto.getIdentifier(),
-            textDto.getSubIdentifier(),
-            textDto.getLanguage()
-    );
-
-    if (existing.isEmpty()) {
-      create(textDto);
-    } else {
-      update(existing.get().getId(), textDto);
-    }
+    textDtos.forEach(this::save);
   }
 
   @Nonnull
   @Override
-  @Transactional
-  public TextDto update(@Nonnull final Long id,
-                        @Nonnull final TextDto textDto) {
-    final var existing = getEntityById(id);
-    TextMapper.updateEntity(existing, textDto);
-
-    return TextMapper.toDto(textRepository.save(existing));
-  }
-
-  @Nonnull
-  @Override
-  @Transactional
-  public TextDto create(@Nonnull final TextDto textDto) {
-    final var entity = TextMapper.toNewEntity(
-            textDto,
-            TenantEntity.ref(TenantContext.getRequired())
+  public TextDto save(@Nonnull final TextDto dto) {
+    final var existing = getRepository().findByIdentifierAndSubIdentifierAndLanguage(
+            dto.getIdentifier(),
+            Optional.ofNullable(dto.getSubIdentifier()).orElse(Publ.EMPTY_STRING),
+            dto.getLanguage()
     );
 
-    return TextMapper.toDto(textRepository.save(entity));
+    existing.ifPresent(textEntity -> dto.setId(textEntity.getId()));
+    return super.save(dto);
   }
 
-  @Override
-  @Transactional
-  public void delete(@Nonnull final TextDto dto) {
-    if (dto.getId() != null && dto.getId() > 0) {
-      delete(dto.getId());
-    }
-  }
-
-  @Override
-  @Transactional
-  public void delete(@Nonnull final Long id) {
-    final var entity = getEntityById(id);
-    textRepository.delete(entity);
-  }
 }

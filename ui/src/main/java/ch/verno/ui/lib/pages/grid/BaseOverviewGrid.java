@@ -3,7 +3,7 @@ package ch.verno.ui.lib.pages.grid;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.New;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.publ.VernoUtility;
 import ch.verno.ui.base.components.contextmenu.ActionDef;

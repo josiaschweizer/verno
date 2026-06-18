@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.badge;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.contextmenu.ContextMenu;

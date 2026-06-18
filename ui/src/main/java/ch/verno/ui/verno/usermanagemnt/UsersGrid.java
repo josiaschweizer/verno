@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.usermanagemnt;
 
 import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.db.filter.AppUserFilter;
+import ch.verno.contract.dto.filter.AppUserFilter;
 import ch.verno.common.db.role.Role;
 import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;

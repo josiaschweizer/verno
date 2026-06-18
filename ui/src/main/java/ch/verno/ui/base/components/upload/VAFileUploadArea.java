@@ -2,7 +2,7 @@ package ch.verno.ui.base.components.upload;
 
 import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.publ.CssImportConstants;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.course.courses;
 
 import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.filter.CourseFilter;
+import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.common.server.service.intern.ICourseService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.Routes;

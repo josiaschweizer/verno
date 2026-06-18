@@ -4,7 +4,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
 import ch.verno.lib.New;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;

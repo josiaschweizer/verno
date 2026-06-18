@@ -1,5 +1,6 @@
 package ch.verno.db.entity.mail;
 
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,11 @@ public class MailTemplateTypeEntity {
 
   public MailTemplateTypeEntity(@Nonnull final String key) {
     this.key = key;
+  }
+
+  @Nonnull
+  public static MailTemplateTypeEntity empty() {
+    return new MailTemplateTypeEntity(Publ.EMPTY_STRING);
   }
 
   @Nonnull

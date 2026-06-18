@@ -1,7 +1,7 @@
 package ch.verno.ui.lib.icon;
 
 import ch.verno.lib.annotation.RestrictedTo;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;

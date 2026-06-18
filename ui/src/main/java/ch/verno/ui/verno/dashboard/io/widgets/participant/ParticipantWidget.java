@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.io.dialog.export.ExportDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.ImportDialog;

@@ -6,7 +6,7 @@ import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.server.service.intern.IInstructorService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.server.io.importing.dto.DbField;
 import ch.verno.server.io.importing.dto.DbFieldNested;

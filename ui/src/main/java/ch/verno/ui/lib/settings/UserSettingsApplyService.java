@@ -2,7 +2,7 @@ package ch.verno.ui.lib.settings;
 
 import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;

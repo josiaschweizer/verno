@@ -3,7 +3,7 @@ package ch.verno.ui.base.components.file.csv;
 import ch.verno.common.exceptions.io.ParseCsvException;
 import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

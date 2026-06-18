@@ -5,7 +5,7 @@ import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;

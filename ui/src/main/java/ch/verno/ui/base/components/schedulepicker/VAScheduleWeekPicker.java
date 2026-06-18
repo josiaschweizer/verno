@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.schedulepicker;
 
 import ch.verno.common.db.dto.YearWeekDto;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;

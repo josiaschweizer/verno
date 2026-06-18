@@ -1,6 +1,6 @@
 package ch.verno.common.lib.url;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
 public class UrlUtil {

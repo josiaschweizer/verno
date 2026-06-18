@@ -9,7 +9,7 @@ import ch.verno.common.server.service.intern.IGenderService;
 import ch.verno.common.server.service.intern.IParticipantService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
 import ch.verno.lib.New;
 import ch.verno.server.io.importing.dto.DbField;

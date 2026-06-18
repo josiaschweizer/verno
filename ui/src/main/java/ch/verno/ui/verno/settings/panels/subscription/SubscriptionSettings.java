@@ -10,7 +10,7 @@ import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.common.properties.configprovider.VernoBillingConfigProvider;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;

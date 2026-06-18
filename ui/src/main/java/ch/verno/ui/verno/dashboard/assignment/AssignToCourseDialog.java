@@ -3,7 +3,7 @@ package ch.verno.ui.verno.dashboard.assignment;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.CourseDto;
 import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.contract.dto.filter.ParticipantFilter;
 import ch.verno.common.server.service.intern.IParticipantService;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;

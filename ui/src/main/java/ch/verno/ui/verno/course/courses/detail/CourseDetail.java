@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.course.courses.detail;
 
 import ch.verno.common.db.dto.table.*;
-import ch.verno.common.db.filter.ParticipantFilter;
+import ch.verno.contract.dto.filter.ParticipantFilter;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.server.service.intern.ICourseLevelService;
 import ch.verno.common.server.service.intern.ICourseScheduleService;

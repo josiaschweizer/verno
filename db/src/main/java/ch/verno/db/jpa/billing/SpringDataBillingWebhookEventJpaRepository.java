@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SpringDataBillingWebhookEventJpaRepository extends JpaRepository<BillingWebhookEventEntity, Long> {
+public interface SpringDataBillingWebhookEventJpaRepository extends
+        JpaRepository<BillingWebhookEventEntity, Long> {
 
   @Nonnull
   Optional<BillingWebhookEventEntity> findByStripeEventId(@Nonnull String stripeEventId);

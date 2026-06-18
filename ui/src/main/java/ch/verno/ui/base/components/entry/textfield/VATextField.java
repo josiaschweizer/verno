@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.entry.textfield;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.textfield.TextField;

@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.mapping;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.combobox.ComboBox;

@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.colorpicker;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import org.vaadin.addons.tatu.ColorPicker;
 

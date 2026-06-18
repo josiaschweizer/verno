@@ -1,6 +1,6 @@
 package ch.verno.db.jpa.mail;
 
-import ch.verno.common.db.type.mail.MailLogStatus;
+import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.repository.JpaRepository;

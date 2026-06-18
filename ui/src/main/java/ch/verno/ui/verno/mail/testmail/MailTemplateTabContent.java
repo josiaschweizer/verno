@@ -2,9 +2,9 @@ package ch.verno.ui.verno.mail.testmail;
 
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.common.lib.i18n.TranslationHelper;
-import ch.verno.common.lib.mail.MailContentDto;
-import ch.verno.common.lib.test.testdata.TestDataUtil;
+import ch.verno.ui.i18n.TranslationHelper;
+import ch.verno.contract.mail.MailContentDto;
+import ch.verno.common.test.lib.TestDataUtil;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.ui.base.components.button.VAButton;

@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.CssImportConstants;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.factory.EntryFactory;

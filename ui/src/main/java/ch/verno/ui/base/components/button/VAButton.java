@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.button;
 
 import ch.verno.publ.CssImportConstants;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;

@@ -7,7 +7,7 @@ import ch.verno.common.server.service.intern.*;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;

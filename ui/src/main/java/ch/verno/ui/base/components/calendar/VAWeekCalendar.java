@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.calendar;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.Routes;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;

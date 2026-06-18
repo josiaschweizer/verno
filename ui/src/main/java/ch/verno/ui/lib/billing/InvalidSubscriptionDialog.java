@@ -7,7 +7,7 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.server.properties.application.VernoApplicationConfigProviderImpl;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;

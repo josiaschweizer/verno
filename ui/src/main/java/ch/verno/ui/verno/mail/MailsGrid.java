@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.mail;
 
 import ch.verno.common.db.dto.table.mail.MailLogDto;
-import ch.verno.common.db.filter.MailLogFilter;
+import ch.verno.contract.dto.filter.MailLogFilter;
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.lib.format.Converter;
@@ -9,7 +9,7 @@ import ch.verno.common.server.service.intern.mail.IMailConfigService;
 import ch.verno.common.server.service.intern.mail.IMailLogService;
 import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
 import ch.verno.lib.New;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.publ.VernoUtility;
 import ch.verno.server.service.intern.mail.MailLogService;

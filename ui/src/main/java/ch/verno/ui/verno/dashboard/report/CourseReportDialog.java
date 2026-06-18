@@ -5,7 +5,7 @@ import ch.verno.common.db.dto.table.ParticipantDto;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.ReportServerGate;
 import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
 import com.vaadin.flow.component.button.Button;

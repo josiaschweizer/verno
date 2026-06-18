@@ -2,9 +2,9 @@ package ch.verno.ui.base.navigation;
 
 import ch.verno.common.db.type.mail.MailValidity;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.i18n.TranslationHelper;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.Routes;
 import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIcons;

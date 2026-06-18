@@ -1,7 +1,8 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.type.mail.MailContentFormat;
+import ch.verno.common.type.mail.MailContentFormat;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -46,6 +47,7 @@ public class MailTemplateEntity {
   private OffsetDateTime updatedAt = OffsetDateTime.now();
 
   protected MailTemplateEntity() {
+    // JPA
   }
 
   public MailTemplateEntity(@Nonnull final TenantEntity tenant,
@@ -61,6 +63,24 @@ public class MailTemplateEntity {
     this.contentFormat = contentFormat;
   }
 
+  @Nonnull
+  public static MailTemplateEntity ref(@Nonnull final MailTemplateId id) {
+    final var entity = new MailTemplateEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  @Nonnull
+  public static MailTemplateEntity empty() {
+    return new MailTemplateEntity(
+            TenantEntity.empty(),
+            MailTemplateTypeEntity.empty(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            MailContentFormat.AUTO
+    );
+  }
+
   @PreUpdate
   protected void onPreUpdate() {
     updatedAt = OffsetDateTime.now();
@@ -68,6 +88,10 @@ public class MailTemplateEntity {
 
   public MailTemplateId getId() {
     return id;
+  }
+
+  public void setId(@Nonnull final MailTemplateId id) {
+    this.id = id;
   }
 
   public TenantEntity getTenant() {

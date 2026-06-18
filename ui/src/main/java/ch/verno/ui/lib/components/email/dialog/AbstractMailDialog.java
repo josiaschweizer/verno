@@ -2,8 +2,8 @@ package ch.verno.ui.lib.components.email.dialog;
 
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.common.lib.mail.MailContentDto;
-import ch.verno.common.lib.mail.MailTemplateType;
+import ch.verno.contract.mail.MailContentDto;
+import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.lib.Lazy;
 import ch.verno.server.async.BackgroundExecutor;

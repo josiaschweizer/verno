@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SpringDataBillingAccessTokenJpaRepository extends JpaRepository<BillingAccessTokenEntity, Long> {
+public interface SpringDataBillingAccessTokenJpaRepository extends
+        JpaRepository<BillingAccessTokenEntity, Long> {
 
   @Nonnull
   Optional<BillingAccessTokenEntity> findByTokenHash(@Nonnull String tokenHash);

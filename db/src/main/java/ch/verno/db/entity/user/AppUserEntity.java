@@ -3,6 +3,7 @@ package ch.verno.db.entity.user;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -61,6 +62,27 @@ public class AppUserEntity extends TenantScopedEntity {
     this.passwordHash = passwordHash;
     this.role = role;
     this.active = active;
+  }
+
+  @Nonnull
+  public static AppUserEntity ref(@Nonnull final Long id) {
+    final var entity = new AppUserEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  @Nonnull
+  public static AppUserEntity empty() {
+    return new AppUserEntity(
+            TenantEntity.empty(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            true
+    );
   }
 
   public Long getId() {

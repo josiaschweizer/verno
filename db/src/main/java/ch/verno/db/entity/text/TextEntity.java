@@ -2,6 +2,7 @@ package ch.verno.db.entity.text;
 
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import ch.verno.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -53,13 +54,29 @@ public class TextEntity extends TenantScopedEntity {
   }
 
   public TextEntity(@Nonnull String identifier,
-                    @Nonnull String subIdentifier,
+                    @Nullable String subIdentifier,
                     @Nonnull String languageCode,
                     @Nonnull String text) {
     this.identifier = identifier;
     this.subIdentifier = subIdentifier;
     this.languageCode = languageCode;
     this.text = text;
+  }
+
+  @Nonnull
+  public static TextEntity ref(@Nonnull final Long id) {
+    final var entity = new TextEntity();
+    entity.id = id;
+    return entity;
+  }
+
+  @Nonnull
+  public static TextEntity empty() {
+    return new TextEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING
+    );
   }
 
   public Long getId() {

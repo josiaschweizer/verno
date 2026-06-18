@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.filter;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
 import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;

@@ -1,8 +1,8 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.type.mail.MailLogStatus;
+import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.db.entity.tenant.TenantEntityListener;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class MailLogEntity {
 
   @Id
-  @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +61,8 @@ public class MailLogEntity {
   @Column
   private Long createdBy;
 
-  public MailLogEntity() {
+  protected MailLogEntity() {
+    // JPA
   }
 
   public MailLogEntity(@Nonnull final TenantEntity tenant,
@@ -91,6 +92,32 @@ public class MailLogEntity {
     this.sentAt = sentAt;
     this.createdAt = createdAt;
     this.createdBy = createdBy;
+  }
+
+  @Nonnull
+  public static MailLogEntity ref(@Nonnull final Long id) {
+    final var entity = new MailLogEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  @Nonnull
+  public static MailLogEntity empty() {
+    return new MailLogEntity(
+            TenantEntity.empty(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            MailLogStatus.QUEUED,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            null,
+            LocalDateTime.now(),
+            null
+    );
   }
 
   public Long getId() {

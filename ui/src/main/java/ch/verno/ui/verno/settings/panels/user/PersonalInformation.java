@@ -5,7 +5,7 @@ import ch.verno.common.db.role.Role;
 import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.ui.dto.UserDtoUnhashedPw;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.settings.VABaseSetting;

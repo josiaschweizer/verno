@@ -4,7 +4,7 @@ import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.publ.VernoConstants;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;

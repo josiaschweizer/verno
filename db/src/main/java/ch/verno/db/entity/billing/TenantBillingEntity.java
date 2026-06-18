@@ -1,8 +1,8 @@
 package ch.verno.db.entity.billing;
 
-import ch.verno.common.db.type.billing.BillingPaymentStatus;
-import ch.verno.common.db.type.billing.BillingPlanKey;
-import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
+import ch.verno.common.type.billing.BillingPaymentStatus;
+import ch.verno.common.type.billing.BillingPlanKey;
+import ch.verno.common.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;

@@ -4,7 +4,7 @@ import ch.verno.common.api.dto.internal.file.storage.DownloadFileResponse;
 import ch.verno.common.api.dto.internal.file.storage.FileUploadResponse;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.client.BaseApiClient;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

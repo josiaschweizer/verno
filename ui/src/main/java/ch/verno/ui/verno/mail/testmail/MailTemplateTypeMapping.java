@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.mail.testmail;
 
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.i18n.TranslationHelper;
-import ch.verno.common.lib.mail.MailTemplateType;
+import ch.verno.ui.i18n.TranslationHelper;
+import ch.verno.contract.mail.MailTemplateType;
 import jakarta.annotation.Nonnull;
 
 public enum MailTemplateTypeMapping {

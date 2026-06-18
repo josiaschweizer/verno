@@ -2,8 +2,8 @@ package ch.verno.ui.lib.components.email;
 
 import ch.verno.common.db.dto.table.mail.MailTemplateDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.mail.MailTemplateType;
-import ch.verno.common.lib.mail.placeholder.Placeholder;
+import ch.verno.contract.mail.MailTemplateType;
+import ch.verno.contract.mail.placeholder.Placeholder;
 import ch.verno.common.server.service.intern.mail.IMailTemplateService;
 import ch.verno.publ.VernoUtility;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;

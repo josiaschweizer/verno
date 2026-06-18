@@ -4,8 +4,8 @@ import ch.verno.common.db.dto.table.InstructorDto;
 import ch.verno.common.server.service.intern.IInstructorService;
 import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.i18n.AbstractTranslationHelper;
-import ch.verno.publ.Publ;
+import ch.verno.ui.i18n.AbstractTranslationHelper;
+import ch.verno.lib.Publ;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
 import jakarta.annotation.Nonnull;
 
