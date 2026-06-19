@@ -5,6 +5,7 @@ import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -57,6 +58,33 @@ public class InstructorEntity extends TenantScopedEntity {
     this.lastname = lastname;
     this.email = email;
     this.phone = phone;
+  }
+
+  public InstructorEntity(@Nonnull final String firstname,
+                          @Nonnull final String lastname,
+                          @Nonnull final String email,
+                          @Nonnull final String phone) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.phone = phone;
+  }
+
+  @Nonnull
+  public static InstructorEntity empty() {
+    return new InstructorEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING
+    );
+  }
+
+  @Nonnull
+  public static InstructorEntity ref(@Nonnull final Long id) {
+    final var entity = InstructorEntity.empty();
+    entity.setId(id);
+    return entity;
   }
 
   public Long getId() {

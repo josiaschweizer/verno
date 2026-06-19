@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.multilanguagefield;
 
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.publ.CssImportConstants;
 import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
@@ -27,7 +27,6 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @CssImport(CssImportConstants.VA_MULTI_LANGUAGE_FIELD)
 public class VAMultiLanguageField extends CustomField<Map<Language, String>> {

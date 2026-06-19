@@ -5,7 +5,7 @@ import ch.verno.common.db.dto.table.AppUserSettingDto;
 import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.theme.ThemeConstants;
 import com.vaadin.flow.component.Component;

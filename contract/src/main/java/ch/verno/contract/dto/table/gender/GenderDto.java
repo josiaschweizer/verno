@@ -3,7 +3,7 @@ package ch.verno.contract.dto.table.gender;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.text.TextDto;
 import ch.verno.lib.Publ;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -36,6 +36,13 @@ public class GenderDto extends BaseDto {
   @Nonnull
   public static GenderDto empty() {
     return new GenderDto();
+  }
+
+  @Nonnull
+  public static GenderDto ref(@Nonnull final Long id) {
+    final var dto = new GenderDto();
+    dto.setId(id);
+    return dto;
   }
 
   public boolean isEmpty() {

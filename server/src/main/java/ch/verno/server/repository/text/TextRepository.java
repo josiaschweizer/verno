@@ -2,7 +2,7 @@ package ch.verno.server.repository.text;
 
 import ch.verno.db.entity.text.TextEntity;
 import ch.verno.db.jpa.text.SpringDataTextJpaRepository;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;

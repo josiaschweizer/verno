@@ -3,11 +3,18 @@ package ch.verno.common.dto.ui.phonenumber;
 import ch.verno.common.lib.calling.CallingCode;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-public record PhoneNumber(
-    @Nonnull CallingCode callingCode,
-    @Nonnull String phoneNumber
-) {
+import java.util.Optional;
+
+public record PhoneNumber(@Nonnull CallingCode callingCode,
+                          @Nonnull String phoneNumber) {
+
+  @Nonnull
+  public static PhoneNumber ofNullable(@Nullable final String value) {
+    final var saveValue = Optional.ofNullable(value).orElse(Publ.EMPTY_STRING);
+    return fromString(saveValue);
+  }
 
   @Nonnull
   public static PhoneNumber fromString(@Nonnull final String value) {

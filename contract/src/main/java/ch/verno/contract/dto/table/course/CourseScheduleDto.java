@@ -51,6 +51,13 @@ public class CourseScheduleDto extends BaseDto {
     return new CourseScheduleDto();
   }
 
+  @Nonnull
+  public static CourseScheduleDto ref(@Nonnull final Long id) {
+    final var dto = new CourseScheduleDto();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L

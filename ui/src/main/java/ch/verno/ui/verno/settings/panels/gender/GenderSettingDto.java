@@ -6,8 +6,8 @@ import ch.verno.common.db.dto.table.GenderDto;
 import ch.verno.common.db.dto.table.text.TextDto;
 import ch.verno.common.lib.gender.GenderUtil;
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
-import ch.verno.lib.language.LanguageUtil;
+import ch.verno.lib.lib.language.Language;
+import ch.verno.lib.lib.language.LanguageUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

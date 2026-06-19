@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.text.TextDto;
 import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.base.MapperContext;
 import ch.verno.server.mapper.gender.GenderMapper;

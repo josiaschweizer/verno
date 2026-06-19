@@ -4,6 +4,8 @@ import ch.verno.db.entity.instructor.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.New;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -119,23 +121,77 @@ public class CourseEntity extends TenantScopedEntity {
     this.location = location;
 
     this.courseLevels = courseLevels != null
-            ? new ArrayList<>(courseLevels)
-            : new ArrayList<>();
+            ? New.list(courseLevels)
+            : New.list();
     this.courseSchedule = courseSchedule;
 
     this.weekdays = weekdays != null
-            ? new ArrayList<>(weekdays)
-            : new ArrayList<>();
+            ? New.list(weekdays)
+            : New.list();
     this.startTime = startTime;
     this.endTime = endTime;
 
     this.instructor = instructor;
     this.secondaryInstructors = secondaryInstructors != null
-            ? new ArrayList<>(secondaryInstructors)
-            : new ArrayList<>();
+            ? New.list(secondaryInstructors)
+            : New.list();
 
     this.note = note;
     this.color = color;
+  }
+
+  public CourseEntity(@Nonnull final String title,
+                      @Nullable final Integer capacity,
+                      @Nonnull final String location,
+                      @Nullable final List<CourseLevelEntity> courseLevels,
+                      @Nullable final CourseScheduleEntity courseSchedule,
+                      @Nullable final List<DayOfWeek> weekdays,
+                      @Nullable final LocalTime startTime,
+                      @Nullable final LocalTime endTime,
+                      @Nullable final InstructorEntity instructor,
+                      @Nullable final List<InstructorEntity> secondaryInstructors,
+                      @Nonnull final String note,
+                      @Nullable final String color) {
+    this.title = title;
+    this.capacity = capacity;
+    this.location = location;
+
+    this.courseLevels = courseLevels != null
+            ? New.list(courseLevels)
+            : New.list();
+    this.courseSchedule = courseSchedule;
+
+    this.weekdays = weekdays != null
+            ? New.list(weekdays)
+            : New.list();
+    this.startTime = startTime;
+    this.endTime = endTime;
+
+    this.instructor = instructor;
+    this.secondaryInstructors = secondaryInstructors != null
+            ? New.list(secondaryInstructors)
+            : New.list();
+
+    this.note = note;
+    this.color = color;
+  }
+
+  @Nonnull
+  public static CourseEntity empty() {
+    return new CourseEntity(
+            Publ.EMPTY_STRING,
+            Publ.ZERO,
+            Publ.EMPTY_STRING,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            Publ.EMPTY_STRING,
+            null
+    );
   }
 
   @Nonnull

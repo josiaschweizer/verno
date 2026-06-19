@@ -87,10 +87,33 @@ public class TenantBillingEntity extends TenantScopedEntity {
     this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
+  public TenantBillingEntity(@Nonnull final String planKey,
+                             @Nonnull final String subscriptionStatus,
+                             @Nonnull final String paymentStatus,
+                             final boolean hasValidPaymentMethod,
+                             @Nonnull final List<String> additionalLicenceOptions) {
+    this.planKey = planKey;
+    this.subscriptionStatus = subscriptionStatus;
+    this.paymentStatus = paymentStatus;
+    this.hasValidPaymentMethod = hasValidPaymentMethod;
+    this.additionalLicenceOptions = additionalLicenceOptions;
+  }
+
   @Nonnull
   public static TenantBillingEntity createDefault(@Nonnull final TenantEntity tenant) {
     return new TenantBillingEntity(
             tenant,
+            BillingPlanKey.FREE.name(),
+            BillingSubscriptionStatus.INACTIVE.name(),
+            BillingPaymentStatus.UNPAID.name(),
+            false,
+            New.arrayList()
+    );
+  }
+
+  @Nonnull
+  public static TenantBillingEntity empty() {
+    return new TenantBillingEntity(
             BillingPlanKey.FREE.name(),
             BillingSubscriptionStatus.INACTIVE.name(),
             BillingPaymentStatus.UNPAID.name(),

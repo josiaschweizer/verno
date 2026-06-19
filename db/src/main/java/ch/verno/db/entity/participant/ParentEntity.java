@@ -1,10 +1,11 @@
 package ch.verno.db.entity.participant;
 
-import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.address.AddressEntity;
+import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -59,6 +60,33 @@ public class ParentEntity extends TenantScopedEntity {
     this.phone = phone;
   }
 
+  public ParentEntity(@Nonnull final String firstname,
+                      @Nonnull final String lastname,
+                      @Nonnull final String email,
+                      @Nonnull final String phone) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.phone = phone;
+  }
+
+  @Nonnull
+  public static ParentEntity empty() {
+    return new ParentEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING
+    );
+  }
+
+  @Nonnull
+  public static ParentEntity ref(@Nonnull final Long id) {
+    final var entity = ParentEntity.empty();
+    entity.setId(id);
+    return entity;
+  }
+
   public Long getId() {
     return id;
   }
@@ -67,6 +95,7 @@ public class ParentEntity extends TenantScopedEntity {
     this.id = id;
   }
 
+  @Nonnull
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }

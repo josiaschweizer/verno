@@ -1,10 +1,7 @@
 package ch.verno.ui.base.factory;
 
-import ch.verno.common.db.dto.YearWeekDto;
-import ch.verno.common.db.dto.table.GenderDto;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
 import ch.verno.ui.base.components.entry.email.VAEmailField;

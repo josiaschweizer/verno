@@ -60,6 +60,13 @@ public class ParentDto extends BaseDto {
     return new ParentDto();
   }
 
+  @Nonnull
+  public static ParentDto ref(@Nonnull final Long id) {
+    final var dto = ParentDto.empty();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L

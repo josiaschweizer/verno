@@ -2,8 +2,8 @@ package ch.verno.ui.config.i18n;
 
 import ch.verno.common.server.service.intern.user.IAppUserService;
 import ch.verno.common.server.service.intern.user.IAppUserSettingService;
-import ch.verno.lib.language.Language;
-import ch.verno.lib.language.LanguageUtil;
+import ch.verno.lib.lib.language.Language;
+import ch.verno.lib.lib.language.LanguageUtil;
 import ch.verno.ui.base.error.GlobalErrorHandler;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;

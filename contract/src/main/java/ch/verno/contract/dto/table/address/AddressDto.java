@@ -56,6 +56,13 @@ public class AddressDto extends BaseDto {
     return new AddressDto();
   }
 
+  @Nonnull
+  public static AddressDto ref(@Nonnull final Long id) {
+    final var dto = new AddressDto();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L

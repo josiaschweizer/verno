@@ -62,6 +62,13 @@ public class InstructorDto extends BaseDto {
     return new InstructorDto();
   }
 
+  @Nonnull
+  public static InstructorDto ref(@Nonnull final Long id) {
+    final var dto = new InstructorDto();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L

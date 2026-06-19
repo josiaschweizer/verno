@@ -108,6 +108,13 @@ public class ParticipantDto extends BaseDto {
     return new ParticipantDto();
   }
 
+  @Nonnull
+  public static ParticipantDto ref(@Nonnull final Long id) {
+    final var dto = ParticipantDto.empty();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L

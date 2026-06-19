@@ -1,8 +1,8 @@
 package ch.verno.db.entity.address;
 
-import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -50,6 +50,19 @@ public class AddressEntity extends TenantScopedEntity {
     this.zipCode = zipCode;
     this.city = city;
     this.country = country;
+  }
+
+  @Nonnull
+  public static AddressEntity ref(@Nonnull final Long id) {
+    final var entity = new AddressEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING
+    );
+    entity.setId(id);
+    return entity;
   }
 
   public Long getId() {

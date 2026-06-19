@@ -95,6 +95,13 @@ public class CourseDto extends BaseDto {
     return new CourseDto();
   }
 
+  @Nonnull
+  public static CourseDto ref(@Nonnull final Long id) {
+    final var dto = CourseDto.empty();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return this.getId() != null
             && this.getId() == 0L

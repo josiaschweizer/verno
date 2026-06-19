@@ -4,6 +4,8 @@ import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
 import ch.verno.db.entity.user.AppUserEntity;
+import ch.verno.lib.Publ;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 @Entity
@@ -34,14 +36,39 @@ public class AppUserSettingEntity extends TenantScopedEntity {
     // JPA
   }
 
-  public AppUserSettingEntity(final TenantEntity tenant,
-                              final AppUserEntity user,
-                              final String theme,
-                              final String languageTag) {
+  public AppUserSettingEntity(@Nonnull final TenantEntity tenant,
+                              @Nonnull final AppUserEntity user,
+                              @Nonnull final String theme,
+                              @Nonnull final String languageTag) {
     setTenant(tenant);
     this.user = user;
     this.theme = theme;
     this.languageTag = languageTag;
+  }
+
+
+  public AppUserSettingEntity(@Nonnull final AppUserEntity user,
+                              @Nonnull final String theme,
+                              @Nonnull final String languageTag) {
+    this.user = user;
+    this.theme = theme;
+    this.languageTag = languageTag;
+  }
+
+  @Nonnull
+  public static AppUserSettingEntity empty() {
+    return new AppUserSettingEntity(
+            AppUserEntity.empty(),
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING
+    );
+  }
+
+  @Nonnull
+  public static AppUserSettingEntity ref(@Nonnull final Long id){
+    final var entity = AppUserSettingEntity.empty();
+    entity.setId(id);
+    return entity;
   }
 
   public Long getId() {

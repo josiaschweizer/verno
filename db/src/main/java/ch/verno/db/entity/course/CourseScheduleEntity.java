@@ -5,6 +5,8 @@ import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.New;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -57,6 +59,33 @@ public class CourseScheduleEntity extends TenantScopedEntity {
     this.color = color;
     this.status = status;
     this.weeks = weeks;
+  }
+
+  public CourseScheduleEntity(@Nonnull final String title,
+                              @Nonnull final String color,
+                              @Nonnull final CourseScheduleStatus status,
+                              @Nonnull final List<String> weeks) {
+    this.title = title;
+    this.color = color;
+    this.status = status;
+    this.weeks = weeks;
+  }
+
+  @Nonnull
+  public static CourseScheduleEntity empty() {
+    return new CourseScheduleEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            CourseScheduleStatus.PLANNED,
+            New.list()
+    );
+  }
+
+  @Nonnull
+  public static CourseScheduleEntity ref(@Nonnull final Long id) {
+    final var entity = new CourseScheduleEntity();
+    entity.setId(id);
+    return entity;
   }
 
   public Long getId() {

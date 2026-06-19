@@ -1,4 +1,4 @@
-package ch.verno.lib.language;
+package ch.verno.lib.lib.language;
 
 import jakarta.annotation.Nonnull;
 

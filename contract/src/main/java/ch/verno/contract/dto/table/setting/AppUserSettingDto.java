@@ -1,7 +1,7 @@
 package ch.verno.contract.dto.table.setting;
 
 import ch.verno.contract.dto.table.base.BaseDto;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

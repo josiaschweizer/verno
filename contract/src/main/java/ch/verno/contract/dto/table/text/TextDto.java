@@ -2,7 +2,7 @@ package ch.verno.contract.dto.table.text;
 
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.Publ;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

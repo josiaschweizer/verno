@@ -1,18 +1,20 @@
 package ch.verno.ui.verno.participant.detail;
 
-import ch.verno.common.db.dto.table.*;
-import ch.verno.common.db.type.CourseScheduleStatus;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.server.service.intern.*;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.common.lib.Routes;
+import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseLevelDto;
+import ch.verno.contract.dto.table.gender.GenderDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.contract.dto.table.setting.AppUserSettingDto;
 import ch.verno.lib.Publ;
-import ch.verno.publ.Routes;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
+import ch.verno.ui.injection.Injector;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -54,10 +56,10 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
   @Nonnull private final AppUserSettingDto userSettingDto;
 
-  public ParticipantDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
+  public ParticipantDetail(@Nonnull final Injector injector) {
+    super(injector);
 
-    this.participantService = globalInterface.getService(IParticipantService.class);
+    this.participantService = injector.getInstance(IParticipantService.class);
     this.genderService = globalInterface.getService(IGenderService.class);
     this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
     this.courseService = globalInterface.getService(ICourseService.class);
@@ -97,8 +99,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
         return;
       }
 
-      final var updated = participantService
-              .disableParticipant(bean, bean.isActive());
+      final var updated = participantService.disableParticipant(bean, bean.isActive());
 
       getBinder().setBean(updated);
       getBinder().validate();
@@ -133,7 +134,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Nonnull
@@ -176,7 +177,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   @Override
   protected ParticipantDto newBeanInstance() {
-    return new ParticipantDto();
+    return ParticipantDto.empty();
   }
 
   @Override

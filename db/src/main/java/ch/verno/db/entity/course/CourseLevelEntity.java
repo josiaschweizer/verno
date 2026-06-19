@@ -3,7 +3,9 @@ package ch.verno.db.entity.course;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -55,6 +57,26 @@ public class CourseLevelEntity extends TenantScopedEntity {
     this.name = name;
     this.description = description;
     this.sortingOrder = sortingOrder;
+  }
+
+  public CourseLevelEntity(@Nonnull final String code,
+                           @Nonnull final String name,
+                           @Nullable final String description,
+                           @Nullable final Integer sortingOrder) {
+    this.code = code;
+    this.name = name;
+    this.description = description;
+    this.sortingOrder = sortingOrder;
+  }
+
+  @Nonnull
+  public static CourseLevelEntity empty() {
+    return new CourseLevelEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            null,
+            null
+    );
   }
 
   @Nonnull

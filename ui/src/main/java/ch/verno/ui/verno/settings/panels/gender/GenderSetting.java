@@ -3,7 +3,7 @@ package ch.verno.ui.verno.settings.panels.gender;
 import ch.verno.common.server.service.intern.IGenderService;
 import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.lib.settings.VABaseSetting;

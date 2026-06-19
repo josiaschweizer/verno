@@ -3,7 +3,7 @@ package ch.verno.db.entity.text;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
 import ch.verno.lib.Publ;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 

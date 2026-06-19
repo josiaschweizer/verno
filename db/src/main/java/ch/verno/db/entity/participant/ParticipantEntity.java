@@ -7,6 +7,7 @@ import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
@@ -109,6 +110,35 @@ public class ParticipantEntity extends TenantScopedEntity {
     this.phone = phone;
     this.note = note;
     this.active = active;
+  }
+
+  public ParticipantEntity(@Nonnull final String firstname,
+                           @Nonnull final String lastname,
+                           @Nonnull final LocalDate birthdate,
+                           @Nonnull final String email,
+                           @Nonnull final String phone,
+                           @Nonnull final String note,
+                           final boolean active) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.birthdate = birthdate;
+    this.email = email;
+    this.phone = phone;
+    this.note = note;
+    this.active = active;
+  }
+
+  @Nonnull
+  public static ParticipantEntity empty() {
+    return new ParticipantEntity(
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            LocalDate.EPOCH,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            false
+    );
   }
 
   @Nonnull

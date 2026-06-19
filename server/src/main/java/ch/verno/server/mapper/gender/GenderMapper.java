@@ -14,7 +14,6 @@ public class GenderMapper implements IEntityMapper<GenderEntity, GenderDto> {
   @Override
   public GenderDto toSimpleDto(@Nonnull final GenderEntity entity) {
     final var dto = GenderDto.empty();
-
     dto.setId(entity.getId());
     dto.setName(entity.getName());
     dto.setDescription(entity.getDescription());

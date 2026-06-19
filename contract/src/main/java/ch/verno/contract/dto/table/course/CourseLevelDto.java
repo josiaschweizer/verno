@@ -46,6 +46,13 @@ public class CourseLevelDto extends BaseDto {
     return new CourseLevelDto();
   }
 
+  @Nonnull
+  public static CourseLevelDto ref(@Nullable final Long id) {
+    final var dto = new CourseLevelDto();
+    dto.setId(id);
+    return dto;
+  }
+
   public boolean isEmpty() {
     return getId() != null
             && getId() == 0L
