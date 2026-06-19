@@ -5,8 +5,8 @@ import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.injection.Injector;
 import ch.verno.ui.verno.FieldFactory;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
-  @Nonnull private final Injector injector;
+  @Nonnull protected final Injector injector;
 
   @Nonnull private final Binder<T> binder;
   @Nonnull protected EntryFactory<T> entryFactory;

@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.emptystate;
 
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import ch.verno.ui.base.components.button.VAButton;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;

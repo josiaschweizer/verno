@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.mail.testmail;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.contract.mail.MailTemplateType;
+import ch.verno.ui.i18n.TranslationHelper;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 
 public enum MailTemplateTypeMapping {
@@ -35,12 +35,12 @@ public enum MailTemplateTypeMapping {
   }
 
   @Nonnull
-  public String getName(@Nonnull final GlobalInterface globalInterface) {
-    return TranslationHelper.getTranslation(globalInterface, nameKey);
+  public String getName(@Nonnull final Injector injector) {
+    return injector.getInstance(TranslationHelper.class).getTranslation(nameKey);
   }
 
   @Nonnull
-  public String getDescription(@Nonnull final  GlobalInterface globalInterface) {
-    return TranslationHelper.getTranslation(globalInterface, descriptionKey);
+  public String getDescription(@Nonnull final Injector injector) {
+    return injector.getInstance(TranslationHelper.class).getTranslation(nameKey);
   }
 }

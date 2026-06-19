@@ -1,20 +1,22 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
-import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.ui.dto.UserDtoUnhashedPw;
-import ch.verno.lib.Publ;
-import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.user.AppUserClient;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -22,26 +24,27 @@ import java.util.List;
 
 public class CreateUserDialog extends VAAbstractDialog {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final IAppUserService appUserService;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
 
-  @Nonnull private final EntryFactory<UserDtoUnhashedPw> entryFactory;
   @Nonnull private final Binder<UserDtoUnhashedPw> binder;
+  @Nonnull private final EntryFactory<UserDtoUnhashedPw> entryFactory;
 
   @Nonnull private final FormMode formMode;
   @Nonnull private final String oldUserName;
 
-  public CreateUserDialog(@Nonnull final GlobalInterface globalInterface) {
-    this(globalInterface, FormMode.CREATE, new UserDtoUnhashedPw());
+  @Inject
+  public CreateUserDialog(@Nonnull final Injector injector) {
+    this(injector, FormMode.CREATE, new UserDtoUnhashedPw());
   }
 
-  public CreateUserDialog(@Nonnull final GlobalInterface globalInterface,
+  public CreateUserDialog(@Nonnull final Injector injector,
                           @Nonnull final FormMode formMode,
                           @Nonnull final UserDtoUnhashedPw binderDto) {
-    this.globalInterface = globalInterface;
-    this.appUserService = globalInterface.getService(IAppUserService.class);
+    this.injector = injector;
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
 
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
     this.binder = new Binder<>(UserDtoUnhashedPw.class);
     this.binder.setBean(binderDto);
 
@@ -54,7 +57,7 @@ public class CreateUserDialog extends VAAbstractDialog {
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var userLayout = new UserLayout(globalInterface, entryFactory);
+    final var userLayout = new UserLayout(injector, entryFactory);
 
     if (formMode != FormMode.CREATE) {
       setHeaderTitle(getTranslation("shared.update.existing.application.user"));
@@ -104,51 +107,28 @@ public class CreateUserDialog extends VAAbstractDialog {
   }
 
   private void createNewUser(@Nonnull final UserDtoUnhashedPw bean) {
-    if (appUserService.findByUserName(bean.getUsername()).isPresent()) {
+    if (appUserClient.get().findByUsername(bean.getUsername()).isPresent()) {
       NotificationFactory.showErrorNotification(getTranslation("shared.username.0.already.exists", bean.getUsername()));
       return;
     }
 
-    final var hashedPassword = globalInterface.getPasswordEncoder().encode(bean.getPassword());
-    if (hashedPassword == null) {
-      return;
-    }
-
-    appUserService.createAppUser(new AppUserDto(
-            bean.getUsername(),
-            bean.getFirstname(),
-            bean.getLastname(),
-            bean.getEmail(),
-            hashedPassword,
-            bean.getRole(),
-            true
-    ));
+    appUserClient.get().createAppUser(bean);
 
     NotificationFactory.showSuccessNotification(getTranslation("shared.created.user.0.successfully", bean.getUsername()));
   }
 
   private void updateUser(@Nonnull final UserDtoUnhashedPw bean) {
-    final var foundById = appUserService.findByUserName(oldUserName);
+    final var foundById = appUserClient.get().findByUsername(oldUserName);
     if (foundById.isEmpty()) {
       NotificationFactory.showErrorNotification(getTranslation("shared.user.with.username.0.does.not.exist", bean.getUsername()));
       return;
     }
 
-    appUserService.updateAppUser(
-            new AppUserDto(
-                    foundById.get().getId(),
-                    bean.getUsername(),
-                    bean.getFirstname(),
-                    bean.getLastname(),
-                    bean.getEmail(),
-                    Publ.EMPTY_STRING,
-                    bean.getRole(),
-                    false
-            ));
+    appUserClient.get().updateAppUser(bean);
 
-    final var currentUser = globalInterface.getUserProperties().getOptionalCurrentUser();
+    final var currentUser = injector.getInstance(UserProperties.class).getOptionalCurrentUser();
     if (currentUser.isEmpty()) {
-      globalInterface.getUserProperties().logout(); // user has changed his own username - log him out to avoid any issues with the security context
+      injector.getInstance(UserProperties.class).logout(); // user has changed his own username - log him out to avoid any issues with the security context
       return;
     }
 

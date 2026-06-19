@@ -1,30 +1,23 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
-import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
-import ch.verno.common.db.dto.table.AddressDto;
-import ch.verno.common.db.dto.table.ParentDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.server.service.intern.ICourseLevelService;
-import ch.verno.common.server.service.intern.IGenderService;
-import ch.verno.common.server.service.intern.IParticipantService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.common.io.importing.DbField;
+import ch.verno.common.io.importing.DbFieldNested;
+import ch.verno.common.io.importing.DbFieldRelation;
+import ch.verno.common.io.importing.DbFieldTyped;
+import ch.verno.contract.dto.table.address.AddressDto;
+import ch.verno.contract.dto.table.participant.ParentDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
-import ch.verno.server.io.importing.dto.DbField;
-import ch.verno.server.io.importing.dto.DbFieldNested;
-import ch.verno.server.io.importing.dto.DbFieldRelation;
-import ch.verno.server.io.importing.dto.DbFieldTyped;
-import ch.verno.server.mapper.csv.CsvMappingRowError;
-import ch.verno.server.mapper.csv.ParticipantCsvMapper;
-import ch.verno.server.service.intern.AddressService;
-import ch.verno.server.service.intern.ParentService;
-import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
+import ch.verno.rpc.client.course.CourseLevelClient;
+import ch.verno.rpc.client.gender.GenderClient;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +44,15 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
   @NonNls public static final String ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final ICourseLevelService courseLevelService;
-  @Nonnull private final IGenderService genderService;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<GenderClient> genderClient;
+  @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
 
-  public ParticipantImportConfig(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
-    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
-    this.genderService = globalInterface.getService(IGenderService.class);
+  @Inject
+  public ParticipantImportConfig(@Nonnull final Injector injector) {
+    this.injector = injector;
+    this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
+    this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
   }
 
   @Nonnull
@@ -99,7 +93,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     final var address = new DbFieldNested<>(
             ADDRESS,
             "shared.address",
-            AddressDto::new,
+            AddressDto::empty,
             ParticipantDto::setAddress,
             List.of(
                     new DbField<>(STREET, "shared.street", AddressDto::setStreet, false),
@@ -114,7 +108,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     final var parentOne = new DbFieldNested<>(
             PARENT_ONE,
             "participant.parent_one",
-            ParentDto::new,
+            ParentDto::empty,
             ParticipantDto::setParentOne,
             List.of(
                     new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
@@ -135,7 +129,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     final var parentTwo = new DbFieldNested<>(
             PARENT_TWO,
             "participant.parent_two",
-            ParentDto::new,
+            ParentDto::empty,
             ParticipantDto::setParentTwo,
             List.of(
                     new DbField<>(FIRSTNAME, "shared.first.name", ParentDto::setFirstName, false),
@@ -163,19 +157,19 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     final var courseLevel = new DbFieldRelation<>(
             COURSE_LEVEL,
             "courseLevel.course_level",
-            code -> courseLevelService.getCourseLevelByCode(code).orElse(null),
+            code -> courseLevelClient.get().getCourseLevelByCode(code).orElse(null),
             ParticipantDto::addCourseLevel,
             false
     );
     final var gender = new DbFieldRelation<>(
             GENDER,
             "shared.gender",
-            genderName -> genderService.getGenderByName(genderName).orElse(null),
+            genderName -> genderClient.get().getGenderByName(genderName).orElse(null),
             ParticipantDto::setGender,
             false
     );
 
-    return New.arrayList(courseLevel, gender);
+    return New.list(courseLevel, gender);
   }
 
   @Nonnull

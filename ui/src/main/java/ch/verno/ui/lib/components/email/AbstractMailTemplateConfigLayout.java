@@ -1,13 +1,14 @@
 package ch.verno.ui.lib.components.email;
 
-import ch.verno.common.db.dto.table.mail.MailTemplateDto;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.rpc.client.mail.MailTemplateClient;
+import ch.verno.contract.dto.table.mail.MailTemplateDto;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.contract.mail.placeholder.Placeholder;
-import ch.verno.common.server.service.intern.mail.IMailTemplateService;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.factory.EntryFactory;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -25,19 +27,20 @@ import java.util.Optional;
 
 public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHorizontalLayout> {
 
-  @Nonnull private final IMailTemplateService mailTemplateService;
-  @Nonnull private final EntryFactory<MailTemplateDto> entryFactory;
-  @Nonnull private final MailTemplateType mailTemplateType;
+  @Nonnull private final Lazy<MailTemplateClient> mailTemplateClient;
 
   @Nullable private MailTemplateDto template;
   @Nonnull protected final Binder<MailTemplateDto> binder;
+  @Nonnull private final MailTemplateType mailTemplateType;
 
   @Nullable private TextArea selectedTextArea;
+  @Nonnull private final EntryFactory<MailTemplateDto> entryFactory;
 
-  public AbstractMailTemplateConfigLayout(@Nonnull final GlobalInterface globalInterface,
+  public AbstractMailTemplateConfigLayout(@Nonnull final Injector injector,
                                           @Nonnull final MailTemplateType mailTemplateType) {
-    this.mailTemplateService = globalInterface.getService(IMailTemplateService.class);
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.mailTemplateClient = Lazy.of(() -> injector.getInstance(MailTemplateClient.class));
+
+    this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
     this.mailTemplateType = mailTemplateType;
     this.binder = new Binder<>(MailTemplateDto.class);
 
@@ -55,9 +58,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
     );
     emailSubject.setWidthFull();
     emailSubject.addFocusListener(e -> selectedTextArea = emailSubject);
-    emailSubject.setPlaceholder(getTranslation(
-            "setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"
-    ));
+    emailSubject.setPlaceholder(getTranslation("setting.no.email.subject.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.subject"));
 
     final var emailContent = entryFactory.createTextAreaEntry(
             MailTemplateDto::getContent,
@@ -67,9 +68,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
             getTranslation("setting.email.content")
     );
     emailContent.addFocusListener(e -> selectedTextArea = emailContent);
-    emailContent.setPlaceholder(getTranslation(
-            "setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"
-    ));
+    emailContent.setPlaceholder(getTranslation("setting.no.email.content.yet.use.the.buttons.on.the.right.to.add.placeholders.and.type.your.own.content"));
     emailContent.setSizeFull();
 
     final var emailLayout = new VerticalLayout(emailSubject, emailContent);
@@ -94,8 +93,8 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
   private void initBinder() {
     binder.setChangeDetectionEnabled(true);
 
-    if (mailTemplateService.hasTemplateByKey(mailTemplateType.getKey())) {
-      template = mailTemplateService.getTemplateByKey(mailTemplateType.getKey());
+    if (mailTemplateClient.get().hasTemplateByKey(mailTemplateType.getKey())) {
+      template = mailTemplateClient.get().getTemplateByKey(mailTemplateType.getKey());
     } else {
       template = new MailTemplateDto(mailTemplateType.getKey());
     }
@@ -117,7 +116,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
 
   @Nonnull
   public MailTemplateDto getBean() {
-    final var bean = new MailTemplateDto(mailTemplateType.getKey());
+    final var bean = MailTemplateDto.fromTemplateKey(mailTemplateType.getKey());
 
     try {
       binder.writeBean(bean);
@@ -139,7 +138,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
       return;
     }
 
-    mailTemplateService.upsertTemplate(template);
+    mailTemplateClient.get().upsertTemplate(template);
     binder.readBean(template); // read template dto so we no longer have changes
   }
 

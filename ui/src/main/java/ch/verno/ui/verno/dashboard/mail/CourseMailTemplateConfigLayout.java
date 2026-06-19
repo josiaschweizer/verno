@@ -1,12 +1,12 @@
 package ch.verno.ui.verno.dashboard.mail;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.contract.mail.placeholder.Placeholder;
 import ch.verno.contract.mail.placeholder.PlaceholderValue;
 import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
 import ch.verno.lib.Publ;
 import ch.verno.ui.lib.components.email.AbstractMailTemplateConfigLayout;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import jakarta.annotation.Nonnull;
 
@@ -14,9 +14,9 @@ import java.util.List;
 
 public class CourseMailTemplateConfigLayout extends AbstractMailTemplateConfigLayout {
 
-  public CourseMailTemplateConfigLayout(@Nonnull final GlobalInterface globalInterface,
+  public CourseMailTemplateConfigLayout(@Nonnull final Injector injector,
                                         @Nonnull final MailTemplateType mailTemplateType) {
-    super(globalInterface, mailTemplateType);
+    super(injector, mailTemplateType);
   }
 
   @Nonnull

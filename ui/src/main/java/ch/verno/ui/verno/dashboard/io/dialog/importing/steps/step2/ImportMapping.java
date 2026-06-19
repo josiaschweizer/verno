@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.ServerGate;
 import ch.verno.common.server.io.importing.CsvColumn;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.io.ImportClient;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
@@ -12,7 +12,7 @@ import ch.verno.ui.base.components.notification.inline.VAInlineNotificationTheme
 import ch.verno.ui.verno.dashboard.io.dto.ImportField;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
-import com.vaadin.flow.function.ValueProvider;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
@@ -24,7 +24,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   @NonNls public static final String RELATION_POST_FIX = Publ.SPACE + Publ.REQUIRED_STAR + "relation";
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Lazy<ImportClient> importClient;
   @Nonnull private final ImportEntityConfig<T> entityConfig;
 
   private ImportColumnMappingPanel panel;
@@ -32,9 +32,9 @@ public class ImportMapping<T> extends BaseDialogStep {
   @Nullable private String fileToken;
   @Nullable private Runnable onValidationChangedListener;
 
-  public ImportMapping(@Nonnull final GlobalInterface globalInterface,
+  public ImportMapping(@Nonnull final Injector injector,
                        @Nonnull final ImportEntityConfig<T> entityConfig) {
-    this.globalInterface = globalInterface;
+    this.importClient = Lazy.of(() -> injector.getInstance(ImportClient.class));
     this.entityConfig = entityConfig;
 
     setSizeFull();
@@ -54,8 +54,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
     removeAll();
 
-    final var serverGate = globalInterface.getService(ServerGate.class);
-    final var fileColumns = serverGate.resolveCsvSchema(fileToken);
+    final var fileColumns = importClient.get().resolveCsvSchema(fileToken);
     final List<String> csvHeaders = fileColumns.columns().stream().map(CsvColumn::name).toList();
 
     initUI(csvHeaders);
@@ -77,8 +76,8 @@ public class ImportMapping<T> extends BaseDialogStep {
   @Nonnull
   private VAInlineNotification createInfoInlineNotification() {
     final var notification = new VAInlineNotification(VAInlineNotificationTheme.WARNING);
-    notification.setTitle("Import Mapping");
-    notification.setDescription("DB-Felder, die mit *relation gekennzeichnet sind, verweisen auf andere Datensätze. Diese Felder sind anfälliger für Importfehler und sollten besonders sorgfältig zugeordnet werden.");
+    notification.setTitle("Import Mapping"); //TODO translation
+    notification.setDescription("DB-Felder, die mit *relation gekennzeichnet sind, verweisen auf andere Datensätze. Diese Felder sind anfälliger für Importfehler und sollten besonders sorgfältig zugeordnet werden."); //TODO translation
     return notification;
   }
 
@@ -174,6 +173,7 @@ public class ImportMapping<T> extends BaseDialogStep {
     return panel.getMapping();
   }
 
+  @Nonnull
   public ImportResult performImport() {
     if (fileToken == null) {
       return ImportResult.completeFailure();

@@ -13,9 +13,14 @@ public class BOFactory {
   @Nonnull private final ServerBean serverBean;
   @Nonnull private final Map<Class<?>, Object> cache;
 
-  public BOFactory(@Nonnull final ServerBean serverBean) {
+  private BOFactory(@Nonnull final ServerBean serverBean) {
     this.cache = New.concurrentHashMap();
     this.serverBean = serverBean;
+  }
+
+  @Nonnull
+  public static BOFactory getInstance(@Nonnull final ServerBean bean) {
+    return new BOFactory(bean);
   }
 
   @Nonnull

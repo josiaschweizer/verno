@@ -1,12 +1,12 @@
 package ch.verno.ui.verno.dashboard.mail;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.CourseScheduleDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.ui.lib.components.email.dialog.AbstractMailDialog;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -14,13 +14,13 @@ import java.util.List;
 
 public class CourseMailDialog extends AbstractMailDialog<CourseMailTemplateConfigLayout> {
 
+  @Nullable private CourseDto course;
   @Nullable private List<ParticipantDto> participants;
   @Nullable private CourseScheduleDto courseSchedule;
-  @Nullable private CourseDto course;
 
-  public CourseMailDialog(@Nonnull final GlobalInterface globalInterface,
+  public CourseMailDialog(@Nonnull final Injector injector,
                           @Nonnull final MailTemplateType mailTemplateType) {
-    super(globalInterface, mailTemplateType);
+    super(injector, mailTemplateType);
   }
 
   @Override

@@ -6,6 +6,7 @@ import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDo
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2.ImportMapping;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -28,14 +29,14 @@ public class ImportDialog extends Dialog {
 
   private ImportDialogStep currentStep;
 
-  public ImportDialog(@Nonnull final GlobalInterface globalInterface,
+  public ImportDialog(@Nonnull final Injector injector,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig<?> entityConfig) {
     steps = new ArrayList<>();
     currentStep = ImportDialogStep.ZERO;
 
-    final var importFileStep = new ImportFile(globalInterface);
-    final var importMappingStep = new ImportMapping<>(globalInterface, entityConfig);
+    final var importFileStep = new ImportFile(injector);
+    final var importMappingStep = new ImportMapping<>(injector, entityConfig);
 
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);

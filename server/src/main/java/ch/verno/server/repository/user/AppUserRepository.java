@@ -33,6 +33,6 @@ public class AppUserRepository extends AbstractEntityRepository<AppUserEntity, L
 
   public boolean existsByUsernameAndTenantId(@Nonnull final String username,
                                              @Nonnull final Long tenantId) {
-    return getRepository().existsByUsernameAndTenantId(username, tenantId);
+    return getRepository().existsByUsernameAndTenantId(username, tenantId); //TODO check if the tenant can be removed -> tenant is always filtered<
   }
 }

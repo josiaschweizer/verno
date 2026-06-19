@@ -1,6 +1,7 @@
 package ch.verno.ui.base.components.schedulepicker;
 
-import ch.verno.common.db.dto.YearWeekDto;
+import ch.verno.common.dto.lib.YearWeekDto;
+import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -19,21 +20,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@CssImport("./components/va-schedule-week-picker.css")
+@CssImport(CssImportConstants.VA_SCHEDULE_WEEK_PICKER)
 public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
 
-  @Nonnull
-  private Integer currentYear;
-  @Nonnull
-  private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
-  @Nullable
-  private Integer quantityProposalCourseDays;
-  @Nullable
-  private ComboBox<Integer> yearSelect;
-  @Nullable
-  private CheckboxGroup<Integer> weekSelect;
-  @Nonnull
-  private final Div previewText;
+  public static final String WEEK_PICKER_CLASSNAME = "schedule-week-picker";
+  public static final String CONTENT_CLASSNAME = "schedule-week-picker-content";
+  public static final String YEAR_COMBOBOX_CLASSNAME = "schedule-week-picker-year-combobox";
+  public static final String PREVIEW_CLASSNAME = "schedule-week-picker-preview";
+  public static final String PREVIEW_TEXT_CLASSNAME = "schedule-week-picker-preview-text";
+  public static final String WEEK_SELECT_CLASSNAME = "schedule-week-picker-week-select";
+  public static final String PREVIEW_TEXT_RED_CLASSNAME = "schedule-week-picker-preview-text-red";
+  public static final String PREVIEW_TEXT_NORMAL_CLASSNAME = "schedule-week-picker-preview-text-normal";
+  @Nonnull private Integer currentYear;
+  @Nonnull private final Map<Integer, Set<Integer>> selectedYearWeeksMap;
+  @Nullable private Integer quantityProposalCourseDays;
+  @Nullable private ComboBox<Integer> yearSelect;
+  @Nullable private CheckboxGroup<Integer> weekSelect;
+  @Nonnull private final Div previewText;
 
   private boolean internalUpdate = false;
   private boolean enforceQuantitySetting;
@@ -53,7 +56,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   }
 
   private void initUI() {
-    addClassName("schedule-week-picker");
+    addClassName(WEEK_PICKER_CLASSNAME);
     setWidthFull();
 
     yearSelect = createYearComboBox();
@@ -61,7 +64,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     final var previewLayout = createPreviewLayout();
 
     final var content = new VerticalLayout();
-    content.addClassName("schedule-week-picker-content");
+    content.addClassName(CONTENT_CLASSNAME);
     content.setPadding(false);
     content.setSpacing(false);
     content.setWidthFull();
@@ -78,7 +81,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     final var combobox = new ComboBox<Integer>();
     combobox.setPlaceholder(getTranslation("base.year"));
     combobox.setWidthFull();
-    combobox.addClassName("schedule-week-picker-year-combobox");
+    combobox.addClassName(YEAR_COMBOBOX_CLASSNAME);
     combobox.addValueChangeListener(this::selectedYearChanged);
 
     final var nowYear = LocalDate.now().getYear();
@@ -125,12 +128,12 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   @Nonnull
   private HorizontalLayout createPreviewLayout() {
     final var layout = new HorizontalLayout();
-    layout.addClassName("schedule-week-picker-preview");
+    layout.addClassName(PREVIEW_CLASSNAME);
     layout.setPadding(false);
     layout.setSpacing(false);
     layout.setWidthFull();
 
-    previewText.addClassName("schedule-week-picker-preview-text");
+    previewText.addClassName(PREVIEW_TEXT_CLASSNAME);
     previewText.setWidthFull();
 
     layout.add(previewText);
@@ -141,7 +144,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
     final var checkboxGroup = new CheckboxGroup<Integer>();
     checkboxGroup.setLabel(getTranslation("base.week"));
     checkboxGroup.setItems(weeksOfYear(currentYear));
-    checkboxGroup.addClassName("schedule-week-picker-week-select");
+    checkboxGroup.addClassName(WEEK_SELECT_CLASSNAME);
     checkboxGroup.addValueChangeListener(this::selectedWeeksChanged);
     return checkboxGroup;
   }
@@ -251,10 +254,10 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
   private String getPreviewTitle(@Nonnull final ArrayList<String> parts) {
     if (quantityProposalCourseDays != null) {
       if (parts.size() > quantityProposalCourseDays) {
-        previewText.addClassName("schedule-week-picker-preview-text-red");
+        previewText.addClassName(PREVIEW_TEXT_RED_CLASSNAME);
       } else {
-        previewText.removeClassName("schedule-week-picker-preview-text-red");
-        previewText.addClassName("schedule-week-picker-preview-text-normal");
+        previewText.removeClassName(PREVIEW_TEXT_RED_CLASSNAME);
+        previewText.addClassName(PREVIEW_TEXT_NORMAL_CLASSNAME);
       }
       return getTranslation("base.weeks") + Publ.SPACE + Publ.LEFT_PARENTHESIS + parts.size() +
               Publ.SPACE + Publ.SLASH + Publ.SPACE +
@@ -292,9 +295,7 @@ public class VAScheduleWeekPicker extends CustomField<Set<YearWeekDto>> {
         return;
       }
 
-      weeks.stream()
-              .sorted()
-              .forEach(week -> parts.add("KW" + Publ.MINUS + week + Publ.MINUS + year));
+      weeks.stream().sorted().forEach(week -> parts.add("KW" + Publ.MINUS + week + Publ.MINUS + year));
     });
     return parts;
   }

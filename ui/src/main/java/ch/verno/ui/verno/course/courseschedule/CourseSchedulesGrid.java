@@ -1,20 +1,19 @@
 package ch.verno.ui.verno.course.courseschedule;
 
-import ch.verno.common.db.dto.table.CourseScheduleDto;
+import ch.verno.rpc.client.course.CourseScheduleClient;
+import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;
-import ch.verno.common.server.service.intern.ICourseScheduleService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Routes;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +23,22 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @PermitAll
-@Route(Routes.COURSE_SCHEDULES)
+@com.vaadin.flow.router.Route(Routes.COURSE_SCHEDULES)
 @Menu(order = 3.2, icon = "vaadin:calendar", title = "courseSchedule.course.schedules")
 public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, CourseScheduleFilter> implements HasDynamicTitle {
 
-  @Nonnull
-  private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final CourseScheduleClient courseScheduleClient;
 
   @Autowired
-  public CourseSchedulesGrid(@Nonnull final GlobalInterface globalInterface) {
-    this(globalInterface, true, true);
+  public CourseSchedulesGrid(@Nonnull final Injector injector) {
+    this(injector, true, true);
   }
 
-  public CourseSchedulesGrid(@Nonnull final GlobalInterface globalInterface,
+  public CourseSchedulesGrid(@Nonnull final Injector injector,
                              final boolean showGridToolbar,
                              final boolean showFilterToolbar) {
-    super(globalInterface, CourseScheduleFilter.empty(), showGridToolbar, showFilterToolbar);
-    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
+    super(injector, CourseScheduleFilter.empty(), showGridToolbar, showFilterToolbar);
+    this.courseScheduleClient = injector.getInstance(CourseScheduleClient.class);
   }
 
   @Nonnull

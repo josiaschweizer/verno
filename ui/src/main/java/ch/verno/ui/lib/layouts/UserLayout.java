@@ -1,14 +1,14 @@
 package ch.verno.ui.lib.layouts;
 
 import ch.verno.common.db.role.Role;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.common.ui.dto.UserDtoUnhashedPw;
+import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -21,18 +21,18 @@ import java.util.Optional;
 
 public class UserLayout {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
   @Nonnull private final EntryFactory<UserDtoUnhashedPw> entryFactory;
-  @Nonnull private final IAppUserService appUserService;
 
   @Nonnull private String usernamePanelDisabledReasonKey = Publ.EMPTY_STRING;
   @Nonnull private String roleDisabledReasonKey = Publ.EMPTY_STRING;
   @Nonnull private String passwordDisabledReasonKey = Publ.EMPTY_STRING;
 
-  public UserLayout(@Nonnull final GlobalInterface globalInterface,
+  public UserLayout(@Nonnull final Injector injector,
                     @Nonnull final EntryFactory<UserDtoUnhashedPw> entryFactory) {
-    this.globalInterface = globalInterface;
-    this.appUserService = globalInterface.getService(IAppUserService.class);
+    this.injector = injector;
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
     this.entryFactory = entryFactory;
   }
 

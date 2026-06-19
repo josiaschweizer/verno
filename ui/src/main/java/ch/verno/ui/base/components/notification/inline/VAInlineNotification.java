@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.notification.inline;
 
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.dependency.CssImport;

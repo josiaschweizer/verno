@@ -1,7 +1,7 @@
 package ch.verno.ui.verno;
 
-import ch.verno.common.db.dto.table.GenderDto;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.contract.dto.table.gender.GenderDto;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;

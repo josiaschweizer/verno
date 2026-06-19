@@ -1,26 +1,29 @@
 package ch.verno.ui.verno.dashboard.io.widgets.participant;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.io.dialog.export.ExportDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.ImportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class ParticipantWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  private ParticipantsGrid participantsGrid;
+  @Nonnull private final Injector injector;
+  @Nullable private ParticipantsGrid participantsGrid;
 
-  public ParticipantWidget(@Nonnull final GlobalInterface globalInterface) {
+  @Inject
+  public ParticipantWidget(@Nonnull final Injector injector) {
     super();
-    this.globalInterface = globalInterface;
+    this.injector = injector;
 
-    build();
+    buildUI();
   }
 
   @Nonnull
@@ -35,9 +38,9 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
             getTranslation("shared.import"),
             VaadinIcon.DOWNLOAD,
             e -> {
-              final var config = new ParticipantImportConfig(globalInterface);
+              final var config = injector.getInstance(ParticipantImportConfig.class);
               final var importDialog = new ImportDialog(
-                      globalInterface,
+                      injector,
                       getTranslation("shared.import") + Publ.SPACE + getTranslation("participant.participant"),
                       config
               );

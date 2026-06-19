@@ -1,24 +1,26 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.io.dialog.export.ExportDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.ImportDialog;
 import ch.verno.ui.verno.instructor.InstructorsGrid;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 
 public class InstructorWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
   private InstructorsGrid instructorGrid;
 
-  public InstructorWidget(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  @Inject
+  public InstructorWidget(@Nonnull final Injector injector) {
+    this.injector = injector;
 
-    build();
+    buildUI();
   }
 
   @Nonnull

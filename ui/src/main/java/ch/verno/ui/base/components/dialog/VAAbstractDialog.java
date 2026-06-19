@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.dialog;
 
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.lib.icon.IconUtil;

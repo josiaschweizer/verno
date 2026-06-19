@@ -3,7 +3,7 @@ package ch.verno.ui.lib.settings;
 import ch.verno.common.db.dto.base.BaseDto;
 import ch.verno.common.db.dto.table.TenantSettingDto;
 import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.button.VAButton;

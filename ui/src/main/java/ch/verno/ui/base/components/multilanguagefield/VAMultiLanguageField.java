@@ -2,7 +2,7 @@ package ch.verno.ui.base.components.multilanguagefield;
 
 import ch.verno.lib.New;
 import ch.verno.lib.lib.language.Language;
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
 import ch.verno.publ.VernoUtility;
 import ch.verno.ui.base.components.button.ButtonBuilder;

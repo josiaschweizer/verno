@@ -1,11 +1,7 @@
 package ch.verno.common.lib;
 
 import ch.verno.lib.Publ;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
-
-import java.util.Arrays;
 
 @SuppressWarnings("HardcodedFileSeparator")
 public class Routes {

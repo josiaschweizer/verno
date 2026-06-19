@@ -8,7 +8,7 @@ import ch.verno.common.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.lib.Publ;
-import ch.verno.server.properties.application.VernoApplicationConfigProviderImpl;
+import ch.verno.server.applicationproperties.application.VernoApplicationConfigProviderImpl;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;

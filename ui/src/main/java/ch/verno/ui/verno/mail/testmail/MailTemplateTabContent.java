@@ -1,20 +1,17 @@
 package ch.verno.ui.verno.mail.testmail;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.contract.mail.MailContentDto;
-import ch.verno.common.test.lib.TestDataUtil;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.lib.Lazy;
-import ch.verno.lib.New;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.button.variants.VASaveButton;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.verno.dashboard.mail.CourseMailTemplateConfigLayout;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import jakarta.annotation.Nonnull;
@@ -23,20 +20,20 @@ import javax.annotation.Nullable;
 
 public class MailTemplateTabContent {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<MailClient> mailServerGate;
   @Nonnull private final MailTemplateTypeMapping textMapping;
-  @Nonnull private final Lazy<MailServerGate> mailServerGate;
 
   @Nonnull private final VAVerticalLayout layout;
   @Nullable private CourseMailTemplateConfigLayout templateLayout;
 
   @Nullable private TestMailTemplateDialog testMailTemplateDialog;
 
-  public MailTemplateTabContent(@Nonnull final GlobalInterface globalInterface,
+  public MailTemplateTabContent(@Nonnull final Injector injector,
                                 @Nonnull final MailTemplateTypeMapping mapping) {
-    this.globalInterface = globalInterface;
+    this.injector = injector;
     this.textMapping = mapping;
-    this.mailServerGate = Lazy.of(() -> globalInterface.getService(MailServerGate.class));
+    this.mailServerGate = Lazy.of(() -> injector.getInstance(MailClient.class));
 
     this.layout = initUI();
   }
@@ -56,14 +53,14 @@ public class MailTemplateTabContent {
   @Nonnull
   private VAInlineNotification createInlineNotification() {
     final var notification = new VAInlineNotification();
-    notification.setTitle(textMapping.getName(globalInterface));
-    notification.setDescription(textMapping.getDescription(globalInterface));
+    notification.setTitle(textMapping.getName(injector));
+    notification.setDescription(textMapping.getDescription(injector));
     return notification;
   }
 
   @Nonnull
   private CourseMailTemplateConfigLayout createMailTemplateLayout() {
-    final var config = new CourseMailTemplateConfigLayout(globalInterface, textMapping.getMailTemplateType());
+    final var config = new CourseMailTemplateConfigLayout(injector, textMapping.getMailTemplateType());
     config.getContent().setSizeFull();
     return config;
   }
@@ -89,7 +86,7 @@ public class MailTemplateTabContent {
 
   @Nonnull
   private VAButton createTestMailButton() {
-    final var button = new VAButton(TranslationHelper.getTranslation(globalInterface, "mail.test.mail.template"), IconUtil.createExtraSmall(VaadinIcon.PLAY));
+    final var button = new VAButton(injector.getInstance(TranslationHelper.class).getTranslation("mail.test.mail.template"), IconUtil.createExtraSmall(VaadinIcon.PLAY));
     templateLayout.addBinderValueChangeListener(e1 -> button.setEnabled(templateLayout.isValid()));
     button.setEnabled(templateLayout.isValid());
     button.addClickListener(e -> testMail());
@@ -123,22 +120,23 @@ public class MailTemplateTabContent {
   }
 
   private void sendCourseInviteMail(@Nonnull final String recipient) {
-    final var demoParticipant = TestDataUtil.createDemoParticipant(recipient);
-    final var courseSchedule = TestDataUtil.createDemoCourseSchedule();
-    final var course = TestDataUtil.createDemoCourse();
+    //TODO temporarily commented out bc TestDataUtil isn't done yet
+//    final var demoParticipant = TestDataUtil.createDemoParticipant(recipient);
+//    final var courseSchedule = TestDataUtil.createDemoCourseSchedule();
+//    final var course = TestDataUtil.createDemoCourse();
+//
+//    final var bean = templateLayout.getBean();
+//    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
+//
+//    mailServerGate.get().sendCourseEmails(
+//            mailContent,
+//            templateLayout.getPlaceholderValues(),
+//            New.list(demoParticipant),
+//            courseSchedule,
+//            course
+//    );
 
-    final var bean = templateLayout.getBean();
-    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
-
-    mailServerGate.get().sendCourseEmails(
-            mailContent,
-            templateLayout.getPlaceholderValues(),
-            New.list(demoParticipant),
-            courseSchedule,
-            course
-    );
-
-    NotificationFactory.showSuccessNotification(TranslationHelper.getTranslation(globalInterface, "mail.email.sent.successfully"));
+    NotificationFactory.showSuccessNotification(injector.getInstance(TranslationHelper.class).getTranslation("mail.email.sent.successfully"));
 
     if (testMailTemplateDialog != null) {
       testMailTemplateDialog.close();

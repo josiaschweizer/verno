@@ -1,7 +1,7 @@
 package ch.verno.ui.injection;
 
-import ch.verno.client.rpc.RpcClient;
-import ch.verno.client.rpc.RpcProxyFactory;
+import ch.verno.rpc.rpc.RpcClient;
+import ch.verno.rpc.rpc.RpcFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -44,7 +44,7 @@ public class UiGuiceModule extends AbstractModule {
 
   @Provides
   @Singleton
-  RpcProxyFactory rpcProxyFactory(RpcClient rpcClient) {
-    return new RpcProxyFactory(rpcClient);
+  RpcFactory rpcProxyFactory(RpcClient rpcClient) {
+    return new RpcFactory(rpcClient);
   }
 }

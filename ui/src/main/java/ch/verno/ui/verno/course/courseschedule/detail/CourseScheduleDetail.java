@@ -1,11 +1,7 @@
 package ch.verno.ui.verno.course.courseschedule.detail;
 
-import ch.verno.common.db.dto.table.CourseScheduleDto;
-import ch.verno.common.db.type.CourseScheduleStatus;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.server.service.intern.ICourseScheduleService;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
@@ -15,7 +11,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
@@ -24,14 +19,12 @@ import java.util.Optional;
 import java.util.Set;
 
 @PermitAll
-@Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
+@com.vaadin.flow.router.Route(Routes.COURSE_SCHEDULES + Routes.DETAIL)
 @Menu(order = 3.21, icon = VaadinIconConstants.CALENDAR_ENVELOPE, title = "courseSchedule.course.schedule.detail")
 public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> implements HasDynamicTitle {
 
-  @Nonnull
-  private final ICourseScheduleService courseScheduleService;
-  @Nonnull
-  private final ITenantSettingService tenantSettingService;
+  @Nonnull private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final ITenantSettingService tenantSettingService;
 
   public CourseScheduleDetail(@Nonnull final GlobalInterface globalInterface) {
     super(globalInterface);

@@ -16,31 +16,19 @@ public class New {
   }
 
   @Nonnull
-  public static <T> List<T> list(@Nonnull final T item) {
-    return arrayList(item);
-  }
-
-  @Nonnull
   @SafeVarargs
   public static <T> List<T> list(@Nonnull final T... items) {
     return arrayList(items);
   }
 
   @Nonnull
-  public static <T> List<T> list(@Nonnull final List<T> lists) {
+  public static <T> List<T> copyList(@Nonnull final List<T> lists) {
     return combinedArrayList(lists);
   }
 
   @Nonnull
   public static <T> ArrayList<T> arrayList() {
     return new ArrayList<>(BASE_LIST_SIZE);
-  }
-
-  @Nonnull
-  public static <T> ArrayList<T> arrayList(@Nonnull T item) {
-    final var list = new ArrayList<T>(BASE_LIST_SIZE);
-    list.add(item);
-    return list;
   }
 
   @Nonnull
@@ -60,7 +48,6 @@ public class New {
   @SafeVarargs
   protected static <T> ArrayList<T> combinedArrayList(@Nonnull final List<? extends T>... lists) {
     final var result = new ArrayList<T>(BASE_LIST_SIZE);
-
     for (final var list : lists) {
       result.addAll(list);
     }

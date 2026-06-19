@@ -1,11 +1,12 @@
 package ch.verno.ui.base.components.toolbar;
 
+import ch.verno.common.lib.Routes;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.ui.injection.Injector;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -47,7 +48,7 @@ public class ViewToolbarFactory {
                                               @Nonnull final String gridObjectName,
                                               @Nullable final Button actionButton,
                                               @Nullable final VASearchFilter filter) {
-    final var translation = TranslationHelper.getTranslation(injector, "base.grid");
+    final var translation = injector.getInstance(TranslationHelper.class).getTranslation("base.grid");
 
     if (filter != null) {
       return new ViewToolbar(

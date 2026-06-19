@@ -1,19 +1,15 @@
 package ch.verno.ui.verno.dashboard.course;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.mail.MailConfigClient;
+import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.contract.dto.filter.ParticipantFilter;
-import ch.verno.common.server.service.intern.ICourseService;
-import ch.verno.common.server.service.intern.IParticipantService;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.db.type.billing.BillingLicenceOption;
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.contract.mail.MailTemplateType;
-import ch.verno.common.properties.BillingProperties;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoConstants;
+import ch.verno.lib.VernoConstants;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.base.factory.SpanFactory;
@@ -21,6 +17,7 @@ import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.mail.CourseMailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -35,32 +32,32 @@ import java.util.stream.Stream;
 
 public class CourseWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
 
-  @Nonnull private final IParticipantService participantService;
-  @Nonnull private final Lazy<IMailConfigService> mailConfigService;
+  @Nonnull private final ParticipantClient participantClient;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigService;
   @Nonnull private final Lazy<BillingProperties> billingProperties;
 
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
 
-  public CourseWidget(@Nonnull final Long currentCourseId,
-                      @Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  public CourseWidget(@Nonnull final Injector injector,
+                      @Nonnull final Long currentCourseId) {
+    this.injector = injector;
 
-    participantService = globalInterface.getService(IParticipantService.class);
-    mailConfigService = Lazy.of(() -> globalInterface.getService(IMailConfigService.class));
-    billingProperties = Lazy.of(() -> globalInterface.getService(BillingProperties.class));
+    this.participantClient = injector.getInstance(ParticipantClient.class);
+    this.mailConfigService = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
 
-    final var courseService = globalInterface.getService(ICourseService.class);
+
+    final var courseService = injector.getInstance(CourseClient.class);
     currentCourse = courseService.getCourseById(currentCourseId);
 
-    participantsInCourse = participantService.findParticipants(
+    participantsInCourse = participantClient.findParticipants(
             ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
     );
 
-    build();
+    buildUI();
   }
 
   @Nonnull
@@ -75,7 +72,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
             getTranslation("setting.send.email"),
             VaadinIcon.MAILBOX,
             e -> {
-              final var dialog = new CourseMailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
+              final var dialog = new CourseMailDialog(injector, MailTemplateType.COURSE_INVITE);
               dialog.setParticipants(participantsInCourse);
               dialog.setCourse(currentCourse);
               dialog.open();
@@ -117,11 +114,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
-              final var dialog = new AssignToCourseDialog(
-                      globalInterface,
-                      currentCourse
-              );
-
+              final var dialog = new AssignToCourseDialog(injector, currentCourse);
               dialog.addClosedListener(ev -> refresh());
               dialog.addDialogCloseActionListener(ev -> refresh());
               dialog.open();
@@ -129,10 +122,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var detailButton = createHeaderButton(Publ.EMPTY_STRING,
             VaadinIcon.EXTERNAL_LINK, e -> {
-              final var courseDetailDialog = new CourseDetailDialog(
-                      globalInterface,
-                      currentCourse
-              );
+              final var courseDetailDialog = new CourseDetailDialog(injector, currentCourse);
               courseDetailDialog.open();
             });
 
@@ -202,7 +192,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     if ((oldParticipantsInCourse.isEmpty() && !participantsInCourse.isEmpty()) ||
             (!oldParticipantsInCourse.isEmpty() && participantsInCourse.isEmpty())) {
-      build();
+      buildUI();
     }
   }
 }

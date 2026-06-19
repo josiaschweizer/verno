@@ -12,9 +12,8 @@ import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
-import ch.verno.ui.injection.Injector;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
-import ch.verno.ui.lib.url.RoutesUtil;
+import ch.verno.ui.lib.url.RouteUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -31,7 +30,6 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -44,7 +42,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @PermitAll
-@Route(Routes.PARTICIPANTS + Routes.DETAIL)
+@com.vaadin.flow.router.Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @Menu(order = 1.1, icon = "vaadin:user", title = "participant.participant.detail")
 public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements HasDynamicTitle {
 
@@ -134,7 +132,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   @Override
   protected String getDetailRoute() {
-    return RoutesUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
+    return RouteUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Nonnull

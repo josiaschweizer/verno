@@ -1,24 +1,25 @@
 package ch.verno.ui.verno.usermanagemnt;
 
-import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.contract.dto.filter.AppUserFilter;
 import ch.verno.common.db.role.Role;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
-import ch.verno.common.ui.dto.UserDtoUnhashedPw;
-import ch.verno.publ.Routes;
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.filter.AppUserFilter;
+import ch.verno.contract.dto.table.user.AppUserDto;
+import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.SpanFactory;
+import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.GridColumnHelper;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
-import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
 import ch.verno.ui.verno.usermanagemnt.dialog.CreateUserDialog;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
@@ -41,14 +42,14 @@ import java.util.stream.Stream;
 @Menu(order = 99, icon = CustomIconConstants.USER_COG, title = "shared.application.users")
 public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> implements HasDynamicTitle {
 
-  @Nonnull private final IAppUserService appUserService;
-  private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<UserProperties> userProperties;
 
-  protected UsersGrid(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, AppUserFilter.empty(), true, false);
+  protected UsersGrid(@Nonnull final Injector injector) {
+    super(injector, AppUserFilter.empty(), true, false);
 
-    this.globalInterface = globalInterface;
-    this.appUserService = globalInterface.getService(IAppUserService.class);
+    this.injector = injector;
+    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
   }
 
   @Nonnull
@@ -131,7 +132,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
 
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final AppUserDto dto) {
-    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
+    final var currentUser = injector.getInstance(UserProperties.class).getCurrentUser();
     final var actions = new ArrayList<ActionDef>();
 
     actions.add(ActionDef.create(
@@ -170,9 +171,9 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
   private void openUserDialog(@Nullable final AppUserDto dto) {
     CreateUserDialog dialog;
     if (dto == null) {
-      dialog = new CreateUserDialog(globalInterface);
+      dialog = injector.getInstance(CreateUserDialog.class);
     } else {
-      dialog = new CreateUserDialog(globalInterface, FormMode.EDIT, UserDtoUnhashedPw.fromAppUserDto(dto));
+      dialog = new CreateUserDialog(injector, FormMode.EDIT, UserDtoUnhashedPw.fromAppUserDto(dto));
     }
 
     dialog.addClosedListener(e -> setFilter(getFilter())); // refresh grid by reapplying filter when dialog is closed

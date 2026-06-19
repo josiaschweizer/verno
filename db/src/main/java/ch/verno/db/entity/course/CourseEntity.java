@@ -121,19 +121,19 @@ public class CourseEntity extends TenantScopedEntity {
     this.location = location;
 
     this.courseLevels = courseLevels != null
-            ? New.list(courseLevels)
+            ? New.copyList(courseLevels)
             : New.list();
     this.courseSchedule = courseSchedule;
 
     this.weekdays = weekdays != null
-            ? New.list(weekdays)
+            ? New.copyList(weekdays)
             : New.list();
     this.startTime = startTime;
     this.endTime = endTime;
 
     this.instructor = instructor;
     this.secondaryInstructors = secondaryInstructors != null
-            ? New.list(secondaryInstructors)
+            ? New.copyList(secondaryInstructors)
             : New.list();
 
     this.note = note;
@@ -157,19 +157,19 @@ public class CourseEntity extends TenantScopedEntity {
     this.location = location;
 
     this.courseLevels = courseLevels != null
-            ? New.list(courseLevels)
+            ? New.copyList(courseLevels)
             : New.list();
     this.courseSchedule = courseSchedule;
 
     this.weekdays = weekdays != null
-            ? New.list(weekdays)
+            ? New.copyList(weekdays)
             : New.list();
     this.startTime = startTime;
     this.endTime = endTime;
 
     this.instructor = instructor;
     this.secondaryInstructors = secondaryInstructors != null
-            ? New.list(secondaryInstructors)
+            ? New.copyList(secondaryInstructors)
             : New.list();
 
     this.note = note;
