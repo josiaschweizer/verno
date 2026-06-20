@@ -3,6 +3,7 @@ package ch.verno.rpc.properties.user;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.endpoint.properties.user.UserResource;
+import ch.verno.lib.lib.language.Language;
 import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.base.navigation.Navigator;
 import com.vaadin.flow.component.UI;
@@ -19,13 +20,18 @@ public class UserProperties {
   }
 
   @Nonnull
-  public AppUserDto getCurrentUser() {
-    return userResource.getCurrentUser();
+  public AppUserDto getCurrentAppUser() {
+    return userResource.getCurrentAppUser();
   }
 
   @Nonnull
-  public Optional<AppUserDto> getOptionalCurrentUser() {
-    return userResource.getOptionalCurrentUser();
+  public Optional<AppUserDto> getOptionalCurrentAppUser() {
+    return userResource.getOptionalCurrentAppUser();
+  }
+
+  @Nonnull
+  public Language getCurrentUserLanguage() {
+    return userResource.getCurrentUserLanguage();
   }
 
   public void logout() {

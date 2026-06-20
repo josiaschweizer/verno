@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.mapping;
 
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -66,7 +66,7 @@ public abstract class VABaseColumnMappingPanel<TField> extends Composite<Div> {
             .setAutoWidth(true)
             .setFlexGrow(1);
 
-    grid.getStyle().setMinHeight(VernoUtility.LUMO_ZERO);
+    grid.getStyle().setMinHeight(VernoUtility.NONE);
   }
 
   private ComboBox<FieldOption<TField>> buildFieldCombo(@Nonnull final MappingRow row,

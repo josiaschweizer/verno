@@ -25,14 +25,14 @@ public class CourseMailDialog extends AbstractMailDialog<CourseMailTemplateConfi
 
   @Override
   @Nonnull
-  protected CourseMailTemplateConfigLayout createTemplateConfigLayout(@Nonnull final GlobalInterface globalInterface,
+  protected CourseMailTemplateConfigLayout createTemplateConfigLayout(@Nonnull final Injector injector,
                                                                       @Nonnull final MailTemplateType mailTemplateType) {
-    return new CourseMailTemplateConfigLayout(globalInterface, mailTemplateType);
+    return new CourseMailTemplateConfigLayout(injector, mailTemplateType);
   }
 
   @Override
   protected void executeSend(@Nonnull final MailContentDto mailContent) {
-    mailServerGate.get().sendCourseEmails(
+    mailClient.get().sendCourseMails(
             mailContent,
             templateConfigLayout.getPlaceholderValues(),
             participants != null ? participants : List.of(),

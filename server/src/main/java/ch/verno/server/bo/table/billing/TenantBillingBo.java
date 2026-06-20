@@ -19,12 +19,12 @@ import java.time.OffsetDateTime;
 @Component
 public class TenantBillingBo {
 
+  @Nonnull private final TenantBillingMapper mapper;
   @Nonnull private final Lazy<TenantBillingRepository> repository;
-  @Nonnull private final Lazy<TenantBillingMapper> mapper;
 
   protected TenantBillingBo(@Nonnull final ServerBean bean) {
+    this.mapper = bean.get(TenantBillingMapper.class);
     this.repository = Lazy.of(() -> bean.get(TenantBillingRepository.class));
-    this.mapper = Lazy.of(() -> bean.get(TenantBillingMapper.class));
   }
 
   @Nonnull
@@ -33,7 +33,7 @@ public class TenantBillingBo {
 
     try {
       TenantContext.set(tenantId);
-      return repository.get().save(mapper.get().toNewEntity(dto));
+      return repository.get().save(mapper.toNewEntity(dto));
     } catch (final DataIntegrityViolationException exception) {
       final var existing = repository.get().findByTenantId(tenantId);
 
@@ -48,14 +48,12 @@ public class TenantBillingBo {
   @Nonnull
   public TenantBillingEntity update(@Nonnull final TenantBillingDto dto) {
     final var tenantId = requireTenantId(dto);
-
     TenantContext.set(tenantId);
 
     final var entity = repository.get()
             .findByTenantId(tenantId)
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.TENANT_BILLING_BY_TENANT_ID_NOT_FOUND));
-
-    mapper.get().updateEntity(entity, dto);
+    mapper.updateEntity(entity, dto);
 
     return repository.get().save(entity);
   }
@@ -67,7 +65,7 @@ public class TenantBillingBo {
       return false;
     }
 
-    final var dto = mapper.get().toSimpleDto(billing.get());
+    final var dto = mapper.toSimpleDto(billing.get());
 
     if (BillingSubscriptionStatus.ACTIVE.equals(dto.getSubscriptionStatus())) {
       return true;

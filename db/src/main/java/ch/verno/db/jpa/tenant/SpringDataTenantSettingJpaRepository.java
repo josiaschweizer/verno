@@ -1,8 +1,7 @@
 package ch.verno.db.jpa.tenant;
 
 import ch.verno.db.entity.setting.TenantSettingEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 
-public interface SpringDataTenantSettingJpaRepository extends
-        JpaRepository<TenantSettingEntity, Long> {
+public interface SpringDataTenantSettingJpaRepository extends AbstractEntityJpaRepository<TenantSettingEntity, Long> {
 }

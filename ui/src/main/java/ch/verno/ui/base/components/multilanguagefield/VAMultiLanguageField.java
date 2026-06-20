@@ -1,10 +1,10 @@
 package ch.verno.ui.base.components.multilanguagefield;
 
 import ch.verno.lib.New;
+import ch.verno.lib.VernoUtility;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoUtility;
 import ch.verno.ui.base.components.button.ButtonBuilder;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.VADialog;

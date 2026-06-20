@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NonNls;
 @SuppressWarnings("HardcodedFileSeparator")
 public class VernoConstants {
 
+  @NonNls public static final String VERNO = "Verno";
+
   public static final int DEFAULT_SMTP_PORT = 587;
 
   public static final String ADMIN_ROLE = "ADMIN";
@@ -27,7 +29,7 @@ public class VernoConstants {
   @NonNls public static final String TEMP_FILE_BASE_DIR = "verno-temp-";
   @NonNls public static final String FILE_BASE_DIR = "verno-files-";
 
-  @NonNls public static final String X_TENANT = "X-Mandant";
+  @NonNls public static final String X_MANDANT = "X-Mandant";
 
   public static final Integer MAX_MAIL_BATCH_SIZE = 100;
   public static final Double MAIL_SEND_DELAY_MS = 500.0;

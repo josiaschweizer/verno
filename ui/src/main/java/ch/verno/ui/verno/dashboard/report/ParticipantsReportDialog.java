@@ -1,10 +1,13 @@
 package ch.verno.ui.verno.dashboard.report;
 
-import ch.verno.common.gate.server.ReportServerGate;
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.file.ReportClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -17,12 +20,13 @@ import java.util.List;
 
 public class ParticipantsReportDialog extends VAAbstractDialog {
 
-  @Nonnull private final ReportServerGate reportServerGate;
+  @Nonnull private final Lazy<ReportClient> reportClient;
 
   @Nonnull private String reportToken;
 
-  public ParticipantsReportDialog(@Nonnull final ReportServerGate reportServerGate) {
-    this.reportServerGate = reportServerGate;
+  @Inject
+  public ParticipantsReportDialog(@Nonnull final Injector injector) {
+    this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
 
     generateReport();
     initUI(getTranslation("shared.generate.report"));
@@ -56,7 +60,7 @@ public class ParticipantsReportDialog extends VAAbstractDialog {
   }
 
   private void generateReport() {
-    reportToken = reportServerGate.generateParticipantsReport();
+    reportToken = reportClient.get().generateParticipantsReport();
   }
 
   @Nonnull
@@ -76,7 +80,7 @@ public class ParticipantsReportDialog extends VAAbstractDialog {
   }
 
   private void deleteTempOnServer() {
-    reportServerGate.deleteTempFile(reportToken);
+    reportClient.get().deleteTempFile(reportToken);
   }
 
   @Nonnull

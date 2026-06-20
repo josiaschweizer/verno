@@ -1,15 +1,16 @@
 package ch.verno.ui.verno.settings.panels.report;
 
-import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.contract.dto.table.setting.TenantSettingDto;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoConstants;
+import ch.verno.lib.VernoConstants;
+import ch.verno.rpc.properties.tenant.TenantProperties;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.client.file.FileApiClient;
+import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,14 +25,15 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "setting.report.settings";
 
+  @Nonnull private final Lazy<FileApiClient> fileApiClient;
+  @Nonnull private final Lazy<TenantProperties> tenantProperties;
   @Nonnull private final ITenantSettingService tenantSettingService;
-  @Nonnull private final FileApiClient fileApiClient;
 
-  public ReportSetting(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
+  public ReportSetting(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
 
-    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
-    this.fileApiClient = new FileApiClient(globalInterface, "http://localhost:8080"); //todo erweitern um die url nicht zu hardcoden
+    this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
+    this.fileApiClient = Lazy.of(() -> new FileApiClient(injector, "http://localhost:8080")); //todo erweitern um die url nicht zu hardcoden
 
     this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
   }

@@ -7,7 +7,8 @@ public class VernoUtility {
   private VernoUtility(){
   }
 
-  @NonNls public static final String LUMO_ZERO = "0";
+  @NonNls public static final String NONE = "0";
+  @NonNls public static final String LUMO_ZERO = NONE;
 
   @NonNls public static final String LUMO_SPACE_NONE = LUMO_ZERO;
   @NonNls public static final String LUMO_SPACE_XS = "var(--lumo-space-xs)";
@@ -24,10 +25,11 @@ public class VernoUtility {
   @NonNls public static final String LINE_HEIGHT_TWO = "2";
   @NonNls public static final String LINE_HEIGHT_THREE = "3";
 
+  @NonNls public static final String FLEX_GROW_ZERO = NONE;
+  @NonNls public static final String FLEX_GROW_ONE = "1";
 
   @NonNls public static final String LUMO_ERROR_COLOR = "var(--lumo-error-color)";
 
-  @NonNls public static final String NONE = LUMO_ZERO;
   @NonNls public static final String SEVEN_HUNDRED_PX_REM = "43.75rem";
 
 }

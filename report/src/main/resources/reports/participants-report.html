@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Teilnehmerliste</title>
+
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 5mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #000;
+        }
+
+        h1 {
+            margin-bottom: 8mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Teilnehmerliste</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Geburtsdatum</th>
+        <th>Geschlecht</th>
+        <th>Elternteil 1</th>
+        <th>Elternteil 2</th>
+        <th>Adresse</th>
+        <th>E-Mail</th>
+        <th>Telefon</th>
+        <th>Level</th>
+        <th>Notiz</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="p : ${participants}">
+        <td th:text="${p.firstname}">-</td>
+        <td th:text="${p.lastname}">-</td>
+        <td th:text="${p.birthdate}">-</td>
+        <td th:text="${p.gender}">-</td>
+        <td th:text="${p.parentOne}">-</td>
+        <td th:text="${p.parentTwo}">-</td>
+        <td th:text="${p.address}">-</td>
+        <td th:text="${p.email}">-</td>
+        <td th:text="${p.phone}">-</td>
+        <td th:text="${p.courseLevels}">-</td>
+        <td th:text="${p.note}">-</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

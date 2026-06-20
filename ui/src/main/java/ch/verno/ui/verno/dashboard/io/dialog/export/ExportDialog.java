@@ -1,13 +1,14 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
-import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.ServerGate;
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.lib.Attributes;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -20,14 +21,13 @@ import java.util.List;
 
 public class ExportDialog<T> extends VAAbstractDialog {
 
-  @Nonnull private final ServerGate serverGate;
-  @Nonnull private final TempFileServerGate tempFileServerGate;
+  public static final String CLICK_JS = "click";
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
   @Nonnull private String fileToken;
 
-  public ExportDialog(@Nonnull final GlobalInterface globalInterface,
+  public ExportDialog(@Nonnull final Injector injector,
                       @Nonnull final ExportEntityConfig<T> config) {
-    this.serverGate = globalInterface.getGate(ServerGate.class);
-    this.tempFileServerGate = globalInterface.getGate(TempFileServerGate.class);
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
 
     generateCsvFile(config);
     initUI(getTranslation("shared.export.csv"));
@@ -63,14 +63,14 @@ public class ExportDialog<T> extends VAAbstractDialog {
   @Nonnull
   private Button createDownloadButton() {
     final var hidden = new Anchor(buildAttachmentUrl(fileToken), getTranslation("shared.download"));
-    hidden.getElement().setAttribute("download", true);
+    hidden.getElement().setAttribute(Attributes.DOWNLOAD, true);
     hidden.getStyle().setDisplay(Style.Display.NONE);
     add(hidden);
 
     final var downloadButton = new Button(getTranslation("shared.download"));
     downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     downloadButton.addClickListener(e -> {
-      hidden.getElement().callJsFunction("click");
+      hidden.getElement().callJsFunction(CLICK_JS);
       close();
     });
     return downloadButton;

@@ -1,0 +1,11 @@
+.va-dashboard-grid {
+    --va-dashboard-gap: 16px;
+    --va-dashboard-row-min-height: 160px;
+
+    display: grid;
+    gap: var(--va-dashboard-gap);
+    align-items: stretch;
+
+    grid-template-columns: repeat(auto-fit, minmax(var(--va-widget-min-w, 280px), 1fr));
+    grid-auto-rows: minmax(var(--va-dashboard-row-min-height), auto);
+}

@@ -1,0 +1,21 @@
+vaadin-button[theme~='xs'] {
+    --lumo-button-size: var(--lumo-size-xs);
+}
+
+.va-button-readonly {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.va-button-readonly:hover {
+    opacity: 0.55;
+}
+
+.va-button-readonly::part(label) {
+    pointer-events: none;
+}
+
+.va-button-readonly::part(prefix),
+.va-button-readonly::part(suffix) {
+    pointer-events: none;
+}

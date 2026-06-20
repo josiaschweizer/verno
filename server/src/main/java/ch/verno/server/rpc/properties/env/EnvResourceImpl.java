@@ -4,7 +4,7 @@ import ch.verno.contract.endpoint.properties.env.EnvResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.bo.BOFactory;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.env.EnvironmentVariableBo;
 import jakarta.annotation.Nonnull;
 
@@ -15,7 +15,7 @@ public class EnvResourceImpl implements EnvResource {
   @Nonnull private final Lazy<EnvironmentVariableBo> environmentVariableBo;
 
   public EnvResourceImpl(@Nonnull final ServerBean bean) {
-    this.environmentVariableBo = Lazy.of(() -> bean.get(BOFactory.class).get(EnvironmentVariableBo.class));
+    this.environmentVariableBo = Lazy.of(() -> bean.get(BoFactory.class).get(EnvironmentVariableBo.class));
   }
 
   @Nonnull

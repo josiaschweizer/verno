@@ -1,11 +1,12 @@
 package ch.verno.ui.client.file;
 
-import ch.verno.common.api.dto.internal.file.storage.DownloadFileResponse;
-import ch.verno.common.api.dto.internal.file.storage.FileUploadResponse;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.dto.file.storage.DownloadFileResponse;
+import ch.verno.contract.dto.file.storage.FileUploadResponse;
+import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Publ;
+import ch.verno.lib.VernoConstants;
 import ch.verno.ui.client.BaseApiClient;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,14 +23,14 @@ import java.util.Map;
 
 public class FileApiClient extends BaseApiClient {
 
-  public FileApiClient(@Nonnull final GlobalInterface globalInterface,
+  public FileApiClient(@Nonnull final Injector injector,
                        @Nonnull final String baseUrl) {
-    super(globalInterface, BaseApiClient.build(baseUrl));
+    super(injector, BaseApiClient.build(baseUrl));
   }
 
-  public FileApiClient(@Nonnull final GlobalInterface globalInterface,
+  public FileApiClient(@Nonnull final Injector injector,
                        @Nonnull final RestClient restClient) {
-    super(globalInterface, restClient);
+    super(injector, restClient);
   }
 
   @Nullable
@@ -42,9 +43,7 @@ public class FileApiClient extends BaseApiClient {
     final var fileBytes = readBytes(inputStream);
     final MultiValueMap<String, Object> multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
 
-    return post(ApiUrl.FILES, Map.of(
-                    "X-Mandant", tenantKey
-            ),
+    return post(ApiUrl.FILES, Map.of(VernoConstants.X_MANDANT, tenantKey),
             MediaType.MULTIPART_FORM_DATA,
             multipartBody)
             .retrieve()

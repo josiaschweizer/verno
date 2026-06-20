@@ -1,9 +1,13 @@
 package ch.verno.ui.base.components.upload;
 
-import ch.verno.common.gate.server.TempFileServerGate;
 import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.client.file.TempFileClient;
+import ch.verno.ui.base.components.file.FileType;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -18,6 +22,7 @@ import org.jetbrains.annotations.NonNls;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 @CssImport(CssImportConstants.VA_FILE_UPLOAD_AREA)
@@ -34,8 +39,7 @@ public class VAFileUploadArea extends VerticalLayout {
   @NonNls public static final String SANITIZE_REGEX = "[^a-zA-Z0-9._-]";
   @NonNls public static final String UPLOAD_JS_FUNCTION = "this.files = []; this.requestContentUpdate && this.requestContentUpdate();";
 
-  @Nonnull
-  private final TempFileServerGate tempFileServerGate;
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
 
   @Nullable private String tempToken;
   @Nullable private String originalFileName;
@@ -47,17 +51,17 @@ public class VAFileUploadArea extends VerticalLayout {
   @Nullable private Consumer<String> onFileUploaded;
   @Nullable private Runnable onFileRemoved;
 
-  public VAFileUploadArea(@Nonnull final TempFileServerGate tempFileServerGate) {
-    this.tempFileServerGate = tempFileServerGate;
+  @Inject
+  public VAFileUploadArea(@Nonnull final Injector injector) {
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
 
     setSizeFull();
     setPadding(false);
     setSpacing(false);
 
-    getStyle()
-            .setMargin(VernoUtility.LUMO_ZERO)
-            .setGap(VernoUtility.LUMO_ZERO)
-            .setOverflow(Style.Overflow.HIDDEN);
+    getStyle().setMargin(VernoUtility.LUMO_ZERO);
+    getStyle().setGap(VernoUtility.LUMO_ZERO);
+    getStyle().setOverflow(Style.Overflow.HIDDEN);
 
     dropArea = new Div();
     dropArea.addClassName(DROP_AREA_CLASSNAME);
@@ -83,7 +87,7 @@ public class VAFileUploadArea extends VerticalLayout {
 
       final String stored;
       try {
-        stored = tempFileServerGate.store(sanitizeFileName(originalFileName), bytes);
+        stored = tempFileClient.get().store(sanitizeFileName(originalFileName), bytes);
       } catch (Exception e) {
         ui.access(() -> resetUI(true));
         return;
@@ -217,7 +221,7 @@ public class VAFileUploadArea extends VerticalLayout {
     }
 
     try {
-      tempFileServerGate.delete(tempToken);
+      tempFileClient.delete(tempToken);
     } catch (Exception ignored) {
     } finally {
       tempToken = null;

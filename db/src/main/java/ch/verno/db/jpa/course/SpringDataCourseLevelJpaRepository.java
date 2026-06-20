@@ -1,15 +1,12 @@
 package ch.verno.db.jpa.course;
 
 import ch.verno.db.entity.course.CourseLevelEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public interface SpringDataCourseLevelJpaRepository extends
-        JpaRepository<CourseLevelEntity, Long>,
-        JpaSpecificationExecutor<CourseLevelEntity> {
+public interface SpringDataCourseLevelJpaRepository extends AbstractEntityJpaRepository<CourseLevelEntity, Long> {
 
   @Nonnull
   Optional<CourseLevelEntity> findByCode(String code);

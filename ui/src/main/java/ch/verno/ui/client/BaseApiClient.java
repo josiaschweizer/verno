@@ -1,7 +1,6 @@
 package ch.verno.ui.client;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.VernoConstants;
+import com.google.inject.Injector;
 import com.vaadin.flow.server.VaadinRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -12,12 +11,12 @@ import java.util.Map;
 
 public abstract class BaseApiClient {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  protected final RestClient restClient;
+  @Nonnull private final Injector injector;
+  @Nonnull protected final RestClient restClient;
 
-  protected BaseApiClient(@Nonnull final GlobalInterface globalInterface,
-                          final RestClient restClient) {
-    this.globalInterface = globalInterface;
+  protected BaseApiClient(@Nonnull final Injector injector,
+                          @Nonnull final RestClient restClient) {
+    this.injector = injector;
     this.restClient = restClient;
   }
 
@@ -32,7 +31,6 @@ public abstract class BaseApiClient {
                                                   @Nonnull final Map<String, String> headers,
                                                   @Nonnull final MediaType contentType,
                                                   @Nonnull final Object body) {
-
     RestClient.RequestHeadersSpec<?> rc = restClient.post()
             .uri(url)
             .contentType(contentType)
@@ -49,8 +47,7 @@ public abstract class BaseApiClient {
   @Nonnull
   protected RestClient.RequestHeadersSpec<?> get(@Nonnull final String url,
                                                  @Nonnull final Map<String, String> headers) {
-    RestClient.RequestHeadersSpec<?> rc = restClient.get()
-            .uri(url);
+    RestClient.RequestHeadersSpec<?> rc = restClient.get().uri(url);
     applyTenantHeader(rc);
 
     for (final var header : headers.entrySet()) {

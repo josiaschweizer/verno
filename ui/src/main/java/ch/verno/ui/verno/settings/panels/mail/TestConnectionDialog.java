@@ -1,15 +1,16 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.MailServerGate;
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestStatus;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -24,6 +25,7 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,24 +36,26 @@ import java.util.concurrent.Executors;
 
 public class TestConnectionDialog extends VAAbstractDialog {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Lazy<MailClient> mailClient;
 
-  private EmailField emailField;
-  private ProgressBar progressBar;
+  @Nullable private EmailField emailField;
+  @Nullable private ProgressBar progressBar;
 
-  private Div resultBox;
-  private HorizontalLayout resultHeader;
-  private Icon resultIcon;
-  private Span resultTitle;
-  private Span resultMessage;
+  @Nullable private Div resultBox;
+  @Nullable private HorizontalLayout resultHeader;
+  @Nullable private Icon resultIcon;
+  @Nullable private Span resultTitle;
+  @Nullable private Span resultMessage;
 
-  private Button closeButton;
-  private Button testButton;
+  @Nullable private Button closeButton;
+  @Nullable private Button testButton;
 
   private volatile boolean running = false;
 
-  public TestConnectionDialog(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  @Inject
+  public TestConnectionDialog(@Nonnull final Injector injector) {
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
+
     initUI(getTranslation("setting.test.email.connection"), DialogSize.MEDIUM);
   }
 
@@ -92,7 +96,7 @@ public class TestConnectionDialog extends VAAbstractDialog {
     final var resultBody = new VerticalLayout(resultHeader, resultMessage);
     resultBody.setPadding(false);
     resultBody.setSpacing(false);
-    resultBody.getStyle().setGap("var(--lumo-space-xs)");
+    resultBody.getStyle().setGap(VernoUtility.LUMO_SPACE_XS);
     resultBody.setWidthFull();
 
     resultBox = new Div(resultBody);
@@ -206,9 +210,11 @@ public class TestConnectionDialog extends VAAbstractDialog {
   }
 
   @Nonnull
-  private TestResult sendTestMail(@Nonnull final String toEmail, @Nonnull final String successMsg, @Nonnull final String errorMsgTemplate) {
+  private TestResult sendTestMail(@Nonnull final String toEmail,
+                                  @Nonnull final String successMsg,
+                                  @Nonnull final String errorMsgTemplate) {
     try {
-      globalInterface.getService(MailServerGate.class).sendWelcomeMail(toEmail);
+      mailClient.get().sendWelcomeMail(toEmail);
       return new TestResult(TestStatus.VALID, successMsg);
     } catch (Exception e) {
       final var message = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();

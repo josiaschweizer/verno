@@ -4,7 +4,7 @@ import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.db.entity.address.AddressEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.bo.BOFactory;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.address.AddressBo;
 import ch.verno.server.mapper.address.AddressMapper;
 import ch.verno.server.repository.address.AddressRepository;
@@ -26,7 +26,7 @@ public class AddressService extends AbstractEntityService<
 
   public AddressService(@Nonnull final ServerBean bean) {
     super(bean.get(AddressRepository.class), bean.get(AddressMapper.class));
-    this.addressBo = Lazy.of(() -> bean.get(BOFactory.class).get(AddressBo.class));
+    this.addressBo = Lazy.of(() -> bean.get(BoFactory.class).get(AddressBo.class));
   }
 
   @Nonnull

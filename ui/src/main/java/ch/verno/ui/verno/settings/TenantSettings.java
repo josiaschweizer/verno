@@ -1,8 +1,7 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.lib.Routes;
 import ch.verno.lib.Lazy;
-import ch.verno.publ.Routes;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.settings.VABaseSettingsPage;
 import ch.verno.ui.verno.settings.panels.courselevel.CourseLevelSetting;
@@ -12,6 +11,7 @@ import ch.verno.ui.verno.settings.panels.quantity.QuantitySetting;
 import ch.verno.ui.verno.settings.panels.report.ReportSetting;
 import ch.verno.ui.verno.settings.panels.shared.SharedSettings;
 import ch.verno.ui.verno.settings.panels.subscription.SubscriptionSettings;
+import com.google.inject.Injector;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
@@ -35,16 +35,16 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
   @Nonnull private final Lazy<SubscriptionSettings> subscriptionSettings;
 
   @Autowired
-  public TenantSettings(@Nonnull final GlobalInterface globalInterface) {
-    this.sharedSetting = Lazy.of(() -> new SharedSettings(globalInterface));
-    this.quantitySetting = Lazy.of(() -> new QuantitySetting(globalInterface));
+  public TenantSettings(@Nonnull final Injector injector) {
+    this.sharedSetting = Lazy.of(() -> injector.getInstance(SharedSettings.class));
+    this.quantitySetting = Lazy.of(() -> injector.getInstance(QuantitySetting.class));
     this.reportSetting = Lazy.of(() -> new ReportSetting(globalInterface));
     this.courseLevelGridSetting = Lazy.of(() -> new CourseLevelSetting(globalInterface));
-    this.genderSetting = Lazy.of(() -> new GenderSetting(globalInterface));
+    this.genderSetting = Lazy.of(() -> injector.getInstance(GenderSetting.class));
     this.mailSettings = Lazy.of(() -> new MailSettings(globalInterface));
     this.subscriptionSettings = Lazy.of(() -> new SubscriptionSettings(globalInterface));
 
-    initUI(globalInterface);
+    initUI(injector);
   }
 
   @Nonnull

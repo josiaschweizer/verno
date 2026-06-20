@@ -13,7 +13,7 @@ import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
-import ch.verno.ui.lib.url.RouteUtil;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -132,7 +132,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   @Override
   protected String getDetailRoute() {
-    return RouteUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Nonnull

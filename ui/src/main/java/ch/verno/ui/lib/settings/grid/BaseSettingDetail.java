@@ -1,16 +1,17 @@
 package ch.verno.ui.lib.settings.grid;
 
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Div;
 import jakarta.annotation.Nonnull;
 
 public abstract class BaseSettingDetail<T> extends BaseDetailView<T> {
 
-  public BaseSettingDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
+  public BaseSettingDetail(@Nonnull final Injector injector) {
+    super(injector);
   }
 
   @Override
@@ -33,7 +34,7 @@ public abstract class BaseSettingDetail<T> extends BaseDetailView<T> {
     getBinder().addStatusChangeListener(event -> updateSaveButtonState());
 
     final var spacer = new Div();
-    spacer.getStyle().set("flex-grow", "1");
+    spacer.getStyle().setFlexGrow(VernoUtility.FLEX_GROW_ONE);
 
     add(spacer);
     add(createActionButtonLayout());

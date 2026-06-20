@@ -19,13 +19,13 @@ import java.time.OffsetDateTime;
 public class BillingAccessTokenBo {
 
   @Nonnull private final Lazy<AppUserRepository> appUserRepository;
-  @Nonnull private final Lazy<BillingAccessTokenRepository> repository;
-  @Nonnull private final Lazy<BillingAccessTokenMapper> mapper;
+  @Nonnull private final BillingAccessTokenMapper billingAccessTokenMapper;
+  @Nonnull private final Lazy<BillingAccessTokenRepository> billingAccessTokenRepository;
 
   public BillingAccessTokenBo(@Nonnull final ServerBean bean) {
     this.appUserRepository = Lazy.of(() -> bean.get(AppUserRepository.class));
-    this.repository = Lazy.of(() -> bean.get(BillingAccessTokenRepository.class));
-    this.mapper = Lazy.of(() -> bean.get(BillingAccessTokenMapper.class));
+    this.billingAccessTokenMapper = bean.get(BillingAccessTokenMapper.class);
+    this.billingAccessTokenRepository = Lazy.of(() -> bean.get(BillingAccessTokenRepository.class));
   }
 
   @Nonnull
@@ -37,9 +37,9 @@ public class BillingAccessTokenBo {
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.APP_USER_NOT_FOUND));
 
     try {
-      return repository.get().save(mapper.get().toNewEntity(dto));
+      return billingAccessTokenRepository.get().save(billingAccessTokenMapper.toNewEntity(dto));
     } catch (final DataIntegrityViolationException exception) {
-      return repository.get()
+      return billingAccessTokenRepository.get()
               .findByTokenHash(dto.getTokenHash())
               .orElseThrow(() -> exception);
     }
@@ -51,37 +51,37 @@ public class BillingAccessTokenBo {
       throw new IllegalStateException("id must not be null");
     }
 
-    final var entity = repository.get()
+    final var entity = billingAccessTokenRepository.get()
             .findById(dto.getId())
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.BILLING_ACCESS_TOKEN_BY_ID_NOT_FOUND));
 
-    mapper.get().updateEntity(entity, dto);
-    return repository.get().save(entity);
+    billingAccessTokenMapper.updateEntity(entity, dto);
+    return billingAccessTokenRepository.get().save(entity);
   }
 
   @Nonnull
   public BillingAccessTokenEntity markAsUsed(@Nonnull final String tokenHash) {
-    final var entity = repository.get()
+    final var entity = billingAccessTokenRepository.get()
             .findByTokenHash(tokenHash)
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND));
 
     entity.setUsedAt(OffsetDateTime.now());
-    return repository.get().save(entity);
+    return billingAccessTokenRepository.get().save(entity);
   }
 
   public boolean existsByTokenHash(@Nonnull final String tokenHash) {
-    return repository.get().existsByTokenHash(tokenHash);
+    return billingAccessTokenRepository.get().existsByTokenHash(tokenHash);
   }
 
   public boolean isExpired(@Nonnull final String tokenHash) {
-    return repository.get()
+    return billingAccessTokenRepository.get()
             .findByTokenHash(tokenHash)
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND))
             .isExpired();
   }
 
   public boolean isUsed(@Nonnull final String tokenHash) {
-    return repository.get()
+    return billingAccessTokenRepository.get()
             .findByTokenHash(tokenHash)
             .orElseThrow(() -> new DBNotFoundException(DBNotFoundReason.BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND))
             .isUsed();

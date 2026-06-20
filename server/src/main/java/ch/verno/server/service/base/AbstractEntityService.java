@@ -5,6 +5,7 @@ import ch.verno.server.mapper.base.IEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,7 @@ public abstract class AbstractEntityService<
 
   @Nonnull
   @Override
+  @Transactional(readOnly = true)
   public Optional<DTO> findById(@Nonnull Long id) {
     return repository.findById(id)
             .map(mapper::toSimpleDto);
@@ -44,6 +46,7 @@ public abstract class AbstractEntityService<
 
   @Nonnull
   @Override
+  @Transactional(readOnly = true)
   public List<DTO> findAll() {
     return repository.findAll()
             .stream()
@@ -53,6 +56,7 @@ public abstract class AbstractEntityService<
 
   @Nonnull
   @Override
+  @Transactional
   public DTO save(@Nonnull DTO dto) {
     if (dto.getId() == null) {
       return create(dto);
@@ -62,6 +66,7 @@ public abstract class AbstractEntityService<
   }
 
   @Nonnull
+  @Transactional
   protected DTO create(@Nonnull DTO dto) {
     ENTITY entity = mapper.toNewEntity(dto);
     entity = repository.save(entity);
@@ -69,6 +74,7 @@ public abstract class AbstractEntityService<
   }
 
   @Nonnull
+  @Transactional
   protected DTO update(@Nonnull DTO dto) {
     if (dto.getId() == null) {
       throw new ServiceException("Cannot update an entity without an id");
@@ -83,11 +89,13 @@ public abstract class AbstractEntityService<
   }
 
   @Override
+  @Transactional
   public void deleteById(@Nonnull Long id) {
     repository.deleteById(id);
   }
 
   @Override
+  @Transactional
   public void delete(@Nonnull final DTO dto) {
     if (dto.getId() == null) {
       throw new ServiceException("Cannot delete entity with null id");
@@ -97,6 +105,7 @@ public abstract class AbstractEntityService<
   }
 
   @Override
+  @Transactional(readOnly = true)
   public long count() {
     return repository.count();
   }

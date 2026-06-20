@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.bo.BOFactory;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.billing.BillingAccessTokenBo;
 import ch.verno.server.mapper.billing.BillingAccessTokenMapper;
 import ch.verno.server.repository.billing.BillingAccessTokenRepository;
@@ -31,7 +31,7 @@ public class BillingAccessTokenService extends AbstractEntityService<
             bean.get(BillingAccessTokenMapper.class)
     );
 
-    this.tokenBo = Lazy.of(() -> bean.get(BOFactory.class).get(BillingAccessTokenBo.class));
+    this.tokenBo = Lazy.of(() -> bean.get(BoFactory.class).get(BillingAccessTokenBo.class));
   }
 
   @Nonnull

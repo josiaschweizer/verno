@@ -1,13 +1,15 @@
 package ch.verno.ui.verno.course;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.server.service.intern.ICourseScheduleService;
-import ch.verno.common.server.service.intern.ICourseService;
-import ch.verno.common.ui.base.components.colorpicker.Colors;
-import ch.verno.publ.Routes;
-import ch.verno.publ.VernoUtility;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.course.CourseScheduleClient;
 import ch.verno.ui.base.components.calendar.VAWeekCalendar;
 import ch.verno.ui.base.components.calendar.WeekCalendarEventDto;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
@@ -27,15 +29,13 @@ import java.util.List;
 @Menu(order = 3, icon = "vaadin:calendar", title = "course.course")
 public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
 
-  @Nonnull
-  private final ICourseScheduleService courseScheduleService;
-  @Nonnull
-  private final ICourseService courseService;
+  @Nonnull private final Lazy<CourseClient> courseClient;
+  @Nonnull private final Lazy<CourseScheduleClient> courseScheduleClient;
 
-  public CourseOverview(@Nonnull final ICourseService courseService,
-                        @Nonnull final ICourseScheduleService courseScheduleService) {
-    this.courseScheduleService = courseScheduleService;
-    this.courseService = courseService;
+  @Inject
+  public CourseOverview(@Nonnull final Injector injector) {
+    this.courseClient = Lazy.of(() -> injector.getInstance(CourseClient.class));
+    this.courseScheduleClient = Lazy.of(() -> injector.getInstance(CourseScheduleClient.class));
 
     initUI();
   }
@@ -57,7 +57,7 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
   @Nonnull
   private List<WeekCalendarEventDto> getEventsForWeek(@Nonnull final LocalDate weekStart) {
     final var monday = weekStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-    final var courseScheduleByWeek = courseScheduleService.getCourseScheduleByWeek(monday);
+    final var courseScheduleByWeek = courseScheduleClient.get().getCourseScheduleByWeek(monday);
 
     final var courses = new ArrayList<CourseDto>();
     for (final var courseScheduleDto : courseScheduleByWeek) {

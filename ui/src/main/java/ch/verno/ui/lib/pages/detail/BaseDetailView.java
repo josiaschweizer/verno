@@ -16,6 +16,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -62,8 +63,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
     this.formMode = getDefaultFormMode();
     this.binder = createBinder();
-    this.entryFactory = new EntryFactory<>(injector.getI18NProvider());
-    this.fieldFactory = new FieldFactory<>(entryFactory, injector.getI18NProvider());
+
+    final var i18nProvider = injector.getInstance(I18NProvider.class);
+    this.entryFactory = new EntryFactory<>(i18nProvider);
+    this.fieldFactory = new FieldFactory<>(entryFactory, i18nProvider);
   }
 
   @Override

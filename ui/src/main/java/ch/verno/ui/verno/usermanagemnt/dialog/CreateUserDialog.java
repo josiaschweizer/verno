@@ -126,7 +126,7 @@ public class CreateUserDialog extends VAAbstractDialog {
 
     appUserClient.get().updateAppUser(bean);
 
-    final var currentUser = injector.getInstance(UserProperties.class).getOptionalCurrentUser();
+    final var currentUser = injector.getInstance(UserProperties.class).getOptionalCurrentAppUser();
     if (currentUser.isEmpty()) {
       injector.getInstance(UserProperties.class).logout(); // user has changed his own username - log him out to avoid any issues with the security context
       return;

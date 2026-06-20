@@ -1,23 +1,21 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
-import ch.verno.common.db.dto.table.mail.MailConfigDto;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.db.type.mail.SmtpSecurity;
-import ch.verno.common.event.ReloadNavigationBarEvent;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.contract.dto.table.mail.MailConfigDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.event.bus.ViewEventBus;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
@@ -29,17 +27,17 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
 
   public static final String TITLE_KEY = "setting.mail.provider.settings";
 
-  @Nonnull private final IMailConfigService mailConfigService;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
   @Nonnull private final EntryFactory<MailConfigDto> entryFactory;
 
-  public MailSettings(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
+  public MailSettings(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
 
-    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.mailConfigClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
+    this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
 
-    if (mailConfigService.hasConfigForCurrentTenant()) {
-      this.dto = mailConfigService.getConfigForCurrentTenant();
+    if (mailConfigClient.get().hasConfigForCurrentTenant()) {
+      this.dto = mailConfigClient.get().getConfigForCurrentTenant();
     }
   }
 
@@ -61,7 +59,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
     menu.addItem(getTranslation("setting.test.connection"), e -> {
       save(); // save the current config to then load it into the dialog
 
-      final var dialog = new TestConnectionDialog(globalInterface);
+      final var dialog = new TestConnectionDialog(injector);
       dialog.addClosedListener(close -> {
         // refresh config after test connection dialog is closed, as the test dialog might update the mail validity
         if (mailConfigService.hasConfigForCurrentTenant()) {

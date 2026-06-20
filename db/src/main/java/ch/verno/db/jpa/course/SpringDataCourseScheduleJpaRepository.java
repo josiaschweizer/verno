@@ -2,15 +2,12 @@ package ch.verno.db.jpa.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.db.entity.course.CourseScheduleEntity;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface SpringDataCourseScheduleJpaRepository extends
-        JpaRepository<CourseScheduleEntity, Long>,
-        JpaSpecificationExecutor<CourseScheduleEntity> {
+public interface SpringDataCourseScheduleJpaRepository extends AbstractEntityJpaRepository<CourseScheduleEntity, Long> {
 
   @Nonnull
   List<CourseScheduleEntity> findByWeeksContains(@Nonnull String week);

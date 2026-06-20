@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.rpc.client.course.CourseScheduleClient;
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;

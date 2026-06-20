@@ -311,13 +311,13 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     final var participantReportDialogButton = new VAButton(getTranslation("shared.report"), VaadinIcon.FILE_TEXT.create());
     participantReportDialogButton.addClickListener(e -> createDialogButtonClick());
 
-    final var gridToolbar = ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
+    final var gridToolbar = ViewToolbarFactory.createGridToolbar(injector, getGridObjectName(), getDetailPageRoute());
     gridToolbar.addActionButton(participantReportDialogButton, true);
     return gridToolbar;
   }
 
   private void createDialogButtonClick() {
-    final var reportDialog = new ParticipantsReportDialog(reportServerGate);
+    final var reportDialog = injector.getInstance(ParticipantsReportDialog.class);
     reportDialog.open();
   }
 

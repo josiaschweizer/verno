@@ -12,6 +12,7 @@ import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -89,7 +90,7 @@ public class TextService extends AbstractEntityService<
   }
 
   @Transactional
-  public void saveMultiple(@Nonnull final List<TextDto> textDtos) {
+  public void saveMultiple(@Nonnull final Collection<TextDto> textDtos) {
     textDtos.forEach(this::save);
   }
 

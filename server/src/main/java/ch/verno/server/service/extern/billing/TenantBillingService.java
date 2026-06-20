@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.bo.BOFactory;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.billing.TenantBillingBo;
 import ch.verno.server.mapper.billing.TenantBillingMapper;
 import ch.verno.server.repository.billing.TenantBillingRepository;
@@ -33,7 +33,7 @@ public class TenantBillingService extends AbstractEntityService<
             bean.get(TenantBillingMapper.class)
     );
 
-    this.tenantBillingBo = Lazy.of(() -> bean.get(BOFactory.class).get(TenantBillingBo.class));
+    this.tenantBillingBo = Lazy.of(() -> bean.get(BoFactory.class).get(TenantBillingBo.class));
   }
 
   @Nonnull

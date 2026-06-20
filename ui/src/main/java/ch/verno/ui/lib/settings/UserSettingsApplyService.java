@@ -24,7 +24,7 @@ public class UserSettingsApplyService {
   }
 
   public void applyCurrentUserSettings() {
-    final var appUserOptional = injector.getInstance(UserProperties.class).getOptionalCurrentUser();
+    final var appUserOptional = injector.getInstance(UserProperties.class).getOptionalCurrentAppUser();
     if (appUserOptional.isEmpty()) {
       return;
     }

@@ -44,7 +44,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
   @NonNls public static final String ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
 
-  @Nonnull private final Injector injector;
+  @Nonnull private final Injector injector; //TODO delete?
   @Nonnull private final Lazy<GenderClient> genderClient;
   @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
 

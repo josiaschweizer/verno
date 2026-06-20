@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.toolbar;
 
 import ch.verno.common.lib.Routes;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
@@ -110,25 +111,15 @@ public class ViewToolbarFactory {
 
   private static void applyUserBadgeToToolbar(@Nonnull final Injector injector,
                                               @Nonnull final ViewToolbar toolbar) {
-    final var currentUser = injector.getUserProperties().getCurrentUser(); //TODO user properties rpc call
+    final var userProperties = injector.getInstance(UserProperties.class);
+    final var currentUser = userProperties.getCurrentAppUser();
     final var ui = UI.getCurrent();
 
     final var userBadge = new UserActionBadge(currentUser.getUsername())
 //            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
-            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", () -> globalInterface.getUserProperties().logout());
+            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", userProperties::logout);
 
     toolbar.addUserAction(userBadge);
   }
-
-  @Nullable
-  private static User getCurrentUser() {
-    final var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof User) {
-      return (User) authentication.getPrincipal();
-    }
-
-    return null;
-  }
-
 }

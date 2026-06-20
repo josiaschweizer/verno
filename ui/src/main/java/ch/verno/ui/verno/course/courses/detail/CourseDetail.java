@@ -1,9 +1,5 @@
 package ch.verno.ui.verno.course.courses.detail;
 
-import ch.verno.rpc.client.course.CourseClient;
-import ch.verno.rpc.client.course.CourseLevelClient;
-import ch.verno.rpc.client.course.CourseScheduleClient;
-import ch.verno.rpc.client.instructor.InstructorClient;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.ParticipantFilter;
 import ch.verno.contract.dto.table.course.CourseDto;
@@ -12,10 +8,14 @@ import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.course.CourseLevelClient;
+import ch.verno.rpc.client.course.CourseScheduleClient;
+import ch.verno.rpc.client.instructor.InstructorClient;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
-import ch.verno.ui.lib.url.RouteUtil;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.google.inject.Injector;
@@ -27,6 +27,7 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.jspecify.annotations.NonNull;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @PermitAll
-@com.vaadin.flow.router.Route(Routes.COURSES + Routes.DETAIL)
+@Route(Routes.COURSES + Routes.DETAIL)
 @Menu(order = 3.11, icon = VaadinIconConstants.MOBILE, title = "course.course.detail")
 public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
@@ -99,7 +100,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @NonNull
   @Override
   protected String getDetailRoute() {
-    return RouteUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
   }
 
   @Nonnull

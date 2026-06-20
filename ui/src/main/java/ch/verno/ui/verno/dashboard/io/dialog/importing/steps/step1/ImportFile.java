@@ -2,6 +2,7 @@ package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
 import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.upload.VAFileUploadArea;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -20,8 +21,8 @@ public class ImportFile extends BaseDialogStep {
     getStyle().setMargin(VernoUtility.LUMO_ZERO)
             .setGap(VernoUtility.LUMO_ZERO);
 
-    fileUpload = new VAFileUploadArea(injector.getInstance(TempFileServerGate.class));
-    fileUpload.setAcceptedFileTypes(".csv");
+    fileUpload = injector.getInstance(VAFileUploadArea.class);
+    fileUpload.setAcceptedFileTypes(FileType.CSV.getFileExtension());
     fileUpload.setMaxFiles(1);
 
     addAndExpand(fileUpload);

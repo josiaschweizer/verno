@@ -132,7 +132,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
 
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final AppUserDto dto) {
-    final var currentUser = injector.getInstance(UserProperties.class).getCurrentUser();
+    final var currentUser = injector.getInstance(UserProperties.class).getCurrentAppUser();
     final var actions = new ArrayList<ActionDef>();
 
     actions.add(ActionDef.create(

@@ -1,12 +1,15 @@
 package ch.verno.ui.verno.settings.panels.gender;
 
-import ch.verno.common.server.service.intern.IGenderService;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
-import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.Publ;
+import ch.verno.lib.lib.language.Language;
+import ch.verno.rpc.client.gender.GenderClient;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,18 +19,21 @@ import java.util.List;
 
 public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
-  @Nonnull private final IGenderService genderService;
+  @Nonnull private final Lazy<GenderClient> genderClient;
+  @Nonnull private final Lazy<UserProperties> userProperties;
 
-  public GenderSetting(@Nonnull GlobalInterface globalInterface) {
-    super(globalInterface, "Gender Settings", true); //TODO translation
+  @Inject
+  public GenderSetting(@Nonnull final Injector injector) {
+    super(injector, "setting.gender.settings", true);
 
-    this.genderService = globalInterface.getService(IGenderService.class);
+    this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
+    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
 
     loadGenderSettings();
   }
 
   private void loadGenderSettings() {
-    final var genders = genderService.getAllGenders();
+    final var genders = genderClient.get().getAllGenders();
     this.dto = new GenderSettingDto(getCurrentUserLanguage(), genders);
   }
 
@@ -84,7 +90,7 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
   private void saveGenders() {
     for (final var genderDto : dto.getGender()) {
-      genderService.saveGender(genderDto);
+      genderClient.get().saveGender(genderDto);
     }
   }
 
@@ -102,6 +108,6 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
   @Nonnull
   private Language getCurrentUserLanguage() {
-    return globalInterface.getUserProperties().getCurrentUserSetting().getLanguage();
+    return userProperties.get().getCurrentUserLanguage();
   }
 }

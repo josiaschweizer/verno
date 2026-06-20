@@ -3,6 +3,7 @@ package ch.verno.ui.lib.pages.grid;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.emptystate.VAEmptyState;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
@@ -11,6 +12,7 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.grid.VAGrid;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
+import ch.verno.ui.lib.url.RoutesUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -33,7 +35,7 @@ import java.util.stream.Stream;
 
 public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
 
-  @Nonnull private final Injector injector;
+  @Nonnull protected final Injector injector;
 
   @Nonnull protected final VAGrid<T> grid;
   @Nonnull protected final Map<String, Grid.Column<T>> columnsByKey;
@@ -128,15 +130,15 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   protected ViewToolbar createGridToolbar() {
     if (hasDetailPage()) {
-      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
+      return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName(), getDetailPageRoute());
     }
 
     final var customRunnable = getCustomActionButtonRunnable();
     if (customRunnable == null) {
-      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName());
+      return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName());
     }
 
-    return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getCustomActionButtonRunnable());
+    return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName(), getCustomActionButtonRunnable());
   }
 
   @Nonnull
@@ -251,8 +253,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   }
 
   protected void navigateToDetail(@Nonnull final T dto) {
-    final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, dto.getId());
+    final var url = RoutesUtil.getDetailURL(this.getClass());
+    final var redirectURL = RoutesUtil.getURLWithId(url, dto.getId());
     UI.getCurrent().navigate(redirectURL);
   }
 

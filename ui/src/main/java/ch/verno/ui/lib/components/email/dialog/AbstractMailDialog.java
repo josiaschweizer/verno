@@ -1,10 +1,10 @@
 package ch.verno.ui.lib.components.email.dialog;
 
-import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.notification.NotificationFactory;
@@ -22,14 +22,14 @@ import java.util.List;
 
 public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLayout> extends VAAbstractDialog {
 
-  @Nonnull protected final Lazy<MailClient> mailServerGate;
+  @Nonnull protected final Lazy<MailClient> mailClient;
 
   private boolean isCanceled;
   @Nonnull protected final T templateConfigLayout;
 
   public AbstractMailDialog(@Nonnull final Injector injector,
                             @Nonnull final MailTemplateType mailTemplateType) {
-    this.mailServerGate = Lazy.of(() -> injector.getInstance(MailClient.class));
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
     this.templateConfigLayout = createTemplateConfigLayout(injector, mailTemplateType);
 
     initUI(getTranslation("setting.send.email"), DialogSize.BIG);

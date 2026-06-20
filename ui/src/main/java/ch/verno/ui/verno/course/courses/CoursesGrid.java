@@ -12,7 +12,7 @@ import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
-import ch.verno.ui.lib.url.RouteUtil;
+import ch.verno.ui.lib.url.RoutesUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -61,7 +61,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
   @Nonnull
   @Override
   protected String getDetailPageRoute() {
-    return RouteUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
   }
 
   @Nonnull
