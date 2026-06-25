@@ -1,7 +1,7 @@
 package ch.verno.ui.base.shortcut;
 
 import ch.verno.lib.Publ;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;

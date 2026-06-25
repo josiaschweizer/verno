@@ -6,8 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public interface SpringDataAddressJpaRepository extends
-        AbstractEntityJpaRepository<AddressEntity, Long> {
+public interface SpringDataAddressJpaRepository extends AbstractEntityJpaRepository<AddressEntity, Long> {
 
   @Nonnull
   Optional<AddressEntity> findByStreetAndHouseNumberAndZipCodeAndCityAndCountry(

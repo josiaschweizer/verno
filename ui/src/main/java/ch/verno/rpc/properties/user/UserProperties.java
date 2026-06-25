@@ -1,6 +1,7 @@
 package ch.verno.rpc.properties.user;
 
 import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.table.setting.AppUserSettingDto;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.endpoint.properties.user.UserResource;
 import ch.verno.lib.lib.language.Language;
@@ -27,6 +28,11 @@ public class UserProperties {
   @Nonnull
   public Optional<AppUserDto> getOptionalCurrentAppUser() {
     return userResource.getOptionalCurrentAppUser();
+  }
+
+  @Nonnull
+  public AppUserSettingDto getCurrentAppUserSetting() {
+    return userResource.getCurrentAppUserSetting();
   }
 
   @Nonnull

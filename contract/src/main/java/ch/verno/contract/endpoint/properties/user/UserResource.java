@@ -29,20 +29,20 @@ public interface UserResource {
 
   /**
    *
-   * @return the user language of the current user
-   * @throws UserNotAuthenticatedException if no user is authenticated
-   * @throws IllegalStateException         if the user setting cannot be found for the current user
-   */
-  Language getCurrentUserLanguage();
-
-  /**
-   *
    * @return the app user setting of the user currently logged in
    * @throws UserNotAuthenticatedException if the user is not authenticated
    * @throws IllegalStateException         if the user setting cannot be found for the current user
    */
   @Nonnull
   AppUserSettingDto getCurrentAppUserSetting();
+
+  /**
+   *
+   * @return the user language of the current user
+   * @throws UserNotAuthenticatedException if no user is authenticated
+   * @throws IllegalStateException         if the user setting cannot be found for the current user
+   */
+  Language getCurrentUserLanguage();
 
   /**
    * logout current user on backend (SecurityContextHolder)

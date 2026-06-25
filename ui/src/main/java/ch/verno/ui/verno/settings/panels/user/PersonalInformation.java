@@ -1,16 +1,17 @@
 package ch.verno.ui.verno.settings.panels.user;
 
-import ch.verno.common.db.dto.table.AppUserDto;
 import ch.verno.common.db.role.Role;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.ui.dto.UserDtoUnhashedPw;
+import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.EntryFactory;
-import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.layouts.UserLayout;
+import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -22,11 +23,12 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
 
   public static final String TITLE_KEY = "shared.my.profile";
 
-  @Nonnull private final IAppUserService userService;
+  @Nonnull private final Lazy<AppUserClient> userClient;
 
-  public PersonalInformation(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
-    this.userService = globalInterface.getService(IAppUserService.class);
+  @Inject
+  public PersonalInformation(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
+    this.userClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
   }
 
   @Override
@@ -45,7 +47,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
 
     menu.addItem(getTranslation("shared.passwort.andern"), e -> {
       final var userId = dto.getId() != null ? dto.getId() : -1;
-      new ChangePasswordDialog(globalInterface, userId).open();
+      new ChangePasswordDialog(injector, userId).open();
     });
 
     return button;

@@ -15,6 +15,7 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.file.upload.VAUpload;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
+import com.google.inject.Inject;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.checkbox.Checkbox;

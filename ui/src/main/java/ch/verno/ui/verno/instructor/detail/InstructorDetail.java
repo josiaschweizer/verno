@@ -1,14 +1,19 @@
 package ch.verno.ui.verno.instructor.detail;
 
-import ch.verno.common.db.dto.table.AppUserSettingDto;
-import ch.verno.common.db.dto.table.InstructorDto;
-import ch.verno.common.server.service.intern.IGenderService;
-import ch.verno.common.server.service.intern.IInstructorService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.table.instructor.InstructorDto;
+import ch.verno.contract.dto.table.setting.AppUserSettingDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.gender.GenderClient;
+import ch.verno.rpc.client.instructor.InstructorClient;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
+import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -17,25 +22,27 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.jspecify.annotations.NonNull;
+
+import java.util.Optional;
 
 @PermitAll
 @Route(Routes.INSTRUCTORS + Routes.DETAIL)
 @Menu(order = 2.1, icon = "vaadin:academy-cap", title = "shared.instructor.detail")
 public class InstructorDetail extends BaseDetailView<InstructorDto> implements HasDynamicTitle {
 
-  @Nonnull private final IInstructorService instructorService;
-  @Nonnull private final IGenderService genderService;
+  @Nonnull private final Lazy<GenderClient> genderClient;
+  @Nonnull private final Lazy<InstructorClient> instructorClient;
+
   @Nonnull private final AppUserSettingDto userSettingDto;
 
-  public InstructorDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
+  public InstructorDetail(@Nonnull final Injector injector) {
+    super(injector);
 
-    this.instructorService = globalInterface.getService(IInstructorService.class);
-    this.genderService = globalInterface.getService(IGenderService.class);
-    this.userSettingDto = globalInterface.getUserProperties().getCurrentUserSetting();
+    this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
+    this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
 
-    super.setShowPaddingAroundDetail(true);
+    this.userSettingDto = injector.getInstance(UserProperties.class).getCurrentAppUserSetting();
+    setShowPaddingAroundDetail(true);
   }
 
   @Nonnull
@@ -44,10 +51,10 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
     return getTranslation("shared.instructor");
   }
 
-  @NonNull
+  @Nonnull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
   }
 
   @Nonnull
@@ -64,12 +71,12 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
 
   @Override
   protected void createBean(@Nonnull final InstructorDto bean) {
-    instructorService.createInstructor(bean);
+    instructorClient.get().saveInstructor(bean);
   }
 
   @Override
   protected void updateBean(@Nonnull final InstructorDto bean) {
-    instructorService.updateInstructor(bean);
+    instructorClient.get().saveInstructor(bean);
   }
 
   @Nonnull
@@ -81,12 +88,13 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
   @Nonnull
   @Override
   protected InstructorDto newBeanInstance() {
-    return new InstructorDto();
+    return InstructorDto.empty();
   }
 
+  @Nonnull
   @Override
-  protected InstructorDto getBeanById(@Nonnull final Long id) {
-    return instructorService.getInstructorById(id);
+  protected Optional<InstructorDto> getBeanById(@Nonnull final Long id) {
+    return instructorClient.get().getInstructorById(id);
   }
 
   @Override
@@ -96,8 +104,9 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
     add(instructorLayout, addressLayout);
   }
 
-  private VerticalLayout createInstructorLayout() {
-    final var layout = new VerticalLayout();
+  @Nonnull
+  private VAVerticalLayout createInstructorLayout() {
+    final var layout = new VAVerticalLayout();
     layout.add(createInstructorInfoLayout());
     layout.add(createInstructorContactLayout());
     return layout;
@@ -117,7 +126,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
             InstructorDto::getGender,
             InstructorDto::setGender,
             getBinder(),
-            genderService.getAllGenders(),
+            genderClient.get().getAllGenders(),
             userSettingDto.getLanguage()
     );
 
@@ -125,7 +134,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
   }
 
   @Nonnull
-  private HorizontalLayout createInstructorContactLayout() {
+  private VAHorizontalLayout createInstructorContactLayout() {
     final var email = fieldFactory.createEmailField(
             InstructorDto::getEmail,
             InstructorDto::setEmail,

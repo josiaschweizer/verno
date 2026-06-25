@@ -1,7 +1,7 @@
 package ch.verno.server.service.base;
 
 import ch.verno.contract.dto.table.base.BaseDto;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.db.base.IEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.hibernate.service.spi.ServiceException;
@@ -90,8 +90,8 @@ public abstract class AbstractEntityService<
 
   @Override
   @Transactional
-  public void deleteById(@Nonnull Long id) {
-    repository.deleteById(id);
+  public boolean deleteById(@Nonnull Long id) {
+    return repository.deleteById(id);
   }
 
   @Override
@@ -108,6 +108,12 @@ public abstract class AbstractEntityService<
   @Transactional(readOnly = true)
   public long count() {
     return repository.count();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public void flush() {
+    repository.flush();
   }
 
 }

@@ -1,12 +1,10 @@
 package ch.verno.ui.verno.security.api;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.VernoSecrets;
+import com.google.inject.AbstractModule;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -16,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@Configuration
-public class ApiAuthConfig {
+public class ApiAuthConfig extends AbstractModule {
 
   @Value("${verno.api.username:verno}")
   private String apiUsername;
@@ -26,7 +23,7 @@ public class ApiAuthConfig {
   private String apiPassword;
 
   @Bean
-  public UserDetailsService apiUserDetailsService(@Nonnull PasswordEncoder passwordEncoder) {
+  public UserDetailsService apiUserDetailsService(@Nonnull final PasswordEncoder passwordEncoder) {
     return new InMemoryUserDetailsManager(
             User.builder()
                     .username(apiUsername)
@@ -38,7 +35,7 @@ public class ApiAuthConfig {
 
   @Bean
   @Primary
-  public AuthenticationManager apiAuthenticationManager(@Nonnull PasswordEncoder passwordEncoder,
+  public AuthenticationManager apiAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
                                                         @Qualifier("apiUserDetailsService") @Nonnull UserDetailsService apiUserDetailsService) {
     final var provider = new DaoAuthenticationProvider(apiUserDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
@@ -46,7 +43,7 @@ public class ApiAuthConfig {
   }
 
   @Bean
-  public AuthenticationManager vaadinAuthenticationManager(@Nonnull PasswordEncoder passwordEncoder,
+  public AuthenticationManager vaadinAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
                                                            @Qualifier("appUserService") @Nonnull UserDetailsService userDetailsService) {
     final var provider = new DaoAuthenticationProvider(userDetailsService);
     provider.setPasswordEncoder(passwordEncoder);

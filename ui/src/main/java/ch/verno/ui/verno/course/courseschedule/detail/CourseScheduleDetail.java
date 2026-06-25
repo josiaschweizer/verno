@@ -1,11 +1,17 @@
 package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.lib.Routes;
+import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.course.CourseScheduleClient;
+import ch.verno.rpc.client.setting.TenantSettingClient;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -23,20 +29,20 @@ import java.util.Set;
 @Menu(order = 3.21, icon = VaadinIconConstants.CALENDAR_ENVELOPE, title = "courseSchedule.course.schedule.detail")
 public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> implements HasDynamicTitle {
 
-  @Nonnull private final ICourseScheduleService courseScheduleService;
-  @Nonnull private final ITenantSettingService tenantSettingService;
+  @Nonnull private final Lazy<TenantSettingClient> tenantSettingClient;
+  @Nonnull private final Lazy<CourseScheduleClient> courseScheduleClient;
 
-  public CourseScheduleDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
-    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
-    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
+  public CourseScheduleDetail(@Nonnull final Injector injector) {
+    super(injector);
+    this.tenantSettingClient = Lazy.of(() -> injector.getInstance(TenantSettingClient.class));
+    this.courseScheduleClient = Lazy.of(() -> injector.getInstance(CourseScheduleClient.class));
 
     this.setShowPaddingAroundDetail(true);
   }
 
   @Override
   protected void initUI() {
-    final var setting = tenantSettingService.getCurrentTenantSettingOrDefault();
+    final var setting = tenantSettingClient.get().getCurrentOrDefaultTenantSetting();
 
     add(new VerticalLayout(
             createInfoLayout(),
@@ -63,7 +69,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
             CourseScheduleStatus.values(),
             Optional.empty(),
             getTranslation(getTranslation("courseSchedule.course.schedule.status")),
-            t -> getTranslation(t.getDisplayNameKey())
+            state -> getTranslation(state.getDisplayNameKey())
     );
     final var colorPicker = entryFactory.createColorPickerEntry(
             CourseScheduleDto::getColor,
@@ -101,7 +107,7 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
   @Nonnull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.COURSE_SCHEDULES, Routes.DETAIL);
   }
 
   @Nonnull
@@ -118,12 +124,12 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
 
   @Override
   protected void createBean(@Nonnull final CourseScheduleDto bean) {
-    courseScheduleService.createCourseSchedule(bean);
+    courseScheduleClient.get().saveCourseSchedule(bean);
   }
 
   @Override
   protected void updateBean(@Nonnull final CourseScheduleDto bean) {
-    courseScheduleService.updateCourseSchedule(bean);
+    courseScheduleClient.get().saveCourseSchedule(bean);
   }
 
   @Nonnull
@@ -138,9 +144,10 @@ public class CourseScheduleDetail extends BaseDetailView<CourseScheduleDto> impl
     return CourseScheduleDto.empty();
   }
 
+  @Nonnull
   @Override
-  protected CourseScheduleDto getBeanById(@Nonnull final Long id) {
-    return courseScheduleService.getCourseScheduleById(id);
+  protected Optional<CourseScheduleDto> getBeanById(@Nonnull final Long id) {
+    return courseScheduleClient.get().getCourseScheduleById(id);
   }
 
   @Override

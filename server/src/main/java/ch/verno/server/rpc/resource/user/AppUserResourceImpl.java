@@ -24,8 +24,20 @@ public class AppUserResourceImpl implements AppUserResource {
 
   @Nonnull
   @Override
+  public Optional<AppUserDto> findByUserId(@Nonnull final Long id) {
+    return appUserService.get().findById(id);
+  }
+
+  @Nonnull
+  @Override
   public Optional<AppUserDto> findByUsername(@Nonnull final String username) {
     return appUserService.get().findByUsername(username);
+  }
+
+  @Nonnull
+  @Override
+  public Optional<AppUserDto> findByUsernameOrEmail(@Nonnull final String usernameOrEmail) {
+    return appUserService.get().findByUsernameOrEmail(usernameOrEmail);
   }
 
   @Nonnull

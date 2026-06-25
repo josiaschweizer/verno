@@ -4,6 +4,7 @@ import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Attributes;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.file.CsvClient;
 import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
@@ -15,18 +16,23 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.List;
 
 public class ExportDialog<T> extends VAAbstractDialog {
 
-  public static final String CLICK_JS = "click";
+  @NonNls public static final String CLICK_JS = "click";
+
+  @Nonnull private final Lazy<CsvClient> csvClient;
   @Nonnull private final Lazy<TempFileClient> tempFileClient;
+
   @Nonnull private String fileToken;
 
   public ExportDialog(@Nonnull final Injector injector,
                       @Nonnull final ExportEntityConfig<T> config) {
+    this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
     this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
 
     generateCsvFile(config);
@@ -42,7 +48,7 @@ public class ExportDialog<T> extends VAAbstractDialog {
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var preview = new CsvPreview(buildInlineUrl(fileToken));
+    final var preview = new CsvPreview(tempFileClient, buildInlineUrl(fileToken));
 
     final var layout = new HorizontalLayout(preview);
     layout.setSizeFull();
@@ -78,12 +84,12 @@ public class ExportDialog<T> extends VAAbstractDialog {
 
 
   private void generateCsvFile(@Nonnull final ExportEntityConfig<T> config) {
-    final var fileDto = serverGate.generateFileFromCsv(config.getFileName(), config.getRows());
-    fileToken = tempFileServerGate.store(fileDto);
+    final var fileDto = csvClient.get().generateFileFromCsv(config.getFileName(), config.getRows());
+    fileToken = tempFileClient.get().store(fileDto);
   }
 
   private void deleteTempOnServer() {
-    tempFileServerGate.delete(fileToken);
+    tempFileClient.get().delete(fileToken);
   }
 
   @Nonnull

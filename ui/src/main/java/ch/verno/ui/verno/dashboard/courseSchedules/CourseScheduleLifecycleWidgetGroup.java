@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleActivateWidget;
 import ch.verno.ui.verno.dashboard.widgets.CourseScheduleFinishWidget;
@@ -15,14 +14,13 @@ public class CourseScheduleLifecycleWidgetGroup extends VerticalLayout implement
   public CourseScheduleLifecycleWidgetGroup(@Nonnull final Injector injector) {
     this.injector = injector;
 
-    setWidthFull();
-
     init();
   }
 
   private void init() {
-    add(new CourseScheduleActivateWidget(globalInterface));
-    add(new CourseScheduleFinishWidget(globalInterface));
+    setWidthFull();
+    add(new CourseScheduleActivateWidget(injector));
+    add(new CourseScheduleFinishWidget(injector));
   }
 
   @Override

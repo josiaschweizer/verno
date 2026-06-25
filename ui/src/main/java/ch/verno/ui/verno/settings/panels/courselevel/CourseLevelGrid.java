@@ -1,9 +1,11 @@
 package ch.verno.ui.verno.settings.panels.courselevel;
 
-import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.server.service.intern.ICourseLevelService;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.course.CourseLevelDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.course.CourseLevelClient;
 import ch.verno.ui.lib.settings.grid.BaseSettingGrid;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,17 +21,17 @@ import java.util.Map;
 @SpringComponent
 public class CourseLevelGrid extends BaseSettingGrid<CourseLevelDto> {
 
-  @Nonnull
-  private ICourseLevelService courseLevelService;
+  @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
 
-  public CourseLevelGrid(@Nonnull final GlobalInterface globalInterface) {
-    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+  @Inject
+  public CourseLevelGrid(@Nonnull final Injector injector) {
+    this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
   }
-
-  @Autowired
-  public void setCourseLevelService(@Nonnull final ICourseLevelService courseLevelService) {
-    this.courseLevelService = courseLevelService;
-  }
+//
+//  @Autowired
+//  public void setCourseLevelService(@Nonnull final CourseLevelClient courseLevelClient) {
+//    this.courseLevelClient = Lazy.of(() -> courseLevelClient);
+//  }
 
   @Nonnull
   @Override

@@ -7,9 +7,13 @@ import jakarta.annotation.Nonnull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RpcEndpoint
 public interface CourseScheduleResource {
+
+  @Nonnull
+  Optional<CourseScheduleDto> getById(@Nonnull Long id);
 
   @Nonnull
   List<CourseScheduleDto> getByWeek(@Nonnull LocalDate weekDate);
@@ -17,6 +21,7 @@ public interface CourseScheduleResource {
   @Nonnull
   List<CourseScheduleDto> getByStatus(@Nonnull CourseScheduleStatus status);
 
-  CourseScheduleDto updateCourseSchedule(@Nonnull CourseScheduleDto dto);
+  @Nonnull
+  CourseScheduleDto saveCourseSchedule(@Nonnull CourseScheduleDto dto);
 
 }

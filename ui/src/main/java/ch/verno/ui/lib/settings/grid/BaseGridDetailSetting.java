@@ -1,8 +1,8 @@
 package ch.verno.ui.lib.settings.grid;
 
-import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
@@ -15,11 +15,11 @@ public abstract class BaseGridDetailSetting<T extends BaseDto, G extends BaseSet
   @Nonnull protected final G grid;
   @Nonnull protected final D detailView;
 
-  protected BaseGridDetailSetting(@Nonnull final GlobalInterface globalInterface,
+  protected BaseGridDetailSetting(@Nonnull final Injector injector,
                                   @Nonnull final String titleKey,
                                   @Nonnull final G grid,
                                   @Nonnull final D detailView) {
-    super(globalInterface, titleKey, false);
+    super(injector, titleKey, false);
     setCardDefaultHeight();
 
     this.grid = grid;

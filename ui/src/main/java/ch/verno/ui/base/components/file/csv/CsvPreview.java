@@ -1,9 +1,9 @@
 package ch.verno.ui.base.components.file.csv;
 
 import ch.verno.common.exceptions.io.ParseCsvException;
-import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.file.TempFileClient;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,7 +20,12 @@ import java.util.Map;
 
 public class CsvPreview extends VerticalLayout {
 
-  public CsvPreview(@Nonnull final String fileUrl) {
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
+
+  public CsvPreview(@Nonnull final Lazy<TempFileClient> tempFileClient,
+                    @Nonnull final String fileUrl) {
+    this.tempFileClient = tempFileClient;
+
     setPadding(false);
     setSpacing(false);
     setSizeFull();
@@ -46,9 +51,7 @@ public class CsvPreview extends VerticalLayout {
   @Nonnull
   private List<Map<String, String>> loadCsvData(@Nonnull final String token) {
     try {
-      final var globalGate = GlobalInterface.getInstance();
-      final var fileServerGate = globalGate.getGate(TempFileServerGate.class);
-      final var fileDto = fileServerGate.loadFile(token);
+      final var fileDto = tempFileClient.get().loadFile(token);
 
       return parseCsv(fileDto.pdfBytes());
     } catch (Exception e) {
@@ -71,7 +74,6 @@ public class CsvPreview extends VerticalLayout {
 
       for (final var record : csvParser) {
         final var row = new LinkedHashMap<String, String>();
-
         for (final var header : headers) {
           row.put(header, record.isMapped(header) ? record.get(header) : Publ.EMPTY_STRING);
         }
@@ -95,7 +97,7 @@ public class CsvPreview extends VerticalLayout {
     if (!data.isEmpty()) {
       final var firstRow = data.getFirst();
       for (String columnName : firstRow.keySet()) {
-        grid.addColumn(row -> row.getOrDefault(columnName, ""))
+        grid.addColumn(row -> row.getOrDefault(columnName, Publ.EMPTY_STRING))
                 .setHeader(columnName)
                 .setAutoWidth(true)
                 .setFlexGrow(1);

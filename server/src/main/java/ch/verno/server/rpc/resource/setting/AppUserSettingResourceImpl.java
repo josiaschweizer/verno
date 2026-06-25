@@ -5,6 +5,8 @@ import ch.verno.contract.endpoint.setting.AppUserSettingResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.rpc.properties.user.UserResourceImpl;
+import ch.verno.server.rpc.resource.user.AppUserResourceImpl;
 import ch.verno.server.service.intern.table.setting.AppUserSettingService;
 import jakarta.annotation.Nonnull;
 

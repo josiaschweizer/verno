@@ -3,7 +3,7 @@ package ch.verno.server.service.intern.table.setting;
 import ch.verno.contract.dto.table.setting.TenantSettingDto;
 import ch.verno.db.entity.setting.TenantSettingEntity;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.setting.TenantSettingMapper;
+import ch.verno.server.mapper.db.setting.TenantSettingMapper;
 import ch.verno.server.repository.setting.TenantSettingRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;

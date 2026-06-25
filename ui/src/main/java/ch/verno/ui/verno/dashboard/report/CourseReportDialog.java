@@ -1,13 +1,13 @@
 package ch.verno.ui.verno.dashboard.report;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.ReportServerGate;
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.file.ReportClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
@@ -20,17 +20,18 @@ import java.util.List;
 
 public class CourseReportDialog extends VAAbstractDialog {
 
+  @Nonnull private final Lazy<ReportClient> reportClient;
 
-  @Nonnull private final ReportServerGate reportServerGate;
   @Nonnull private final CourseDto currentCourse;
   @Nonnull private final List<ParticipantDto> participantsInCourse;
 
   @Nonnull private String reportToken;
 
-  public CourseReportDialog(@Nonnull final GlobalInterface globalInterface,
+  public CourseReportDialog(@Nonnull final Injector injector,
                             @Nonnull final CourseDto currentCourse,
                             @Nonnull final List<ParticipantDto> participantsInCourse) {
-    this.reportServerGate = globalInterface.getService(ReportServerGate.class);
+    this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
+
     this.currentCourse = currentCourse;
     this.participantsInCourse = participantsInCourse;
 
@@ -67,7 +68,7 @@ public class CourseReportDialog extends VAAbstractDialog {
   }
 
   private void generateReport() {
-    reportToken = reportServerGate.generateCourseReport(currentCourse, participantsInCourse);
+    reportToken = reportClient.get().generateCourseReport(currentCourse, participantsInCourse);
   }
 
   @Nonnull

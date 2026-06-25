@@ -1,6 +1,7 @@
 package ch.verno.ui.injection;
 
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public final class InjectorFactory {
 

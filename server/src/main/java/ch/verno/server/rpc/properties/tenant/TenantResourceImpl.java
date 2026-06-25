@@ -9,6 +9,7 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.tenant.TenantService;
 import jakarta.annotation.Nonnull;
 
+import java.util.List;
 import java.util.Optional;
 
 @RpcResource(TenantResource.class)
@@ -29,5 +30,11 @@ public class TenantResourceImpl implements TenantResource {
     }
 
     return tenantService.get().findById(currentTenant);
+  }
+
+  @Nonnull
+  @Override
+  public List<TenantDto> findAllTenants() {
+    return tenantService.get().findAllTenants();
   }
 }

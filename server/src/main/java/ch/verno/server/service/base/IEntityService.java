@@ -16,10 +16,12 @@ public interface IEntityService<DTO> {
   @Nonnull
   DTO save(@Nonnull DTO dto);
 
-  void deleteById(@Nonnull Long id);
+  boolean deleteById(@Nonnull Long id);
 
   void delete(@Nonnull DTO dto);
 
   long count();
+
+  void flush();
 
 }

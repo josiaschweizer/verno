@@ -1,5 +1,8 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.common.type.mail.SmtpSecurity;
 import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.mail.MailConfigClient;
@@ -9,6 +12,7 @@ import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.event.bus.ViewEventBus;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -30,14 +34,15 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
   @Nonnull private final EntryFactory<MailConfigDto> entryFactory;
 
+  @Inject
   public MailSettings(@Nonnull final Injector injector) {
     super(injector, TITLE_KEY, true);
 
     this.mailConfigClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
     this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
 
-    if (mailConfigClient.get().hasConfigForCurrentTenant()) {
-      this.dto = mailConfigClient.get().getConfigForCurrentTenant();
+    if (mailConfigClient.get().hasMailConfigForCurrentTenant()) {
+      this.dto = getConfigForCurrentTenant();
     }
   }
 
@@ -62,8 +67,8 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
       final var dialog = new TestConnectionDialog(injector);
       dialog.addClosedListener(close -> {
         // refresh config after test connection dialog is closed, as the test dialog might update the mail validity
-        if (mailConfigService.hasConfigForCurrentTenant()) {
-          dto = mailConfigService.getConfigForCurrentTenant();
+        if (mailConfigClient.get().hasMailConfigForCurrentTenant()) {
+          dto = getConfigForCurrentTenant();
           binder.readBean(dto);
           updateHeaderBadge();
           updateNavigationBar();
@@ -166,7 +171,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Nonnull
   @Override
   protected MailConfigDto createNewBeanInstance() {
-    return new MailConfigDto();
+    return MailConfigDto.empty();
   }
 
   @Override
@@ -233,5 +238,15 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Nonnull
   private VABadgeLabel createNotConfiguredBadge() {
     return BadgeLabelFactory.createBadgeLabel(getTranslation("setting.not.configured"), VABadgeLabelOptions.NORMAL);
+  }
+
+  @Nonnull
+  private MailConfigDto getConfigForCurrentTenant() {
+    final var opt = mailConfigClient.get().getMailConfigForCurrentTenant();
+    if (opt.isPresent()) {
+      return opt.get();
+    } else {
+      throw new IllegalStateException("Mail config resource not found");
+    }
   }
 }

@@ -8,6 +8,8 @@ import ch.verno.common.gate.GlobalInterface;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.theme.ThemeConstants;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -30,8 +32,9 @@ public class ThemeSetting extends VABaseSetting<UISettingDto> {
   @Nullable private AppUserDto currentUser;
   @Nullable private AppUserSettingDto currentSetting;
 
-  public ThemeSetting(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
+  @Inject
+  public ThemeSetting(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
 
     this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
 

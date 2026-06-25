@@ -8,7 +8,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.billing.TenantBillingBo;
-import ch.verno.server.mapper.billing.TenantBillingMapper;
+import ch.verno.server.mapper.db.billing.TenantBillingMapper;
 import ch.verno.server.repository.billing.TenantBillingRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;

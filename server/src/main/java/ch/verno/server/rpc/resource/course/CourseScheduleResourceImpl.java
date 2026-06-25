@@ -11,6 +11,7 @@ import jakarta.annotation.Nonnull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 @RpcResource(CourseScheduleResource.class)
@@ -20,6 +21,12 @@ public class CourseScheduleResourceImpl implements CourseScheduleResource {
 
   public CourseScheduleResourceImpl(@Nonnull final ServerBean serverBean) {
     this.courseScheduleService = Lazy.of(() -> serverBean.get(CourseScheduleService.class));
+  }
+
+  @Nonnull
+  @Override
+  public Optional<CourseScheduleDto> getById(@Nonnull final Long id) {
+    return courseScheduleService.get().findById(id);
   }
 
   @Nonnull
@@ -34,8 +41,9 @@ public class CourseScheduleResourceImpl implements CourseScheduleResource {
     return courseScheduleService.get().findByStatus(status);
   }
 
+  @Nonnull
   @Override
-  public CourseScheduleDto updateCourseSchedule(@Nonnull final CourseScheduleDto dto) {
+  public CourseScheduleDto saveCourseSchedule(@Nonnull final CourseScheduleDto dto) {
     return  courseScheduleService.get().save(dto);
   }
 }

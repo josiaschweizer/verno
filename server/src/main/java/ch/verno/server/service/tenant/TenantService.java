@@ -4,7 +4,7 @@ import ch.verno.contract.dto.table.tenant.TenantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.tenant.TenantMapper;
+import ch.verno.server.mapper.db.tenant.TenantMapper;
 import ch.verno.server.repository.tenant.TenantRepository;
 import jakarta.annotation.Nonnull;
 

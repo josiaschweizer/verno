@@ -1,16 +1,17 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.ui.base.components.notification.NotificationFactory;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -19,20 +20,23 @@ import java.util.Optional;
 
 public class ChangePasswordDialog extends VAAbstractDialog {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final IAppUserService appUserService;
-  @Nonnull private final EntryFactory<ChangePasswordDto> entryFactory;
-  @Nonnull private final Binder<ChangePasswordDto> binder;
+  @Nonnull private final Injector injector;
 
-  public ChangePasswordDialog(@Nonnull final GlobalInterface globalInterface,
+  @Nonnull private final Binder<ChangePasswordDto> binder;
+  @Nonnull private final EntryFactory<ChangePasswordDto> entryFactory;
+
+  public ChangePasswordDialog(@Nonnull final Injector injector,
                               @Nonnull final Long userId) {
-    this.globalInterface = globalInterface;
-    this.appUserService = globalInterface.getService(IAppUserService.class);
-    this.entryFactory = new EntryFactory<>(globalInterface.getI18NProvider());
+    this.injector = injector;
+
     this.binder = new Binder<>(ChangePasswordDto.class);
     this.binder.setBean(new ChangePasswordDto(userId));
+    this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
 
-    final var user = appUserService.findAppUserById(userId);
+    final var appUserClient = injector.getInstance(AppUserClient.class);
+    final var user = appUserClient.findByUserId(userId);
+
+
     initUI(getTranslation("shared.change.password", user.getUsername()), DialogSize.MEDIUM_COMPACT);
   }
 

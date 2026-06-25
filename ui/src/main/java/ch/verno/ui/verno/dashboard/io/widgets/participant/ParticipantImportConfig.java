@@ -6,13 +6,25 @@ import ch.verno.common.io.importing.DbField;
 import ch.verno.common.io.importing.DbFieldNested;
 import ch.verno.common.io.importing.DbFieldRelation;
 import ch.verno.common.io.importing.DbFieldTyped;
+import ch.verno.contract.dto.file.temp.CsvMapDto;
+import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.result.error.SaveErrorCode;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
+import ch.verno.rpc.client.address.AddressClient;
 import ch.verno.rpc.client.course.CourseLevelClient;
+import ch.verno.rpc.client.file.CsvClient;
+import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.rpc.client.gender.GenderClient;
+import ch.verno.rpc.client.participant.ParentClient;
+import ch.verno.rpc.client.participant.ParticipantClient;
+import ch.verno.ui.feature.importing.csv.CsvMappingRowError;
+import ch.verno.ui.feature.importing.csv.ParticipantCsvMapper;
+import ch.verno.ui.i18n.TranslationHelper;
+import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -42,17 +54,29 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @NonNls public static final String COURSE_LEVEL = "course-level";
   @NonNls public static final String GENDER = "gender";
 
-  @NonNls public static final String ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
-
-  @Nonnull private final Injector injector; //TODO delete?
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<CsvClient> csvClient;
   @Nonnull private final Lazy<GenderClient> genderClient;
+  @Nonnull private final Lazy<ParentClient> parentClient;
+  @Nonnull private final Lazy<AddressClient> addressClient;
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
   @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
+  @Nonnull private final Lazy<ParticipantClient> participantClient;
+
+  @Nonnull private final TranslationHelper translationHelper;
 
   @Inject
   public ParticipantImportConfig(@Nonnull final Injector injector) {
     this.injector = injector;
+    this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
     this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
+    this.parentClient = Lazy.of(() -> injector.getInstance(ParentClient.class));
+    this.addressClient = Lazy.of(() -> injector.getInstance(AddressClient.class));
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
     this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
+    this.participantClient = Lazy.of(() -> injector.getInstance(ParticipantClient.class));
+
+    this.translationHelper = injector.getInstance(TranslationHelper.class);
   }
 
   @Nonnull
@@ -176,11 +200,10 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   @Override
   public ImportResult performImport(@Nonnull final String fileToken,
                                     @Nonnull final Map<String, String> mapping) {
-    final var fileServerGate = globalInterface.getService(TempFileServerGate.class);
-    final var fileDto = fileServerGate.loadFile(fileToken);
-    final var csvRows = fileServerGate.parseRows(fileDto);
+    final var fileDto = tempFileClient.get().loadFile(fileToken);
+    final var csvRows = csvClient.get().parseRows(fileDto);
 
-    final var mapper = new ParticipantCsvMapper(globalInterface);
+    final var mapper = injector.getInstance(ParticipantCsvMapper.class);
     final var result = mapper.map(
             csvRows,
             mapping,
@@ -191,29 +214,17 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
 
     final var saveables = result.saveables();
-    final var participantService = globalInterface.getService(IParticipantService.class);
-
     final var importErrors = New.<CsvMappingRowError>arrayList(result.errors());
 
     for (int i = 0; i < saveables.size(); i++) {
       final var saveable = saveables.get(i);
 
       processNestedEntities(saveable);
+      final var saveResult = participantClient.get().saveParticipant(saveable);
 
-      try {
-        participantService.createParticipant(saveable);
-      } catch (DataIntegrityViolationException e) {
-        importErrors.add(new CsvMappingRowError(
-                i + 1,
-                buildImportErrorMessage(saveable, e)
-        ));
-      } catch (Exception e) {
-        importErrors.add(new CsvMappingRowError(
-                i + 1,
-                TranslationHelper.getTranslation(globalInterface, "common.unerwarteter.fehler.beim.import.0", e.getMessage())
-        ));
-      }
+      importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
     }
+
 
     if (!importErrors.isEmpty()) {
       final var errorCsvRows = new ArrayList<CsvMapDto>();
@@ -225,8 +236,8 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
         errorCsvRows.add(csvRow);
       }
 
-      final var errorFile = fileServerGate.parseRows(errorCsvRows, "participant_import_errors.csv");
-      final var token = fileServerGate.store(errorFile);
+      final var errorFile = csvClient.get().parseRows("participant_import_errors.csv", errorCsvRows);
+      final var token = tempFileClient.get().store(errorFile);
       return ImportResult.partialSuccess(token, errorFile.filename());
     }
 
@@ -235,35 +246,32 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
   @Nonnull
   private String buildImportErrorMessage(@Nonnull final ParticipantDto participant,
-                                         @Nonnull final DataIntegrityViolationException exception) {
-    final var mostSpecificCause = exception.getMostSpecificCause();
-    final var message = mostSpecificCause.getMessage();
-
-    if (message != null &&
-            message.contains(ERROR_DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT) &&
-            message.toLowerCase().contains(EMAIL)) {
-      return TranslationHelper.getTranslation(globalInterface, "common.participant.with.this.email.already.exists.0", participant.getEmail());
+                                         @Nonnull final SaveResult<ParticipantDto> saveResult) {
+    final var errorCode = saveResult.errorCode();
+    if (errorCode != null) {
+      if (errorCode.equals(SaveErrorCode.PARTICIPANT_EMAIL_ALREADY_EXISTS)) {
+        return translationHelper.getTranslation("common.participant.with.this.email.already.exists.0", participant.getEmail());
+      } else {
+        return translationHelper.getTranslation("common.datenbankfehler.beim.import.0", errorCode);
+      }
     }
 
-    return TranslationHelper.getTranslation(globalInterface, "common.datenbankfehler.beim.import.0", message);
+    return translationHelper.getTranslation("common.datenbankfehler.beim.import");
   }
 
   private void processNestedEntities(@Nonnull final ParticipantDto participant) {
-    final var addressService = globalInterface.getService(AddressService.class);
-    final var parentService = globalInterface.getService(ParentService.class);
-
     if (!participant.getAddress().isEmpty()) {
-      final var addressDto = addressService.findOrCreateAddress(participant.getAddress());
+      final var addressDto = addressClient.get().findOrCreateAddress(participant.getAddress());
       participant.setAddress(addressDto);
     }
 
     if (!participant.getParentOne().isEmpty()) {
-      final var parentOneDto = parentService.findOrCreateParent(participant.getParentOne());
+      final var parentOneDto = parentClient.get().findOrCreateParent(participant.getParentOne());
       participant.setParentOne(parentOneDto);
     }
 
     if (!participant.getParentTwo().isEmpty()) {
-      final var parentTwoDto = parentService.findOrCreateParent(participant.getParentTwo());
+      final var parentTwoDto = parentClient.get().findOrCreateParent(participant.getParentTwo());
       participant.setParentTwo(parentTwoDto);
     }
   }

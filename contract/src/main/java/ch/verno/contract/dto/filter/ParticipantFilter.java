@@ -6,31 +6,16 @@ import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class ParticipantFilter {
+public class ParticipantFilter extends BaseFilter {
 
-  @Nullable
-  private String searchText;
-
-  @Nullable
-  private Set<Long> genderIds;
-
-  @Nullable
-  private Set<Long> courseLevelIds;
-
-  @Nullable
-  private Set<Long> instructorIds;
-
-  @Nullable
-  private Set<Long> courseIds;
-
-  @Nullable
-  private LocalDate birthDateFrom;
-
-  @Nullable
-  private LocalDate birthDateTo;
-
-  @Nullable
-  private Boolean active;
+  @Nullable private String searchText;
+  @Nullable private Set<Long> genderIds;
+  @Nullable private Set<Long> courseLevelIds;
+  @Nullable private Set<Long> instructorIds;
+  @Nullable private Set<Long> courseIds;
+  @Nullable private LocalDate birthDateFrom;
+  @Nullable private LocalDate birthDateTo;
+  @Nullable private Boolean active;
 
   public ParticipantFilter() {
     // default constructor

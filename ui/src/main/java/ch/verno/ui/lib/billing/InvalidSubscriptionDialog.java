@@ -1,18 +1,20 @@
 package ch.verno.ui.lib.billing;
 
-import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.server.service.extern.ITenantBillingService;
-import ch.verno.common.server.service.extern.billing.token.IBillingAccessLinkService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.properties.UserProperties;
 import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.contract.dto.table.billing.TenantBillingDto;
+import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
-import ch.verno.server.applicationproperties.application.VernoApplicationConfigProviderImpl;
+import ch.verno.rpc.client.billing.BillingClient;
+import ch.verno.rpc.properties.application.ApplicationProperties;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.UI;
@@ -26,32 +28,31 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-@CssImport("./apps/invalid-subscription/invalid-subscription-dialog.css")
+@CssImport(CssImportConstants.INVALID_SUBSCRIPTION_DIALOG)
 public class InvalidSubscriptionDialog extends VAAbstractDialog {
 
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG = "invalid-subscription-dialog";
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_ICON = "invalid-subscription-dialog-icon";
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT = "invalid-subscription-dialog-hint";
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_BUTTON = "invalid-subscription-dialog-button";
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_TEXT = "invalid-subscription-dialog-text";
-  public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_CONTENT = "invalid-subscription-dialog-content";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG = "invalid-subscription-dialog";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_ICON = "invalid-subscription-dialog-icon";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT = "invalid-subscription-dialog-hint";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_BUTTON = "invalid-subscription-dialog-button";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_TEXT = "invalid-subscription-dialog-text";
+  @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_CONTENT = "invalid-subscription-dialog-content";
 
-  @Nonnull private final UserProperties userProperties;
-  @Nonnull private final ITenantBillingService tenantBillingService;
-  @Nonnull private final VernoApplicationConfigProviderImpl applicationConfig;
-  @Nonnull private final IBillingAccessLinkService billingAccessLinkService;
+  @Nonnull private final Lazy<BillingClient> billingClient;
+  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<ApplicationProperties> applicationProperties;
 
-
-  public InvalidSubscriptionDialog(@Nonnull final GlobalInterface globalInterface) {
-    userProperties = globalInterface.getUserProperties();
-    tenantBillingService = globalInterface.getService(ITenantBillingService.class);
-    applicationConfig = globalInterface.getService(VernoApplicationConfigProviderImpl.class);
-    billingAccessLinkService = globalInterface.getService(IBillingAccessLinkService.class);
+  @Inject
+  public InvalidSubscriptionDialog(@Nonnull final Injector injector) {
+    this.billingClient = Lazy.of(() -> injector.getInstance(BillingClient.class));
+    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.applicationProperties = Lazy.of(() -> injector.getInstance(ApplicationProperties.class));
 
     setCloseOnEsc(false);
     setCloseOnOutsideClick(false);
@@ -88,7 +89,7 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
     hint.addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_HINT);
 
     VAButton manageSubscriptionButton;
-    if (RunMode.fromKey(applicationConfig.getRunMode()).equals(RunMode.DEV)) {
+    if (applicationProperties.get().getRunMode().equals(RunMode.DEV)) {
       manageSubscriptionButton = new VAButton(
               VaadinIcon.CREDIT_CARD.create(),
               "DEV Mode - Create Dev Subscription - only for DEV Usage!!!",
@@ -119,17 +120,14 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
 
   @Nonnull
   private String getRedirectLink() {
-    final var currentUser = userProperties.getCurrentUser();
+    final var currentUser = userProperties.get().getCurrentAppUser();
 
-    return billingAccessLinkService.createSubscriptionUrlForCheckout(
-            TenantContext.getRequired(),
-            Optional.ofNullable(currentUser.getId()).orElse(Publ.ZERO_LONG)
-    );
+    return billingClient.get().createSubscriptionUrlForCheckout(Optional.ofNullable(currentUser.getId()).orElse(Publ.ZERO_LONG));
   }
 
   private void createDevSubscription() {
     final var currentTenantId = TenantContext.getOrDefault(Publ.ZERO_LONG);
-    tenantBillingService.createTenantBilling(TenantBillingDto.createDefaultDevDto(currentTenantId));
+    billingClient.get().createTenantBilling(TenantBillingDto.createDefaultDevDto(currentTenantId));
 
     Optional.of(UI.getCurrent()).ifPresent(ui -> ui.refreshCurrentRoute(false));
   }

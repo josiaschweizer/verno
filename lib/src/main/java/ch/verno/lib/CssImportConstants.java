@@ -19,5 +19,6 @@ public class CssImportConstants {
   @NonNls public static final String VA_BASE_SETTING = "./components/setting/va-base-setting.css";
 
   // apps
+  @NonNls public static final String INVALID_SUBSCRIPTION_DIALOG = "./apps/invalid-subscription/invalid-subscription-dialog.css";
 
 }

@@ -1,5 +1,7 @@
 package ch.verno.ui.verno.dashboard.course;
 
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.rpc.client.billing.BillingClient;
 import ch.verno.rpc.client.course.CourseClient;
 import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.rpc.client.participant.ParticipantClient;
@@ -34,9 +36,8 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
   @Nonnull private final Injector injector;
 
-  @Nonnull private final ParticipantClient participantClient;
+  @Nonnull private final Lazy<BillingClient> billingClient;
   @Nonnull private final Lazy<MailConfigClient> mailConfigService;
-  @Nonnull private final Lazy<BillingProperties> billingProperties;
 
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
@@ -46,13 +47,14 @@ public class CourseWidget extends VAAccordionWidgetBase {
                       @Nonnull final Long currentCourseId) {
     this.injector = injector;
 
-    this.participantClient = injector.getInstance(ParticipantClient.class);
+    this.billingClient = Lazy.of(()->injector.getInstance(BillingClient.class));
     this.mailConfigService = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
 
 
     final var courseService = injector.getInstance(CourseClient.class);
     currentCourse = courseService.getCourseById(currentCourseId);
 
+    final var participantClient = injector.getInstance(ParticipantClient.class);
     participantsInCourse = participantClient.findParticipants(
             ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
     );
@@ -80,7 +82,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
     );
 
     if (mailConfigService.get().hasConfigForCurrentTenant()) {
-      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
+      if (mailConfigService.get().getMailConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
               !participantsInCourse.isEmpty()) {
         emailButton.removePseudoEnabled();
       } else {
@@ -108,7 +110,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
                     participantsInCourse)
                     .open()
     );
-    if (!billingProperties.get().isOptionLicenced(BillingLicenceOption.REPORT)) {
+    if (!billingClient.get().isOptionLicenced(BillingLicenceOption.REPORT)) {
       reportButton.setPseudoEnabled(false, getTranslation("shared.the.report.option.is.not.licensed.for.your.tenant.please.contact.your.tenant.administrator.to.enable.this.feature"));
     }
 

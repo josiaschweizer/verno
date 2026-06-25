@@ -25,6 +25,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
 
@@ -242,7 +243,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull
   protected abstract T newBeanInstance();
 
-  protected abstract T getBeanById(@Nonnull final Long id);
+  @Nonnull
+  protected abstract Optional<T> getBeanById(@Nonnull final Long id);
 
   protected void onCreateButtonClick(@Nonnull final ClickEvent<Button> event) {
     binder.setBean(newBeanInstance());
@@ -281,7 +283,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
       updateSaveButtonState();
     } else {
-      final var bean = getBeanById(parameter);
+      final var bean = getBeanById(parameter).orElseGet(this::newBeanInstance);
       binder.setBean(bean);
       pendingFormMode = Objects.requireNonNullElseGet(forcedFormMode, () -> getFormModeByBean(bean));
 

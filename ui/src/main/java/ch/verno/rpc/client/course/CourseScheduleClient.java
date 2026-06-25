@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class CourseScheduleClient {
 
@@ -20,6 +21,12 @@ public class CourseScheduleClient {
     courseScheduleResource = Lazy.of(() -> factory.create(CourseScheduleResource.class));
   }
 
+  @Nonnull
+  public Optional<CourseScheduleDto> getCourseScheduleById(@Nonnull final Long id) {
+    return courseScheduleResource.get().getById(id);
+  }
+
+  @Nonnull
   public List<CourseScheduleDto> getCourseScheduleByWeek(@Nonnull final LocalDate weekDate) {
     return courseScheduleResource.get().getByWeek(weekDate);
   }
@@ -27,6 +34,11 @@ public class CourseScheduleClient {
   @Nonnull
   public List<CourseScheduleDto> getCourseScheduleByStatus(@Nonnull final CourseScheduleStatus status) {
     return courseScheduleResource.get().getByStatus(status);
+  }
+
+  @Nonnull
+  public CourseScheduleDto saveCourseSchedule(@Nonnull final CourseScheduleDto dto){
+    return courseScheduleResource.get().saveCourseSchedule(dto);
   }
 
 }

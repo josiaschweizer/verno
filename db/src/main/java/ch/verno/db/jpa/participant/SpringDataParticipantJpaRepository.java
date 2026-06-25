@@ -2,16 +2,13 @@ package ch.verno.db.jpa.participant;
 
 import ch.verno.db.entity.course.CourseEntity;
 import ch.verno.db.entity.participant.ParticipantEntity;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface SpringDataParticipantJpaRepository extends
-        JpaRepository<ParticipantEntity, Long>,
-        JpaSpecificationExecutor<ParticipantEntity> {
+public interface SpringDataParticipantJpaRepository extends AbstractEntityJpaRepository<ParticipantEntity, Long> {
 
   List<ParticipantEntity> findByCourses(@Nonnull CourseEntity course);
 

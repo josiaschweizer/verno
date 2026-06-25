@@ -21,6 +21,8 @@ public class TenantSettingClient {
     return tenantSettingResource.get().getCurrentOrDefaultTenantSetting();
   }
 
+  @Nonnull
+  @SuppressWarnings("UnusedReturnValue")
   public TenantSettingDto saveTenantSetting(@Nonnull final  TenantSettingDto tenantSetting) {
     return tenantSettingResource.get().saveTenantSetting(tenantSetting);
   }

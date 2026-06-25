@@ -1,17 +1,20 @@
 package ch.verno.ui.verno.participant;
 
-import ch.verno.rpc.client.course.CourseClient;
-import ch.verno.rpc.client.course.CourseLevelClient;
-import ch.verno.rpc.client.file.ReportClient;
-import ch.verno.rpc.client.participant.ParentClient;
-import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.ParticipantFilter;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
+import ch.verno.lib.Publ;
+import ch.verno.lib.lang.EmptyUtil;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.course.CourseLevelClient;
+import ch.verno.rpc.client.file.ReportClient;
+import ch.verno.rpc.client.participant.ParentClient;
+import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
@@ -22,6 +25,7 @@ import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.verno.dashboard.report.ParticipantsReportDialog;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -100,7 +104,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     final int limit = query.getLimit();
     final var sortOrders = query.getSortOrders();
 
-    return participantClient.findParticipants(filter, offset, limit, sortOrders).stream();
+    return participantClient.get().getAllParticipants(filter, offset, limit, sortOrders).stream();
   }
 
   @Nonnull
@@ -112,7 +116,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull
   @Override
   protected String getDetailPageRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
   }
 
   @Override
@@ -156,7 +160,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   }
 
   private void deleteParticipant(@Nonnull final ParticipantDto dto) {
-    if (participantClient.get().deleteParticipant(dto.getId())) {
+    if (participantClient.get().deleteParticipantById(dto.getId())) {
       deleteParent(dto.getParentOne());
       deleteParent(dto.getParentTwo());
 
@@ -166,20 +170,20 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   private void deleteParent(@Nonnull final ParentDto dto) {
     final var id = dto.getId();
-    if (id != null && id > 0) {
-      parentClient.get().deleteById(id);
+    if (EmptyUtil.isPositive(id)) {
+      parentClient.get().deleteParentById(id);
     }
   }
 
   private void disableItem(@Nonnull final ParticipantDto dto) {
     dto.setActive(false);
-    participantClient.get().updateParticipant(dto);
+    participantClient.get().saveParticipant(dto);
     refreshGrid();
   }
 
   private void enableItem(@Nonnull final ParticipantDto dto) {
     dto.setActive(true);
-    participantClient.get().updateParticipant(dto);
+    participantClient.get().saveParticipant(dto);
     refreshGrid();
   }
 
@@ -269,7 +273,8 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Nonnull
   @Override
   public List<ComboBoxBase<?, ?, ?>> getFilterComponents() {
-    final var courses = courseService.getAllCourses().stream()
+    final var courses = courseService.get().getAllCourses()
+            .stream()
             .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));
     final var courseFilter = filterEntryFactory.createMultiSelectComboboxFilter(
             ParticipantFilter::getCourseIds,
@@ -278,7 +283,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             filterBinder,
             getTranslation("filter.course_filter"));
 
-    final var courseLevels = courseLevelClient.getAllCourseLevels().stream()
+    final var courseLevels = courseLevelClient.get().getAllCourseLevels().stream()
             .collect(Collectors.toMap(
                     BaseDto::getId,
                     CourseLevelDto::getName,

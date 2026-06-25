@@ -5,7 +5,7 @@ import ch.verno.db.entity.text.TextEntity;
 import ch.verno.lib.Publ;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.text.TextMapper;
+import ch.verno.server.mapper.db.text.TextMapper;
 import ch.verno.server.repository.text.TextRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;

@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.DialogStepDto;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDownloadDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;

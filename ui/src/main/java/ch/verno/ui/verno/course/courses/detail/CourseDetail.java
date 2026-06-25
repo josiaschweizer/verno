@@ -137,8 +137,9 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     return CourseDto.empty();
   }
 
+  @Nonnull
   @Override
-  protected CourseDto getBeanById(@Nonnull final Long id) {
+  protected Optional<CourseDto> getBeanById(@Nonnull final Long id) {
     return courseClient.get().getCourseById(id);
   }
 

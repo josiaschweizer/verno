@@ -5,7 +5,7 @@ import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.mail.MailBo;
-import ch.verno.server.mapper.mail.MailConfigMapper;
+import ch.verno.server.mapper.db.mail.MailConfigMapper;
 import ch.verno.server.repository.mail.MailConfigRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;
@@ -33,6 +33,10 @@ public class MailConfigService extends AbstractEntityService<
 
   public boolean existsByTenantId(@Nonnull final Long tenantId) {
     return getRepository().existsByTenantId(tenantId);
+  }
+
+  public boolean hasMailConfigForCurrentTenant() {
+    return mailBo.get().hasMailConfigForCurrentTenant();
   }
 
   @Nonnull

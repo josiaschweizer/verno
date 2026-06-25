@@ -6,7 +6,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.gender.GenderBo;
-import ch.verno.server.mapper.gender.GenderMapper;
+import ch.verno.server.mapper.db.gender.GenderMapper;
 import ch.verno.server.repository.gender.GenderRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;

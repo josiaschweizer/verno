@@ -29,6 +29,7 @@ public abstract class AbstractEntityRepository<ENTITY, ID, R extends AbstractEnt
   }
 
   @Nonnull
+  @Override
   public Page<ENTITY> findAll(@Nonnull final Specification<ENTITY> specification,
                               @Nonnull final Pageable pageable) {
     return repository.findAll(specification, pageable);
@@ -58,8 +59,13 @@ public abstract class AbstractEntityRepository<ENTITY, ID, R extends AbstractEnt
   }
 
   @Override
-  public void deleteById(@Nonnull final ID id) {
-    repository.deleteById(id);
+  public boolean deleteById(@Nonnull final ID id) {
+    if (existsById(id)) {
+      repository.deleteById(id);
+      return true;
+    }
+
+    return false;
   }
 
   @Override

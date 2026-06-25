@@ -20,6 +20,7 @@ public abstract class BaseApiClient {
     this.restClient = restClient;
   }
 
+  @Nonnull
   protected static RestClient build(@Nonnull final String baseUrl) {
     return RestClient.builder()
             .baseUrl(baseUrl)

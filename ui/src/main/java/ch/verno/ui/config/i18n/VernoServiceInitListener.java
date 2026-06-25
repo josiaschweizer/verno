@@ -1,96 +1,51 @@
 package ch.verno.ui.config.i18n;
 
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.server.service.intern.user.IAppUserSettingService;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.lib.language.LanguageUtil;
+import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.error.GlobalErrorHandler;
+import ch.verno.ui.injection.InjectorFactory;
+import com.google.inject.Injector;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
-@Component
 public final class VernoServiceInitListener implements VaadinServiceInitListener {
 
   private static final Logger LOG = LoggerFactory.getLogger(VernoServiceInitListener.class);
 
-  @Nonnull private final ApplicationContext applicationContext;
-
-  // Use ApplicationContext so we don't require the IAppUserService/IAppUserSettingService
-  // beans to be present at construction time (avoids hard dependency on server module).
-  public VernoServiceInitListener(@Nonnull final ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
-
   @Override
-  public void serviceInit(@Nonnull ServiceInitEvent event) {
+  public void serviceInit(@Nonnull final ServiceInitEvent event) {
+    final var injector = InjectorFactory.create();
+
     event.getSource().addSessionInitListener(sessionEvent -> {
-      sessionEvent.getSession().setErrorHandler(new GlobalErrorHandler());
+      final var errorHandler = injector.getInstance(GlobalErrorHandler.class);
+      sessionEvent.getSession().setErrorHandler(errorHandler);
     });
 
     event.getSource().addUIInitListener(uiEvent -> {
       final var ui = uiEvent.getUI();
 
-      final var language = loadLanguageFromDatabase();
+      final var language = getUserLanguage(injector);
       final var locale = Locale.forLanguageTag(language.getCode());
       ui.setLocale(locale);
-
-      final var session = ui.getSession();
-      if (session != null) {
-        session.setLocale(locale);
-      }
+      ui.getSession().setLocale(locale);
     });
   }
 
   @Nonnull
-  private Language loadLanguageFromDatabase() {
-    final var currentUser = getCurrentUser();
-    if (currentUser == null) {
+  private Language getUserLanguage(@Nonnull final Injector injector) {
+    // first check if there is a user logged in
+    final var userProperties = injector.getInstance(UserProperties.class);
+    final var currentUser = userProperties.getOptionalCurrentAppUser();
+    if (currentUser.isPresent()) {
       return LanguageUtil.getDefaultLanguage();
     }
 
-    try {
-      final var appUserService = applicationContext.getBeanProvider(IAppUserService.class).getIfAvailable();
-      final var appUserSettingService = applicationContext.getBeanProvider(IAppUserSettingService.class).getIfAvailable();
-
-      // If either service implementation is not available, fallback to default locale
-      if (appUserService == null || appUserSettingService == null) {
-        return LanguageUtil.getDefaultLanguage();
-      }
-
-      final var appUserOptional = appUserService.findByUserName(currentUser.getUsername());
-      if (appUserOptional.isEmpty() || appUserOptional.get().getId() == null) {
-        return LanguageUtil.getDefaultLanguage();
-      }
-
-      final var appUser = appUserOptional.get();
-
-      final var userSetting = appUserSettingService.getAppUserSettingByUserId(appUser.getId());
-      return userSetting.getLanguage();
-    } catch (Exception ignored) {
-      // Fallback to default
-    }
-
-    return LanguageUtil.getDefaultLanguage();
-  }
-
-  @Nullable
-  private User getCurrentUser() {
-    final var authentication = SecurityContextHolder.getContext().getAuthentication();
-    LOG.debug("VernoServiceInitListener.getCurrentUser: authentication={} thread={}", authentication, Thread.currentThread().getName());
-    if (authentication != null && authentication.getPrincipal() instanceof User) {
-      return (User) authentication.getPrincipal();
-    }
-
-    return null;
+    return userProperties.getCurrentUserLanguage();
   }
 }

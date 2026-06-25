@@ -12,7 +12,13 @@ import java.util.Optional;
 public interface AppUserResource {
 
   @Nonnull
+  Optional<AppUserDto> findByUserId(@Nonnull Long id);
+
+  @Nonnull
   Optional<AppUserDto> findByUsername(@Nonnull String username);
+
+  @Nonnull
+  Optional<AppUserDto> findByUsernameOrEmail(@Nonnull String usernameOrEmail);
 
   @Nonnull
   List<AppUserDto> getAllUsers();

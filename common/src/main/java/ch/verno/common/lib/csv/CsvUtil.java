@@ -2,7 +2,7 @@ package ch.verno.common.lib.csv;
 
 import ch.verno.common.server.io.importing.CsvDelimiter;
 import ch.verno.lib.Publ;
-import ch.verno.lib.StringSanitizer;
+import ch.verno.lib.sanitize.StringSanitizer;
 import jakarta.annotation.Nonnull;
 
 import java.nio.charset.StandardCharsets;

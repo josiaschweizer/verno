@@ -5,6 +5,7 @@ import ch.verno.lib.Publ;
 import ch.verno.rpc.client.setting.AppUserSettingClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
@@ -18,6 +19,7 @@ public class UserSettingsApplyService {
   @Nonnull private final Injector injector;
   @Nonnull private final Lazy<AppUserSettingClient> appUserSettingClient;
 
+  @Inject
   public UserSettingsApplyService(@Nonnull final Injector injector) {
     this.injector = injector;
     this.appUserSettingClient = Lazy.of(() -> injector.getInstance(AppUserSettingClient.class));

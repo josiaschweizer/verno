@@ -41,8 +41,8 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
     this.reportSetting = Lazy.of(() -> new ReportSetting(globalInterface));
     this.courseLevelGridSetting = Lazy.of(() -> new CourseLevelSetting(globalInterface));
     this.genderSetting = Lazy.of(() -> injector.getInstance(GenderSetting.class));
-    this.mailSettings = Lazy.of(() -> new MailSettings(globalInterface));
-    this.subscriptionSettings = Lazy.of(() -> new SubscriptionSettings(globalInterface));
+    this.mailSettings = Lazy.of(() -> injector.getInstance(MailSettings.class));
+    this.subscriptionSettings = Lazy.of(() -> injector.getInstance(SubscriptionSettings.class));
 
     initUI(injector);
   }

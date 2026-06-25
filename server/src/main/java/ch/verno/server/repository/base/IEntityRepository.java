@@ -1,6 +1,9 @@
 package ch.verno.server.repository.base;
 
 import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +12,10 @@ public interface IEntityRepository<E,ID> {
 
   @Nonnull
   List<E> findAll();
+
+  @Nonnull
+  Page<E> findAll(@Nonnull Specification<E> specification,
+                  @Nonnull Pageable pageable);
 
   @Nonnull
   Optional<E> findById(@Nonnull ID id);
@@ -21,7 +28,7 @@ public interface IEntityRepository<E,ID> {
 
   void delete(@Nonnull E entity);
 
-  void deleteById(@Nonnull ID id);
+  boolean deleteById(@Nonnull ID id);
 
   boolean existsById(@Nonnull ID id);
 
