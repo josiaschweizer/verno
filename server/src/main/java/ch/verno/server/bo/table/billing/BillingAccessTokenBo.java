@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.billing.BillingAccessTokenMapper;
+import ch.verno.server.mapper.billing.BillingAccessTokenMapper;
 import ch.verno.server.repository.billing.BillingAccessTokenRepository;
 import ch.verno.server.repository.user.AppUserRepository;
 import jakarta.annotation.Nonnull;

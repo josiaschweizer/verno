@@ -1,7 +1,7 @@
 package ch.verno.server.service.base;
 
 import ch.verno.contract.dto.table.base.BaseDto;
-import ch.verno.server.mapper.db.base.IEntityMapper;
+import ch.verno.server.mapper.base.IEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.hibernate.service.spi.ServiceException;
@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractEntityService<
+        ID,
         ENTITY,
-        DTO extends BaseDto,
-        REPOSITORY extends IEntityRepository<ENTITY, Long>,
+        DTO extends BaseDto<ID>,
+        REPOSITORY extends IEntityRepository<ENTITY, ID>,
         MAPPER extends IEntityMapper<ENTITY, DTO>
-        > implements IEntityService<DTO> {
+        > implements IEntityServiceExtendedById<DTO, ID> {
 
   @Nonnull private final REPOSITORY repository;
   @Nonnull private final MAPPER mapper;
@@ -39,7 +40,7 @@ public abstract class AbstractEntityService<
   @Nonnull
   @Override
   @Transactional(readOnly = true)
-  public Optional<DTO> findById(@Nonnull Long id) {
+  public Optional<DTO> findById(@Nonnull final ID id) {
     return repository.findById(id)
             .map(mapper::toSimpleDto);
   }
@@ -57,7 +58,7 @@ public abstract class AbstractEntityService<
   @Nonnull
   @Override
   @Transactional
-  public DTO save(@Nonnull DTO dto) {
+  public DTO save(@Nonnull final DTO dto) {
     if (dto.getId() == null) {
       return create(dto);
     }
@@ -67,7 +68,7 @@ public abstract class AbstractEntityService<
 
   @Nonnull
   @Transactional
-  protected DTO create(@Nonnull DTO dto) {
+  protected DTO create(@Nonnull final DTO dto) {
     ENTITY entity = mapper.toNewEntity(dto);
     entity = repository.save(entity);
     return mapper.toSimpleDto(entity);
@@ -80,8 +81,7 @@ public abstract class AbstractEntityService<
       throw new ServiceException("Cannot update an entity without an id");
     }
 
-    ENTITY entity = repository.findById(dto.getId())
-            .orElseThrow();
+    ENTITY entity = repository.findById(dto.getId()).orElseThrow();
 
     mapper.updateEntity(entity, dto);
     entity = repository.save(entity);
@@ -90,7 +90,7 @@ public abstract class AbstractEntityService<
 
   @Override
   @Transactional
-  public boolean deleteById(@Nonnull Long id) {
+  public boolean deleteById(@Nonnull ID id) {
     return repository.deleteById(id);
   }
 

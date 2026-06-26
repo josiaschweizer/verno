@@ -11,7 +11,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class InstructorDto extends BaseDto {
+public class InstructorDto extends BaseDto<Long> {
 
   @Nonnull private String firstName;
   @Nonnull private String lastName;

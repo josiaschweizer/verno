@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-public interface IEntityRepository<E,ID> {
+public interface IEntityRepository<E, ID> {
 
   @Nonnull
   List<E> findAll();

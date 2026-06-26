@@ -3,6 +3,7 @@ package ch.verno.contract.dto.table.gender;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.text.TextDto;
 import ch.verno.lib.Publ;
+import ch.verno.lib.lang.ObjectUtil;
 import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -10,7 +11,7 @@ import jakarta.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-public class GenderDto extends BaseDto {
+public class GenderDto extends BaseDto<Long> {
 
   @Nonnull private String name;
   @Nonnull private String description;

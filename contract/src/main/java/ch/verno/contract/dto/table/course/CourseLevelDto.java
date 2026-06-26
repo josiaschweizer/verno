@@ -7,7 +7,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class CourseLevelDto extends BaseDto {
+public class CourseLevelDto extends BaseDto<Long> {
 
   @Nonnull private String code;
   @Nonnull private String name;

@@ -7,6 +7,7 @@ import ch.verno.contract.dto.filter.AppUserFilter;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.form.FormMode;
@@ -43,13 +44,13 @@ import java.util.stream.Stream;
 public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> implements HasDynamicTitle {
 
   @Nonnull private final Injector injector;
-  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<AppUserClient> userClient;
 
   protected UsersGrid(@Nonnull final Injector injector) {
     super(injector, AppUserFilter.empty(), true, false);
 
     this.injector = injector;
-    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.userClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
   }
 
   @Nonnull
@@ -60,7 +61,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
     final var limit = query.getLimit();
     final var sortOrders = query.getSortOrders();
 
-    return appUserService.findUsers(filter, offset, limit, sortOrders).stream();
+    return userClient.get().getUsers(filter, offset, limit, sortOrders).stream();
   }
 
   @Nonnull
@@ -185,19 +186,19 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
       return;
     }
 
-    final var dialog = new ChangePasswordDialog(globalInterface, dto.getId());
+    final var dialog = new ChangePasswordDialog(injector, dto.getId());
     dialog.open();
   }
 
   private void disableItem(@Nonnull final AppUserDto dto) {
     dto.setActive(false);
-    appUserService.updateAppUser(dto);
+    userClient.get().saveUser(dto);
     refreshGrid();
   }
 
   private void enableItem(@Nonnull final AppUserDto dto) {
     dto.setActive(true);
-    appUserService.updateAppUser(dto);
+    userClient.get().saveUser(dto);
     refreshGrid();
   }
 
@@ -208,7 +209,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
 
   private void confirmDelete(@Nullable final AppUserDto dto) {
     if (dto != null && dto.getId() != null) {
-      appUserService.deleteAppUser(dto.getId());
+      userClient.get().deleteUser(dto);
       setFilter(getFilter()); // refresh grid by reapplying filter
     }
   }

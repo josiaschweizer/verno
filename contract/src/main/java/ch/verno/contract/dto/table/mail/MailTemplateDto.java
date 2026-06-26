@@ -6,7 +6,7 @@ import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class MailTemplateDto extends BaseDto {
+public class MailTemplateDto extends BaseDto<Long> {
 
   @Nonnull private String templateKey;
   @Nonnull private String subject;

@@ -25,4 +25,9 @@ public class ReportClient {
     return reportResource.get().generateCourseReport(course, participants);
   }
 
+  @Nonnull
+  public String generateParticipantsReport() {
+    return reportResource.get().generateParticipantsReport();
+  }
+
 }

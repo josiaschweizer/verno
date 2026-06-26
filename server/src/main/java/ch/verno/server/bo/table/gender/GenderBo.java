@@ -9,7 +9,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.gender.GenderMapper;
+import ch.verno.server.mapper.gender.GenderMapper;
 import ch.verno.server.repository.gender.GenderRepository;
 import ch.verno.server.service.intern.table.text.TextService;
 import jakarta.annotation.Nonnull;

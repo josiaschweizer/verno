@@ -7,7 +7,7 @@ import ch.verno.lib.lib.language.Language;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TextDto extends BaseDto {
+public class TextDto extends BaseDto<Long> {
 
   @Nonnull private String identifier;
   @Nullable private String subIdentifier;

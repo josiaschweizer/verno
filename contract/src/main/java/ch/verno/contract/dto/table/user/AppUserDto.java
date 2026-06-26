@@ -6,7 +6,7 @@ import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class AppUserDto extends BaseDto {
+public class AppUserDto extends BaseDto<Long> {
 
   @Nonnull private String username;
   @Nonnull private String firstname;

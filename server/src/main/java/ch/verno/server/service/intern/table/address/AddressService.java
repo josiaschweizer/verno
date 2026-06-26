@@ -6,9 +6,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.address.AddressBo;
-import ch.verno.server.mapper.db.address.AddressMapper;
+import ch.verno.server.mapper.address.AddressMapper;
 import ch.verno.server.repository.address.AddressRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class AddressService extends AbstractEntityService<
+public class AddressService extends AbstractEntityServiceLongId<
         AddressEntity,
         AddressDto,
         AddressRepository,

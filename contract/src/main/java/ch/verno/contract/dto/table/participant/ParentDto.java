@@ -10,7 +10,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class ParentDto extends BaseDto {
+public class ParentDto extends BaseDto<Long> {
 
   @Nonnull private String firstName;
   @Nonnull private String lastName;

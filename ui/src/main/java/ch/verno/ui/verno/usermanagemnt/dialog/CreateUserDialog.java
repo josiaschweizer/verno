@@ -112,7 +112,7 @@ public class CreateUserDialog extends VAAbstractDialog {
       return;
     }
 
-    appUserClient.get().createAppUser(bean);
+    appUserClient.get().saveUser(bean);
 
     NotificationFactory.showSuccessNotification(getTranslation("shared.created.user.0.successfully", bean.getUsername()));
   }
@@ -124,7 +124,7 @@ public class CreateUserDialog extends VAAbstractDialog {
       return;
     }
 
-    appUserClient.get().updateAppUser(bean);
+    appUserClient.get().saveUser(bean);
 
     final var currentUser = injector.getInstance(UserProperties.class).getOptionalCurrentAppUser();
     if (currentUser.isEmpty()) {

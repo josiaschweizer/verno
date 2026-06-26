@@ -3,7 +3,7 @@ package ch.verno.contract.dto.filter;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
-public record AppUserFilter(@Nonnull String searchText) {
+public record AppUserFilter(@Nonnull String searchText) implements BaseFilter {
 
   @Nonnull
   public static AppUserFilter empty() {

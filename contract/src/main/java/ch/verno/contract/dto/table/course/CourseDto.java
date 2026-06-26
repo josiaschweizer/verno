@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-public class CourseDto extends BaseDto {
+public class CourseDto extends BaseDto<Long> {
 
   @Nonnull private String title;
   @Nullable private Integer capacity;

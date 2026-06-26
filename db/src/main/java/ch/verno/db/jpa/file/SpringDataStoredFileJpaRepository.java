@@ -1,8 +1,7 @@
 package ch.verno.db.jpa.file;
 
 import ch.verno.db.entity.file.StoredFileEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 
-public interface SpringDataStoredFileJpaRepository extends
-        JpaRepository<StoredFileEntity, Long> {
+public interface SpringDataStoredFileJpaRepository extends AbstractEntityJpaRepository<StoredFileEntity, Long> {
 }

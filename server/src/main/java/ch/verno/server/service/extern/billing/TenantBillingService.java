@@ -8,9 +8,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.billing.TenantBillingBo;
-import ch.verno.server.mapper.db.billing.TenantBillingMapper;
+import ch.verno.server.mapper.billing.TenantBillingMapper;
 import ch.verno.server.repository.billing.TenantBillingRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class TenantBillingService extends AbstractEntityService<
+public class TenantBillingService extends AbstractEntityServiceLongId<
         TenantBillingEntity,
         TenantBillingDto,
         TenantBillingRepository,

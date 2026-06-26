@@ -10,11 +10,15 @@ import java.util.Optional;
 
 public interface SpringDataParticipantJpaRepository extends AbstractEntityJpaRepository<ParticipantEntity, Long> {
 
+  @Nonnull
   List<ParticipantEntity> findByCourses(@Nonnull CourseEntity course);
 
+  @Nonnull
   List<ParticipantEntity> findByCoursesAndActiveTrue(@Nonnull CourseEntity course);
 
+  @Nonnull
   Optional<ParticipantEntity> findByEmail(@Nonnull String email);
 
   boolean existsByCourses_Id(@Nonnull Long courseId);
+
 }

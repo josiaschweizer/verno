@@ -7,7 +7,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class AddressDto extends BaseDto {
+public class AddressDto extends BaseDto<Long> {
 
   @Nonnull private String street;
   @Nonnull private String houseNumber;

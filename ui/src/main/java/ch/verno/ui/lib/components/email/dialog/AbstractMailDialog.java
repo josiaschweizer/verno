@@ -4,6 +4,7 @@ import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.async.BackgroundExecutorClient;
 import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
@@ -22,6 +23,7 @@ import java.util.List;
 
 public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLayout> extends VAAbstractDialog {
 
+  @Nonnull private final Injector injector;
   @Nonnull protected final Lazy<MailClient> mailClient;
 
   private boolean isCanceled;
@@ -29,9 +31,10 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
 
   public AbstractMailDialog(@Nonnull final Injector injector,
                             @Nonnull final MailTemplateType mailTemplateType) {
+    this.injector = injector;
     this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
-    this.templateConfigLayout = createTemplateConfigLayout(injector, mailTemplateType);
 
+    this.templateConfigLayout = createTemplateConfigLayout(injector, mailTemplateType);
     initUI(getTranslation("setting.send.email"), DialogSize.BIG);
 
     this.isCanceled = false;
@@ -66,7 +69,7 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
     }
 
     final var bean = templateConfigLayout.getBean();
-    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
+    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent(), null);
 
     close();
 
@@ -84,7 +87,7 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
     popup.openAndRunAsync(
             ui,
             TenantContext.getRequired(),
-            BackgroundExecutor.getInstance().getExecutorService(),
+            injector.getInstance(BackgroundExecutorClient.class).getExecutorService(),
             () -> executeSend(mailContent),
             () -> NotificationFactory.showSuccessNotification(getTranslation("mail.e.mail.s.sent.successfully")),
             () -> NotificationFactory.showErrorNotification(getTranslation("mail.e.mail.s.sent.failed"))

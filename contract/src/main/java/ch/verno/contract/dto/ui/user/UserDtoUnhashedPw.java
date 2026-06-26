@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
-public class UserDtoUnhashedPw extends BaseDto {
+public class UserDtoUnhashedPw extends BaseDto<Long> {
 
   @Nonnull private String username;
   @Nonnull private String email;
@@ -28,7 +28,7 @@ public class UserDtoUnhashedPw extends BaseDto {
 
   @Nonnull
   public static UserDtoUnhashedPw fromAppUserDto(@Nonnull final AppUserDto appUserDto) {
-    final UserDtoUnhashedPw dto = new UserDtoUnhashedPw();
+    final var dto = new UserDtoUnhashedPw();
     dto.setId(appUserDto.getId());
     dto.setUsername(appUserDto.getUsername());
     dto.setEmail(appUserDto.getEmail());
@@ -38,6 +38,22 @@ public class UserDtoUnhashedPw extends BaseDto {
     dto.setRole(appUserDto.getRole());
     dto.setActive(appUserDto.isActive());
     return dto;
+  }
+
+  @Nonnull
+  public AppUserDto toAppUserDtoUnhashedPw() {
+    final var user = AppUserDto.empty();
+
+    user.setId(getId());
+    user.setUsername(username);
+    user.setEmail(email);
+    user.setFirstname(firstname);
+    user.setLastname(lastname);
+    user.setPasswordHash(password);
+    user.setRole(role);
+    user.setActive(active);
+
+    return user;
   }
 
   @Nonnull

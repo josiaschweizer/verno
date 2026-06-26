@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ParticipantDto extends BaseDto {
+public class ParticipantDto extends BaseDto<Long> {
 
   @Nonnull private String firstName;
   @Nonnull private String lastName;

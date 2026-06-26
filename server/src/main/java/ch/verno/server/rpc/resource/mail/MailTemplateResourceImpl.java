@@ -1,13 +1,39 @@
 package ch.verno.server.rpc.resource.mail;
 
+import ch.verno.contract.dto.table.mail.MailTemplateDto;
 import ch.verno.contract.endpoint.mail.MailTemplateResource;
+import ch.verno.contract.rpc.RpcResource;
+import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.service.intern.table.mail.MailTemplateService;
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
+@SuppressWarnings("unused")
+@RpcResource(MailTemplateResource.class)
 public class MailTemplateResourceImpl implements MailTemplateResource {
 
-  public MailTemplateResourceImpl(@Nonnull final ServerBean bean) {
+  @Nonnull private final Lazy<MailTemplateService> mailTemplateService;
 
+  public MailTemplateResourceImpl(@Nonnull final ServerBean serverBean) {
+    this.mailTemplateService = Lazy.of(() -> serverBean.get(MailTemplateService.class));
   }
 
+  @Override
+  public boolean hasTemplateByKey(@Nonnull final String key) {
+    return mailTemplateService.get().hasTemplateByKey(key);
+  }
+
+  @Nonnull
+  @Override
+  public Optional<MailTemplateDto> getTemplateByKey(@Nonnull final String key) {
+    return mailTemplateService.get().findByKey(key);
+  }
+
+  @Nonnull
+  @Override
+  public MailTemplateDto saveMailTemplate(@Nonnull final MailTemplateDto mailTemplate) {
+    return mailTemplateService.get().save(mailTemplate);
+  }
 }

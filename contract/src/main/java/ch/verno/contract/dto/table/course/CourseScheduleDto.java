@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CourseScheduleDto extends BaseDto {
+public class CourseScheduleDto extends BaseDto<Long> {
 
   @Nonnull private String title;
   @Nonnull private CourseScheduleStatus status;

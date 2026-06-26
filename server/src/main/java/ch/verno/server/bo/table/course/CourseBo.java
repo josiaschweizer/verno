@@ -2,6 +2,7 @@ package ch.verno.server.bo.table.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.course.CourseScheduleService;
@@ -25,8 +26,13 @@ public class CourseBo {
     final var courseSchedules = courseScheduleService.get().findByStatus(status);
 
     return courseSchedules.stream()
-            .flatMap(schedule -> courseService.get().findByCourseScheduleId(schedule.getId()).stream())
+            .flatMap(schedule -> getCoursesByCourseSchedule(schedule).stream())
             .toList();
+  }
+
+  @Nonnull
+  public List<CourseDto> getCoursesByCourseSchedule(@Nonnull final CourseScheduleDto courseSchedule) {
+    return courseService.get().findByCourseScheduleId(courseSchedule.getId());
   }
 
 }

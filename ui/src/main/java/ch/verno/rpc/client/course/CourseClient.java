@@ -2,6 +2,7 @@ package ch.verno.rpc.client.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.endpoint.course.CourseResource;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
@@ -28,6 +29,11 @@ public class CourseClient {
   @Nonnull
   public List<CourseDto> getCoursesByCourseScheduleStatus(@Nonnull final CourseScheduleStatus status) {
     return courseResource.get().getCoursesByCourseScheduleStatus(status);
+  }
+
+  @Nonnull
+  public List<CourseDto> getCoursesByCourseSchedule(@Nonnull final CourseScheduleDto courseSchedule) {
+    return courseResource.get().getCoursesByCourseSchedule(courseSchedule);
   }
 
   @Nonnull

@@ -20,15 +20,11 @@ import java.util.Optional;
 
 public class ChangePasswordDialog extends VAAbstractDialog {
 
-  @Nonnull private final Injector injector;
-
   @Nonnull private final Binder<ChangePasswordDto> binder;
   @Nonnull private final EntryFactory<ChangePasswordDto> entryFactory;
 
   public ChangePasswordDialog(@Nonnull final Injector injector,
                               @Nonnull final Long userId) {
-    this.injector = injector;
-
     this.binder = new Binder<>(ChangePasswordDto.class);
     this.binder.setBean(new ChangePasswordDto(userId));
     this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));

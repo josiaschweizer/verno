@@ -8,16 +8,16 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.billing.BillingAccessTokenBo;
-import ch.verno.server.mapper.db.billing.BillingAccessTokenMapper;
+import ch.verno.server.mapper.billing.BillingAccessTokenMapper;
 import ch.verno.server.repository.billing.BillingAccessTokenRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class BillingAccessTokenService extends AbstractEntityService<
+public class BillingAccessTokenService extends AbstractEntityServiceLongId<
         BillingAccessTokenEntity,
         BillingAccessTokenDto,
         BillingAccessTokenRepository,
@@ -26,11 +26,7 @@ public class BillingAccessTokenService extends AbstractEntityService<
   @Nonnull private final Lazy<BillingAccessTokenBo> tokenBo;
 
   public BillingAccessTokenService(@Nonnull final ServerBean bean) {
-    super(
-            bean.get(BillingAccessTokenRepository.class),
-            bean.get(BillingAccessTokenMapper.class)
-    );
-
+    super(bean.get(BillingAccessTokenRepository.class), bean.get(BillingAccessTokenMapper.class));
     this.tokenBo = Lazy.of(() -> bean.get(BoFactory.class).get(BillingAccessTokenBo.class));
   }
 

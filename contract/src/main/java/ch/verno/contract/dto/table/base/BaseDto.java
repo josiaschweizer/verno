@@ -2,17 +2,17 @@ package ch.verno.contract.dto.table.base;
 
 import jakarta.annotation.Nullable;
 
-public class BaseDto {
+public class BaseDto<ID> {
 
-  @Nullable private Long id;
+  @Nullable private ID id;
   @Nullable private Long tenantId; // new: tenant id shared by all DTOs
 
   @Nullable
-  public Long getId() {
+  public ID getId() {
     return id;
   }
 
-  public void setId(@Nullable final Long id) {
+  public void setId(@Nullable final ID id) {
     this.id = id;
   }
 

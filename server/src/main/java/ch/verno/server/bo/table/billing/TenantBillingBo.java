@@ -8,7 +8,7 @@ import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.billing.TenantBillingMapper;
+import ch.verno.server.mapper.billing.TenantBillingMapper;
 import ch.verno.server.repository.billing.TenantBillingRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.dao.DataIntegrityViolationException;

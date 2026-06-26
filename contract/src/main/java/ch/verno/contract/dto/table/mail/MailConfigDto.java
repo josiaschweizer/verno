@@ -9,7 +9,7 @@ import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class MailConfigDto extends BaseDto {
+public class MailConfigDto extends BaseDto<Long> {
 
   @Nonnull private String fromName;
   @Nonnull private String fromEmail;

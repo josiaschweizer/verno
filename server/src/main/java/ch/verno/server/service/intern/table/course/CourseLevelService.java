@@ -3,14 +3,14 @@ package ch.verno.server.service.intern.table.course;
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.db.entity.course.CourseLevelEntity;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.course.CourseLevelMapper;
+import ch.verno.server.mapper.course.CourseLevelMapper;
 import ch.verno.server.repository.course.CourseLevelRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class CourseLevelService extends AbstractEntityService<
+public class CourseLevelService extends AbstractEntityServiceLongId<
         CourseLevelEntity,
         CourseLevelDto,
         CourseLevelRepository,

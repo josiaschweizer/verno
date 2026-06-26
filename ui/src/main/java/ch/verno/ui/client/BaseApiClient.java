@@ -1,5 +1,8 @@
 package ch.verno.ui.client;
 
+import ch.verno.lib.Lazy;
+import ch.verno.lib.VernoConstants;
+import ch.verno.rpc.properties.tenant.TenantProperties;
 import com.google.inject.Injector;
 import com.vaadin.flow.server.VaadinRequest;
 import jakarta.annotation.Nonnull;
@@ -13,11 +16,13 @@ public abstract class BaseApiClient {
 
   @Nonnull private final Injector injector;
   @Nonnull protected final RestClient restClient;
+  @Nonnull private final Lazy<TenantProperties> tenantProperties;
 
   protected BaseApiClient(@Nonnull final Injector injector,
                           @Nonnull final RestClient restClient) {
     this.injector = injector;
     this.restClient = restClient;
+    this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
   }
 
   @Nonnull
@@ -72,11 +77,8 @@ public abstract class BaseApiClient {
   }
 
   private void applyTenantHeader(@Nonnull final RestClient.RequestHeadersSpec<?> spec) {
-    final var tenant = globalInterface.resolveTenant();
-
-    if (tenant != null) {
-      spec.header(VernoConstants.X_TENANT, tenant.getSlug());
-    }
+    final var tenant = tenantProperties.get().resolveCurrentTenant();
+    tenant.ifPresent(tenantDto -> spec.header(VernoConstants.X_MANDANT, tenantDto.slug()));
   }
 
   @Nullable

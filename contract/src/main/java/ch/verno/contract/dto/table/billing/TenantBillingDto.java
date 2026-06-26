@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class TenantBillingDto extends BaseDto {
+public class TenantBillingDto extends BaseDto<Long> {
 
   @Nonnull private String stripeCustomerId;
   @Nonnull private String stripeSubscriptionId;

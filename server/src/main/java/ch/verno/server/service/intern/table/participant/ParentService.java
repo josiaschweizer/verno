@@ -4,14 +4,14 @@ import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
 import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.db.entity.participant.ParentEntity;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.participant.ParentMapper;
+import ch.verno.server.mapper.participant.ParentMapper;
 import ch.verno.server.repository.participant.ParentRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class ParentService extends AbstractEntityService<
+public class ParentService extends AbstractEntityServiceLongId<
         ParentEntity,
         ParentDto,
         ParentRepository,

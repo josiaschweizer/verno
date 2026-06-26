@@ -4,9 +4,8 @@ import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.contract.dto.filter.MailLogFilter;
 import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.db.entity.mail.MailLogEntity;
-import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.mail.MailLogMapper;
+import ch.verno.server.mapper.mail.MailLogMapper;
 import ch.verno.server.repository.mail.MailLogRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.MailLogSpec;
@@ -15,6 +14,7 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class MailLogService extends AbstractSpecEntityService<
+        Long,
         MailLogEntity,
         MailLogDto,
         MailLogRepository,
@@ -23,7 +23,7 @@ public class MailLogService extends AbstractSpecEntityService<
         MailLogFilter> {
 
   public MailLogService(@Nonnull final ServerBean serverBean) {
-    super(serverBean.get(MailLogRepository.class), serverBean.get(MailLogMapper.class), Lazy.of(MailLogSpec::new));
+    super(serverBean.get(MailLogRepository.class), serverBean.get(MailLogMapper.class), MailLogSpec::new);
   }
 
   @Nonnull

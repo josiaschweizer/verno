@@ -5,14 +5,14 @@ import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.mail.MailBo;
-import ch.verno.server.mapper.db.mail.MailConfigMapper;
+import ch.verno.server.mapper.mail.MailConfigMapper;
 import ch.verno.server.repository.mail.MailConfigRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class MailConfigService extends AbstractEntityService<
+public class MailConfigService extends AbstractEntityServiceLongId<
         MailConfigEntity,
         MailConfigDto,
         MailConfigRepository,

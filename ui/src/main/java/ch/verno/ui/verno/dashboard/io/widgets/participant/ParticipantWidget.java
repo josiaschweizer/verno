@@ -51,8 +51,8 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
             getTranslation("shared.export"),
             VaadinIcon.UPLOAD,
             e -> {
-              final var config = new ParticipantExportConfig(globalInterface);
-              final var exportDialog = new ExportDialog<>(globalInterface, config);
+              final var config = injector.getInstance(ParticipantExportConfig.class);
+              final var exportDialog = new ExportDialog<>(injector, config);
               exportDialog.open();
             });
 
@@ -61,7 +61,8 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    participantsGrid = new ParticipantsGrid(globalInterface,
+    participantsGrid = new ParticipantsGrid(
+            injector,
             false,
             false);
     participantsGrid.getGrid().setAllRowsVisible(true);

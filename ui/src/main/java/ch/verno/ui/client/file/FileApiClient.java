@@ -1,7 +1,7 @@
 package ch.verno.ui.client.file;
 
-import ch.verno.contract.dto.file.storage.DownloadFileResponse;
-import ch.verno.contract.dto.file.storage.FileUploadResponse;
+import ch.verno.contract.dto.file.storage.api.DownloadFileResponse;
+import ch.verno.contract.dto.file.storage.api.FileUploadResponse;
 import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Publ;
 import ch.verno.lib.VernoConstants;

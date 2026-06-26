@@ -1,11 +1,11 @@
 package ch.verno.ui.lib.components.email;
 
-import ch.verno.rpc.client.mail.MailTemplateClient;
 import ch.verno.contract.dto.table.mail.MailTemplateDto;
 import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.contract.mail.placeholder.Placeholder;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.client.mail.MailTemplateClient;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.factory.EntryFactory;
 import com.google.inject.Injector;
@@ -93,11 +93,8 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
   private void initBinder() {
     binder.setChangeDetectionEnabled(true);
 
-    if (mailTemplateClient.get().hasTemplateByKey(mailTemplateType.getKey())) {
-      template = mailTemplateClient.get().getTemplateByKey(mailTemplateType.getKey());
-    } else {
-      template = new MailTemplateDto(mailTemplateType.getKey());
-    }
+    final var templateByKey = mailTemplateClient.get().getTemplateByKey(mailTemplateType.getKey());
+    template = templateByKey.orElseGet(() -> MailTemplateDto.fromTemplateKey(mailTemplateType.getKey()));
 
     binder.readBean(template);
   }
@@ -138,7 +135,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
       return;
     }
 
-    mailTemplateClient.get().upsertTemplate(template);
+    mailTemplateClient.get().saveMailTemplate(template);
     binder.readBean(template); // read template dto so we no longer have changes
   }
 

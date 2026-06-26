@@ -6,9 +6,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.gender.GenderBo;
-import ch.verno.server.mapper.db.gender.GenderMapper;
+import ch.verno.server.mapper.gender.GenderMapper;
 import ch.verno.server.repository.gender.GenderRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class GenderService extends AbstractEntityService<
+public class GenderService extends AbstractEntityServiceLongId<
         GenderEntity,
         GenderDto,
         GenderRepository,

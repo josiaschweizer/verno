@@ -1,5 +1,6 @@
 package ch.verno.rpc.properties.tenant;
 
+import ch.verno.contract.dto.table.setting.TenantSettingDto;
 import ch.verno.contract.dto.table.tenant.TenantDto;
 import ch.verno.contract.endpoint.properties.tenant.TenantResource;
 import ch.verno.lib.Lazy;

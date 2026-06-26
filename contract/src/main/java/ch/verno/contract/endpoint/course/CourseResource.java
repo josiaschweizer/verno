@@ -2,6 +2,7 @@ package ch.verno.contract.endpoint.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
 
@@ -16,6 +17,8 @@ public interface CourseResource {
 
   @Nonnull
   List<CourseDto> getCoursesByCourseScheduleStatus(@Nonnull CourseScheduleStatus status);
+
+  List<CourseDto> getCoursesByCourseSchedule(@Nonnull CourseScheduleDto courseSchedule);
 
   @Nonnull
   List<CourseDto> getAllCourses();

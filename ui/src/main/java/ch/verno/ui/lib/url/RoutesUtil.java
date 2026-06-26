@@ -29,13 +29,14 @@ public class RoutesUtil {
     return getURL(currentClass) + Routes.DETAIL;
   }
 
-  public static String getURLWithId(@Nonnull final String baseURL,
-                                    @Nullable final Long id) {
+  @Nonnull
+  public static String getURLWithId(@Nonnull final String baseUrl,
+                                    @Nullable final Object id) {
     if (id == null) {
       return Publ.EMPTY_STRING;
     }
 
-    return baseURL + Publ.SLASH + id;
+    return baseUrl + Publ.SLASH + id;
   }
 
   @Nonnull

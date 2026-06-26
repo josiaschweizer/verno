@@ -5,7 +5,7 @@ import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class AppUserSettingDto extends BaseDto {
+public class AppUserSettingDto extends BaseDto<Long> {
 
   @Nonnull private Long userId;
   @Nullable private String theme;

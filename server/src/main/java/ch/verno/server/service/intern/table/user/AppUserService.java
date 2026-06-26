@@ -1,23 +1,28 @@
 package ch.verno.server.service.intern.table.user;
 
+import ch.verno.contract.dto.filter.AppUserFilter;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.db.entity.user.AppUserEntity;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.user.AppUserMapper;
+import ch.verno.server.mapper.user.AppUserMapper;
 import ch.verno.server.repository.user.AppUserRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractSpecEntityService;
+import ch.verno.server.spec.AppUserSpec;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public class AppUserService extends AbstractEntityService<
+public class AppUserService extends AbstractSpecEntityService<
+        Long,
         AppUserEntity,
         AppUserDto,
         AppUserRepository,
-        AppUserMapper> {
+        AppUserMapper,
+        AppUserSpec,
+        AppUserFilter> {
 
   public AppUserService(@Nonnull final ServerBean bean) {
-    super(bean.get(AppUserRepository.class), bean.get(AppUserMapper.class));
+    super(bean.get(AppUserRepository.class), bean.get(AppUserMapper.class), AppUserSpec::new);
   }
 
   @Nonnull

@@ -13,4 +13,7 @@ public interface ReportResource {
   @Nonnull
   String generateCourseReport(@Nonnull CourseDto course, @Nonnull List<ParticipantDto> participants);
 
+  @Nonnull
+  String generateParticipantsReport();
+
 }

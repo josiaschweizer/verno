@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface ObjectStorage {
 
-  void put(@Nonnull String key, @Nonnull InputStream data, long size) throws Exception;
+  StoredObject put(@Nonnull String key,
+                   @Nonnull InputStream data,
+                   long size) throws Exception;
 
   @Nonnull
   Optional<InputStream> get(@Nonnull String key) throws Exception;

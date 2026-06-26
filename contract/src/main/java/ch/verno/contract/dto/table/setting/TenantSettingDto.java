@@ -5,7 +5,7 @@ import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class TenantSettingDto extends BaseDto {
+public class TenantSettingDto extends BaseDto<Long> {
 
   @Nonnull private Integer courseDaysPerSchedule;
   @Nonnull private Integer maxParticipantsPerCourse;

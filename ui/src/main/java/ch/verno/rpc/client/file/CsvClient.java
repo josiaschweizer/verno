@@ -8,7 +8,6 @@ import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
 import com.google.inject.Inject;
 import jakarta.annotation.Nonnull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class CsvClient {
 
   @Nonnull
   public FileDto generateFileFromCsv(@Nonnull final String filename,
-                                     @NonNull final List<CsvMapDto> rows) {
+                                     @Nonnull final List<CsvMapDto> rows) {
     return csvResource.get().generateFileFromCsv(filename, rows);
   }
 

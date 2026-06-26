@@ -5,10 +5,11 @@ import ch.verno.db.entity.user.AppUserEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.domain.Specification;
 
-public class AppUserSpec {
+public class AppUserSpec extends BaseSpec<AppUserEntity, AppUserFilter> {
 
   @Nonnull
-  public Specification<AppUserEntity> appUserSpec(@Nonnull final AppUserFilter filter) {
+  @Override
+  public Specification<AppUserEntity> getSpecification(@Nonnull final AppUserFilter filter) {
     return (root, query, cb) -> {
       return cb.like(cb.lower(root.get("username")), "%" + filter.searchText().toLowerCase() + "%");
     };

@@ -8,7 +8,7 @@ import jakarta.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class BillingAccessTokenDto extends BaseDto {
+public class BillingAccessTokenDto extends BaseDto<Long> {
 
   @Nullable private Long userId;
   @Nonnull private String tokenHash;

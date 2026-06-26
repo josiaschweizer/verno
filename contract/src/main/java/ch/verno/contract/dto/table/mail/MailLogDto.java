@@ -8,7 +8,7 @@ import jakarta.annotation.Nullable;
 
 import java.time.LocalDateTime;
 
-public class MailLogDto extends BaseDto {
+public class MailLogDto extends BaseDto<Long> {
 
   @Nonnull private String recipientEmail;
   @Nonnull private String recipientName;

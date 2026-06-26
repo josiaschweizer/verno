@@ -5,9 +5,9 @@ import ch.verno.db.entity.text.TextEntity;
 import ch.verno.lib.Publ;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.db.text.TextMapper;
+import ch.verno.server.mapper.text.TextMapper;
 import ch.verno.server.repository.text.TextRepository;
-import ch.verno.server.service.base.AbstractEntityService;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class TextService extends AbstractEntityService<
+public class TextService extends AbstractEntityServiceLongId<
         TextEntity,
         TextDto,
         TextRepository,
