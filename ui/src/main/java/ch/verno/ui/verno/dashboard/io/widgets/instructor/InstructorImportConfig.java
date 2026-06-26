@@ -1,28 +1,32 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
-import ch.verno.common.api.dto.internal.file.temp.CsvMapDto;
-import ch.verno.common.db.dto.table.AddressDto;
-import ch.verno.common.db.dto.table.InstructorDto;
-import ch.verno.common.server.service.intern.IInstructorService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.TempFileServerGate;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.common.io.importing.DbField;
+import ch.verno.common.io.importing.DbFieldNested;
+import ch.verno.common.io.importing.DbFieldTyped;
+import ch.verno.contract.dto.file.temp.CsvMapDto;
+import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.result.error.SaveErrorCode;
+import ch.verno.contract.dto.table.address.AddressDto;
+import ch.verno.contract.dto.table.instructor.InstructorDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.address.AddressClient;
+import ch.verno.rpc.client.file.CsvClient;
+import ch.verno.rpc.client.file.TempFileClient;
+import ch.verno.rpc.client.instructor.InstructorClient;
+import ch.verno.ui.feature.importing.csv.CsvMappingRowError;
+import ch.verno.ui.feature.importing.csv.InstructorCsvMapper;
 import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.server.io.importing.dto.DbField;
-import ch.verno.server.io.importing.dto.DbFieldNested;
-import ch.verno.server.io.importing.dto.DbFieldTyped;
-import ch.verno.server.mapper.csv.CsvMappingRowError;
-import ch.verno.server.mapper.csv.InstructorCsvMapper;
-import ch.verno.server.service.intern.AddressService;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
@@ -39,10 +43,23 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
   @NonNls public static final String ERROR_UK_INSTRUCTOR_MANDANT_EMAIL = "uk_instructor_mandant_email";
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull final Injector injector;
+  @Nonnull private final Lazy<CsvClient> csvClient;
+  @Nonnull private final Lazy<AddressClient> addressClient;
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
+  @Nonnull private final Lazy<InstructorClient> instructorClient;
 
-  public InstructorImportConfig(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  @Nonnull private final TranslationHelper translationHelper;
+
+  public InstructorImportConfig(@Nonnull final Injector injector) {
+    this.injector = injector;
+
+    this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
+    this.addressClient = Lazy.of(() -> injector.getInstance(AddressClient.class));
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
+    this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
+
+    this.translationHelper = injector.getInstance(TranslationHelper.class);
   }
 
   @Nonnull
@@ -75,7 +92,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     final var address = new DbFieldNested<>(
             ADDRESS,
             "shared.address",
-            AddressDto::new,
+            AddressDto::empty,
             InstructorDto::setAddress,
             List.of(
                     new DbField<>(STREET, "shared.street", AddressDto::setStreet, false),
@@ -96,11 +113,10 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   public ImportResult performImport(@Nonnull final String fileToken,
                                     @Nonnull final Map<String, String> mapping) {
 
-    final var fileServerGate = globalInterface.getService(TempFileServerGate.class);
-    final var fileDto = fileServerGate.loadFile(fileToken);
-    final var csvRows = fileServerGate.parseRows(fileDto);
+    final var fileDto = tempFileClient.get().loadFile(fileToken);
+    final var csvRows = csvClient.get().parseRows(fileDto);
 
-    final var mapper = new InstructorCsvMapper(globalInterface);
+    @Nonnull final var mapper = injector.getInstance(InstructorCsvMapper.class);
     final var result = mapper.map(
             csvRows,
             mapping,
@@ -110,26 +126,15 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
     );
 
     final var saveables = result.saveables();
-    final var instructorService = globalInterface.getService(IInstructorService.class);
 
     final var importErrors = new ArrayList<>(result.errors());
     for (int i = 0; i < saveables.size(); i++) {
       final var saveable = saveables.get(i);
       processNestedEntities(saveable);
 
-      try {
-        instructorService.createInstructor(saveable);
-      } catch (DataIntegrityViolationException e) {
-        importErrors.add(new CsvMappingRowError(
-                i + 1,
-                buildImportErrorMessage(saveable, e)
-        ));
-      } catch (Exception e) {
-        importErrors.add(new CsvMappingRowError(
-                i + 1,
-                TranslationHelper.getTranslation(globalInterface, "common.unerwarteter.fehler.beim.import.0", e.getMessage())
-        ));
-      }
+      final var saveResult = instructorClient.get().saveInstructor(saveable);
+
+      importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
     }
 
     if (!importErrors.isEmpty()) {
@@ -140,8 +145,8 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
         errorCsvRows.add(csvRow);
       }
 
-      final var errorFile = fileServerGate.parseRows(errorCsvRows, "instructor_import_errors.csv");
-      final var token = fileServerGate.store(errorFile);
+      final var errorFile = csvClient.get().parseRows("instructor_import_errors.csv", errorCsvRows);
+      final var token = tempFileClient.get().store(errorFile);
 
       return ImportResult.partialSuccess(token, errorFile.filename());
     }
@@ -151,20 +156,24 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
   @Nonnull
   private String buildImportErrorMessage(@Nonnull final InstructorDto instructor,
-                                         @Nonnull final DataIntegrityViolationException e) {
-    final var message = e.getMostSpecificCause().getMessage();
-    if (message != null && message.contains(ERROR_UK_INSTRUCTOR_MANDANT_EMAIL)) {
-      return TranslationHelper.getTranslation(globalInterface, "common.instructor.mit.dieser.e.mail.existiert.bereits.0", instructor.getEmail());
-    }
+                                         @Nonnull final SaveResult<InstructorDto> saveResult) {
+    final var errorCode = saveResult.errorCode();
+    final var errorMessage = saveResult.errorMessage();
 
-    return TranslationHelper.getTranslation(globalInterface, "common.datenbankfehler.beim.import.0", message);
+    if (errorCode != null) {
+      if (errorCode.equals(SaveErrorCode.INSTRUCTOR_EMAIL_ALREADY_EXISTS)) {
+        return translationHelper.getTranslation("common.instructor.mit.dieser.e.mail.existiert.bereits.0", instructor.getEmail());
+      }
+
+      return translationHelper.getTranslation("common.datenbankfehler.beim.import.0", Optional.ofNullable(errorMessage).orElse(errorCode));
+
+    }
+    return translationHelper.getTranslation("common.datenbankfehler.beim.import");
   }
 
   private void processNestedEntities(@Nonnull final InstructorDto instructor) {
-    final var addressService = globalInterface.getService(AddressService.class);
-
     if (!instructor.getAddress().isEmpty()) {
-      final var addressDto = addressService.findOrCreateAddress(instructor.getAddress());
+      final var addressDto = addressClient.get().findOrCreateAddress(instructor.getAddress());
       instructor.setAddress(addressDto);
     }
   }

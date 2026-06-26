@@ -1,5 +1,6 @@
 package ch.verno.rpc.client.instructor;
 
+import ch.verno.contract.dto.result.base.SaveResult;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.endpoint.instructor.InstructorResource;
 import ch.verno.lib.Lazy;
@@ -31,7 +32,7 @@ public class InstructorClient {
 
   @Nonnull
   @SuppressWarnings("UnusedReturnValue")
-  public InstructorDto saveInstructor(@Nonnull final InstructorDto instructor) {
+  public SaveResult<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorResource.get().saveInstructor(instructor);
   }
 

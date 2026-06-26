@@ -1,27 +1,28 @@
 package ch.verno.ui.verno.mail;
 
-import ch.verno.common.db.dto.table.mail.MailLogDto;
-import ch.verno.contract.dto.filter.MailLogFilter;
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
+import ch.verno.common.lib.Routes;
 import ch.verno.common.lib.format.Converter;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.server.service.intern.mail.IMailLogService;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.contract.dto.filter.MailLogFilter;
+import ch.verno.contract.dto.table.mail.MailConfigDto;
+import ch.verno.contract.dto.table.mail.MailLogDto;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
-import ch.verno.publ.Routes;
-import ch.verno.publ.VernoUtility;
-import ch.verno.server.service.intern.mail.MailLogService;
+import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.client.mail.MailConfigClient;
+import ch.verno.rpc.client.mail.MailLogClient;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.button.ButtonBuilder;
 import ch.verno.ui.base.components.emptystate.VAEmptyState;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
-import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.verno.mail.testmail.TestMailTemplatePage;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
@@ -35,6 +36,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -47,15 +49,22 @@ import java.util.stream.Stream;
 @Menu(order = 96, icon = "vaadin:mailbox", title = "mail.log")
 public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> implements BeforeEnterObserver {
 
-  @Nonnull private final IMailLogService mailLogService;
-  @Nonnull private final IMailConfigService mailConfigService;
+  @NonNls public static final String GRID_COLUMN_RECIPIENT_EMAIL = "recipient-email";
+  @NonNls public static final String GRID_COLUMN_RECIPIENT_NAME = "recipient-name";
+  @NonNls public static final String GRID_COLUMN_SUBJECT = "subject";
+  @NonNls public static final String GRID_COLUMN_SENT_AT = "sent-at";
+  @NonNls public static final String GRID_COLUMN_ERROR_MESSAGE = "error-message";
+  @NonNls public static final String GRID_COLUMN_STATUS = "status";
+
+  @Nonnull private final Lazy<MailLogClient> mailLogClient;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
 
   @Autowired
-  protected MailsGrid(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, MailLogFilter.empty());
+  protected MailsGrid(@Nonnull final Injector injector) {
+    super(injector, MailLogFilter.empty());
 
-    this.mailLogService = globalInterface.getService(MailLogService.class);
-    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
+    this.mailLogClient = Lazy.of(() -> injector.getInstance(MailLogClient.class));
+    this.mailConfigClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
   }
 
   @Override
@@ -68,11 +77,11 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
 
   private boolean hasValidMailConfiguration() {
     try {
-      if (!mailConfigService.hasConfigForCurrentTenant()) {
+      if (!mailConfigClient.get().hasMailConfigForCurrentTenant()) {
         return false;
       }
 
-      final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+      final var mailConfig = mailConfigClient.get().getMailConfigForCurrentTenant().orElseGet(MailConfigDto::empty);
       return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
     } catch (Exception e) {
       return false;
@@ -87,7 +96,7 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
     final var limit = query.getLimit();
     final var sortOrders = query.getSortOrders();
 
-    return mailLogService.findMailLogs(filter, offset, limit, sortOrders).stream();
+    return mailLogClient.get().getMailLogs(filter, offset, limit, sortOrders).stream();
   }
 
   @Nonnull
@@ -101,11 +110,11 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   protected List<ObjectGridColumn<MailLogDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<MailLogDto>>();
 
-    columns.add(new ObjectGridColumn<>("recipientEmail", MailLogDto::getRecipientEmail, getTranslation("mail.recipient.email"), true));
-    columns.add(new ObjectGridColumn<>("recipientName", MailLogDto::getRecipientName, getTranslation("mail.recipient.name"), true));
-    columns.add(new ObjectGridColumn<>("subject", MailLogDto::getSubject, getTranslation("mail.subject"), true));
-    columns.add(new ObjectGridColumn<>("sentAt", mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), getTranslation("mail.sent.at"), true));
-    columns.add(new ObjectGridColumn<>("errorMessage", MailLogDto::getErrorMessage, getTranslation("base.error"), false));
+    columns.add(new ObjectGridColumn<>(GRID_COLUMN_RECIPIENT_EMAIL, MailLogDto::getRecipientEmail, getTranslation("mail.recipient.email"), true));
+    columns.add(new ObjectGridColumn<>(GRID_COLUMN_RECIPIENT_NAME, MailLogDto::getRecipientName, getTranslation("mail.recipient.name"), true));
+    columns.add(new ObjectGridColumn<>(GRID_COLUMN_SUBJECT, MailLogDto::getSubject, getTranslation("mail.subject"), true));
+    columns.add(new ObjectGridColumn<>(GRID_COLUMN_SENT_AT, mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), getTranslation("mail.sent.at"), true));
+    columns.add(new ObjectGridColumn<>(GRID_COLUMN_ERROR_MESSAGE, MailLogDto::getErrorMessage, getTranslation("base.error"), false));
 
     return columns;
   }
@@ -115,7 +124,7 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   protected List<ComponentGridColumn<MailLogDto>> getComponentColumns() {
     final var columns = new ArrayList<ComponentGridColumn<MailLogDto>>();
 
-    columns.add(new ComponentGridColumn<>("status", this::getBadgeLabel, "Status", true));
+    columns.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getBadgeLabel, getTranslation("shared.status"), true));
 
     return columns;
   }
@@ -166,7 +175,7 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
     final var notification = new VAInlineNotification();
     notification.setActionAlignment(VAInlineNotification.VAInlineNotificationActionAlignment.RIGHT_CENTERED);
     notification.setTitle("Test Emails");
-    notification.setDescription("Test your Email Texts and your Email Configuration.");
+    notification.setDescription("Test your Email Texts and your Email Configuration."); //TODO translation
     notification.setActions(button);
 
     final var layout = new VerticalLayout(notification);

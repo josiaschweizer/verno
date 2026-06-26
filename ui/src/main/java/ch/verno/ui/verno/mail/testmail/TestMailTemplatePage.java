@@ -1,8 +1,8 @@
 package ch.verno.ui.verno.mail.testmail;
 
-import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.common.lib.Routes;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.navigation.Navigator;
@@ -18,12 +18,12 @@ import jakarta.annotation.security.PermitAll;
 public class TestMailTemplatePage extends VAVerticalLayout {
 
   @Nonnull private final Injector injector;
-  @Nonnull private final Lazy<MailClient> mailClient;
+  @Nonnull private final Lazy<MailConfigClient> mailClient;
 
   @Inject
   public TestMailTemplatePage(@Nonnull final Injector injector) {
     this.injector = injector;
-    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
 
     if (!mailConfigValid()) {
       navigateToSetting();
@@ -46,8 +46,7 @@ public class TestMailTemplatePage extends VAVerticalLayout {
   }
 
   private boolean mailConfigValid() {
-    final var config = mailClient.get().getOptionalConfigForCurrentTenant();
-    return config.isPresent();
+    return mailClient.get().hasMailConfigForCurrentTenant();
   }
 
   private void navigateToSetting() {

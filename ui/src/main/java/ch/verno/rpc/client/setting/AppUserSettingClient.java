@@ -21,4 +21,9 @@ public class AppUserSettingClient {
     return appUserSettingResource.get().getAppUserSettingByUserId(userId);
   }
 
+  @Nonnull
+  public AppUserSettingDto saveAppUserSetting(@Nonnull final AppUserSettingDto setting) {
+    return appUserSettingResource.get().saveAppUserSetting(setting);
+  }
+
 }

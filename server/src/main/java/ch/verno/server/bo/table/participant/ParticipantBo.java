@@ -7,9 +7,13 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public class ParticipantBo {
+
+  @NonNls public static final String DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
+  @NonNls public static final String EMAIL = "email";
 
   @Nonnull private final Lazy<ParticipantService> participantService;
 
@@ -38,8 +42,8 @@ public class ParticipantBo {
     final var message = cause.getMessage();
 
     return message != null
-            && message.contains("duplicate key value violates unique constraint")
-            && message.toLowerCase().contains("email");
+            && message.contains(DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT)
+            && message.toLowerCase().contains(EMAIL);
   }
 
 }

@@ -3,7 +3,7 @@ package ch.verno.contract.dto.filter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record MailLogFilter(@Nullable String searchText) {
+public record MailLogFilter(@Nullable String searchText) implements BaseFilter {
 
   @Nonnull
   public static MailLogFilter ofSearchText(@Nullable final String searchText) {

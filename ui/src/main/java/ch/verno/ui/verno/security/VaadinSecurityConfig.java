@@ -17,7 +17,7 @@ public class VaadinSecurityConfig {
 
   @Bean
   @Order(2)
-  public SecurityFilterChain internalApiFilterChain(@Nonnull HttpSecurity http) throws Exception {
+  public SecurityFilterChain internalApiFilterChain(@Nonnull HttpSecurity http) {
     http
             .securityMatcher("/internal/api/v1/**")
             .csrf(AbstractHttpConfigurer::disable)
@@ -30,7 +30,7 @@ public class VaadinSecurityConfig {
   @Bean
   @Order(3)
   public SecurityFilterChain vaadinFilterChain(@Nonnull HttpSecurity http,
-                                               @Qualifier("vaadinAuthenticationManager") @Nonnull AuthenticationManager vaadinAuthenticationManager) throws Exception {
+                                               @Qualifier("vaadinAuthenticationManager") @Nonnull AuthenticationManager vaadinAuthenticationManager) {
     http
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(vaadinAuthenticationManager)

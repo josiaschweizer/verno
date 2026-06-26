@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error;
 
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;

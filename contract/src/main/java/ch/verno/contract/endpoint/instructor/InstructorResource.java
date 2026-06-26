@@ -1,5 +1,6 @@
 package ch.verno.contract.endpoint.instructor;
 
+import ch.verno.contract.dto.result.base.SaveResult;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
@@ -17,6 +18,6 @@ public interface InstructorResource {
   List<InstructorDto> getAllInstructors();
 
   @Nonnull
-  InstructorDto saveInstructor(@Nonnull InstructorDto instructor);
+  SaveResult<InstructorDto> saveInstructor(@Nonnull InstructorDto instructor);
 
 }

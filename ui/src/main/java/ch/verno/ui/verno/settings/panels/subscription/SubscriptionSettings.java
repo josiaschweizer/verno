@@ -37,7 +37,6 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
     this.i18NProvider = Lazy.of(() -> injector.getInstance(I18NProvider.class));
     this.billingClient = Lazy.of(() -> injector.getInstance(BillingClient.class));
 
-    loadDto();
     configureHeader();
   }
 
@@ -108,7 +107,9 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
     addActionButtons(navButton);
   }
 
-  private void loadDto() {
+
+  @Override
+  protected void loadDto() {
     this.dto = billingClient.get().getTenantBillingForCurrentTenant();
   }
 

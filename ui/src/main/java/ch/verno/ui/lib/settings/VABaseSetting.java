@@ -116,6 +116,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
     super.onAttach(attachEvent);
 
     if (contentComponent == null) {
+      loadDto();
       setContent(createContent());
 
       binder.readBean(dto);
@@ -180,5 +181,14 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   protected boolean isAlwaysReadOnly() {
     // to be overridden if setting panel should be read only
     return false;
+  }
+
+  /**
+   * Loads the values that are initially displayed by the settings.
+   * <p>
+   * The default implementation does nothing.
+   */
+  protected void loadDto() {
+    // Optional override
   }
 }

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.settings.panels.theme;
 
-import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
 

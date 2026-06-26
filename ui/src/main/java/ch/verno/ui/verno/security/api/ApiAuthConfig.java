@@ -1,10 +1,10 @@
 package ch.verno.ui.verno.security.api;
 
-import com.google.inject.AbstractModule;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -14,7 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-public class ApiAuthConfig extends AbstractModule {
+@Configuration
+public class ApiAuthConfig {
 
   @Value("${verno.api.username:verno}")
   private String apiUsername;
@@ -22,8 +23,10 @@ public class ApiAuthConfig extends AbstractModule {
   @Value("${verno.api.password:verno}")
   private String apiPassword;
 
-  @Bean
+  @Nonnull
+  @Bean("apiUserDetailsService")
   public UserDetailsService apiUserDetailsService(@Nonnull final PasswordEncoder passwordEncoder) {
+
     return new InMemoryUserDetailsManager(
             User.builder()
                     .username(apiUsername)
@@ -33,20 +36,28 @@ public class ApiAuthConfig extends AbstractModule {
     );
   }
 
-  @Bean
+  @Nonnull
+  @Bean("apiAuthenticationManager")
   @Primary
   public AuthenticationManager apiAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
-                                                        @Qualifier("apiUserDetailsService") @Nonnull UserDetailsService apiUserDetailsService) {
+                                                        @Qualifier("apiUserDetailsService")
+                                                        @Nonnull final UserDetailsService apiUserDetailsService) {
+
     final var provider = new DaoAuthenticationProvider(apiUserDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
+
     return new ProviderManager(provider);
   }
 
-  @Bean
+  @Nonnull
+  @Bean("vaadinAuthenticationManager")
   public AuthenticationManager vaadinAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
-                                                           @Qualifier("appUserService") @Nonnull UserDetailsService userDetailsService) {
+                                                           @Qualifier("appUserService")
+                                                           @Nonnull final UserDetailsService userDetailsService) {
+
     final var provider = new DaoAuthenticationProvider(userDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
+
     return new ProviderManager(provider);
   }
 }

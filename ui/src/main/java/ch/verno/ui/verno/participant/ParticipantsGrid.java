@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.participant;
 
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.ParticipantFilter;
 import ch.verno.contract.dto.table.base.BaseDto;
@@ -12,7 +13,6 @@ import ch.verno.lib.Publ;
 import ch.verno.lib.lang.EmptyUtil;
 import ch.verno.rpc.client.course.CourseClient;
 import ch.verno.rpc.client.course.CourseLevelClient;
-import ch.verno.rpc.client.file.ReportClient;
 import ch.verno.rpc.client.participant.ParentClient;
 import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.ui.base.components.button.VAButton;
@@ -66,8 +66,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @NonNls public static final String GRID_COLUMN_PARENT_ONE = "parentOne";
   @NonNls public static final String GRID_COLUMN_PARENT_TWO = "parentTwo";
   @NonNls public static final String GRID_COLUMN_ADDRESS = "address";
+  @NonNls public static final String GRID_COLUMN_STATUS = "status";
+  @NonNls public static final String GRID_COLUMN_ACTION_COLUMN = "actionColumn";
 
-  @Nonnull private final Lazy<ReportClient> reportClient;
   @Nonnull private final Lazy<ParentClient> parentClient;
   @Nonnull private final Lazy<CourseClient> courseService;
   @Nonnull private final Lazy<ParticipantClient> participantClient;
@@ -78,7 +79,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
                           final boolean showFilterToolbar) {
     super(injector, ParticipantFilter.empty(), showGridToolbar, showFilterToolbar);
 
-    this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
     this.parentClient = Lazy.of(() -> injector.getInstance(ParentClient.class));
     this.participantClient = Lazy.of(() -> injector.getInstance(ParticipantClient.class));
     this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
@@ -89,7 +89,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   public ParticipantsGrid(@Nonnull final Injector injector) {
     super(injector, ParticipantFilter.empty(), true, true);
 
-    this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
     this.parentClient = Lazy.of(() -> injector.getInstance(ParentClient.class));
     this.courseService = Lazy.of(() -> injector.getInstance(CourseClient.class));
     this.participantClient = Lazy.of(() -> injector.getInstance(ParticipantClient.class));
@@ -104,7 +103,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
     final int limit = query.getLimit();
     final var sortOrders = query.getSortOrders();
 
-    return participantClient.get().getAllParticipants(filter, offset, limit, sortOrders).stream();
+    return participantClient.get().getParticipants(filter, offset, limit, sortOrders).stream();
   }
 
   @Nonnull
@@ -225,8 +224,8 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ComponentGridColumn<ParticipantDto>> getComponentColumns() {
     final var components = new ArrayList<ComponentGridColumn<ParticipantDto>>();
-    components.add(new ComponentGridColumn<>("active", this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
-    components.add(new ComponentGridColumn<>("actionColumn", this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
+    components.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
+    components.add(new ComponentGridColumn<>(GRID_COLUMN_ACTION_COLUMN, this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
     return components;
   }
 
@@ -234,7 +233,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   private Span getStatusBadge(@Nonnull final ParticipantDto dto) {
     final var string = dto.isActive() ? getTranslation("shared.active") : getTranslation("shared.inactive");
     final var statusSpan = new Span(string);
-    statusSpan.getElement().getThemeList().add(dto.isActive() ? "badge success" : "badge error");
+    statusSpan.getElement().getThemeList().add(dto.isActive() ? VABadgeLabelOptions.SUCCESS.getTheme() : VABadgeLabelOptions.ERROR.getTheme());
     return statusSpan;
   }
 
@@ -334,7 +333,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Override
   protected void setDefaultSorting() {
-    final var lastNameCol = columnsByKey.get("lastname");
+    final var lastNameCol = columnsByKey.get(GRID_COLUMN_LASTNAME);
     if (lastNameCol == null) {
       return;
     }

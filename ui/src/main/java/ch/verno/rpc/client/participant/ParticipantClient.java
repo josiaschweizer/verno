@@ -34,10 +34,10 @@ public class ParticipantClient {
   }
 
   @Nonnull
-  public List<ParticipantDto> getAllParticipants(@Nonnull final ParticipantFilter filter,
-                                                 final int offset,
-                                                 final int limit,
-                                                 List<QuerySortOrder> sortOrders) {
+  public List<ParticipantDto> getParticipants(@Nonnull final ParticipantFilter filter,
+                                              final int offset,
+                                              final int limit,
+                                              @Nonnull final List<QuerySortOrder> sortOrders) {
     final var orders = SortOrderMapper.toDto(sortOrders);
     return participantResource.get().getAllParticipants(filter, offset, limit, orders);
   }

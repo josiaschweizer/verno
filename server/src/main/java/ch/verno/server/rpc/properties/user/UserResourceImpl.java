@@ -15,6 +15,7 @@ import jakarta.annotation.Nonnull;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 @RpcResource(EnvResource.class)
@@ -61,6 +62,26 @@ public class UserResourceImpl implements UserResource {
     }
 
     return setting.get();
+  }
+
+  @Nonnull
+  @Override
+  public Optional<AppUserSettingDto> getOptionalCurrentAppUserSetting() {
+    final var user = getOptionalCurrentAppUser();
+    return user.flatMap(appUserDto -> appUserSettingService.get().findByUserId(appUserDto.getId()));
+
+  }
+
+  @Nonnull
+  @Override
+  public AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull final Supplier<AppUserSettingDto> fallback) {
+    final var user = getOptionalCurrentAppUser();
+    if (user.isEmpty()) {
+      return fallback.get();
+    }
+
+    final var setting = getOptionalCurrentAppUserSetting();
+    return setting.orElseGet(fallback);
   }
 
   @Override

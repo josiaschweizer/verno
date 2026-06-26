@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.security.api;
 
-import ch.verno.publ.ApiUrl;
+import ch.verno.contract.gateway.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

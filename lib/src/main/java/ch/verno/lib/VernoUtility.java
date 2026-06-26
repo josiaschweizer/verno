@@ -19,6 +19,7 @@ public final class VernoUtility {
   @NonNls public static final String FLEX_SHRINK_ONE = "1";
 
   // Lumo Spacing
+  @NonNls public static final String LUMO_SPACE_NONE = "0";
   @NonNls public static final String LUMO_SPACE_XS = "var(--lumo-space-xs)";
   @NonNls public static final String LUMO_SPACE_S = "var(--lumo-space-s)";
   @NonNls public static final String LUMO_SPACE_M = "var(--lumo-space-m)";

@@ -6,7 +6,7 @@ import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class ParticipantFilter extends BaseFilter {
+public class ParticipantFilter implements BaseFilter {
 
   @Nullable private String searchText;
   @Nullable private Set<Long> genderIds;

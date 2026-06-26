@@ -11,6 +11,7 @@ import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class UserProperties {
 
@@ -33,6 +34,21 @@ public class UserProperties {
   @Nonnull
   public AppUserSettingDto getCurrentAppUserSetting() {
     return userResource.getCurrentAppUserSetting();
+  }
+
+  @Nonnull
+  public Optional<AppUserSettingDto> getOptionalCurrentAppUserSetting() {
+    return userResource.getOptionalCurrentAppUserSetting();
+  }
+
+  @Nonnull
+  public AppUserSettingDto getCurrentOrEmptyAppUserSetting() {
+    return userResource.getCurrentOrFallbackAppUserSetting(AppUserSettingDto::empty);
+  }
+
+  @Nonnull
+  public AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull Supplier<AppUserSettingDto> fallback) {
+    return userResource.getCurrentOrFallbackAppUserSetting(fallback);
   }
 
   @Nonnull

@@ -3,6 +3,7 @@ package ch.verno.server.service.base;
 import ch.verno.contract.dto.filter.BaseFilter;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.base.SortOrderDto;
+import ch.verno.lib.Lazy;
 import ch.verno.server.mapper.db.base.IEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import ch.verno.server.spec.BaseSpec;
@@ -20,11 +21,11 @@ public class AbstractSpecEntityService<
         FILTER extends BaseFilter
         > extends AbstractEntityService<ENTITY, DTO, REPOSITORY, MAPPER> {
 
-  @Nonnull private final SPEC spec;
+  @Nonnull private final Lazy<SPEC> spec;
 
   protected AbstractSpecEntityService(@Nonnull final REPOSITORY repository,
                                       @Nonnull final MAPPER mapper,
-                                      @Nonnull final SPEC spec) {
+                                      @Nonnull final Lazy<SPEC> spec) {
     super(repository, mapper);
     this.spec = spec;
   }
@@ -34,7 +35,7 @@ public class AbstractSpecEntityService<
                            final int offset,
                            final int limit,
                            @Nonnull final List<SortOrderDto> sortOrders) {
-    final var specification = spec.getSpecification(filter);
+    final var specification = spec.get().getSpecification(filter);
     final var page = PageHelper.createPageRequest(offset, limit, sortOrders);
 
     return getRepository().findAll(specification, page)

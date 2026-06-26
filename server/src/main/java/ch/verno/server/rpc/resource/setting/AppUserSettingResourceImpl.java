@@ -27,4 +27,10 @@ public class AppUserSettingResourceImpl implements AppUserSettingResource {
   public Optional<AppUserSettingDto> getAppUserSettingByUserId(@Nonnull final Long userId) {
     return appUserSettingService.get().findByUserId(userId);
   }
+
+  @Nonnull
+  @Override
+  public AppUserSettingDto saveAppUserSetting(@Nonnull final AppUserSettingDto appUserSettingDto) {
+    return appUserSettingService.get().save(appUserSettingDto);
+  }
 }

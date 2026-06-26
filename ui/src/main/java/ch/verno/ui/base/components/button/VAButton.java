@@ -80,7 +80,7 @@ public class VAButton extends Button {
             .setAlignItems(Style.AlignItems.CENTER)
             .setJustifyContent(Style.JustifyContent.CENTER)
             .setGap(VernoUtility.LUMO_SPACE_S)
-            .setLineHeight(VernoUtility.LINE_HEIGHT_THREE);
+            .setLineHeight(VernoUtility.LUMO_LINE_HEIGHT_M);
 
     setIcon(content); //TODO remove hacky setIcon with text
   }

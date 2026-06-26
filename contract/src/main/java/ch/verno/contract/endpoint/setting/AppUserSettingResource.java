@@ -12,4 +12,7 @@ public interface AppUserSettingResource {
   @Nonnull
   Optional<AppUserSettingDto> getAppUserSettingByUserId(@Nonnull Long userId);
 
+  @Nonnull
+  AppUserSettingDto saveAppUserSetting(@Nonnull AppUserSettingDto appUserSettingDto);
+
 }
