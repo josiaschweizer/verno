@@ -11,7 +11,7 @@ import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
-import ch.verno.server.applicationproperties.BillingConfigProvider;
+import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.extern.billing.BillingAccessTokenService;
 import ch.verno.server.service.extern.billing.TenantBillingService;

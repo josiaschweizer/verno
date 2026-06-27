@@ -4,7 +4,7 @@ import ch.verno.common.lib.application.RunMode;
 import ch.verno.contract.endpoint.properties.application.ApplicationResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
-import ch.verno.server.applicationproperties.ApplicationConfigProvider;
+import ch.verno.server.application.properties.ApplicationConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import jakarta.annotation.Nonnull;
 

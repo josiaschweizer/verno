@@ -5,7 +5,7 @@ import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.contract.endpoint.billing.BillingResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
-import ch.verno.server.applicationproperties.BillingConfigProvider;
+import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.billing.BillingBo;

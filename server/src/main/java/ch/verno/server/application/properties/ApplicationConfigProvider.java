@@ -1,4 +1,4 @@
-package ch.verno.server.applicationproperties;
+package ch.verno.server.application.properties;
 
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;

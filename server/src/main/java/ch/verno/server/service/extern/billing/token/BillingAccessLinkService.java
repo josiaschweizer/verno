@@ -4,7 +4,7 @@ import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.common.type.billing.BillingAccessTokenPurpose;
 import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Lazy;
-import ch.verno.server.applicationproperties.BillingConfigProvider;
+import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.extern.billing.TenantBillingService;
 import jakarta.annotation.Nonnull;
