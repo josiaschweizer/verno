@@ -10,9 +10,9 @@ import java.util.List;
 public class PageHelper {
 
   @Nonnull
-  public static PageRequest createPageRequest(final int offset,
-                                              final int limit,
-                                              @Nonnull final List<SortOrderDto> sortOrders) {
+  public static PageRequest createPageRequest(@Nonnull final List<SortOrderDto> sortOrders,
+                                              final int offset,
+                                              final int limit) {
     final int page = offset / limit;
 
     final var sort = sortOrders.isEmpty()

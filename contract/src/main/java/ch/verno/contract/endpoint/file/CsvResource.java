@@ -15,9 +15,6 @@ public interface CsvResource {
   CsvSchema resolveSchema(@Nonnull String fileToken);
 
   @Nonnull
-  FileDto generateFileFromCsv(@Nonnull String filename, @Nonnull List<CsvMapDto> rows);
-
-  @Nonnull
   List<CsvMapDto> parseRows(@Nonnull FileDto fileDto);
 
   @Nonnull

@@ -26,12 +26,6 @@ public class CsvClient {
   }
 
   @Nonnull
-  public FileDto generateFileFromCsv(@Nonnull final String filename,
-                                     @Nonnull final List<CsvMapDto> rows) {
-    return csvResource.get().generateFileFromCsv(filename, rows);
-  }
-
-  @Nonnull
   public List<CsvMapDto> parseRows(@Nonnull final FileDto fileDto) {
     return csvResource.get().parseRows(fileDto);
   }
@@ -39,7 +33,7 @@ public class CsvClient {
   @Nonnull
   public FileDto parseRows(@Nonnull final String filename,
                            @Nonnull final List<CsvMapDto> rows) {
-    return csvResource.get().parseRows(rows, filename);
+    return csvResource.get().parseRows(filename, rows);
   }
 
 }

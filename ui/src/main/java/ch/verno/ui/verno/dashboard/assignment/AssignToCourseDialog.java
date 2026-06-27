@@ -61,7 +61,7 @@ public class AssignToCourseDialog extends VAAbstractDialog {
       protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
                                              @Nonnull final ParticipantFilter filter) {
         filter.setActive(true);
-        if (tenantSettingClient.get().getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings()) {
+        if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isEnforceCourseLevelSettings()) {
           filter.setCourseLevelIds(currentCourse.getCourseLevels()
                   .stream()
                   .map(BaseDto::getId)

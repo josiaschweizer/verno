@@ -4,8 +4,8 @@ import ch.verno.common.lib.Routes;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoConstants;
-import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.tenant.TenantProperties;
+import ch.verno.rpc.properties.user.UserProperties;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -26,14 +26,14 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
   @Value("${verno.dev.user}")
   private String devUser;
 
-  @Nonnull private final Lazy<AppUserClient> appUserClient;
+  @Nonnull private final Lazy<UserProperties> userProperties;
   @Nonnull private final Lazy<TenantProperties> tenantProperties;
   @Nonnull private final AuthenticationContext authenticationContext;
 
   @Inject
   public AutoLoginConfig(@Nonnull final Injector injector,
                          @Nonnull final AuthenticationContext authenticationContext) {
-    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
+    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
     this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
     this.authenticationContext = authenticationContext;
   }
@@ -56,8 +56,12 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
 
     applyTenant();
 
-    final var userDetails = appUserClient.get().findByUsernameOrEmail(devUser);
-    final var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    final var userDetails = userProperties.get().findOptionalByUsernameOrEmail(devUser);
+    if (userDetails.isEmpty()) {
+      return;
+    }
+
+    final var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.get().getAuthorities());
 
     final var securityContext = SecurityContextHolder.createEmptyContext();
     securityContext.setAuthentication(authentication);

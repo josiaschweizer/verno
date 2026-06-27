@@ -1,6 +1,7 @@
 package ch.verno.ui.lib.settings;
 
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
 import com.google.inject.Inject;
@@ -12,21 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserSettingsApplyService {
 
-  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
 
   @Inject
   public UserSettingsApplyService(@Nonnull final Injector injector) {
-    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
   }
 
   public void applyCurrentUserSettings() {
-    final var appUserOptional = userProperties.get().getOptionalCurrentAppUser();
+    final var appUserOptional = appUserClient.get().getOptionalCurrentAppUser();
     if (appUserOptional.isEmpty()) {
       return;
     }
 
     try {
-      final var userSetting = userProperties.get().getCurrentAppUserSetting();
+      final var userSetting = appUserClient.get().getCurrentAppUserSetting();
       final boolean isDarkMode = "setting.dark".equals(userSetting.getTheme());
       ThemeSetting.applyTheme(isDarkMode);
       ThemeSetting.applyLanguage(userSetting.getLanguage());

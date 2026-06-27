@@ -6,7 +6,7 @@ import jakarta.annotation.Nullable;
 public record CourseFilter(@Nullable String searchText,
                            @Nullable Long instructorId,
                            @Nullable Long courseScheduleId,
-                           @Nullable Long courseLevelId) {
+                           @Nullable Long courseLevelId) implements BaseFilter {
 
   @Nonnull
   public static CourseFilter fromSearchText(@Nullable final String searchText) {

@@ -7,6 +7,7 @@ import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.billing.BillingClient;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.application.ApplicationProperties;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
@@ -45,13 +46,13 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
   @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_CONTENT = "invalid-subscription-dialog-content";
 
   @Nonnull private final Lazy<BillingClient> billingClient;
-  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
   @Nonnull private final Lazy<ApplicationProperties> applicationProperties;
 
   @Inject
   public InvalidSubscriptionDialog(@Nonnull final Injector injector) {
     this.billingClient = Lazy.of(() -> injector.getInstance(BillingClient.class));
-    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
     this.applicationProperties = Lazy.of(() -> injector.getInstance(ApplicationProperties.class));
 
     setCloseOnEsc(false);
@@ -120,7 +121,7 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
 
   @Nonnull
   private String getRedirectLink() {
-    final var currentUser = userProperties.get().getCurrentAppUser();
+    final var currentUser = appUserClient.get().getCurrentAppUser();
 
     return billingClient.get().createSubscriptionUrlForCheckout(Optional.ofNullable(currentUser.getId()).orElse(Publ.ZERO_LONG));
   }

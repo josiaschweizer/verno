@@ -30,4 +30,8 @@ public class ReportClient {
     return reportResource.get().generateParticipantsReport();
   }
 
+  public void deleteTempFile(@Nonnull final String token) {
+    reportResource.get().deleteTempFile(token);
+  }
+
 }

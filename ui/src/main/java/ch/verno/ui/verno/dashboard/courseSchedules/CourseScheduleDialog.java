@@ -130,7 +130,7 @@ public class CourseScheduleDialog extends VAAbstractDialog {
                 : CourseScheduleStatus.COMPLETED
         );
 
-        courseScheduleClient.updateCourseSchedule(course);
+        courseScheduleClient.saveCourseSchedule(course);
       }
     });
 

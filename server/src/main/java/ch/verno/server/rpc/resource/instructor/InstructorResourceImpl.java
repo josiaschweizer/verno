@@ -1,6 +1,9 @@
 package ch.verno.server.rpc.resource.instructor;
 
-import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.filter.InstructorFilter;
+import ch.verno.contract.dto.response.base.delete.DeleteResponse;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
+import ch.verno.contract.dto.table.base.SortOrderDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.endpoint.instructor.InstructorResource;
 import ch.verno.contract.rpc.RpcResource;
@@ -40,7 +43,32 @@ public class InstructorResourceImpl implements InstructorResource {
 
   @Nonnull
   @Override
-  public SaveResult<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
+  public List<InstructorDto> getInstructors(@Nonnull final InstructorFilter filter,
+                                            @Nonnull final List<SortOrderDto> sortOrders, final int offset,
+                                            final int limit) {
+    return instructorService.get().findAll(filter, sortOrders, offset, limit);
+  }
+
+  @Nonnull
+  @Override
+  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorBo.get().saveInstructor(instructor);
+  }
+
+  @Nonnull
+  @Override
+  public DeleteResponse deleteInstructor(@Nonnull final InstructorDto instructor) {
+    return instructorService.get().delete(instructor);
+  }
+
+  @Nonnull
+  @Override
+  public DeleteResponse deleteInstructorById(@Nonnull final Long id) {
+    return instructorService.get().deleteById(id);
+  }
+
+  @Override
+  public boolean isInstructorReferenced(@Nonnull final Long instructorId) {
+    return instructorBo.get().isInstructorReferenced(instructorId);
   }
 }

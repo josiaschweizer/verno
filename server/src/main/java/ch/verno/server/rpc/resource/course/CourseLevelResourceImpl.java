@@ -39,4 +39,10 @@ public class CourseLevelResourceImpl implements CourseLevelResource {
   public List<CourseLevelDto> getAllCourseLevels() {
     return courseLevelService.get().findAll();
   }
+
+  @Nonnull
+  @Override
+  public CourseLevelDto saveCourseLevel(@Nonnull final CourseLevelDto courseLevelDto) {
+    return courseLevelService.get().save(courseLevelDto);
+  }
 }

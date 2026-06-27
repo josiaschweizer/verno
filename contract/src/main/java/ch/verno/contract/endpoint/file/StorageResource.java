@@ -1,6 +1,5 @@
 package ch.verno.contract.endpoint.file;
 
-import ch.verno.contract.dto.file.storage.DeletedObjectDto;
 import ch.verno.contract.dto.file.storage.StoredObjectDto;
 import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
@@ -21,6 +20,5 @@ public interface StorageResource {
                         @Nonnull InputStream data,
                         long size);
 
-  @Nonnull
-  DeletedObjectDto delete(@Nonnull String key);
+  void delete(@Nonnull Long id);
 }

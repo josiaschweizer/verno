@@ -117,12 +117,12 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Override
   protected void createBean(@Nonnull final CourseDto bean) {
-    courseClient.get().createCourse(bean);
+    courseClient.get().saveCourse(bean);
   }
 
   @Override
   protected void updateBean(@Nonnull final CourseDto bean) {
-    courseClient.get().updateCourse(bean);
+    courseClient.get().saveCourse(bean);
   }
 
   @Nonnull
@@ -207,7 +207,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Nonnull
   private VerticalLayout createCourseLayout() {
-    final var courseSchedules = courseScheduleClient.get().getAllCourseSchedules();
+    final var courseSchedules = courseScheduleClient.get().getCourseSchedules();
     final var courseScheduleOptions = courseSchedules.stream()
             .collect(Collectors.toMap(CourseScheduleDto::getId, CourseScheduleDto::getTitle));
 
@@ -215,7 +215,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             dto -> dto.getCourseSchedule() != null ? dto.getCourseSchedule().getId() : null,
             (dto, value) -> dto.setCourseSchedule(value == null ?
                     null :
-                    courseScheduleClient.get().getCourseScheduleById(value)),
+                    courseScheduleClient.get().getCourseScheduleById(value).orElseGet(CourseScheduleDto::empty)),
             getBinder(),
             Optional.of(getTranslation("courseSchedule.course.schedule.is.required")),
             getTranslation("courseSchedule.course.schedule"),
@@ -248,7 +248,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             dto -> dto.getInstructor() != null ? dto.getInstructor().getId() : null,
             (dto, value) -> dto.setInstructor(value == null ?
                     null :
-                    instructorClient.get().getInstructorById(value)),
+                    instructorClient.get().getInstructorById(value).orElseGet(InstructorDto::empty)),
             getBinder(),
             Optional.empty(),
             getTranslation("shared.instructor"),

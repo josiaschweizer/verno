@@ -1,6 +1,9 @@
 package ch.verno.contract.endpoint.instructor;
 
-import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.filter.InstructorFilter;
+import ch.verno.contract.dto.response.base.delete.DeleteResponse;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
+import ch.verno.contract.dto.table.base.SortOrderDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
@@ -18,6 +21,20 @@ public interface InstructorResource {
   List<InstructorDto> getAllInstructors();
 
   @Nonnull
-  SaveResult<InstructorDto> saveInstructor(@Nonnull InstructorDto instructor);
+  List<InstructorDto> getInstructors(@Nonnull InstructorFilter filter,
+                                     @Nonnull List<SortOrderDto> sortOrders,
+                                     int offset,
+                                     int limit);
+
+  @Nonnull
+  SaveResponse<InstructorDto> saveInstructor(@Nonnull InstructorDto instructor);
+
+  @Nonnull
+  DeleteResponse deleteInstructor(@Nonnull InstructorDto instructor);
+
+  @Nonnull
+  DeleteResponse deleteInstructorById(@Nonnull Long id);
+
+  boolean isInstructorReferenced(@Nonnull Long instructorId);
 
 }

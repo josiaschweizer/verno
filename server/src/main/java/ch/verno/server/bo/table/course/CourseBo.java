@@ -7,6 +7,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.course.CourseScheduleService;
 import ch.verno.server.service.intern.table.course.CourseService;
+import ch.verno.server.service.intern.table.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.List;
 public class CourseBo {
 
   @Nonnull private final Lazy<CourseService> courseService;
+  @Nonnull private final Lazy<ParticipantService> participantService;
   @Nonnull private final Lazy<CourseScheduleService> courseScheduleService;
 
   CourseBo(@Nonnull final ServerBean serverBean){
     this.courseService = Lazy.of(() -> serverBean.get(CourseService.class));
+    this.participantService = Lazy.of(() -> serverBean.get(ParticipantService.class));
     this.courseScheduleService = Lazy.of(() -> serverBean.get(CourseScheduleService.class));
   }
 
@@ -33,6 +36,14 @@ public class CourseBo {
   @Nonnull
   public List<CourseDto> getCoursesByCourseSchedule(@Nonnull final CourseScheduleDto courseSchedule) {
     return courseService.get().findByCourseScheduleId(courseSchedule.getId());
+  }
+
+  public boolean isCourseReferenced(@Nonnull final CourseDto courseDto) {
+    if (courseDto.getId() == null || courseDto.getId() == 0) {
+      return false;
+    }
+
+    return participantService.get().existsByCourseId(courseDto.getId());
   }
 
 }

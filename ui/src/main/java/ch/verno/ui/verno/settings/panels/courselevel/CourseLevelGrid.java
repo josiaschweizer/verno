@@ -11,7 +11,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,7 +35,7 @@ public class CourseLevelGrid extends BaseSettingGrid<CourseLevelDto> {
   @Nonnull
   @Override
   protected List<CourseLevelDto> fetchItems() {
-    return courseLevelService.getAllCourseLevels();
+    return courseLevelClient.get().getAllCourseLevels();
   }
 
   @Nonnull

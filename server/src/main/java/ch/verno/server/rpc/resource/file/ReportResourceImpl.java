@@ -13,6 +13,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @RpcResource(ReportResource.class)
 public class ReportResourceImpl implements ReportResource {
 
@@ -31,13 +32,18 @@ public class ReportResourceImpl implements ReportResource {
   public String generateCourseReport(@Nonnull final CourseDto course,
                                      @Nonnull final List<ParticipantDto> participants) {
     final var report = courseReportUseCase.get().generate(course, participants);
-    return tempFileBo.get().store(report.filename(), report.pdfBytes());
+    return tempFileBo.get().store(report);
   }
 
   @Nonnull
   @Override
   public String generateParticipantsReport() {
     final var report = participantReportUseCase.get().generate();
-    return tempFileBo.get().store(report.filename(), report.pdfBytes());
+    return tempFileBo.get().store(report);
+  }
+
+  @Override
+  public void deleteTempFile(@Nonnull final String token) {
+    tempFileBo.get().delete(token);
   }
 }

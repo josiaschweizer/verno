@@ -21,4 +21,8 @@ public class ParticipantRepository extends AbstractEntityRepository<
   public List<ParticipantEntity> findByCourse(@Nonnull final CourseEntity course) {
     return getRepository().findByCourses(course);
   }
+
+  public boolean existsByCourseId(@Nonnull final Long courseId){
+    return getRepository().existsByCourses_Id(courseId);
+  }
 }

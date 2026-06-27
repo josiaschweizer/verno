@@ -4,7 +4,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public record InstructorFilter(@Nullable String searchText,
-                               @Nullable Long genderId) {
+                               @Nullable Long genderId) implements BaseFilter {
 
   @Nonnull
   public static InstructorFilter ofSearchText(@Nullable final String searchText) {

@@ -1,6 +1,8 @@
 package ch.verno.server.service.base;
 
+import ch.verno.contract.dto.response.base.delete.DeleteResponse;
 import ch.verno.contract.dto.table.base.BaseDto;
+import ch.verno.lib.lang.ObjectUtil;
 import ch.verno.server.mapper.base.IEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
@@ -65,9 +67,15 @@ public abstract class AbstractEntityServiceUndefinedId<
   @Transactional
   protected abstract DTO update(@Nonnull DTO dto);
 
+  @Nonnull
   @Transactional
-  public void delete(@Nonnull final DTO dto) {
+  public DeleteResponse delete(@Nonnull final DTO dto) {
+    if (dto.getId() == null || ObjectUtil.isEmpty(dto.getId())) {
+      return DeleteResponse.emptyId();
+    }
+
     getRepository().delete(getMapper().toNewEntity(dto));
+    return DeleteResponse.success();
   }
 
   @Transactional(readOnly = true)

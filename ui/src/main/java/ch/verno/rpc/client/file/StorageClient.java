@@ -1,6 +1,5 @@
 package ch.verno.rpc.client.file;
 
-import ch.verno.contract.dto.file.storage.DeletedObjectDto;
 import ch.verno.contract.dto.file.storage.StoredObjectDto;
 import ch.verno.contract.endpoint.file.StorageResource;
 import ch.verno.lib.Lazy;
@@ -34,9 +33,8 @@ public class StorageClient {
     return storageResource.get().store(key, data, size);
   }
 
-  @Nonnull
-  public DeletedObjectDto delete(@Nonnull final String key) {
-    return storageResource.get().delete(key);
+  public void delete(@Nonnull final Long id) {
+    storageResource.get().delete(id);
   }
 
 }

@@ -1,6 +1,9 @@
 package ch.verno.server.rpc.resource.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.contract.dto.filter.CourseFilter;
+import ch.verno.contract.dto.response.base.delete.DeleteResponse;
+import ch.verno.contract.dto.table.base.SortOrderDto;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.endpoint.course.CourseResource;
@@ -13,7 +16,6 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @SuppressWarnings("unused")
 @RpcResource(CourseResource.class)
@@ -44,10 +46,41 @@ public class CourseResourceImpl implements CourseResource {
     return courseBo.get().getCoursesByCourseSchedule(courseSchedule);
   }
 
+  @Override
+  public boolean isCourseReferenced(@Nonnull final CourseDto courseDto) {
+    return courseBo.get().isCourseReferenced(courseDto);
+  }
+
   @Nonnull
   @Override
   public List<CourseDto> getAllCourses() {
     return courseService.get().findAll();
   }
 
+  @Nonnull
+  @Override
+  public List<CourseDto> getCourses(@Nonnull final CourseFilter courseFilter,
+                                    @Nonnull final List<SortOrderDto> sortOrders,
+                                    final int offset,
+                                    final int limit) {
+    return courseService.get().findAll(courseFilter, sortOrders, offset, limit);
+  }
+
+  @Nonnull
+  @Override
+  public CourseDto saveCourse(@Nonnull final CourseDto courseDto) {
+    return courseService.get().save(courseDto);
+  }
+
+  @Nonnull
+  @Override
+  public DeleteResponse delete(@Nonnull final CourseDto courseDto) {
+    return courseService.get().delete(courseDto);
+  }
+
+  @Nonnull
+  @Override
+  public DeleteResponse deleteById(@Nonnull final Long id) {
+    return courseService.get().deleteById(id);
+  }
 }

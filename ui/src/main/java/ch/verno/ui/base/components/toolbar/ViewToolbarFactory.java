@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.toolbar;
 
 import ch.verno.common.lib.Routes;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.button.VAButton;
@@ -111,10 +112,11 @@ public class ViewToolbarFactory {
 
   private static void applyUserBadgeToToolbar(@Nonnull final Injector injector,
                                               @Nonnull final ViewToolbar toolbar) {
-    final var userProperties = injector.getInstance(UserProperties.class);
-    final var currentUser = userProperties.getCurrentAppUser();
+    final var appUserClient = injector.getInstance(AppUserClient.class);
+    final var currentUser = appUserClient.getCurrentAppUser();
     final var ui = UI.getCurrent();
 
+    final var userProperties = injector.getInstance(UserProperties.class);
     final var userBadge = new UserActionBadge(currentUser.getUsername())
 //            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))

@@ -11,11 +11,15 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.List;
 
 public class ImportErrorDownloadDialog extends VAAbstractDialog {
+
+  @NonNls public static final String DOWNLOAD_ATTRIBUTE = "download";
+  @NonNls public static final String CLICK_JS = "click";
 
   @Nonnull private final String errorFileToken;
   @Nonnull private final String fileName;
@@ -50,14 +54,14 @@ public class ImportErrorDownloadDialog extends VAAbstractDialog {
   @Nonnull
   private Button createDownloadButton() {
     final var hidden = new Anchor(buildAttachmentUrl(errorFileToken), fileName);
-    hidden.getElement().setAttribute("download", true);
+    hidden.getElement().setAttribute(DOWNLOAD_ATTRIBUTE, true);
     hidden.getStyle().setDisplay(Style.Display.NONE);
     add(hidden);
 
     final var downloadButton = new Button(getTranslation("shared.download"));
     downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     downloadButton.addClickListener(e -> {
-      hidden.getElement().callJsFunction("click");
+      hidden.getElement().callJsFunction(CLICK_JS);
       close();
     });
 

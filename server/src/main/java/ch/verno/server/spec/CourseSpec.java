@@ -2,20 +2,20 @@ package ch.verno.server.spec;
 
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.db.entity.course.CourseEntity;
-import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class CourseSpec {
+public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
 
   @Nonnull
-  public Specification<CourseEntity> courseSpec(@Nonnull final CourseFilter filter) {
+  @Override
+  public Specification<CourseEntity> getSpecification(@Nonnull final CourseFilter filter) {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
@@ -86,17 +86,5 @@ public class CourseSpec {
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
-  }
-
-  @Nonnull
-  private static Predicate likeLower(@Nonnull final CriteriaBuilder cb,
-                                     @Nonnull final Expression<?> path,
-                                     @Nonnull final String pattern) {
-    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
-  }
-
-  @Nonnull
-  private static String normalize(@Nullable final String s) {
-    return BaseSpec.normalize(s);
   }
 }

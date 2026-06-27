@@ -19,4 +19,7 @@ public interface CourseLevelResource {
   @Nonnull
   List<CourseLevelDto> getAllCourseLevels();
 
+  @Nonnull
+  CourseLevelDto saveCourseLevel(@Nonnull CourseLevelDto courseLevelDto);
+
 }

@@ -278,6 +278,10 @@ public class ParticipantDto extends BaseDto<Long> {
     }
   }
 
+  public void removeCourse(@Nonnull final CourseDto courseDto) {
+    courses.remove(courseDto);
+  }
+
   @Nonnull
   public AddressDto getAddress() {
     return address;

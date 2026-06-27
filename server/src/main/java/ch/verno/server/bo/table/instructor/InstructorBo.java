@@ -1,10 +1,11 @@
 package ch.verno.server.bo.table.instructor;
 
-import ch.verno.contract.dto.result.base.SaveResult;
-import ch.verno.contract.dto.result.error.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.service.intern.table.course.CourseService;
 import ch.verno.server.service.intern.table.instructor.InstructorService;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -15,25 +16,27 @@ public class InstructorBo {
   @NonNls public static final String DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT = "duplicate key value violates unique constraint";
   @NonNls public static final String EMAIL = "email";
 
+  @Nonnull private final Lazy<CourseService> courseService;
   @Nonnull private final Lazy<InstructorService> instructorService;
 
   protected InstructorBo(@Nonnull final ServerBean serverBean) {
+    this.courseService = Lazy.of(() -> serverBean.get(CourseService.class));
     this.instructorService = Lazy.of(() -> serverBean.get(InstructorService.class));
   }
 
   @Nonnull
-  public SaveResult<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructorDto) {
+  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructorDto) {
     try {
       final var saved = instructorService.get().save(instructorDto);
       instructorService.get().flush();
 
-      return SaveResult.success(saved);
+      return SaveResponse.success(saved);
     } catch (DataIntegrityViolationException exception) {
       if (isDuplicatedInstructorEmail(exception)) {
-        return SaveResult.failed(SaveErrorCode.INSTRUCTOR_EMAIL_ALREADY_EXISTS);
+        return SaveResponse.failed(SaveErrorCode.EMAIL_ALREADY_EXISTS);
       }
 
-      return SaveResult.failed(SaveErrorCode.DATABASE_ERROR);
+      return SaveResponse.failed(SaveErrorCode.DATABASE_ERROR);
     }
   }
 
@@ -44,6 +47,14 @@ public class InstructorBo {
     return message != null &&
             message.contains(DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT) &&
             message.toLowerCase().contains(EMAIL);
+  }
+
+  public boolean isInstructorReferenced(@Nonnull final Long instructorId) {
+    if (!instructorService.get().existsById(instructorId)) {
+      return false;
+    }
+
+    return courseService.get().existsById(instructorId);
   }
 
 }

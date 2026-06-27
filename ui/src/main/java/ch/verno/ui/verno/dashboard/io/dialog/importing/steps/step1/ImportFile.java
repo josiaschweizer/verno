@@ -18,8 +18,7 @@ public class ImportFile extends BaseDialogStep {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
-    getStyle().setMargin(VernoUtility.LUMO_ZERO)
-            .setGap(VernoUtility.LUMO_ZERO);
+    getStyle().setMargin(VernoUtility.NONE).setGap(VernoUtility.NONE);
 
     fileUpload = injector.getInstance(VAFileUploadArea.class);
     fileUpload.setAcceptedFileTypes(FileType.CSV.getFileExtension());

@@ -38,7 +38,7 @@ public enum SmtpSecurity {
     throw new IllegalArgumentException("Invalid SmtpSecurity name: " + name);
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 

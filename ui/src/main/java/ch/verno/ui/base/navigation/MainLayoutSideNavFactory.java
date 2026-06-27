@@ -1,5 +1,7 @@
 package ch.verno.ui.base.navigation;
 
+import ch.verno.common.lib.Routes;
+import ch.verno.common.type.mail.MailValidity;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.mail.MailConfigClient;
@@ -126,11 +128,12 @@ public class MainLayoutSideNavFactory {
 
   private boolean hasValidMailConfiguration() {
     try {
-      if (!mailConfigClient.hasConfigForCurrentTenant()) {
+      final var config = mailConfigClient.get().getMailConfigForCurrentTenant();
+      if (config.isEmpty()) {
         return false;
       }
 
-      final var mailConfig = mailConfigClient.getConfigForCurrentTenant();
+      final var mailConfig = config.get();
       return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
     } catch (Exception e) {
       return false;
@@ -139,9 +142,8 @@ public class MainLayoutSideNavFactory {
 
   @Nonnull
   private SideNavItem createSideNavItem(@Nonnull final MenuEntry menuEntry) {
-    final var title = TranslationHelper.getTranslation(globalInterface, menuEntry.title());
-
-    final SideNavItem item = (menuEntry.icon() != null)
+    final var title = injector.getInstance(TranslationHelper.class).getTranslation(menuEntry.title());
+    final var item = (menuEntry.icon() != null)
             ? new SideNavItem(title, menuEntry.path(), createIcon(menuEntry))
             : new SideNavItem(title, menuEntry.path());
 
@@ -159,9 +161,9 @@ public class MainLayoutSideNavFactory {
       return new Icon(VaadinIcon.CUBES);
     } else if (icon.startsWith(CustomIconConstants.VAADIN_ICON)) {
       return new Icon(icon);
-    } else {
-      final var customIcon = CustomIcons.of(icon);
-      return IconUtil.create(customIcon);
     }
+
+    final var customIcon = CustomIcons.of(icon);
+    return IconUtil.create(customIcon);
   }
 }

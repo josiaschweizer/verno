@@ -6,6 +6,7 @@ import ch.verno.contract.dto.table.setting.AppUserSettingDto;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.gender.GenderClient;
 import ch.verno.rpc.client.instructor.InstructorClient;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
@@ -41,7 +42,7 @@ public class InstructorDetail extends BaseDetailView<InstructorDto> implements H
     this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
     this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
 
-    this.userSettingDto = injector.getInstance(UserProperties.class).getCurrentAppUserSetting();
+    this.userSettingDto = injector.getInstance(AppUserClient.class).getCurrentAppUserSetting();
     setShowPaddingAroundDetail(true);
   }
 

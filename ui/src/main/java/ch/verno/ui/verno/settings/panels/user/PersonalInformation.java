@@ -1,12 +1,12 @@
 package ch.verno.ui.verno.settings.panels.user;
 
 import ch.verno.common.db.role.Role;
+import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.form.FormMode;
-import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.verno.usermanagemnt.dialog.ChangePasswordDialog;
@@ -56,10 +56,10 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
   @Nonnull
   @Override
   protected Component createContent() {
-    final var userLayout = new UserLayout(globalInterface, new EntryFactory<>(globalInterface.getI18NProvider()));
+    final var userLayout = injector.getInstance(UserLayout.class);
     userLayout.setUsernamePanelReadOnly(getTranslation("shared.der.benutzername.kann.nur.durch.den.administrator.geandert.werden"));
 
-    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
+    final var currentUser = userClient.get().getCurrentAppUser();
     if (currentUser.getRole().equals(Role.ADMIN)) {
       userLayout.setRoleReadOnly(getTranslation("shared.ein.administrator.kann.sich.selber.nicht.die.rolle.entziehen.bitte.wenden.sie.sich.an.einen.anderen.administrator.um.ihre.rolle.zu.andern"));
     } else {
@@ -84,7 +84,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
               dto.isActive()
       );
 
-      final var updated = userService.updateAppUser(updatedUser);
+      final var updated = userClient.get().saveUser(updatedUser);
       dto = UserDtoUnhashedPw.fromAppUserDto(updated);
       dto.setPassword(Publ.EIGHT_STARS);
 
@@ -102,7 +102,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
   @Nonnull
   @Override
   protected UserDtoUnhashedPw createNewBeanInstance() {
-    final var currentUser = globalInterface.getUserProperties().getCurrentUser();
+    final var currentUser = userClient.get().getCurrentAppUser();
     currentUser.setPasswordHash(Publ.EIGHT_STARS);
     return UserDtoUnhashedPw.fromAppUserDto(currentUser);
   }

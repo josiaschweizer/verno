@@ -1,6 +1,8 @@
 package ch.verno.contract.endpoint.course;
 
 import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.contract.dto.filter.CourseScheduleFilter;
+import ch.verno.contract.dto.table.base.SortOrderDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
@@ -20,6 +22,15 @@ public interface CourseScheduleResource {
 
   @Nonnull
   List<CourseScheduleDto> getByStatus(@Nonnull CourseScheduleStatus status);
+
+  @Nonnull
+  List<CourseScheduleDto> getCourseSchedules(@Nonnull CourseScheduleFilter filter,
+                                             int offset,
+                                             int limit,
+                                             @Nonnull List<SortOrderDto> sortOrders);
+
+  @Nonnull
+  List<CourseScheduleDto> getCourseSchedules();
 
   @Nonnull
   CourseScheduleDto saveCourseSchedule(@Nonnull CourseScheduleDto dto);

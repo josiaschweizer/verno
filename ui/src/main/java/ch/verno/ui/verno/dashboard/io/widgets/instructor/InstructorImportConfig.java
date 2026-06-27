@@ -5,8 +5,8 @@ import ch.verno.common.io.importing.DbField;
 import ch.verno.common.io.importing.DbFieldNested;
 import ch.verno.common.io.importing.DbFieldTyped;
 import ch.verno.contract.dto.file.temp.CsvMapDto;
-import ch.verno.contract.dto.result.base.SaveResult;
-import ch.verno.contract.dto.result.error.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.lib.Lazy;
@@ -19,6 +19,7 @@ import ch.verno.ui.feature.importing.csv.InstructorCsvMapper;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportResult;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -26,7 +27,6 @@ import org.jetbrains.annotations.NonNls;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class InstructorImportConfig implements ImportEntityConfig<InstructorDto> {
 
@@ -51,6 +51,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
   @Nonnull private final TranslationHelper translationHelper;
 
+  @Inject
   public InstructorImportConfig(@Nonnull final Injector injector) {
     this.injector = injector;
 
@@ -156,18 +157,17 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
 
   @Nonnull
   private String buildImportErrorMessage(@Nonnull final InstructorDto instructor,
-                                         @Nonnull final SaveResult<InstructorDto> saveResult) {
-    final var errorCode = saveResult.errorCode();
-    final var errorMessage = saveResult.errorMessage();
+                                         @Nonnull final SaveResponse<InstructorDto> saveResponse) {
+    final var errorCode = saveResponse.errorCode();
 
     if (errorCode != null) {
-      if (errorCode.equals(SaveErrorCode.INSTRUCTOR_EMAIL_ALREADY_EXISTS)) {
+      if (errorCode.equals(SaveErrorCode.EMAIL_ALREADY_EXISTS)) {
         return translationHelper.getTranslation("common.instructor.mit.dieser.e.mail.existiert.bereits.0", instructor.getEmail());
       }
 
-      return translationHelper.getTranslation("common.datenbankfehler.beim.import.0", Optional.ofNullable(errorMessage).orElse(errorCode));
-
+      return translationHelper.getTranslation(errorCode.getTranslationKey());
     }
+
     return translationHelper.getTranslation("common.datenbankfehler.beim.import");
   }
 

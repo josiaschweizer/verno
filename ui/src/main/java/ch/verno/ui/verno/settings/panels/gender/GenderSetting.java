@@ -5,7 +5,7 @@ import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.rpc.client.gender.GenderClient;
-import ch.verno.rpc.properties.user.UserProperties;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.multilanguagefield.VAMultiLanguageField;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import com.google.inject.Inject;
@@ -20,14 +20,14 @@ import java.util.List;
 public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
   @Nonnull private final Lazy<GenderClient> genderClient;
-  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
 
   @Inject
   public GenderSetting(@Nonnull final Injector injector) {
     super(injector, "setting.gender.settings", true);
 
     this.genderClient = Lazy.of(() -> injector.getInstance(GenderClient.class));
-    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
 
     loadGenderSettings();
   }
@@ -108,6 +108,6 @@ public class GenderSetting extends VABaseSetting<GenderSettingDto> {
 
   @Nonnull
   private Language getCurrentUserLanguage() {
-    return userProperties.get().getCurrentUserLanguage();
+    return appUserClient.get().getCurrentUserLanguage();
   }
 }

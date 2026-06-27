@@ -1,11 +1,11 @@
 package ch.verno.ui.config.i18n;
 
 import ch.verno.lib.lib.language.Language;
-import ch.verno.lib.lib.language.LanguageUtil;
-import ch.verno.rpc.properties.user.UserProperties;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.error.GlobalErrorHandler;
 import ch.verno.ui.injection.InjectorFactory;
 import com.google.inject.Injector;
+import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import jakarta.annotation.Nonnull;
@@ -20,7 +20,11 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
   @Override
   public void serviceInit(@Nonnull final ServiceInitEvent event) {
-    final var injector = InjectorFactory.create();
+    final var i18nProvider = event.getSource()
+            .getInstantiator()
+            .getOrCreate(I18NProvider.class);
+
+    final var injector = InjectorFactory.create(i18nProvider);
 
     event.getSource().addSessionInitListener(sessionEvent -> {
       final var errorHandler = injector.getInstance(GlobalErrorHandler.class);
@@ -32,6 +36,7 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
       final var language = getUserLanguage(injector);
       final var locale = Locale.forLanguageTag(language.getCode());
+
       ui.setLocale(locale);
       ui.getSession().setLocale(locale);
     });
@@ -39,13 +44,7 @@ public final class VernoServiceInitListener implements VaadinServiceInitListener
 
   @Nonnull
   private Language getUserLanguage(@Nonnull final Injector injector) {
-    // first check if there is a user logged in
-    final var userProperties = injector.getInstance(UserProperties.class);
-    final var currentUser = userProperties.getOptionalCurrentAppUser();
-    if (currentUser.isPresent()) {
-      return LanguageUtil.getDefaultLanguage();
-    }
-
-    return userProperties.getCurrentUserLanguage();
+    final var appUserClient = injector.getInstance(AppUserClient.class);
+    return appUserClient.getCurrentOrDefaultUserLanguage();
   }
 }

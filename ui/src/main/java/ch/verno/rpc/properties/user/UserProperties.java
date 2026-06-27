@@ -1,64 +1,46 @@
 package ch.verno.rpc.properties.user;
 
 import ch.verno.common.lib.Routes;
-import ch.verno.contract.dto.table.setting.AppUserSettingDto;
-import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.endpoint.properties.user.UserResource;
-import ch.verno.lib.lib.language.Language;
+import ch.verno.contract.endpoint.user.AppUserResource;
+import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.base.navigation.Navigator;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class UserProperties {
 
-  @Nonnull private final UserResource userResource;
+  @Nonnull private final Lazy<UserResource> userResource;
+  @Nonnull private final Lazy<AppUserResource> appUserResource;
 
   public UserProperties(@Nonnull final RpcFactory rpcFactory) {
-    this.userResource = rpcFactory.create(UserResource.class);
+    this.userResource = Lazy.of(() -> rpcFactory.create(UserResource.class));
+    this.appUserResource = Lazy.of(() -> rpcFactory.create(AppUserResource.class));
   }
 
   @Nonnull
-  public AppUserDto getCurrentAppUser() {
-    return userResource.getCurrentAppUser();
-  }
+  public Optional<UserDetails> findOptionalByUsernameOrEmail(@Nonnull final String usernameOrEmail) {
+    final var userOptional = appUserResource.get().findByUsernameOrEmail(usernameOrEmail);
+    if (userOptional.isEmpty()) {
+      return Optional.empty();
+    }
 
-  @Nonnull
-  public Optional<AppUserDto> getOptionalCurrentAppUser() {
-    return userResource.getOptionalCurrentAppUser();
-  }
-
-  @Nonnull
-  public AppUserSettingDto getCurrentAppUserSetting() {
-    return userResource.getCurrentAppUserSetting();
-  }
-
-  @Nonnull
-  public Optional<AppUserSettingDto> getOptionalCurrentAppUserSetting() {
-    return userResource.getOptionalCurrentAppUserSetting();
-  }
-
-  @Nonnull
-  public AppUserSettingDto getCurrentOrEmptyAppUserSetting() {
-    return userResource.getCurrentOrFallbackAppUserSetting(AppUserSettingDto::empty);
-  }
-
-  @Nonnull
-  public AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull Supplier<AppUserSettingDto> fallback) {
-    return userResource.getCurrentOrFallbackAppUserSetting(fallback);
-  }
-
-  @Nonnull
-  public Language getCurrentUserLanguage() {
-    return userResource.getCurrentUserLanguage();
+    final var user = userOptional.get();
+    final var userDetail = User.withUsername(user.getUsername())
+            .password(user.getPasswordHash())
+            .roles(user.getRole().getRole())
+            .build();
+    return Optional.of(userDetail);
   }
 
   public void logout() {
     final var ui = UI.getCurrent();
-    final var result = userResource.logout();
+    final var result = userResource.get().logout();
     if (result) {
       ui.getSession().getSession().invalidate();
       Navigator.navigateTo(Routes.LOGIN);

@@ -17,4 +17,5 @@ public interface ObjectStorage {
   void delete(@Nonnull String key) throws Exception;
 
   boolean exists(@Nonnull String key) throws Exception;
+
 }

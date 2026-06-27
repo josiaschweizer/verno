@@ -159,7 +159,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   }
 
   private void deleteParticipant(@Nonnull final ParticipantDto dto) {
-    if (participantClient.get().deleteParticipantById(dto.getId())) {
+    if (participantClient.get().deleteParticipantById(dto.getId()).successful()) {
       deleteParent(dto.getParentOne());
       deleteParent(dto.getParentTwo());
 

@@ -1,10 +1,12 @@
 package ch.verno.ui.verno.settings.panels.mail;
 
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.common.type.mail.MailValidity;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.lib.VernoUtility;
 import ch.verno.rpc.client.mail.MailClient;
+import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;
@@ -37,6 +39,7 @@ import java.util.concurrent.Executors;
 public class TestConnectionDialog extends VAAbstractDialog {
 
   @Nonnull private final Lazy<MailClient> mailClient;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
 
   @Nullable private EmailField emailField;
   @Nullable private ProgressBar progressBar;
@@ -55,6 +58,7 @@ public class TestConnectionDialog extends VAAbstractDialog {
   @Inject
   public TestConnectionDialog(@Nonnull final Injector injector) {
     this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
+    this.mailConfigClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
 
     initUI(getTranslation("setting.test.email.connection"), DialogSize.MEDIUM);
   }
@@ -311,7 +315,6 @@ public class TestConnectionDialog extends VAAbstractDialog {
   }
 
   private void setMailConfigEnabled(final boolean valid) {
-    final var mailConfigService = globalInterface.getService(IMailConfigService.class);
-    mailConfigService.updateMailValidity(valid ? MailValidity.TESTED_VALID : MailValidity.TESTED_INVALID);
+    mailConfigClient.get().updateCurrentMailValidity(valid ? MailValidity.TESTED_VALID : MailValidity.TESTED_INVALID);
   }
 }

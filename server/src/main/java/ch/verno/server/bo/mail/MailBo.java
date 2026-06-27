@@ -1,11 +1,12 @@
 package ch.verno.server.bo.mail;
 
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.common.type.mail.MailValidity;
 import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.mail.MailConfigMapper;
-import ch.verno.server.repository.mail.MailConfigRepository;
+import ch.verno.server.service.intern.table.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
@@ -13,23 +14,34 @@ import java.util.Optional;
 public class MailBo {
 
   @Nonnull private final MailConfigMapper mailConfigMapper;
-  @Nonnull private final Lazy<MailConfigRepository> mailConfigRepository;
+  @Nonnull private final Lazy<MailConfigService> mailConfigService;
 
   protected MailBo(@Nonnull final ServerBean serverBean) {
     this.mailConfigMapper = serverBean.get(MailConfigMapper.class);
-    this.mailConfigRepository = Lazy.of(() -> serverBean.get(MailConfigRepository.class));
+    this.mailConfigService = Lazy.of(() -> serverBean.get(MailConfigService.class));
   }
 
   @Nonnull
   public Optional<MailConfigDto> getMailConfigForCurrentTenant() {
     final var currentTenant = TenantContext.getRequired();
-    return mailConfigRepository.get().findByTenantId(currentTenant)
-            .map(mailConfigMapper::toSimpleDto);
+    return mailConfigService.get().findByTenantId(currentTenant);
   }
 
   public boolean hasMailConfigForCurrentTenant() {
     final var currentTenant = TenantContext.getRequired();
-    return mailConfigRepository.get().findByTenantId(currentTenant).isPresent();
+    return mailConfigService.get().existsByTenantId(currentTenant);
+  }
+
+  @Nonnull
+  public MailConfigDto updateCurrentMailValidity(@Nonnull final MailValidity mailValidity) {
+    final var currentConfigOptional = getMailConfigForCurrentTenant();
+    if (currentConfigOptional.isEmpty()) {
+      return MailConfigDto.empty();
+    }
+
+    final var currentConfig = currentConfigOptional.get();
+    currentConfig.setMailValidity(mailValidity);
+    return mailConfigService.get().save(currentConfig);
   }
 
 }

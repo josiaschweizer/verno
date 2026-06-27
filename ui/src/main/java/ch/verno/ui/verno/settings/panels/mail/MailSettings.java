@@ -9,6 +9,7 @@ import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.event.ReloadNavigationBarEvent;
 import ch.verno.ui.lib.event.bus.ViewEventBus;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -177,7 +178,7 @@ public class MailSettings extends VABaseSetting<MailConfigDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      mailConfigService.upsertConfig(dto);
+      mailConfigClient.get().saveMailConfig(dto);
       updateNavigationBar();
     }
   }

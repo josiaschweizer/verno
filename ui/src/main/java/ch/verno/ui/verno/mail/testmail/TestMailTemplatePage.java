@@ -10,11 +10,12 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 
 @PermitAll
-@com.vaadin.flow.router.Route(Routes.MAIL_TEST)
+@Route(Routes.MAIL_TEST)
 public class TestMailTemplatePage extends VAVerticalLayout {
 
   @Nonnull private final Injector injector;

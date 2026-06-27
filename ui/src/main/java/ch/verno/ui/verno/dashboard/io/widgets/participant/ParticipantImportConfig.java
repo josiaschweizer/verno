@@ -7,8 +7,8 @@ import ch.verno.common.io.importing.DbFieldNested;
 import ch.verno.common.io.importing.DbFieldRelation;
 import ch.verno.common.io.importing.DbFieldTyped;
 import ch.verno.contract.dto.file.temp.CsvMapDto;
-import ch.verno.contract.dto.result.base.SaveResult;
-import ch.verno.contract.dto.result.error.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
@@ -246,10 +246,10 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
 
   @Nonnull
   private String buildImportErrorMessage(@Nonnull final ParticipantDto participant,
-                                         @Nonnull final SaveResult<ParticipantDto> saveResult) {
-    final var errorCode = saveResult.errorCode();
+                                         @Nonnull final SaveResponse<ParticipantDto> saveResponse) {
+    final var errorCode = saveResponse.errorCode();
     if (errorCode != null) {
-      if (errorCode.equals(SaveErrorCode.PARTICIPANT_EMAIL_ALREADY_EXISTS)) {
+      if (errorCode.equals(SaveErrorCode.EMAIL_ALREADY_EXISTS)) {
         return translationHelper.getTranslation("common.participant.with.this.email.already.exists.0", participant.getEmail());
       } else {
         return translationHelper.getTranslation("common.datenbankfehler.beim.import.0", errorCode);

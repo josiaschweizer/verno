@@ -84,7 +84,7 @@ public class ExportDialog<T> extends VAAbstractDialog {
 
 
   private void generateCsvFile(@Nonnull final ExportEntityConfig<T> config) {
-    final var fileDto = csvClient.get().generateFileFromCsv(config.getFileName(), config.getRows());
+    final var fileDto = csvClient.get().parseRows(config.getFileName(), config.getRows());
     fileToken = tempFileClient.get().store(fileDto);
   }
 

@@ -1,11 +1,14 @@
 package ch.verno.rpc.client.instructor;
 
-import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.filter.InstructorFilter;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.contract.endpoint.instructor.InstructorResource;
 import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.helper.SortOrderMapper;
 import ch.verno.rpc.rpc.RpcFactory;
 import com.google.inject.Inject;
+import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
@@ -31,9 +34,27 @@ public class InstructorClient {
   }
 
   @Nonnull
+  public List<InstructorDto> getInstructors(@Nonnull final InstructorFilter filter,
+                                            @Nonnull final List<QuerySortOrder> sortOrders,
+                                            final int offset,
+                                            final int limit) {
+    final var orders = SortOrderMapper.toDto(sortOrders);
+    return instructorResource.get().getInstructors(filter, orders, offset, limit);
+  }
+
+  @Nonnull
   @SuppressWarnings("UnusedReturnValue")
-  public SaveResult<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
+  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorResource.get().saveInstructor(instructor);
   }
+
+  public void deleteInstructor(@Nonnull final InstructorDto instructor) {
+    instructorResource.get().deleteInstructor(instructor);
+  }
+
+  public boolean isInstructorReferenced(@Nonnull final Long instructorId) {
+    return instructorResource.get().isInstructorReferenced(instructorId);
+  }
+
 
 }

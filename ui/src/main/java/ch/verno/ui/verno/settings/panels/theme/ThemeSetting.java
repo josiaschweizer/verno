@@ -4,6 +4,7 @@ import ch.verno.contract.dto.table.setting.AppUserSettingDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.rpc.client.setting.AppUserSettingClient;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.theme.ThemeConstants;
@@ -33,7 +34,7 @@ public class ThemeSetting extends VABaseSetting<UISettingDto> {
     super(injector, TITLE_KEY, true);
 
     this.appUserSettingClient = Lazy.of(() -> injector.getInstance(AppUserSettingClient.class));
-    this.currentAppUserSetting = injector.getInstance(UserProperties.class).getCurrentOrEmptyAppUserSetting();
+    this.currentAppUserSetting = injector.getInstance(AppUserClient.class).getCurrentOrEmptyAppUserSetting();
   }
 
   @Override

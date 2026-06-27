@@ -1,8 +1,10 @@
 package ch.verno.server.rpc.resource.participant;
 
 import ch.verno.contract.dto.filter.ParticipantFilter;
-import ch.verno.contract.dto.result.base.SaveResult;
+import ch.verno.contract.dto.response.base.delete.DeleteResponse;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.base.SortOrderDto;
+import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.contract.endpoint.participant.ParticipantResource;
 import ch.verno.contract.rpc.RpcResource;
@@ -35,27 +37,54 @@ public class ParticipantResourceImpl implements ParticipantResource {
 
   @Nonnull
   @Override
-  public List<ParticipantDto> getAllParticipants() {
+  public List<ParticipantDto> getParticipants() {
     return participantService.get().findAll();
   }
 
   @Nonnull
   @Override
-  public List<ParticipantDto> getAllParticipants(@Nonnull final ParticipantFilter filter,
-                                                 final int offset,
-                                                 final int limit,
-                                                 @Nonnull final List<SortOrderDto> sortOrders) {
-    return participantService.get().findAll(filter, offset, limit, sortOrders);
+  public List<ParticipantDto> getParticipants(@Nonnull final ParticipantFilter filter,
+                                              final int offset,
+                                              final int limit,
+                                              @Nonnull final List<SortOrderDto> sortOrders) {
+    return participantService.get().findAll(filter, sortOrders, offset, limit);
   }
 
   @Nonnull
   @Override
-  public SaveResult<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
+  public SaveResponse<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
     return participantBo.get().saveParticipant(dto);
   }
 
+  @Nonnull
   @Override
-  public boolean deleteParticipantById(@Nonnull final Long id) {
+  public DeleteResponse deleteParticipantById(@Nonnull final Long id) {
     return participantService.get().deleteById(id);
+  }
+
+  @Nonnull
+  @Override
+  public ParticipantDto enableParticipant(@Nonnull final Long id) {
+    return participantBo.get().enableParticipant(id);
+  }
+
+  @Nonnull
+  @Override
+  public ParticipantDto disableParticipant(@Nonnull final Long id) {
+    return participantBo.get().disableParticipant(id);
+  }
+
+  @Nonnull
+  @Override
+  public ParticipantDto addCourse(@Nonnull final Long participantId,
+                                  @Nonnull final CourseDto courseDto) {
+    return participantBo.get().addCourse(participantId, courseDto);
+  }
+
+  @Nonnull
+  @Override
+  public ParticipantDto removeCourse(@Nonnull final Long participantId,
+                                     @Nonnull final CourseDto courseDto) {
+    return participantBo.get().removeCourse(participantId, courseDto);
   }
 }

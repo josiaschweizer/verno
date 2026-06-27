@@ -34,4 +34,9 @@ public class CourseLevelClient {
     return courseLevelResource.get().getAllCourseLevels();
   }
 
+  @Nonnull
+  public CourseLevelDto saveCourseLevel(@Nonnull final  CourseLevelDto courseLevelDto) {
+    return courseLevelResource.get().saveCourseLevel(courseLevelDto);
+  }
+
 }

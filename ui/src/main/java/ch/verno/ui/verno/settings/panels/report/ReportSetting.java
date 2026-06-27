@@ -12,6 +12,7 @@ import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.client.file.FileApiClient;
 import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
@@ -31,6 +32,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull private final Lazy<TenantProperties> tenantProperties;
   @Nonnull private final Lazy<TenantSettingClient> tenantSettingClient;
 
+  @Inject
   public ReportSetting(@Nonnull final Injector injector) {
     super(injector, TITLE_KEY, true);
 

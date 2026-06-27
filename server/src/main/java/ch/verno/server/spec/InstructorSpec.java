@@ -2,18 +2,19 @@ package ch.verno.server.spec;
 
 import ch.verno.contract.dto.filter.InstructorFilter;
 import ch.verno.db.entity.instructor.InstructorEntity;
-import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class InstructorSpec {
+public class InstructorSpec extends BaseSpec<InstructorEntity, InstructorFilter> {
 
   @Nonnull
-  public Specification<InstructorEntity> instructorSpec(@Nonnull final InstructorFilter filter) {
+  @Override
+  public Specification<InstructorEntity> getSpecification(@Nonnull final InstructorFilter filter) {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
@@ -58,17 +59,5 @@ public class InstructorSpec {
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
-  }
-
-  @Nonnull
-  private static Predicate likeLower(final CriteriaBuilder cb,
-                                     final Expression<?> path,
-                                     final String pattern) {
-    return cb.like(cb.lower(cb.coalesce(path.as(String.class), Publ.EMPTY_STRING)), pattern);
-  }
-
-  @Nonnull
-  private static String normalize(final String s) {
-    return BaseSpec.normalize(s);
   }
 }

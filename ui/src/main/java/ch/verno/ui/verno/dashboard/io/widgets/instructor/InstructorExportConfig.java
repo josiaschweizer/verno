@@ -16,12 +16,11 @@ import java.util.List;
 
 public class InstructorExportConfig extends AbstractTranslationHelper implements ExportEntityConfig<InstructorDto> {
 
-  @Nonnull private final Injector injector;
   @Nonnull private final Lazy<InstructorClient> instructorClient;
 
   @Inject
   public InstructorExportConfig(@Nonnull final Injector injector) {
-    this.injector = injector;
+    super(injector);
     this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
   }
 

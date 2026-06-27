@@ -35,9 +35,9 @@ public class InstructorWidget extends VAAccordionWidgetBase {
             getTranslation("shared.import"),
             VaadinIcon.DOWNLOAD,
             e -> {
-              final var config = new InstructorImportConfig(globalInterface);
+              final var config = injector.getInstance(InstructorImportConfig.class);
               final var importDialog = new ImportDialog(
-                      globalInterface,
+                      injector,
                       getTranslation("shared.import") + Publ.SPACE + getTranslation("shared.instructor"),
                       config
               );
@@ -48,8 +48,8 @@ public class InstructorWidget extends VAAccordionWidgetBase {
             getTranslation("shared.export"),
             VaadinIcon.UPLOAD,
             e -> {
-              final var config = new InstructorExportConfig(globalInterface);
-              final var exportDialog = new ExportDialog<>(globalInterface, config);
+              final var config = injector.getInstance(InstructorExportConfig.class);
+              final var exportDialog = new ExportDialog<>(injector, config);
               exportDialog.open();
             });
 
@@ -58,7 +58,7 @@ public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    instructorGrid = new InstructorsGrid(globalInterface, false, false);
+    instructorGrid = new InstructorsGrid(injector, false, false);
     instructorGrid.getGrid().setAllRowsVisible(true);
     add(instructorGrid);
   }

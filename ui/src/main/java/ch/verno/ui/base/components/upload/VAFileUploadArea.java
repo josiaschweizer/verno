@@ -5,7 +5,6 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.lib.VernoUtility;
 import ch.verno.rpc.client.file.TempFileClient;
-import ch.verno.ui.base.components.file.FileType;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NonNls;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 @CssImport(CssImportConstants.VA_FILE_UPLOAD_AREA)
@@ -59,8 +57,8 @@ public class VAFileUploadArea extends VerticalLayout {
     setPadding(false);
     setSpacing(false);
 
-    getStyle().setMargin(VernoUtility.LUMO_ZERO);
-    getStyle().setGap(VernoUtility.LUMO_ZERO);
+    getStyle().setMargin(VernoUtility.NONE);
+    getStyle().setGap(VernoUtility.NONE);
     getStyle().setOverflow(Style.Overflow.HIDDEN);
 
     dropArea = new Div();
@@ -221,8 +219,7 @@ public class VAFileUploadArea extends VerticalLayout {
     }
 
     try {
-      tempFileClient.delete(tempToken);
-    } catch (Exception ignored) {
+      tempFileClient.get().delete(tempToken);
     } finally {
       tempToken = null;
     }

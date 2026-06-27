@@ -14,11 +14,15 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.List;
 
 public class ParticipantsReportDialog extends VAAbstractDialog {
+
+  @NonNls public static final String CLICK_JS = "click";
+  @NonNls public static final String DOWNLOAD_ATTRIBUTE = "download";
 
   @Nonnull private final Lazy<ReportClient> reportClient;
 
@@ -66,14 +70,14 @@ public class ParticipantsReportDialog extends VAAbstractDialog {
   @Nonnull
   private Button createDownloadButton() {
     final var hidden = new Anchor(buildAttachmentUrl(reportToken), getTranslation("shared.download"));
-    hidden.getElement().setAttribute("download", true);
+    hidden.getElement().setAttribute(DOWNLOAD_ATTRIBUTE, true);
     hidden.getStyle().setDisplay(Style.Display.NONE);
     add(hidden);
 
     final var downloadButton = new Button(getTranslation("shared.download"));
     downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     downloadButton.addClickListener(e -> {
-      hidden.getElement().callJsFunction("click");
+      hidden.getElement().callJsFunction(CLICK_JS);
       close();
     });
     return downloadButton;

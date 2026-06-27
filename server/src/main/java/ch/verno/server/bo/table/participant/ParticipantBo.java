@@ -1,7 +1,8 @@
 package ch.verno.server.bo.table.participant;
 
-import ch.verno.contract.dto.result.base.SaveResult;
-import ch.verno.contract.dto.result.error.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveErrorCode;
+import ch.verno.contract.dto.response.base.save.SaveResponse;
+import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
@@ -22,18 +23,18 @@ public class ParticipantBo {
   }
 
   @Nonnull
-  public SaveResult<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
+  public SaveResponse<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
     try {
       final var participant = participantService.get().save(dto);
       participantService.get().flush();
 
-      return SaveResult.success(participant);
+      return SaveResponse.success(participant);
     } catch (DataIntegrityViolationException exception) {
       if (isDuplicateParticipantEmail(exception)) {
-        return SaveResult.failed(SaveErrorCode.PARTICIPANT_EMAIL_ALREADY_EXISTS);
+        return SaveResponse.failed(SaveErrorCode.EMAIL_ALREADY_EXISTS);
       }
 
-      return SaveResult.failed(SaveErrorCode.DATABASE_ERROR);
+      return SaveResponse.failed(SaveErrorCode.DATABASE_ERROR);
     }
   }
 
@@ -44,6 +45,54 @@ public class ParticipantBo {
     return message != null
             && message.contains(DUPLICATE_KEY_VALUE_VIOLATES_UNIQUE_CONSTRAINT)
             && message.toLowerCase().contains(EMAIL);
+  }
+
+  @Nonnull
+  public ParticipantDto enableParticipant(@Nonnull final Long id) {
+    final var participantOptional = participantService.get().findById(id);
+    if (participantOptional.isEmpty()) {
+      return ParticipantDto.empty();
+    }
+
+    final var participant = participantOptional.get();
+    participant.setActive(true);
+    return getParticipantToResult(saveParticipant(participant));
+  }
+
+  @Nonnull
+  public ParticipantDto disableParticipant(@Nonnull final Long id) {
+    final var participantOptional = participantService.get().findById(id);
+    if (participantOptional.isEmpty()) {
+      return ParticipantDto.empty();
+    }
+
+    final var participant = participantOptional.get();
+    participant.setActive(false);
+    return getParticipantToResult(saveParticipant(participant));
+  }
+
+  @Nonnull
+  private ParticipantDto getParticipantToResult(@Nonnull final SaveResponse<ParticipantDto> result) {
+    if (result.dto() == null) {
+      return ParticipantDto.empty();
+    }
+    return result.dto();
+  }
+
+  @Nonnull
+  public ParticipantDto addCourse(@Nonnull final Long participantId,
+                                  @Nonnull final CourseDto courseDto) {
+    final var participant = participantService.get().findByIdRequired(participantId);
+    participant.addCourse(courseDto);
+    return participantService.get().save(participant);
+  }
+
+  @Nonnull
+  public ParticipantDto removeCourse(@Nonnull final Long participantId,
+                                     @Nonnull final CourseDto courseDto) {
+    final var participant = participantService.get().findByIdRequired(participantId);
+    participant.removeCourse(courseDto);
+    return participantService.get().save(participant);
   }
 
 }

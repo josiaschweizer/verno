@@ -38,4 +38,8 @@ public class ParticipantService extends AbstractSpecEntityService<
             .toList();
   }
 
+  public boolean existsByCourseId(@Nonnull final Long courseId){
+    return getRepository().existsByCourseId(courseId);
+  }
+
 }

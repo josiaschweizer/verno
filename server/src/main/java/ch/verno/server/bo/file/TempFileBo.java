@@ -16,9 +16,8 @@ public class TempFileBo {
   }
 
   @Nonnull
-  public String store(@Nonnull final String filename,
-                      @Nonnull final byte[] data) {
-    return tempFileHandler.get().store(filename, data);
+  public String store(@Nonnull final FileDto fileDto) {
+    return tempFileHandler.get().store(fileDto);
   }
 
   @Nonnull

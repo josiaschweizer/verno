@@ -34,7 +34,7 @@ public class CourseWidgetGroup extends VerticalLayout implements Refreshable {
 
     for (final var course : courses) {
       if (course.getId() != null) {
-        add(new CourseWidget(course.getId(), injector));
+        add(new CourseWidget(injector, course.getId()));
       }
     }
   }

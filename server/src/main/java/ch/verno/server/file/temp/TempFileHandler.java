@@ -33,15 +33,14 @@ public final class TempFileHandler {
   }
 
   @Nonnull
-  public String store(@Nonnull final String filename,
-                      @Nonnull final byte[] data) {
+  public String store(@Nonnull final FileDto fileDto) {
     final String token = UUID.randomUUID().toString();
-    final String safeName = sanitizeFilename(filename);
+    final String safeName = sanitizeFilename(fileDto.filename());
 
     final Path file = baseDir.resolve(token + Publ.MINUS + safeName);
 
     try {
-      Files.write(file, data, StandardOpenOption.CREATE_NEW);
+      Files.write(file, fileDto.pdfBytes(), StandardOpenOption.CREATE_NEW);
     } catch (IOException e) {
       throw new RuntimeException("Failed to write temp file: " + file, e);
     }

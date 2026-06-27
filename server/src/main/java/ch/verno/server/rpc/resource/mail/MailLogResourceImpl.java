@@ -28,6 +28,6 @@ public class MailLogResourceImpl implements MailLogResource {
                                        final int offset,
                                        final int limit,
                                        @Nonnull final List<SortOrderDto> sortOrders) {
-    return mailLogService.get().findAll(filter, offset, limit, sortOrders);
+    return mailLogService.get().findAll(filter, sortOrders, offset, limit);
   }
 }

@@ -95,7 +95,7 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
   @Override
   protected void updateBean(@Nonnull final CourseLevelDto bean) {
-    courseLevelClient.saveCourseLevel(bean);
+    courseLevelClient.get().saveCourseLevel(bean);
   }
 
   @Nonnull

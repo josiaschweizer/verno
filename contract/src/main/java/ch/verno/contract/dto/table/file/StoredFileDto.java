@@ -27,6 +27,18 @@ public class StoredFileDto extends BaseDto<Long> {
     this.checksumSha256 = checksumSha256;
   }
 
+  public StoredFileDto(@Nonnull final Long id,
+                       @Nonnull final String filename,
+                       @Nonnull final String contentType,
+                       @Nonnull final Long size,
+                       @Nonnull final String checksumSha256) {
+    setId(id);
+    this.filename = filename;
+    this.contentType = contentType;
+    this.size = size;
+    this.checksumSha256 = checksumSha256;
+  }
+
   @Nonnull
   public static StoredFileDto empty() {
     return new StoredFileDto();

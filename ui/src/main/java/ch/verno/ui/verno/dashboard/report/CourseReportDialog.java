@@ -2,6 +2,7 @@ package ch.verno.ui.verno.dashboard.report;
 
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.file.ReportClient;
@@ -88,7 +89,7 @@ public class CourseReportDialog extends VAAbstractDialog {
   }
 
   private void deleteTempOnServer() {
-    reportServerGate.deleteTempFile(reportToken);
+    reportClient.get().deleteTempFile(reportToken);
   }
 
   @Nonnull

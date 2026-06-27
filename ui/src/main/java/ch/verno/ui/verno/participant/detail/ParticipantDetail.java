@@ -16,10 +16,11 @@ import ch.verno.rpc.client.course.CourseLevelClient;
 import ch.verno.rpc.client.gender.GenderClient;
 import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.rpc.client.setting.TenantSettingClient;
-import ch.verno.rpc.properties.user.UserProperties;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
 import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
 
 @PermitAll
 @com.vaadin.flow.router.Route(Routes.PARTICIPANTS + Routes.DETAIL)
-@Menu(order = 1.1, icon = "vaadin:user", title = "participant.participant.detail")
+@Menu(order = 1.1, icon = VaadinIconConstants.USER, title = "participant.participant.detail")
 public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements HasDynamicTitle {
 
   @Nonnull private final Lazy<GenderClient> genderClient;
@@ -72,21 +73,19 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     this.participantClient = Lazy.of(() -> injector.getInstance(ParticipantClient.class));
     this.tenantSettingClient = Lazy.of(() -> injector.getInstance(TenantSettingClient.class));
 
-    this.userSettingDto = injector.getInstance(UserProperties.class).getCurrentAppUserSetting();
+    this.userSettingDto = injector.getInstance(AppUserClient.class).getCurrentAppUserSetting();
 
     super.setShowPaddingAroundDetail(true);
   }
 
   @Nullable
   @Override
-  //todo fertig machen
   protected VABadgeLabel getInfoBadge() {
     final var active = getBinder().getBean().isActive();
     final var labelText = active ? getTranslation("shared.active") : getTranslation("shared.inactive");
     final var badgeOption = active ? VABadgeLabelOptions.SUCCESS : VABadgeLabelOptions.WARNING;
 
-    final var badge = BadgeLabelFactory.createBadgeLabel(labelText, badgeOption);
-    return null;
+    return BadgeLabelFactory.createBadgeLabel(labelText, badgeOption);
   }
 
   @Nullable
@@ -106,7 +105,12 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
         return;
       }
 
-      final var updated = participantClient.get().disableParticipant(bean.getId(), bean.isActive());
+      ParticipantDto updated;
+      if (bean.isActive()) {
+        updated = participantClient.get().disableParticipant(bean.getId());
+      } else {
+        updated = participantClient.get().enableParticipant(bean.getId());
+      }
 
       getBinder().setBean(updated);
       getBinder().validate();
@@ -158,12 +162,12 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
   @Override
   protected void createBean(@Nonnull final ParticipantDto bean) {
-    participantService.createParticipant(bean);
+    participantClient.get().saveParticipant(bean);
   }
 
   @Override
   protected void updateBean(@Nonnull final ParticipantDto bean) {
-    participantService.updateParticipant(bean);
+    participantClient.get().saveParticipant(bean);
   }
 
   @Nonnull
@@ -231,7 +235,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             ParticipantDto::getGender,
             ParticipantDto::setGender,
             getBinder(),
-            genderService.getAllGenders(),
+            genderClient.get().getAllGenders(),
             userSettingDto.getLanguage()
     );
 
@@ -254,7 +258,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
 
   @Nonnull
   private HorizontalLayout createParticipantCourseLayout() {
-    final var courseLevels = courseLevelService.getAllCourseLevels();
+    final var courseLevels = courseLevelClient.get().getAllCourseLevels();
     final var courseLevelsEntry = entryFactory.createMultiSelectComboBoxEntry(
             ParticipantDto::getCourseLevels,
             ParticipantDto::setCourseLevels,
@@ -266,11 +270,11 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     final var courses = new ArrayList<CourseDto>();
-    if (tenantSettingService.getCurrentTenantSettingOrDefault().isLimitCourseAssignmentsToActive()) {
-      courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.PLANNED));
-      courses.addAll(courseService.getCoursesByCourseScheduleStatus(CourseScheduleStatus.ACTIVE));
+    if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isLimitCourseAssignmentsToActive()) {
+      courses.addAll(courseClient.get().getCoursesByCourseScheduleStatus(CourseScheduleStatus.PLANNED));
+      courses.addAll(courseClient.get().getCoursesByCourseScheduleStatus(CourseScheduleStatus.ACTIVE));
     } else {
-      courses.addAll(courseService.getAllCourses());
+      courses.addAll(courseClient.get().getAllCourses());
     }
 
     final var coursesEntry = entryFactory.createMultiSelectComboBoxEntry(
@@ -284,7 +288,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     );
 
     courseLevelsEntry.addValueChangeListener(e -> {
-      if (tenantSettingService.getCurrentTenantSettingOrDefault().isEnforceCourseLevelSettings()) {
+      if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isEnforceCourseLevelSettings()) {
         final var selectedLevels = e.getValue();
         final var selectedCourse = coursesEntry.getValue();
 
@@ -433,7 +437,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             genderGetter,
             genderSetter,
             getBinder(),
-            genderService.getAllGenders(),
+            genderClient.get().getAllGenders(),
             userSettingDto.getLanguage()
     );
 

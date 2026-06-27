@@ -3,7 +3,7 @@ package ch.verno.ui.lib.billing;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.billing.BillingClient;
-import ch.verno.rpc.properties.user.UserProperties;
+import ch.verno.rpc.client.user.AppUserClient;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
@@ -15,18 +15,18 @@ import java.util.Optional;
 public class SubscriptionApplyService {
 
   @Nonnull private final Injector injector;
-  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<AppUserClient> userClient;
   @Nonnull private final Lazy<BillingClient> tenantBillingClient;
 
   @Inject
   public SubscriptionApplyService(@Nonnull final Injector injector) {
     this.injector = injector;
-    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.userClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
     this.tenantBillingClient = Lazy.of(() -> injector.getInstance(BillingClient.class));
   }
 
   public void applyCurrentUserSubscriptionState() {
-    final var currentUserOptional = userProperties.get().getOptionalCurrentAppUser();
+    final var currentUserOptional = userClient.get().getOptionalCurrentAppUser();
     if (currentUserOptional.isEmpty()) {
       return;
     }

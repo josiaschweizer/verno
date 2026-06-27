@@ -1,6 +1,5 @@
 package ch.verno.server.rpc.resource.file;
 
-import ch.verno.contract.dto.file.storage.DeletedObjectDto;
 import ch.verno.contract.dto.file.storage.StoredObjectDto;
 import ch.verno.contract.endpoint.file.StorageResource;
 import ch.verno.contract.rpc.RpcResource;
@@ -13,6 +12,7 @@ import jakarta.annotation.Nonnull;
 import java.io.InputStream;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 @RpcResource(StorageResource.class)
 public class StorageResourceImpl implements StorageResource {
 
@@ -25,7 +25,7 @@ public class StorageResourceImpl implements StorageResource {
   @Nonnull
   @Override
   public Optional<InputStream> findByKey(@Nonnull final String key) {
-    return storageBo.get().findByKey(key);
+    return storageBo.get().getByKey(key);
   }
 
   @Override
@@ -41,9 +41,8 @@ public class StorageResourceImpl implements StorageResource {
     return storageBo.get().save(key, data, size);
   }
 
-  @Nonnull
   @Override
-  public DeletedObjectDto delete(@Nonnull final String key) {
-    return storageBo.get().delete(key);
+  public void delete(@Nonnull final Long id) {
+    storageBo.get().delete(id);
   }
 }

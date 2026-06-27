@@ -6,7 +6,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
-public class CourseScheduleFilter {
+public class CourseScheduleFilter implements BaseFilter {
 
   @Nullable private String searchText;
   @Nullable private CourseScheduleStatus status;

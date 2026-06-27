@@ -57,7 +57,7 @@ public class CreateUserDialog extends VAAbstractDialog {
   @Nonnull
   @Override
   protected HorizontalLayout createContent() {
-    final var userLayout = new UserLayout(injector, entryFactory);
+    final var userLayout = injector.getInstance(UserLayout.class);
 
     if (formMode != FormMode.CREATE) {
       setHeaderTitle(getTranslation("shared.update.existing.application.user"));
@@ -126,7 +126,7 @@ public class CreateUserDialog extends VAAbstractDialog {
 
     appUserClient.get().saveUser(bean);
 
-    final var currentUser = injector.getInstance(UserProperties.class).getOptionalCurrentAppUser();
+    final var currentUser = appUserClient.get().getOptionalCurrentAppUser();
     if (currentUser.isEmpty()) {
       injector.getInstance(UserProperties.class).logout(); // user has changed his own username - log him out to avoid any issues with the security context
       return;

@@ -2,6 +2,7 @@ package ch.verno.ui.verno.settings.panels.courselevel;
 
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.ui.lib.settings.grid.BaseGridDetailSetting;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -10,6 +11,7 @@ public class CourseLevelSetting extends BaseGridDetailSetting<CourseLevelDto, Co
 
   public static final String TITLE_KEY = "courseLevel.course_levels";
 
+  @Inject
   public CourseLevelSetting(@Nonnull final Injector injector) {
     super(
             injector,
