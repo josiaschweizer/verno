@@ -5,9 +5,11 @@ import ch.verno.db.entity.participant.ParticipantEntity;
 import ch.verno.db.jpa.participant.SpringDataParticipantJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class ParticipantRepository extends AbstractEntityRepository<
         ParticipantEntity,
         Long,

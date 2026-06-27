@@ -10,9 +10,11 @@ import ch.verno.server.repository.mail.MailLogRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.MailLogSpec;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class MailLogService extends AbstractSpecEntityService<
         Long,
         MailLogEntity,

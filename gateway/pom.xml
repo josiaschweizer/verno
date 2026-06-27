@@ -19,10 +19,6 @@
         </dependency>
         <dependency>
             <groupId>ch.verno</groupId>
-            <artifactId>server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.verno</groupId>
             <artifactId>ui</artifactId>
         </dependency>
 
@@ -64,6 +60,12 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
+
+                <configuration>
+                    <frontendDirectory>
+                        ${project.basedir}/../ui/src/main/frontend
+                    </frontendDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>

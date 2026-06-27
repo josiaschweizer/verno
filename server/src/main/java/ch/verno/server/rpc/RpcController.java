@@ -1,4 +1,4 @@
-package ch.verno.gateway.rpc;
+package ch.verno.server.rpc;
 
 import ch.verno.contract.rpc.RpcRequest;
 import ch.verno.contract.rpc.RpcResponse;

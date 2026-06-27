@@ -4,9 +4,11 @@ import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.db.jpa.mail.SpringDataMailConfigJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class MailConfigRepository extends AbstractEntityRepository<
         MailConfigEntity,
         Long,

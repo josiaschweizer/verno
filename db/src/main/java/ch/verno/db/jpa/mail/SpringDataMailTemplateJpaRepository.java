@@ -10,10 +10,12 @@ import java.util.Optional;
 
 public interface SpringDataMailTemplateJpaRepository extends AbstractEntityJpaRepository<MailTemplateEntity, MailTemplateId> {
 
-  @Nonnull
-  Optional<MailTemplateEntity> findTemplateType_Key(@Nonnull String templateKey); //TODO vorher mit findByTenant_IdAndTemplateType_Key mit tenantid gewesen
+  boolean existsByTenant_IdAndTemplateType_Key(@Nonnull Long tenantId,
+                                               @Nonnull String templateKey);
 
-  boolean existsTemplateType_Key(@Nonnull String templateKey);
+  @Nonnull
+  Optional<MailTemplateEntity> findByTenant_IdAndTemplateType_Key(@Nonnull Long tenantId,
+                                                                  @Nonnull String templateKey); //TODO vorher mit findByTenant_IdAndTemplateType_Key mit tenantid gewesen
 
   List<MailTemplateEntity> findAllByTenant_Id(Long tenantId);
 

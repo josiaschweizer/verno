@@ -1,12 +1,12 @@
 package ch.verno.server.rpc.properties.user;
 
-import ch.verno.contract.endpoint.properties.env.EnvResource;
 import ch.verno.contract.endpoint.properties.user.UserResource;
 import ch.verno.contract.rpc.RpcResource;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
-@RpcResource(EnvResource.class)
+@Component
+@RpcResource(UserResource.class)
 public class UserResourceImpl implements UserResource {
 
   @Override

@@ -5,9 +5,11 @@ import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.jpa.mail.SpringDataMailLogJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class MailLogRepository extends AbstractEntityRepository<
         MailLogEntity,
         Long,

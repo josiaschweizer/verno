@@ -4,9 +4,11 @@ import ch.verno.db.entity.setting.TenantSettingEntity;
 import ch.verno.db.jpa.tenant.SpringDataTenantSettingJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class TenantSettingRepository extends AbstractEntityRepository<
         TenantSettingEntity,
         Long,

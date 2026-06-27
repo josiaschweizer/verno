@@ -4,10 +4,12 @@ import ch.verno.contract.rpc.RpcRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
+@Component
 public class RpcDispatcher {
 
   @Nonnull private final RpcResourceRegistry registry;
@@ -24,7 +26,12 @@ public class RpcDispatcher {
     final var endpointType = Class.forName(request.endpoint());
     final var resource = registry.getResource(request.endpoint());
 
-    final var method = findMethod(endpointType, request.method(), request.arguments().size());
+    final var method = findMethod(
+            endpointType,
+            request.method(),
+            request.arguments().size()
+    );
+
     final var arguments = convertArguments(method, request.arguments());
 
     return method.invoke(resource, arguments);
@@ -35,12 +42,15 @@ public class RpcDispatcher {
                             @Nonnull final String methodName,
                             final int argumentCount) {
     for (final var method : endpointType.getMethods()) {
-      if (method.getName().equals(methodName) && method.getParameterCount() == argumentCount) {
+      if (method.getName().equals(methodName)
+              && method.getParameterCount() == argumentCount) {
         return method;
       }
     }
 
-    throw new IllegalStateException("No RPC method found: " + endpointType.getName() + "#" + methodName);
+    throw new IllegalStateException(
+            "No RPC method found: " + endpointType.getName() + "#" + methodName
+    );
   }
 
   @Nonnull
@@ -50,7 +60,10 @@ public class RpcDispatcher {
     final var convertedArguments = new Object[parameterTypes.length];
 
     for (int i = 0; i < parameterTypes.length; i++) {
-      convertedArguments[i] = objectMapper.convertValue(arguments.get(i), parameterTypes[i]);
+      convertedArguments[i] = objectMapper.convertValue(
+              arguments.get(i),
+              parameterTypes[i]
+      );
     }
 
     return convertedArguments;

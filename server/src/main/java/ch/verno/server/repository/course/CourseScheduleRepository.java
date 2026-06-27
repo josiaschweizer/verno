@@ -5,9 +5,11 @@ import ch.verno.db.entity.course.CourseScheduleEntity;
 import ch.verno.db.jpa.course.SpringDataCourseScheduleJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class CourseScheduleRepository extends AbstractEntityRepository<
         CourseScheduleEntity,
         Long,
