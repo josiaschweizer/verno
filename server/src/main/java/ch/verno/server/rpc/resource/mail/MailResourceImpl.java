@@ -7,14 +7,18 @@ import ch.verno.contract.endpoint.mail.MailResource;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.placeholder.PlaceholderValue;
 import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.mail.MailSenderService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@RpcResource(MailResource.class)
 public class MailResourceImpl implements MailResource {
 
   @Nonnull private final Lazy<MailSenderService> mailSenderService;

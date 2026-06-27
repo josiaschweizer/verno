@@ -4,9 +4,11 @@ import ch.verno.db.entity.course.CourseEntity;
 import ch.verno.db.jpa.course.SpringDataCourseJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class CourseRepository extends AbstractEntityRepository<
         CourseEntity,
         Long,

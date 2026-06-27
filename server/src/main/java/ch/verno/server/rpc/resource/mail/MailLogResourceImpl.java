@@ -9,10 +9,11 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.mail.MailLogService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(MailLogResource.class)
 public class MailLogResourceImpl implements MailLogResource {
 

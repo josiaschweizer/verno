@@ -7,9 +7,13 @@ import ch.verno.server.mapper.course.CourseLevelMapper;
 import ch.verno.server.repository.course.CourseLevelRepository;
 import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
+@Transactional
 public class CourseLevelService extends AbstractEntityServiceLongId<
         CourseLevelEntity,
         CourseLevelDto,

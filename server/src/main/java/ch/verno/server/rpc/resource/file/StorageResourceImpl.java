@@ -8,11 +8,12 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.file.StorageBo;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(StorageResource.class)
 public class StorageResourceImpl implements StorageResource {
 

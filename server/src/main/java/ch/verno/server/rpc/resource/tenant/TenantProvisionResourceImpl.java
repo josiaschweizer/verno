@@ -6,8 +6,9 @@ import ch.verno.contract.response.tenant.create.CreateTenantResponse;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.server.bean.ServerBean;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(TenantProvisionResource.class)
 public class TenantProvisionResourceImpl implements TenantProvisionResource {
 

@@ -13,11 +13,12 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.table.course.CourseBo;
 import ch.verno.server.service.intern.table.course.CourseService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(CourseResource.class)
 public class CourseResourceImpl implements CourseResource {
 

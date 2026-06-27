@@ -27,6 +27,8 @@ public final class MainLayout extends AppLayout {
 
   @Nonnull private final Scroller navBarScroller;
 
+  private boolean registeredAtViewEventBus;
+
   MainLayout(@Nonnull final Injector injector) {
 
     this.sideNavFactory = injector.getInstance(MainLayoutSideNavFactory.class);
@@ -52,15 +54,21 @@ public final class MainLayout extends AppLayout {
   protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
 
+    ViewEventBus.getInstance().register(this);
+    registeredAtViewEventBus = true;
+
     userSettingsApplyService.get().applyCurrentUserSettings();
     subscriptionApplyService.get().applyCurrentUserSubscriptionState();
-
-    ViewEventBus.getInstance().register(this);
   }
 
   @Override
   protected void onDetach(@Nonnull final DetachEvent detachEvent) {
-    ViewEventBus.getInstance().unregister(this);
+    if (registeredAtViewEventBus) {
+      ViewEventBus.getInstance().unregister(this);
+      registeredAtViewEventBus = false;
+    }
+
+    super.onDetach(detachEvent);
   }
 
   private void registerUtilityStyleClasses() {

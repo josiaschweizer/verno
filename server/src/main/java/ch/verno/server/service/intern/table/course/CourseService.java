@@ -9,9 +9,13 @@ import ch.verno.server.repository.course.CourseRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.CourseSpec;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class CourseService extends AbstractSpecEntityService<
         Long,
         CourseEntity,

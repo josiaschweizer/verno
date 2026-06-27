@@ -18,14 +18,16 @@ import ch.verno.server.bo.table.user.AppUserBo;
 import ch.verno.server.service.intern.table.setting.AppUserSettingService;
 import ch.verno.server.service.intern.table.user.AppUserService;
 import jakarta.annotation.Nonnull;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(AppUserResource.class)
 public class AppUserResourceImpl implements AppUserResource {
 
@@ -117,7 +119,9 @@ public class AppUserResourceImpl implements AppUserResource {
   @Override
   public Optional<AppUserDto> getOptionalCurrentAppUser() {
     final var auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth == null) {
+    if (auth == null ||
+            !auth.isAuthenticated() ||
+            auth instanceof AnonymousAuthenticationToken) {
       return Optional.empty();
     }
 

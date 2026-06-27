@@ -13,11 +13,12 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.instructor.InstructorBo;
 import ch.verno.server.service.intern.table.instructor.InstructorService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(InstructorResource.class)
 public class InstructorResourceImpl implements InstructorResource {
 

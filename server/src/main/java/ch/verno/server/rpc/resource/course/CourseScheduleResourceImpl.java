@@ -10,12 +10,13 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.course.CourseScheduleService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(CourseScheduleResource.class)
 public class CourseScheduleResourceImpl implements CourseScheduleResource {
 

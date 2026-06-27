@@ -10,10 +10,11 @@ import ch.verno.server.bo.file.TempFileBo;
 import ch.verno.server.report.course.CourseReportUseCase;
 import ch.verno.server.report.participant.ParticipantReportUseCase;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(ReportResource.class)
 public class ReportResourceImpl implements ReportResource {
 

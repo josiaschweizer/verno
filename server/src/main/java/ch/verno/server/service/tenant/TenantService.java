@@ -7,11 +7,13 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.tenant.TenantMapper;
 import ch.verno.server.repository.tenant.TenantRepository;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class TenantService {
 
   @Nonnull private final Lazy<TenantMapper> tenantMapper;

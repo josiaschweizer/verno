@@ -9,10 +9,11 @@ import ch.verno.server.rpc.properties.user.UserResourceImpl;
 import ch.verno.server.rpc.resource.user.AppUserResourceImpl;
 import ch.verno.server.service.intern.table.setting.AppUserSettingService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(AppUserSettingResource.class)
 public class AppUserSettingResourceImpl implements AppUserSettingResource {
 

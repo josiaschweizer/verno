@@ -7,8 +7,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.file.TempFileBo;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(TempFileResource.class)
 public class TempFileResourceImpl implements TempFileResource {
 

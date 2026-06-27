@@ -11,8 +11,9 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.billing.BillingBo;
 import ch.verno.server.service.extern.billing.TenantBillingService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(BillingResource.class)
 public class BillingResourceImpl implements BillingResource {
 

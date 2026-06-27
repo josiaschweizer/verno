@@ -6,6 +6,7 @@ import ch.verno.contract.endpoint.user.AppUserResource;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.base.navigation.Navigator;
+import com.google.inject.Inject;
 import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +19,7 @@ public class UserProperties {
   @Nonnull private final Lazy<UserResource> userResource;
   @Nonnull private final Lazy<AppUserResource> appUserResource;
 
+  @Inject
   public UserProperties(@Nonnull final RpcFactory rpcFactory) {
     this.userResource = Lazy.of(() -> rpcFactory.create(UserResource.class));
     this.appUserResource = Lazy.of(() -> rpcFactory.create(AppUserResource.class));

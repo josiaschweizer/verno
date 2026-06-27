@@ -9,9 +9,11 @@ import ch.verno.server.repository.user.AppUserRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.AppUserSpec;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class AppUserService extends AbstractSpecEntityService<
         Long,
         AppUserEntity,

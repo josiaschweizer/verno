@@ -9,7 +9,9 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.address.AddressBo;
 import ch.verno.server.service.intern.table.address.AddressService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
+@Component
 @RpcResource(AddressResource.class)
 public class AddressResourceImpl implements AddressResource {
 

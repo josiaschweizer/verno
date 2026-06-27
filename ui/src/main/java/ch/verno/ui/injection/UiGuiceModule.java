@@ -38,8 +38,9 @@ public class UiGuiceModule extends AbstractModule {
 
   @Provides
   @Singleton
-  RpcClient rpcClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
-    return new RpcClient("http://localhost:8080/rpc", restTemplate, objectMapper); //TODO property!!!
+  RpcClient rpcClient(@Nonnull final RestTemplate restTemplate,
+                      @Nonnull final ObjectMapper objectMapper) {
+    return new RpcClient("http://localhost:8081/rpc", restTemplate, objectMapper); //TODO property!!!
   }
 
   @Provides

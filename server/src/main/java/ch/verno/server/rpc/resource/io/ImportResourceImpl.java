@@ -5,8 +5,9 @@ import ch.verno.contract.endpoint.io.ImportResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.server.bean.ServerBean;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(ImportResource.class)
 public class ImportResourceImpl implements ImportResource {
 

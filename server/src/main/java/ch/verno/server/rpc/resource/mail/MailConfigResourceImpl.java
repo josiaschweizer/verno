@@ -10,10 +10,11 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.mail.MailBo;
 import ch.verno.server.service.intern.table.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(MailConfigResource.class)
 public class MailConfigResourceImpl implements MailConfigResource {
 

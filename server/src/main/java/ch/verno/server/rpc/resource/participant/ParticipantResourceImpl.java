@@ -14,11 +14,12 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.participant.ParticipantBo;
 import ch.verno.server.service.intern.table.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(ParticipantResource.class)
 public class ParticipantResourceImpl implements ParticipantResource {
 

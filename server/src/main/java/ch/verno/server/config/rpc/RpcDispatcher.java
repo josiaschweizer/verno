@@ -34,7 +34,21 @@ public class RpcDispatcher {
 
     final var arguments = convertArguments(method, request.arguments());
 
-    return method.invoke(resource, arguments);
+    try {
+      return method.invoke(resource, arguments);
+    } catch (java.lang.reflect.InvocationTargetException exception) {
+      final var cause = exception.getCause();
+
+      if (cause instanceof Exception causedException) {
+        throw causedException;
+      }
+
+      if (cause instanceof Error causedError) {
+        throw causedError;
+      }
+
+      throw exception;
+    }
   }
 
   @Nonnull
@@ -48,8 +62,7 @@ public class RpcDispatcher {
       }
     }
 
-    throw new IllegalStateException(
-            "No RPC method found: " + endpointType.getName() + "#" + methodName
+    throw new IllegalStateException("No RPC method found: " + endpointType.getName() + "#" + methodName
     );
   }
 

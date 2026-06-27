@@ -8,8 +8,9 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.table.setting.TenantSettingBo;
 import ch.verno.server.service.intern.table.setting.TenantSettingService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(TenantSettingResource.class)
 public class TenantSettingResourceImpl implements TenantSettingResource {
 

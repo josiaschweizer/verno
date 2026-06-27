@@ -3,6 +3,7 @@ package ch.verno.rpc.rpc;
 import ch.verno.contract.rpc.RpcException;
 import ch.verno.contract.rpc.RpcRequest;
 import ch.verno.contract.rpc.RpcResponse;
+import ch.verno.lib.New;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class RpcClient {
 
@@ -32,7 +34,7 @@ public class RpcClient {
                      @Nullable final Object[] args) {
     try {
       final List<JsonNode> arguments = args == null
-              ? List.of()
+              ? New.list()
               : Arrays.stream(args)
               .map(argument -> (JsonNode) objectMapper.valueToTree(argument))
               .toList();
@@ -43,7 +45,12 @@ public class RpcClient {
               arguments
       );
 
-      final var response = restTemplate.postForObject(rpcUrl, request, RpcResponse.class);
+      final var response = restTemplate.postForObject(
+              rpcUrl,
+              request,
+              RpcResponse.class
+      );
+
       if (response == null) {
         throw new RpcException("RPC response is null.");
       }
@@ -56,8 +63,20 @@ public class RpcClient {
               .getTypeFactory()
               .constructType(method.getGenericReturnType());
 
+      if (response.result() == null) {
+        // prevents to return null if rpc response is empty (null)
+        // (originally while response is parsed from JSON Optional::empty is converted to null)
+        if (returnType.isTypeOrSubTypeOf(Optional.class)) {
+          return Optional.empty();
+        }
+
+        return null;
+      }
+
       return objectMapper.convertValue(response.result(), returnType);
-    } catch (final Exception exception) {
+    } catch (RpcException exception) {
+      throw exception;
+    } catch (Exception exception) {
       throw new RpcException("RPC call failed: " + endpointType.getName() + "#" + method.getName(), exception);
     }
   }

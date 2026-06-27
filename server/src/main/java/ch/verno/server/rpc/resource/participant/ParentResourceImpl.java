@@ -9,7 +9,9 @@ import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.participant.ParentBo;
 import ch.verno.server.service.intern.table.participant.ParentService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
+@Component
 @RpcResource(ParentResource.class)
 public class ParentResourceImpl implements ParentResource {
 

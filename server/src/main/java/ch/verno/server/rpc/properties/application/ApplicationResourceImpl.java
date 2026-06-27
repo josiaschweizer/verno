@@ -7,7 +7,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.application.properties.ApplicationConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
+@Component
 @RpcResource(ApplicationResource.class)
 public class ApplicationResourceImpl implements ApplicationResource {
 

@@ -5,6 +5,7 @@ import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.contract.endpoint.mail.MailConfigResource;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
+import com.google.inject.Inject;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
@@ -13,6 +14,7 @@ public class MailConfigClient {
 
   @Nonnull private final Lazy<MailConfigResource> mailConfigResource;
 
+  @Inject
   public MailConfigClient(@Nonnull final RpcFactory rpcFactory){
     this.mailConfigResource = Lazy.of(() -> rpcFactory.create(MailConfigResource.class));
   }

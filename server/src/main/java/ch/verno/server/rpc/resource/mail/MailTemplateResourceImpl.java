@@ -7,10 +7,11 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.intern.table.mail.MailTemplateService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(MailTemplateResource.class)
 public class MailTemplateResourceImpl implements MailTemplateResource {
 

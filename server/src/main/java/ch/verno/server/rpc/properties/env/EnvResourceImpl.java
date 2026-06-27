@@ -7,8 +7,9 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.env.EnvironmentVariableBo;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-@SuppressWarnings("unused")
+@Component
 @RpcResource(EnvResource.class)
 public class EnvResourceImpl implements EnvResource {
 

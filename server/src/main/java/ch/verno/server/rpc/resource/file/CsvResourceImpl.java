@@ -10,9 +10,11 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.io.importing.SchemaResolver;
 import ch.verno.server.io.importing.csv.CsvImportUtil;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @RpcResource(CsvResource.class)
 public class CsvResourceImpl implements CsvResource {
 

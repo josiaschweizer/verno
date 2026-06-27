@@ -22,7 +22,7 @@ public class UserSettingsApplyService {
 
   public void applyCurrentUserSettings() {
     final var appUserOptional = appUserClient.get().getOptionalCurrentAppUser();
-    if (appUserOptional.isEmpty()) {
+    if (appUserOptional == null || appUserOptional.isEmpty()) {
       return;
     }
 
