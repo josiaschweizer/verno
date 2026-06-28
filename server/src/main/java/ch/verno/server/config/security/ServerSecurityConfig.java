@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 @Configuration
 public class ServerSecurityConfig {
@@ -21,25 +22,22 @@ public class ServerSecurityConfig {
 
   @Bean
   @Order(1)
-  public SecurityFilterChain rpcFilterChain(@Nonnull final HttpSecurity http) throws Exception {
-    http
-            .securityMatcher("/rpc", "/rpc/**")
+  public SecurityFilterChain rpcFilterChain(@Nonnull final HttpSecurity http,
+                                            @Nonnull final InternalRpcAuthFilter internalRpcAuthFilter) {
+    http.securityMatcher("/rpc", "/rpc/**")
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().permitAll()
-            );
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .addFilterBefore(internalRpcAuthFilter, AnonymousAuthenticationFilter.class);
+
 
     return http.build();
   }
 
   @Bean
   @Order(2)
-  public SecurityFilterChain defaultFilterChain(@Nonnull final HttpSecurity http) throws Exception {
-    http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().permitAll()
-            );
+  public SecurityFilterChain defaultFilterChain(@Nonnull final HttpSecurity http) {
+    http.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
     return http.build();
   }

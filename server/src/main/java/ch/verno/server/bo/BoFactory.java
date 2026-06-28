@@ -30,22 +30,13 @@ public final class BoFactory {
   @Nonnull
   private Object create(@Nonnull final Class<?> type) {
     try {
-      return type
-              .getDeclaredConstructor(ServerBean.class)
-              .newInstance(serverBean);
+      final var constructor = type.getDeclaredConstructor(ServerBean.class);
+      constructor.setAccessible(true);
+      return constructor.newInstance(serverBean);
     } catch (final NoSuchMethodException exception) {
-      throw new IllegalStateException(
-              "Business object requires a public constructor with ServerBean: "
-                      + type.getName(),
-              exception
-      );
-    } catch (final InstantiationException
-                   | IllegalAccessException
-                   | InvocationTargetException exception) {
-      throw new IllegalStateException(
-              "Could not create business object: " + type.getName(),
-              exception
-      );
+      throw new IllegalStateException("Business object requires a public constructor with ServerBean: " + type.getName(), exception);
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+      throw new IllegalStateException("Could not create business object: " + type.getName(), exception);
     }
   }
 }

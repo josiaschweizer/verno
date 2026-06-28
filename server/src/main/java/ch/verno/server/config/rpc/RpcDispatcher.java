@@ -69,14 +69,12 @@ public class RpcDispatcher {
   @Nonnull
   private Object[] convertArguments(@Nonnull final Method method,
                                     @Nonnull final List<JsonNode> arguments) {
-    final var parameterTypes = method.getParameterTypes();
-    final var convertedArguments = new Object[parameterTypes.length];
+    final var genericParameterTypes = method.getGenericParameterTypes();
+    final var convertedArguments = new Object[genericParameterTypes.length];
 
-    for (int i = 0; i < parameterTypes.length; i++) {
-      convertedArguments[i] = objectMapper.convertValue(
-              arguments.get(i),
-              parameterTypes[i]
-      );
+    for (int i = 0; i < genericParameterTypes.length; i++) {
+      final var javaType = objectMapper.getTypeFactory().constructType(genericParameterTypes[i]);
+      convertedArguments[i] = objectMapper.convertValue(arguments.get(i), javaType);
     }
 
     return convertedArguments;

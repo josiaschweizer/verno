@@ -5,6 +5,7 @@ import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 @Entity
@@ -91,6 +92,16 @@ public class AppUserEntity extends TenantScopedEntity {
 
   public void setId(final Long id) {
     this.id = id;
+  }
+
+  @Nullable
+  public Long getTenantId() {
+    final var tenant = getTenant();
+    if (tenant == null) {
+      return null;
+    } else {
+      return tenant.getId();
+    }
   }
 
   public String getUsername() {

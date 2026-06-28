@@ -1,6 +1,6 @@
 package ch.verno.server.application.properties;
 
-import ch.verno.lib.Publ;
+import ch.verno.common.lib.application.RunMode;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,7 +16,7 @@ public class ApplicationConfigProvider {
 
   @Nonnull
   public String getRunMode() {
-    return Optional.ofNullable(runMode).orElse(Publ.EMPTY_STRING);
+    return Optional.ofNullable(runMode).orElse(RunMode.DEV.getKey());
   }
 
   public void setRunMode(@Nullable final String runMode) {

@@ -27,7 +27,7 @@ public class SubscriptionApplyService {
 
   public void applyCurrentUserSubscriptionState() {
     final var currentUserOptional = userClient.get().getOptionalCurrentAppUser();
-    if (currentUserOptional == null || currentUserOptional.isEmpty()) {
+    if (currentUserOptional.isEmpty()) {
       return;
     }
 

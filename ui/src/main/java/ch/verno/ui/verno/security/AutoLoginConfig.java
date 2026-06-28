@@ -56,18 +56,22 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
 
     applyTenant();
 
-    final var userDetails = userProperties.get().findOptionalByUsernameOrEmail(devUser);
-    if (userDetails.isEmpty()) {
+    final var userDetailsOptional = userProperties.get().findOptionalByUsernameOrEmail(devUser);
+    if (userDetailsOptional.isEmpty()) {
       return;
     }
 
-    final var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.get().getAuthorities());
+    final var userDetails = userDetailsOptional.get();
+    final var authentication = new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            userDetailsOptional.get().getAuthorities()
+    );
 
     final var securityContext = SecurityContextHolder.createEmptyContext();
     securityContext.setAuthentication(authentication);
     SecurityContextHolder.setContext(securityContext);
     session.setAttribute(VernoConstants.SPRING_SECURITY_CONTEXT, securityContext);
-
 
     event.getUI().getPage().reload();
   }

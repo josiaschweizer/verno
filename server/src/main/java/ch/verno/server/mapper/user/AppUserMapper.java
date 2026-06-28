@@ -16,6 +16,7 @@ public class AppUserMapper implements IEntityMapper<AppUserEntity, AppUserDto> {
     final var dto = AppUserDto.empty();
 
     dto.setId(entity.getId());
+    dto.setTenantId(entity.getTenantId());
     dto.setUsername(entity.getUsername());
     dto.setFirstname(entity.getFirstname());
     dto.setLastname(entity.getLastname());

@@ -1,5 +1,7 @@
 package ch.verno.ui.injection;
 
+import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
+import ch.verno.rpc.auth.InternalRpcAuthInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
 import tools.jackson.databind.ObjectMapper;
@@ -20,8 +22,16 @@ public class UiGuiceModule extends AbstractModule {
 
   @Provides
   @Singleton
-  RestTemplate restTemplate() {
-    return new RestTemplate();
+  RestTemplate restTemplate(@Nonnull final InternalRpcAuthInterceptor internalRpcAuthInterceptor) {
+    final var restTemplate = new RestTemplate();
+    restTemplate.getInterceptors().add(internalRpcAuthInterceptor);
+    return restTemplate;
+  }
+
+  @Provides
+  @Singleton
+  InternalRpcAuthInterceptor internalRpcAuthInterceptor(@Nonnull final InternalRpcTokenCodec tokenCodec) {
+    return new InternalRpcAuthInterceptor(tokenCodec);
   }
 
   @Provides
