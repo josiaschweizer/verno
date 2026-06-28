@@ -4,13 +4,11 @@ import ch.verno.common.db.constants.text.TextConstants;
 import ch.verno.common.lib.gender.GenderUtil;
 import ch.verno.contract.dto.table.gender.GenderDto;
 import ch.verno.contract.dto.table.text.TextDto;
-import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.gender.GenderMapper;
-import ch.verno.server.repository.gender.GenderRepository;
+import ch.verno.server.service.intern.table.gender.GenderService;
 import ch.verno.server.service.intern.table.text.TextService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -20,94 +18,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Transactional
 public class GenderBo {
 
   @Nonnull private final Lazy<TextService> textService;
-  @Nonnull private final Lazy<GenderMapper> genderMapper;
-  @Nonnull private final Lazy<GenderRepository> genderRepository;
+  @Nonnull private final Lazy<GenderService> genderService;
 
   protected GenderBo(@Nonnull final ServerBean serverBean) {
-    textService = Lazy.of(() -> serverBean.get(TextService.class));
-    genderMapper = Lazy.of(() -> serverBean.get(GenderMapper.class));
-    genderRepository = Lazy.of(() -> serverBean.get(GenderRepository.class));
+    this.textService = Lazy.of(() -> serverBean.get(TextService.class));
+    this.genderService = Lazy.of(() -> serverBean.get(GenderService.class));
   }
 
-  /**
-   * Finds a gender by its internal or translated name and enriches it with
-   * <p>
-   * its configured display texts.
-   *
-   * @param name internal or translated gender name
-   * @return the matching gender, if one exists
-   */
   @Nonnull
-  @Transactional(readOnly = true)
   public Optional<GenderDto> findByName(@Nonnull final String name) {
     final var safeName = GenderUtil.translateToInternalGender(name);
-    return genderRepository.get().findByName(safeName)
+    return genderService.get().findByName(safeName)
             .map(this::toDtoWithTranslations);
   }
 
-  /**
-   * Finds all genders and enriches them with their configured display texts.
-   *
-   * @return all configured genders
-   */
   @Nonnull
   @Transactional(readOnly = true)
   public List<GenderDto> findAll() {
-    return genderRepository.get().findAll()
+    return genderService.get().findAll()
             .stream()
             .map(this::toDtoWithTranslations)
             .toList();
   }
 
-  /**
-   * Saves a gender and its user-defined translations.
-   *
-   * @param dto gender to save
-   * @return the saved gender including its translations
-   */
   @Nonnull
   public GenderDto save(@Nonnull final GenderDto dto) {
-    final var oldEntity = findEntityById(dto.getId());
-    final var oldGenderName = oldEntity
-            .map(GenderEntity::getName)
-            .orElse(null);
-    final var savedEntity = saveGender(dto, oldEntity.orElse(null));
+    final var oldGenderName = findOldGenderName(dto.getId());
+    final var savedDto = genderService.get().save(dto);
+
     if (dto.getUserDisplayTexts() != null) {
-      saveUserTranslations(savedEntity.getName(), oldGenderName, dto.getUserDisplayTexts());
+      saveUserTranslations(savedDto.getName(), oldGenderName, dto.getUserDisplayTexts());
     }
 
-    return toDtoWithTranslations(savedEntity);
+    return toDtoWithTranslations(savedDto);
   }
 
-  @Nonnull
-
-  private GenderEntity saveGender(@Nonnull final GenderDto dto,
-                                  @Nullable final GenderEntity existingEntity) {
-    if (existingEntity == null) {
-      return genderRepository.get().save(genderMapper.get().toNewEntity(dto));
-    }
-
-    genderMapper.get().updateEntity(existingEntity, dto);
-    return genderRepository.get().save(existingEntity);
-  }
-
-  @Nonnull
-  private Optional<GenderEntity> findEntityById(@Nullable final Long id) {
+  @Nullable
+  private String findOldGenderName(@Nullable final Long id) {
     if (id == null) {
-      return Optional.empty();
+      return null;
     }
-    return genderRepository.get().findById(id);
+
+    return genderService.get().findById(id)
+            .map(GenderDto::getName)
+            .orElse(null);
   }
 
   @Nonnull
-
-  private GenderDto toDtoWithTranslations(@Nonnull final GenderEntity entity) {
-    final var dto = genderMapper.get().toSimpleDto(entity);
-    dto.setUserDisplayTexts(getUserTranslations(entity.getName()));
+  private GenderDto toDtoWithTranslations(@Nonnull final GenderDto dto) {
+    dto.setUserDisplayTexts(getUserTranslations(dto.getName()));
     return dto;
   }
 

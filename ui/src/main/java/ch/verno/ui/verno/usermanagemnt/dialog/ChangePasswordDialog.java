@@ -8,6 +8,7 @@ import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
+import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -106,7 +107,7 @@ public class ChangePasswordDialog extends VAAbstractDialog {
 
       final var currentUser = appUserClient.getCurrentAppUser();
       if (currentUser.getId() != null && currentUser.getId().equals(changePasswordDto.getUserId())) {
-        injector.getInstance(UserProperties.class).logout();
+        injector.getInstance(LogoutUtil.class).logout();
       }
 
       appUserClient.findByUserId(changePasswordDto.getUserId()).ifPresent(user ->

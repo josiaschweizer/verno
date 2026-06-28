@@ -5,6 +5,7 @@ import ch.verno.contract.endpoint.setting.TenantSettingResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.setting.TenantSettingBo;
 import ch.verno.server.service.intern.table.setting.TenantSettingService;
 import jakarta.annotation.Nonnull;
@@ -18,7 +19,7 @@ public class TenantSettingResourceImpl implements TenantSettingResource {
   @Nonnull private final Lazy<TenantSettingService> tenantSettingService;
 
   public TenantSettingResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.tenantSettingBo = Lazy.of(() -> serverBean.get(TenantSettingBo.class));
+    this.tenantSettingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantSettingBo.class));
     this.tenantSettingService = Lazy.of(() -> serverBean.get(TenantSettingService.class));
   }
 

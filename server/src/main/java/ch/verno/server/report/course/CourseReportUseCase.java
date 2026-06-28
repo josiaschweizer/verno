@@ -28,7 +28,7 @@ public class CourseReportUseCase {
 
   public CourseReportUseCase(@Nonnull final ServerBean serverBean) {
     this.storageBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(StorageBo.class));
-    this.tenantSettingBo = Lazy.of(() -> serverBean.get(TenantSettingBo.class));
+    this.tenantSettingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantSettingBo.class));
     this.participantService = Lazy.of(() -> serverBean.get(ParticipantService.class));
     this.courseReportRenderer = Lazy.of(() -> serverBean.get(CourseReportRenderer.class));
   }

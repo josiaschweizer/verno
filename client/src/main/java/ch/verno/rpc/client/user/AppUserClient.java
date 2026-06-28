@@ -14,9 +14,6 @@ import ch.verno.rpc.rpc.RpcFactory;
 import com.google.inject.Inject;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import jakarta.annotation.Nonnull;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -81,20 +78,6 @@ public class AppUserClient {
     return appUserResource.get().deleteUser(user);
   }
 
-  @Nonnull
-  public UserDetails loadUserByUsername(@Nonnull final String username) {
-    final var userOptional = appUserResource.get().findByUsernameOrEmail(username);
-    if (userOptional.isEmpty()) {
-      throw new UsernameNotFoundException(username);
-    }
-
-    final var user = userOptional.get(); //TODO MAYBE REFACTOR?
-    return User.withUsername(user.getUsername())
-            .password(user.getPasswordHash())
-            .roles(user.getRole().getRole())
-            .build();
-  }
-
   public AppUserDto getCurrentAppUser() {
     return appUserResource.get().getCurrentAppUser();
   }
@@ -116,12 +99,12 @@ public class AppUserClient {
 
   @Nonnull
   public AppUserSettingDto getCurrentOrEmptyAppUserSetting() {
-    return appUserResource.get().getCurrentOrFallbackAppUserSetting(AppUserSettingDto::empty);
+    return appUserResource.get().getOptionalCurrentAppUserSetting().orElseGet(AppUserSettingDto::empty);
   }
 
   @Nonnull
   public AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull Supplier<AppUserSettingDto> fallback) {
-    return appUserResource.get().getCurrentOrFallbackAppUserSetting(fallback);
+    return appUserResource.get().getOptionalCurrentAppUserSetting().orElseGet(fallback);
   }
 
   @Nonnull

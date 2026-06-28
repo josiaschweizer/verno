@@ -7,7 +7,6 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.address.AddressBo;
-import ch.verno.server.service.intern.table.address.AddressService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Component;
 public class AddressResourceImpl implements AddressResource {
 
   @Nonnull private final Lazy<AddressBo> addressBo;
-  @Nonnull private final Lazy<AddressService> addressService;
 
   public AddressResourceImpl(@Nonnull final ServerBean serverBean) {
     this.addressBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(AddressBo.class));
-    this.addressService = Lazy.of(() -> serverBean.get(AddressService.class));
   }
 
   @Nonnull

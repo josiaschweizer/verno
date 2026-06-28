@@ -26,7 +26,6 @@ public class UiTenantFilter extends OncePerRequestFilter {
 
     try {
       final var tenantId = tenantResolver.resolveTenantId(request.getServerName());
-
       tenantId.ifPresent(TenantContext::set);
 
       filterChain.doFilter(request, response);

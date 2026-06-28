@@ -36,6 +36,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
 
   @Autowired
   public TenantSettings(@Nonnull final Injector injector) {
+    super(injector);
     this.sharedSetting = Lazy.of(() -> injector.getInstance(SharedSettings.class));
     this.quantitySetting = Lazy.of(() -> injector.getInstance(QuantitySetting.class));
     this.reportSetting = Lazy.of(() -> injector.getInstance(ReportSetting.class));
@@ -44,7 +45,7 @@ public class TenantSettings extends VABaseSettingsPage implements HasDynamicTitl
     this.mailSettings = Lazy.of(() -> injector.getInstance(MailSettings.class));
     this.subscriptionSettings = Lazy.of(() -> injector.getInstance(SubscriptionSettings.class));
 
-    initUI(injector);
+    initUI();
   }
 
   @Nonnull

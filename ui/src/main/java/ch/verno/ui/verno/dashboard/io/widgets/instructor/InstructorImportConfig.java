@@ -10,7 +10,7 @@ import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.lib.Lazy;
-import ch.verno.rpc.client.address.AddressClient;
+import ch.verno.rpc.client.AddressClient;
 import ch.verno.rpc.client.file.CsvClient;
 import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.rpc.client.instructor.InstructorClient;
@@ -40,8 +40,6 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   @NonNls public static final String HOUSE_NUMBER = "house-number";
   @NonNls public static final String CITY = "city";
   @NonNls public static final String COUNTRY = "country";
-
-  @NonNls public static final String ERROR_UK_INSTRUCTOR_MANDANT_EMAIL = "uk_instructor_mandant_email";
 
   @Nonnull final Injector injector;
   @Nonnull private final Lazy<CsvClient> csvClient;
@@ -159,7 +157,6 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
   private String buildImportErrorMessage(@Nonnull final InstructorDto instructor,
                                          @Nonnull final SaveResponse<InstructorDto> saveResponse) {
     final var errorCode = saveResponse.errorCode();
-
     if (errorCode != null) {
       if (errorCode.equals(SaveErrorCode.EMAIL_ALREADY_EXISTS)) {
         return translationHelper.getTranslation("common.instructor.mit.dieser.e.mail.existiert.bereits.0", instructor.getEmail());

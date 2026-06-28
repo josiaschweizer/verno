@@ -22,13 +22,11 @@ import java.util.List;
 //todo user user_cog icon from external source
 public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle {
 
-  @Nonnull private final Injector injector;
-
   @Inject
   public UserSettings(@Nonnull final Injector injector) {
-    this.injector = injector;
+    super(injector);
 
-    initUI(injector);
+    initUI();
   }
 
   @Nonnull

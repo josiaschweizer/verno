@@ -8,6 +8,7 @@ import ch.verno.ui.base.components.badge.UserActionBadge;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.i18n.TranslationHelper;
+import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -116,11 +117,11 @@ public class ViewToolbarFactory {
     final var currentUser = appUserClient.getCurrentAppUser();
     final var ui = UI.getCurrent();
 
-    final var userProperties = injector.getInstance(UserProperties.class);
+    final var logoutUtil = injector.getInstance(LogoutUtil.class);
     final var userBadge = new UserActionBadge(currentUser.getUsername())
 //            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
-            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", userProperties::logout);
+            .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", logoutUtil::logout);
 
     toolbar.addUserAction(userBadge);
   }

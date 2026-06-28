@@ -12,11 +12,11 @@ import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import org.springframework.web.client.RestTemplate;
 
-public class UiGuiceModule extends AbstractModule {
+public class GuiceModule extends AbstractModule {
 
   @Nonnull private final I18NProvider i18NProvider;
 
-  public UiGuiceModule(@Nonnull final I18NProvider i18NProvider) {
+  public GuiceModule(@Nonnull final I18NProvider i18NProvider) {
     this.i18NProvider = i18NProvider;
   }
 

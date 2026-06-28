@@ -3,13 +3,13 @@ package ch.verno.ui.verno.usermanagemnt.dialog;
 import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.user.AppUserClient;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
+import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -128,7 +128,7 @@ public class CreateUserDialog extends VAAbstractDialog {
 
     final var currentUser = appUserClient.get().getOptionalCurrentAppUser();
     if (currentUser.isEmpty()) {
-      injector.getInstance(UserProperties.class).logout(); // user has changed his own username - log him out to avoid any issues with the security context
+      injector.getInstance(LogoutUtil.class).logout(); // user has changed his own username - log him out to avoid any issues with the security context
       return;
     }
 

@@ -10,7 +10,13 @@ import java.util.List;
 
 public abstract class VABaseSettingsPage extends VerticalLayout {
 
-  protected void initUI(@Nonnull final Injector injector) {
+  @Nonnull protected final Injector injector;
+
+  public VABaseSettingsPage(@Nonnull final Injector injector) {
+    this.injector = injector;
+  }
+
+  protected void initUI() {
     setPadding(false);
     setSpacing(false);
     setSizeFull();

@@ -96,18 +96,6 @@ public interface AppUserResource {
   Optional<AppUserSettingDto> getOptionalCurrentAppUserSetting();
 
   /**
-   * Returns the settings of the currently authenticated user or a fallback value.
-   * <p>
-   * The fallback supplier is used when no user is authenticated or when no settings exist for the
-   * authenticated user.
-   *
-   * @param fallback supplier that creates the fallback settings
-   * @return the current user's settings, or the supplied fallback settings
-   */
-  @Nonnull
-  AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull Supplier<AppUserSettingDto> fallback);
-
-  /**
    *
    * @return the user language of the current user
    * @throws UserNotAuthenticatedException if no user is authenticated

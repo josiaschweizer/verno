@@ -12,6 +12,6 @@ public final class InjectorFactory {
 
   @Nonnull
   public static Injector create(@Nonnull final I18NProvider i18n) {
-    return Guice.createInjector(new UiGuiceModule(i18n));
+    return Guice.createInjector(new GuiceModule(i18n));
   }
 }

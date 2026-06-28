@@ -1,4 +1,4 @@
-package ch.verno.rpc.client.address;
+package ch.verno.rpc.client;
 
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.endpoint.address.AddressResource;

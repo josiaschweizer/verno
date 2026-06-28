@@ -1,7 +1,5 @@
 package ch.verno.ui.injection;
 
-import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
-import ch.verno.rpc.config.InternalRpcTokenModule;
 import ch.verno.rpc.config.InternalRpcTokenModuleApplicationProperty;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -17,9 +15,9 @@ public class InjectorConfiguration {
   @Bean
   public Injector injector(@Nonnull final I18NProvider i18NProvider,
                            @Value("${verno.rpc.internal-secret}") @Nonnull final String rpcInternalSecret) {
-    //TODO move interanl secret into env file and then use the InternalRpcTokenModule
+    //TODO move internal secret into env file and then use the InternalRpcTokenModule
     return Guice.createInjector(
-            new UiGuiceModule(i18NProvider),
+            new GuiceModule(i18NProvider),
             new InternalRpcTokenModuleApplicationProperty(rpcInternalSecret)
     );
   }

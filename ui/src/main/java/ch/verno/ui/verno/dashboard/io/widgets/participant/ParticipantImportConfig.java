@@ -14,7 +14,7 @@ import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
-import ch.verno.rpc.client.address.AddressClient;
+import ch.verno.rpc.client.AddressClient;
 import ch.verno.rpc.client.course.CourseLevelClient;
 import ch.verno.rpc.client.file.CsvClient;
 import ch.verno.rpc.client.file.TempFileClient;

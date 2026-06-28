@@ -147,18 +147,6 @@ public class AppUserResourceImpl implements AppUserResource {
     return user.flatMap(appUserDto -> appUserSettingService.get().findByUserId(appUserDto.getId()));
   }
 
-  @Nonnull
-  @Override
-  public AppUserSettingDto getCurrentOrFallbackAppUserSetting(@Nonnull final Supplier<AppUserSettingDto> fallback) {
-    final var user = getOptionalCurrentAppUser();
-    if (user.isEmpty()) {
-      return fallback.get();
-    }
-
-    final var setting = getOptionalCurrentAppUserSetting();
-    return setting.orElseGet(fallback);
-  }
-
   @Override
   public @Nonnull Language getCurrentUserLanguage() {
     final var setting = getCurrentAppUserSetting();

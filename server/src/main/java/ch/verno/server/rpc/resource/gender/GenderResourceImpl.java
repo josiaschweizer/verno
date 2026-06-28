@@ -5,6 +5,8 @@ import ch.verno.contract.endpoint.gender.GenderResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.BoFactory;
+import ch.verno.server.bo.table.gender.GenderBo;
 import ch.verno.server.service.intern.table.gender.GenderService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
@@ -16,27 +18,27 @@ import java.util.Optional;
 @RpcResource(GenderResource.class)
 public class GenderResourceImpl implements GenderResource {
 
-  @Nonnull private final Lazy<GenderService> genderService;
+  @Nonnull private final Lazy<GenderBo> genderBo;
 
   public GenderResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.genderService = Lazy.of(() -> new GenderService(serverBean));
+    this.genderBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(GenderBo.class));
   }
 
   @Nonnull
   @Override
   public Optional<GenderDto> getGenderByName(@Nonnull final String name) {
-    return genderService.get().findByName(name);
+    return genderBo.get().findByName(name);
   }
 
   @Nonnull
   @Override
   public List<GenderDto> getAllGenders() {
-    return genderService.get().findAll();
+    return genderBo.get().findAll();
   }
 
   @Nonnull
   @Override
   public GenderDto saveGender(@Nonnull final GenderDto gender) {
-    return genderService.get().save(gender);
+    return genderBo.get().save(gender);
   }
 }

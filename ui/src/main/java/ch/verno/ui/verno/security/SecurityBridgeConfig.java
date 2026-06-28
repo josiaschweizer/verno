@@ -1,6 +1,7 @@
 package ch.verno.ui.verno.security;
 
 import ch.verno.rpc.client.user.AppUserClient;
+import ch.verno.rpc.properties.user.UserProperties;
 import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ public class SecurityBridgeConfig {
   @Nonnull
   @Bean("appUserService")
   public UserDetailsService appUserDetailsService(@Nonnull final Injector injector) {
-    final var appUserClient = injector.getInstance(AppUserClient.class);
-    return appUserClient::loadUserByUsername;
+    final var userProperties = injector.getInstance(UserProperties.class);
+    return userProperties::loadUserByUsername;
   }
 }

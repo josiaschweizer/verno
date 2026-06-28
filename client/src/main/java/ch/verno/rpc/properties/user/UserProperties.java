@@ -1,16 +1,14 @@
 package ch.verno.rpc.properties.user;
 
-import ch.verno.common.lib.Routes;
 import ch.verno.contract.endpoint.properties.user.UserResource;
 import ch.verno.contract.endpoint.user.AppUserResource;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;
-import ch.verno.ui.base.navigation.Navigator;
 import com.google.inject.Inject;
-import com.vaadin.flow.component.UI;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
@@ -40,13 +38,22 @@ public class UserProperties {
     return Optional.of(userDetail);
   }
 
-  public void logout() {
-    final var ui = UI.getCurrent();
-    final var result = userResource.get().logout();
-    if (result) {
-      ui.getSession().getSession().invalidate();
-      Navigator.navigateTo(Routes.LOGIN);
+  @Nonnull
+  public UserDetails loadUserByUsername(@Nonnull final String username) {
+    final var userOptional = appUserResource.get().findByUsernameOrEmail(username);
+    if (userOptional.isEmpty()) {
+      throw new UsernameNotFoundException(username);
     }
+
+    final var user = userOptional.get(); //TODO MAYBE REFACTOR?
+    return User.withUsername(user.getUsername())
+            .password(user.getPasswordHash())
+            .roles(user.getRole().getRole())
+            .build();
+  }
+
+  public boolean logout() {
+    return userResource.get().logout();
   }
 
 }
