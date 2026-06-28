@@ -36,6 +36,12 @@ public class TenantResourceImpl implements TenantResource {
 
   @Nonnull
   @Override
+  public Optional<Long> getTenantIdBySlug(@Nonnull final String slug) {
+    return tenantService.get().findTenantIdBySlug(slug);
+  }
+
+  @Nonnull
+  @Override
   public List<TenantDto> findAllTenants() {
     return tenantService.get().findAllTenants();
   }

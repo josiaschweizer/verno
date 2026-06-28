@@ -1,6 +1,5 @@
 package ch.verno.rpc.properties.tenant;
 
-import ch.verno.contract.dto.table.setting.TenantSettingDto;
 import ch.verno.contract.dto.table.tenant.TenantDto;
 import ch.verno.contract.endpoint.properties.tenant.TenantResource;
 import ch.verno.lib.Lazy;
@@ -23,6 +22,11 @@ public class TenantProperties {
   @Nonnull
   public Optional<TenantDto> resolveCurrentTenant() {
     return tenantResource.get().resolveTenant();
+  }
+
+  @Nonnull
+  public Optional<Long> getTenantIdBySlug(@Nonnull final String slug){
+    return tenantResource.get().getTenantIdBySlug(slug);
   }
 
   @Nonnull

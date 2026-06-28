@@ -14,6 +14,9 @@ public interface TenantResource {
   Optional<TenantDto> resolveTenant();
 
   @Nonnull
+  Optional<Long> getTenantIdBySlug(@Nonnull String slug);
+
+  @Nonnull
   List<TenantDto> findAllTenants();
 
 }

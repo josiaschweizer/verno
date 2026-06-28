@@ -26,7 +26,7 @@ public class InstructorResourceImpl implements InstructorResource {
   @Nonnull private final Lazy<InstructorService> instructorService;
 
   public InstructorResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.instructorBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(InstructorBo.class));
+    this.instructorBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(InstructorBo.class));
     this.instructorService = Lazy.of(() -> serverBean.get(InstructorService.class));
   }
 

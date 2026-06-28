@@ -1,7 +1,7 @@
 package ch.verno.contract.rpc;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.Nonnull;
+import tools.jackson.databind.JsonNode;
 
 import java.util.List;
 

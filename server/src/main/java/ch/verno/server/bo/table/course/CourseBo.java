@@ -5,6 +5,7 @@ import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.base.IBusinessObject;
 import ch.verno.server.service.intern.table.course.CourseScheduleService;
 import ch.verno.server.service.intern.table.course.CourseService;
 import ch.verno.server.service.intern.table.participant.ParticipantService;
@@ -12,13 +13,13 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public class CourseBo {
+public class CourseBo implements IBusinessObject {
 
   @Nonnull private final Lazy<CourseService> courseService;
   @Nonnull private final Lazy<ParticipantService> participantService;
   @Nonnull private final Lazy<CourseScheduleService> courseScheduleService;
 
-  CourseBo(@Nonnull final ServerBean serverBean){
+  public CourseBo(@Nonnull final ServerBean serverBean){
     this.courseService = Lazy.of(() -> serverBean.get(CourseService.class));
     this.participantService = Lazy.of(() -> serverBean.get(ParticipantService.class));
     this.courseScheduleService = Lazy.of(() -> serverBean.get(CourseScheduleService.class));

@@ -27,7 +27,7 @@ public class ParticipantResourceImpl implements ParticipantResource {
   @Nonnull private final Lazy<ParticipantService> participantService;
 
   public ParticipantResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.participantBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(ParticipantBo.class));
+    this.participantBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(ParticipantBo.class));
     this.participantService = Lazy.of(() -> serverBean.get(ParticipantService.class));
   }
 

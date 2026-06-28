@@ -16,7 +16,7 @@ public class MailBo {
   @Nonnull private final MailConfigMapper mailConfigMapper;
   @Nonnull private final Lazy<MailConfigService> mailConfigService;
 
-  protected MailBo(@Nonnull final ServerBean serverBean) {
+  public MailBo(@Nonnull final ServerBean serverBean) {
     this.mailConfigMapper = serverBean.get(MailConfigMapper.class);
     this.mailConfigService = Lazy.of(() -> serverBean.get(MailConfigService.class));
   }

@@ -1,14 +1,19 @@
 package ch.verno.rpc.rpc;
 
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.rpc.RpcException;
 import ch.verno.contract.rpc.RpcRequest;
 import ch.verno.contract.rpc.RpcResponse;
 import ch.verno.lib.New;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -45,9 +50,19 @@ public class RpcClient {
               arguments
       );
 
+      final var headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+
+      final var tenantId = TenantContext.get();
+      if (tenantId != null) {
+        headers.set(VernoConstants.X_MANDANT, tenantId.toString());
+      }
+
+      final var requestEntity = new HttpEntity<>(request, headers);
+
       final var response = restTemplate.postForObject(
               rpcUrl,
-              request,
+              requestEntity,
               RpcResponse.class
       );
 
@@ -64,8 +79,6 @@ public class RpcClient {
               .constructType(method.getGenericReturnType());
 
       if (response.result() == null) {
-        // prevents to return null if rpc response is empty (null)
-        // (originally while response is parsed from JSON Optional::empty is converted to null)
         if (returnType.isTypeOrSubTypeOf(Optional.class)) {
           return Optional.empty();
         }

@@ -22,7 +22,7 @@ public class MailConfigResourceImpl implements MailConfigResource {
   @Nonnull private final Lazy<MailConfigService> mailConfigService;
 
   public MailConfigResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.mailBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(MailBo.class));
+    this.mailBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(MailBo.class));
     this.mailConfigService = Lazy.of(() -> serverBean.get(MailConfigService.class));
   }
 

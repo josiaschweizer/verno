@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 
+//TODO REMOVE USAGE -> use CurrentTenantProvider
 public final class TenantContext {
 
   private static final ThreadLocal<Long> CURRENT = new ThreadLocal<>();

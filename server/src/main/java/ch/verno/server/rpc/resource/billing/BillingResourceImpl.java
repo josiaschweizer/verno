@@ -22,7 +22,7 @@ public class BillingResourceImpl implements BillingResource {
   @Nonnull private final Lazy<BillingConfigProvider> billingConfigProvider;
 
   public BillingResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.billingBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(BillingBo.class));
+    this.billingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(BillingBo.class));
     this.tenantBillingService = Lazy.of(() -> serverBean.get(TenantBillingService.class));
     this.billingConfigProvider = Lazy.of(() -> serverBean.get(BillingConfigProvider.class));
   }

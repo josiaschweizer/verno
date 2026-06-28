@@ -10,6 +10,7 @@ import ch.verno.contract.endpoint.course.CourseResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.course.CourseBo;
 import ch.verno.server.service.intern.table.course.CourseService;
 import jakarta.annotation.Nonnull;
@@ -26,7 +27,7 @@ public class CourseResourceImpl implements CourseResource {
   @Nonnull private final Lazy<CourseService> courseService;
 
   public CourseResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.courseBo = Lazy.of(() -> serverBean.get(CourseBo.class));
+    this.courseBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(CourseBo.class));
     this.courseService = Lazy.of(() -> serverBean.get(CourseService.class));
   }
 

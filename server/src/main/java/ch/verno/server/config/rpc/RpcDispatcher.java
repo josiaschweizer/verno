@@ -1,8 +1,8 @@
 package ch.verno.server.config.rpc;
 
 import ch.verno.contract.rpc.RpcRequest;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

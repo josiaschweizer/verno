@@ -19,7 +19,7 @@ public class AddressResourceImpl implements AddressResource {
   @Nonnull private final Lazy<AddressService> addressService;
 
   public AddressResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.addressBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(AddressBo.class));
+    this.addressBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(AddressBo.class));
     this.addressService = Lazy.of(() -> serverBean.get(AddressService.class));
   }
 

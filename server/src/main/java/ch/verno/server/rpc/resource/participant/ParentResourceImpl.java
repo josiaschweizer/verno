@@ -19,7 +19,7 @@ public class ParentResourceImpl implements ParentResource {
   @Nonnull private final Lazy<ParentService> parentService;
 
   public ParentResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.parentBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(ParentBo.class));
+    this.parentBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(ParentBo.class));
 
     this.parentService = Lazy.of(() -> serverBean.get(ParentService.class));
   }

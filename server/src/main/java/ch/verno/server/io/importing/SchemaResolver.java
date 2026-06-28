@@ -16,7 +16,7 @@ public class SchemaResolver {
   @Nonnull private final CsvSchemaAnalyzer csvSchemaAnalyzer;
 
   public SchemaResolver(@Nonnull final ServerBean serverBean) {
-    this.tempFileBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(TempFileBo.class));
+    this.tempFileBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TempFileBo.class));
     this.csvSchemaAnalyzer = new CsvSchemaAnalyzer();
   }
 

@@ -20,7 +20,7 @@ public class StorageResourceImpl implements StorageResource {
   @Nonnull private final Lazy<StorageBo> storageBo;
 
   public StorageResourceImpl(@Nonnull final ServerBean serverBean) {
-    this.storageBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(StorageBo.class));
+    this.storageBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(StorageBo.class));
   }
 
   @Nonnull

@@ -27,13 +27,9 @@ public class TenantBillingService extends AbstractEntityServiceLongId<
 
   @Nonnull private final Lazy<TenantBillingBo> tenantBillingBo;
 
-  public TenantBillingService(@Nonnull final ServerBean bean) {
-    super(
-            bean.get(TenantBillingRepository.class),
-            bean.get(TenantBillingMapper.class)
-    );
-
-    this.tenantBillingBo = Lazy.of(() -> bean.get(BoFactory.class).get(TenantBillingBo.class));
+  public TenantBillingService(@Nonnull final ServerBean serverBean) {
+    super(serverBean.get(TenantBillingRepository.class), serverBean.get(TenantBillingMapper.class));
+    this.tenantBillingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantBillingBo.class));
   }
 
   @Nonnull

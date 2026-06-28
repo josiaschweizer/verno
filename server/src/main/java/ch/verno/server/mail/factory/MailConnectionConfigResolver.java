@@ -19,7 +19,7 @@ public class MailConnectionConfigResolver {
   @Nonnull private final Lazy<MailConfigService> mailConfigService;
 
   public MailConnectionConfigResolver(@Nonnull final ServerBean serverBean) {
-    this.envBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(EnvironmentVariableBo.class));
+    this.envBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(EnvironmentVariableBo.class));
     this.mailConfigService = Lazy.of(() -> serverBean.get(MailConfigService.class));
   }
 

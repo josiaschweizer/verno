@@ -11,9 +11,13 @@ import ch.verno.server.repository.participant.ParticipantRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.ParticipantSpec;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class ParticipantService extends AbstractSpecEntityService<
         Long,
         ParticipantEntity,

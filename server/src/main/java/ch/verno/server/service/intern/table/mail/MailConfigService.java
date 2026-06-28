@@ -9,9 +9,13 @@ import ch.verno.server.mapper.mail.MailConfigMapper;
 import ch.verno.server.repository.mail.MailConfigRepository;
 import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
+@Transactional
 public class MailConfigService extends AbstractEntityServiceLongId<
         MailConfigEntity,
         MailConfigDto,

@@ -23,25 +23,25 @@ public class RpcController {
     this.dispatcher = dispatcher;
   }
 
-  @Nonnull
   @PostMapping
   public RpcResponse call(@RequestBody @Nonnull final RpcRequest request) {
     try {
       final var result = dispatcher.dispatch(request);
       return RpcResponse.success(result);
-    } catch (Exception exception) {
-      LOGGER.error(
-              "RPC call failed: {}#{}",
-              request.endpoint(),
-              request.method(),
-              exception
+    } catch (final java.lang.reflect.InvocationTargetException exception) {
+      final var targetException = exception.getTargetException();
+
+      return RpcResponse.error(
+              targetException.getClass().getSimpleName()
+                      + ": "
+                      + targetException.getMessage()
       );
-
-      final var message = exception.getMessage() != null
-              ? exception.getMessage()
-              : exception.getClass().getName();
-
-      return RpcResponse.error(message);
+    } catch (final Exception exception) {
+      return RpcResponse.error(
+              exception.getClass().getSimpleName()
+                      + ": "
+                      + exception.getMessage()
+      );
     }
   }
 }

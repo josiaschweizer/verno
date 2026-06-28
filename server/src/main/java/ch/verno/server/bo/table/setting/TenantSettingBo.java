@@ -14,7 +14,7 @@ public class TenantSettingBo {
   @Nonnull private final Lazy<TenantSettingService> tenantSettingService;
 
   protected TenantSettingBo(@Nonnull final ServerBean serverBean) {
-    this.tenantBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(TenantBo.class));
+    this.tenantBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantBo.class));
     this.tenantSettingService = Lazy.of(() -> serverBean.get(TenantSettingService.class));
   }
 

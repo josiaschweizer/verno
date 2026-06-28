@@ -18,7 +18,6 @@ import ch.verno.server.service.extern.billing.TenantBillingService;
 import ch.verno.server.util.security.TokenGenerator;
 import jakarta.annotation.Nonnull;
 
-import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +26,11 @@ public class BillingBo {
 
   private static final int DEFAULT_EXPIRY_MINUTES = 10;
 
-  @Nonnull private final Lazy<SecureRandom> secureRandom;
   @Nonnull private final Lazy<TenantBillingService> tenantBillingService;
   @Nonnull private final Lazy<BillingConfigProvider> billingConfigProvider;
   @Nonnull private final Lazy<BillingAccessTokenService> billingAccessTokenService;
 
   protected BillingBo(@Nonnull final ServerBean bean) {
-    this.secureRandom = Lazy.of(SecureRandom::new);
     this.tenantBillingService = Lazy.of(() -> bean.get(TenantBillingService.class));
     this.billingConfigProvider = Lazy.of(() -> bean.get(BillingConfigProvider.class));
     this.billingAccessTokenService = Lazy.of(() -> bean.get(BillingAccessTokenService.class));

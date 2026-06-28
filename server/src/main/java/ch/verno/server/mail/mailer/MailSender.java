@@ -19,7 +19,7 @@ public class MailSender {
   @Nonnull private final Lazy<MailerFactory> mailerFactory;
 
   public MailSender(@Nonnull final ServerBean serverBean) {
-    this.mailLogBo = Lazy.of(() -> serverBean.get(BoFactory.class).get(MailLogBo.class));
+    this.mailLogBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(MailLogBo.class));
     this.mailerFactory = Lazy.of(() -> serverBean.get(MailerFactory.class));
   }
 
