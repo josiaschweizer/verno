@@ -9,9 +9,11 @@ import ch.verno.server.mapper.mail.MailTemplateMapper;
 import ch.verno.server.repository.mail.MailTemplateRepository;
 import ch.verno.server.service.base.AbstractEntityServiceUndefinedId;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class MailTemplateService extends AbstractEntityServiceUndefinedId<
         MailTemplateEntity,
         MailTemplateDto,

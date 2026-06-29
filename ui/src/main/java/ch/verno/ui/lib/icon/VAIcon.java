@@ -16,18 +16,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class VAIcon extends Span {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(VAIcon.class);
 
-  @SuppressWarnings("HardcodedFileSeparator") @NonNls private static final String RESOURCE_PREFIX = "META-INF/resources/";
-  @NonNls private static final String DEFAULT_COLOR = "var(--lumo-contrast-60pct)";
+  @NonNls private static final String RESOURCE_PREFIX = "META-INF/resources/";
+  @NonNls private static final String DEFAULT_COLOR = "var(--va-icon-color, var(--lumo-contrast-60pct))";
   @NonNls public static final String CONFIGURE_SVG_ELEMENT_JS = """
           const svg = this.querySelector('svg');
           if (svg) {
             svg.style.width = $0;
             svg.style.height = $0;
             svg.style.display = 'block';
+            svg.querySelectorAll('[fill]').forEach(el => el.setAttribute('fill', 'currentColor'));
+            svg.querySelectorAll('[stroke]').forEach(el => el.setAttribute('stroke', 'currentColor'));
           }
           """;
 

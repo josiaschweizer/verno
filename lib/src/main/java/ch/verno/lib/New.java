@@ -22,6 +22,11 @@ public class New {
   }
 
   @Nonnull
+  public static <T> List<T> list(@Nonnull final Collection<T> items) {
+    return arrayList(items);
+  }
+
+  @Nonnull
   public static <T> List<T> copyList(@Nonnull final List<T> lists) {
     return combinedArrayList(lists);
   }
@@ -40,13 +45,13 @@ public class New {
   }
 
   @SafeVarargs
-  public static <T> ArrayList<T> arrayList(@Nonnull List<T>... lists) {
+  public static <T> ArrayList<T> arrayList(@Nonnull Collection<T>... lists) {
     return combinedArrayList(lists);
   }
 
   @Nonnull
   @SafeVarargs
-  protected static <T> ArrayList<T> combinedArrayList(@Nonnull final List<? extends T>... lists) {
+  protected static <T> ArrayList<T> combinedArrayList(@Nonnull final Collection<? extends T>... lists) {
     final var result = new ArrayList<T>(BASE_LIST_SIZE);
     for (final var list : lists) {
       result.addAll(list);

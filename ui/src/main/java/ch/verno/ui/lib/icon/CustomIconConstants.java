@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NonNls;
 
 public class CustomIconConstants {
 
-  @NonNls public static final String VAADIN_ICON = "vaadin:";
   @NonNls private static final String CUSTOM_ICON_PREFIX = "CustomIcon:";
 
   @NonNls public static final String VERNO_LOGO = CUSTOM_ICON_PREFIX + "VernoLogo";

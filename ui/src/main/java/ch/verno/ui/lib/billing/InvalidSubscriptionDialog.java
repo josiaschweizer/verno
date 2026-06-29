@@ -14,6 +14,7 @@ import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
@@ -65,8 +66,8 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
-    final var wrapper = new HorizontalLayout(buildContent());
+  protected VAHorizontalLayout createContent() {
+    final var wrapper = new VAHorizontalLayout(buildContent());
     wrapper.setWidthFull();
     wrapper.setPadding(false);
     wrapper.setSpacing(false);

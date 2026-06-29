@@ -4,6 +4,7 @@ import ch.verno.contract.dto.table.setting.TenantSettingDto;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.setting.TenantSettingClient;
 import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,6 +18,7 @@ public class SharedSettings extends VABaseSetting<TenantSettingDto> {
 
   @Nonnull private final Lazy<TenantSettingClient> tenantSettingClient;
 
+  @Inject
   public SharedSettings(@Nonnull final Injector injector) {
     super(injector, TITLE_KEY, true);
 

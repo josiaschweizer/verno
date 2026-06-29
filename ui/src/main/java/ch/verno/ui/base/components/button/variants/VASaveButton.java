@@ -17,7 +17,9 @@ public class VASaveButton extends VAButton {
     super();
     this.dirtyProvider = dirtyProvider;
 
-    setContent(getTranslation(SAVE_KEY), IconUtil.creatExtraSmall(CustomIcons.SAVE));
+    setText(getTranslation(SAVE_KEY));
+    setIcon(IconUtil.creatExtraSmall(CustomIcons.SAVE));
+
     addClickListener(e -> refreshDirtyState());
     refreshDirtyState();
   }
@@ -27,11 +29,7 @@ public class VASaveButton extends VAButton {
   }
 
   public void setDirty(final boolean dirty) {
-    if (dirty) {
-      setContent(getTranslation(SAVE_KEY), IconUtil.creatExtraSmall(CustomIcons.SAVE_FILLED));
-    } else {
-      setContent(getTranslation(SAVE_KEY), IconUtil.creatExtraSmall(CustomIcons.SAVE));
-    }
+    setIcon(dirty ? IconUtil.creatExtraSmall(CustomIcons.SAVE_FILLED) : IconUtil.creatExtraSmall(CustomIcons.SAVE));
   }
 
   public boolean isDirty() {

@@ -1,13 +1,18 @@
 package ch.verno.ui.verno.mail.testmail;
 
-import ch.verno.rpc.client.mail.MailClient;
+import ch.verno.contract.mail.MailContentDto;
+import ch.verno.contract.test.lib.TestDataUtil;
 import ch.verno.lib.Lazy;
+import ch.verno.lib.New;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.button.variants.VASaveButton;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.verno.dashboard.mail.CourseMailTemplateConfigLayout;
@@ -21,7 +26,7 @@ import javax.annotation.Nullable;
 public class MailTemplateTabContent {
 
   @Nonnull private final Injector injector;
-  @Nonnull private final Lazy<MailClient> mailServerGate;
+  @Nonnull private final Lazy<MailClient> mailClient;
   @Nonnull private final MailTemplateTypeMapping textMapping;
 
   @Nonnull private final VAVerticalLayout layout;
@@ -32,8 +37,8 @@ public class MailTemplateTabContent {
   public MailTemplateTabContent(@Nonnull final Injector injector,
                                 @Nonnull final MailTemplateTypeMapping mapping) {
     this.injector = injector;
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
     this.textMapping = mapping;
-    this.mailServerGate = Lazy.of(() -> injector.getInstance(MailClient.class));
 
     this.layout = initUI();
   }
@@ -105,6 +110,15 @@ public class MailTemplateTabContent {
       button.refreshDirtyState();
     });
     button.setEnabled(templateLayout.isValid());
+
+    final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
+    injector.getInstance(ShortcutRegistry.class).register(
+            DefaultVernoShortcuts.SAVE,
+            button::click,
+            layout,
+            registration
+    );
+
     return button;
   }
 
@@ -120,21 +134,19 @@ public class MailTemplateTabContent {
   }
 
   private void sendCourseInviteMail(@Nonnull final String recipient) {
-    //TODO temporarily commented out bc TestDataUtil isn't done yet
-//    final var demoParticipant = TestDataUtil.createDemoParticipant(recipient);
-//    final var courseSchedule = TestDataUtil.createDemoCourseSchedule();
-//    final var course = TestDataUtil.createDemoCourse();
-//
-//    final var bean = templateLayout.getBean();
-//    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
-//
-//    mailServerGate.get().sendCourseEmails(
-//            mailContent,
-//            templateLayout.getPlaceholderValues(),
-//            New.list(demoParticipant),
-//            courseSchedule,
-//            course
-//    );
+    final var demoParticipant = TestDataUtil.createDemoParticipant(recipient);
+    final var courseSchedule = TestDataUtil.createDemoCourseSchedule();
+    final var course = TestDataUtil.createDemoCourse();
+
+    final var bean = templateLayout.getBean();
+    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent(), MailContentDto.MailContentType.PLAIN);
+    mailClient.get().sendCourseMails(
+            mailContent,
+            templateLayout.getPlaceholderValues(),
+            New.list(demoParticipant),
+            courseSchedule,
+            course
+    );
 
     NotificationFactory.showSuccessNotification(injector.getInstance(TranslationHelper.class).getTranslation("mail.email.sent.successfully"));
 

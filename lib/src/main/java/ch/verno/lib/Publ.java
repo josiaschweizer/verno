@@ -23,10 +23,12 @@ public class Publ {
   public static final String QUESTION_MARK = "?";
   public static final String DASH = "-";
   public static final String SLASH = "/";
+  public static final String BACKSLASH = "\\";
   public static final String COMMA = ",";
   public static final String EQUALS = "=";
   public static final String PLUS = "+";
   public static final String SIMPLE_QUOTE = "'";
+  public static final String BACKQUOTE = "`";
   public static final String DOT = ".";
   public static final String COLON = ":";
   public static final String UNDERSCORE = "_";
@@ -38,6 +40,9 @@ public class Publ {
   public static final String LEFT_SINGLE_ANGLE_QUOTATION_MARK = "‹";
   public static final String RIGHT_SINGLE_ANGLE_QUOTATION_MARK = "›";
   public static final String REQUIRED_STAR = "*";
+  public static final String SEMICOLON = ";";
+  public static final String BRACKET_LEFT = "[";
+  public static final String BRACKET_RIGHT = "]";
 
   public static final String CMD_SIGN = "⌘";
   public static final String CTRL_MAC_SIGN = "⌃";

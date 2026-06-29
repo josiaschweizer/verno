@@ -8,6 +8,7 @@ import ch.verno.rpc.client.async.BackgroundExecutorClient;
 import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.lib.components.email.AbstractMailTemplateConfigLayout;
 import ch.verno.ui.lib.mail.SendMailPopup;
@@ -15,7 +16,6 @@ import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -42,8 +42,8 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
-    final var layout = new HorizontalLayout(templateConfigLayout);
+  protected VAHorizontalLayout createContent() {
+    final var layout = new VAHorizontalLayout(templateConfigLayout);
     layout.setSizeFull();
     layout.setPadding(false);
     layout.setSpacing(false);

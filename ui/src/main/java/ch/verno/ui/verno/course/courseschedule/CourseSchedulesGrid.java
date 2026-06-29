@@ -1,9 +1,9 @@
 package ch.verno.ui.verno.course.courseschedule;
 
-import ch.verno.rpc.client.course.CourseScheduleClient;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
+import ch.verno.rpc.client.course.CourseScheduleClient;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
@@ -86,7 +86,7 @@ public class CourseSchedulesGrid extends BaseOverviewGrid<CourseScheduleDto, Cou
   @Override
   protected List<ComponentGridColumn<CourseScheduleDto>> getComponentColumns() {
     final var componentColumns = new ArrayList<ComponentGridColumn<CourseScheduleDto>>();
-    componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_COLOR, this::getColorSpan, getTranslation("shared.color"), false, (GridActionRoles) null));
+    componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_COLOR, this::getColorSpan, getTranslation("shared.color"), false));
     componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
     return componentColumns;
   }

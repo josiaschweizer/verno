@@ -7,9 +7,11 @@ import ch.verno.server.mapper.setting.AppUserSettingMapper;
 import ch.verno.server.repository.setting.AppUserSettingRepository;
 import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class AppUserSettingService extends AbstractEntityServiceLongId<
         AppUserSettingEntity,
         AppUserSettingDto,

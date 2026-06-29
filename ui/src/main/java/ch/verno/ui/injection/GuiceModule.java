@@ -4,13 +4,19 @@ import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
 import ch.verno.rpc.auth.InternalRpcAuthInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
-import tools.jackson.databind.ObjectMapper;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistryImpl;
+import ch.verno.ui.injection.scope.PageScope;
+import ch.verno.ui.injection.scope.PageScoped;
+import ch.verno.ui.injection.scope.SessionScope;
+import ch.verno.ui.injection.scope.SessionScoped;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.ObjectMapper;
 
 public class GuiceModule extends AbstractModule {
 
@@ -18,6 +24,14 @@ public class GuiceModule extends AbstractModule {
 
   public GuiceModule(@Nonnull final I18NProvider i18NProvider) {
     this.i18NProvider = i18NProvider;
+  }
+
+  @Override
+  protected void configure() {
+    bindScope(PageScoped.class, new PageScope());
+    bindScope(SessionScoped.class, new SessionScope());
+
+    bind(ShortcutRegistry.class).to(ShortcutRegistryImpl.class);
   }
 
   @Provides

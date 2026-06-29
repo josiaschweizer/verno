@@ -40,6 +40,7 @@ import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
@@ -52,7 +53,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @PermitAll
-@com.vaadin.flow.router.Route(Routes.PARTICIPANTS + Routes.DETAIL)
+@Route(Routes.PARTICIPANTS + Routes.DETAIL)
 @Menu(order = 1.1, icon = VaadinIconConstants.USER, title = "participant.participant.detail")
 public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements HasDynamicTitle {
 

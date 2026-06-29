@@ -14,7 +14,6 @@ public class TenantFilterEnabler {
   @PersistenceContext
   private EntityManager entityManager;
 
-  @Transactional
   public void enable() {
     final var tenantId = TenantContext.getRequired();
 

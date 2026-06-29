@@ -6,6 +6,7 @@ import ch.verno.lib.Publ;
 import ch.verno.rpc.client.file.ReportClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -44,11 +45,11 @@ public class ParticipantsReportDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var preview = new PdfPreview(buildInlineUrl(reportToken));
     preview.applyDefaultStyle();
 
-    final var layout = new HorizontalLayout(preview);
+    final var layout = new VAHorizontalLayout(preview);
     layout.setSizeFull();
     layout.setPadding(false);
     layout.setSpacing(false);

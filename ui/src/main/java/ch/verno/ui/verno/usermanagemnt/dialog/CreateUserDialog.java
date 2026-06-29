@@ -6,6 +6,7 @@ import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.layouts.UserLayout;
@@ -56,7 +57,7 @@ public class CreateUserDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var userLayout = injector.getInstance(UserLayout.class);
 
     if (formMode != FormMode.CREATE) {

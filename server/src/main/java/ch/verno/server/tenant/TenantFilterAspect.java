@@ -16,8 +16,8 @@ public class TenantFilterAspect {
   }
 
   @Before(
-          "within(@org.springframework.stereotype.Repository *) && " +
-                  "!within(@ch.verno.server.tenant.UnscopedQuery *) && " +
+          "within(ch.verno.server.repository..*) && " +
+                  "!@within(ch.verno.server.tenant.UnscopedQuery) && " +
                   "!@annotation(ch.verno.server.tenant.UnscopedQuery)"
   )
   public void enableTenantFilter() {

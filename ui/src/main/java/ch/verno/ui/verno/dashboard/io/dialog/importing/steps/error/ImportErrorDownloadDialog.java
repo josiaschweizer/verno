@@ -4,6 +4,7 @@ import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -34,9 +35,9 @@ public class ImportErrorDownloadDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var text = new Text(getTranslation("shared.beim.import.konnten.nicht.alle.datensatze.erfolgreich.verarbeitet.werden.die.betroffenen.eintrage.wurden.in.einer.separaten.datei.zusammengefasst.und.konnen.hier.heruntergeladen.werden"));
-    final var layout = new HorizontalLayout(text);
+    final var layout = new VAHorizontalLayout(text);
     layout.setWidthFull();
     layout.setPadding(false);
     layout.setSpacing(false);

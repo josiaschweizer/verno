@@ -1,12 +1,16 @@
 package ch.verno.ui.base.components.toolbar;
 
 import ch.verno.common.lib.Routes;
+import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.user.AppUserClient;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.badge.UserActionBadge;
+import ch.verno.ui.base.components.badge.UserBadgeMenuItem;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
+import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
+import ch.verno.ui.base.shortcut.dialog.ShortcutOverviewDialog;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Injector;
@@ -118,11 +122,32 @@ public class ViewToolbarFactory {
     final var ui = UI.getCurrent();
 
     final var logoutUtil = injector.getInstance(LogoutUtil.class);
-    final var userBadge = new UserActionBadge(currentUser.getUsername())
-//            .addItem(VaadinIcon.USER, "Profil", () -> ui.navigate(Routes.PROFILE))
+    final var shortcutRegistry = Lazy.of(() -> injector.getInstance(ShortcutRegistry.class));
+    final var userBadge = new UserActionBadge(shortcutRegistry, currentUser.getUsername())
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
+            .addItem(createShortcutOverviewMenuItem(injector))
             .addItemWithTranslationKey(VaadinIcon.SIGN_OUT, "shared.logout", logoutUtil::logout);
 
     toolbar.addUserAction(userBadge);
+  }
+
+  @Nonnull
+  private static UserBadgeMenuItem createShortcutOverviewMenuItem(@Nonnull final Injector injector) {
+    return new UserBadgeMenuItem(
+            VaadinIcon.KEYBOARD_O,
+            injector.getInstance(TranslationHelper.class).getTranslation("shared.shortcuts"),
+            () -> openShortcutOverviewDialog(injector),
+            () -> hasShortcutRegistryItems(injector),
+            DefaultVernoShortcuts.SHORTCUTS
+    );
+  }
+
+  private static void openShortcutOverviewDialog(@Nonnull final Injector injector) {
+    final var shortcutsDialog = injector.getInstance(ShortcutOverviewDialog.class);
+    shortcutsDialog.open();
+  }
+
+  private static boolean hasShortcutRegistryItems(@Nonnull final Injector injector) {
+    return !injector.getInstance(ShortcutRegistry.class).isRegistryEmpty();
   }
 }

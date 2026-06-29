@@ -7,6 +7,7 @@ import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.course.courseschedule.CourseSchedulesGrid;
 import com.google.inject.Injector;
@@ -57,7 +58,7 @@ public class CourseScheduleDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     grid = new CourseSchedulesGrid(injector, false, false) {
 
       @Nonnull
@@ -76,7 +77,7 @@ public class CourseScheduleDialog extends VAAbstractDialog {
     grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
     grid.getGrid().addSelectionListener(e -> confirmButton.setEnabled(!grid.getGrid().getSelectedItems().isEmpty()));
 
-    final var layout = new HorizontalLayout(grid);
+    final var layout = new VAHorizontalLayout(grid);
     layout.setHeightFull();
     layout.expand(grid);
     return layout;

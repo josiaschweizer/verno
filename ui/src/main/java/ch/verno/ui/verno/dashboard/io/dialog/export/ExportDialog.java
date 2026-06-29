@@ -8,6 +8,7 @@ import ch.verno.rpc.client.file.CsvClient;
 import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -47,10 +48,10 @@ public class ExportDialog<T> extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var preview = new CsvPreview(tempFileClient, buildInlineUrl(fileToken));
 
-    final var layout = new HorizontalLayout(preview);
+    final var layout = new VAHorizontalLayout(preview);
     layout.setSizeFull();
     layout.setPadding(false);
     layout.setSpacing(false);

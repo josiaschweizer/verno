@@ -9,6 +9,7 @@ import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestResult;
 import ch.verno.ui.verno.settings.panels.mail.mailtest.TestStatus;
 import com.google.inject.Inject;
@@ -71,7 +72,7 @@ public class TestConnectionDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     emailField = new EmailField(getTranslation("setting.test.email"));
     emailField.setWidthFull();
     emailField.setClearButtonVisible(true);
@@ -107,7 +108,7 @@ public class TestConnectionDialog extends VAAbstractDialog {
     resultBox.setWidthFull();
     resultBox.setVisible(false);
     resultBox.getStyle().setBorderRadius("var(--lumo-border-radius-l)");
-    resultBox.getStyle().setPadding("var(--lumo-space-m)");
+    resultBox.getStyle().setPadding(VernoUtility.LUMO_SPACE_M);
     resultBox.getStyle().setBorder("1px solid var(--lumo-contrast-20pct)");
     resultBox.getStyle().setBackground("var(--lumo-contrast-5pct)");
     resultBox.getStyle().set("box-sizing", "border-box");
@@ -118,9 +119,9 @@ public class TestConnectionDialog extends VAAbstractDialog {
     root.setPadding(false);
     root.setSpacing(true);
     root.setWidthFull();
-    root.getStyle().setGap("var(--lumo-space-m)");
+    root.getStyle().setGap(VernoUtility.LUMO_SPACE_M);
 
-    final var wrapper = new HorizontalLayout(root);
+    final var wrapper = new VAHorizontalLayout(root);
     wrapper.setWidthFull();
     return wrapper;
   }

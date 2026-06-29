@@ -5,6 +5,7 @@ import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -46,7 +47,7 @@ public class ChangePasswordDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var newPassword = entryFactory.createPasswordField(
             ChangePasswordDto::getNewPassword,
             ChangePasswordDto::setNewPassword,

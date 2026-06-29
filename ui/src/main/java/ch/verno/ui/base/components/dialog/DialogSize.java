@@ -25,6 +25,11 @@ public enum DialogSize {
           "clamp(320px, 45vw, 800px)",
           "70vh",
           "320px"
+  ),
+  SMALL_COMPACT(
+          "clamp(280px, 35vw, 600px)",
+          "60vh",
+          "280px"
   );
 
   @Nonnull private final String width;

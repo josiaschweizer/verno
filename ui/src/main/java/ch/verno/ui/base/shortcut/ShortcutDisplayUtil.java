@@ -1,10 +1,15 @@
 package ch.verno.ui.base.shortcut;
 
 import ch.verno.lib.Publ;
+import ch.verno.lib.VernoUtility;
+import ch.verno.lib.font.Font;
+import ch.verno.ui.base.components.div.VADiv;
 import ch.verno.ui.base.os.OS;
 import ch.verno.ui.base.os.OSUtil;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
+import com.vaadin.flow.dom.Style;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
@@ -16,19 +21,39 @@ public class ShortcutDisplayUtil {
   public static String toDisplayString(@Nonnull final VAShortcut shortcut) {
     final var os = OSUtil.getOs();
 
-    final var modifiers = shortcut.keyModifier() != null ?
-            Arrays.stream(shortcut.keyModifier())
-            .map(mod -> mapModifierToDisplay(mod, os))
-            .collect(Collectors.joining(" + "))
+    final var modifiers = shortcut.getKeyModifier() != null ?
+            Arrays.stream(shortcut.getKeyModifier())
+                    .map(mod -> mapModifierToDisplay(mod, os))
+                    .collect(Collectors.joining(" + "))
             : Publ.EMPTY_STRING;
 
-    final var key = mapKeyToDisplay(shortcut.key());
+    final var key = mapKeyToDisplay(shortcut.getKey());
 
     if (modifiers.isBlank()) {
       return key;
     }
 
     return modifiers + " + " + key;
+  }
+
+  @Nonnull
+  public static VADiv createKeyBadge(@Nonnull final VAShortcut shortcut) {
+    final var badge = new VADiv(toDisplayString(shortcut));
+    badge.addClassNames(
+            LumoUtility.FontSize.SMALL,
+            LumoUtility.Background.CONTRAST_5,
+            LumoUtility.BorderColor.CONTRAST_20,
+            LumoUtility.Border.ALL,
+            LumoUtility.BorderRadius.SMALL,
+            LumoUtility.Padding.Horizontal.SMALL,
+            LumoUtility.Padding.Vertical.XSMALL
+    );
+    badge.getStyle().setMinWidth(VernoUtility.FOUR_REM);
+    badge.getStyle().setTextAlign(Style.TextAlign.CENTER);
+    badge.getStyle().setDisplay(Style.Display.INLINE_BLOCK);
+    badge.getStyle().set("font-family", Font.MONOSPACE_FONT_STACK);
+
+    return badge;
   }
 
   @Nonnull
@@ -60,6 +85,17 @@ public class ShortcutDisplayUtil {
       case "Escape" -> "Esc";
       case "Enter" -> "Enter";
       case "Tab" -> "Tab";
+      case "Comma" -> Publ.COMMA;
+      case "Period" -> Publ.DOT;
+      case "Semicolon" -> Publ.SEMICOLON;
+      case "Slash" -> Publ.SLASH;
+      case "Backslash" -> Publ.BACKSLASH;
+      case "Minus" -> Publ.MINUS;
+      case "Equal" -> Publ.EQUALS;
+      case "BracketLeft" -> Publ.BRACKET_LEFT;
+      case "BracketRight" -> Publ.BRACKET_RIGHT;
+      case "Quote" -> Publ.SIMPLE_QUOTE;
+      case "Backquote" -> Publ.BACKQUOTE;
       default -> {
         if (raw.startsWith("Key")) {
           yield raw.replace("Key", Publ.EMPTY_STRING);

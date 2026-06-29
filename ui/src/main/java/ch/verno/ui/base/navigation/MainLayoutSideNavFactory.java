@@ -6,9 +6,9 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.mail.MailConfigClient;
 import ch.verno.ui.i18n.TranslationHelper;
-import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
@@ -159,7 +159,7 @@ public class MainLayoutSideNavFactory {
     final var icon = menuEntry.icon();
     if (icon == null) {
       return new Icon(VaadinIcon.CUBES);
-    } else if (icon.startsWith(CustomIconConstants.VAADIN_ICON)) {
+    } else if (icon.startsWith(VaadinIconConstants.VAADIN_PREFIX)) {
       return new Icon(icon);
     }
 

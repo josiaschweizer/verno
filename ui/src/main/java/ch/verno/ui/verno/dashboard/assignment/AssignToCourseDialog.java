@@ -10,6 +10,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -53,7 +54,7 @@ public class AssignToCourseDialog extends VAAbstractDialog {
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     grid = new ParticipantsGrid(injector, false, false) {
 
       @Nonnull
@@ -99,7 +100,7 @@ public class AssignToCourseDialog extends VAAbstractDialog {
     };
     grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
 
-    final var layout = new HorizontalLayout(grid);
+    final var layout = new VAHorizontalLayout(grid);
     layout.setHeightFull();
     layout.expand(grid);
     return layout;

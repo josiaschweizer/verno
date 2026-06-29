@@ -2,14 +2,16 @@ package ch.verno.ui.base.components.button;
 
 import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
-import ch.verno.lib.VernoUtility;
+import ch.verno.ui.base.shortcut.VAShortcut;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistryEntry;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ShortcutRegistration;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.shared.Registration;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -38,12 +40,6 @@ public class VAButton extends Button {
   }
 
   public VAButton(@Nonnull final String text,
-                  @Nonnull final Component icon) {
-    super();
-    setContent(text, icon);
-  }
-
-  public VAButton(@Nonnull final String text,
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
     super(text);
     addClickListener(listener);
@@ -56,10 +52,18 @@ public class VAButton extends Button {
   }
 
   public VAButton(@Nonnull final String text,
+                  @Nonnull final Component icon) {
+    super();
+    setText(text);
+    setIcon(icon);
+  }
+
+  public VAButton(@Nonnull final String text,
                   @Nonnull final Component icon,
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
     super();
-    setContent(text, icon);
+    setText(text);
+    setIcon(icon);
     addClickListener(listener);
   }
 
@@ -67,22 +71,10 @@ public class VAButton extends Button {
                   @Nonnull final String text,
                   @Nonnull final ComponentEventListener<ClickEvent<Button>> listener) {
     super();
-    setContent(text, icon);
+    setText(text);
+    setIcon(icon);
+    setIconAfterText(true);
     addClickListener(listener);
-  }
-
-  protected void setContent(@Nonnull final String text,
-                          @Nonnull final Component icon) {
-    final var label = new Span(text);
-    final var content = new Span(icon, label);
-    content.getStyle()
-            .setDisplay(Style.Display.INLINE_FLEX)
-            .setAlignItems(Style.AlignItems.CENTER)
-            .setJustifyContent(Style.JustifyContent.CENTER)
-            .setGap(VernoUtility.LUMO_SPACE_S)
-            .setLineHeight(VernoUtility.LUMO_LINE_HEIGHT_M);
-
-    setIcon(content); //TODO remove hacky setIcon with text
   }
 
   public void removePseudoEnabled() {
@@ -133,6 +125,11 @@ public class VAButton extends Button {
 
       listener.onComponentEvent(event);
     });
+  }
+
+  @Nonnull
+  public ShortcutRegistration addClickShortcut(@Nonnull final VAShortcut shortcut) {
+    return addClickShortcut(shortcut.getKey(), shortcut.getKeyModifier());
   }
 
   public boolean isPseudoEnabled() {

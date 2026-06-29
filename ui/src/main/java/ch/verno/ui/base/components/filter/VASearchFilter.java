@@ -2,13 +2,12 @@ package ch.verno.ui.base.components.filter;
 
 import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
+import ch.verno.ui.base.os.OSUtil;
+import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
 import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
 import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;
-import ch.verno.ui.base.shortcut.VAShortcut;
-import ch.verno.ui.base.os.OSUtil;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
-import com.vaadin.flow.component.ShortcutRegistration;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import jakarta.annotation.Nonnull;
@@ -17,19 +16,20 @@ import jakarta.annotation.Nullable;
 public class VASearchFilter extends CustomField<String> {
 
   @Nonnull private final VATextField textField;
-  @Nonnull private ShortcutRegistration focusShortcutRegistration;
 
   @Nullable private String currentValue;
 
-  public VASearchFilter() {
-    this(null, null);
+  public VASearchFilter(@Nonnull final Injector injector) {
+    this(injector, null, null);
   }
 
-  public VASearchFilter(@Nullable final String placeholder) {
-    this(null, placeholder);
+  public VASearchFilter(@Nonnull final Injector injector,
+                        @Nullable final String placeholder) {
+    this(injector, null, placeholder);
   }
 
-  public VASearchFilter(@Nullable final String label,
+  public VASearchFilter(@Nonnull final Injector injector,
+                        @Nullable final String label,
                         @Nullable final String placeholder) {
     setWidthFull();
 
@@ -57,10 +57,12 @@ public class VASearchFilter extends CustomField<String> {
       }
       setValue(currentValue);
     });
-    final var focusShortcut = new VAShortcut(Key.KEY_F, KeyModifier.ALT);
+    final var focusShortcut = DefaultVernoShortcuts.FOCUS;
     if (!OSUtil.getOs().isMobile()) {
-      RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
+      final var registration = RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
       textField.setSuffixComponent(ShortcutDisplayComponent.of(focusShortcut));
+
+      injector.getInstance(ShortcutRegistry.class).register(focusShortcut, textField::focus, textField, registration);
     }
 
     add(textField);

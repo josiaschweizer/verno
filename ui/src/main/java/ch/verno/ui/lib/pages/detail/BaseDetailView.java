@@ -1,10 +1,14 @@
 package ch.verno.ui.lib.pages.detail;
 
 import ch.verno.ui.base.components.badge.VABadgeLabel;
+import ch.verno.ui.base.components.button.VAButton;
+import ch.verno.ui.base.components.button.variants.VASaveButton;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
+import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
 import ch.verno.ui.verno.FieldFactory;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
@@ -35,7 +39,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull protected EntryFactory<T> entryFactory;
   @Nonnull protected FieldFactory<T> fieldFactory;
 
-  @Nonnull protected Button saveButton;
+  @Nonnull protected VAButton saveButton;
   @Nonnull protected Runnable afterSave;
 
   @Nullable protected ViewToolbarResult viewToolbar;
@@ -58,12 +62,11 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     this.injector = injector;
     this.showHeaderToolbar = showHeaderToolbar;
 
-    this.saveButton = new Button(getTranslation("common.save"));
-    this.saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    this.afterSave = () -> UI.getCurrent().navigate(getBasePageRoute());
-
-    this.formMode = getDefaultFormMode();
     this.binder = createBinder();
+    this.formMode = getDefaultFormMode();
+
+    this.saveButton = createSaveButton();
+    this.afterSave = () -> UI.getCurrent().navigate(getBasePageRoute());
 
     final var i18nProvider = injector.getInstance(I18NProvider.class);
     this.entryFactory = new EntryFactory<>(i18nProvider);
@@ -94,7 +97,6 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
     initUI();
 
-    saveButton.addClickListener(event -> save());
     binder.addValueChangeListener(event -> updateSaveButtonState());
     binder.addStatusChangeListener(event -> updateSaveButtonState());
 
@@ -127,6 +129,21 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     }
 
     return result;
+  }
+
+  @Nonnull
+  private VAButton createSaveButton() {
+    final var button = new VASaveButton(binder::hasChanges);
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+    final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
+    injector.getInstance(ShortcutRegistry.class).register(
+            DefaultVernoShortcuts.SAVE,
+            button::click,
+            this,
+            registration
+    );
+    return button;
   }
 
   @Nullable

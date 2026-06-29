@@ -2,8 +2,8 @@ package ch.verno.ui.base.components.dialog;
 
 import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.button.VAButton;
-import ch.verno.ui.lib.icon.CustomIcons;
-import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.base.components.button.variants.VASaveButton;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -46,7 +46,7 @@ public abstract class VAAbstractDialog extends Dialog {
   }
 
   @Nonnull
-  protected abstract HorizontalLayout createContent();
+  protected abstract VAHorizontalLayout createContent();
 
   @Nonnull
   protected abstract Collection<Button> createActionButtons();
@@ -60,9 +60,15 @@ public abstract class VAAbstractDialog extends Dialog {
 
   @Nonnull
   protected VAButton createSaveButton(@Nonnull final Consumer<ClickEvent<Button>> action) {
-    final var button = new VAButton(getTranslation("shared.save"), IconUtil.creatExtraSmall(CustomIcons.SAVE));
+    final var button = new VASaveButton(() -> true);
     button.addClickListener(action::accept);
     return button;
   }
 
+  @Nonnull
+  protected VAButton createCloseButton() {
+    final var button = new VAButton(getTranslation("setting.close"));
+    button.addClickListener(e -> close());
+    return button;
+  }
 }

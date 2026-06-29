@@ -9,7 +9,9 @@ import ch.verno.server.repository.instructor.InstructorRepository;
 import ch.verno.server.service.base.AbstractSpecEntityService;
 import ch.verno.server.spec.InstructorSpec;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 
+@Service
 public class InstructorService extends AbstractSpecEntityService<
         Long,
         InstructorEntity,

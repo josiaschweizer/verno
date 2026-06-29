@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NonNls;
 
 public class VaadinIconConstants {
 
-  @NonNls private final static String VAADIN_PREFIX = "vaadin:";
+  @NonNls public final static String VAADIN_PREFIX = "vaadin:";
 
   @NonNls public static final String USER = VAADIN_PREFIX + "user";
   @NonNls public static final String MOBILE = VAADIN_PREFIX + "mobile";

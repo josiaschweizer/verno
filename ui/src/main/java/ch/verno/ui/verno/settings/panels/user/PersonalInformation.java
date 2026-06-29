@@ -102,7 +102,7 @@ public class PersonalInformation extends VABaseSetting<UserDtoUnhashedPw> {
   @Nonnull
   @Override
   protected UserDtoUnhashedPw createNewBeanInstance() {
-    final var currentUser = userClient.get().getCurrentAppUser();
+    final var currentUser = injector.getInstance(AppUserClient.class).getCurrentAppUser();
     currentUser.setPasswordHash(Publ.EIGHT_STARS);
     return UserDtoUnhashedPw.fromAppUserDto(currentUser);
   }

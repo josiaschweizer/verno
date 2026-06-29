@@ -1,10 +1,9 @@
 package ch.verno.ui.base.components.filter;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -36,13 +35,14 @@ public class VAFilterBar extends VerticalLayout {
 
   private boolean filtersVisible = false;
 
-  public VAFilterBar() {
+  @Inject
+  public VAFilterBar(@Nonnull final Injector injector) {
     setPadding(false);
     setSpacing(false);
     getStyle().setGap("0");
     setWidthFull();
 
-    searchFilter = new VASearchFilter(null, getTranslation("base.search"));
+    searchFilter = new VASearchFilter(injector, null, getTranslation("base.search"));
     searchFilter.setWidthFull();
 
     toggleFiltersButton = new Button(getTranslation("base.filter"), VaadinIcon.FILTER.create());

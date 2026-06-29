@@ -143,7 +143,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
 
   @Nonnull
   private VerticalLayout createFilterBar() {
-    final var filterBar = new VAFilterBar();
+    final var filterBar = injector.getInstance(VAFilterBar.class);
     getFilterComponents().forEach(filterBar::addFilterComponent);
     filterBar.setSearchHandler(searchText -> setFilter(withSearchText(searchText)));
     filterBar.setOnFiltersChanged(() -> {

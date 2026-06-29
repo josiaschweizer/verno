@@ -6,6 +6,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.util.LayoutUtil;
@@ -43,9 +44,9 @@ public class UserLayout {
   }
 
   @Nonnull
-  public HorizontalLayout buildUserLayout(@Nonnull final Binder<UserDtoUnhashedPw> binder,
-                                          @Nonnull final FormMode formMode,
-                                          @Nonnull final String oldUserName) {
+  public VAHorizontalLayout buildUserLayout(@Nonnull final Binder<UserDtoUnhashedPw> binder,
+                                            @Nonnull final FormMode formMode,
+                                            @Nonnull final String oldUserName) {
     final var username = createUserNameField(binder, formMode, oldUserName);
 
     final var email = entryFactory.createEmailEntry(
