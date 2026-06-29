@@ -7,7 +7,7 @@ import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.span.VASpan;
 import ch.verno.ui.base.shortcut.ShortcutDisplayUtil;
 import ch.verno.ui.base.shortcut.VAShortcut;
-import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import ch.verno.ui.base.shortcut.registry.ShortcutController;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Shortcuts;
@@ -30,12 +30,12 @@ import java.util.function.Supplier;
 
 public final class UserActionBadge extends Composite<HorizontalLayout> {
 
-  @Nonnull private final Lazy<ShortcutRegistry> shortcutRegistry;
+  @Nonnull private final Lazy<ShortcutController> shortcutRegistry;
 
   @Nonnull private final ContextMenu menu;
   @Nonnull private final List<EnabledBinding> enabledBindings;
 
-  public UserActionBadge(@Nonnull final Lazy<ShortcutRegistry> shortcutRegistry,
+  public UserActionBadge(@Nonnull final Lazy<ShortcutController> shortcutRegistry,
                          @Nonnull final String displayName) {
     this.shortcutRegistry = shortcutRegistry;
     this.enabledBindings = New.list();

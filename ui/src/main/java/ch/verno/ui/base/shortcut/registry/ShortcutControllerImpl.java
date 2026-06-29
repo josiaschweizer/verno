@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 @PageScoped
-public class ShortcutRegistryImpl implements ShortcutRegistry {
+public class ShortcutControllerImpl implements ShortcutController {
 
   @Nonnull private final Map<VAShortcut, ShortcutRegistryEntry> registry;
 
   @Inject
-  public ShortcutRegistryImpl() {
+  public ShortcutControllerImpl() {
     this.registry = New.concurrentHashMap();
   }
 

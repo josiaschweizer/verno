@@ -8,7 +8,7 @@ import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
-import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import ch.verno.ui.base.shortcut.registry.ShortcutController;
 import ch.verno.ui.verno.FieldFactory;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
@@ -137,7 +137,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
-    injector.getInstance(ShortcutRegistry.class).register(
+    injector.getInstance(ShortcutController.class).register(
             DefaultVernoShortcuts.SAVE,
             button::click,
             this,

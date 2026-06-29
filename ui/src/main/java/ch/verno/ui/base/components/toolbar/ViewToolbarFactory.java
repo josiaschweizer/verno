@@ -10,7 +10,7 @@ import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.filter.VASearchFilter;
 import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
 import ch.verno.ui.base.shortcut.dialog.ShortcutOverviewDialog;
-import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
+import ch.verno.ui.base.shortcut.registry.ShortcutController;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Injector;
@@ -122,7 +122,7 @@ public class ViewToolbarFactory {
     final var ui = UI.getCurrent();
 
     final var logoutUtil = injector.getInstance(LogoutUtil.class);
-    final var shortcutRegistry = Lazy.of(() -> injector.getInstance(ShortcutRegistry.class));
+    final var shortcutRegistry = Lazy.of(() -> injector.getInstance(ShortcutController.class));
     final var userBadge = new UserActionBadge(shortcutRegistry, currentUser.getUsername())
             .addItemWithTranslationKey(VaadinIcon.SLIDER, "setting.user_settings", () -> ui.navigate(Routes.USER_SETTINGS))
             .addItem(createShortcutOverviewMenuItem(injector))
@@ -148,6 +148,6 @@ public class ViewToolbarFactory {
   }
 
   private static boolean hasShortcutRegistryItems(@Nonnull final Injector injector) {
-    return !injector.getInstance(ShortcutRegistry.class).isRegistryEmpty();
+    return !injector.getInstance(ShortcutController.class).isRegistryEmpty();
   }
 }

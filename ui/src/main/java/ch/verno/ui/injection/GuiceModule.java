@@ -4,8 +4,8 @@ import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
 import ch.verno.rpc.auth.InternalRpcAuthInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
-import ch.verno.ui.base.shortcut.registry.ShortcutRegistry;
-import ch.verno.ui.base.shortcut.registry.ShortcutRegistryImpl;
+import ch.verno.ui.base.shortcut.registry.ShortcutController;
+import ch.verno.ui.base.shortcut.registry.ShortcutControllerImpl;
 import ch.verno.ui.injection.scope.PageScope;
 import ch.verno.ui.injection.scope.PageScoped;
 import ch.verno.ui.injection.scope.SessionScope;
@@ -31,7 +31,7 @@ public class GuiceModule extends AbstractModule {
     bindScope(PageScoped.class, new PageScope());
     bindScope(SessionScoped.class, new SessionScope());
 
-    bind(ShortcutRegistry.class).to(ShortcutRegistryImpl.class);
+    bind(ShortcutController.class).to(ShortcutControllerImpl.class);
   }
 
   @Provides

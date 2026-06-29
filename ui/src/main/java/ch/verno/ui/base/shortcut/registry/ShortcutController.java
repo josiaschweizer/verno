@@ -8,7 +8,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 
-public interface ShortcutRegistry {
+public interface ShortcutController {
 
   void register(@Nonnull VAShortcut shortcut,
                 @Nonnull ShortcutRegistryEntry entry);
