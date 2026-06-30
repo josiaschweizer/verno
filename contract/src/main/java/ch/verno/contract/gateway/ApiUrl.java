@@ -35,5 +35,4 @@ public class ApiUrl {
   @NonNls public static final String RESOLVE_ACCESS_TOKEN = "/resolve";
   @NonNls public static final String START_STRIPE_SESSION = "/start";
   @NonNls public static final String STRIP_WEBHOOK = "/stripe";
-
 }

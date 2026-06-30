@@ -43,4 +43,7 @@ public interface CourseResource {
   @Nonnull
   DeleteResponse deleteById(@Nonnull Long id);
 
+  @Nonnull
+  Long getCourseCount();
+
 }

@@ -13,8 +13,8 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.extern.billing.BillingAccessTokenService;
-import ch.verno.server.service.extern.billing.TenantBillingService;
+import ch.verno.server.service.entity.billing.BillingAccessTokenService;
+import ch.verno.server.service.entity.billing.TenantBillingService;
 import ch.verno.server.util.security.TokenGenerator;
 import jakarta.annotation.Nonnull;
 

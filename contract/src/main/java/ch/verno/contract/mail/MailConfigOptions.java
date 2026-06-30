@@ -13,7 +13,7 @@ public record MailConfigOptions(@Nullable MailOrigin mailOrigin) {
 
   public enum MailOrigin {
     TENANT_CONFIG,
-    ENV // ONLY USE FOR INTERNAL API CALLS (eg get in touch dialog from landing page) !!!!!
+    ENV // ONLY USE FOR INTERNAL API CALLS (e.g. get in touch dialog from landing page) !!!!!
   }
 
 }

@@ -11,7 +11,7 @@ import ch.verno.db.entity.instructor.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.lib.annotation.RestrictedTo;
 import ch.verno.server.mapper.base.IEntityMapper;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

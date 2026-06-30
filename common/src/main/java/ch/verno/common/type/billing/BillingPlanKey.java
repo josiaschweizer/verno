@@ -41,10 +41,6 @@ public enum BillingPlanKey {
   }
 
   public boolean isLicenced(@Nonnull final BillingLicenceOption option) {
-    if (this.getBillingLicenceOptions().contains(option)) {
-      return true;
-    }
-
-    return false;
+    return getBillingLicenceOptions().contains(option);
   }
 }

@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.sanitize.address.AddressSanitizer;
-import ch.verno.server.service.intern.table.address.AddressService;
+import ch.verno.server.service.entity.address.AddressService;
 import ch.verno.server.util.ServerStringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

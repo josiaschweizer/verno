@@ -7,7 +7,7 @@ import ch.verno.report.dto.ParticipantListReportDto;
 import ch.verno.report.dto.ParticipantReportDto;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.report.base.usecase.BaseListReportUseCase;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 

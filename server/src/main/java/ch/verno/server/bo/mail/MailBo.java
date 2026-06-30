@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.mail.MailConfigMapper;
-import ch.verno.server.service.intern.table.mail.MailConfigService;
+import ch.verno.server.service.entity.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;

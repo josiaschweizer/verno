@@ -8,7 +8,7 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.env.EnvironmentVariableBo;
 import ch.verno.server.mail.SmtpSecurityMapper;
-import ch.verno.server.service.intern.table.mail.MailConfigService;
+import ch.verno.server.service.entity.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

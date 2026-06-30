@@ -8,7 +8,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.mail.MailBo;
-import ch.verno.server.service.intern.table.mail.MailConfigService;
+import ch.verno.server.service.entity.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

@@ -5,7 +5,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.tenant.TenantBo;
-import ch.verno.server.service.intern.table.setting.TenantSettingService;
+import ch.verno.server.service.entity.setting.TenantSettingService;
 import jakarta.annotation.Nonnull;
 
 public class TenantSettingBo {

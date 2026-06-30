@@ -6,7 +6,7 @@ import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.dao.DataIntegrityViolationException;

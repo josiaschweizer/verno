@@ -1,13 +1,12 @@
 package ch.verno.server.bo.table.user;
 
-import ch.verno.contract.dto.response.base.delete.DeleteErrorCode;
 import ch.verno.contract.dto.response.base.save.SaveErrorCode;
 import ch.verno.contract.dto.response.base.save.SaveResponse;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.base.IBusinessObject;
-import ch.verno.server.service.intern.table.user.AppUserService;
+import ch.verno.server.service.entity.user.AppUserService;
 import jakarta.annotation.Nonnull;
 
 public class AppUserBo implements IBusinessObject {

@@ -31,6 +31,7 @@ public class TenantMapper implements IEntityMapper<TenantEntity, TenantDto> {
   @Override
   public TenantEntity toNewEntity(@Nonnull final TenantDto dto) {
     final var entity = TenantEntity.empty();
+    entity.setId(dto.id()); // set tenant id to new tenant id (exceptionally for the tenant entity)
     updateEntity(entity, dto);
     return entity;
   }

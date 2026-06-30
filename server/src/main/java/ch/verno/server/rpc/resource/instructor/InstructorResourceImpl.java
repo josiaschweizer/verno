@@ -11,7 +11,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.instructor.InstructorBo;
-import ch.verno.server.service.intern.table.instructor.InstructorService;
+import ch.verno.server.service.entity.instructor.InstructorService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

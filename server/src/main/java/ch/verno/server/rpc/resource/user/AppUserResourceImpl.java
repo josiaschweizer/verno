@@ -15,8 +15,8 @@ import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.lib.language.LanguageUtil;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.table.user.AppUserBo;
-import ch.verno.server.service.intern.table.setting.AppUserSettingService;
-import ch.verno.server.service.intern.table.user.AppUserService;
+import ch.verno.server.service.entity.setting.AppUserSettingService;
+import ch.verno.server.service.entity.user.AppUserService;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Component
 @RpcResource(AppUserResource.class)

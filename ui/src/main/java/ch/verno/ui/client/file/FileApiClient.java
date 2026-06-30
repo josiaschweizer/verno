@@ -41,7 +41,7 @@ public class FileApiClient extends BaseApiClient {
                                                  final long size) {
 
     final var fileBytes = readBytes(inputStream);
-    final MultiValueMap<String, Object> multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
+    final var multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
 
     return post(ApiUrl.FILES, Map.of(VernoConstants.X_MANDANT, tenantKey),
             MediaType.MULTIPART_FORM_DATA,

@@ -5,7 +5,7 @@ import ch.verno.contract.endpoint.mail.MailTemplateResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.intern.table.mail.MailTemplateService;
+import ch.verno.server.service.entity.mail.MailTemplateService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

@@ -9,7 +9,7 @@ import jakarta.annotation.Nullable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class BillingWebhookEventDto extends BaseDto {
+public class BillingWebhookEventDto extends BaseDto<Long> {
 
   @Nonnull private String stripeEventId;
   @Nonnull private String eventType;

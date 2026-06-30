@@ -4,7 +4,7 @@ import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.sanitize.participant.ParentSanitizer;
-import ch.verno.server.service.intern.table.participant.ParentService;
+import ch.verno.server.service.entity.participant.ParentService;
 import jakarta.annotation.Nonnull;
 
 public class ParentBo {

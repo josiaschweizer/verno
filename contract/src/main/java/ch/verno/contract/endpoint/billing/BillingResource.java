@@ -13,7 +13,8 @@ public interface BillingResource {
   @Nonnull
   TenantBillingDto getTenantBillingForCurrentTenant();
 
-  void createTenantBilling(@Nonnull TenantBillingDto dto);
+  @Nonnull
+  TenantBillingDto createTenantBilling(@Nonnull TenantBillingDto dto);
 
   @Nonnull
   String createSubscriptionUrlForCheckout(@Nonnull Long userId);

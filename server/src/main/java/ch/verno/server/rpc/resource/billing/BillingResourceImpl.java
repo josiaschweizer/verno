@@ -9,7 +9,7 @@ import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.billing.BillingBo;
-import ch.verno.server.service.extern.billing.TenantBillingService;
+import ch.verno.server.service.entity.billing.TenantBillingService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +38,10 @@ public class BillingResourceImpl implements BillingResource {
     return billingBo.get().getTenantBillingForCurrentTenant();
   }
 
+  @Nonnull
   @Override
-  public void createTenantBilling(@Nonnull final TenantBillingDto dto) {
-    tenantBillingService.get().save(dto);
+  public TenantBillingDto createTenantBilling(@Nonnull final TenantBillingDto dto) {
+    return tenantBillingService.get().save(dto);
   }
 
   @Nonnull

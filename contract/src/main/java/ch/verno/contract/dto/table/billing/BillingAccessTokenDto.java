@@ -1,5 +1,6 @@
 package ch.verno.contract.dto.table.billing;
 
+import ch.verno.common.type.billing.BillingAccessTokenPurpose;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
@@ -33,10 +34,11 @@ public class BillingAccessTokenDto extends BaseDto<Long> {
                                @Nullable final OffsetDateTime expiresAt,
                                @Nullable final OffsetDateTime usedAt,
                                @Nullable final OffsetDateTime createdAt) {
-    this(null, null, tokenHash, purpose, expiresAt, usedAt, createdAt);
+    this(null, null, null, tokenHash, purpose, expiresAt, usedAt, createdAt);
   }
 
   public BillingAccessTokenDto(@Nullable final Long id,
+                               @Nullable final Long tenantId,
                                @Nullable final Long userId,
                                @Nonnull final String tokenHash,
                                @Nonnull final String purpose,
@@ -44,6 +46,7 @@ public class BillingAccessTokenDto extends BaseDto<Long> {
                                @Nullable final OffsetDateTime usedAt,
                                @Nullable final OffsetDateTime createdAt) {
     setId(id);
+    setTenantId(tenantId);
     this.userId = userId;
     this.tokenHash = tokenHash;
     this.purpose = purpose;
@@ -55,6 +58,15 @@ public class BillingAccessTokenDto extends BaseDto<Long> {
   @Nonnull
   public static BillingAccessTokenDto empty() {
     return new BillingAccessTokenDto();
+  }
+
+  @Nonnull
+  public static BillingAccessTokenDto create(@Nullable final Long tenantId,
+                                             @Nullable final Long userId,
+                                             @Nonnull final String tokenHash,
+                                             @Nonnull final BillingAccessTokenPurpose purpose,
+                                             @Nullable final OffsetDateTime expiresAt) {
+    return new BillingAccessTokenDto(null, tenantId, userId, tokenHash, purpose.name(), expiresAt, null, null);
   }
 
   @Nullable

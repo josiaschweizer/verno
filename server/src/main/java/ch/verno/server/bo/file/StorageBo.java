@@ -2,19 +2,19 @@ package ch.verno.server.bo.file;
 
 import ch.verno.contract.dto.file.storage.StoredObjectDto;
 import ch.verno.contract.dto.table.file.FileDownload;
+import ch.verno.contract.dto.table.file.FileUploadDto;
 import ch.verno.contract.dto.table.file.StoredFileDto;
 import ch.verno.db.storage.ObjectStorage;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.lib.exception.ExceptionUtil;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.intern.table.file.StoredFileService;
+import ch.verno.server.service.entity.file.StoredFileService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,21 +46,21 @@ public class StorageBo {
    */
   @Nonnull
   @Transactional
-  public StoredFileDto save(@Nonnull final MultipartFile file) {
-    if (file.isEmpty()) {
-      throw new IllegalArgumentException("File is empty.");
-    }
-
+  public StoredFileDto save(@Nonnull final FileUploadDto file) {
     final byte[] data;
-    try {
-      data = file.getBytes();
+    try (final var content = file.content()) {
+      data = content.readAllBytes();
     } catch (final IOException exception) {
       throw ExceptionUtil.toUnchecked("Could not read uploaded file.", exception);
     }
 
+    if (data.length == 0) {
+      throw new IllegalArgumentException("File is empty.");
+    }
+
     final var dto = StoredFileDto.empty();
-    dto.setFilename(safeFilename(file.getOriginalFilename()));
-    dto.setContentType(normalizeContentType(file.getContentType()));
+    dto.setFilename(safeFilename(file.filename()));
+    dto.setContentType(normalizeContentType(file.contentType()));
     dto.setSize((long) data.length);
     dto.setChecksumSha256(sha256Hex(data));
 
@@ -102,11 +102,24 @@ public class StorageBo {
    * Returns metadata for a stored file.
    *
    * @param id stored file ID
+   * @return stored file metadata, if available - else returns an empty StoredFileDto
+   */
+  @Nonnull
+  @Transactional(readOnly = true)
+  public StoredFileDto getMeta(@Nonnull final Long id) {
+    final var meta = getMetaById(id);
+    return meta.orElseGet(StoredFileDto::empty);
+  }
+
+  /**
+   * Returns metadata for a stored file.
+   *
+   * @param id stored file ID
    * @return stored file metadata, if available
    */
   @Nonnull
   @Transactional(readOnly = true)
-  public Optional<StoredFileDto> getById(@Nonnull final Long id) {
+  public Optional<StoredFileDto> getMetaById(@Nonnull final Long id) {
     return storedFileService.get().findById(id);
   }
 
@@ -152,7 +165,7 @@ public class StorageBo {
   @Nonnull
   @Transactional(readOnly = true)
   public FileDownload download(@Nonnull final Long id) {
-    final var storedFile = getById(id);
+    final var storedFile = getMetaById(id);
 
     if (storedFile.isEmpty()) {
       return FileDownload.empty();
@@ -195,11 +208,11 @@ public class StorageBo {
    */
   @Transactional
   public void delete(@Nonnull final Long id) {
-    final var storageKey = storedFileService.get().getStorageKey(id);
+    final var objectStorageKey = storedFileService.get().getStorageKey(id);
 
     try {
-      if (storageKey != null && !storageKey.isBlank()) {
-        delete(storageKey);
+      if (!objectStorageKey.isBlank()) {
+        delete(objectStorageKey);
       }
 
       storedFileService.get().deleteById(id);

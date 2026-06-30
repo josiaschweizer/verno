@@ -6,9 +6,9 @@ import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.base.IBusinessObject;
-import ch.verno.server.service.intern.table.course.CourseScheduleService;
-import ch.verno.server.service.intern.table.course.CourseService;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.course.CourseScheduleService;
+import ch.verno.server.service.entity.course.CourseService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

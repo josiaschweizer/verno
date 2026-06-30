@@ -46,4 +46,6 @@ public interface ParticipantResource {
   ParticipantDto removeCourse(@Nonnull Long participantId,
                               @Nonnull CourseDto courseDto);
 
+  @Nonnull
+  Long getParticipantCount();
 }
