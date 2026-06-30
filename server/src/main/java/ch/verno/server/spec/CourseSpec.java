@@ -29,7 +29,7 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
         query.distinct(true);
         final var pattern = "%" + searchText + "%";
 
-        scheduleJoin = root.join("schedule", JoinType.LEFT);
+        scheduleJoin = root.join("courseSchedule", JoinType.LEFT);
         instructorJoin = root.join("instructor", JoinType.LEFT);
         levelJoin = root.join("courseLevels", JoinType.LEFT);
         weekdayJoin = root.join("weekdays", JoinType.LEFT);
@@ -71,7 +71,7 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
 
       if (filter.courseScheduleId() != null) {
         if (scheduleJoin == null) {
-          scheduleJoin = root.join("schedule", JoinType.LEFT);
+          scheduleJoin = root.join("courseSchedule", JoinType.LEFT);
         }
         predicates.add(cb.equal(scheduleJoin.get("id"), filter.courseScheduleId()));
       }
