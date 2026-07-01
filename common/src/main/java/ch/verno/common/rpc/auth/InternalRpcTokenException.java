@@ -8,4 +8,9 @@ public class InternalRpcTokenException extends RuntimeException {
     super(message);
   }
 
+  public InternalRpcTokenException(@Nullable final String message,
+                                   @Nullable final Throwable cause) {
+    super(message, cause);
+  }
+
 }

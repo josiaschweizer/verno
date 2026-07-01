@@ -7,15 +7,34 @@ public class ApiUrl {
 
   @NonNls private static final String API = "/api";
   @NonNls private static final String INTERNAL = "/internal";
+  @NonNls private static final String PUBLIC = "/public";
+  @NonNls private static final String AUTH = "/auth";
   @NonNls private static final String V1 = "/v1";
   public static final String VERSION = V1;
 
+  /**
+   * The default base api is a normal api which needs authentication but is used from outside (e.g. rest api calls or create tenant requests)
+   */
   public static final String BASE_API = API + VERSION;
+  /**
+   * The internal api is a server-to-server only api which should not be able to call from outside
+   */
+  public static final String INTERNAL_BASE_API = INTERNAL + BASE_API;
+  /**
+   * The public api is a 100% public api which doesn't require any authentication
+   */
+  public static final String PUBLIC_BASE_API = PUBLIC + BASE_API;
+  /**
+   * The public auth api is a public api route which requires a scoped token
+   */
+  public static final String PUBLIC_AUTH_BASE_API = PUBLIC_BASE_API + AUTH;
 
-  @NonNls public static final String TEMP_FILE_REPORT = INTERNAL + BASE_API + "/temp-file/report";
-  @NonNls public static final String TEMP_FILE_IMPORT = INTERNAL + BASE_API + "/temp-file/import";
-  @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL + BASE_API + "/temp-file/export";
-  @NonNls public static final String FILES = INTERNAL + BASE_API + "/files";
+  @NonNls public static final String TEMP_FILE_REPORT = INTERNAL_BASE_API + "/temp-file/report";
+  @NonNls public static final String TEMP_FILE_IMPORT = INTERNAL_BASE_API + "/temp-file/import";
+  @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL_BASE_API + "/temp-file/export";
+  @NonNls public static final String FILES = INTERNAL_BASE_API + "/files";
+
+  @NonNls public static final String TEMP_FILE_REPORT_PUBLIC = PUBLIC_AUTH_BASE_API + "/temp-file/report";
 
   @NonNls public static final String TENANTS = BASE_API + "/tenants";
   @NonNls public static final String APPLICATION = BASE_API + "/application";

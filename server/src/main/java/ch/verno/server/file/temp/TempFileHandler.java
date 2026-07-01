@@ -51,7 +51,7 @@ public final class TempFileHandler {
 
   @Nonnull
   public FileDto load(@Nonnull final String token) {
-    final TempFileEntry entry = resolveEntry(token);
+    final var entry = resolveEntry(token);
 
     if (Instant.now().isAfter(entry.expiresAt())) {
       delete(token);

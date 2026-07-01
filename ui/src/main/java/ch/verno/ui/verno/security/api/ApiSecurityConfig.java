@@ -15,13 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
+@SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator"})
 public class ApiSecurityConfig {
 
   @Bean
   @Order(1)
   public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final CorsConfigurationSource apiCorsSource,
-                                            @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) throws Exception {
+                                            @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) {
     final var resolveBillingAccessToken = ApiUrl.BILLING_ACCESS_TOKEN + ApiUrl.RESOLVE_ACCESS_TOKEN;
     final var startStripeSession = ApiUrl.BILLING_SESSION + ApiUrl.START_STRIPE_SESSION;
 

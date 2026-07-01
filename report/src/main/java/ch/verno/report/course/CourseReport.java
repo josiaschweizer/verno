@@ -51,6 +51,6 @@ public class CourseReport extends BaseReport<CourseReportDto> {
   @Nonnull
   @Override
   protected String getTemplate() {
-    return "reports/course-report";
+    return "templates/reports/course-report";
   }
 }

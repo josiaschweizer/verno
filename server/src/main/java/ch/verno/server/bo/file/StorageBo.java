@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.HexFormat;
@@ -34,8 +33,8 @@ public class StorageBo {
   @Nonnull private final Lazy<StoredFileService> storedFileService;
 
   protected StorageBo(@Nonnull final ServerBean serverBean) {
-    this.objectStorage = Lazy.of(() -> serverBean.get(ObjectStorage.class));
     this.storedFileService = Lazy.of(() -> serverBean.get(StoredFileService.class));
+    this.objectStorage = Lazy.of(() -> serverBean.get(ObjectStorage.class));
   }
 
   /**
@@ -47,28 +46,21 @@ public class StorageBo {
   @Nonnull
   @Transactional
   public StoredFileDto save(@Nonnull final FileUploadDto file) {
-    final byte[] data;
-    try (final var content = file.content()) {
-      data = content.readAllBytes();
-    } catch (final IOException exception) {
-      throw ExceptionUtil.toUnchecked("Could not read uploaded file.", exception);
-    }
-
-    if (data.length == 0) {
+    if (file.byteContent().length == 0) {
       throw new IllegalArgumentException("File is empty.");
     }
 
     final var dto = StoredFileDto.empty();
     dto.setFilename(safeFilename(file.filename()));
     dto.setContentType(normalizeContentType(file.contentType()));
-    dto.setSize((long) data.length);
-    dto.setChecksumSha256(sha256Hex(data));
+    dto.setSize((long) file.byteContent().length);
+    dto.setChecksumSha256(sha256Hex(file.byteContent()));
 
     final var storedFile = storedFileService.get().save(dto);
     final var storageKey = buildStorageKey(storedFile.getId());
 
     try {
-      save(storageKey, new ByteArrayInputStream(data), data.length);
+      save(storageKey, new ByteArrayInputStream(file.byteContent()), file.byteContent().length);
       storedFileService.get().setStorageKey(storedFile.getId(), storageKey);
 
       return storedFile;
@@ -127,7 +119,7 @@ public class StorageBo {
    * Loads file content using the stored file ID.
    *
    * @param id stored file ID
-   * @return file content as input stream
+   * @return file content as input byteData
    */
   @Nonnull
   @Transactional(readOnly = true)
@@ -180,7 +172,7 @@ public class StorageBo {
       final var content = objectStorage.get().get(storageKey);
 
       return content
-              .map(inputStream -> new FileDownload(storedFile.get(), inputStream))
+              .map(inputStream -> new FileDownload(storedFile.get(), getBytesFromInputStream(inputStream)))
               .orElseGet(() -> FileDownload.noContent(storedFile.get()));
     } catch (final Exception exception) {
       throw ExceptionUtil.toUnchecked("Could not download file.", exception);
@@ -286,6 +278,15 @@ public class StorageBo {
       return HexFormat.of().formatHex(messageDigest.digest(data));
     } catch (final Exception exception) {
       throw ExceptionUtil.toUnchecked("Could not calculate checksum.", exception);
+    }
+  }
+
+  @Nonnull
+  private byte[] getBytesFromInputStream(@Nonnull final InputStream inputStream) {
+    try {
+      return inputStream.readAllBytes();
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to load template file", e);
     }
   }
 }

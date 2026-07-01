@@ -19,7 +19,7 @@ public class VaadinSecurityConfig {
   @Order(2)
   public SecurityFilterChain internalApiFilterChain(@Nonnull HttpSecurity http) {
     http
-            .securityMatcher("/internal/api/v1/**")
+            .securityMatcher("/internal/api/v1/**") //TODO delete because api is everything going over the gateway and is coming in with rpc
             .csrf(AbstractHttpConfigurer::disable)
             .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());

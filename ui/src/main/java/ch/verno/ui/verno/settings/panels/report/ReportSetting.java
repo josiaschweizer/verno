@@ -38,7 +38,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
     this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
     this.tenantSettingClient = Lazy.of(() -> injector.getInstance(TenantSettingClient.class));
-    this.fileApiClient = Lazy.of(() -> new FileApiClient(injector, "http://localhost:8082")); //todo erweitern um die url nicht zu hardcoden
+    this.fileApiClient = Lazy.of(() -> injector.getInstance(FileApiClient.class));
 
     this.dto = tenantSettingClient.get().getCurrentOrDefaultTenantSetting();
   }

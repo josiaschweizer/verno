@@ -27,7 +27,8 @@ public class FileStorageController {
 
   @PostMapping(consumes = "multipart/form-data")
   public FileUploadResponse upload(@RequestPart("file") MultipartFile file) {
-    final var stored = storageResource.upload(toFileUploadDto(file));
+    final var uploadDto = convertToUploadDto(file);
+    final var stored = storageResource.upload(uploadDto);
     return new FileUploadResponse(
             stored.getId(),
             stored.getFilename(),
@@ -40,18 +41,8 @@ public class FileStorageController {
   public ResponseEntity<DownloadFileResponse> download(@PathVariable @Nonnull final Long id) {
     final var download = storageResource.download(id);
 
-    final byte[] bytes;
-    try (final var inputStream = download.stream()) {
-      if (inputStream != null) {
-        bytes = inputStream.readAllBytes();
-      } else {
-        bytes = new byte[0];
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to read file stream", e);
-    }
-
     final var meta = download.meta();
+    final var bytes = download.byteData();
     return ResponseEntity.ok(new DownloadFileResponse(
             bytes,
             meta.getFilename(),
@@ -80,12 +71,12 @@ public class FileStorageController {
   }
 
   @Nonnull
-  private FileUploadDto toFileUploadDto(@Nonnull final MultipartFile file) throws FileUploadException {
+  private FileUploadDto convertToUploadDto(@Nonnull final MultipartFile file) throws FileUploadException {
     try {
       return new FileUploadDto(
               file.getOriginalFilename(),
               file.getContentType(),
-              file.getInputStream(),
+              file.getBytes(),
               file.getSize()
       );
     } catch (IOException e) {

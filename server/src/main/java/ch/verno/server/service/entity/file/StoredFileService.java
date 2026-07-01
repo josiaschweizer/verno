@@ -8,8 +8,11 @@ import ch.verno.server.mapper.file.StoredFileMapper;
 import ch.verno.server.repository.file.StoredFileRepository;
 import ch.verno.server.service.base.AbstractEntityService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class StoredFileService extends AbstractEntityService<
         Long,
         StoredFileEntity,

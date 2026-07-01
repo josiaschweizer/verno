@@ -9,7 +9,6 @@ public abstract class AbstractFilePreview extends Div {
   @Nonnull private final FileType fileType;
   @Nonnull private final IFrame frame;
 
-
   public AbstractFilePreview(@Nonnull final FileType fileType) {
     this.fileType = fileType;
     this.frame = new IFrame();

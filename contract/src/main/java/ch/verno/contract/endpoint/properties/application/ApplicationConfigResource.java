@@ -5,7 +5,7 @@ import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
 
 @RpcEndpoint
-public interface ApplicationResource {
+public interface ApplicationConfigResource {
 
   @Nonnull
   RunMode getRunMode();
