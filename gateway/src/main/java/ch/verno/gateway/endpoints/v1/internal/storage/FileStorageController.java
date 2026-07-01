@@ -7,6 +7,7 @@ import ch.verno.contract.dto.table.file.FileUploadDto;
 import ch.verno.contract.endpoint.file.StorageResource;
 import ch.verno.contract.gateway.ApiUrl;
 import ch.verno.lib.exception.file.FileUploadException;
+import ch.verno.rpc.rpc.RpcFactory;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class FileStorageController {
 
   @Nonnull private final StorageResource storageResource;
 
-  public FileStorageController(@Nonnull final StorageResource storageResource) {
-    this.storageResource = storageResource;
+  public FileStorageController(@Nonnull final RpcFactory rpcFactory) {
+    this.storageResource = rpcFactory.create(StorageResource.class);
   }
 
   @PostMapping(consumes = "multipart/form-data")

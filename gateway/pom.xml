@@ -15,33 +15,26 @@
     <dependencies>
         <dependency>
             <groupId>ch.verno</groupId>
-            <artifactId>contract</artifactId>
+            <artifactId>contract</artifactId>°
         </dependency>
         <dependency>
             <groupId>ch.verno</groupId>
-            <artifactId>ui</artifactId>
+            <artifactId>client</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-dev</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -56,16 +49,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-
-                <configuration>
-                    <frontendDirectory>
-                        ${project.basedir}/../ui/src/main/frontend
-                    </frontendDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>
