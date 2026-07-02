@@ -20,7 +20,7 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
 //    final var downloadButton = createDownloadButton();
 
 //    return List.of(cancelButton, downloadButton);
-    New.list();
+    return New.list();
   }
 
   protected abstract String getApiUrl();
