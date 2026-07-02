@@ -4,7 +4,7 @@ import ch.verno.contract.rpc.RpcEndpoint;
 import jakarta.annotation.Nonnull;
 
 @RpcEndpoint
-public interface ApiConfigResource {
+public interface ApiConfigResource { //TODO refactore into application config resource
 
   @Nonnull
   String getBaseUrl();
@@ -14,4 +14,7 @@ public interface ApiConfigResource {
 
   @Nonnull
   String getApiPassword();
+
+  @Nonnull
+  String getResourceAccessTokenSecret();
 }

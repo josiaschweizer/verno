@@ -35,4 +35,10 @@ public class ApiConfigResourceImpl implements ApiConfigResource {
   public String getApiPassword() {
     return apiConfigProvider.get().getPassword();
   }
+
+  @Nonnull
+  @Override
+  public String getResourceAccessTokenSecret(){
+    return apiConfigProvider.get().getResourceAccessTokenSecret();
+  }
 }

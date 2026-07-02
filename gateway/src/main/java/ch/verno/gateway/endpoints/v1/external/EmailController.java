@@ -3,7 +3,7 @@ package ch.verno.gateway.endpoints.v1.external;
 import ch.verno.contract.api.exernal.email.SendEmailRequest;
 import ch.verno.contract.api.exernal.email.SendEmailResponse;
 import ch.verno.contract.endpoint.mail.MailResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.contract.mail.MailConfigOptions;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailDto;

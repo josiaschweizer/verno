@@ -1,7 +1,8 @@
 package ch.verno.ui.verno.dashboard.report;
 
+import ch.verno.common.lib.url.UrlBuilder;
 import ch.verno.common.lib.url.UrlUtil;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.file.ReportClient;
@@ -94,16 +95,19 @@ public class ParticipantsReportDialog extends VAAbstractDialog {
   @Nonnull
   private String buildInlineUrl(@Nonnull final String token) {
     final var baseUrl = apiConfigProperties.get().getBaseUrl();
-    final var path = ApiUrl.TEMP_FILE_REPORT + Publ.SLASH + token + ApiUrl.DISPOSITION_INLINE;
+    final var path = ApiUrl.TEMP_FILE_REPORT_PUBLIC + Publ.SLASH + token + ApiUrl.DISPOSITION_INLINE;
 
     return UrlUtil.buildSafeUrl(baseUrl, path);
   }
 
   @Nonnull
   private String buildAttachmentUrl(@Nonnull final String token) {
+
+
     final var baseUrl = apiConfigProperties.get().getBaseUrl();
-    final var path = ApiUrl.TEMP_FILE_REPORT + Publ.SLASH + token + ApiUrl.DISPOSITION_ATTACHMENT;
+    final var path = ApiUrl.TEMP_FILE_REPORT_PUBLIC + Publ.SLASH + token + ApiUrl.DISPOSITION_ATTACHMENT;
 
     return UrlUtil.buildSafeUrl(baseUrl, path);
   }
+
 }

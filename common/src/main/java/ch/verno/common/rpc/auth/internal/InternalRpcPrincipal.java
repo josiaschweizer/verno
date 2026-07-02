@@ -1,4 +1,4 @@
-package ch.verno.common.rpc.auth;
+package ch.verno.common.rpc.auth.internal;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

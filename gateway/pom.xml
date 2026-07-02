@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>ch.verno</groupId>
-            <artifactId>contract</artifactId>°
+            <artifactId>contract</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.verno</groupId>

@@ -1,4 +1,4 @@
-package ch.verno.lib.exception;
+package ch.verno.lib.exception.stripe;
 
 import jakarta.annotation.Nonnull;
 

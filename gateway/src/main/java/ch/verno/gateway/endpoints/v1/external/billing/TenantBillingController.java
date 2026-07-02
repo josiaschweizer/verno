@@ -7,7 +7,7 @@ import ch.verno.contract.api.exernal.billing.tenant.CreateTenantBillingRequest;
 import ch.verno.contract.api.exernal.billing.tenant.CreateTenantBillingResponse;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.contract.endpoint.billing.BillingResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.gateway.base.BaseController;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;

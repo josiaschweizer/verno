@@ -3,7 +3,7 @@ package ch.verno.gateway.endpoints.v1.external.billing;
 import ch.verno.contract.api.exernal.billing.session.StartBillingSessionRequest;
 import ch.verno.contract.api.exernal.billing.session.StartBillingSessionResponse;
 import ch.verno.contract.endpoint.billing.StripeResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.rpc.rpc.RpcFactory;
 import jakarta.annotation.Nonnull;
 import org.springframework.web.bind.annotation.PostMapping;

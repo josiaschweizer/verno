@@ -2,7 +2,7 @@ package ch.verno.server.bo.billing.accesslink;
 
 import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.common.type.billing.BillingAccessTokenPurpose;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;

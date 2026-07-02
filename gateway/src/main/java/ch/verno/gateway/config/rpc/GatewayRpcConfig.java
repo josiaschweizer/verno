@@ -1,5 +1,7 @@
 package ch.verno.gateway.config.rpc;
 
+import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
 import tools.jackson.databind.ObjectMapper;

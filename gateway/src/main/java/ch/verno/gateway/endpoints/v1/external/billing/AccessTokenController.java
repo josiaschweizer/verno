@@ -3,7 +3,7 @@ package ch.verno.gateway.endpoints.v1.external.billing;
 import ch.verno.contract.api.exernal.billing.accesstoken.ResolveBillingAccessTokenRequest;
 import ch.verno.contract.api.exernal.billing.accesstoken.ResolveBillingAccessTokenResponse;
 import ch.verno.contract.endpoint.billing.BillingAccessTokenResolverResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.gateway.base.BaseController;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.rpc.RpcFactory;

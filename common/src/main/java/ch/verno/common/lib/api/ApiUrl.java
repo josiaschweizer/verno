@@ -1,4 +1,4 @@
-package ch.verno.contract.gateway;
+package ch.verno.common.lib.api;
 
 import org.jetbrains.annotations.NonNls;
 
@@ -26,10 +26,10 @@ public class ApiUrl {
   public static final String PUBLIC_BASE_API = PUBLIC + BASE_API;
   /**
    * The public auth api is a public api route which requires a scoped token
+   * public / api / version / auth
    */
   public static final String PUBLIC_AUTH_BASE_API = PUBLIC_BASE_API + AUTH;
 
-  @NonNls public static final String TEMP_FILE_REPORT = INTERNAL_BASE_API + "/temp-file/report";
   @NonNls public static final String TEMP_FILE_IMPORT = INTERNAL_BASE_API + "/temp-file/import";
   @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL_BASE_API + "/temp-file/export";
   @NonNls public static final String FILES = INTERNAL_BASE_API + "/files";

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.security.api;
 
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator"})
-public class ApiSecurityConfig {
+public class ApiSecurityConfig { //TODO I THINK THIS CAN BE DELETED
 
   @Bean
   @Order(1)

@@ -1,5 +1,6 @@
-package ch.verno.common.rpc.auth;
+package ch.verno.common.rpc.auth.internal;
 
+import ch.verno.lib.exception.rpc.auth.internal.InternalRpcTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

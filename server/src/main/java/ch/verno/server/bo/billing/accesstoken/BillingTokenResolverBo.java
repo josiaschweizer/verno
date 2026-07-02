@@ -2,7 +2,7 @@ package ch.verno.server.bo.billing.accesstoken;
 
 import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.lib.Lazy;
-import ch.verno.lib.exception.StripeTokenException;
+import ch.verno.lib.exception.stripe.StripeTokenException;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.entity.billing.BillingAccessTokenService;
 import jakarta.annotation.Nonnull;
