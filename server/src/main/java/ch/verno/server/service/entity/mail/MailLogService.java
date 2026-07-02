@@ -28,11 +28,7 @@ public class MailLogService extends AbstractSpecEntityService<
     super(serverBean.get(MailLogRepository.class), serverBean.get(MailLogMapper.class), MailLogSpec::new);
   }
 
-  @Nonnull
-  @Override
-  public MailLogDto create(@Nonnull final MailLogDto dto) {
-    return super.create(dto);
-  }
+
 
   @Nonnull
   public List<MailLogDto> findAllByStatus(@Nonnull final MailLogStatus status) {

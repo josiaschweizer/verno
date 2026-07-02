@@ -6,9 +6,11 @@ import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.contract.mail.MailConfigOptions;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailDto;
+import ch.verno.contract.mail.placeholder.PlaceholderResolver;
 import ch.verno.contract.mail.placeholder.PlaceholderUtil;
-import ch.verno.contract.mail.placeholder.PlaceholderValue;
-import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.contract.mail.placeholder.course.CourseMailPlaceholderContext;
+import ch.verno.contract.mail.placeholder.course.CoursePlaceholder;
+import ch.verno.contract.mail.placeholder.course.CourseMailPlaceholderMapping;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoConstants;
 import ch.verno.server.bean.ServerBean;
@@ -61,7 +63,7 @@ public class MailSenderService {
   }
 
   public void sendCourseMails(@Nonnull final MailContentDto mailContent,
-                              @Nonnull final List<PlaceholderValue<CourseMailPlaceholderContext>> placeholderValues,
+                              @Nonnull final List<CoursePlaceholder> placeholders,
                               @Nullable final List<ParticipantDto> participants,
                               @Nullable final CourseScheduleDto schedule,
                               @Nullable final CourseDto course) {
@@ -76,15 +78,18 @@ public class MailSenderService {
       }
 
       final var context = new CourseMailPlaceholderContext(participant, schedule, course);
+      final var placeholderResolver = new PlaceholderResolver<>(new CourseMailPlaceholderMapping());
       final var subject = PlaceholderUtil.replacePlaceholders(
+              placeholderResolver,
               mailContent.subject(),
               context,
-              placeholderValues
+              placeholders
       );
       final var content = PlaceholderUtil.replacePlaceholders(
+              placeholderResolver,
               mailContent.content(),
               context,
-              placeholderValues
+              placeholders
       );
 
       sendMail(MailDto.simple(

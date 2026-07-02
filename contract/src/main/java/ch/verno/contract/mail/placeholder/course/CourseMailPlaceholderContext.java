@@ -1,8 +1,9 @@
-package ch.verno.contract.mail.placeholder.context;
+package ch.verno.contract.mail.placeholder.course;
 
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.contract.mail.placeholder.base.MailContext;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

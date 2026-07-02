@@ -17,6 +17,7 @@ import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.verno.dashboard.mail.CourseMailTemplateConfigLayout;
 import com.google.inject.Injector;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import jakarta.annotation.Nonnull;
@@ -109,6 +110,7 @@ public class MailTemplateTabContent {
       saveTemplate();
       button.refreshDirtyState();
     });
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     button.setEnabled(templateLayout.isValid());
 
     final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);

@@ -8,16 +8,16 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.mail.MailConfigMapper;
 import ch.verno.server.service.entity.mail.MailConfigService;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class MailBo {
 
-  @Nonnull private final MailConfigMapper mailConfigMapper;
   @Nonnull private final Lazy<MailConfigService> mailConfigService;
 
   public MailBo(@Nonnull final ServerBean serverBean) {
-    this.mailConfigMapper = serverBean.get(MailConfigMapper.class);
     this.mailConfigService = Lazy.of(() -> serverBean.get(MailConfigService.class));
   }
 

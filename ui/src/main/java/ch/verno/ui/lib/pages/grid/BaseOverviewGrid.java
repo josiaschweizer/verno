@@ -29,11 +29,14 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
+public abstract class BaseOverviewGrid<T extends BaseDto<?>, F> extends VerticalLayout {
+
+  @NonNls public static final String GRID_COLUMN_ACTION_COLUMN = "action-column";
 
   @Nonnull protected final Injector injector;
 

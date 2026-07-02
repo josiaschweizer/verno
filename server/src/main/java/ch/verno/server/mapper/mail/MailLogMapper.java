@@ -3,12 +3,20 @@ package ch.verno.server.mapper.mail;
 import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.base.IEntityMapper;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MailLogMapper implements IEntityMapper<MailLogEntity, MailLogDto> {
+
+  @Nonnull private final EntityManager entityManager;
+
+  public MailLogMapper(@Nonnull final ServerBean serverBean) {
+    this.entityManager = serverBean.get(EntityManager.class);
+  }
 
   @Nonnull
   @Override
@@ -41,7 +49,7 @@ public class MailLogMapper implements IEntityMapper<MailLogEntity, MailLogDto> {
     updateEntity(entity, dto);
 
     if (dto.getTenantId() != null) {
-      entity.setTenant(TenantEntity.ref(dto.getTenantId()));
+      entity.setTenant(entityManager.getReference(TenantEntity.class, dto.getTenantId()));
     }
 
     return entity;

@@ -47,7 +47,7 @@ public class AppUserEntity extends TenantScopedEntity {
     // JPA
   }
 
-  public AppUserEntity(@Nonnull final TenantEntity tenant,
+  public AppUserEntity(@Nullable final TenantEntity tenant,
                        @Nonnull final String username,
                        @Nonnull final String firstname,
                        @Nonnull final String lastname,
@@ -75,7 +75,7 @@ public class AppUserEntity extends TenantScopedEntity {
   @Nonnull
   public static AppUserEntity empty() {
     return new AppUserEntity(
-            TenantEntity.empty(),
+            null,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,

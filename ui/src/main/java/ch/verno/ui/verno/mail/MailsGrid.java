@@ -6,6 +6,7 @@ import ch.verno.common.lib.format.Converter;
 import ch.verno.common.type.mail.MailValidity;
 import ch.verno.contract.dto.filter.MailLogFilter;
 import ch.verno.contract.dto.table.mail.MailConfigDto;
+import ch.verno.common.db.constants.mail.MailLogConstants;
 import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
@@ -18,6 +19,7 @@ import ch.verno.ui.base.components.button.ButtonBuilder;
 import ch.verno.ui.base.components.emptystate.VAEmptyState;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
 import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
@@ -36,7 +38,6 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -46,15 +47,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.MAIL_LOG)
-@Menu(order = 96, icon = "vaadin:mailbox", title = "mail.log")
+@Menu(order = 96, icon = VaadinIconConstants.MAILBOX, title = "mail.log")
 public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> implements BeforeEnterObserver {
-
-  @NonNls public static final String GRID_COLUMN_RECIPIENT_EMAIL = "recipient-email";
-  @NonNls public static final String GRID_COLUMN_RECIPIENT_NAME = "recipient-name";
-  @NonNls public static final String GRID_COLUMN_SUBJECT = "subject";
-  @NonNls public static final String GRID_COLUMN_SENT_AT = "sent-at";
-  @NonNls public static final String GRID_COLUMN_ERROR_MESSAGE = "error-message";
-  @NonNls public static final String GRID_COLUMN_STATUS = "status";
 
   @Nonnull private final Lazy<MailLogClient> mailLogClient;
   @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
@@ -110,11 +104,11 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   protected List<ObjectGridColumn<MailLogDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<MailLogDto>>();
 
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_RECIPIENT_EMAIL, MailLogDto::getRecipientEmail, getTranslation("mail.recipient.email"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_RECIPIENT_NAME, MailLogDto::getRecipientName, getTranslation("mail.recipient.name"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_SUBJECT, MailLogDto::getSubject, getTranslation("mail.subject"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_SENT_AT, mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), getTranslation("mail.sent.at"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_ERROR_MESSAGE, MailLogDto::getErrorMessage, getTranslation("base.error"), false));
+    columns.add(new ObjectGridColumn<>(MailLogConstants.RECIPIENT_EMAIL, MailLogDto::getRecipientEmail, getTranslation("mail.recipient.email"), true));
+    columns.add(new ObjectGridColumn<>(MailLogConstants.RECIPIENT_NAME, MailLogDto::getRecipientName, getTranslation("mail.recipient.name"), true));
+    columns.add(new ObjectGridColumn<>(MailLogConstants.SUBJECT, MailLogDto::getSubject, getTranslation("mail.subject"), true));
+    columns.add(new ObjectGridColumn<>(MailLogConstants.SENT_AT, mailLogDto -> Converter.localDateTime(mailLogDto.getSentAt()), getTranslation("mail.sent.at"), true));
+    columns.add(new ObjectGridColumn<>(MailLogConstants.ERROR_MESSAGE, MailLogDto::getErrorMessage, getTranslation("base.error"), false));
 
     return columns;
   }
@@ -124,7 +118,7 @@ public class MailsGrid extends BaseOverviewGrid<MailLogDto, MailLogFilter> imple
   protected List<ComponentGridColumn<MailLogDto>> getComponentColumns() {
     final var columns = new ArrayList<ComponentGridColumn<MailLogDto>>();
 
-    columns.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getBadgeLabel, getTranslation("shared.status"), true));
+    columns.add(new ComponentGridColumn<>(MailLogConstants.STATUS, this::getBadgeLabel, getTranslation("shared.status"), true));
 
     return columns;
   }

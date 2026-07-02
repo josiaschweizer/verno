@@ -12,6 +12,7 @@ public final class VernoUtility {
   @NonNls public static final String AUTO = "auto";
   @NonNls public static final String FULL_SIZE = "100%";
 
+  @NonNls public static final String ONE_REM = "1rem";
   @NonNls public static final String FOUR_REM = "4rem";
 
   // Flex

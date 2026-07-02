@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.course.courses;
 
+import ch.verno.common.db.constants.course.CourseConstants;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.contract.dto.table.course.CourseDto;
@@ -10,6 +11,7 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.factory.SpanFactory;
 import ch.verno.ui.i18n.TranslationHelper;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
@@ -26,7 +28,6 @@ import com.vaadin.flow.router.Menu;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +35,8 @@ import java.util.stream.Stream;
 
 @PermitAll
 @com.vaadin.flow.router.Route(Routes.COURSES)
-@Menu(order = 3.1, icon = "vaadin:desktop", title = "course.course.overview")
+@Menu(order = 3.1, icon = VaadinIconConstants.DESKTOP, title = "course.course.overview")
 public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> implements HasDynamicTitle {
-
-  @NonNls public static final String GRID_COLUMN_TITLE = "title";
-  @NonNls public static final String GRID_COLUMN_CAPACITY = "capacity";
-  @NonNls public static final String GRID_COLUMN_WEEKDAYS = "weekdays";
-  @NonNls public static final String GRID_COLUMN_INSTRUCTOR = "instructor";
-  @NonNls public static final String GRID_COLUMN_COURSE_SCHEDULE = "course-schedule";
-  @NonNls public static final String GRID_COLUMN_COURSE_LEVELS = "course-levels";
-  @NonNls public static final String GRID_COLUMN_START_TIME = "start-time";
-  @NonNls public static final String GRID_COLUMN_END_TIME = "end-time";
-  @NonNls public static final String GRID_COLUMN_STATUS = "status";
-  @NonNls public static final String GRID_COLUMN_ACTION_COLUMN = "action-column";
 
   @Nonnull private final Lazy<CourseClient> courseClient;
   @Nonnull private final TranslationHelper translationHelper;
@@ -84,14 +74,14 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
   @Override
   protected List<ObjectGridColumn<CourseDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<CourseDto>>();
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_TITLE, CourseDto::getTitle, getTranslation("shared.title"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_CAPACITY, CourseDto::getCapacity, getTranslation("course.max.capacity"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_WEEKDAYS, CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_INSTRUCTOR, CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_COURSE_SCHEDULE, CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_COURSE_LEVELS, CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_START_TIME, CourseDto::getStartTime, getTranslation("course.start.time"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_END_TIME, CourseDto::getEndTime, getTranslation("course.end.time"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.TITLE, CourseDto::getTitle, getTranslation("shared.title"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.CAPACITY, CourseDto::getCapacity, getTranslation("course.max.capacity"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.WEEKDAYS, CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.INSTRUCTOR, CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.COURSE_SCHEDULE, CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.COURSE_LEVELS, CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.START_TIME, CourseDto::getStartTime, getTranslation("course.start.time"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.END_TIME, CourseDto::getEndTime, getTranslation("course.end.time"), true));
     return columns;
   }
 
@@ -99,7 +89,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
   @Override
   protected List<ComponentGridColumn<CourseDto>> getComponentColumns() {
     final var componentColumns = new ArrayList<ComponentGridColumn<CourseDto>>();
-    componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
+    componentColumns.add(new ComponentGridColumn<>(CourseConstants.STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
     componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_ACTION_COLUMN, this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
     return componentColumns;
   }

@@ -1,8 +1,10 @@
-package ch.verno.contract.mail.placeholder;
+package ch.verno.contract.mail.placeholder.course;
 
+import ch.verno.contract.mail.placeholder.base.Placeholder;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
-public enum Placeholder {
+public enum CoursePlaceholder implements Placeholder {
   FIRSTNAME("shared.first.name", "${firstname}"),
   LASTNAME("shared.last.name", "${lastname}"),
   COURSE_NAME("shared.course.name", "${courseName}"),
@@ -15,18 +17,20 @@ public enum Placeholder {
   @Nonnull private final String nameKey;
   @Nonnull private final String value;
 
-  Placeholder(@Nonnull final String nameKey,
-              @Nonnull final String value) {
+  CoursePlaceholder(@Nonnull final String nameKey,
+                    @NonNls @Nonnull final String value) {
     this.nameKey = nameKey;
     this.value = value;
   }
 
   @Nonnull
+  @Override
   public String getNameKey() {
     return nameKey;
   }
 
   @Nonnull
+  @Override
   public String getValue() {
     return value;
   }
