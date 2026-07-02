@@ -6,6 +6,7 @@ import ch.verno.common.db.constants.course.CourseScheduleConstants;
 import ch.verno.common.db.constants.instructor.InstructorConstants;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.db.entity.course.CourseEntity;
+import ch.verno.lib.New;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -13,7 +14,6 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 
 public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
 
@@ -21,11 +21,11 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
   @Override
   public Specification<CourseEntity> getSpecification(@Nonnull final CourseFilter filter) {
     return (root, query, cb) -> {
-      final var predicates = new ArrayList<Predicate>();
+      final var predicates = New.<Predicate>list();
 
+      Join<?, ?> levelJoin = null;
       Join<?, ?> scheduleJoin = null;
       Join<?, ?> instructorJoin = null;
-      Join<?, ?> levelJoin = null;
       Join<CourseEntity, DayOfWeek> weekdayJoin;
 
       final var searchText = normalize(filter.searchText());
@@ -33,9 +33,9 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
         query.distinct(true);
         final var pattern = "%" + searchText + "%";
 
-        scheduleJoin = root.join(CourseConstants.COURSE_SCHEDULE, JoinType.LEFT);
-        instructorJoin = root.join(CourseConstants.INSTRUCTOR, JoinType.LEFT);
-        levelJoin = root.join(CourseConstants.COURSE_LEVELS, JoinType.LEFT);
+        levelJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
+        scheduleJoin = root.join(CourseScheduleConstants.ENTITY_NAME, JoinType.LEFT);
+        instructorJoin = root.join(InstructorConstants.ENTITY_NAME, JoinType.LEFT);
         weekdayJoin = root.join(CourseConstants.WEEKDAYS, JoinType.LEFT);
 
         predicates.add(
@@ -49,7 +49,7 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
                         cb.like(cb.lower(cb.toString(root.get(CourseConstants.END_TIME))), pattern),
 
                         likeLower(cb, scheduleJoin.get(CourseConstants.TITLE), pattern),
-                        cb.like(cb.lower(cb.toString(scheduleJoin.get(CourseConstants.STATUS))), pattern),
+                        cb.like(cb.lower(cb.toString(scheduleJoin.get(CourseScheduleConstants.STATUS))), pattern),
 
                         likeLower(cb, instructorJoin.get(InstructorConstants.FIRSTNAME), pattern),
                         likeLower(cb, instructorJoin.get(InstructorConstants.LASTNAME), pattern),
@@ -83,12 +83,22 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
       if (filter.courseLevelId() != null) {
         query.distinct(true);
         if (levelJoin == null) {
-          levelJoin = root.join(CourseLevelConstants.ENTITY_NAME, JoinType.LEFT);
+          levelJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
         }
         predicates.add(cb.equal(levelJoin.get(CourseLevelConstants.ID), filter.courseLevelId()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
+  }
+
+  @Nonnull
+  @Override
+  public String resolveSortProperty(@Nonnull final String property) {
+    if (property.equals(CourseScheduleConstants.STATUS)) {
+      return createForeignRelation(CourseScheduleConstants.ENTITY_NAME, property);
+    }
+
+    return super.resolveSortProperty(property);
   }
 }

@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NonNls;
 
 public class CourseLevelConstants extends BaseEntityConstants {
 
-  @NonNls public static final String ENTITY_NAME = "courseLevels";
+  @NonNls public static final String ENTITY_NAME = "courseLevel";
+  @NonNls public static final String MANY_ENTITY_NAME = "courseLevels";
 
   @NonNls public static final String CODE = "code";
   @NonNls public static final String NAME = "name";

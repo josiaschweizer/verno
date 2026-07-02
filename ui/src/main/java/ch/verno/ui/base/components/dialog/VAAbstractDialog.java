@@ -60,8 +60,8 @@ public abstract class VAAbstractDialog extends Dialog {
 
   @Nonnull
   protected VAButton createSaveButton(@Nonnull final Consumer<ClickEvent<Button>> action) {
-    final var button = new VASaveButton(() -> true);
-    button.addClickListener(action::accept);
+    final var button = new VASaveButton(action::accept);
+    button.setDirtyActionProvider(() -> true);
     return button;
   }
 

@@ -36,8 +36,11 @@ public class AbstractSpecEntityService<
                            @Nonnull final List<SortOrderDto> sortOrders,
                            final int offset,
                            final int limit) {
-    final var specification = spec.get().getSpecification(filter);
-    final var page = PageHelper.createPageRequest(sortOrders, offset, limit);
+    final var specInstance = spec.get();
+    final var specification = specInstance.getSpecification(filter);
+    final var resolvedSortOrders = specInstance.resolveSortOrders(sortOrders);
+
+    final var page = PageHelper.createPageRequest(resolvedSortOrders, offset, limit);
 
     return getRepository().findAll(specification, page)
             .stream()

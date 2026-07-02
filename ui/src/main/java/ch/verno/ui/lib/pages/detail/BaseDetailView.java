@@ -39,7 +39,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   @Nonnull protected EntryFactory<T> entryFactory;
   @Nonnull protected FieldFactory<T> fieldFactory;
 
-  @Nonnull protected VAButton saveButton;
+  @Nonnull protected VASaveButton saveButton;
   @Nonnull protected Runnable afterSave;
 
   @Nullable protected ViewToolbarResult viewToolbar;
@@ -132,8 +132,9 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
   }
 
   @Nonnull
-  private VAButton createSaveButton() {
-    final var button = new VASaveButton(binder::hasChanges);
+  private VASaveButton createSaveButton() {
+    final var button = new VASaveButton(e -> save());
+    button.setDirtyActionProvider(binder::hasChanges);
     button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
     final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
@@ -172,6 +173,8 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       final boolean valid = binder.isValid();
       saveButton.setEnabled(valid);
     }
+
+    saveButton.refreshDirtyState();
   }
 
   public void applyFormMode(@Nonnull final FormMode formMode) {

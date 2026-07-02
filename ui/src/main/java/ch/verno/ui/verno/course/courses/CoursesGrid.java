@@ -1,6 +1,9 @@
 package ch.verno.ui.verno.course.courses;
 
 import ch.verno.common.db.constants.course.CourseConstants;
+import ch.verno.common.db.constants.course.CourseLevelConstants;
+import ch.verno.common.db.constants.course.CourseScheduleConstants;
+import ch.verno.common.db.constants.instructor.InstructorConstants;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.contract.dto.table.course.CourseDto;
@@ -77,9 +80,9 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     columns.add(new ObjectGridColumn<>(CourseConstants.TITLE, CourseDto::getTitle, getTranslation("shared.title"), true));
     columns.add(new ObjectGridColumn<>(CourseConstants.CAPACITY, CourseDto::getCapacity, getTranslation("course.max.capacity"), true));
     columns.add(new ObjectGridColumn<>(CourseConstants.WEEKDAYS, CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), true));
-    columns.add(new ObjectGridColumn<>(CourseConstants.INSTRUCTOR, CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
-    columns.add(new ObjectGridColumn<>(CourseConstants.COURSE_SCHEDULE, CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
-    columns.add(new ObjectGridColumn<>(CourseConstants.COURSE_LEVELS, CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
+    columns.add(new ObjectGridColumn<>(InstructorConstants.ENTITY_NAME, CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
+    columns.add(new ObjectGridColumn<>(CourseScheduleConstants.ENTITY_NAME, CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
+    columns.add(new ObjectGridColumn<>(CourseLevelConstants.MANY_ENTITY_NAME, CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));
     columns.add(new ObjectGridColumn<>(CourseConstants.START_TIME, CourseDto::getStartTime, getTranslation("course.start.time"), true));
     columns.add(new ObjectGridColumn<>(CourseConstants.END_TIME, CourseDto::getEndTime, getTranslation("course.end.time"), true));
     return columns;
@@ -89,7 +92,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
   @Override
   protected List<ComponentGridColumn<CourseDto>> getComponentColumns() {
     final var componentColumns = new ArrayList<ComponentGridColumn<CourseDto>>();
-    componentColumns.add(new ComponentGridColumn<>(CourseConstants.STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
+    componentColumns.add(new ComponentGridColumn<>(CourseScheduleConstants.STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
     componentColumns.add(new ComponentGridColumn<>(GRID_COLUMN_ACTION_COLUMN, this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
     return componentColumns;
   }

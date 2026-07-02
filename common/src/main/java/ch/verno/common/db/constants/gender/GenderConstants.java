@@ -8,6 +8,6 @@ public class GenderConstants extends BaseEntityConstants {
   @NonNls public static final String ENTITY_NAME = "gender";
 
   @NonNls public static final String NAME = "name";
-  @NonNls public static final String DESCRIPTION = "description",
+  @NonNls public static final String DESCRIPTION = "description";
 
 }

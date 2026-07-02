@@ -101,7 +101,7 @@ public class MailTemplateTabContent {
 
   @Nonnull
   private VAButton createSaveButton() {
-    final var button = new VASaveButton(() -> templateLayout.hasChanges() && templateLayout.isValid());
+    final var button = new VASaveButton(null);
     templateLayout.addBinderValueChangeListener(e -> {
       button.setEnabled(templateLayout.isValid());
       button.refreshDirtyState();
@@ -110,6 +110,7 @@ public class MailTemplateTabContent {
       saveTemplate();
       button.refreshDirtyState();
     });
+    button.setDirtyActionProvider(() -> templateLayout.hasChanges() && templateLayout.isValid());
     button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     button.setEnabled(templateLayout.isValid());
 
