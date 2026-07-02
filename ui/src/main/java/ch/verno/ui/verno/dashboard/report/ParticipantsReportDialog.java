@@ -25,7 +25,7 @@ public class ParticipantsReportDialog extends BaseReportPreviewDialog {
   @Nonnull
   @Override
   protected String getApiUrl() {
-    return ApiUrl.TEMP_FILE_REPORT_PUBLIC;
+    return ApiUrl.TEMP_FILE_REPORT_PUBLIC_AUTH;
   }
 
 }

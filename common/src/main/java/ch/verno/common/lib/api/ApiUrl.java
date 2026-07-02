@@ -22,6 +22,7 @@ public class ApiUrl {
   public static final String INTERNAL_BASE_API = INTERNAL + BASE_API;
   /**
    * The public api is a 100% public api which doesn't require any authentication
+   * public / api / version
    */
   public static final String PUBLIC_BASE_API = PUBLIC + BASE_API;
   /**
@@ -30,12 +31,12 @@ public class ApiUrl {
    */
   public static final String PUBLIC_AUTH_BASE_API = PUBLIC_BASE_API + AUTH;
 
+  // internal end points
   @NonNls public static final String TEMP_FILE_IMPORT = INTERNAL_BASE_API + "/temp-file/import";
   @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL_BASE_API + "/temp-file/export";
   @NonNls public static final String FILES = INTERNAL_BASE_API + "/files";
 
-  @NonNls public static final String TEMP_FILE_REPORT_PUBLIC = PUBLIC_AUTH_BASE_API + "/temp-file/report";
-
+  // normal end points
   @NonNls public static final String TENANTS = BASE_API + "/tenants";
   @NonNls public static final String APPLICATION = BASE_API + "/application";
   @NonNls public static final String EMAIL = BASE_API + "/email";
@@ -45,13 +46,24 @@ public class ApiUrl {
   @NonNls public static final String BILLING_WEBHOOK = BILLING + "/webhook";
   @NonNls public static final String BILLING_SESSION = BILLING + "/session";
 
+  // public auth endpoints
+  @NonNls public static final String TEMP_FILE_REPORT_PUBLIC_AUTH = PUBLIC_AUTH_BASE_API + "/temp-file/report";
+
+  // public endpoints
+  @NonNls public static final String HEALTH = PUBLIC_BASE_API + "/health";
+
+  // ending-endpoints
   @NonNls public static final String COUNT = "/count";
 
+  @NonNls public static final String RESOLVE_ACCESS_TOKEN = "/resolve";
+  @NonNls public static final String START_STRIPE_SESSION = "/start";
+  @NonNls public static final String STRIP_WEBHOOK = "/stripe";
+
+
+  // additional constants
   @NonNls public static final String DISPOSITION_ATTACHMENT = "?disposition=attachment";
   @NonNls public static final String DISPOSITION_INLINE = "?disposition=inline";
 
   @NonNls public static final String ENTRY_TOKEN = "entry?token=";
-  @NonNls public static final String RESOLVE_ACCESS_TOKEN = "/resolve";
-  @NonNls public static final String START_STRIPE_SESSION = "/start";
-  @NonNls public static final String STRIP_WEBHOOK = "/stripe";
+
 }
