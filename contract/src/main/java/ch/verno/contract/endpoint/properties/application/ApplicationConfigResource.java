@@ -10,4 +10,7 @@ public interface ApplicationConfigResource {
   @Nonnull
   RunMode getRunMode();
 
+  @Nonnull
+  String rpcUrl();
+
 }

@@ -2,7 +2,7 @@ package ch.verno.gateway.endpoints.v1.external;
 
 import ch.verno.contract.endpoint.course.CourseResource;
 import ch.verno.contract.endpoint.participant.ParticipantResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.gateway.base.BaseController;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.rpc.RpcFactory;

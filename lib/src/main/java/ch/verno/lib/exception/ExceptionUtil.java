@@ -1,5 +1,6 @@
 package ch.verno.lib.exception;
 
+import ch.verno.lib.exception.entity.EntityNotFoundException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;

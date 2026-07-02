@@ -3,7 +3,7 @@ package ch.verno.server.bo.billing.stripe;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoSecrets;
-import ch.verno.lib.exception.StripeSessionException;
+import ch.verno.lib.exception.stripe.StripeSessionException;
 import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;

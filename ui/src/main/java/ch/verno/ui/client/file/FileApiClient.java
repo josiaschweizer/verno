@@ -3,7 +3,7 @@ package ch.verno.ui.client.file;
 import ch.verno.contract.dto.file.storage.api.DownloadFileResponse;
 import ch.verno.contract.dto.file.storage.api.FileUploadResponse;
 import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.rpc.RpcFactory;

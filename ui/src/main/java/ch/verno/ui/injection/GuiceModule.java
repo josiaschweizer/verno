@@ -1,6 +1,6 @@
 package ch.verno.ui.injection;
 
-import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
+import ch.verno.common.rpc.auth.internal.InternalRpcTokenCodec;
 import ch.verno.rpc.auth.InternalRpcAuthInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;

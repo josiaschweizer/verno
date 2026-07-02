@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.Attributes;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
@@ -14,7 +14,6 @@ import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;

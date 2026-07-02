@@ -75,10 +75,17 @@ public class Publ {
   public static final String ZERO_WIDTH_NON_JOINER = "\u200C";
   public static final String ZERO_WIDTH_JOINER = "\u200D";
 
+  public static final String API_ANYTHING = "/**";
 
   public static class Char {
     public static final char SEMICOLON = ';';
     public static final char COMMA = ',';
+    public static final char SLASH = '/';
+    public static final char BACKSLASH = '\\';
+
+    public static final char QUESTION_MARK = '?';
+    public static final char AMPERSAND = '&';
+    public static final char EQUALS = '=';
 
   }
 

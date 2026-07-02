@@ -8,7 +8,7 @@ import ch.verno.common.type.billing.BillingSubscriptionStatus;
 import ch.verno.contract.dto.lib.billing.GeneratedBillingAccessTokenDto;
 import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.server.application.properties.BillingConfigProvider;

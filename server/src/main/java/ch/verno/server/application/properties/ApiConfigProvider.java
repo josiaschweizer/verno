@@ -15,6 +15,7 @@ public class ApiConfigProvider {
   @Nullable private String url;
   @Nullable private String username;
   @Nullable private String password; //TODO MOVE TO ENV!!!
+  @Nullable private String resourceAccessTokenSecret; //TODO MOVE TO ENV!!!
 
   @Nonnull
   public String getUrl() {
@@ -41,5 +42,14 @@ public class ApiConfigProvider {
 
   public void setPassword(@Nullable final String password) {
     this.password = password;
+  }
+
+  @Nullable
+  public String getResourceAccessTokenSecret() {
+    return Optional.ofNullable(resourceAccessTokenSecret).orElse(Publ.EMPTY_STRING);
+  }
+
+  public void setResourceAccessTokenSecret(@Nullable final String resourceAccessTokenSecret) {
+    this.resourceAccessTokenSecret = resourceAccessTokenSecret;
   }
 }

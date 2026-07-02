@@ -1,4 +1,4 @@
-package ch.verno.common.rpc.auth;
+package ch.verno.lib.exception.rpc.auth.internal;
 
 import jakarta.annotation.Nullable;
 
