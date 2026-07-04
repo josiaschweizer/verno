@@ -4,12 +4,12 @@ import ch.verno.common.lib.application.RunMode;
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.JsImportConstants;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.billing.BillingClient;
 import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.application.ApplicationProperties;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.anchorbutton.VAAnchorButton;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
@@ -17,17 +17,15 @@ import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ModalityMode;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
@@ -36,8 +34,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@JsModule(JsImportConstants.INVALID_SUBSCRIPTION_DIALOG)
 @CssImport(CssImportConstants.INVALID_SUBSCRIPTION_DIALOG)
 public class InvalidSubscriptionDialog extends VAAbstractDialog {
+
+  @NonNls private static final String ON_TAB_VISIBLE_CALLBACK = "onTabVisible";
+  @NonNls private static final String ATTRIBUTE_VISIBILITY_CALLBACK = "data-visibility-callback";
 
   @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG = "invalid-subscription-dialog";
   @NonNls public static final String CLASSNAME_INVALID_SUBSCRIPTION_DIALOG_ICON = "invalid-subscription-dialog-icon";
@@ -61,7 +63,20 @@ public class InvalidSubscriptionDialog extends VAAbstractDialog {
     setModality(ModalityMode.STRICT);
     addClassName(CLASSNAME_INVALID_SUBSCRIPTION_DIALOG);
 
+    getElement().setAttribute(ATTRIBUTE_VISIBILITY_CALLBACK, ON_TAB_VISIBLE_CALLBACK);
+
     initUI(null, DialogSize.SMALL);
+  }
+
+  @ClientCallable
+  @SuppressWarnings("unused")
+  private void onTabVisible() {
+    final var appUser = appUserClient.get().getCurrentAppUser();
+    final var tenantId = Optional.ofNullable(appUser.getTenantId()).orElse(Publ.ZERO_LONG);
+
+    if (billingClient.get().hasValidSubscriptionByTenantId(tenantId)) {
+      UI.getCurrent().refreshCurrentRoute(true);
+    }
   }
 
   @Nonnull

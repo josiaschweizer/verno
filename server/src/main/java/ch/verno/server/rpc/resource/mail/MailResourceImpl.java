@@ -6,8 +6,7 @@ import ch.verno.contract.dto.table.participant.ParticipantDto;
 import ch.verno.contract.endpoint.mail.MailResource;
 import ch.verno.contract.mail.MailContentDto;
 import ch.verno.contract.mail.MailDto;
-import ch.verno.contract.mail.placeholder.PlaceholderValue;
-import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
+import ch.verno.contract.mail.placeholder.course.CoursePlaceholder;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
@@ -40,7 +39,7 @@ public class MailResourceImpl implements MailResource {
 
   @Override
   public void sendCourseMails(@Nonnull final MailContentDto mailContent,
-                              @Nonnull final List<PlaceholderValue<CourseMailPlaceholderContext>> placeholderValues,
+                              @Nonnull final List<CoursePlaceholder> placeholderValues,
                               @Nullable final List<ParticipantDto> participants,
                               @Nullable final CourseScheduleDto schedule,
                               @Nullable final CourseDto course) {

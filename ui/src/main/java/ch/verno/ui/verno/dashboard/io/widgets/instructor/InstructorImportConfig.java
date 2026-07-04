@@ -131,7 +131,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
       final var saveable = saveables.get(i);
       processNestedEntities(saveable);
 
-      final var saveResult = instructorClient.get().saveInstructor(saveable);
+      final var saveResult = instructorClient.get().apiSaveInstructor(saveable);
 
       importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
     }

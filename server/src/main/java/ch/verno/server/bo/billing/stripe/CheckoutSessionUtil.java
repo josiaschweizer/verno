@@ -10,9 +10,9 @@ public class CheckoutSessionUtil {
 
   @Nonnull
   public static Session createSession(@Nonnull final String checkoutSuccessUrl,
-                               @Nonnull final String checkoutCancelUrl,
-                               @Nonnull final String stripePriceId,
-                               @Nonnull final SessionMetaDataDto metaData) throws StripeException {
+                                      @Nonnull final String checkoutCancelUrl,
+                                      @Nonnull final String stripePriceId,
+                                      @Nonnull final SessionMetaDataDto metaData) throws StripeException {
     final var params = SessionCreateParams.builder()
             .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
             .setSuccessUrl(checkoutSuccessUrl)

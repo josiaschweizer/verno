@@ -1,6 +1,5 @@
 package ch.verno.db.entity.tenant;
 
-import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -38,11 +37,6 @@ public class TenantEntity {
 
   public static TenantEntity ref(@Nonnull final Long id) {
     return new TenantEntity(id);
-  }
-
-  @Nonnull
-  public static TenantEntity empty() {
-    return new TenantEntity(Publ.EMPTY_STRING, Publ.EMPTY_STRING);
   }
 
   @Nonnull

@@ -38,7 +38,7 @@ public class ParticipantService extends AbstractSpecEntityService<
   public List<ParticipantDto> findParticipantsByCourse(@Nonnull final CourseDto course) {
     return getRepository().findByCourse(courseMapper.toEntityReference(course))
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 

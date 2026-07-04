@@ -1,5 +1,8 @@
 package ch.verno.ui.verno.participant;
 
+import ch.verno.common.db.constants.course.CourseConstants;
+import ch.verno.common.db.constants.course.CourseLevelConstants;
+import ch.verno.common.db.constants.participant.ParticipantConstants;
 import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.ParticipantFilter;
@@ -41,7 +44,6 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
-import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -53,21 +55,6 @@ import java.util.stream.Stream;
 @com.vaadin.flow.router.Route(Routes.PARTICIPANTS)
 @Menu(order = 1, icon = VaadinIconConstants.USER, title = "participant.participants.overview")
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
-
-  @NonNls public static final String GRID_COLUMN_FIRSTNAME = "firstname";
-  @NonNls public static final String GRID_COLUMN_LASTNAME = "lastname";
-  @NonNls public static final String GRID_COLUMN_BIRTHDATE = "birthdate";
-  @NonNls public static final String GRID_COLUMN_COURSE_LEVELS = "courseLevels";
-  @NonNls public static final String GRID_COLUMN_SIBLINGS = "siblings";
-  @NonNls public static final String GRID_COLUMN_NOTE = "note";
-  @NonNls public static final String GRID_COLUMN_EMAIL = "email";
-  @NonNls public static final String GRID_COLUMN_PHONE = "phone";
-  @NonNls public static final String GRID_COLUMN_COURSES = "courses";
-  @NonNls public static final String GRID_COLUMN_PARENT_ONE = "parentOne";
-  @NonNls public static final String GRID_COLUMN_PARENT_TWO = "parentTwo";
-  @NonNls public static final String GRID_COLUMN_ADDRESS = "address";
-  @NonNls public static final String GRID_COLUMN_STATUS = "status";
-  @NonNls public static final String GRID_COLUMN_ACTION_COLUMN = "actionColumn";
 
   @Nonnull private final Lazy<ParentClient> parentClient;
   @Nonnull private final Lazy<CourseClient> courseService;
@@ -190,32 +177,32 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ObjectGridColumn<ParticipantDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<ParticipantDto>>();
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_FIRSTNAME, ParticipantDto::getFirstName,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.FIRSTNAME, ParticipantDto::getFirstName,
             getTranslation("shared.first.name"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_LASTNAME, ParticipantDto::getLastName,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.LASTNAME, ParticipantDto::getLastName,
             getTranslation("shared.last.name"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_BIRTHDATE, ParticipantDto::getAgeFromBirthday,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.BIRTHDATE, ParticipantDto::getAgeFromBirthday,
             getTranslation("shared.age"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_COURSE_LEVELS, dto ->
+    columns.add(new ObjectGridColumn<>(CourseLevelConstants.MANY_ENTITY_NAME, dto ->
             joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
             getTranslation("courseLevel.course_level"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_SIBLINGS, dto ->
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.MANY_ENTITY_NAME, dto ->
             joinDisplayNamesFromList(dto.getSiblings(), ParticipantDto::getDisplayName),
             getTranslation("participant.geschwister"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_NOTE, ParticipantDto::getNote,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.NOTE, ParticipantDto::getNote,
             getTranslation("shared.note"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_EMAIL, ParticipantDto::getEmail,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.EMAIL, ParticipantDto::getEmail,
             getTranslation("shared.e.mail"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_PHONE, ParticipantDto::getPhoneString,
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.PHONE, ParticipantDto::getPhoneString,
             getTranslation("shared.phone"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_COURSES, dto ->
+    columns.add(new ObjectGridColumn<>(CourseConstants.MANY_ENTITY_NAME, dto ->
             joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
             getTranslation("course.course"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_PARENT_ONE, dto ->
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.ENTITY_NAME, dto ->
             dto.getParentOne().displayName(), getTranslation("participant.parent_one"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_PARENT_TWO, dto ->
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.PARENT_ONE, dto ->
             dto.getParentTwo().displayName(), getTranslation("participant.parent_two"), true));
-    columns.add(new ObjectGridColumn<>(GRID_COLUMN_ADDRESS, dto ->
+    columns.add(new ObjectGridColumn<>(ParticipantConstants.PARENT_TWO, dto ->
             dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
     return columns;
   }
@@ -224,7 +211,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected List<ComponentGridColumn<ParticipantDto>> getComponentColumns() {
     final var components = new ArrayList<ComponentGridColumn<ParticipantDto>>();
-    components.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
+    components.add(new ComponentGridColumn<>(ParticipantConstants.ACTIVE, this::getStatusBadge, getTranslation("shared.status"), true, GridActionRoles.STICK_COLUMN));
     components.add(new ComponentGridColumn<>(GRID_COLUMN_ACTION_COLUMN, this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
     return components;
   }
@@ -333,7 +320,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Override
   protected void setDefaultSorting() {
-    final var lastNameCol = columnsByKey.get(GRID_COLUMN_LASTNAME);
+    final var lastNameCol = columnsByKey.get(ParticipantConstants.LASTNAME);
     if (lastNameCol == null) {
       return;
     }

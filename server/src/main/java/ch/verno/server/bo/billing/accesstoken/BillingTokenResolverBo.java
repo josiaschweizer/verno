@@ -90,11 +90,11 @@ public class BillingTokenResolverBo {
 
   private void validateBillingAccessToken(@Nonnull final BillingAccessTokenDto token) {
     if (isExpired(token)) {
-      throw new StripeTokenException("Billing access token is expired");
+      throw new StripeTokenException("Billing access token is expired - please return to the main side and try again"); //TODO translate bc it gets sent to the frontend
     }
 
     if (isUsed(token)) {
-      throw new StripeTokenException("Billing access token has already been used");
+      throw new StripeTokenException("Billing access token has already been used - please return to the main side and try again"); //TODO translate bc it gets sent to the frontend
     }
   }
 

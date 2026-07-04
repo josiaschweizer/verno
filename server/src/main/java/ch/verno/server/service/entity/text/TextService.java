@@ -37,7 +37,7 @@ public class TextService extends AbstractEntityServiceLongId<
     return getRepository()
             .findByIdentifier(identifier)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 
@@ -59,7 +59,7 @@ public class TextService extends AbstractEntityServiceLongId<
     return getRepository()
             .findByIdentifierAndSubIdentifier(identifier, subIdentifier)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 
@@ -86,7 +86,7 @@ public class TextService extends AbstractEntityServiceLongId<
                     subIdentifier,
                     language
             )
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   @Transactional

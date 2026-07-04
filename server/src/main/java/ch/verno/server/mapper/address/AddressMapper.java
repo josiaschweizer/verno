@@ -2,17 +2,17 @@ package ch.verno.server.mapper.address;
 
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.db.entity.address.AddressEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.util.ServerStringUtil;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddressMapper implements IEntityMapper<AddressEntity, AddressDto> {
+public class AddressMapper extends AbstractEntityMapper<AddressEntity, AddressDto> {
 
   @Nonnull
   @Override
-  public AddressDto toSimpleDto(@Nonnull final AddressEntity entity) {
+  public AddressDto toDto(@Nonnull final AddressEntity entity) {
     final var dto = AddressDto.empty();
 
     dto.setId(entity.getId());

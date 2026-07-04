@@ -8,9 +8,13 @@ import ch.verno.server.mapper.participant.ParentMapper;
 import ch.verno.server.repository.participant.ParentRepository;
 import ch.verno.server.service.base.AbstractEntityServiceLongId;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
+@Transactional
 public class ParentService extends AbstractEntityServiceLongId<
         ParentEntity,
         ParentDto,
@@ -26,6 +30,6 @@ public class ParentService extends AbstractEntityServiceLongId<
                                           @Nonnull final String lastname,
                                           @Nonnull final String email,
                                           @Nonnull final PhoneNumber phone) {
-    return getRepository().findByFields(firstname, lastname, email, phone.toString()).map(getMapper()::toSimpleDto);
+    return getRepository().findByFields(firstname, lastname, email, phone.toString()).map(getMapper()::toDto);
   }
 }

@@ -5,7 +5,7 @@ import type { ResolveBillingAccessTokenRequest } from '@/type/api/token/ResolveB
 const env = (import.meta as any).env as any
 
 const baseUrl =
-  (env.VITE_API_BASE_URL as string | undefined) || 'http://localhost:8080'
+  (env.VITE_API_BASE_URL as string | undefined) || 'http://localhost:8082'
 
 const client = createApiClient({
   baseUrl,
@@ -15,7 +15,7 @@ export const billingTokensApi = {
   async resolveEntryToken(token: string) {
     return await client.request<ResolveBillingAccessTokenResponse>({
       method: 'POST',
-      path: '/api/v1/billing/access-token/resolve',
+      path: 'public/api/v1/billing/access-token/resolve',
       body: {
         token,
       } as ResolveBillingAccessTokenRequest,

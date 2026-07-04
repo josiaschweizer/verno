@@ -7,18 +7,18 @@ import ch.verno.common.type.billing.BillingSubscriptionStatus;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.lib.Publ;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class TenantBillingMapper implements IEntityMapper<TenantBillingEntity, TenantBillingDto> {
+public class TenantBillingMapper extends AbstractEntityMapper<TenantBillingEntity, TenantBillingDto> {
 
   @Nonnull
   @Override
-  public TenantBillingDto toSimpleDto(@Nonnull final TenantBillingEntity entity) {
+  public TenantBillingDto toDto(@Nonnull final TenantBillingEntity entity) {
     final var dto = TenantBillingDto.empty();
 
     dto.setId(entity.getId());

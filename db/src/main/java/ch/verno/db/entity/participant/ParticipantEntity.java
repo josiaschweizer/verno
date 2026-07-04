@@ -276,6 +276,9 @@ public class ParticipantEntity extends TenantScopedEntity {
   }
 
   public void setSiblings(final List<ParticipantEntity> siblings) {
-    this.siblings = siblings;
+    this.siblings.clear();
+    if (siblings != null) {
+      this.siblings.addAll(siblings);
+    }
   }
 }

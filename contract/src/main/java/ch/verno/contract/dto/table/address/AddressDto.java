@@ -65,7 +65,6 @@ public class AddressDto extends BaseDto<Long> {
 
   public boolean isEmpty() {
     return getId() != null
-            && getId() == 0L
             && street.isEmpty()
             && houseNumber.isEmpty()
             && zipCode.isEmpty()

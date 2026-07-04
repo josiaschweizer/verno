@@ -34,7 +34,7 @@ public class BillingWebhookEventService extends AbstractEntityServiceLongId<
       return create(dto);
     } catch (DataIntegrityViolationException exception) {
       return getRepository().findByStripeEventId(dto.getStripeEventId())
-              .map(getMapper()::toSimpleDto)
+              .map(getMapper()::toDto)
               .orElseThrow(() -> exception);
     }
   }
@@ -50,7 +50,7 @@ public class BillingWebhookEventService extends AbstractEntityServiceLongId<
   @Transactional(readOnly = true)
   public Optional<BillingWebhookEventDto> findByStripeEventId(@Nonnull final String stripeEventId) {
     return getRepository().findByStripeEventId(stripeEventId)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   public void markProcessed(@Nonnull final String stripeEventId) {

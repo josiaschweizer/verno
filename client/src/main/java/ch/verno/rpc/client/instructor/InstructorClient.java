@@ -43,8 +43,7 @@ public class InstructorClient {
   }
 
   @Nonnull
-  @SuppressWarnings("UnusedReturnValue")
-  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
+  public InstructorDto saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorResource.get().saveInstructor(instructor);
   }
 
@@ -56,5 +55,9 @@ public class InstructorClient {
     return instructorResource.get().isInstructorReferenced(instructorId);
   }
 
+  @Nonnull
+  public SaveResponse<InstructorDto> apiSaveInstructor(@Nonnull final InstructorDto instructor) {
+    return instructorResource.get().apiSaveInstructor(instructor);
+  }
 
 }

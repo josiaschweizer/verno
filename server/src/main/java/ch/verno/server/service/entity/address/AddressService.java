@@ -23,11 +23,8 @@ public class AddressService extends AbstractEntityServiceLongId<
         AddressRepository,
         AddressMapper> {
 
-  @Nonnull private final Lazy<AddressBo> addressBo;
-
   public AddressService(@Nonnull final ServerBean bean) {
     super(bean.get(AddressRepository.class), bean.get(AddressMapper.class));
-    this.addressBo = Lazy.of(() -> bean.get(BoFactory.class).get(AddressBo.class));
   }
 
   @Nonnull
@@ -45,7 +42,7 @@ public class AddressService extends AbstractEntityServiceLongId<
                                            @Nonnull final String country) {
     return getRepository()
             .findByFields(street, houseNumber, zipCode, city, country)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   @Nonnull

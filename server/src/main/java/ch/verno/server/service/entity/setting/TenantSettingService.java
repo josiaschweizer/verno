@@ -24,7 +24,7 @@ public class TenantSettingService extends AbstractEntityServiceLongId<
 
   @Nonnull
   public Optional<TenantSettingDto> findByTenantId(@Nonnull final Long tenantId) {
-    return getRepository().getByTenantId(tenantId).map(getMapper()::toSimpleDto);
+    return getRepository().getByTenantId(tenantId).map(getMapper()::toDto);
   }
 
 }

@@ -1,3 +1,3 @@
 export type StartBillingSessionResponse = {
-    url: string
+  url: string
 }

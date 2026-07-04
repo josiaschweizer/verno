@@ -2,18 +2,18 @@ package ch.verno.server.mapper.file;
 
 import ch.verno.contract.dto.table.file.StoredFileDto;
 import ch.verno.db.entity.file.StoredFileEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
 @Component
-public class StoredFileMapper implements IEntityMapper<StoredFileEntity, StoredFileDto> {
+public class StoredFileMapper extends AbstractEntityMapper<StoredFileEntity, StoredFileDto> {
 
   @Nonnull
   @Override
-  public StoredFileDto toSimpleDto(@Nonnull final StoredFileEntity entity) {
+  public StoredFileDto toDto(@Nonnull final StoredFileEntity entity) {
     final var dto = StoredFileDto.empty();
 
     dto.setId(entity.getId());

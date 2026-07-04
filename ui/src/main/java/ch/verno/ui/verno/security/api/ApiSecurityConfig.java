@@ -33,7 +33,7 @@ public class ApiSecurityConfig { //TODO I THINK THIS CAN BE DELETED
             .authenticationManager(apiAuthenticationManager)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(ApiUrl.BILLING_WEBHOOK, ApiUrl.BILLING_WEBHOOK + "/**").permitAll()
+//                    .requestMatchers(ApiUrl.BILLING_WEBHOOK, ApiUrl.BILLING_WEBHOOK + "/**").permitAll()
                     .requestMatchers(resolveBillingAccessToken, resolveBillingAccessToken + "/**").permitAll()
                     .requestMatchers(startStripeSession, startStripeSession + "/**").permitAll()
                     .requestMatchers(ApiUrl.TENANTS, ApiUrl.TENANTS + "/**").authenticated()

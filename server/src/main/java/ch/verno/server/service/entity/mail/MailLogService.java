@@ -28,17 +28,13 @@ public class MailLogService extends AbstractSpecEntityService<
     super(serverBean.get(MailLogRepository.class), serverBean.get(MailLogMapper.class), MailLogSpec::new);
   }
 
-  @Nonnull
-  @Override
-  public MailLogDto create(@Nonnull final MailLogDto dto) {
-    return super.create(dto);
-  }
+
 
   @Nonnull
   public List<MailLogDto> findAllByStatus(@Nonnull final MailLogStatus status) {
     return getRepository().findAllByStatus(status)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 
@@ -46,7 +42,7 @@ public class MailLogService extends AbstractSpecEntityService<
   public List<MailLogDto> findAllByRecipientEmail(@Nonnull final String recipientEmail) {
     return getRepository().findAllByRecipientEmail(recipientEmail)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 

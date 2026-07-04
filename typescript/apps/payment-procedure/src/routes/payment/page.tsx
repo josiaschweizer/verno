@@ -1,7 +1,9 @@
 import { CreditCard, ShieldCheck, TriangleAlert } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import RevealSection from '@verno/components/ui/RevealSection'
+import { ApiError } from '@verno/lib/apiClient'
 import { billingSessionApi } from '@/lib/api/billingSession'
 
 type BillingEntryContext = {
@@ -37,13 +39,29 @@ function getPurposeLabel(purpose: string) {
   }
 }
 
+function getBillingErrorMessage(code: string | null): string {
+  switch (code) {
+    case 'BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND':
+      return 'Der Zahlungszugang ist ungültig. Bitte öffnen Sie den Link erneut aus Verno.'
+    case 'BILLING_TOKEN_EXPIRED':
+      return 'Dieser Zahlungslink ist abgelaufen. Bitte fordern Sie einen neuen an.'
+    case 'BILLING_TOKEN_USED':
+      return 'Dieser Zahlungslink wurde bereits verwendet.'
+    default:
+      return 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.'
+  }
+}
+
 export default function PaymentPage() {
   const navigate = useNavigate()
+  const token = sessionStorage.getItem('billingEntryToken')
   const rawContext = sessionStorage.getItem('billingEntryContext')
   const [isStartingPayment, setIsStartingPayment] = useState(false)
 
   const context = useMemo(() => {
-    if (!rawContext) return null
+    if (!rawContext) {
+      return null
+    }
 
     try {
       return JSON.parse(rawContext) as BillingEntryContext
@@ -53,8 +71,6 @@ export default function PaymentPage() {
   }, [rawContext])
 
   async function startPayment() {
-    const token = sessionStorage.getItem('billingEntryToken')
-
     if (!token) {
       console.error('Billing entry token is missing')
       return
@@ -67,11 +83,18 @@ export default function PaymentPage() {
       window.location.href = result.url
     } catch (error) {
       console.error('Failed to start billing session', error)
+
+      const description =
+        error instanceof ApiError && error.message
+          ? error.message
+          : 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.'
+
+      toast.error('Zahlung konnte nicht gestartet werden', { description })
       setIsStartingPayment(false)
     }
   }
 
-  if (!context) {
+  if (!token) {
     return (
       <main className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden -m-4">
         <div className="mx-auto min-h-full max-w-6xl px-6 py-8 md:py-0 flex flex-col">
@@ -173,49 +196,51 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-verno-surface shadow p-5">
-                <h2 className="text-lg font-semibold text-verno-darker">
-                  Billing-Kontext
-                </h2>
+              {context && (
+                <div className="rounded-2xl bg-verno-surface shadow p-5">
+                  <h2 className="text-lg font-semibold text-verno-darker">
+                    Billing-Kontext
+                  </h2>
 
-                <div className="mt-5 space-y-4">
-                  <div className="border-b border-verno-bg/80 pb-3">
-                    <p className="text-xs uppercase text-muted-foreground">
-                      Mandant
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-verno-darker">
-                      {context.tenantId}
-                    </p>
-                  </div>
+                  <div className="mt-5 space-y-4">
+                    <div className="border-b border-verno-bg/80 pb-3">
+                      <p className="text-xs uppercase text-muted-foreground">
+                        Mandant
+                      </p>
+                      <p className="mt-1 text-sm font-medium text-verno-darker">
+                        {context.tenantId}
+                      </p>
+                    </div>
 
-                  <div className="border-b border-verno-bg/80 pb-3">
-                    <p className="text-xs uppercase text-muted-foreground">
-                      Benutzer
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-verno-darker">
-                      {context.userId}
-                    </p>
-                  </div>
+                    <div className="border-b border-verno-bg/80 pb-3">
+                      <p className="text-xs uppercase text-muted-foreground">
+                        Benutzer
+                      </p>
+                      <p className="mt-1 text-sm font-medium text-verno-darker">
+                        {context.userId}
+                      </p>
+                    </div>
 
-                  <div className="border-b border-verno-bg/80 pb-3">
-                    <p className="text-xs uppercase text-muted-foreground">
-                      Aktion
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-verno-darker">
-                      {getPurposeLabel(context.purpose)}
-                    </p>
-                  </div>
+                    <div className="border-b border-verno-bg/80 pb-3">
+                      <p className="text-xs uppercase text-muted-foreground">
+                        Aktion
+                      </p>
+                      <p className="mt-1 text-sm font-medium text-verno-darker">
+                        {getPurposeLabel(context.purpose)}
+                      </p>
+                    </div>
 
-                  <div>
-                    <p className="text-xs uppercase text-muted-foreground">
-                      Gültig bis
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-verno-darker">
-                      {formatDate(context.expiresAt)}
-                    </p>
+                    <div>
+                      <p className="text-xs uppercase text-muted-foreground">
+                        Gültig bis
+                      </p>
+                      <p className="mt-1 text-sm font-medium text-verno-darker">
+                        {formatDate(context.expiresAt)}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </RevealSection>
         </section>

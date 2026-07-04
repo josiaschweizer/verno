@@ -69,7 +69,6 @@ public class ParentDto extends BaseDto<Long> {
 
   public boolean isEmpty() {
     return getId() != null
-            && getId() == 0L
             && firstName.isEmpty()
             && lastName.isEmpty()
             && email.isEmpty()

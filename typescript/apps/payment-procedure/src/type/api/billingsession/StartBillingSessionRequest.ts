@@ -1,3 +1,3 @@
 export type StartBillingSessionRequest = {
-    token: string
+  token: string
 }

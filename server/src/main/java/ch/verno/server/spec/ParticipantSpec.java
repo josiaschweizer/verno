@@ -1,8 +1,17 @@
 package ch.verno.server.spec;
 
+import ch.verno.common.db.constants.address.AddressConstants;
+import ch.verno.common.db.constants.course.CourseConstants;
+import ch.verno.common.db.constants.course.CourseLevelConstants;
+import ch.verno.common.db.constants.gender.GenderConstants;
+import ch.verno.common.db.constants.instructor.InstructorConstants;
+import ch.verno.common.db.constants.participant.ParentConstants;
+import ch.verno.common.db.constants.participant.ParticipantConstants;
 import ch.verno.contract.dto.filter.ParticipantFilter;
 import ch.verno.db.entity.participant.ParticipantEntity;
+import ch.verno.lib.New;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -14,21 +23,15 @@ import java.util.List;
 
 public class ParticipantSpec extends BaseSpec<ParticipantEntity, ParticipantFilter> {
 
+  private static final int MIN_AGE = 0;
+  private static final int MAX_AGE = 130;
+
   @Override
   public Specification<ParticipantEntity> getSpecification(@Nonnull final ParticipantFilter filter) {
     return (root, query, cb) -> {
       final var predicates = new ArrayList<Predicate>();
 
       Join<?, ?> genderJoin = null;
-      Join<?, ?> addressJoin;
-
-      Join<?, ?> parentOneJoin;
-      Join<?, ?> parentTwoJoin;
-      Join<?, ?> parentOneGenderJoin;
-      Join<?, ?> parentTwoGenderJoin;
-      Join<?, ?> parentOneAddressJoin;
-      Join<?, ?> parentTwoAddressJoin;
-
       Join<?, ?> coursesJoin = null;
       Join<?, ?> courseLevelsJoin = null;
 
@@ -38,128 +41,124 @@ public class ParticipantSpec extends BaseSpec<ParticipantEntity, ParticipantFilt
 
         final var pattern = "%" + searchText + "%";
 
-        genderJoin = root.join("gender", JoinType.LEFT);
-        addressJoin = root.join("address", JoinType.LEFT);
-        parentOneJoin = root.join("parentOne", JoinType.LEFT);
-        parentTwoJoin = root.join("parentTwo", JoinType.LEFT);
+        genderJoin = root.join(GenderConstants.ENTITY_NAME, JoinType.LEFT);
+        final var addressJoin = root.join(AddressConstants.ENTITY_NAME, JoinType.LEFT);
+        coursesJoin = root.join(CourseConstants.MANY_ENTITY_NAME, JoinType.LEFT);
+        courseLevelsJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
+        final var instructorJoin = coursesJoin.join(InstructorConstants.ENTITY_NAME, JoinType.LEFT);
 
-        parentOneGenderJoin = parentOneJoin.join("gender", JoinType.LEFT);
-        parentTwoGenderJoin = parentTwoJoin.join("gender", JoinType.LEFT);
-        parentOneAddressJoin = parentOneJoin.join("address", JoinType.LEFT);
-        parentTwoAddressJoin = parentTwoJoin.join("address", JoinType.LEFT);
+        final var orPredicates = New.<Predicate>list();
 
-        coursesJoin = root.join("courses", JoinType.LEFT);
-        courseLevelsJoin = root.join("courseLevels", JoinType.LEFT);
-
-        final var instructorJoin = coursesJoin.join("instructor", JoinType.LEFT);
-
-        final List<Predicate> orPredicates = new ArrayList<>();
-
-        orPredicates.add(likeLower(cb, root.get("firstname"), pattern));
-        orPredicates.add(likeLower(cb, root.get("lastname"), pattern));
-        orPredicates.add(likeLower(cb, root.get("email"), pattern));
-        orPredicates.add(likeLower(cb, root.get("phone"), pattern));
-        orPredicates.add(likeLower(cb, root.get("note"), pattern));
-        orPredicates.add(cb.like(cb.lower(cb.toString(root.get("id"))), pattern));
+        orPredicates.add(likeLower(cb, root.get(ParticipantConstants.FIRSTNAME), pattern));
+        orPredicates.add(likeLower(cb, root.get(ParticipantConstants.LASTNAME), pattern));
+        orPredicates.add(likeLower(cb, root.get(ParticipantConstants.EMAIL), pattern));
+        orPredicates.add(likeLower(cb, root.get(ParticipantConstants.PHONE), pattern));
+        orPredicates.add(likeLower(cb, root.get(ParticipantConstants.NOTE), pattern));
+        orPredicates.add(cb.like(cb.lower(cb.toString(root.get(ParticipantConstants.ID))), pattern));
 
         final var age = tryParseInt(searchText);
-        if (age != null && age >= 0 && age <= 130) {
+        if (age != null && age >= MIN_AGE && age <= MAX_AGE) {
           final var today = LocalDate.now();
           final var maxBirthdate = today.minusYears(age);
           final var minBirthdate = today.minusYears(age + 1).plusDays(1);
-          orPredicates.add(cb.between(root.get("birthdate"), minBirthdate, maxBirthdate));
+          orPredicates.add(cb.between(root.get(ParticipantConstants.BIRTHDATE), minBirthdate, maxBirthdate));
         }
 
-        orPredicates.add(likeLower(cb, genderJoin.get("name"), pattern));
-        orPredicates.add(likeLower(cb, genderJoin.get("description"), pattern));
+        addGenderAndAddress(orPredicates, cb, genderJoin, addressJoin, pattern);
 
-        orPredicates.add(likeLower(cb, addressJoin.get("street"), pattern));
-        orPredicates.add(likeLower(cb, addressJoin.get("houseNumber"), pattern));
-        orPredicates.add(likeLower(cb, addressJoin.get("zipCode"), pattern));
-        orPredicates.add(likeLower(cb, addressJoin.get("city"), pattern));
-        orPredicates.add(likeLower(cb, addressJoin.get("country"), pattern));
+        orPredicates.add(likeLower(cb, coursesJoin.get(CourseConstants.TITLE), pattern));
+        orPredicates.add(likeLower(cb, coursesJoin.get(CourseConstants.LOCATION), pattern));
+        orPredicates.add(cb.like(cb.lower(cb.toString(coursesJoin.get(CourseConstants.CAPACITY))), pattern));
 
-        orPredicates.add(likeLower(cb, coursesJoin.get("title"), pattern));
-        orPredicates.add(likeLower(cb, coursesJoin.get("location"), pattern));
-        orPredicates.add(cb.like(cb.lower(cb.toString(coursesJoin.get("capacity"))), pattern));
+        orPredicates.add(likeLower(cb, instructorJoin.get(InstructorConstants.FIRSTNAME), pattern));
+        orPredicates.add(likeLower(cb, instructorJoin.get(InstructorConstants.LASTNAME), pattern));
+        orPredicates.add(likeLower(cb, instructorJoin.get(InstructorConstants.EMAIL), pattern));
+        orPredicates.add(likeLower(cb, instructorJoin.get(InstructorConstants.PHONE), pattern));
 
-        orPredicates.add(likeLower(cb, instructorJoin.get("firstname"), pattern));
-        orPredicates.add(likeLower(cb, instructorJoin.get("lastname"), pattern));
-        orPredicates.add(likeLower(cb, instructorJoin.get("email"), pattern));
-        orPredicates.add(likeLower(cb, instructorJoin.get("phone"), pattern));
+        orPredicates.add(likeLower(cb, courseLevelsJoin.get(CourseLevelConstants.CODE), pattern));
+        orPredicates.add(likeLower(cb, courseLevelsJoin.get(CourseLevelConstants.NAME), pattern));
+        orPredicates.add(likeLower(cb, courseLevelsJoin.get(CourseLevelConstants.DESCRIPTION), pattern));
+        orPredicates.add(cb.like(cb.lower(cb.toString(courseLevelsJoin.get(CourseLevelConstants.SORTING_ORDER))), pattern));
 
-        orPredicates.add(likeLower(cb, courseLevelsJoin.get("code"), pattern));
-        orPredicates.add(likeLower(cb, courseLevelsJoin.get("name"), pattern));
-        orPredicates.add(likeLower(cb, courseLevelsJoin.get("description"), pattern));
-        orPredicates.add(cb.like(cb.lower(cb.toString(courseLevelsJoin.get("sortingOrder"))), pattern));
-
-        orPredicates.add(likeLower(cb, parentOneJoin.get("firstname"), pattern));
-        orPredicates.add(likeLower(cb, parentOneJoin.get("lastname"), pattern));
-        orPredicates.add(likeLower(cb, parentOneJoin.get("email"), pattern));
-        orPredicates.add(likeLower(cb, parentOneJoin.get("phone"), pattern));
-
-        orPredicates.add(likeLower(cb, parentOneGenderJoin.get("name"), pattern));
-        orPredicates.add(likeLower(cb, parentOneGenderJoin.get("description"), pattern));
-
-        orPredicates.add(likeLower(cb, parentOneAddressJoin.get("street"), pattern));
-        orPredicates.add(likeLower(cb, parentOneAddressJoin.get("houseNumber"), pattern));
-        orPredicates.add(likeLower(cb, parentOneAddressJoin.get("zipCode"), pattern));
-        orPredicates.add(likeLower(cb, parentOneAddressJoin.get("city"), pattern));
-        orPredicates.add(likeLower(cb, parentOneAddressJoin.get("country"), pattern));
-
-        orPredicates.add(likeLower(cb, parentTwoJoin.get("firstname"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoJoin.get("lastname"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoJoin.get("email"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoJoin.get("phone"), pattern));
-
-        orPredicates.add(likeLower(cb, parentTwoGenderJoin.get("name"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoGenderJoin.get("description"), pattern));
-
-        orPredicates.add(likeLower(cb, parentTwoAddressJoin.get("street"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoAddressJoin.get("houseNumber"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoAddressJoin.get("zipCode"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoAddressJoin.get("city"), pattern));
-        orPredicates.add(likeLower(cb, parentTwoAddressJoin.get("country"), pattern));
+        addParentPredicates(orPredicates, cb, root.join(ParticipantConstants.PARENT_ONE, JoinType.LEFT), pattern);
+        addParentPredicates(orPredicates, cb, root.join(ParticipantConstants.PARENT_TWO, JoinType.LEFT), pattern);
 
         predicates.add(cb.or(orPredicates.toArray(new Predicate[0])));
       }
 
       if (filter.getGenderIds() != null && !filter.getGenderIds().isEmpty()) {
         if (genderJoin == null) {
-          genderJoin = root.join("gender", JoinType.LEFT);
+          genderJoin = root.join(GenderConstants.ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(genderJoin.get("id").in(filter.getGenderIds()));
+        predicates.add(genderJoin.get(GenderConstants.ID).in(filter.getGenderIds()));
       }
 
       if (filter.getCourseIds() != null && !filter.getCourseIds().isEmpty()) {
         query.distinct(true);
         if (coursesJoin == null) {
-          coursesJoin = root.join("courses", JoinType.LEFT);
+          coursesJoin = root.join(CourseConstants.MANY_ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(coursesJoin.get("id").in(filter.getCourseIds()));
+        predicates.add(coursesJoin.get(CourseConstants.ID).in(filter.getCourseIds()));
       }
 
       if (filter.getCourseLevelIds() != null && !filter.getCourseLevelIds().isEmpty()) {
         query.distinct(true);
         if (courseLevelsJoin == null) {
-          courseLevelsJoin = root.join("courseLevels", JoinType.LEFT);
+          courseLevelsJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(courseLevelsJoin.get("id").in(filter.getCourseLevelIds()));
+        predicates.add(courseLevelsJoin.get(CourseLevelConstants.ID).in(filter.getCourseLevelIds()));
       }
 
       if (filter.getBirthDateFrom() != null) {
-        predicates.add(cb.greaterThanOrEqualTo(root.get("birthdate"), filter.getBirthDateFrom()));
+        predicates.add(cb.greaterThanOrEqualTo(root.get(ParticipantConstants.BIRTHDATE), filter.getBirthDateFrom()));
       }
 
       if (filter.getBirthDateTo() != null) {
-        predicates.add(cb.lessThanOrEqualTo(root.get("birthdate"), filter.getBirthDateTo()));
+        predicates.add(cb.lessThanOrEqualTo(root.get(ParticipantConstants.BIRTHDATE), filter.getBirthDateTo()));
       }
 
       if (filter.isActive() != null) {
-        predicates.add(cb.equal(root.get("active"), filter.isActive()));
+        predicates.add(cb.equal(root.get(ParticipantConstants.ACTIVE), filter.isActive()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
     };
+  }
+
+  private void addParentPredicates(@Nonnull final List<Predicate> orPredicates,
+                                   @Nonnull final CriteriaBuilder cb,
+                                   @Nonnull final Join<?, ?> parentJoin,
+                                   @Nonnull final String pattern) {
+    orPredicates.add(likeLower(cb, parentJoin.get(ParentConstants.FIRSTNAME), pattern));
+    orPredicates.add(likeLower(cb, parentJoin.get(ParentConstants.LASTNAME), pattern));
+    orPredicates.add(likeLower(cb, parentJoin.get(ParentConstants.EMAIL), pattern));
+    orPredicates.add(likeLower(cb, parentJoin.get(ParentConstants.PHONE), pattern));
+
+    final var genderJoin = parentJoin.join(GenderConstants.ENTITY_NAME, JoinType.LEFT);
+    final var addressJoin = parentJoin.join(AddressConstants.ENTITY_NAME, JoinType.LEFT);
+    addGenderAndAddress(orPredicates, cb, genderJoin, addressJoin, pattern);
+  }
+
+  private void addGenderAndAddress(@Nonnull final List<Predicate> orPredicates,
+                                   @Nonnull final CriteriaBuilder cb,
+                                   @Nonnull final Join<?, ?> genderJoin,
+                                   @Nonnull final Join<?, ?> addressJoin,
+                                   @Nonnull final String pattern) {
+    orPredicates.add(likeLower(cb, genderJoin.get(GenderConstants.NAME), pattern));
+    orPredicates.add(likeLower(cb, genderJoin.get(GenderConstants.DESCRIPTION), pattern));
+
+    orPredicates.add(likeLower(cb, addressJoin.get(AddressConstants.STREET), pattern));
+    orPredicates.add(likeLower(cb, addressJoin.get(AddressConstants.HOUSE_NUMBER), pattern));
+    orPredicates.add(likeLower(cb, addressJoin.get(AddressConstants.ZIPCODE), pattern));
+    orPredicates.add(likeLower(cb, addressJoin.get(AddressConstants.CITY), pattern));
+    orPredicates.add(likeLower(cb, addressJoin.get(AddressConstants.COUNTRY), pattern));
+  }
+
+  @Nonnull
+  @Override
+  public String resolveSortProperty(@Nonnull final String property) {
+    if (property.equals(ParticipantConstants.ID)) {
+    }
+    return super.resolveSortProperty(property);
   }
 }

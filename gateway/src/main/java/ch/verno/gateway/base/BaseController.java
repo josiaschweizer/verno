@@ -3,6 +3,7 @@ package ch.verno.gateway.base;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.Instant;
@@ -19,7 +20,14 @@ public abstract class BaseController {
 
   @Nonnull
   protected <T> ResponseEntity<T> created(@Nullable final T body) {
-    return ResponseEntity.status(201)
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .headers(defaultHeaders())
+            .body(body);
+  }
+
+  @Nonnull
+  protected <T> ResponseEntity<T> failedCreating(@Nullable final T body) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .headers(defaultHeaders())
             .body(body);
   }

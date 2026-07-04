@@ -2,16 +2,16 @@ package ch.verno.server.mapper.setting;
 
 import ch.verno.contract.dto.table.setting.TenantSettingDto;
 import ch.verno.db.entity.setting.TenantSettingEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TenantSettingMapper implements IEntityMapper<TenantSettingEntity, TenantSettingDto> {
+public class TenantSettingMapper extends AbstractEntityMapper<TenantSettingEntity, TenantSettingDto> {
 
   @Nonnull
   @Override
-  public TenantSettingDto toSimpleDto(@Nonnull final TenantSettingEntity entity) {
+  public TenantSettingDto toDto(@Nonnull final TenantSettingEntity entity) {
     final var dto = TenantSettingDto.empty();
 
     dto.setId(entity.getId());

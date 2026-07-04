@@ -27,7 +27,7 @@ public class CourseLevelService extends AbstractEntityServiceLongId<
   @Nonnull
   public Optional<CourseLevelDto> findByCode(@Nonnull final String code) {
     return getRepository().findByCode(code)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
 }

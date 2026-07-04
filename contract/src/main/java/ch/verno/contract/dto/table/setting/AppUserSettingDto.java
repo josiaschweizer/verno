@@ -1,5 +1,6 @@
 package ch.verno.contract.dto.table.setting;
 
+import ch.verno.common.lib.theme.ThemeConstants;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.lib.language.Language;
 import jakarta.annotation.Nonnull;
@@ -8,7 +9,7 @@ import jakarta.annotation.Nullable;
 public class AppUserSettingDto extends BaseDto<Long> {
 
   @Nonnull private Long userId;
-  @Nullable private String theme;
+  @Nonnull private String theme;
   @Nonnull private Language language;
 
   private AppUserSettingDto() {
@@ -18,7 +19,7 @@ public class AppUserSettingDto extends BaseDto<Long> {
   }
 
   public AppUserSettingDto(@Nonnull final Long userId,
-                           @Nonnull final String theme,
+                           @Nullable final String theme,
                            @Nonnull final Language language) {
     this(null, userId, theme, language);
   }
@@ -29,7 +30,7 @@ public class AppUserSettingDto extends BaseDto<Long> {
                            @Nullable final Language language) {
     setId(id);
     this.userId = userId;
-    this.theme = theme;
+    this.theme = theme != null ? theme.toLowerCase() : ThemeConstants.SETTING_LIGHT;
     this.language = language != null ? language : Language.DE;
   }
 

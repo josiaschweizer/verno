@@ -32,7 +32,7 @@ public class MailConfigService extends AbstractEntityServiceLongId<
   @Nonnull
   public Optional<MailConfigDto> findByTenantId(@Nonnull final Long tenantId) {
     return getRepository().findByTenantId(tenantId)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   public boolean existsByTenantId(@Nonnull final Long tenantId) {

@@ -52,7 +52,7 @@ public class InstructorResourceImpl implements InstructorResource {
 
   @Nonnull
   @Override
-  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
+  public InstructorDto saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorBo.get().saveInstructor(instructor);
   }
 
@@ -71,5 +71,11 @@ public class InstructorResourceImpl implements InstructorResource {
   @Override
   public boolean isInstructorReferenced(@Nonnull final Long instructorId) {
     return instructorBo.get().isInstructorReferenced(instructorId);
+  }
+
+  @Nonnull
+  @Override
+  public SaveResponse<InstructorDto> apiSaveInstructor(@Nonnull final InstructorDto instructorDto) {
+    return instructorBo.get().apiSaveInstructor(instructorDto);
   }
 }

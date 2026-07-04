@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -16,7 +15,6 @@ public class TenantConfigProvider {
   private boolean enabled = true;
   private boolean allowHeaderFallback = true;
   @Nullable private String headerName = "X-Mandant-Id";
-  @Nullable private List<String> baseDomains = List.of("verno-app.ch", "a.run.app", "localhost");
 
   public boolean isEnabled() {
     return enabled;
@@ -41,14 +39,5 @@ public class TenantConfigProvider {
 
   public void setHeaderName(@Nullable final String headerName) {
     this.headerName = headerName;
-  }
-
-  @Nonnull
-  public List<String> getBaseDomains() {
-    return Optional.ofNullable(baseDomains).orElse(List.of());
-  }
-
-  public void setBaseDomains(@Nullable final List<String> baseDomains) {
-    this.baseDomains = baseDomains;
   }
 }

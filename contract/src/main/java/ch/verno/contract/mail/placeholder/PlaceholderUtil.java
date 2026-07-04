@@ -1,6 +1,7 @@
 package ch.verno.contract.mail.placeholder;
 
-import ch.verno.contract.mail.placeholder.context.MailContext;
+import ch.verno.contract.mail.placeholder.base.MailContext;
+import ch.verno.contract.mail.placeholder.base.Placeholder;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -13,12 +14,14 @@ public final class PlaceholderUtil {
   }
 
   @Nonnull
-  public static <C extends MailContext> String replacePlaceholders(@Nonnull String content,
-                                                                   @Nonnull C context,
-                                                                   @Nonnull List<PlaceholderValue<C>> placeholderValues) {
-    for (final var placeholder : placeholderValues) {
-      final var replacement = placeholder.valueFunction().apply(context);
-      content = content.replace(placeholder.placeholder().getValue(), nullToEmpty(replacement));
+  public static <C extends MailContext, P extends Placeholder> String replacePlaceholders(@Nonnull final PlaceholderResolver<C, P> placeholderResolver,
+                                                                                          @Nonnull String content,
+                                                                                          @Nonnull final C context,
+                                                                                          @Nonnull final List<P> placeholders) {
+    for (final var placeholder : placeholders) {
+      final var valueFunction = placeholderResolver.getValueFunctionForPlaceholder(placeholder);
+      final var replacement = valueFunction.apply(context);
+      content = content.replace(placeholder.getValue(), nullToEmpty(replacement));
     }
     return content;
   }

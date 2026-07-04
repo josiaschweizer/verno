@@ -33,7 +33,7 @@ public class CourseService extends AbstractSpecEntityService<
   public List<CourseDto> findByCourseScheduleId(@Nonnull final Long courseScheduleId) {
     return getRepository().findByCourseScheduleId(courseScheduleId)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 

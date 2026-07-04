@@ -150,6 +150,6 @@ public class MailLogBo {
             now,
             createdBy
     );
-    return mailLogService.create(dto);
+    return mailLogService.save(dto);
   }
 }

@@ -30,13 +30,13 @@ public class AppUserService extends AbstractSpecEntityService<
   @Nonnull
   public Optional<AppUserDto> findByUsername(@Nonnull final String username) {
     return getRepository().findByUsername(username)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   @Nonnull
   public Optional<AppUserDto> findByUsernameOrEmail(@Nonnull final String nameOrEmail) {
     return getRepository().findByUsernameOrEmail(nameOrEmail)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   public boolean existsByUsername(@Nonnull final String username,

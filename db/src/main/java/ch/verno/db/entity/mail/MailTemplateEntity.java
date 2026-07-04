@@ -73,7 +73,7 @@ public class MailTemplateEntity {
   @Nonnull
   public static MailTemplateEntity empty() {
     return new MailTemplateEntity(
-            TenantEntity.empty(),
+            null,
             MailTemplateTypeEntity.empty(),
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,

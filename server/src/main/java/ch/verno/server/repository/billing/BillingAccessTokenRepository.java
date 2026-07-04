@@ -3,6 +3,7 @@ package ch.verno.server.repository.billing;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
 import ch.verno.db.jpa.billing.SpringDataBillingAccessTokenJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ public class BillingAccessTokenRepository extends AbstractEntityRepository<
   }
 
   @Nonnull
+  @UnscopedQuery
   public Optional<BillingAccessTokenEntity> findByTokenHash(@Nonnull final String tokenHash) {
     return getRepository().findByTokenHash(tokenHash);
   }
