@@ -1,4 +1,4 @@
-package ch.verno.contract.api;
+package ch.verno.contract.api.util;
 
 import jakarta.annotation.Nonnull;
 

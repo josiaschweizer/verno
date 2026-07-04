@@ -3,7 +3,7 @@ package ch.verno.server.repository.tenant;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.jpa.tenant.SpringDataTenantJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;
-import ch.verno.server.tenant.UnscopedQuery;
+import ch.verno.server.config.tenant.UnscopedQuery;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 

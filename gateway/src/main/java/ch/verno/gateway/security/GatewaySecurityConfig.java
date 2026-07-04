@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 /**
  * All gateway-level {@link SecurityFilterChain} configuration in one place, ordered by matcher
@@ -63,10 +64,9 @@ public class GatewaySecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager gatewayAuthenticationManager(
-          @Nonnull final UserDetailsService gatewayUserDetailsService,
-          @Nonnull final PasswordEncoder passwordEncoder,
-          @Nonnull final ObjectPostProcessor<Object> objectPostProcessor) throws Exception {
+  public AuthenticationManager gatewayAuthenticationManager(@Nonnull final UserDetailsService gatewayUserDetailsService,
+                                                            @Nonnull final PasswordEncoder passwordEncoder,
+                                                            @Nonnull final ObjectPostProcessor<Object> objectPostProcessor) {
     final var provider = new DaoAuthenticationProvider(gatewayUserDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
 
@@ -77,9 +77,8 @@ public class GatewaySecurityConfig {
 
   @Bean
   @Order(0)
-  public SecurityFilterChain publicAuthFilterChain(
-          @Nonnull final HttpSecurity http,
-          @Nonnull final ResourceAccessFilter resourceAccessFilter) throws Exception {
+  public SecurityFilterChain publicAuthFilterChain(@Nonnull final HttpSecurity http,
+                                                   @Nonnull final ResourceAccessFilter resourceAccessFilter) {
 
     http
             .securityMatcher(ApiUrl.PUBLIC_AUTH_BASE_API + Publ.API_ANYTHING)
@@ -94,9 +93,11 @@ public class GatewaySecurityConfig {
 
   @Bean
   @Order(1)
-  public SecurityFilterChain publicOpenFilterChain(@Nonnull final HttpSecurity http) throws Exception {
+  public SecurityFilterChain publicOpenFilterChain(@Nonnull final HttpSecurity http,
+                                                   @Nonnull final CorsConfigurationSource apiCorsSource) {
     http
             .securityMatcher(ApiUrl.PUBLIC_BASE_API + Publ.API_ANYTHING)
+            .cors(cors -> cors.configurationSource(apiCorsSource))
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
@@ -106,9 +107,8 @@ public class GatewaySecurityConfig {
 
   @Bean
   @Order(2)
-  public SecurityFilterChain internalFilterChain(
-          @Nonnull final HttpSecurity http,
-          @Nonnull final AuthenticationManager gatewayAuthenticationManager) throws Exception {
+  public SecurityFilterChain internalFilterChain(@Nonnull final HttpSecurity http,
+                                                 @Nonnull final AuthenticationManager gatewayAuthenticationManager) {
 
     http
             .securityMatcher(ApiUrl.INTERNAL_BASE_API + Publ.API_ANYTHING)
@@ -123,12 +123,13 @@ public class GatewaySecurityConfig {
 
   @Bean
   @Order(3)
-  public SecurityFilterChain apiFilterChain(
-          @Nonnull final HttpSecurity http,
-          @Nonnull final AuthenticationManager gatewayAuthenticationManager) throws Exception {
+  public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
+                                            @Nonnull final AuthenticationManager gatewayAuthenticationManager,
+                                            @Nonnull final CorsConfigurationSource apiCorsSource) {
 
     http
             .securityMatcher(ApiUrl.BASE_API + Publ.API_ANYTHING)
+            .cors(cors -> cors.configurationSource(apiCorsSource))
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(gatewayAuthenticationManager)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

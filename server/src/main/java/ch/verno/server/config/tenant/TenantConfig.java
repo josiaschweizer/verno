@@ -1,7 +1,5 @@
-package ch.verno.server.config;
+package ch.verno.server.config.tenant;
 
-import ch.verno.server.tenant.TenantFilter;
-import ch.verno.server.tenant.TenantResolver;
 import jakarta.annotation.Nonnull;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

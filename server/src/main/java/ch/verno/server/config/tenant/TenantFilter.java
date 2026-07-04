@@ -1,4 +1,4 @@
-package ch.verno.server.tenant;
+package ch.verno.server.config.tenant;
 
 import ch.verno.common.exceptions.server.tenant.TenantNotResolvedException;
 import ch.verno.common.tenant.TenantContext;

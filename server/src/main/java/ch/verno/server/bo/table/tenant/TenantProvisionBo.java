@@ -1,7 +1,6 @@
 package ch.verno.server.bo.table.tenant;
 
 import ch.verno.common.db.role.Role;
-import ch.verno.common.exceptions.server.service.TenantAlreadyExistsException;
 import ch.verno.common.lib.gender.Gender;
 import ch.verno.common.lib.gender.GenderConstants;
 import ch.verno.common.lib.gender.GenderUtil;
@@ -19,8 +18,8 @@ import ch.verno.lib.lib.language.Language;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.service.entity.gender.GenderService;
 import ch.verno.server.service.entity.setting.AppUserSettingService;
-import ch.verno.server.service.entity.user.AppUserService;
 import ch.verno.server.service.entity.tenant.TenantService;
+import ch.verno.server.service.entity.user.AppUserService;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -46,7 +45,7 @@ public class TenantProvisionBo {
   @Nonnull
   public CreateTenantResponse createTenant(@Nonnull final CreateTenantRequest request) {
     if (tenantService.get().existsBySlug(request.tenantKey())) {
-      throw new TenantAlreadyExistsException("tenantKey already exists: " + request.tenantKey());
+      return CreateTenantResponse.failure(request.tenantKey(), request.subdomain(), VernoConstants.STATUS_TENANT_SLUG_ALREADY_EXISTS);
     }
 
     final var savedTenant = saveTenant(request);
@@ -56,13 +55,7 @@ public class TenantProvisionBo {
     saveUserSetting(savedUser, request.preferredLanguage());
     saveGenders(request.preferredLanguage());
 
-    return new CreateTenantResponse(
-            savedTenant.id(),
-            savedTenant.slug(),
-            request.subdomain(),
-            false,
-            VernoConstants.STATUS_CREATED
-    );
+    return CreateTenantResponse.success(savedTenant.id(), savedTenant.slug(), request.subdomain());
   }
 
   @Nonnull

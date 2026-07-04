@@ -1,4 +1,4 @@
-package ch.verno.server.tenant;
+package ch.verno.server.config.tenant;
 
 import ch.verno.common.tenant.TenantContext;
 import ch.verno.db.entity.tenant.TenantFilters;

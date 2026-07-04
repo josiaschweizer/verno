@@ -1,9 +1,9 @@
-package ch.verno.gateway.endpoints.v1.external.billing;
+package ch.verno.gateway.endpoints.v1.pub.billing;
 
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.contract.api.exernal.billing.accesstoken.ResolveBillingAccessTokenRequest;
 import ch.verno.contract.api.exernal.billing.accesstoken.ResolveBillingAccessTokenResponse;
 import ch.verno.contract.endpoint.billing.BillingAccessTokenResolverResource;
-import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.gateway.base.BaseController;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.rpc.RpcFactory;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(ApiUrl.BILLING_ACCESS_TOKEN)
-public class AccessTokenController extends BaseController {
+@RequestMapping(ApiUrl.PUBLIC_BILLING_ACCESS_TOKEN)
+public class PublicAccessTokenController extends BaseController {
 
   @Nonnull private final BillingAccessTokenResolverResource tokenResolverResource;
 
-  public AccessTokenController(@Nonnull final RpcFactory rpcFactory) {
+  public PublicAccessTokenController(@Nonnull final RpcFactory rpcFactory) {
     this.tokenResolverResource = rpcFactory.create(BillingAccessTokenResolverResource.class);
   }
 
@@ -37,5 +37,4 @@ public class AccessTokenController extends BaseController {
             resolvedToken.getExpiresAt()
     );
   }
-
 }

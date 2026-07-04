@@ -25,9 +25,9 @@ public class BillingAccessTokenService extends AbstractEntityServiceLongId<
 
   @Nonnull private final Lazy<BillingAccessTokenBo> tokenBo;
 
-  public BillingAccessTokenService(@Nonnull final ServerBean bean) {
-    super(bean.get(BillingAccessTokenRepository.class), bean.get(BillingAccessTokenMapper.class));
-    this.tokenBo = Lazy.of(() -> bean.get(BoFactory.class).get(BillingAccessTokenBo.class));
+  public BillingAccessTokenService(@Nonnull final ServerBean serverBean) {
+    super(serverBean.get(BillingAccessTokenRepository.class), serverBean.get(BillingAccessTokenMapper.class));
+    this.tokenBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(BillingAccessTokenBo.class));
   }
 
   @Nonnull

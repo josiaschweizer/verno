@@ -1,4 +1,4 @@
-package ch.verno.ui.lib.theme;
+package ch.verno.common.lib.theme;
 
 import org.jetbrains.annotations.NonNls;
 

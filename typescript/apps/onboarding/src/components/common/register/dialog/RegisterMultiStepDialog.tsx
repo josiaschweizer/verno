@@ -23,6 +23,7 @@ import { ApiError } from '@verno/lib/apiClient'
 import resolveUsername from '@/components/common/register/steps/resolveUsername'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { buildWorkspaceWithTenantPrefixUrl } from '@/lib/buildWorkspaceWithTenantPrefixUrl'
 
 interface Props {
   open: boolean
@@ -227,13 +228,15 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       setSubmitPhase(3)
       await new Promise((r) => setTimeout(r, 700))
 
+      const workspaceUrl = buildWorkspaceWithTenantPrefixUrl(subdomain)
+
       toast.success(t('dialog.toast.successTitle'), {
         duration: 10000,
         description: (
           <span className="flex flex-col gap-1">
             <span>{t('dialog.toast.successDescription')}</span>
             <a
-              href={`https://${subdomain}.verno-app.ch`}
+              href={workspaceUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium underline"

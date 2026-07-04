@@ -15,12 +15,6 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 public class ServerSecurityConfig {
 
   @Bean
-  @Nonnull
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
   @Order(1)
   public SecurityFilterChain rpcFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final InternalRpcAuthFilter internalRpcAuthFilter) {

@@ -1,4 +1,4 @@
-package ch.verno.server.tenant;
+package ch.verno.server.config.tenant;
 
 import jakarta.annotation.Nonnull;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,8 +17,8 @@ public class TenantFilterAspect {
 
   @Before(
           "within(ch.verno.server.repository..*) && " +
-                  "!@within(ch.verno.server.tenant.UnscopedQuery) && " +
-                  "!@annotation(ch.verno.server.tenant.UnscopedQuery)"
+                  "!@within(ch.verno.server.config.tenant.UnscopedQuery) && " +
+                  "!@annotation(ch.verno.server.config.tenant.UnscopedQuery)"
   )
   public void enableTenantFilter() {
     enabler.enable();

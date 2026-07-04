@@ -27,12 +27,29 @@ public final class BoFactory {
     return type.cast(cache.computeIfAbsent(type, this::create));
   }
 
+  public <T> T getEmptyConstructor(@Nonnull final Class<T> type) {
+    return type.cast(cache.computeIfAbsent(type, this::createEmptyConstructor));
+  }
+
   @Nonnull
   private Object create(@Nonnull final Class<?> type) {
     try {
       final var constructor = type.getDeclaredConstructor(ServerBean.class);
       constructor.setAccessible(true);
       return constructor.newInstance(serverBean);
+    } catch (final NoSuchMethodException exception) {
+      throw new IllegalStateException("Business object requires a public constructor with ServerBean: " + type.getName(), exception);
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
+      throw new IllegalStateException("Could not create business object: " + type.getName(), exception);
+    }
+  }
+
+  @Nonnull
+  private Object createEmptyConstructor(@Nonnull final Class<?> type) {
+    try {
+      final var constructor = type.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      return constructor.newInstance();
     } catch (final NoSuchMethodException exception) {
       throw new IllegalStateException("Business object requires a public constructor with ServerBean: " + type.getName(), exception);
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {

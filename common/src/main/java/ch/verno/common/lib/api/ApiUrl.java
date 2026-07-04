@@ -51,6 +51,9 @@ public class ApiUrl {
 
   // public endpoints
   @NonNls public static final String HEALTH = PUBLIC_BASE_API + "/health";
+  @NonNls public static final String PUBLIC_BILLING = PUBLIC_BASE_API + "/billing";
+  @NonNls public static final String PUBLIC_BILLING_ACCESS_TOKEN = PUBLIC_BILLING + "/access-token";
+  @NonNls public static final String PUBLIC_BILLING_SESSION = PUBLIC_BILLING + "/session";
 
   // ending-endpoints
   @NonNls public static final String COUNT = "/count";

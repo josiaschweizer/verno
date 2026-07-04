@@ -1,5 +1,6 @@
 package ch.verno.server.bo.billing.stripe;
 
+import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoSecrets;
@@ -13,6 +14,8 @@ import ch.verno.server.service.entity.billing.TenantBillingService;
 import com.stripe.exception.StripeException;
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
 public class StripeBo {
 
   @Nonnull private final Lazy<BillingTokenResolverBo> billingResolverBo;
@@ -25,7 +28,7 @@ public class StripeBo {
     this.billingResolverBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(BillingTokenResolverBo.class));
     this.tenantBillingService = Lazy.of(() -> serverBean.get(TenantBillingService.class));
 
-    this.environmentVariableBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(EnvironmentVariableBo.class));
+    this.environmentVariableBo = Lazy.of(() -> BoFactory.getInstance(serverBean).getEmptyConstructor(EnvironmentVariableBo.class));
     this.billingConfigProvider = Lazy.of(() -> serverBean.get(BillingConfigProvider.class));
   }
 
@@ -33,11 +36,8 @@ public class StripeBo {
   public String startBillingSession(@Nonnull final String rawToken) {
     final var resolvedToken = billingResolverBo.get().resolveBillingAccessToken(rawToken);
     final var userId = resolvedToken.getUserId();
-    final var tenantId = resolvedToken.getTenantId();
-
-    if (tenantId == null) {
-      throw new IllegalArgumentException("Tenant ID is null - we cannot start a billing session without a tenant context!");
-    }
+    final var tenantId = Optional.ofNullable(resolvedToken.getTenantId()).orElseThrow(() -> new IllegalArgumentException("Tenant ID is null - we cannot start a billing session without a tenant context!"));
+    TenantContext.set(tenantId);
 
     final var billingOptional = tenantBillingService.get().findOptionalByTenantId(tenantId);
 
