@@ -30,12 +30,16 @@ public class InstructorBo {
 
   @Nonnull
   public InstructorDto saveInstructor(@Nonnull final InstructorDto instructorDto) {
-      final var saved = instructorService.get().save(instructorDto);
+    final var relationEntitiesSaved = saveRelationEntities(instructorDto);
 
-    // save additional entities
+    return instructorService.get().save(relationEntitiesSaved);
+  }
+
+  @Nonnull
+  private InstructorDto saveRelationEntities(@Nonnull final InstructorDto instructorDto) {
     instructorDto.setAddress(addressBo.get().findOrCreate(instructorDto.getAddress()));
 
-    return saved;
+    return instructorDto;
   }
 
   @Nonnull
