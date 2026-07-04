@@ -2,6 +2,7 @@ package ch.verno.server.file.temp;
 
 
 import ch.verno.contract.dto.file.temp.FileDto;
+import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
@@ -17,13 +18,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * A TempFileHandler using a concurrent hash map for thread safe read / write / delete operations
+ */
 public final class TempFileHandler {
 
   @Nonnull private final Path baseDir;
   @Nonnull private final Map<String, TempFileEntry> index;
 
+  /**
+   * Needs to be used via Spring Instantiation so we have a singleton instance of it
+   */
   public TempFileHandler() {
-    index = new ConcurrentHashMap<>();
+    this.index = New.concurrentHashMap();
 
     try {
       this.baseDir = Files.createTempDirectory(VernoConstants.TEMP_FILE_BASE_DIR);

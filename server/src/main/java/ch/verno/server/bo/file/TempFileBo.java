@@ -14,7 +14,7 @@ public class TempFileBo {
   @Nonnull private final Lazy<TempFileHandler> tempFileHandler;
 
   protected TempFileBo(@Nonnull final ServerBean serverBean) {
-    this.tempFileHandler = Lazy.of(TempFileHandler::new);
+    this.tempFileHandler = Lazy.of(() -> serverBean.get(TempFileHandler.class));
   }
 
   @Nonnull

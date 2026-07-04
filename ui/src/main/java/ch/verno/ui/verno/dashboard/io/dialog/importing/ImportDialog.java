@@ -1,5 +1,6 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
+import ch.verno.lib.New;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.DialogStepDto;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDownloadDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
@@ -31,8 +32,8 @@ public class ImportDialog extends Dialog {
   public ImportDialog(@Nonnull final Injector injector,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig<?> entityConfig) {
-    steps = new ArrayList<>();
-    currentStep = ImportDialogStep.ZERO;
+    this.steps = New.list();
+    this.currentStep = ImportDialogStep.ZERO;
 
     final var importFileStep = new ImportFile(injector);
     final var importMappingStep = new ImportMapping<>(injector, entityConfig);

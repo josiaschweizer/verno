@@ -1,5 +1,6 @@
 package ch.verno.server.config;
 
+import ch.verno.server.file.temp.TempFileHandler;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,12 @@ public class ServerConfig {
   @Nonnull
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  @Nonnull
+  public TempFileHandler tempFileHandler() {
+    return new TempFileHandler();
   }
 
 }

@@ -38,7 +38,8 @@ public class CsvResourceImpl implements CsvResource {
 
   @Nonnull
   @Override
-  public FileDto parseRows(@Nonnull final String filename, @Nonnull final List<CsvMapDto> rows) {
+  public FileDto parseRows(@Nonnull final String filename,
+                           @Nonnull final List<CsvMapDto> rows) {
     return new FileDto(filename, CsvImportUtil.createFileDtoFromRows(rows));
   }
 }

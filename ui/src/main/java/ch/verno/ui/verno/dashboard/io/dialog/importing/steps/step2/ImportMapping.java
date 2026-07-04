@@ -4,7 +4,7 @@ import ch.verno.common.server.io.importing.CsvColumn;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
-import ch.verno.rpc.client.io.ImportClient;
+import ch.verno.rpc.client.file.CsvClient;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
@@ -24,7 +24,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   @NonNls public static final String RELATION_POST_FIX = Publ.SPACE + Publ.REQUIRED_STAR + "relation";
 
-  @Nonnull private final Lazy<ImportClient> importClient;
+  @Nonnull private final Lazy<CsvClient> csvClient;
   @Nonnull private final ImportEntityConfig<T> entityConfig;
 
   private ImportColumnMappingPanel panel;
@@ -34,7 +34,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   public ImportMapping(@Nonnull final Injector injector,
                        @Nonnull final ImportEntityConfig<T> entityConfig) {
-    this.importClient = Lazy.of(() -> injector.getInstance(ImportClient.class));
+    this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
     this.entityConfig = entityConfig;
 
     setSizeFull();
@@ -54,7 +54,7 @@ public class ImportMapping<T> extends BaseDialogStep {
 
     removeAll();
 
-    final var fileColumns = importClient.get().resolveCsvSchema(fileToken);
+    final var fileColumns = csvClient.get().resolveCsvSchema(fileToken);
     final List<String> csvHeaders = fileColumns.columns().stream().map(CsvColumn::name).toList();
 
     initUI(csvHeaders);
