@@ -43,7 +43,6 @@ public class ApiUrl {
 
   @NonNls public static final String BILLING = BASE_API + "/billing";
   @NonNls public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";
-  @NonNls public static final String BILLING_WEBHOOK = BILLING + "/webhook";
   @NonNls public static final String BILLING_SESSION = BILLING + "/session";
 
   // public auth endpoints
@@ -53,6 +52,7 @@ public class ApiUrl {
   @NonNls public static final String HEALTH = PUBLIC_BASE_API + "/health";
   @NonNls public static final String PUBLIC_BILLING = PUBLIC_BASE_API + "/billing";
   @NonNls public static final String PUBLIC_BILLING_ACCESS_TOKEN = PUBLIC_BILLING + "/access-token";
+  @NonNls public static final String PUBLIC_BILLING_WEBHOOK = PUBLIC_BILLING + "/webhook";
   @NonNls public static final String PUBLIC_BILLING_SESSION = PUBLIC_BILLING + "/session";
 
   // ending-endpoints

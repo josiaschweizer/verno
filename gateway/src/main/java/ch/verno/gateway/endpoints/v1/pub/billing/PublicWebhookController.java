@@ -1,4 +1,4 @@
-package ch.verno.gateway.endpoints.v1.external.billing;
+package ch.verno.gateway.endpoints.v1.pub.billing;
 
 import ch.verno.contract.endpoint.billing.StripeResource;
 import ch.verno.common.lib.api.ApiUrl;
@@ -9,12 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiUrl.BILLING_WEBHOOK)
-public class WebhookController extends BaseController {
+@RequestMapping(ApiUrl.PUBLIC_BILLING_WEBHOOK)
+public class PublicWebhookController extends BaseController {
 
   @Nonnull private final StripeResource stripeResource;
 
-  public WebhookController(@Nonnull final RpcFactory rpcFactory) {
+  public PublicWebhookController(@Nonnull final RpcFactory rpcFactory) {
     this.stripeResource = rpcFactory.create(StripeResource.class);
   }
 
@@ -22,6 +22,9 @@ public class WebhookController extends BaseController {
   @PostMapping(ApiUrl.STRIP_WEBHOOK)
   public ResponseEntity<String> createStripeWebhook(@RequestBody @Nonnull final String payload,
                                                     @RequestHeader("Stripe-Signature") @Nonnull final String signatureHeader) {
+
+
+
     stripeResource.handleStripeWebhook(payload, signatureHeader);
     return ResponseEntity.ok().build();
   }

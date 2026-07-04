@@ -182,13 +182,12 @@ public class TenantBillingDto extends BaseDto<Long> {
 
   @Nonnull
   public List<String> getAdditionalStringLicenceOptions() {
-    return additionalLicenceOptions.stream()
-            .map(BillingLicenceOption::name)
-            .toList();
+    return New.list(additionalLicenceOptions.stream().map(BillingLicenceOption::name).toList());
   }
 
   public void setAdditionalLicenceOptions(@Nonnull final List<BillingLicenceOption> additionalLicenceOptions) {
-    this.additionalLicenceOptions = additionalLicenceOptions;
+    this.additionalLicenceOptions.clear();
+    this.additionalLicenceOptions.addAll(additionalLicenceOptions);
   }
 
   @Nonnull

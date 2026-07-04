@@ -31,22 +31,20 @@ import java.util.Optional;
 
 public class StripeWebhookBo {
 
-  @Nonnull private final Lazy<TenantBillingBo> tenantBillingBo;
   @Nonnull private final Lazy<TenantBillingService> tenantBillingService;
   @Nonnull private final Lazy<EnvironmentVariableBo> environmentVariableBo;
   @Nonnull private final Lazy<BillingWebhookEventService> billingWebhookEventService;
 
   protected StripeWebhookBo(@Nonnull final ServerBean serverBean) {
-    this.tenantBillingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantBillingBo.class));
     this.tenantBillingService = Lazy.of(() -> serverBean.get(TenantBillingService.class));
-    this.environmentVariableBo = Lazy.of(() -> serverBean.get(EnvironmentVariableBo.class));
+    this.environmentVariableBo = Lazy.of(() -> BoFactory.getInstance(serverBean).getEmptyConstructor(EnvironmentVariableBo.class));
     this.billingWebhookEventService = Lazy.of(() -> serverBean.get(BillingWebhookEventService.class));
   }
 
 
   public void handleStripeWebhook(@Nonnull final String payload,
                                   @Nonnull final String signatureHead) {
-    final var stripeWebhookSecret = environmentVariableBo.get().getEnv(VernoSecrets.ENV_STRIPE_SECRET_KEY);
+    final var stripeWebhookSecret = environmentVariableBo.get().getEnv(VernoSecrets.STRIPE_WEBHOOK_SECRET);
 
     final Event event;
     try {
@@ -322,7 +320,6 @@ public class StripeWebhookBo {
     newBilling.setPaymentStatus(BillingPaymentStatus.UNPAID);
     newBilling.setHasValidPaymentMethod(false);
 
-    final var savedBilling = tenantBillingService.get().save(newBilling);
-    return Optional.of(savedBilling);
+    return Optional.of(tenantBillingService.get().save(newBilling));
   }
 }
