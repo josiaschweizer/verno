@@ -1,6 +1,8 @@
 package ch.verno.gateway;
 
-import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
+import ch.verno.contract.endpoint.properties.env.EnvResource;
+import ch.verno.lib.VernoSecrets;
 import ch.verno.rpc.rpc.RpcFactory;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -17,11 +19,13 @@ public class GatewayTestConfig {
   @Primary
   public RpcFactory rpcFactory() {
     final var mockFactory = Mockito.mock(RpcFactory.class);
-    final var mockApiConfig = Mockito.mock(ApiConfigResource.class);
+    final var mockApplicationConfig = Mockito.mock(ApplicationConfigResource.class);
+    Mockito.when(mockApplicationConfig.getApiUsername()).thenReturn(TEST_USER);
+    Mockito.when(mockFactory.create(ApplicationConfigResource.class)).thenReturn(mockApplicationConfig);
 
-    Mockito.when(mockApiConfig.getApiUsername()).thenReturn(TEST_USER);
-    Mockito.when(mockApiConfig.getApiPassword()).thenReturn(TEST_PASSWORD);
-    Mockito.when(mockFactory.create(ApiConfigResource.class)).thenReturn(mockApiConfig);
+    final var mockEnvResource = Mockito.mock(EnvResource.class);
+    Mockito.when(mockEnvResource.getEnv(VernoSecrets.API_PASSWORD)).thenReturn(TEST_PASSWORD); //TODO correct?
+    Mockito.when(mockFactory.create(EnvResource.class)).thenReturn(mockEnvResource);
 
     return mockFactory;
   }

@@ -1,5 +1,8 @@
 package ch.verno.ui.verno.security.api;
 
+import ch.verno.rpc.properties.application.ApplicationProperties;
+import ch.verno.rpc.properties.env.EnvProperties;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,19 +20,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class ApiAuthConfig {
 
-  @Value("${verno.api.username:verno}") //TODO .properties file
-  private String apiUsername;
-
-  @Value("${verno.api.password:verno}") //TODO .properties file
-  private String apiPassword;
-
   @Nonnull
   @Bean("apiUserDetailsService")
-  public UserDetailsService apiUserDetailsService(@Nonnull final PasswordEncoder passwordEncoder) {
+  public UserDetailsService apiUserDetailsService(@Nonnull final Injector injector) {
+    final var applicationProperties = injector.getInstance(ApplicationProperties.class);
+    final var apiUsername = applicationProperties.getApiUsername();
+    final var envProperties = injector.getInstance(EnvProperties.class);
+    final var encodedApiPassword = envProperties.getEncodedApiPassword();
+
     return new InMemoryUserDetailsManager(
             User.builder()
                     .username(apiUsername)
-                    .password(passwordEncoder.encode(apiPassword))
+                    .password(encodedApiPassword)
                     .roles("API")
                     .build()
     );
@@ -41,7 +43,7 @@ public class ApiAuthConfig {
   public AuthenticationManager apiAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
                                                         @Qualifier("apiUserDetailsService")
                                                         @Nonnull final UserDetailsService apiUserDetailsService) {
-    final var provider = new DaoAuthenticationProvider(apiUserDetailsService);
+    final var provider = new DaoAuthenticationProvider(apiUserDetailsService); //TODO 1 delete password encoder in frontend?
     provider.setPasswordEncoder(passwordEncoder);
 
     return new ProviderManager(provider);

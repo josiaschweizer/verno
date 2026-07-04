@@ -6,7 +6,7 @@ import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.lib.Attributes;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.file.ReportClient;
-import ch.verno.rpc.properties.api.ApiConfigProperties;
+import ch.verno.rpc.properties.application.ApplicationProperties;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
@@ -27,14 +27,14 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
   @NonNls public static final String CLICK_JS = "click";
 
   @Nonnull protected final Lazy<ReportClient> reportClient;
-  @Nonnull protected final Lazy<ApiConfigProperties> apiConfigProperties;
+  @Nonnull protected final Lazy<ApplicationProperties> applicationProperties;
 
   @Nullable private String reportToken;
   @Nullable private String apiAccessToken;
 
   public BaseReportPreviewDialog(@Nonnull final Injector injector) {
     this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
-    this.apiConfigProperties = Lazy.of(() -> injector.getInstance(ApiConfigProperties.class));
+    this.applicationProperties = Lazy.of(() -> injector.getInstance(ApplicationProperties.class));
   }
 
   /**
@@ -123,9 +123,9 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
 
   @Nonnull
   private String buildUrl(@Nonnull final String path, @Nonnull final String disposition) {
-    final var baseUrl = apiConfigProperties.get().getBaseUrl();
+    final var rpcUrl = applicationProperties.get().getApiUrl();
 
-    return UrlBuilder.of(baseUrl, path)
+    return UrlBuilder.of(rpcUrl, path)
             .withDisposition(disposition)
             .withAccessToken(apiAccessToken)
             .build();

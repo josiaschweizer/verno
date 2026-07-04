@@ -15,4 +15,7 @@ public interface EnvResource {
   @Nonnull
   String getEnvNullable(@Nonnull String key);
 
+  @Nonnull
+  String encodeString(@Nonnull String value);
+
 }

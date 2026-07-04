@@ -1,11 +1,12 @@
 package ch.verno.ui.client.file;
 
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.contract.dto.file.storage.api.DownloadFileResponse;
 import ch.verno.contract.dto.file.storage.api.FileUploadResponse;
-import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
-import ch.verno.common.lib.api.ApiUrl;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
+import ch.verno.rpc.properties.env.EnvProperties;
 import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.client.BaseApiClient;
 import com.google.inject.Inject;
@@ -45,17 +46,15 @@ public class FileApiClient extends BaseApiClient {
     final var fileBytes = readBytes(inputStream);
     final var multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
 
-    return post(ApiUrl.FILES, New.map(), MediaType.MULTIPART_FORM_DATA, multipartBody)
-            .retrieve()
-            .body(FileUploadResponse.class);
+    final var rc = post(ApiUrl.FILES, New.map(), MediaType.MULTIPART_FORM_DATA, multipartBody);
+    return rc.retrieve().body(FileUploadResponse.class);
   }
 
   @Nullable
-  public DownloadFileResponse getReportTemplate(@Nonnull final String tenantKey,
+  public DownloadFileResponse getReportTemplate(@Nonnull final String tenantKey, //TODO delete tenantKey - is no longer used because the tenant header is already set by the base
                                                 @Nonnull final Long id) {
-    return get(ApiUrl.FILES + Publ.SLASH + id, Map.of())
-            .retrieve()
-            .body(DownloadFileResponse.class);
+    final var rc = get(ApiUrl.FILES + Publ.SLASH + id, Map.of());
+    return rc.retrieve().body(DownloadFileResponse.class);
   }
 
   public void deleteReportTemplate(@Nonnull final String tenantKey, @Nonnull final Long fileId) {
@@ -106,11 +105,14 @@ public class FileApiClient extends BaseApiClient {
 
   @Nonnull
   private static BasicAuthRequest getBasicAuthRequest(@Nonnull final Injector injector) {
-    final var apiProperties = injector.getInstance(RpcFactory.class).create(ApiConfigResource.class);
-    final var url = apiProperties.getBaseUrl();
+    final var apiProperties = injector.getInstance(RpcFactory.class).create(ApplicationConfigResource.class);
+    final var rpcUrl = apiProperties.getApiUrl();
     final var username = apiProperties.getApiUsername();
-    final var password = apiProperties.getApiPassword();
-    return new BasicAuthRequest(url, username, password);
+
+    final var envProperties = injector.getInstance(EnvProperties.class);
+    final var password = envProperties.getApiPassword();
+
+    return new BasicAuthRequest(rpcUrl, username, password);
   }
 
 }

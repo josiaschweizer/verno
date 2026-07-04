@@ -11,6 +11,12 @@ public interface ApplicationConfigResource {
   RunMode getRunMode();
 
   @Nonnull
-  String rpcUrl();
+  String getRpcUrl();
+
+  @Nonnull
+  String getApiUrl();
+
+  @Nonnull
+  String getApiUsername();
 
 }

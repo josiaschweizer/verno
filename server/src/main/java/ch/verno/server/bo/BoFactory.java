@@ -38,7 +38,7 @@ public final class BoFactory {
       constructor.setAccessible(true);
       return constructor.newInstance(serverBean);
     } catch (final NoSuchMethodException exception) {
-      throw new IllegalStateException("Business object requires a public constructor with ServerBean: " + type.getName(), exception);
+      throw new IllegalStateException("Business object requires a protected constructor with ServerBean: " + type.getName(), exception);
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException exception) {
       throw new IllegalStateException("Could not create business object: " + type.getName(), exception);
     }
