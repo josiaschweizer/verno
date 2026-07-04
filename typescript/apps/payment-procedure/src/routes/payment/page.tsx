@@ -39,19 +39,6 @@ function getPurposeLabel(purpose: string) {
   }
 }
 
-function getBillingErrorMessage(code: string | null): string {
-  switch (code) {
-    case 'BILLING_ACCESS_TOKEN_BY_TOKEN_HASH_NOT_FOUND':
-      return 'Der Zahlungszugang ist ungültig. Bitte öffnen Sie den Link erneut aus Verno.'
-    case 'BILLING_TOKEN_EXPIRED':
-      return 'Dieser Zahlungslink ist abgelaufen. Bitte fordern Sie einen neuen an.'
-    case 'BILLING_TOKEN_USED':
-      return 'Dieser Zahlungslink wurde bereits verwendet.'
-    default:
-      return 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.'
-  }
-}
-
 export default function PaymentPage() {
   const navigate = useNavigate()
   const token = sessionStorage.getItem('billingEntryToken')
