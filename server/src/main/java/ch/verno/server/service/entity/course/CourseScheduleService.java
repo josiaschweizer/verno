@@ -38,7 +38,7 @@ public class CourseScheduleService extends AbstractSpecEntityService<
     final var week = WeekKey.from(weekDate);
     return getRepository().findByWeek(week)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 
@@ -47,7 +47,7 @@ public class CourseScheduleService extends AbstractSpecEntityService<
   public List<CourseScheduleDto> findByStatus(@Nonnull final CourseScheduleStatus status) {
     return getRepository().findByStatus(status)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 }

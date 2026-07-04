@@ -1,7 +1,5 @@
 package ch.verno.server.bo.table.address;
 
-import ch.verno.common.exceptions.db.DBNotFoundException;
-import ch.verno.common.exceptions.db.DBNotFoundReason;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
@@ -12,6 +10,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class AddressBo {
 
@@ -21,38 +21,25 @@ public class AddressBo {
     this.addressService = Lazy.of(() -> bean.get(AddressService.class));
   }
 
-  @Nullable
-  public AddressDto saveOrUpdate(@Nullable final AddressDto dto) {
-    if (dto == null || !hasContent(dto)) {
-      return null;
+  @Nonnull
+  public AddressDto findOrCreate(@Nonnull final AddressDto dto) {
+    if (!hasContent(dto)) {
+      return AddressDto.empty();
     }
 
     final var sanitizedDto = AddressSanitizer.sanitize(dto);
-
-    if (sanitizedDto.getId() != null && sanitizedDto.getId() != 0L) {
-      addressService.get()
-              .findById(sanitizedDto.getId())
-              .orElseThrow(() -> new DBNotFoundException(
-                      DBNotFoundReason.ADDRESS_BY_ID_NOT_FOUND,
-                      sanitizedDto.getId()
-              ));
-    }
-
-    return addressService.get().save(sanitizedDto);
+    return findByFields(sanitizedDto).orElseGet(() -> addressService.get().save(sanitizedDto));
   }
 
   @Nonnull
-  public AddressDto findOrCreate(@Nonnull final AddressDto dto) {
-    final var sanitizedDto = AddressSanitizer.sanitize(dto);
-
-    final var foundOptional = addressService.get().findByFields(
-                    sanitizedDto.getStreet(),
-                    sanitizedDto.getHouseNumber(),
-                    sanitizedDto.getZipCode(),
-                    sanitizedDto.getCity(),
-                    sanitizedDto.getCountry()
+  public Optional<AddressDto> findByFields(@Nonnull final AddressDto dto) {
+    return addressService.get().findByFields(
+            dto.getStreet(),
+            dto.getHouseNumber(),
+            dto.getZipCode(),
+            dto.getCity(),
+            dto.getCountry()
     );
-    return foundOptional.orElseGet(() -> addressService.get().save(sanitizedDto));
   }
 
   public boolean hasContent(@Nullable final AddressDto dto) {

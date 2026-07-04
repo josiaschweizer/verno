@@ -15,7 +15,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 @Component
 public class TenantBillingBo {
@@ -66,7 +65,7 @@ public class TenantBillingBo {
       return false;
     }
 
-    final var dto = mapper.toSimpleDto(billing.get());
+    final var dto = mapper.toDto(billing.get());
     if (BillingSubscriptionStatus.ACTIVE.equals(dto.getSubscriptionStatus())) {
       return true;
     } else if (BillingSubscriptionStatus.TRIAL.equals(dto.getSubscriptionStatus())) {

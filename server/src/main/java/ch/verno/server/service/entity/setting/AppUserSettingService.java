@@ -25,6 +25,6 @@ public class AppUserSettingService extends AbstractEntityServiceLongId<
   @Nonnull
   public Optional<AppUserSettingDto> findByUserId(@Nonnull final Long userId) {
     return getRepository().findByUserId(userId)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 }

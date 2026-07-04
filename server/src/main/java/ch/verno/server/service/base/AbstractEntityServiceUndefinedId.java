@@ -3,7 +3,7 @@ package ch.verno.server.service.base;
 import ch.verno.contract.dto.response.base.delete.DeleteResponse;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.lang.ObjectUtil;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ public abstract class AbstractEntityServiceUndefinedId<
         ENTITY,
         DTO extends BaseDto<?>,
         REPOSITORY extends IEntityRepository<ENTITY, ?>,
-        MAPPER extends IEntityMapper<ENTITY, DTO>
+        MAPPER extends AbstractEntityMapper<ENTITY, DTO>
         > implements IEntityService<DTO> {
 
   @Nonnull private final REPOSITORY repository;
@@ -41,7 +41,7 @@ public abstract class AbstractEntityServiceUndefinedId<
   public List<DTO> findAll() {
     return repository.findAll()
             .stream()
-            .map(mapper::toSimpleDto)
+            .map(mapper::toDto)
             .toList();
   }
 
@@ -60,7 +60,7 @@ public abstract class AbstractEntityServiceUndefinedId<
   protected DTO create(@Nonnull final DTO dto) {
     ENTITY entity = mapper.toNewEntity(dto);
     entity = repository.save(entity);
-    return mapper.toSimpleDto(entity);
+    return mapper.toDto(entity);
   }
 
   @Nonnull

@@ -30,7 +30,7 @@ public class MailTemplateService extends AbstractEntityServiceUndefinedId<
 
   @Nonnull
   public Optional<MailTemplateDto> findByKey(@Nonnull final String key) {
-    return getRepository().findByKey(key).map(getMapper()::toSimpleDto);
+    return getRepository().findByKey(key).map(getMapper()::toDto);
   }
 
   @Nonnull

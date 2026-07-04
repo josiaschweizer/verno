@@ -53,7 +53,7 @@ public class ParticipantResourceImpl implements ParticipantResource {
 
   @Nonnull
   @Override
-  public SaveResponse<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
+  public ParticipantDto saveParticipant(@Nonnull final ParticipantDto dto) {
     return participantBo.get().saveParticipant(dto);
   }
 
@@ -93,5 +93,11 @@ public class ParticipantResourceImpl implements ParticipantResource {
   @Override
   public Long getParticipantCount() {
     return participantService.get().count();
+  }
+
+  @Nonnull
+  @Override
+  public SaveResponse<ParticipantDto> apiSaveParticipant(@Nonnull final ParticipantDto participantDto) {
+    return participantBo.get().apiSaveParticipant(participantDto);
   }
 }

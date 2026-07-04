@@ -44,7 +44,7 @@ public class TenantBillingService extends AbstractEntityServiceLongId<
   public Optional<TenantBillingDto> findOptionalByTenantId(@Nonnull final Long tenantId) {
     return getRepository()
             .findByTenantId(tenantId)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   @Nonnull
@@ -52,17 +52,17 @@ public class TenantBillingService extends AbstractEntityServiceLongId<
   public Optional<TenantBillingDto> findOptionalByStripeCustomerId(@Nonnull final String stripeCustomerId) {
     return getRepository()
             .findByStripeCustomerId(stripeCustomerId)
-            .map(getMapper()::toSimpleDto);
+            .map(getMapper()::toDto);
   }
 
   @Nonnull
   @Override
   public TenantBillingDto save(@Nonnull final TenantBillingDto dto) {
     if (dto.getId() == null) {
-      return getMapper().toSimpleDto(tenantBillingBo.get().create(dto));
+      return getMapper().toDto(tenantBillingBo.get().create(dto));
     }
 
-    return getMapper().toSimpleDto(tenantBillingBo.get().update(dto));
+    return getMapper().toDto(tenantBillingBo.get().update(dto));
   }
 
   public boolean hasTenantValidSubscription(@Nonnull final Long tenantId) {

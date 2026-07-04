@@ -2,16 +2,16 @@ package ch.verno.server.mapper.course;
 
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.db.entity.course.CourseLevelEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CourseLevelMapper implements IEntityMapper<CourseLevelEntity, CourseLevelDto> {
+public class CourseLevelMapper extends AbstractEntityMapper<CourseLevelEntity, CourseLevelDto> {
 
   @Nonnull
   @Override
-  public CourseLevelDto toSimpleDto(@Nonnull final CourseLevelEntity entity) {
+  public CourseLevelDto toDto(@Nonnull final CourseLevelEntity entity) {
     final var dto = CourseLevelDto.empty();
 
     dto.setId(entity.getId());

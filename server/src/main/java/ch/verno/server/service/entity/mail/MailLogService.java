@@ -34,7 +34,7 @@ public class MailLogService extends AbstractSpecEntityService<
   public List<MailLogDto> findAllByStatus(@Nonnull final MailLogStatus status) {
     return getRepository().findAllByStatus(status)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 
@@ -42,7 +42,7 @@ public class MailLogService extends AbstractSpecEntityService<
   public List<MailLogDto> findAllByRecipientEmail(@Nonnull final String recipientEmail) {
     return getRepository().findAllByRecipientEmail(recipientEmail)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 

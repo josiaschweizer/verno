@@ -5,16 +5,16 @@ import ch.verno.db.entity.mail.MailTemplateEntity;
 import ch.verno.db.entity.mail.MailTemplateId;
 import ch.verno.db.entity.mail.MailTemplateTypeEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailTemplateMapper implements IEntityMapper<MailTemplateEntity, MailTemplateDto> {
+public class MailTemplateMapper extends AbstractEntityMapper<MailTemplateEntity, MailTemplateDto> {
 
   @Nonnull
   @Override
-  public MailTemplateDto toSimpleDto(@Nonnull final MailTemplateEntity entity) {
+  public MailTemplateDto toDto(@Nonnull final MailTemplateEntity entity) {
     final var dto = MailTemplateDto.empty();
 
     final var id = entity.getId();

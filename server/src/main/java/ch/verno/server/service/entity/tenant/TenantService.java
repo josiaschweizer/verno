@@ -61,13 +61,13 @@ public class TenantService {
   @Nonnull
   public Optional<TenantDto> findById(@Nonnull final Long id) {
     return tenantRepository.get().findById(id)
-            .map(entity -> tenantMapper.get().toSimpleDto(entity));
+            .map(entity -> tenantMapper.get().toDto(entity));
   }
 
   @Nonnull
   public List<TenantDto> findAllTenants() {
     return tenantRepository.get().findAll().stream()
-            .map(entity -> tenantMapper.get().toSimpleDto(entity))
+            .map(entity -> tenantMapper.get().toDto(entity))
             .toList();
   }
 
@@ -86,7 +86,7 @@ public class TenantService {
   public TenantDto create(@Nonnull final TenantDto dto) {
     TenantEntity entity = tenantMapper.get().toNewEntity(dto);
     entity = tenantRepository.get().save(entity);
-    return tenantMapper.get().toSimpleDto(entity);
+    return tenantMapper.get().toDto(entity);
   }
 
   @Nonnull

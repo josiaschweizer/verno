@@ -4,7 +4,7 @@ import ch.verno.contract.dto.response.base.delete.DeleteResponse;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.exception.ExceptionUtil;
 import ch.verno.lib.lang.ObjectUtil;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.hibernate.service.spi.ServiceException;
@@ -18,7 +18,7 @@ public abstract class AbstractEntityService<
         ENTITY,
         DTO extends BaseDto<ID>,
         REPOSITORY extends IEntityRepository<ENTITY, ID>,
-        MAPPER extends IEntityMapper<ENTITY, DTO>
+        MAPPER extends AbstractEntityMapper<ENTITY, DTO>
         > implements IEntityServiceExtendedById<DTO, ID> {
 
   @Nonnull private final REPOSITORY repository;
@@ -51,14 +51,15 @@ public abstract class AbstractEntityService<
   @Transactional(readOnly = true)
   public Optional<DTO> findById(@Nonnull final ID id) {
     return repository.findById(id)
-            .map(mapper::toSimpleDto);
+            .map(mapper::toDto);
   }
 
   @Nonnull
   @Override
   @Transactional(readOnly = true)
   public DTO findByIdRequired(@Nonnull final ID id) {
-    return getMapper().toSimpleDto(repository.findById(id).orElseThrow(ExceptionUtil::toEntityNotFoundException));
+    return getMapper().toDto(repository.findById(id)
+            .orElseThrow(ExceptionUtil::toEntityNotFoundException));
   }
 
   @Nonnull
@@ -67,7 +68,7 @@ public abstract class AbstractEntityService<
   public List<DTO> findAll() {
     return repository.findAll()
             .stream()
-            .map(mapper::toSimpleDto)
+            .map(mapper::toDto)
             .toList();
   }
 
@@ -87,7 +88,7 @@ public abstract class AbstractEntityService<
   protected DTO create(@Nonnull final DTO dto) {
     ENTITY entity = mapper.toNewEntity(dto);
     entity = repository.save(entity);
-    return mapper.toSimpleDto(entity);
+    return mapper.toDto(entity);
   }
 
   @Nonnull
@@ -101,7 +102,7 @@ public abstract class AbstractEntityService<
 
     mapper.updateEntity(entity, dto);
     entity = repository.save(entity);
-    return mapper.toSimpleDto(entity);
+    return mapper.toDto(entity);
   }
 
   @Nonnull

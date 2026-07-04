@@ -134,7 +134,6 @@ public class ParticipantDto extends BaseDto<Long> {
 
   public boolean isEmpty() {
     return getId() != null
-            && getId() == 0L
             && firstName.isEmpty()
             && lastName.isEmpty()
             && (birthdate == null)

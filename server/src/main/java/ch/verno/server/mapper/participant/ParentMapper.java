@@ -7,16 +7,16 @@ import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.db.entity.address.AddressEntity;
 import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.participant.ParentEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ParentMapper implements IEntityMapper<ParentEntity, ParentDto> {
+public class ParentMapper extends AbstractEntityMapper<ParentEntity, ParentDto> {
 
   @Nonnull
   @Override
-  public ParentDto toSimpleDto(@Nonnull final ParentEntity entity) {
+  public ParentDto toDto(@Nonnull final ParentEntity entity) {
     final var dto = ParentDto.empty();
 
     dto.setId(entity.getId());

@@ -27,6 +27,6 @@ public class GenderService extends AbstractEntityServiceLongId<
   @Nonnull
   @Transactional(readOnly = true)
   public Optional<GenderDto> findByName(@Nonnull final String name) {
-    return getRepository().findByName(name).map(getMapper()::toSimpleDto);
+    return getRepository().findByName(name).map(getMapper()::toDto);
   }
 }

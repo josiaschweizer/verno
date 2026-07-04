@@ -27,7 +27,7 @@ public interface ParticipantResource {
                                        @Nonnull List<SortOrderDto> sortOrders);
 
   @Nonnull
-  SaveResponse<ParticipantDto> saveParticipant(@Nonnull ParticipantDto dto);
+  ParticipantDto saveParticipant(@Nonnull ParticipantDto dto);
 
   @Nonnull
   DeleteResponse deleteParticipantById(@Nonnull Long id);
@@ -48,4 +48,7 @@ public interface ParticipantResource {
 
   @Nonnull
   Long getParticipantCount();
+
+  @Nonnull
+  SaveResponse<ParticipantDto> apiSaveParticipant(@Nonnull ParticipantDto participantDto);
 }

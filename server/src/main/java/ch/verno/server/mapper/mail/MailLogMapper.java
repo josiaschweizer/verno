@@ -4,13 +4,13 @@ import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailLogMapper implements IEntityMapper<MailLogEntity, MailLogDto> {
+public class MailLogMapper extends AbstractEntityMapper<MailLogEntity, MailLogDto> {
 
   @Nonnull private final EntityManager entityManager;
 
@@ -20,7 +20,7 @@ public class MailLogMapper implements IEntityMapper<MailLogEntity, MailLogDto> {
 
   @Nonnull
   @Override
-  public MailLogDto toSimpleDto(@Nonnull final MailLogEntity entity) {
+  public MailLogDto toDto(@Nonnull final MailLogEntity entity) {
     final var dto = MailLogDto.empty();
 
     dto.setId(entity.getId());
