@@ -27,7 +27,7 @@ public interface InstructorResource {
                                      int limit);
 
   @Nonnull
-  SaveResponse<InstructorDto> saveInstructor(@Nonnull InstructorDto instructor);
+  InstructorDto saveInstructor(@Nonnull InstructorDto instructor);
 
   @Nonnull
   DeleteResponse deleteInstructor(@Nonnull InstructorDto instructor);
@@ -36,5 +36,9 @@ public interface InstructorResource {
   DeleteResponse deleteInstructorById(@Nonnull Long id);
 
   boolean isInstructorReferenced(@Nonnull Long instructorId);
+
+  @Nonnull
+  SaveResponse<InstructorDto> apiSaveInstructor(@Nonnull InstructorDto instructorDto);
+
 
 }

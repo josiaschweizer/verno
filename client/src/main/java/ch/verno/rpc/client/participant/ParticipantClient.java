@@ -51,7 +51,7 @@ public class ParticipantClient {
   }
 
   @Nonnull
-  public SaveResponse<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
+  public ParticipantDto saveParticipant(@Nonnull final ParticipantDto dto) {
     return participantResource.get().saveParticipant(dto);
   }
 
@@ -82,4 +82,8 @@ public class ParticipantClient {
     return participantResource.get().removeCourse(participantId, course);
   }
 
+  @Nonnull
+  public SaveResponse<ParticipantDto> apiSaveParticipant(@Nonnull final ParticipantDto dto) {
+    return participantResource.get().apiSaveParticipant(dto);
+  }
 }

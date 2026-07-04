@@ -3,16 +3,16 @@ package ch.verno.server.mapper.user;
 import ch.verno.common.db.role.Role;
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppUserMapper implements IEntityMapper<AppUserEntity, AppUserDto> {
+public class AppUserMapper extends AbstractEntityMapper<AppUserEntity, AppUserDto> {
 
   @Nonnull
   @Override
-  public AppUserDto toSimpleDto(@Nonnull final AppUserEntity entity) {
+  public AppUserDto toDto(@Nonnull final AppUserEntity entity) {
     final var dto = AppUserDto.empty();
 
     dto.setId(entity.getId());

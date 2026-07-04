@@ -220,7 +220,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
       final var saveable = saveables.get(i);
 
       processNestedEntities(saveable);
-      final var saveResult = participantClient.get().saveParticipant(saveable);
+      final var saveResult = participantClient.get().apiSaveParticipant(saveable);
 
       importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
     }

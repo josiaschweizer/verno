@@ -65,7 +65,7 @@ public class MailLogEntity {
     // JPA
   }
 
-  public MailLogEntity(@Nonnull final TenantEntity tenant,
+  public MailLogEntity(@Nullable final TenantEntity tenant,
                        @Nonnull final String recipientEmail,
                        @Nonnull final String recipientName,
                        @Nonnull final String templateName,
@@ -104,7 +104,7 @@ public class MailLogEntity {
   @Nonnull
   public static MailLogEntity empty() {
     return new MailLogEntity(
-            TenantEntity.empty(),
+            null,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,

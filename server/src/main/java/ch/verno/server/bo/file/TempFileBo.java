@@ -6,13 +6,15 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.file.temp.TempFileEntry;
 import ch.verno.server.file.temp.TempFileHandler;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TempFileBo {
 
   @Nonnull private final Lazy<TempFileHandler> tempFileHandler;
 
   protected TempFileBo(@Nonnull final ServerBean serverBean) {
-    this.tempFileHandler = Lazy.of(() -> serverBean.get(TempFileHandler.class));
+    this.tempFileHandler = Lazy.of(TempFileHandler::new);
   }
 
   @Nonnull

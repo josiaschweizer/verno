@@ -3,16 +3,16 @@ package ch.verno.server.mapper.setting;
 import ch.verno.contract.dto.table.setting.AppUserSettingDto;
 import ch.verno.db.entity.setting.AppUserSettingEntity;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppUserSettingMapper implements IEntityMapper<AppUserSettingEntity, AppUserSettingDto> {
+public class AppUserSettingMapper extends AbstractEntityMapper<AppUserSettingEntity, AppUserSettingDto> {
 
   @Nonnull
   @Override
-  public AppUserSettingDto toSimpleDto(@Nonnull final AppUserSettingEntity entity) {
+  public AppUserSettingDto toDto(@Nonnull final AppUserSettingEntity entity) {
     final var dto = AppUserSettingDto.empty();
     dto.setId(entity.getId());
     dto.setUserId(entity.getUser().getId());

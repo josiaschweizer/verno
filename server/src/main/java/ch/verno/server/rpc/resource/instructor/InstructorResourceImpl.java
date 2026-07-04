@@ -11,7 +11,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.instructor.InstructorBo;
-import ch.verno.server.service.intern.table.instructor.InstructorService;
+import ch.verno.server.service.entity.instructor.InstructorService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +52,7 @@ public class InstructorResourceImpl implements InstructorResource {
 
   @Nonnull
   @Override
-  public SaveResponse<InstructorDto> saveInstructor(@Nonnull final InstructorDto instructor) {
+  public InstructorDto saveInstructor(@Nonnull final InstructorDto instructor) {
     return instructorBo.get().saveInstructor(instructor);
   }
 
@@ -71,5 +71,11 @@ public class InstructorResourceImpl implements InstructorResource {
   @Override
   public boolean isInstructorReferenced(@Nonnull final Long instructorId) {
     return instructorBo.get().isInstructorReferenced(instructorId);
+  }
+
+  @Nonnull
+  @Override
+  public SaveResponse<InstructorDto> apiSaveInstructor(@Nonnull final InstructorDto instructorDto) {
+    return instructorBo.get().apiSaveInstructor(instructorDto);
   }
 }

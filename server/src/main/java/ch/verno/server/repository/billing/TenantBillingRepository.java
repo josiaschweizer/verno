@@ -2,6 +2,7 @@ package ch.verno.server.repository.billing;
 
 import ch.verno.db.entity.billing.TenantBillingEntity;
 import ch.verno.db.jpa.billing.SpringDataTenantBillingJpaRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public class TenantBillingRepository extends AbstractEntityRepository<
   }
 
   @Nonnull
+  @UnscopedQuery
   public Optional<TenantBillingEntity> findByStripeCustomerId(@Nonnull String stripeCustomerId) {
     return getRepository().findByStripeCustomerId(stripeCustomerId);
   }

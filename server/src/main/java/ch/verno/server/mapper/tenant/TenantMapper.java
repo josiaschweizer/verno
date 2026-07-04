@@ -2,17 +2,17 @@ package ch.verno.server.mapper.tenant;
 
 import ch.verno.contract.dto.table.tenant.TenantDto;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.mapper.base.MapperContext;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TenantMapper implements IEntityMapper<TenantEntity, TenantDto> {
+public class TenantMapper extends AbstractEntityMapper<TenantEntity, TenantDto> {
 
   @Nonnull
   @Override
-  public TenantDto toSimpleDto(@Nonnull final TenantEntity entity) {
+  public TenantDto toDto(@Nonnull final TenantEntity entity) {
     return new TenantDto(
             entity.getId(),
             entity.getSlug(),
@@ -22,15 +22,9 @@ public class TenantMapper implements IEntityMapper<TenantEntity, TenantDto> {
 
   @Nonnull
   @Override
-  public TenantDto toDto(@Nonnull final TenantEntity entity,
-                         @Nonnull final MapperContext context) {
-    return toSimpleDto(entity);
-  }
-
-  @Nonnull
-  @Override
   public TenantEntity toNewEntity(@Nonnull final TenantDto dto) {
-    final var entity = TenantEntity.empty();
+    // set tenant id to new tenant id (exceptionally for the tenant entity)
+    final var entity = TenantEntity.ref(dto.id());
     updateEntity(entity, dto);
     return entity;
   }

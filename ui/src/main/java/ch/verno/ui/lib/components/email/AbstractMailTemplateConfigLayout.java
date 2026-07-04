@@ -2,7 +2,7 @@ package ch.verno.ui.lib.components.email;
 
 import ch.verno.contract.dto.table.mail.MailTemplateDto;
 import ch.verno.contract.mail.MailTemplateType;
-import ch.verno.contract.mail.placeholder.Placeholder;
+import ch.verno.contract.mail.placeholder.course.CoursePlaceholder;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.VernoUtility;
 import ch.verno.rpc.client.mail.MailTemplateClient;
@@ -144,7 +144,7 @@ public abstract class AbstractMailTemplateConfigLayout extends Composite<VAHoriz
   }
 
   @Nonnull
-  protected Button createPlaceholderButton(@Nonnull final Placeholder placeholder) {
+  protected Button createPlaceholderButton(@Nonnull final CoursePlaceholder placeholder) {
     final var btn = new Button(getTranslation(placeholder.getNameKey()));
     btn.addClickListener(e -> {
       if (selectedTextArea != null) {

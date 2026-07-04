@@ -1,7 +1,7 @@
 package ch.verno.server.config.security;
 
-import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
-import ch.verno.common.rpc.auth.InternalRpcTokenException;
+import ch.verno.common.rpc.auth.internal.InternalRpcTokenCodec;
+import ch.verno.lib.exception.rpc.auth.internal.InternalRpcTokenException;
 import ch.verno.common.tenant.TenantContext;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;

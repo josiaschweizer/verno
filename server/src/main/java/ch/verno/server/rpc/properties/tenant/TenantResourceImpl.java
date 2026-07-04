@@ -6,7 +6,7 @@ import ch.verno.contract.endpoint.properties.tenant.TenantResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.tenant.TenantService;
+import ch.verno.server.service.entity.tenant.TenantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

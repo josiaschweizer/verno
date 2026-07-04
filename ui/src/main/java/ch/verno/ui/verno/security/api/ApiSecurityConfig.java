@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.security.api;
 
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
-public class ApiSecurityConfig {
+@SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator"})
+public class ApiSecurityConfig { //TODO I THINK THIS CAN BE DELETED
 
   @Bean
   @Order(1)
   public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final CorsConfigurationSource apiCorsSource,
-                                            @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) throws Exception {
+                                            @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) {
     final var resolveBillingAccessToken = ApiUrl.BILLING_ACCESS_TOKEN + ApiUrl.RESOLVE_ACCESS_TOKEN;
     final var startStripeSession = ApiUrl.BILLING_SESSION + ApiUrl.START_STRIPE_SESSION;
 
@@ -32,7 +33,7 @@ public class ApiSecurityConfig {
             .authenticationManager(apiAuthenticationManager)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(ApiUrl.BILLING_WEBHOOK, ApiUrl.BILLING_WEBHOOK + "/**").permitAll()
+//                    .requestMatchers(ApiUrl.BILLING_WEBHOOK, ApiUrl.BILLING_WEBHOOK + "/**").permitAll()
                     .requestMatchers(resolveBillingAccessToken, resolveBillingAccessToken + "/**").permitAll()
                     .requestMatchers(startStripeSession, startStripeSession + "/**").permitAll()
                     .requestMatchers(ApiUrl.TENANTS, ApiUrl.TENANTS + "/**").authenticated()

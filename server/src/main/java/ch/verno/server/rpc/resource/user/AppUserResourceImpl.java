@@ -14,9 +14,10 @@ import ch.verno.lib.Lazy;
 import ch.verno.lib.lib.language.Language;
 import ch.verno.lib.lib.language.LanguageUtil;
 import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.user.AppUserBo;
-import ch.verno.server.service.intern.table.setting.AppUserSettingService;
-import ch.verno.server.service.intern.table.user.AppUserService;
+import ch.verno.server.service.entity.setting.AppUserSettingService;
+import ch.verno.server.service.entity.user.AppUserService;
 import jakarta.annotation.Nonnull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,20 +26,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Component
 @RpcResource(AppUserResource.class)
 public class AppUserResourceImpl implements AppUserResource {
 
   @Nonnull private final PasswordEncoder passwordEncoder;
+
   @Nonnull private final Lazy<AppUserBo> appUserBo;
   @Nonnull private final Lazy<AppUserService> appUserService;
   @Nonnull private final Lazy<AppUserSettingService> appUserSettingService;
 
   public AppUserResourceImpl(@Nonnull final ServerBean bean) {
     this.passwordEncoder = bean.get(PasswordEncoder.class);
-    this.appUserBo = Lazy.of(() -> bean.get(AppUserBo.class));
+
+    this.appUserBo = Lazy.of(() -> BoFactory.getInstance(bean).get(AppUserBo.class));
     this.appUserService = Lazy.of(() -> bean.get(AppUserService.class));
     this.appUserSettingService = Lazy.of(() -> bean.get(AppUserSettingService.class));
   }
@@ -93,8 +95,9 @@ public class AppUserResourceImpl implements AppUserResource {
 
   @Nonnull
   @Override
-  public SaveResponse<AppUserDto> updatePassword(@Nonnull final Long userId,
-                                                 @Nonnull final String newPassword) {
+  public SaveResponse<AppUserDto> updateRawPassword(@Nonnull final Long userId,
+                                                    @Nonnull final String newRawPassword) {
+    final var newPassword = passwordEncoder.encode(newRawPassword);
     return appUserBo.get().changePassword(userId, newPassword);
   }
 

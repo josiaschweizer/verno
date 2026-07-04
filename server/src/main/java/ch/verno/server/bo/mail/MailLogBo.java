@@ -4,7 +4,7 @@ import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.lib.Publ;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.intern.table.mail.MailLogService;
+import ch.verno.server.service.entity.mail.MailLogService;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.simplejavamail.api.email.Email;
@@ -150,6 +150,6 @@ public class MailLogBo {
             now,
             createdBy
     );
-    return mailLogService.create(dto);
+    return mailLogService.save(dto);
   }
 }

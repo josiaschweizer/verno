@@ -3,16 +3,16 @@ package ch.verno.server.mapper.billing;
 import ch.verno.common.type.billing.BillingWebhookEventStatus;
 import ch.verno.contract.dto.table.billing.BillingWebhookEventDto;
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BillingWebhookEventMapper implements IEntityMapper<BillingWebhookEventEntity, BillingWebhookEventDto> {
+public class BillingWebhookEventMapper extends AbstractEntityMapper<BillingWebhookEventEntity, BillingWebhookEventDto> {
 
   @Nonnull
   @Override
-  public BillingWebhookEventDto toSimpleDto(@Nonnull final BillingWebhookEventEntity entity) {
+  public BillingWebhookEventDto toDto(@Nonnull final BillingWebhookEventEntity entity) {
 
     final var dto = BillingWebhookEventDto.empty();
     dto.setId(entity.getId());

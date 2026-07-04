@@ -2,7 +2,6 @@ package ch.verno.ui.verno.usermanagemnt.dialog;
 
 import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.rpc.client.user.AppUserClient;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
@@ -13,11 +12,9 @@ import ch.verno.ui.lib.util.LogoutUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -97,14 +94,13 @@ public class ChangePasswordDialog extends VAAbstractDialog {
     if (binder.isValid()) {
       final var changePasswordDto = binder.getBean();
       final var newRawPassword = changePasswordDto.getNewPassword();
-      final var newHashedPassword = injector.getInstance(PasswordEncoder.class).encode(newRawPassword);
 
-      if (newHashedPassword == null) {
+      if (newRawPassword.isBlank()) {
         NotificationFactory.showErrorNotification(getTranslation("shared.failed.to.hash.the.new.password.please.try.again"));
         return;
       }
 
-      appUserClient.changePassword(changePasswordDto.getUserId(), newHashedPassword);
+      appUserClient.changeRawPassword(changePasswordDto.getUserId(), newRawPassword);
 
       final var currentUser = appUserClient.getCurrentAppUser();
       if (currentUser.getId() != null && currentUser.getId().equals(changePasswordDto.getUserId())) {

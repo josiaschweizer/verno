@@ -80,7 +80,7 @@ public class MailConfigEntity {
     // JPA
   }
 
-  public MailConfigEntity(@Nonnull final TenantEntity tenant,
+  public MailConfigEntity(@Nullable final TenantEntity tenant,
                           @Nonnull final String fromName,
                           @Nonnull final String fromEmail,
                           @Nullable final String replyToEmail,
@@ -116,7 +116,7 @@ public class MailConfigEntity {
   @Nonnull
   public static MailConfigEntity empty() {
     return new MailConfigEntity(
-            TenantEntity.empty(),
+            null,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,
             Publ.EMPTY_STRING,

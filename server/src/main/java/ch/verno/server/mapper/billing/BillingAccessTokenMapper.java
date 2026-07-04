@@ -3,15 +3,15 @@ package ch.verno.server.mapper.billing;
 import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.db.entity.billing.BillingAccessTokenEntity;
 import ch.verno.db.entity.user.AppUserEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 @Component
-public class BillingAccessTokenMapper implements IEntityMapper<BillingAccessTokenEntity, BillingAccessTokenDto> {
+public class BillingAccessTokenMapper extends AbstractEntityMapper<BillingAccessTokenEntity, BillingAccessTokenDto> {
 
   @Nonnull
   @Override
-  public BillingAccessTokenDto toSimpleDto(@Nonnull final BillingAccessTokenEntity entity) {
+  public BillingAccessTokenDto toDto(@Nonnull final BillingAccessTokenEntity entity) {
     final var dto = BillingAccessTokenDto.empty();
 
     dto.setId(entity.getId());

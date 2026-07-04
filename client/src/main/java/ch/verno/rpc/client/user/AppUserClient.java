@@ -29,7 +29,7 @@ public class AppUserClient {
   }
 
   @Nonnull
-  public Optional<AppUserDto> findByUserId(@Nonnull final Long userId){
+  public Optional<AppUserDto> findByUserId(@Nonnull final Long userId) {
     return appUserResource.get().findByUserId(userId);
   }
 
@@ -68,9 +68,9 @@ public class AppUserClient {
   }
 
   @Nonnull
-  public SaveResponse<AppUserDto> changePassword(@Nonnull final Long userId,
-                                                 @Nonnull final String newPassword) {
-    return appUserResource.get().updatePassword(userId, newPassword);
+  public SaveResponse<AppUserDto> changeRawPassword(@Nonnull final Long userId,
+                                                    @Nonnull final String newRawPassword) {
+    return appUserResource.get().updateRawPassword(userId, newRawPassword);
   }
 
   @Nonnull

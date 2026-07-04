@@ -5,7 +5,7 @@ import ch.verno.common.tenant.TenantContext;
 import ch.verno.contract.dto.table.tenant.TenantDto;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.tenant.TenantService;
+import ch.verno.server.service.entity.tenant.TenantService;
 import jakarta.annotation.Nonnull;
 
 import java.util.Optional;

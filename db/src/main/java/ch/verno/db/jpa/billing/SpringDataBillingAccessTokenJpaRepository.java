@@ -6,8 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public interface SpringDataBillingAccessTokenJpaRepository extends
-        AbstractEntityJpaRepository<BillingAccessTokenEntity, Long> {
+public interface SpringDataBillingAccessTokenJpaRepository extends AbstractEntityJpaRepository<BillingAccessTokenEntity, Long> {
 
   @Nonnull
   Optional<BillingAccessTokenEntity> findByTokenHash(@Nonnull String tokenHash);

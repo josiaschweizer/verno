@@ -1,17 +1,20 @@
 export type ApiErrorPayload = {
   status: number
+  code?: string
   message: string
   details?: unknown
 }
 
 export class ApiError extends Error {
   status: number
+  code?: string
   details?: unknown
 
   constructor(payload: ApiErrorPayload) {
     super(payload.message)
     this.name = 'ApiError'
     this.status = payload.status
+    this.code = payload.code
     this.details = payload.details
   }
 }
@@ -78,6 +81,7 @@ export function createApiClient(config: {
 
       throw new ApiError({
         status: res.status,
+        code: payload?.code,
         message: msg,
         details: payload,
       })

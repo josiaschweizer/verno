@@ -10,13 +10,14 @@ import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.file.StorageBo;
 import ch.verno.server.bo.table.setting.TenantSettingBo;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseReportUseCase {
@@ -60,14 +61,6 @@ public class CourseReportUseCase {
 
   @Nonnull
   private byte[] getTemplateBytes(@Nonnull final FileDownload templateDownload) {
-    try (final var inputStream = templateDownload.stream()) {
-      if (inputStream != null) {
-        return inputStream.readAllBytes();
-      } else {
-        throw new RuntimeException("Template file not found");
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to load template file", e);
-    }
+    return Optional.ofNullable(templateDownload.byteData()).orElse(new byte[0]);
   }
 }

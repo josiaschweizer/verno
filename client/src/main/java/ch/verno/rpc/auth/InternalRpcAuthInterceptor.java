@@ -1,6 +1,6 @@
 package ch.verno.rpc.auth;
 
-import ch.verno.common.rpc.auth.InternalRpcTokenCodec;
+import ch.verno.common.rpc.auth.internal.InternalRpcTokenCodec;
 import ch.verno.common.tenant.TenantContext;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.HttpRequest;

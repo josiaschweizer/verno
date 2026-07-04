@@ -7,7 +7,6 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.gender.GenderBo;
-import ch.verno.server.service.intern.table.gender.GenderService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

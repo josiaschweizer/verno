@@ -65,17 +65,12 @@ public class TenantBillingBo {
       return false;
     }
 
-    final var dto = mapper.toSimpleDto(billing.get());
-
+    final var dto = mapper.toDto(billing.get());
     if (BillingSubscriptionStatus.ACTIVE.equals(dto.getSubscriptionStatus())) {
       return true;
-    }
-
-    if (BillingSubscriptionStatus.TRIAL.equals(dto.getSubscriptionStatus())) {
+    } else if (BillingSubscriptionStatus.TRIAL.equals(dto.getSubscriptionStatus())) {
       return true;
-    }
-
-    if (BillingSubscriptionStatus.PAST_DUE.equals(dto.getSubscriptionStatus())) {
+    } else if (BillingSubscriptionStatus.PAST_DUE.equals(dto.getSubscriptionStatus())) {
       return dto.getGraceUntil() != null && dto.getGraceUntil().isAfter(OffsetDateTime.now());
     }
 

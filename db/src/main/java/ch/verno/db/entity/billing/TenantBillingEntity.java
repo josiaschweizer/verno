@@ -184,7 +184,12 @@ public class TenantBillingEntity extends TenantScopedEntity {
   }
 
   public void setAdditionalLicenceOptions(@Nonnull final List<String> additionalLicenceOptions) {
-    this.additionalLicenceOptions = additionalLicenceOptions;
+    if (this.additionalLicenceOptions == null) {
+      this.additionalLicenceOptions = New.list(additionalLicenceOptions);
+      return;
+    }
+    this.additionalLicenceOptions.clear();
+    this.additionalLicenceOptions.addAll(additionalLicenceOptions);
   }
 
   @Nonnull

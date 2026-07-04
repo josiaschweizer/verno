@@ -3,16 +3,16 @@ package ch.verno.server.mapper.mail;
 import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailConfigMapper implements IEntityMapper<MailConfigEntity, MailConfigDto> {
+public class MailConfigMapper extends AbstractEntityMapper<MailConfigEntity, MailConfigDto> {
 
   @Nonnull
   @Override
-  public MailConfigDto toSimpleDto(@Nonnull final MailConfigEntity entity) {
+  public MailConfigDto toDto(@Nonnull final MailConfigEntity entity) {
     final var dto = MailConfigDto.empty();
 
     dto.setId(entity.getId());

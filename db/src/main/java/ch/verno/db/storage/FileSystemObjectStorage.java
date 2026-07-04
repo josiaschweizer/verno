@@ -1,23 +1,17 @@
 package ch.verno.db.storage;
 
 import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
 import java.util.Optional;
 
-@Component
 public class FileSystemObjectStorage implements ObjectStorage {
-
-  @NonNls public static final String STORAGE_ROOT = "${files.storage.root:./data/files}";
 
   @Nonnull private final Path root;
 
-  public FileSystemObjectStorage(@Value(STORAGE_ROOT) @Nonnull final String root) {
+  public FileSystemObjectStorage(@Nonnull final String root) {
     this.root = Paths.get(root)
             .toAbsolutePath()
             .normalize();

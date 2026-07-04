@@ -12,7 +12,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.participant.ParticipantBo;
-import ch.verno.server.service.intern.table.participant.ParticipantService;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +53,7 @@ public class ParticipantResourceImpl implements ParticipantResource {
 
   @Nonnull
   @Override
-  public SaveResponse<ParticipantDto> saveParticipant(@Nonnull final ParticipantDto dto) {
+  public ParticipantDto saveParticipant(@Nonnull final ParticipantDto dto) {
     return participantBo.get().saveParticipant(dto);
   }
 
@@ -87,5 +87,17 @@ public class ParticipantResourceImpl implements ParticipantResource {
   public ParticipantDto removeCourse(@Nonnull final Long participantId,
                                      @Nonnull final CourseDto courseDto) {
     return participantBo.get().removeCourse(participantId, courseDto);
+  }
+
+  @Nonnull
+  @Override
+  public Long getParticipantCount() {
+    return participantService.get().count();
+  }
+
+  @Nonnull
+  @Override
+  public SaveResponse<ParticipantDto> apiSaveParticipant(@Nonnull final ParticipantDto participantDto) {
+    return participantBo.get().apiSaveParticipant(participantDto);
   }
 }

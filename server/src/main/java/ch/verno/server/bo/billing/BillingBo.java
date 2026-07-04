@@ -8,13 +8,13 @@ import ch.verno.common.type.billing.BillingSubscriptionStatus;
 import ch.verno.contract.dto.lib.billing.GeneratedBillingAccessTokenDto;
 import ch.verno.contract.dto.table.billing.BillingAccessTokenDto;
 import ch.verno.contract.dto.table.billing.TenantBillingDto;
-import ch.verno.contract.gateway.ApiUrl;
+import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
 import ch.verno.server.application.properties.BillingConfigProvider;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.extern.billing.BillingAccessTokenService;
-import ch.verno.server.service.extern.billing.TenantBillingService;
+import ch.verno.server.service.entity.billing.BillingAccessTokenService;
+import ch.verno.server.service.entity.billing.TenantBillingService;
 import ch.verno.server.util.security.TokenGenerator;
 import jakarta.annotation.Nonnull;
 

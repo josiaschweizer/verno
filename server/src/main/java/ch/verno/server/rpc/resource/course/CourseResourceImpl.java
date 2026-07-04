@@ -12,7 +12,7 @@ import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.bo.BoFactory;
 import ch.verno.server.bo.table.course.CourseBo;
-import ch.verno.server.service.intern.table.course.CourseService;
+import ch.verno.server.service.entity.course.CourseService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
@@ -84,5 +84,11 @@ public class CourseResourceImpl implements CourseResource {
   @Override
   public DeleteResponse deleteById(@Nonnull final Long id) {
     return courseService.get().deleteById(id);
+  }
+
+  @Nonnull
+  @Override
+  public Long getCourseCount() {
+    return courseService.get().count();
   }
 }

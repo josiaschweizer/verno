@@ -17,16 +17,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class ApiAuthConfig {
 
-  @Value("${verno.api.username:verno}")
+  @Value("${verno.api.username:verno}") //TODO .properties file
   private String apiUsername;
 
-  @Value("${verno.api.password:verno}")
+  @Value("${verno.api.password:verno}") //TODO .properties file
   private String apiPassword;
 
   @Nonnull
   @Bean("apiUserDetailsService")
   public UserDetailsService apiUserDetailsService(@Nonnull final PasswordEncoder passwordEncoder) {
-
     return new InMemoryUserDetailsManager(
             User.builder()
                     .username(apiUsername)
@@ -42,7 +41,6 @@ public class ApiAuthConfig {
   public AuthenticationManager apiAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
                                                         @Qualifier("apiUserDetailsService")
                                                         @Nonnull final UserDetailsService apiUserDetailsService) {
-
     final var provider = new DaoAuthenticationProvider(apiUserDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
 
@@ -54,7 +52,6 @@ public class ApiAuthConfig {
   public AuthenticationManager vaadinAuthenticationManager(@Nonnull final PasswordEncoder passwordEncoder,
                                                            @Qualifier("appUserService")
                                                            @Nonnull final UserDetailsService userDetailsService) {
-
     final var provider = new DaoAuthenticationProvider(userDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
 

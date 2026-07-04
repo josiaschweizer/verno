@@ -71,7 +71,7 @@ public class RpcClient {
       }
 
       if (!response.success()) {
-        throw new RpcException(response.errorMessage());
+        throw new RpcException(response.errorCode(), response.errorMessage());
       }
 
       final var returnType = objectMapper

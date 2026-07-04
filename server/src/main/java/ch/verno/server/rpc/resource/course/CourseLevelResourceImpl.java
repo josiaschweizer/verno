@@ -2,11 +2,10 @@ package ch.verno.server.rpc.resource.course;
 
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.contract.endpoint.course.CourseLevelResource;
-import ch.verno.contract.endpoint.course.CourseResource;
 import ch.verno.contract.rpc.RpcResource;
 import ch.verno.lib.Lazy;
 import ch.verno.server.bean.ServerBean;
-import ch.verno.server.service.intern.table.course.CourseLevelService;
+import ch.verno.server.service.entity.course.CourseLevelService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

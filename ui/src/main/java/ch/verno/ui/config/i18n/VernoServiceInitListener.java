@@ -16,8 +16,6 @@ import java.util.Locale;
 
 public final class VernoServiceInitListener implements VaadinServiceInitListener {
 
-  private static final Logger LOG = LoggerFactory.getLogger(VernoServiceInitListener.class);
-
   @Override
   public void serviceInit(@Nonnull final ServiceInitEvent event) {
     final var i18nProvider = event.getSource()

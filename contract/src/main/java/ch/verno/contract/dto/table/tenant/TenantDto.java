@@ -4,7 +4,9 @@ import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public record TenantDto(@Nonnull Long id, @Nonnull String slug, @Nullable String name) {
+public record TenantDto(@Nonnull Long id,
+                        @Nonnull String slug,
+                        @Nullable String name) {
 
   private TenantDto(@Nonnull final Long id) {
     this(id, Publ.EMPTY_STRING, null);

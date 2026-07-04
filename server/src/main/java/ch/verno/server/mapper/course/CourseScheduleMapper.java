@@ -2,17 +2,17 @@ package ch.verno.server.mapper.course;
 
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.db.entity.course.CourseScheduleEntity;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.mapper.lib.YearWeekMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CourseScheduleMapper implements IEntityMapper<CourseScheduleEntity, CourseScheduleDto> {
+public class CourseScheduleMapper extends AbstractEntityMapper<CourseScheduleEntity, CourseScheduleDto> {
 
   @Nonnull
   @Override
-  public CourseScheduleDto toSimpleDto(@Nonnull final CourseScheduleEntity entity) {
+  public CourseScheduleDto toDto(@Nonnull final CourseScheduleEntity entity) {
     final var dto = CourseScheduleDto.empty();
 
     dto.setId(entity.getId());

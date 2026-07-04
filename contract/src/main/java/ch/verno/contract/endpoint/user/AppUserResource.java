@@ -14,7 +14,6 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @RpcEndpoint
 public interface AppUserResource {
@@ -46,12 +45,12 @@ public interface AppUserResource {
    * Updates the password of the user with the given userId
    *
    * @param userId      the id of the user which gets updated
-   * @param newPassword the new password of the user
+   * @param newRawPassword the new UN-ENCODED RAW password of the user
    * @return SaveResponse of AppUserDto indicating whether the save was successful or not
    */
   @Nonnull
-  SaveResponse<AppUserDto> updatePassword(@Nonnull Long userId,
-                                          @Nonnull String newPassword);
+  SaveResponse<AppUserDto> updateRawPassword(@Nonnull Long userId,
+                                             @Nonnull String newRawPassword);
 
   /**
    * Deletes the provided app user

@@ -1,10 +1,8 @@
 package ch.verno.ui.verno.dashboard.mail;
 
 import ch.verno.contract.mail.MailTemplateType;
-import ch.verno.contract.mail.placeholder.Placeholder;
-import ch.verno.contract.mail.placeholder.PlaceholderValue;
-import ch.verno.contract.mail.placeholder.context.CourseMailPlaceholderContext;
-import ch.verno.lib.Publ;
+import ch.verno.contract.mail.placeholder.base.Placeholder;
+import ch.verno.contract.mail.placeholder.course.CoursePlaceholder;
 import ch.verno.ui.lib.components.email.AbstractMailTemplateConfigLayout;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -23,21 +21,20 @@ public class CourseMailTemplateConfigLayout extends AbstractMailTemplateConfigLa
   @Override
   protected List<Button> createPlaceholderButtons() {
     return getPlaceholderValues().stream()
-            .map(PlaceholderValue::placeholder)
             .map(this::createPlaceholderButton)
             .toList();
   }
 
   @Nonnull
-  public List<PlaceholderValue<CourseMailPlaceholderContext>> getPlaceholderValues() {
+  public List<CoursePlaceholder> getPlaceholderValues() {
     return List.of(
-            new PlaceholderValue<>(Placeholder.FIRSTNAME, ctx -> ctx.participant().getFirstName()),
-            new PlaceholderValue<>(Placeholder.LASTNAME, ctx -> ctx.participant().getLastName()),
-            new PlaceholderValue<>(Placeholder.COURSE_NAME, ctx -> ctx.course() != null ? ctx.course().getTitle() : Publ.EMPTY_STRING),
-            new PlaceholderValue<>(Placeholder.COURSE_START_DATE, CourseMailPlaceholderContext::getCourseStartDate),
-            new PlaceholderValue<>(Placeholder.COURSE_END_DATE, CourseMailPlaceholderContext::getCourseEndDate),
-            new PlaceholderValue<>(Placeholder.COURSE_START_TIME, CourseMailPlaceholderContext::getCourseStartTime),
-            new PlaceholderValue<>(Placeholder.COURSE_END_TIME, CourseMailPlaceholderContext::getCourseEndTime)
+            CoursePlaceholder.FIRSTNAME,
+            CoursePlaceholder.LASTNAME,
+            CoursePlaceholder.COURSE_NAME,
+            CoursePlaceholder.COURSE_START_DATE,
+            CoursePlaceholder.COURSE_END_DATE,
+            CoursePlaceholder.COURSE_START_TIME,
+            CoursePlaceholder.COURSE_END_TIME
     );
   }
 }

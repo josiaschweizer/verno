@@ -3,7 +3,7 @@ package ch.verno.server.service.base;
 import ch.verno.contract.dto.filter.BaseFilter;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.base.SortOrderDto;
-import ch.verno.server.mapper.base.IEntityMapper;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.repository.base.IEntityRepository;
 import ch.verno.server.spec.BaseSpec;
 import ch.verno.server.spec.PageHelper;
@@ -17,7 +17,7 @@ public class AbstractSpecEntityService<
         ENTITY,
         DTO extends BaseDto<ID>,
         REPOSITORY extends IEntityRepository<ENTITY, ID>,
-        MAPPER extends IEntityMapper<ENTITY, DTO>,
+        MAPPER extends AbstractEntityMapper<ENTITY, DTO>,
         SPEC extends BaseSpec<ENTITY, FILTER>,
         FILTER extends BaseFilter
         > extends AbstractEntityService<ID, ENTITY, DTO, REPOSITORY, MAPPER> {
@@ -36,12 +36,15 @@ public class AbstractSpecEntityService<
                            @Nonnull final List<SortOrderDto> sortOrders,
                            final int offset,
                            final int limit) {
-    final var specification = spec.get().getSpecification(filter);
-    final var page = PageHelper.createPageRequest(sortOrders, offset, limit);
+    final var specInstance = spec.get();
+    final var specification = specInstance.getSpecification(filter);
+    final var resolvedSortOrders = specInstance.resolveSortOrders(sortOrders);
+
+    final var page = PageHelper.createPageRequest(resolvedSortOrders, offset, limit);
 
     return getRepository().findAll(specification, page)
             .stream()
-            .map(getMapper()::toSimpleDto)
+            .map(getMapper()::toDto)
             .toList();
   }
 

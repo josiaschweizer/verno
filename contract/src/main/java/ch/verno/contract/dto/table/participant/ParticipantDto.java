@@ -7,6 +7,7 @@ import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.contract.dto.table.gender.GenderDto;
+import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,12 +47,12 @@ public class ParticipantDto extends BaseDto<Long> {
     this.phone = PhoneNumber.empty();
     this.note = Publ.EMPTY_STRING;
     this.active = true;
-    this.courses = new ArrayList<>();
-    this.courseLevels = new ArrayList<>();
+    this.courseLevels = New.list();
+    this.courses = New.list();
     this.address = AddressDto.empty();
     this.parentOne = ParentDto.empty();
     this.parentTwo = ParentDto.empty();
-    this.siblings = new ArrayList<>();
+    this.siblings = New.list();
   }
 
   public ParticipantDto(@Nonnull final String firstName,
@@ -68,7 +69,23 @@ public class ParticipantDto extends BaseDto<Long> {
                         @Nonnull final ParentDto parentOne,
                         @Nonnull final ParentDto parentTwo,
                         @Nonnull final List<ParticipantDto> siblings) {
-    this(null, firstName, lastName, birthdate, gender, email, phone, note, active, courses, courseLevel, address, parentOne, parentTwo, siblings);
+    this(
+            null,
+            firstName,
+            lastName,
+            birthdate,
+            gender,
+            email,
+            phone,
+            note,
+            active,
+            courses,
+            courseLevel,
+            address,
+            parentOne,
+            parentTwo,
+            siblings
+    );
   }
 
   public ParticipantDto(@Nullable final Long id,
@@ -95,12 +112,12 @@ public class ParticipantDto extends BaseDto<Long> {
     this.phone = phone;
     this.note = note;
     this.active = active;
-    this.courses = new ArrayList<>(courses);
-    this.courseLevels = new ArrayList<>(courseLevel);
+    this.courses = New.list(courses);
+    this.courseLevels = New.list(courseLevel);
     this.address = address;
     this.parentOne = parentOne;
     this.parentTwo = parentTwo;
-    this.siblings = siblings;
+    this.siblings = New.list(siblings);
   }
 
   @Nonnull
@@ -117,7 +134,6 @@ public class ParticipantDto extends BaseDto<Long> {
 
   public boolean isEmpty() {
     return getId() != null
-            && getId() == 0L
             && firstName.isEmpty()
             && lastName.isEmpty()
             && (birthdate == null)
@@ -315,7 +331,7 @@ public class ParticipantDto extends BaseDto<Long> {
   }
 
   public void setSiblings(@Nonnull final List<ParticipantDto> siblings) {
-    this.siblings = siblings;
+    this.siblings = New.list(siblings);
   }
 
   @Override
