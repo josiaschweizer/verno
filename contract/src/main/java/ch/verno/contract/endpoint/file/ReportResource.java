@@ -16,9 +16,6 @@ public interface ReportResource {
   @Nonnull
   String generateParticipantsReport();
 
-  @Nonnull
-  String issueAccessToken(@Nonnull String fileToken);
-
   void deleteTempFile(@Nonnull String token);
 
 }

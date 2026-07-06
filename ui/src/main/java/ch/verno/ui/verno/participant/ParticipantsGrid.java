@@ -42,6 +42,7 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @PermitAll
-@com.vaadin.flow.router.Route(Routes.PARTICIPANTS)
+@Route(Routes.PARTICIPANTS)
 @Menu(order = 1, icon = VaadinIconConstants.USER, title = "participant.participants.overview")
 public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, ParticipantFilter> implements HasDynamicTitle {
 

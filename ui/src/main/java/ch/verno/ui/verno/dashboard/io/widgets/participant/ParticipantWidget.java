@@ -54,7 +54,8 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
               final var config = injector.getInstance(ParticipantExportConfig.class);
               final var exportDialog = new ExportDialog<>(injector, config);
               exportDialog.open();
-            });
+            }
+    );
 
     header.add(importButton, exportButton);
   }
@@ -65,9 +66,10 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
             injector,
             false,
             false);
-    participantsGrid.getGrid().setAllRowsVisible(true);
-    participantsGrid.setWidthFull();
+//    participantsGrid.getGrid().setAllRowsVisible(true); //TODO set all rows visible throw exception with more than 1k items
+    participantsGrid.setSizeFull();
     add(participantsGrid);
+    setSizeFull();
   }
 
   protected void refresh() {

@@ -24,15 +24,10 @@ public class ReportResourceImpl implements ReportResource {
   @Nonnull private final Lazy<CourseReportUseCase> courseReportUseCase;
   @Nonnull private final Lazy<ParticipantReportUseCase> participantReportUseCase;
 
-  @Nonnull private final Lazy<ResourceAccessTokenCodec> resourceAccessTokenCodec;
-
-
   public ReportResourceImpl(@Nonnull final ServerBean serverBean){
     this.tempFileBo = Lazy.of(() -> serverBean.get(TempFileBo.class));
     this.courseReportUseCase = Lazy.of(() -> serverBean.get(CourseReportUseCase.class));
     this.participantReportUseCase = Lazy.of(() -> serverBean.get(ParticipantReportUseCase.class));
-
-    this.resourceAccessTokenCodec = Lazy.of(() -> serverBean.get(ResourceAccessTokenCodec.class));
   }
 
   @Nonnull
@@ -48,13 +43,6 @@ public class ReportResourceImpl implements ReportResource {
   public String generateParticipantsReport() {
     final var report = participantReportUseCase.get().generate();
     return tempFileBo.get().store(report);
-  }
-
-  @Nonnull
-  @Override
-  public String issueAccessToken(@Nonnull final String fileToken) {
-    final var tenantId = TenantContext.get(); //TODO possibly change?
-    return resourceAccessTokenCodec.get().issue(tenantId, fileToken);
   }
 
   @Override

@@ -15,12 +15,12 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ImportDialog extends Dialog {
 
+  @Nonnull private final Injector injector;
   @Nonnull private final List<DialogStepDto> steps;
 
   @Nullable private HorizontalLayout contentLayout;
@@ -32,6 +32,7 @@ public class ImportDialog extends Dialog {
   public ImportDialog(@Nonnull final Injector injector,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig<?> entityConfig) {
+    this.injector = injector;
     this.steps = New.list();
     this.currentStep = ImportDialogStep.ZERO;
 
@@ -116,8 +117,7 @@ public class ImportDialog extends Dialog {
         if (importResult.completeSuccess()) {
           close();
         } else if (importResult.fileToken() != null && !importResult.fileToken().isBlank()) {
-          final var fileName = importResult.fileName() != null ? importResult.fileName() : "import_errors.csv";
-          final var errorDialog = new ImportErrorDownloadDialog(importResult.fileToken(), fileName);
+          final var errorDialog = new ImportErrorDownloadDialog(injector, importResult.fileToken());
           errorDialog.addClosedListener(c -> close());
           errorDialog.open();
         }

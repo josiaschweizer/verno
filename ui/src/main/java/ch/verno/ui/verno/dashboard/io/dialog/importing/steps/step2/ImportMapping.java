@@ -27,7 +27,7 @@ public class ImportMapping<T> extends BaseDialogStep {
   @Nonnull private final Lazy<CsvClient> csvClient;
   @Nonnull private final ImportEntityConfig<T> entityConfig;
 
-  private ImportColumnMappingPanel panel;
+  private ImportColumnMappingPanel columnMappingPanel;
 
   @Nullable private String fileToken;
   @Nullable private Runnable onValidationChangedListener;
@@ -63,14 +63,14 @@ public class ImportMapping<T> extends BaseDialogStep {
   private void initUI(@Nonnull final List<String> csvHeaders) {
     final var allFields = collectAllFields();
     final var inlineNotification = createInfoInlineNotification();
-    panel = new ImportColumnMappingPanel(csvHeaders, allFields);
+    this.columnMappingPanel = new ImportColumnMappingPanel(csvHeaders, allFields);
 
     if (onValidationChangedListener != null) {
-      panel.addValidationChangeListener(() -> onValidationChangedListener.run());
+      columnMappingPanel.addValidationChangeListener(() -> onValidationChangedListener.run());
     }
 
     setSpacing(true);
-    add(inlineNotification, panel);
+    add(inlineNotification, columnMappingPanel);
   }
 
   @Nonnull
@@ -158,19 +158,19 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   public void setOnValidationChangedListener(@Nullable final Runnable listener) {
     this.onValidationChangedListener = listener;
-    if (panel != null && listener != null) {
-      panel.addValidationChangeListener(listener);
+    if (columnMappingPanel != null && listener != null) {
+      columnMappingPanel.addValidationChangeListener(listener);
     }
   }
 
   @Nonnull
   public Map<String, String> getMapping() {
-    if (!panel.isValid()) {
+    if (!columnMappingPanel.isValid()) {
       NotificationFactory.showErrorNotification(getTranslation("base.bitte.alle.erforderlichen.felder.zuordnen"));
       return Map.of();
     }
 
-    return panel.getMapping();
+    return columnMappingPanel.getMapping();
   }
 
   @Nonnull
@@ -184,6 +184,6 @@ public class ImportMapping<T> extends BaseDialogStep {
 
   @Override
   public boolean isValid() {
-    return panel.isValid();
+    return columnMappingPanel.isValid();
   }
 }

@@ -26,14 +26,14 @@ public class CsvClient {
   }
 
   @Nonnull
-  public List<CsvMapDto> parseRows(@Nonnull final FileDto fileDto) {
-    return csvResource.get().parseRows(fileDto);
+  public List<CsvMapDto> parseFileFromCsvRows(@Nonnull final FileDto fileDto) {
+    return csvResource.get().parseFileFromCsvRows(fileDto);
   }
 
   @Nonnull
-  public FileDto parseRows(@Nonnull final String filename,
-                           @Nonnull final List<CsvMapDto> rows) {
-    return csvResource.get().parseRows(filename, rows);
+  public FileDto parseCsvRowsToFile(@Nonnull final String filename,
+                                    @Nonnull final List<CsvMapDto> rows) {
+    return csvResource.get().parseCsvRowsToFile(filename, rows);
   }
 
 }

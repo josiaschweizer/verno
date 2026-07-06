@@ -17,4 +17,6 @@ public interface TempFileResource {
 
   void delete(@Nonnull String token);
 
+  @Nonnull
+  String issueAccessToken(@Nonnull String fileToken);
 }
