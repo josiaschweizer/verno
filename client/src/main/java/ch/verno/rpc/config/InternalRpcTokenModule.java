@@ -8,15 +8,17 @@ import jakarta.annotation.Nonnull;
 
 public class InternalRpcTokenModule extends AbstractModule {
 
+  @Nonnull private final String secret;
+
+  public InternalRpcTokenModule(@Nonnull final String secret) {
+    this.secret = secret;
+  }
+
   @Nonnull
   @Provides
   @Singleton
   public InternalRpcTokenCodec internalRpcTokenCodec() {
-    final var secret = System.getenv("VERNO_RPC_INTERNAL_SECRET");
-    if (secret == null || secret.isBlank()) {
-      throw new IllegalStateException("VERNO_RPC_INTERNAL_SECRET is not set");
-    }
-
     return new InternalRpcTokenCodec(secret);
   }
+
 }
