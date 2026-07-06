@@ -45,7 +45,7 @@ public class ParticipantExportConfig extends AbstractTranslationHelper implement
     row.put(getTranslation("shared.birthdate"), participant.getBirthdate() != null ? participant.getBirthdate().toString() : Publ.EMPTY_STRING);
     row.put(getTranslation("shared.age"), participant.getAgeFromBirthday() != null ? participant.getAgeFromBirthday().toString() : Publ.EMPTY_STRING);
 
-    row.put(getTranslation("shared.active"), participant.isActive() ? getTranslation("shared.yes") : getTranslation("shared.no"));
+    row.put(getTranslation("shared.active"), participant.isActive() ? getTranslation("common.yes") : getTranslation("common.no"));
     row.put(getTranslation("shared.note"), participant.getNote());
 
     row.put(getTranslation("courseLevel.course_levels"), participant.getCourseLevelsAsString());

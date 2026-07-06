@@ -4,6 +4,7 @@ import ch.verno.common.exceptions.io.ParseCsvException;
 import ch.verno.common.lib.csv.CsvUtil;
 import ch.verno.common.server.io.importing.CsvDelimiter;
 import ch.verno.contract.dto.file.temp.CsvMapDto;
+import ch.verno.lib.New;
 import ch.verno.lib.sanitize.StringSanitizer;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.csv.CSVFormat;
@@ -12,13 +13,9 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public final class CsvImportUtil {
-
-  private CsvImportUtil() {
-  }
 
   @Nonnull
   public static List<CsvMapDto> parseRows(@Nonnull final byte[] csvBytes) {
@@ -39,16 +36,15 @@ public final class CsvImportUtil {
                  .parse(reader)) {
 
       final var headers = csvParser.getHeaderNames();
-      final var rows = new ArrayList<CsvMapDto>();
+      final var rows = New.<CsvMapDto>list();
 
       for (final var record : csvParser) {
-        final var row = new LinkedHashMap<String, String>();
+        final var row = New.<String, String>linkedHashMap();
 
         for (final var header : headers) {
-          row.put(
-                  StringSanitizer.cleanNullSave(header),
-                  record.isMapped(header) ? record.get(header) : null
-          );
+          final var saveHeader = StringSanitizer.cleanNullSave(header);
+          final var mappedValue = record.isMapped(header) ? record.get(header) : null;
+          row.put(saveHeader, mappedValue);
         }
 
         rows.add(new CsvMapDto(row));

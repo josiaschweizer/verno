@@ -113,7 +113,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
                                     @Nonnull final Map<String, String> mapping) {
 
     final var fileDto = tempFileClient.get().loadFile(fileToken);
-    final var csvRows = csvClient.get().parseRows(fileDto);
+    final var csvRows = csvClient.get().parseFileFromCsvRows(fileDto);
 
     @Nonnull final var mapper = injector.getInstance(InstructorCsvMapper.class);
     final var result = mapper.map(
@@ -144,7 +144,7 @@ public class InstructorImportConfig implements ImportEntityConfig<InstructorDto>
         errorCsvRows.add(csvRow);
       }
 
-      final var errorFile = csvClient.get().parseRows("instructor_import_errors.csv", errorCsvRows);
+      final var errorFile = csvClient.get().parseCsvRowsToFile("instructor_import_errors.csv", errorCsvRows);
       final var token = tempFileClient.get().store(errorFile);
 
       return ImportResult.partialSuccess(token, errorFile.filename());

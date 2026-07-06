@@ -30,11 +30,6 @@ public class ReportClient {
     return reportResource.get().generateParticipantsReport();
   }
 
-  @Nonnull
-  public String issueAccessToken(@Nonnull final String fileToken) {
-    return reportResource.get().issueAccessToken(fileToken);
-  }
-
   public void deleteTempFile(@Nonnull final String token) {
     reportResource.get().deleteTempFile(token);
   }

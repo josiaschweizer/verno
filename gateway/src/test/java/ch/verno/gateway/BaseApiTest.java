@@ -1,12 +1,9 @@
 package ch.verno.gateway;
 
-import ch.verno.gateway.config.rpc.GatewayRpcConfig;
 import jakarta.annotation.Nonnull;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
@@ -21,14 +18,12 @@ import org.springframework.web.context.WebApplicationContext;
  * (real security chains, real filters) with {@link GatewayTestConfig} supplying
  * a mocked {@code RpcFactory} so the context starts without a live server process.
  */
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @Import(GatewayTestConfig.class)
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 public abstract class BaseApiTest {
 
-  @Nonnull
-  protected static final String TEST_API_USERNAME = "test-user";
-  @Nonnull
-  protected static final String TEST_API_PASSWORD = "test-password";
+  @Nonnull protected static final String TEST_API_USERNAME = "test-user";
+  @Nonnull protected static final String TEST_API_PASSWORD = "test-password";
 
   @Autowired
   private WebApplicationContext webApplicationContext;

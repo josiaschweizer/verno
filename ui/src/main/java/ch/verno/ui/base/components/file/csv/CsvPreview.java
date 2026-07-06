@@ -2,6 +2,7 @@ package ch.verno.ui.base.components.file.csv;
 
 import ch.verno.common.exceptions.io.ParseCsvException;
 import ch.verno.lib.Lazy;
+import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import ch.verno.rpc.client.file.TempFileClient;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,8 +14,6 @@ import org.apache.commons.csv.CSVFormat;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,16 +21,16 @@ public class CsvPreview extends VerticalLayout {
 
   @Nonnull private final Lazy<TempFileClient> tempFileClient;
 
+  //TODO improve by passing file dto directly into the preview which was generate just before
   public CsvPreview(@Nonnull final Lazy<TempFileClient> tempFileClient,
-                    @Nonnull final String fileUrl) {
+                    @Nonnull final String fileToken) {
     this.tempFileClient = tempFileClient;
 
     setPadding(false);
     setSpacing(false);
     setSizeFull();
 
-    final var token = extractToken(fileUrl);
-    final var csvData = loadCsvData(token);
+    final var csvData = loadCsvData(fileToken);
 
     if (!csvData.isEmpty()) {
       final var grid = createGrid(csvData);
@@ -39,13 +38,6 @@ public class CsvPreview extends VerticalLayout {
     } else {
       add(new Div(getTranslation("shared.keine.daten.verfugbar")));
     }
-  }
-
-  @Nonnull
-  private String extractToken(@Nonnull final String url) {
-    final var parts = url.split(Publ.SLASH);
-    final var lastPart = parts[parts.length - 1];
-    return lastPart.split("\\?")[0];
   }
 
   @Nonnull
@@ -70,10 +62,10 @@ public class CsvPreview extends VerticalLayout {
                  .parse(reader)) {
 
       final var headers = csvParser.getHeaderNames();
-      final var data = new ArrayList<Map<String, String>>();
+      final var data = New.<Map<String, String>>list();
 
       for (final var record : csvParser) {
-        final var row = new LinkedHashMap<String, String>();
+        final var row = New.<String, String>linkedHashMap();
         for (final var header : headers) {
           row.put(header, record.isMapped(header) ? record.get(header) : Publ.EMPTY_STRING);
         }

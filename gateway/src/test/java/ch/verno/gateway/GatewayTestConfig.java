@@ -24,7 +24,7 @@ public class GatewayTestConfig {
     Mockito.when(mockFactory.create(ApplicationConfigResource.class)).thenReturn(mockApplicationConfig);
 
     final var mockEnvResource = Mockito.mock(EnvResource.class);
-    Mockito.when(mockEnvResource.getEnv(VernoSecrets.API_PASSWORD)).thenReturn(TEST_PASSWORD); //TODO correct?
+    Mockito.when(mockEnvResource.getEnv(VernoSecrets.API_PASSWORD)).thenReturn(TEST_PASSWORD);
     Mockito.when(mockFactory.create(EnvResource.class)).thenReturn(mockEnvResource);
 
     return mockFactory;

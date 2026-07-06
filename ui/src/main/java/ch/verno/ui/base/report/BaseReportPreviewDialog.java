@@ -6,6 +6,7 @@ import ch.verno.common.lib.url.UrlUtil;
 import ch.verno.lib.Attributes;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.file.ReportClient;
+import ch.verno.rpc.client.file.TempFileClient;
 import ch.verno.rpc.properties.application.ApplicationProperties;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.pdf.PdfPreview;
@@ -27,6 +28,7 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
   @NonNls public static final String CLICK_JS = "click";
 
   @Nonnull protected final Lazy<ReportClient> reportClient;
+  @Nonnull protected final Lazy<TempFileClient> tempFileClient;
   @Nonnull protected final Lazy<ApplicationProperties> applicationProperties;
 
   @Nullable private String reportToken;
@@ -34,6 +36,7 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
 
   public BaseReportPreviewDialog(@Nonnull final Injector injector) {
     this.reportClient = Lazy.of(() -> injector.getInstance(ReportClient.class));
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
     this.applicationProperties = Lazy.of(() -> injector.getInstance(ApplicationProperties.class));
   }
 
@@ -64,7 +67,7 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
 
   protected void generateTokens() {
     this.reportToken = generateReport();
-    this.apiAccessToken = reportClient.get().issueAccessToken(reportToken);
+    this.apiAccessToken = tempFileClient.get().issueAccessToken(reportToken);
   }
 
   protected void deleteTempOnServer() {
@@ -123,9 +126,9 @@ public abstract class BaseReportPreviewDialog extends VAAbstractDialog {
 
   @Nonnull
   private String buildUrl(@Nonnull final String path, @Nonnull final String disposition) {
-    final var rpcUrl = applicationProperties.get().getApiUrl();
+    final var apiUrl = applicationProperties.get().getApiUrl();
 
-    return UrlBuilder.of(rpcUrl, path)
+    return UrlBuilder.of(apiUrl, path)
             .withDisposition(disposition)
             .withAccessToken(apiAccessToken)
             .build();

@@ -45,7 +45,7 @@ public class UserProperties {
       throw new UsernameNotFoundException(username);
     }
 
-    final var user = userOptional.get(); //TODO MAYBE REFACTOR?
+    final var user = userOptional.get();
     return User.withUsername(user.getUsername())
             .password(user.getPasswordHash())
             .roles(user.getRole().getRole())

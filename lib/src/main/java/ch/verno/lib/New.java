@@ -83,6 +83,11 @@ public class New {
   }
 
   @Nonnull
+  public static <K, V> LinkedHashMap<K, V> linkedHashMap() {
+    return new LinkedHashMap<>(BASE_MAP_SIZE);
+  }
+
+  @Nonnull
   public static <K, V> ConcurrentHashMap<K, V> concurrentHashMap() {
     return new ConcurrentHashMap<K, V>(BASE_MAP_SIZE);
   }

@@ -201,7 +201,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
   public ImportResult performImport(@Nonnull final String fileToken,
                                     @Nonnull final Map<String, String> mapping) {
     final var fileDto = tempFileClient.get().loadFile(fileToken);
-    final var csvRows = csvClient.get().parseRows(fileDto);
+    final var csvRows = csvClient.get().parseFileFromCsvRows(fileDto);
 
     final var mapper = injector.getInstance(ParticipantCsvMapper.class);
     final var result = mapper.map(
@@ -214,7 +214,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
     );
 
     final var saveables = result.saveables();
-    final var importErrors = New.<CsvMappingRowError>arrayList(result.errors());
+    final var importErrors = New.arrayList(result.errors());
 
     for (int i = 0; i < saveables.size(); i++) {
       final var saveable = saveables.get(i);
@@ -222,7 +222,9 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
       processNestedEntities(saveable);
       final var saveResult = participantClient.get().apiSaveParticipant(saveable);
 
-      importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
+      if (!saveResult.successful()) {
+        importErrors.add(new CsvMappingRowError(i + 1, buildImportErrorMessage(saveable, saveResult)));
+      }
     }
 
 
@@ -236,7 +238,7 @@ public class ParticipantImportConfig implements ImportEntityConfig<ParticipantDt
         errorCsvRows.add(csvRow);
       }
 
-      final var errorFile = csvClient.get().parseRows("participant_import_errors.csv", errorCsvRows);
+      final var errorFile = csvClient.get().parseCsvRowsToFile("participant_import_errors.csv", errorCsvRows);
       final var token = tempFileClient.get().store(errorFile);
       return ImportResult.partialSuccess(token, errorFile.filename());
     }
