@@ -31,7 +31,7 @@ public class ApplicationController extends BaseController {
 
   @GetMapping("courseCount")
   public ResponseEntity<?> getCoursesCount() {
-    return ok(courseResource.get().getCourseCount()); //TODO course be extended with only active and planned courses
+    return ok(courseResource.get().getCourseCount()); //TODO course count should be extended with only active and planned courses
   }
 
 }

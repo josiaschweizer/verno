@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.settings;
 
 import ch.verno.common.lib.Routes;
-import ch.verno.ui.lib.icon.VaadinIconConstants;
+import ch.verno.ui.lib.icon.CustomIconConstants;
 import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.lib.settings.VABaseSettingsPage;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
@@ -18,8 +18,7 @@ import java.util.List;
 
 @PermitAll
 @Route(Routes.USER_SETTINGS)
-@Menu(order = 97, icon = VaadinIconConstants.SLIDERS, title = "setting.user_settings")
-//todo user user_cog icon from external source
+@Menu(order = 97, icon = CustomIconConstants.USER_COG, title = "setting.user_settings")
 public class UserSettings extends VABaseSettingsPage implements HasDynamicTitle {
 
   @Inject

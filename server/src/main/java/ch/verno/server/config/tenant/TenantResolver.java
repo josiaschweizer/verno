@@ -11,7 +11,7 @@ public class TenantResolver {
 
   @Nonnull
   public Optional<Long> resolveTenantId(@Nonnull final HttpServletRequest request) {
-    final var value = request.getHeader(VernoConstants.X_MANDANT); //TODO check whether this is correct or not
+    final var value = request.getHeader(VernoConstants.X_MANDANT);
 
     if (value == null || value.isBlank()) {
       return Optional.empty();

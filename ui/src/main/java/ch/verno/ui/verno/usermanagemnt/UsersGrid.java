@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 
 @Route(Routes.APP_USERS)
 @RolesAllowed({"ADMIN"})
-@Menu(order = 99, icon = CustomIconConstants.USER_COG, title = "shared.application.users")
+@Menu(order = 99, icon = CustomIconConstants.USER_MANAGEMENT, title = "shared.application.users")
 public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> implements HasDynamicTitle {
 
   @Nonnull private final Injector injector;

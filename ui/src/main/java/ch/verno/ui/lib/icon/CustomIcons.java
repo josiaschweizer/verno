@@ -7,7 +7,8 @@ public enum CustomIcons {
   USER_COG(CustomIconConstants.USER_COG, "icons/user-cog.svg"),
   SAVE(CustomIconConstants.SAVE, "icons/save.svg"),
   SAVE_FILLED(CustomIconConstants.SAVE_FILLED, "icons/save_filled.svg"),
-  SEND_MAIL(CustomIconConstants.SEND_MAIL, "icons/send-mail.svg")
+  SEND_MAIL(CustomIconConstants.SEND_MAIL, "icons/send-mail.svg"),
+  USER_MANAGEMENT(CustomIconConstants.USER_MANAGEMENT, "icons/user-management.svg"),
   ;
 
   @Nonnull private final String name;

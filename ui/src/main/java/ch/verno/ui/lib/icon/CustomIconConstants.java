@@ -11,6 +11,7 @@ public class CustomIconConstants {
   @NonNls public static final String SAVE = CUSTOM_ICON_PREFIX + "Save";
   @NonNls public static final String SAVE_FILLED = CUSTOM_ICON_PREFIX + "SaveFilled";
   @NonNls public static final String SEND_MAIL = CUSTOM_ICON_PREFIX + "SendMail";
+  @NonNls public static final String USER_MANAGEMENT = CUSTOM_ICON_PREFIX + "UserManagement";
 
 
 }
