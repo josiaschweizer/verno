@@ -34,6 +34,7 @@ public class RpcClient {
     this.objectMapper = objectMapper;
   }
 
+  @Nonnull
   public Object call(@Nonnull final Class<?> endpointType,
                      @Nonnull final Method method,
                      @Nullable final Object[] args) {

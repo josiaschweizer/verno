@@ -32,9 +32,9 @@ public class ApiUrl {
   public static final String PUBLIC_AUTH_BASE_API = PUBLIC_BASE_API + AUTH;
 
   // internal end points
-  @NonNls public static final String TEMP_FILE_IMPORT = INTERNAL_BASE_API + "/temp-file/import";
-  @NonNls public static final String TEMP_FILE_EXPORT = INTERNAL_BASE_API + "/temp-file/export";
-  @NonNls public static final String FILES = INTERNAL_BASE_API + "/files";
+  @NonNls public static final String TEMP_FILE_IMPORT = BASE_API + "/temp-file/import";
+  @NonNls public static final String TEMP_FILE_EXPORT = BASE_API + "/temp-file/export";
+  @NonNls public static final String FILES = BASE_API + "/files";
 
   // normal end points
   @NonNls public static final String TENANTS = BASE_API + "/tenants";

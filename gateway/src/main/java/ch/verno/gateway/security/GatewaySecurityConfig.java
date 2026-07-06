@@ -1,8 +1,10 @@
 package ch.verno.gateway.security;
 
 import ch.verno.common.lib.api.ApiUrl;
-import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
+import ch.verno.contract.endpoint.properties.env.EnvResource;
 import ch.verno.lib.Publ;
+import ch.verno.lib.VernoSecrets;
 import ch.verno.rpc.rpc.RpcFactory;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
@@ -44,9 +46,11 @@ public class GatewaySecurityConfig {
   @Nonnull private final String apiPassword;
 
   public GatewaySecurityConfig(@Nonnull final RpcFactory rpcFactory) {
-    final var apiProperties = rpcFactory.create(ApiConfigResource.class);
-    this.apiUsername = apiProperties.getApiUsername();
-    this.apiPassword = apiProperties.getApiPassword();
+    final var applicationConfigResource = rpcFactory.create(ApplicationConfigResource.class);
+    this.apiUsername = applicationConfigResource.getApiUsername();
+
+    final var envResource = rpcFactory.create(EnvResource.class);
+    apiPassword = envResource.getEnv(VernoSecrets.API_PASSWORD);
   }
 
   @Bean

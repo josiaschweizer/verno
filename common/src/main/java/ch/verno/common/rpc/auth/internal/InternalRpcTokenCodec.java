@@ -16,7 +16,7 @@ import java.util.Date;
 
 public final class InternalRpcTokenCodec {
 
-  @Nonnull private static final String CLAIM_TENANT_ID = "tenantId"; //TODO use X-Mandnat?
+  @Nonnull private static final String CLAIM_TENANT_ID = "tenantId";
 
   @Nonnull private final SecretKey secretKey;
 

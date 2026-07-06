@@ -12,7 +12,20 @@ import java.util.Optional;
 @ConfigurationProperties(prefix = "verno.application")
 public class ApplicationConfigProvider {
 
+  @Nullable private String rpcUrl;
   @Nullable private String runMode;
+
+  @Nullable private String apiUrl;
+  @Nullable private String apiUsername;
+
+  @Nullable
+  public String getRpcUrl() {
+    return rpcUrl;
+  }
+
+  public void setRpcUrl(@Nullable final String rpcUrl) {
+    this.rpcUrl = rpcUrl;
+  }
 
   @Nonnull
   public String getRunMode() {
@@ -21,5 +34,23 @@ public class ApplicationConfigProvider {
 
   public void setRunMode(@Nullable final String runMode) {
     this.runMode = runMode;
+  }
+
+  @Nullable
+  public String getApiUrl() {
+    return apiUrl;
+  }
+
+  public void setApiUrl(@Nullable final String apiUrl) {
+    this.apiUrl = apiUrl;
+  }
+
+  @Nullable
+  public String getApiUsername() {
+    return apiUsername;
+  }
+
+  public void setApiUsername(@Nullable final String apiUsername) {
+    this.apiUsername = apiUsername;
   }
 }

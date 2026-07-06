@@ -11,6 +11,7 @@ public class VernoSecrets {
 
   @NonNls public static final String ENV_BILLING_API_USERNAME = "BILLING_API_USERNAME";
   @NonNls public static final String ENV_BILLING_API_PASSWORD = "BILLING_API_PASSWORD";
+  @NonNls public static final String RPC_INTERNAL_SECRET = "RPC_INTERNAL_SECRET";
 
   @NonNls public static final String SMTP_HOST = "SMTP_HOST";
   @NonNls public static final String SMTP_PORT = "SMTP_PORT";
@@ -20,4 +21,6 @@ public class VernoSecrets {
   @NonNls public static final String SMTP_SECURITY = "SMTP_SECURITY";
 
   @NonNls public static final String VERNO_BASE_URL_PATTERN = "VERNO_BASE_URL_PATTERN";
+  @NonNls public static final String API_PASSWORD = "API_PASSWORD";
+  @NonNls public static final String API_RESOURCE_ACCESS_TOKEN = "API_RESOURCE_ACCESS_TOKEN";
 }

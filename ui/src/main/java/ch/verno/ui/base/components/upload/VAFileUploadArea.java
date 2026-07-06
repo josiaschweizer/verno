@@ -61,10 +61,10 @@ public class VAFileUploadArea extends VerticalLayout {
     getStyle().setGap(VernoUtility.NONE);
     getStyle().setOverflow(Style.Overflow.HIDDEN);
 
-    dropArea = new Div();
+    this.dropArea = new Div();
     dropArea.addClassName(DROP_AREA_CLASSNAME);
 
-    upload = new Upload();
+    this.upload = new Upload();
     upload.addClassName(UPLOAD_CLASSNAME);
     upload.setSizeFull();
     upload.setAutoUpload(true);
@@ -166,9 +166,9 @@ public class VAFileUploadArea extends VerticalLayout {
   }
 
   private void resetUI(final boolean fireRemoveListener) {
-    tempToken = null;
-    originalFileName = null;
-    sizeBytes = 0;
+    this.tempToken = null;
+    this.originalFileName = null;
+    this.sizeBytes = 0;
 
     upload.getElement().executeJs(UPLOAD_JS_FUNCTION);
 

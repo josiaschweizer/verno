@@ -1,15 +1,13 @@
 package ch.verno.gateway.config.rpc;
 
-import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
-import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
-import tools.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class GatewayRpcConfig {
@@ -17,7 +15,13 @@ public class GatewayRpcConfig {
   @Nonnull
   @Bean
   public RestTemplate restTemplate() {
-    return new RestTemplate();
+    final var requestFactory = new SimpleClientHttpRequestFactory();
+    requestFactory.setConnectTimeout(2000);
+    requestFactory.setReadTimeout(10000);
+
+    final var restTemplate = new RestTemplate(requestFactory);
+    restTemplate.getInterceptors().add(new RetryingInterceptor(5, 2000));
+    return restTemplate;
   }
 
   @Nonnull
@@ -30,8 +34,8 @@ public class GatewayRpcConfig {
   @Bean
   public RpcClient rpcClient(@Nonnull final RestTemplate restTemplate,
                              @Nonnull final ObjectMapper objectMapper,
-                             @Value("${verno.rpc.url}") @Nonnull final String rpcUrl) { //TODO PROPERTY!!!!!!!!!!
-    return new RpcClient(rpcUrl, restTemplate, objectMapper);
+                             @Nonnull final RpcProperties rpcProperties) {
+    return new RpcClient(rpcProperties.getUrl(), restTemplate, objectMapper);
   }
 
   @Nonnull

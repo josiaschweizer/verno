@@ -1,23 +1,22 @@
 package ch.verno.rpc.properties.api;
 
-import ch.verno.contract.endpoint.properties.api.ApiConfigResource;
-import ch.verno.lib.Lazy;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
 import ch.verno.rpc.rpc.RpcFactory;
 import com.google.inject.Inject;
 import jakarta.annotation.Nonnull;
 
 public class ApiConfigProperties {
 
-  @Nonnull private final Lazy<ApiConfigResource> apiConfigResource;
+  @Nonnull private final ApplicationConfigResource applicationConfigResource;
 
   @Inject
   public ApiConfigProperties(@Nonnull final RpcFactory rpcFactory) {
-    this.apiConfigResource = Lazy.of(() -> rpcFactory.create(ApiConfigResource.class));
+    this.applicationConfigResource = rpcFactory.create(ApplicationConfigResource.class);
   }
 
   @Nonnull
-  public String getBaseUrl() {
-    return apiConfigResource.get().getBaseUrl();
+  public String getRpcUrl() {
+    return applicationConfigResource.getRpcUrl();
   }
 
 }
