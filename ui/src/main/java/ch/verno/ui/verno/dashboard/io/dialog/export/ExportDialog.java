@@ -22,12 +22,9 @@ import java.util.Collection;
 
 public class ExportDialog<T> extends VAAbstractDialog {
 
-  @NonNls public static final String CLICK_JS = "click";
-
   @Nonnull private final Injector injector;
   @Nonnull private final Lazy<CsvClient> csvClient;
   @Nonnull private final Lazy<TempFileClient> tempFileClient;
-  @Nonnull private final Lazy<ApplicationProperties> applicationProperties;
 
   @Nonnull private String fileToken;
 
@@ -36,7 +33,6 @@ public class ExportDialog<T> extends VAAbstractDialog {
     this.injector = injector;
     this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
     this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
-    this.applicationProperties = Lazy.of(() -> injector.getInstance(ApplicationProperties.class));
 
     generateCsvFile(config);
     initUI(getTranslation("shared.export.csv"));

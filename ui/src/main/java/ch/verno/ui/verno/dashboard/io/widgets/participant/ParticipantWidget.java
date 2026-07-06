@@ -66,7 +66,7 @@ public class ParticipantWidget extends VAAccordionWidgetBase {
             injector,
             false,
             false);
-//    participantsGrid.getGrid().setAllRowsVisible(true); //TODO set all rows visible throw exception with more than 1k items
+    participantsGrid.getGrid().setAllRowsVisible(true); //TODO set all rows visible throw exception with more than 1k items
     participantsGrid.setSizeFull();
     add(participantsGrid);
     setSizeFull();
