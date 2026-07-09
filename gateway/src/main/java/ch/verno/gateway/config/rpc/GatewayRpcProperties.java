@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "verno.rpc")
-public class RpcProperties {
+public class GatewayRpcProperties {
 
   @Nullable private String url;
 

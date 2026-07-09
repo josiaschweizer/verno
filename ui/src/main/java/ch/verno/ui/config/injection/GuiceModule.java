@@ -1,7 +1,8 @@
-package ch.verno.ui.injection;
+package ch.verno.ui.config.injection;
 
 import ch.verno.common.rpc.auth.internal.InternalRpcTokenCodec;
 import ch.verno.rpc.auth.InternalRpcAuthInterceptor;
+import ch.verno.rpc.config.RetryingInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.base.shortcut.registry.ShortcutController;
@@ -20,9 +21,14 @@ import tools.jackson.databind.ObjectMapper;
 
 public class GuiceModule extends AbstractModule {
 
+  public static final int RETRYING_INTERCEPTOR_DELAY_MILLIS = 2000;
+  public static final int RETRYING_INTERCEPTOR_MAX_ATTEMPTS = 5;
+  @Nonnull private final String rpcUrl;
   @Nonnull private final I18NProvider i18NProvider;
 
-  public GuiceModule(@Nonnull final I18NProvider i18NProvider) {
+  public GuiceModule(@Nonnull final String rpcUrl,
+                     @Nonnull final I18NProvider i18NProvider) {
+    this.rpcUrl = rpcUrl;
     this.i18NProvider = i18NProvider;
   }
 
@@ -38,6 +44,7 @@ public class GuiceModule extends AbstractModule {
   @Singleton
   RestTemplate restTemplate(@Nonnull final InternalRpcAuthInterceptor internalRpcAuthInterceptor) {
     final var restTemplate = new RestTemplate();
+    restTemplate.getInterceptors().add(RetryingInterceptor.simple());
     restTemplate.getInterceptors().add(internalRpcAuthInterceptor);
     return restTemplate;
   }
@@ -64,12 +71,12 @@ public class GuiceModule extends AbstractModule {
   @Singleton
   RpcClient rpcClient(@Nonnull final RestTemplate restTemplate,
                       @Nonnull final ObjectMapper objectMapper) {
-    return new RpcClient("http://localhost:8081/rpc", restTemplate, objectMapper); //TODO property!!!
+    return new RpcClient(rpcUrl, restTemplate, objectMapper);
   }
 
   @Provides
   @Singleton
-  RpcFactory rpcProxyFactory(RpcClient rpcClient) {
+  RpcFactory rpcProxyFactory(@Nonnull final RpcClient rpcClient) {
     return new RpcFactory(rpcClient);
   }
 }

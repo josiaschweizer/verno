@@ -15,8 +15,6 @@ import java.time.Duration;
 
 public class InternalRpcAuthInterceptor implements ClientHttpRequestInterceptor {
 
-  private static final long TOKEN_TTL_SECONDS = 30;
-
   @Nonnull private final InternalRpcTokenCodec tokenCodec;
 
   public InternalRpcAuthInterceptor(@Nonnull final InternalRpcTokenCodec tokenCodec) {
@@ -30,15 +28,7 @@ public class InternalRpcAuthInterceptor implements ClientHttpRequestInterceptor 
                                       @Nonnull final ClientHttpRequestExecution execution) throws IOException {
     final var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    System.out.println("RPC AUTH CHECK: " + authentication + " | authenticated="
-            + (authentication != null && authentication.isAuthenticated())
-            + " | anonymous=" + (authentication instanceof AnonymousAuthenticationToken));
-
-
-    if (authentication != null &&
-            authentication.isAuthenticated() &&
-            !(authentication instanceof AnonymousAuthenticationToken)) {
-
+    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
       final var tenantId = TenantContext.get();
       final var token = tokenCodec.issue(authentication.getName(), tenantId, Duration.ofSeconds(30));
       request.getHeaders().setBearerAuth(token);

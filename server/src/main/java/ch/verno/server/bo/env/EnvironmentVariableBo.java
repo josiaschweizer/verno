@@ -1,5 +1,6 @@
 package ch.verno.server.bo.env;
 
+import ch.verno.common.environment.EnvironmentUtil;
 import ch.verno.common.exceptions.lib.EnvironmentVariableNotFound;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.Nonnull;
@@ -14,42 +15,15 @@ public class EnvironmentVariableBo {
 
   protected EnvironmentVariableBo() {
     // Find project root by looking for pom.xml or .env file
-    final var directory = findProjectRoot();
+    final var directory = EnvironmentUtil.findProjectRoot();
 
     dotEnv = Dotenv.configure()
             .directory(directory)
             .ignoreIfMissing()
-            .systemProperties()
+//            .systemProperties() // TODO do we have to re-active that?
             .load();
   }
 
-  @Nonnull
-  private String findProjectRoot() {
-    Path currentPath = Paths.get(System.getProperty("user.dir"));
-
-    while (currentPath != null) {
-      final var envFile = currentPath.resolve(".env").toFile();
-      final var pomFile = currentPath.resolve("pom.xml").toFile();
-
-      if (envFile.exists()) {
-        return currentPath.toString();
-      }
-
-      if (pomFile.exists()) {
-        final var parent = currentPath.getParent();
-        if (parent != null && parent.resolve("pom.xml").toFile().exists()) {
-          currentPath = parent;
-          continue;
-        } else {
-          return currentPath.toString();
-        }
-      }
-
-      currentPath = currentPath.getParent();
-    }
-
-    return System.getProperty("user.dir");
-  }
 
   @Nonnull
   public String getEnv(@Nonnull String key) {

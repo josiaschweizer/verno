@@ -1,4 +1,4 @@
-package ch.verno.gateway.config.rpc;
+package ch.verno.rpc.config;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.http.HttpRequest;
@@ -11,6 +11,9 @@ import java.net.ConnectException;
 
 public class RetryingInterceptor implements ClientHttpRequestInterceptor {
 
+  public static final int RETRYING_INTERCEPTOR_MAX_ATTEMPTS = 5;
+  public static final int RETRYING_INTERCEPTOR_DELAY_MILLIS = 2000;
+
   private final int maxAttempts;
   private final long delayMillis;
 
@@ -18,6 +21,11 @@ public class RetryingInterceptor implements ClientHttpRequestInterceptor {
                              final long delayMillis) {
     this.maxAttempts = maxAttempts;
     this.delayMillis = delayMillis;
+  }
+
+  @Nonnull
+  public static RetryingInterceptor simple() {
+    return new RetryingInterceptor(RETRYING_INTERCEPTOR_MAX_ATTEMPTS, RETRYING_INTERCEPTOR_DELAY_MILLIS);
   }
 
   @Nonnull

@@ -1,5 +1,6 @@
 package ch.verno.gateway.config.rpc;
 
+import ch.verno.rpc.config.RetryingInterceptor;
 import ch.verno.rpc.rpc.RpcClient;
 import ch.verno.rpc.rpc.RpcFactory;
 import jakarta.annotation.Nonnull;
@@ -12,15 +13,18 @@ import tools.jackson.databind.ObjectMapper;
 @Configuration
 public class GatewayRpcConfig {
 
+  public static final int CONNECT_TIMEOUT = 2000;
+  public static final int READ_TIMEOUT = 10000;
+
   @Nonnull
   @Bean
   public RestTemplate restTemplate() {
     final var requestFactory = new SimpleClientHttpRequestFactory();
-    requestFactory.setConnectTimeout(2000);
-    requestFactory.setReadTimeout(10000);
+    requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
+    requestFactory.setReadTimeout(READ_TIMEOUT);
 
     final var restTemplate = new RestTemplate(requestFactory);
-    restTemplate.getInterceptors().add(new RetryingInterceptor(5, 2000));
+    restTemplate.getInterceptors().add(RetryingInterceptor.simple());
     return restTemplate;
   }
 
@@ -34,8 +38,8 @@ public class GatewayRpcConfig {
   @Bean
   public RpcClient rpcClient(@Nonnull final RestTemplate restTemplate,
                              @Nonnull final ObjectMapper objectMapper,
-                             @Nonnull final RpcProperties rpcProperties) {
-    return new RpcClient(rpcProperties.getUrl(), restTemplate, objectMapper);
+                             @Nonnull final GatewayRpcProperties gatewayRpcProperties) {
+    return new RpcClient(gatewayRpcProperties.getUrl(), restTemplate, objectMapper);
   }
 
   @Nonnull

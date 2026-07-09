@@ -34,6 +34,7 @@ public class Publ {
   public static final String UNDERSCORE = "_";
   public static final String AT = "@";
   public static final String HASH = "#";
+  public static final String DOLLAR = "$";
   public static final String LEFT_PARENTHESIS = "(";
   public static final String RIGHT_PARENTHESIS = ")";
   public static final String MINUS = "−";
@@ -43,6 +44,8 @@ public class Publ {
   public static final String SEMICOLON = ";";
   public static final String BRACKET_LEFT = "[";
   public static final String BRACKET_RIGHT = "]";
+  public static final String OPENING_CURLY_BRACE = "{";
+  public static final String CLOSING_CURLY_BRACE = "}";
 
   public static final String CMD_SIGN = "⌘";
   public static final String CTRL_MAC_SIGN = "⌃";
