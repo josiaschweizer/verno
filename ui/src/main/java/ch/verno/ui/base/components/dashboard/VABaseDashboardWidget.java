@@ -1,5 +1,7 @@
 package ch.verno.ui.base.components.dashboard;
 
+import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.Publ;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -8,58 +10,65 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
-@CssImport("./components/dashboard/va-base-dashboard-widget.css")
+@CssImport(CssImportConstants.VA_BASE_DASHBOARD_WIDGET)
 public class VABaseDashboardWidget extends Div implements HasSize {
 
-  @Nonnull
-  private final H3 title; //todo change to component or at least to div
+  @NonNls public static final String VA_DASHBOARD_WIDGET_CLASSNAME = "va-dashboard-widget";
+  @NonNls public static final String HEADER_CLASSNAME = "va-dashboard-widget__header";
+  @NonNls public static final String TITLE_CLASSNAME = "va-dashboard-widget__title";
+  @NonNls public static final String SUBTITLE_CLASSNAME = "va-dashboard-widget__subtitle";
+  @NonNls public static final String ACTIONS_CLASSNAME = "va-dashboard-widget__actions";
+  @NonNls public static final String CONTENT_CLASSNAME = "va-dashboard-widget__content";
+  @NonNls public static final String HEADER_LEFT_CLASSNAME = "va-dashboard-widget__header-left";
+  @NonNls public static final String HEADER_WRAPPER_CLASSNAME = "va-dashboard-widget__header-wrapper";
 
-  @Nonnull
-  private final Span subtitle;
+  @NonNls public static final String VA_WIDGET_MIN_W_CLASSNAME = "--va-widget-min-w";
+  @NonNls public static final String VA_WIDGET_MAX_W_CLASSNAME = "--va-widget-max-w";
+  @NonNls public static final String VA_WIDGET_MIN_H_CLASSNAME = "--va-widget-min-h";
 
-  @Nonnull
-  private final Div actions;
-
-  @Nonnull
-  private final Div content;
+  @Nonnull private final H3 title;
+  @Nonnull private final Span subtitle;
+  @Nonnull private final Div actions;
+  @Nonnull private final Div content;
 
   public VABaseDashboardWidget() {
-    addClassName("va-dashboard-widget");
+    addClassName(VA_DASHBOARD_WIDGET_CLASSNAME);
 
     final var header = new Div();
-    header.addClassName("va-dashboard-widget__header");
+    header.addClassName(HEADER_CLASSNAME);
 
     title = new H3();
-    title.addClassName("va-dashboard-widget__title");
+    title.addClassName(TITLE_CLASSNAME);
 
     subtitle = new Span();
-    subtitle.addClassName("va-dashboard-widget__subtitle");
+    subtitle.addClassName(SUBTITLE_CLASSNAME);
 
     actions = new Div();
-    actions.addClassName("va-dashboard-widget__actions");
+    actions.addClassName(ACTIONS_CLASSNAME);
 
     content = new Div();
-    content.addClassName("va-dashboard-widget__content");
+    content.addClassName(CONTENT_CLASSNAME);
 
     final var headerLeft = new Div(title, subtitle);
-    headerLeft.addClassName("va-dashboard-widget__header-left");
+    headerLeft.addClassName(HEADER_LEFT_CLASSNAME);
 
     header.add(headerLeft, actions);
-    header.addClassName("va-dashboard-widget__header-wrapper");
+    header.addClassName(HEADER_WRAPPER_CLASSNAME);
     add(header, content);
 
-    getStyle().set("--va-widget-min-w", "280px");
-    getStyle().set("--va-widget-max-w", "1fr");
-    getStyle().set("--va-widget-min-h", "160px");
+    getStyle().set(VA_WIDGET_MIN_W_CLASSNAME, "280px");
+    getStyle().set(VA_WIDGET_MAX_W_CLASSNAME, "1fr");
+    getStyle().set(VA_WIDGET_MIN_H_CLASSNAME, "160px");
   }
 
   public void setHeader(@Nullable final String text) {
-    title.setText(text != null ? text : "");
+    title.setText(text != null ? text : Publ.EMPTY_STRING);
   }
 
   public void setSubheader(@Nullable final String text) {
-    subtitle.setText(text != null ? text : "");
+    subtitle.setText(text != null ? text : Publ.EMPTY_STRING);
     subtitle.setVisible(text != null && !text.isBlank());
   }
 
@@ -74,15 +83,15 @@ public class VABaseDashboardWidget extends Div implements HasSize {
   }
 
   public void setMinWidthCss(@Nonnull final String cssValue) {
-    getStyle().set("--va-widget-min-w", cssValue);
+    getStyle().set(VA_WIDGET_MIN_W_CLASSNAME, cssValue);
   }
 
   public void setMaxWidthCss(@Nonnull final String cssValue) {
-    getStyle().set("--va-widget-max-w", cssValue);
+    getStyle().set(VA_WIDGET_MAX_W_CLASSNAME, cssValue);
   }
 
   public void setMinHeightCss(@Nonnull final String cssValue) {
-    getStyle().set("--va-widget-min-h", cssValue);
+    getStyle().set(VA_WIDGET_MIN_H_CLASSNAME, cssValue);
   }
 
   @Nonnull
