@@ -17,7 +17,6 @@ public class InjectorConfiguration {
   public Injector injector(@Nonnull final I18NProvider i18NProvider,
                            @Value(ApplicationPropertiesConstants.VERNO_RPC_URL) @Nonnull final String rpcUrl,
                            @Value(ApplicationPropertiesConstants.VERNO_RPC_SECRET) @Nonnull final String rpcInternalSecret) {
-    //TODO move internal secret into env file and then use the InternalRpcTokenModule
     return Guice.createInjector(
             new GuiceModule(rpcUrl, i18NProvider),
             new InternalRpcTokenModule(rpcInternalSecret)
