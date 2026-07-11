@@ -19,6 +19,7 @@ public class ResourceAccessTokenConfig {
   @Bean
   public ResourceAccessTokenCodec resourceAccessTokenCodec(@Nonnull final ServerBean serverBean) {
     final var envBo = BoFactory.getInstance(serverBean).getEmptyConstructor(EnvironmentVariableBo.class);
+
     return new ResourceAccessTokenCodec(
             envBo.getEnv(VernoSecrets.API_RESOURCE_ACCESS_TOKEN),
             ACCESS_TOKEN_TTL

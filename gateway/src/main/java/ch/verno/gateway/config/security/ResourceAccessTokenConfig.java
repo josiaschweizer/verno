@@ -18,6 +18,7 @@ public class ResourceAccessTokenConfig {
   @Bean
   public ResourceAccessTokenCodec resourceAccessTokenCodec(@Nonnull final RpcFactory rpcFactory) {
     final var envResource = rpcFactory.create(EnvResource.class);
+
     return new ResourceAccessTokenCodec(
             envResource.getEnv(VernoSecrets.API_RESOURCE_ACCESS_TOKEN),
             ACCESS_TOKEN_TTL

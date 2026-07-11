@@ -12,4 +12,6 @@ public class ApplicationPropertiesConstants {
   // this constant does not have to contain ${...} - it's directly used in the environment.getProperties
   @NonNls public static final String VERNO_UI_LOADED_ENV = "verno.ui.loaded-env";
 
+  @NonNls public static final String VERNO_GATEWAY_LOADED_ENV = "verno.gateway.loaded-env";
+
 }

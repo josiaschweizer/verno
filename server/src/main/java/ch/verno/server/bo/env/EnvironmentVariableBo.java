@@ -6,9 +6,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class EnvironmentVariableBo {
 
   @Nonnull private final Dotenv dotEnv;
@@ -26,7 +23,7 @@ public class EnvironmentVariableBo {
 
 
   @Nonnull
-  public String getEnv(@Nonnull String key) {
+  public String getEnv(@Nonnull final String key) {
     final var env = getEnvNullable(key);
 
     if (env == null) {
@@ -37,7 +34,7 @@ public class EnvironmentVariableBo {
   }
 
   @Nullable
-  public String getEnvNullable(@Nonnull String key) {
+  public String getEnvNullable(@Nonnull final String key) {
     return dotEnv.get(key);
   }
 
