@@ -7,7 +7,7 @@ import ch.verno.contract.dto.table.gender.GenderDto;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
-import ch.verno.ui.base.components.entry.email.VAEmailField;
+import ch.verno.ui.base.components.entry.email.VAMailField;
 import ch.verno.ui.base.components.entry.numberfield.VANumberField;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
@@ -15,7 +15,6 @@ import ch.verno.ui.base.components.entry.twooption.VATwoOptionEntry;
 import ch.verno.ui.base.components.entry.weekoption.VAWeekOption;
 import ch.verno.ui.base.components.file.upload.VAUpload;
 import ch.verno.ui.base.components.schedulepicker.VAScheduleWeekPicker;
-import com.google.inject.Inject;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -113,12 +112,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAEmailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
-                                       @Nonnull final Setter<DTO, String> valueSetter,
-                                       @Nonnull final Binder<DTO> binder,
-                                       @Nonnull final Optional<String> required,
-                                       @Nonnull final String label) {
-    final var emailField = new VAEmailField(label);
+  public VAMailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                      @Nonnull final Setter<DTO, String> valueSetter,
+                                      @Nonnull final Binder<DTO> binder,
+                                      @Nonnull final Optional<String> required,
+                                      @Nonnull final String label) {
+    final var emailField = new VAMailField(label);
     emailField.setClearButtonVisible(true);
     emailField.setWidthFull();
     emailField.setValueChangeMode(ValueChangeMode.EAGER);

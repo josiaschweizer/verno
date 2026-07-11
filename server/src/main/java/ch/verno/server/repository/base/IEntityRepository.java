@@ -34,5 +34,7 @@ public interface IEntityRepository<E, ID> {
 
   long count();
 
+  long countUnscoped();
+
   void flush();
 }

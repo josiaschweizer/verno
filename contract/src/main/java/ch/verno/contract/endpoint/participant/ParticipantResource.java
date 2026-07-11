@@ -47,7 +47,7 @@ public interface ParticipantResource {
                               @Nonnull CourseDto courseDto);
 
   @Nonnull
-  Long getParticipantCount();
+  Long getParticipantCountUnscoped();
 
   @Nonnull
   SaveResponse<ParticipantDto> apiSaveParticipant(@Nonnull ParticipantDto participantDto);

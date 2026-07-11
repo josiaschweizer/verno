@@ -3,6 +3,7 @@ package ch.verno.server.repository.mail;
 import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.jpa.mail.SpringDataMailLogJpaRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
 import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,15 @@ public class MailLogRepository extends AbstractEntityRepository<
     return getRepository().findAllByRecipientEmailOrderByCreatedAtDesc(recipientEmail);
   }
 
-
-
+  /**
+   * Saves a tenant-unscoped entity (e.g. came via api from the landing page)
+   *
+   * @param entity Mail Log Entity which gets saved
+   * @return the saved entity
+   */
+  @Nonnull
+  @UnscopedQuery
+  public MailLogEntity saveUnscoped(@Nonnull final MailLogEntity entity) {
+    return getRepository().save(entity);
+  }
 }

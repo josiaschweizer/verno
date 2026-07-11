@@ -2,7 +2,7 @@ package ch.verno.lib;
 
 import java.util.regex.Pattern;
 
-@SuppressWarnings("HardcodedFileSeparator")
+@SuppressWarnings({"HardcodedFileSeparator", "HardCodedStringLiteral"})
 public class Publ {
 
   public static final Integer ZERO = 0;
@@ -78,6 +78,7 @@ public class Publ {
   public static final String ZERO_WIDTH_NON_JOINER = "\u200C";
   public static final String ZERO_WIDTH_JOINER = "\u200D";
 
+  public static final String RPC = "/rpc";
   public static final String API_ANYTHING = "/**";
 
   public static class Char {

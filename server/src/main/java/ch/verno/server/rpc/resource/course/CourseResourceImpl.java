@@ -88,7 +88,7 @@ public class CourseResourceImpl implements CourseResource {
 
   @Nonnull
   @Override
-  public Long getCourseCount() {
-    return courseService.get().count();
+  public Long getCourseCountUnscoped() {
+    return courseService.get().countUnscoped();
   }
 }

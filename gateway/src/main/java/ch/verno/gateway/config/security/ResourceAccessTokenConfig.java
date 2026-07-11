@@ -1,4 +1,4 @@
-package ch.verno.gateway.security;
+package ch.verno.gateway.config.security;
 
 import ch.verno.common.rpc.auth.pub.ResourceAccessTokenCodec;
 import ch.verno.contract.endpoint.properties.env.EnvResource;
@@ -18,6 +18,7 @@ public class ResourceAccessTokenConfig {
   @Bean
   public ResourceAccessTokenCodec resourceAccessTokenCodec(@Nonnull final RpcFactory rpcFactory) {
     final var envResource = rpcFactory.create(EnvResource.class);
+
     return new ResourceAccessTokenCodec(
             envResource.getEnv(VernoSecrets.API_RESOURCE_ACCESS_TOKEN),
             ACCESS_TOKEN_TTL

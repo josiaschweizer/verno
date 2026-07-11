@@ -23,8 +23,8 @@ public class ApiSecurityConfig { //TODO I THINK THIS CAN BE DELETED
   public SecurityFilterChain apiFilterChain(@Nonnull final HttpSecurity http,
                                             @Nonnull final CorsConfigurationSource apiCorsSource,
                                             @Qualifier("apiAuthenticationManager") @Nonnull final AuthenticationManager apiAuthenticationManager) {
-    final var resolveBillingAccessToken = ApiUrl.BILLING_ACCESS_TOKEN + ApiUrl.RESOLVE_ACCESS_TOKEN;
-    final var startStripeSession = ApiUrl.BILLING_SESSION + ApiUrl.START_STRIPE_SESSION;
+    final var resolveBillingAccessToken = ApiUrl.PUBLIC_BILLING_ACCESS_TOKEN + ApiUrl.RESOLVE_ACCESS_TOKEN;
+    final var startStripeSession = ApiUrl.PUBLIC_BILLING_SESSION + ApiUrl.START_STRIPE_SESSION;
 
     http
             .securityMatcher("/api/**")

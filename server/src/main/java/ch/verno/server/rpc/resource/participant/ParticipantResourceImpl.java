@@ -91,8 +91,8 @@ public class ParticipantResourceImpl implements ParticipantResource {
 
   @Nonnull
   @Override
-  public Long getParticipantCount() {
-    return participantService.get().count();
+  public Long getParticipantCountUnscoped() {
+    return participantService.get().countUnscoped();
   }
 
   @Nonnull

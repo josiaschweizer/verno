@@ -1,6 +1,5 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.rpc.properties.user.UserProperties;
 import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;

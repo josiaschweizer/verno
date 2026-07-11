@@ -27,15 +27,7 @@ type RequestOptions = {
   signal?: AbortSignal
 }
 
-function buildBasicAuthHeader(user: string, pass: string): string {
-  const token = btoa(`${user}:${pass}`)
-  return `Basic ${token}`
-}
-
-export function createApiClient(config: {
-  baseUrl: string
-  basicAuth?: { user: string; pass: string }
-}) {
+export function createApiClient(config: { baseUrl: string; credentials?: RequestCredentials }) {
   const baseUrl = config.baseUrl.replace(/\/+$/, '')
 
   async function request<T>(opts: RequestOptions): Promise<T> {
@@ -47,17 +39,11 @@ export function createApiClient(config: {
       ...(opts.headers ?? {}),
     }
 
-    if (config.basicAuth) {
-      headers.Authorization = buildBasicAuthHeader(
-        config.basicAuth.user,
-        config.basicAuth.pass,
-      )
-    }
-
     const res = await fetch(url, {
       method: opts.method ?? 'GET',
       headers,
       body: opts.body != null ? JSON.stringify(opts.body) : undefined,
+      credentials: config.credentials ?? 'same-origin',
       signal: opts.signal,
     })
 
@@ -76,8 +62,7 @@ export function createApiClient(config: {
     }
 
     if (!res.ok) {
-      const msg =
-        payload?.message || payload?.error || res.statusText || 'Request failed'
+      const msg = payload?.message || payload?.error || res.statusText || 'Request failed'
 
       throw new ApiError({
         status: res.status,

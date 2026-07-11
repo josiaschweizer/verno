@@ -1,4 +1,4 @@
-import { createApiClient } from '@verno/lib/apiClient'
+import { api } from './client'
 
 export type CreateTenantRequest = {
   tenantKey: string
@@ -21,65 +21,30 @@ export type CreateTenantResponse = {
   dbStatus: string
 }
 
-const env = (import.meta as any).env as any
-
-const baseUrl = env.VITE_API_BASE_URL || 'http://localhost:8082'
-const apiUser = (env.VITE_PROVISIONER_API_USER as string | undefined) || 'verno'
-const apiPass = (env.VITE_PROVISIONER_API_PASS as string | undefined) || 'verno'
-
-const client = createApiClient({
-  baseUrl,
-  basicAuth: { user: apiUser, pass: apiPass },
-})
-
 export const tenantsApi = {
-  async createTenant(req: CreateTenantRequest) {
-    return await client.request<CreateTenantResponse>({
+  createTenant(req: CreateTenantRequest) {
+    return api.request<CreateTenantResponse>({
       method: 'POST',
-      path: '/api/v1/tenants',
+      path: '/api/tenants',
       body: req,
     })
   },
 
-  async listTenants() {
-    return await client.request<any[]>({
+  getCountOfTenants() {
+    return api.request<any>({ method: 'GET', path: '/api/tenants/count' })
+  },
+
+  getTotalMemberCount() {
+    return api.request<any>({
       method: 'GET',
-      path: '/api/v1/tenants',
+      path: '/api/application/memberCount',
     })
   },
 
-  async getTenant(tenantKey: string) {
-    return await client.request<any>({
+  getTotalCourseCount() {
+    return api.request<any>({
       method: 'GET',
-      path: `/api/v1/tenants/${encodeURIComponent(tenantKey)}`,
-    })
-  },
-
-  async reconcileTenant(tenantKey: string) {
-    return await client.request<any>({
-      method: 'POST',
-      path: `/api/v1/tenants/${encodeURIComponent(tenantKey)}/reconcile`,
-    })
-  },
-
-  async getCountOfTenants() {
-    return await client.request<any>({
-      method: 'GET',
-      path: `/api/v1/tenants/count`,
-    })
-  },
-
-  async getTotalMemberCount() {
-    return await client.request<any>({
-      method: 'GET',
-      path: `/api/v1/application/memberCount`,
-    })
-  },
-
-  async getTotalCourseCount() {
-    return await client.request<any>({
-      method: 'GET',
-      path: `/api/v1/application/courseCount`,
+      path: '/api/application/courseCount',
     })
   },
 }

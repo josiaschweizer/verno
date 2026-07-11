@@ -1,13 +1,16 @@
 package ch.verno.server.config.security;
 
 import ch.verno.common.rpc.auth.internal.InternalRpcTokenCodec;
-import ch.verno.lib.exception.rpc.auth.internal.InternalRpcTokenException;
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.lib.New;
+import ch.verno.lib.Publ;
+import ch.verno.lib.exception.rpc.auth.internal.InternalRpcTokenException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,10 +18,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Component
 public class InternalRpcAuthFilter extends OncePerRequestFilter {
+
+  @NonNls public static final String RPC = Publ.SLASH + "rpc";
+  @NonNls public static final String BEARER = "Bearer ";
 
   @Nonnull private final InternalRpcTokenCodec tokenCodec;
 
@@ -28,34 +33,37 @@ public class InternalRpcAuthFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(@Nonnull final HttpServletRequest request) {
-    return !request.getRequestURI().startsWith("/rpc");
+    return !request.getRequestURI().startsWith(RPC);
   }
 
   @Override
   protected void doFilterInternal(@Nonnull final HttpServletRequest request,
                                   @Nonnull final HttpServletResponse response,
-                                  @Nonnull final FilterChain filterChain)
-          throws ServletException, IOException {
+                                  @Nonnull final FilterChain filterChain) throws ServletException, IOException {
+    final var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (authHeader == null || !authHeader.startsWith(BEARER)) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing internal RPC token");
+      return;
+    }
 
-    final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
     try {
-      if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-        final var principal = tokenCodec.verify(authorizationHeader.substring("Bearer ".length()));
+      final var principal = tokenCodec.verify(authHeader.substring(BEARER.length()));
+      final var authentication = UsernamePasswordAuthenticationToken.authenticated(
+              principal.username(),
+              null,
+              New.list()
+      );
 
-        final var authentication = UsernamePasswordAuthenticationToken.authenticated(
-                principal.username(), null, List.of());
-        final var securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+      final var securityContext = SecurityContextHolder.createEmptyContext();
+      securityContext.setAuthentication(authentication);
+      SecurityContextHolder.setContext(securityContext);
 
-        if (principal.tenantId() != null) {
-          TenantContext.set(principal.tenantId());
-        }
+      if (principal.tenantId() != null) {
+        TenantContext.set(principal.tenantId());
       }
 
       filterChain.doFilter(request, response);
-
     } catch (final InternalRpcTokenException exception) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid internal RPC token");
     } finally {

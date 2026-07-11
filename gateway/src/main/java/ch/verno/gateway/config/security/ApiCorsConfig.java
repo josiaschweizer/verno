@@ -1,4 +1,4 @@
-package ch.verno.gateway.security;
+package ch.verno.gateway.config.security;
 
 import ch.verno.lib.Publ;
 import org.springframework.context.annotation.Bean;
@@ -12,14 +12,12 @@ import java.util.List;
 @Configuration
 public class ApiCorsConfig {
 
-  //TODO CONSTANTS!!!
-
   @Bean
   public CorsConfigurationSource apiCorsSource() {
     final var config = new CorsConfiguration();
     config.setAllowCredentials(true);
 
-    config.setAllowedOrigins(List.of(
+    config.setAllowedOrigins(List.of( //TODO properties
             "https://www.verno-app.ch",
             "https://verno-app.ch",
             "https://payment.verno-app.ch",

@@ -138,7 +138,9 @@ export default function RegisterMultiStepDialog({ open, onClose }: Props) {
       const message = payload?.message ?? e.message
       const details = payload?.details
 
-      if (code === 'TENANT_ALREADY_EXISTS') {
+      console.log(e)
+
+      if (code === 'TENANT_SLUG_ALREADY_EXISTS') {
         return {
           title: t('dialog.errors.tenantAlreadyExists.title'),
           message: t('dialog.errors.tenantAlreadyExists.message'),

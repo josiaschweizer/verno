@@ -1,4 +1,4 @@
-package ch.verno.ui.config.env;
+package ch.verno.gateway.config.env;
 
 import ch.verno.common.environment.EnvironmentUtil;
 import ch.verno.lib.Publ;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Configuration
-public class DotenvPropertySourceConfig {
+public class GatewayPropertySourceConfig {
 
   @Bean
   public static PropertySourcesPlaceholderConfigurer properties(@Nonnull final Environment environment) {
@@ -23,11 +23,11 @@ public class DotenvPropertySourceConfig {
     final var loadedEnvs = resolveLoadedEnvs(environment);
 
     final var props = new Properties();
-    dotenv.entries().forEach(e -> {
-      if (loadedEnvs.contains(e.getKey())) {
-        props.setProperty(e.getKey(), e.getValue());
+    for (final var entry : dotenv.entries()) {
+      if (loadedEnvs.contains(entry.getKey())) {
+        props.setProperty(entry.getKey(), entry.getValue());
       }
-    });
+    }
 
     final var configurer = new PropertySourcesPlaceholderConfigurer();
     configurer.setProperties(props);
@@ -37,7 +37,7 @@ public class DotenvPropertySourceConfig {
   @Nonnull
   private static List<String> resolveLoadedEnvs(@Nonnull final Environment environment) {
     final var raw = environment.getProperty(
-            ApplicationPropertiesConstants.VERNO_UI_LOADED_ENV,
+            ApplicationPropertiesConstants.VERNO_GATEWAY_LOADED_ENV,
             Publ.EMPTY_STRING
     );
     return Arrays.asList(raw.split(Publ.COMMA));
@@ -45,7 +45,6 @@ public class DotenvPropertySourceConfig {
 
   @Nonnull
   private static Dotenv getDotEnv() {
-    // Find project root by looking for pom.xml or .env file
     final var directory = EnvironmentUtil.findProjectRoot();
 
     return Dotenv.configure()

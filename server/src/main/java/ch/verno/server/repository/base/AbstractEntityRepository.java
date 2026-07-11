@@ -1,6 +1,7 @@
 package ch.verno.server.repository.base;
 
 import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,6 +76,12 @@ public abstract class AbstractEntityRepository<ENTITY, ID, R extends AbstractEnt
 
   @Override
   public long count() {
+    return repository.count();
+  }
+
+  @Override
+  @UnscopedQuery
+  public long countUnscoped(){
     return repository.count();
   }
 

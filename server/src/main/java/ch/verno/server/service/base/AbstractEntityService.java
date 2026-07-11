@@ -137,6 +137,12 @@ public abstract class AbstractEntityService<
 
   @Override
   @Transactional(readOnly = true)
+  public long countUnscoped(){
+    return repository.countUnscoped();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public void flush() {
     repository.flush();
   }

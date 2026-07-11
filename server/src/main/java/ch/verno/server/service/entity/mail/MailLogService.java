@@ -28,8 +28,6 @@ public class MailLogService extends AbstractSpecEntityService<
     super(serverBean.get(MailLogRepository.class), serverBean.get(MailLogMapper.class), MailLogSpec::new);
   }
 
-
-
   @Nonnull
   public List<MailLogDto> findAllByStatus(@Nonnull final MailLogStatus status) {
     return getRepository().findAllByStatus(status)
@@ -44,6 +42,13 @@ public class MailLogService extends AbstractSpecEntityService<
             .stream()
             .map(getMapper()::toDto)
             .toList();
+  }
+
+  @Nonnull
+  public MailLogDto saveUnscoped(@Nonnull final MailLogDto dto) {
+    MailLogEntity entity = getMapper().toNewEntity(dto);
+    entity = getRepository().saveUnscoped(entity);
+    return getMapper().toDto(entity);
   }
 
 }
