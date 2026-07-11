@@ -38,8 +38,8 @@ steps:
       - --image=${_AR}/verno-server:${COMMIT_SHA}
       - --region=${_REGION}
       - --platform=managed
-      - --ingress=internal
-      - --no-allow-unauthenticated
+      - --ingress=all
+      - --allow-unauthenticated
       - --add-cloudsql-instances=${_SQL}
       - --set-env-vars=SPRING_PROFILES_ACTIVE=prod
       - --set-env-vars=CLOUDSQL_INSTANCE=${_SQL}
@@ -71,7 +71,7 @@ steps:
           --region=${_REGION} --platform=managed \
           --ingress=all --allow-unauthenticated \
           --set-env-vars=SPRING_PROFILES_ACTIVE=prod \
-          --set-env-vars=VERNO_RPC_URL=$$SERVER_URL \
+          --set-env-vars=VERNO_SERVER_URL=$$SERVER_URL \
           --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest \
           --set-secrets=API_RESOURCE_ACCESS_TOKEN=verno-resource-hmac:latest \
           --quiet
@@ -88,7 +88,7 @@ steps:
           --region=${_REGION} --platform=managed \
           --ingress=all --allow-unauthenticated \
           --set-env-vars=SPRING_PROFILES_ACTIVE=prod \
-          --set-env-vars=VERNO_RPC_URL=$$SERVER_URL \
+          --set-env-vars=VERNO_SERVER_URL=$$SERVER_URL \
           --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest \
           --quiet
 
