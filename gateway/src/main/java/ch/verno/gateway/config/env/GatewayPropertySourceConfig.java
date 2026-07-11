@@ -49,6 +49,7 @@ public class GatewayPropertySourceConfig {
 
     return Dotenv.configure()
             .directory(directory)
+            .systemProperties()
             .ignoreIfMissing()
             .load();
   }

@@ -1,0 +1,100 @@
+substitutions:
+  _AR: europe-west6-docker.pkg.dev/keen-jigsaw-482516-e6/cloud-run-source-deploy/verno
+  _REGION: europe-west6
+  _SQL: keen-jigsaw-482516-e6:europe-west6:verno-sql
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
+
+steps:
+  - id: build-server
+    name: gcr.io/cloud-builders/docker
+    args: ['build','-t','${_AR}/verno-server:${COMMIT_SHA}','-f','Dockerfile.server','.']
+  - id: build-gateway
+    name: gcr.io/cloud-builders/docker
+    args: ['build','-t','${_AR}/verno-gateway:${COMMIT_SHA}','-f','Dockerfile.gateway','.']
+  - id: build-ui
+    name: gcr.io/cloud-builders/docker
+    args: ['build','-t','${_AR}/verno-ui:${COMMIT_SHA}','-f','Dockerfile.ui','.']
+
+  - id: push-server
+    name: gcr.io/cloud-builders/docker
+    args: ['push','${_AR}/verno-server:${COMMIT_SHA}']
+  - id: push-gateway
+    name: gcr.io/cloud-builders/docker
+    args: ['push','${_AR}/verno-gateway:${COMMIT_SHA}']
+  - id: push-ui
+    name: gcr.io/cloud-builders/docker
+    args: ['push','${_AR}/verno-ui:${COMMIT_SHA}']
+
+  - id: deploy-server
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - verno-server
+      - --image=${_AR}/verno-server:${COMMIT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --ingress=internal
+      - --no-allow-unauthenticated
+      - --add-cloudsql-instances=${_SQL}
+      - --set-env-vars=SPRING_PROFILES_ACTIVE=prod
+      - --set-env-vars=CLOUDSQL_INSTANCE=${_SQL}
+      - --set-secrets=DB_NAME=verno_db_name:latest
+      - --set-secrets=DB_USER=verno_db_user:latest
+      - --set-secrets=DB_PASS=verno_db_pass:latest
+      - --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest
+      - --set-secrets=API_RESOURCE_ACCESS_TOKEN=verno-resource-hmac:latest
+      - --set-secrets=STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest
+      - --set-secrets=STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
+      - --set-secrets=STRIPE_PRICE_ID_BASIC_PACKAGE=STRIPE_PRICE_ID_BASIC_PACKAGE:latest
+      - --set-secrets=SMTP_HOST=SMTP_HOST:latest
+      - --set-secrets=SMTP_PORT=SMTP_PORT:latest
+      - --set-secrets=SMTP_USER=SMTP_USER:latest
+      - --set-secrets=SMTP_PASS=SMTP_PASS:latest
+      - --set-secrets=SMTP_SECURITY=SMTP_SECURITY:latest
+      - --set-secrets=SMTP_TLS=SMTP_TLS:latest
+      - --set-secrets=BILLING_API_USERNAME=BILLING_API_USERNAME:latest
+      - --set-secrets=BILLING_API_PASSWORD=BILLING_API_PASSWORD:latest
+      - --quiet
+
+  - id: deploy-gateway
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        SERVER_URL=$(gcloud run services describe verno-server --region=${_REGION} --format='value(status.url)')
+        gcloud run deploy verno-gateway \
+          --image=${_AR}/verno-gateway:${COMMIT_SHA} \
+          --region=${_REGION} --platform=managed \
+          --ingress=all --allow-unauthenticated \
+          --set-env-vars=SPRING_PROFILES_ACTIVE=prod \
+          --set-env-vars=VERNO_RPC_URL=$$SERVER_URL \
+          --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest \
+          --set-secrets=API_RESOURCE_ACCESS_TOKEN=verno-resource-hmac:latest \
+          --quiet
+
+  - id: deploy-ui
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        SERVER_URL=$(gcloud run services describe verno-server --region=${_REGION} --format='value(status.url)')
+        gcloud run deploy verno-ui \
+          --image=${_AR}/verno-ui:${COMMIT_SHA} \
+          --region=${_REGION} --platform=managed \
+          --ingress=all --allow-unauthenticated \
+          --set-env-vars=SPRING_PROFILES_ACTIVE=prod \
+          --set-env-vars=VERNO_RPC_URL=$$SERVER_URL \
+          --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest \
+          --quiet
+
+images:
+  - ${_AR}/verno-server:${COMMIT_SHA}
+  - ${_AR}/verno-gateway:${COMMIT_SHA}
+  - ${_AR}/verno-ui:${COMMIT_SHA}
