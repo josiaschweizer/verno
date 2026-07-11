@@ -1,0 +1,186 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/client-version: 575.0.1
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/maxScale: '5'
+    run.googleapis.com/operation-id: 8da30059-cc60-42c7-9887-27f94225fc05
+    run.googleapis.com/urls: '["https://verno-app-722709602156.europe-west6.run.app","https://verno-app-4vtzxlml2q-oa.a.run.app"]'
+    serving.knative.dev/creator: josia.schweizer@gmail.com
+    serving.knative.dev/lastModifier: 722709602156-compute@developer.gserviceaccount.com
+  creationTimestamp: '2026-02-04T21:37:51.585713Z'
+  generation: 136
+  labels:
+    cloud.googleapis.com/location: europe-west6
+    commit-sha: 34531e18331afedcaa75acef19d3dfde0ac1f8a6
+    gcb-build-id: 408e38f7-0003-4617-81e8-5aa903952db4
+    gcb-trigger-id: 46a8c07b-2a50-4b92-a7b5-c8a017cb7da6
+    gcb-trigger-region: global
+    managed-by: gcp-cloud-build-deploy-cloud-run
+    run.googleapis.com/satisfiesPzs: 'true'
+  name: verno-app
+  namespace: '722709602156'
+  resourceVersion: AAZWVh2+RC4
+  selfLink: /apis/serving.knative.dev/v1/namespaces/722709602156/services/verno-app
+  uid: 8abfb34a-dcc2-4acc-8503-43c0cf2967a9
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '1'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 575.0.1
+        run.googleapis.com/cloudsql-instances: keen-jigsaw-482516-e6:europe-west6:verno-sql
+        run.googleapis.com/startup-cpu-boost: 'true'
+      labels:
+        client.knative.dev/nonce: kqtdkfnkrq
+        commit-sha: 34531e18331afedcaa75acef19d3dfde0ac1f8a6
+        gcb-build-id: 408e38f7-0003-4617-81e8-5aa903952db4
+        gcb-trigger-id: 46a8c07b-2a50-4b92-a7b5-c8a017cb7da6
+        gcb-trigger-region: global
+        managed-by: gcp-cloud-build-deploy-cloud-run
+        run.googleapis.com/startupProbeType: Default
+    spec:
+      containerConcurrency: 80
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: CLOUDSQL_INSTANCE
+          value: keen-jigsaw-482516-e6:europe-west6:verno-sql
+        - name: REDEPLOY_TS
+          value: '1780665376'
+        - name: BILLING_API_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: BILLING_API_PASSWORD
+        - name: BILLING_API_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: BILLING_API_USERNAME
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: verno_db_name
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: verno_db_pass
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: verno_db_user
+        - name: STRIPE_PRICE_ID_BASIC_PACKAGE
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: STRIPE_PRICE_ID_BASIC_PACKAGE
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: STRIPE_SECRET_KEY
+        - name: STRIPE_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: STRIPE_WEBHOOK_SECRET
+        - name: SMTP_HOST
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_HOST
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_PORT
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_USER
+        - name: SMTP_PASS
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_PASS
+        - name: SMTP_SECURITY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_SECURITY
+        - name: SMTP_TLS
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: SMTP_TLS
+        - name: VERNO_BASE_URL_PATTERN
+          value: https://%s.verno-app.ch
+        image: europe-west6-docker.pkg.dev/keen-jigsaw-482516-e6/cloud-run-source-deploy/verno/verno-app:34531e18331afedcaa75acef19d3dfde0ac1f8a6
+        name: verno-app-1
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: verno-run-sa@keen-jigsaw-482516-e6.iam.gserviceaccount.com
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100
+status:
+  address:
+    url: https://verno-app-4vtzxlml2q-oa.a.run.app
+  conditions:
+  - lastTransitionTime: '2026-07-11T13:48:45.868397Z'
+    message: |-
+      Revision 'verno-app-00136-67j' is not ready and cannot serve traffic. The user-provided container failed to start and listen on the port defined provided by the PORT=8080 environment variable within the allocated timeout. This can happen when the container port is misconfigured or if the timeout is too short. The health check timeout can be extended. Logs for this revision might contain more information.
+
+      Logs URL: https://console.cloud.google.com/logs/viewer?project=keen-jigsaw-482516-e6&resource=cloud_run_revision/service_name/verno-app/revision_name/verno-app-00136-67j&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22verno-app%22%0Aresource.labels.revision_name%3D%22verno-app-00136-67j%22 
+      For more troubleshooting guidance, see https://cloud.google.com/run/docs/troubleshooting#container-failed-to-start
+    reason: HealthCheckContainerError
+    status: 'False'
+    type: Ready
+  - lastTransitionTime: '2026-07-11T13:48:45.829447Z'
+    message: |-
+      The user-provided container failed to start and listen on the port defined provided by the PORT=8080 environment variable within the allocated timeout. This can happen when the container port is misconfigured or if the timeout is too short. The health check timeout can be extended. Logs for this revision might contain more information.
+
+      Logs URL: https://console.cloud.google.com/logs/viewer?project=keen-jigsaw-482516-e6&resource=cloud_run_revision/service_name/verno-app/revision_name/verno-app-00136-67j&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22verno-app%22%0Aresource.labels.revision_name%3D%22verno-app-00136-67j%22 
+      For more troubleshooting guidance, see https://cloud.google.com/run/docs/troubleshooting#container-failed-to-start
+    reason: HealthCheckContainerError
+    status: 'False'
+    type: ConfigurationsReady
+  - lastTransitionTime: '2026-07-11T13:48:45.868397Z'
+    message: |-
+      Revision 'verno-app-00136-67j' is not ready and cannot serve traffic. The user-provided container failed to start and listen on the port defined provided by the PORT=8080 environment variable within the allocated timeout. This can happen when the container port is misconfigured or if the timeout is too short. The health check timeout can be extended. Logs for this revision might contain more information.
+
+      Logs URL: https://console.cloud.google.com/logs/viewer?project=keen-jigsaw-482516-e6&resource=cloud_run_revision/service_name/verno-app/revision_name/verno-app-00136-67j&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22verno-app%22%0Aresource.labels.revision_name%3D%22verno-app-00136-67j%22 
+      For more troubleshooting guidance, see https://cloud.google.com/run/docs/troubleshooting#container-failed-to-start
+    reason: HealthCheckContainerError
+    status: 'False'
+    type: RoutesReady
+  latestCreatedRevisionName: verno-app-00136-67j
+  latestReadyRevisionName: verno-app-00135-mvs
+  observedGeneration: 136
+  traffic:
+  - latestRevision: true
+    percent: 100
+    revisionName: verno-app-00135-mvs
+  url: https://verno-app-4vtzxlml2q-oa.a.run.app

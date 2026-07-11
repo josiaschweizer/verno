@@ -16,8 +16,8 @@ public class EnvironmentVariableBo {
 
     dotEnv = Dotenv.configure()
             .directory(directory)
+            .systemProperties() // TODO do we have to re-active that?
             .ignoreIfMissing()
-//            .systemProperties() // TODO do we have to re-active that?
             .load();
   }
 
@@ -35,7 +35,12 @@ public class EnvironmentVariableBo {
 
   @Nullable
   public String getEnvNullable(@Nonnull final String key) {
-    return dotEnv.get(key);
+    final var fromFile = dotEnv.get(key);
+    if (fromFile != null) {
+      return fromFile;
+    }
+
+    return System.getenv(key);
   }
 
   @Nonnull
