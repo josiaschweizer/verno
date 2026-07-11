@@ -47,6 +47,7 @@ steps:
       - --set-secrets=DB_USER=verno_db_user:latest
       - --set-secrets=DB_PASS=verno_db_pass:latest
       - --set-secrets=RPC_INTERNAL_SECRET=verno-rpc-internal-secret:latest
+      - --set-secrets=API_PASSWORD=API_PASSWORD:latest
       - --set-secrets=API_RESOURCE_ACCESS_TOKEN=verno-resource-hmac:latest
       - --set-secrets=STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest
       - --set-secrets=STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET:latest
