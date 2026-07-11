@@ -57,8 +57,6 @@ steps:
       - --set-secrets=SMTP_PASS=SMTP_PASS:latest
       - --set-secrets=SMTP_SECURITY=SMTP_SECURITY:latest
       - --set-secrets=SMTP_TLS=SMTP_TLS:latest
-      - --set-secrets=BILLING_API_USERNAME=BILLING_API_USERNAME:latest
-      - --set-secrets=BILLING_API_PASSWORD=BILLING_API_PASSWORD:latest
       - --quiet
 
   - id: deploy-gateway
