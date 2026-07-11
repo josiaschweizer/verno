@@ -14,7 +14,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.ui
     container_name: verno-app
     depends_on:
       - postgres
