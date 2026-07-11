@@ -2,8 +2,8 @@ FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /build
 
 COPY . .
-RUN mvn -pl ui -am clean package -DskipTests && \
-    cp ui/target/*.jar /build/app.jar
+RUN mvn -pl ui -am clean package -Pproduction -DskipTests && \
+    cp ui/target/app.jar /build/app.jar
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
