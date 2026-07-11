@@ -38,7 +38,7 @@
     "errors": {
       "tenantAlreadyExists": {
         "title": "La clé du mandant existe déjà",
-        "message": "La clé du mandant ou le sous-domaine existe déjà. Choisis une autre valeur."
+        "message": "L'URL du locataire existe déjà. Veuillez choisir une autre valeur."
       },
       "validationFailed": {
         "title": "Saisie invalide",

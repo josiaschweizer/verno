@@ -1,20 +1,20 @@
 package ch.verno.ui.verno.dashboard.course;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.ui.verno.course.courses.detail.CourseDetail;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
 
 public class CourseDetailDialog extends Dialog {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
   @Nonnull private final CourseDto currentCourse;
 
-  public CourseDetailDialog(@Nonnull final GlobalInterface globalInterface,
+  public CourseDetailDialog(@Nonnull final Injector injector,
                             @Nonnull final CourseDto currentCourse) {
-    this.globalInterface = globalInterface;
+    this.injector = injector;
     this.currentCourse = currentCourse;
 
     initUI();
@@ -34,9 +34,7 @@ public class CourseDetailDialog extends Dialog {
 
   @Nonnull
   private VerticalLayout createCourseDetail() {
-    final var courseDetail = new CourseDetail(globalInterface,
-            false,
-            false);
+    final var courseDetail = new CourseDetail(injector, false, false);
     courseDetail.setParameter(null, currentCourse.getId());
     courseDetail.setAfterSave(this::close);
     courseDetail.setPadding(false);

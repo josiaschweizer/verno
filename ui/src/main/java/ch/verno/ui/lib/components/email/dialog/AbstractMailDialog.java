@@ -1,21 +1,21 @@
 package ch.verno.ui.lib.components.email.dialog;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.common.lib.mail.MailContentDto;
-import ch.verno.common.lib.mail.MailTemplateType;
 import ch.verno.common.tenant.TenantContext;
+import ch.verno.contract.mail.MailContentDto;
+import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
-import ch.verno.server.async.BackgroundExecutor;
+import ch.verno.rpc.client.async.BackgroundExecutorClient;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.lib.components.email.AbstractMailTemplateConfigLayout;
 import ch.verno.ui.lib.mail.SendMailPopup;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
@@ -23,16 +23,18 @@ import java.util.List;
 
 public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLayout> extends VAAbstractDialog {
 
-  @Nonnull protected final Lazy<MailServerGate> mailServerGate;
-  @Nonnull protected final T templateConfigLayout;
+  @Nonnull private final Injector injector;
+  @Nonnull protected final Lazy<MailClient> mailClient;
 
   private boolean isCanceled;
+  @Nonnull protected final T templateConfigLayout;
 
-  public AbstractMailDialog(@Nonnull final GlobalInterface globalInterface,
+  public AbstractMailDialog(@Nonnull final Injector injector,
                             @Nonnull final MailTemplateType mailTemplateType) {
-    this.mailServerGate = Lazy.of(() -> globalInterface.getService(MailServerGate.class));
-    this.templateConfigLayout = createTemplateConfigLayout(globalInterface, mailTemplateType);
+    this.injector = injector;
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
 
+    this.templateConfigLayout = createTemplateConfigLayout(injector, mailTemplateType);
     initUI(getTranslation("setting.send.email"), DialogSize.BIG);
 
     this.isCanceled = false;
@@ -40,8 +42,8 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
-    final var layout = new HorizontalLayout(templateConfigLayout);
+  protected VAHorizontalLayout createContent() {
+    final var layout = new VAHorizontalLayout(templateConfigLayout);
     layout.setSizeFull();
     layout.setPadding(false);
     layout.setSpacing(false);
@@ -67,7 +69,7 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
     }
 
     final var bean = templateConfigLayout.getBean();
-    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
+    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent(), null);
 
     close();
 
@@ -85,7 +87,7 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
     popup.openAndRunAsync(
             ui,
             TenantContext.getRequired(),
-            BackgroundExecutor.getInstance().getExecutorService(),
+            injector.getInstance(BackgroundExecutorClient.class).getExecutorService(),
             () -> executeSend(mailContent),
             () -> NotificationFactory.showSuccessNotification(getTranslation("mail.e.mail.s.sent.successfully")),
             () -> NotificationFactory.showErrorNotification(getTranslation("mail.e.mail.s.sent.failed"))
@@ -114,7 +116,7 @@ public abstract class AbstractMailDialog<T extends AbstractMailTemplateConfigLay
   }
 
   @Nonnull
-  protected abstract T createTemplateConfigLayout(@Nonnull GlobalInterface globalInterface,
+  protected abstract T createTemplateConfigLayout(@Nonnull Injector injector,
                                                   @Nonnull MailTemplateType mailTemplateType);
 
   protected abstract void executeSend(@Nonnull MailContentDto mailContent);

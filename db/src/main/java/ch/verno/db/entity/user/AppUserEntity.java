@@ -3,7 +3,9 @@ package ch.verno.db.entity.user;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 @Entity
@@ -45,7 +47,7 @@ public class AppUserEntity extends TenantScopedEntity {
     // JPA
   }
 
-  public AppUserEntity(@Nonnull final TenantEntity tenant,
+  public AppUserEntity(@Nullable final TenantEntity tenant,
                        @Nonnull final String username,
                        @Nonnull final String firstname,
                        @Nonnull final String lastname,
@@ -63,12 +65,43 @@ public class AppUserEntity extends TenantScopedEntity {
     this.active = active;
   }
 
+  @Nonnull
+  public static AppUserEntity ref(@Nonnull final Long id) {
+    final var entity = new AppUserEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  @Nonnull
+  public static AppUserEntity empty() {
+    return new AppUserEntity(
+            null,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            true
+    );
+  }
+
   public Long getId() {
     return id;
   }
 
   public void setId(final Long id) {
     this.id = id;
+  }
+
+  @Nullable
+  public Long getTenantId() {
+    final var tenant = getTenant();
+    if (tenant == null) {
+      return null;
+    } else {
+      return tenant.getId();
+    }
   }
 
   public String getUsername() {

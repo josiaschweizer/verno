@@ -1,0 +1,32 @@
+package ch.verno.server.service.entity.gender;
+
+import ch.verno.contract.dto.table.gender.GenderDto;
+import ch.verno.db.entity.gender.GenderEntity;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.mapper.gender.GenderMapper;
+import ch.verno.server.repository.gender.GenderRepository;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
+import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+@Transactional
+public class GenderService extends AbstractEntityServiceLongId<
+        GenderEntity,
+        GenderDto,
+        GenderRepository,
+        GenderMapper> {
+
+  public GenderService(@Nonnull final ServerBean serverBean) {
+    super(serverBean.get(GenderRepository.class), serverBean.get(GenderMapper.class));
+  }
+
+  @Nonnull
+  @Transactional(readOnly = true)
+  public Optional<GenderDto> findByName(@Nonnull final String name) {
+    return getRepository().findByName(name).map(getMapper()::toDto);
+  }
+}

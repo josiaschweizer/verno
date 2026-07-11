@@ -1,89 +1,75 @@
 package ch.verno.server.mapper.billing;
 
-import ch.verno.common.db.dto.table.billing.TenantBillingDto;
-import ch.verno.common.db.type.billing.BillingLicenceOption;
-import ch.verno.common.db.type.billing.BillingPaymentStatus;
-import ch.verno.common.db.type.billing.BillingPlanKey;
-import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
+import ch.verno.common.type.billing.BillingLicenceOption;
+import ch.verno.common.type.billing.BillingPaymentStatus;
+import ch.verno.common.type.billing.BillingPlanKey;
+import ch.verno.common.type.billing.BillingSubscriptionStatus;
+import ch.verno.contract.dto.table.billing.TenantBillingDto;
 import ch.verno.db.entity.billing.TenantBillingEntity;
-import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.springframework.stereotype.Component;
 
-public final class TenantBillingMapper {
+import java.util.List;
 
-  private TenantBillingMapper() {
-  }
+@Component
+public class TenantBillingMapper extends AbstractEntityMapper<TenantBillingEntity, TenantBillingDto> {
 
   @Nonnull
-  public static TenantBillingDto toDto(@Nullable final TenantBillingEntity entity) {
-    if (entity == null) {
-      return new TenantBillingDto();
-    }
+  @Override
+  public TenantBillingDto toDto(@Nonnull final TenantBillingEntity entity) {
+    final var dto = TenantBillingDto.empty();
 
-    final var dto = new TenantBillingDto(
-            entity.getId(),
-            entity.getStripeCustomerId() == null ? Publ.EMPTY_STRING : entity.getStripeCustomerId(),
-            entity.getStripeSubscriptionId() == null ? Publ.EMPTY_STRING : entity.getStripeSubscriptionId(),
-            BillingPlanKey.valueOf(entity.getPlanKey()),
-            BillingSubscriptionStatus.fromKey(entity.getSubscriptionStatus()),
-            BillingPaymentStatus.fromKey(entity.getPaymentStatus()),
-            entity.getCurrentPeriodEnd(),
-            entity.getGraceUntil(),
-            entity.isHasValidPaymentMethod(),
-            entity.getLastWebhookEventId() == null ? Publ.EMPTY_STRING : entity.getLastWebhookEventId(),
-            entity.getAdditionalLicenceOptions().stream()
-                    .map(BillingLicenceOption::valueOf)
-                    .toList()
-    );
+    dto.setId(entity.getId());
+    dto.setTenantId(entity.getTenant() != null ? entity.getTenant().getId() : null);
 
-    if (entity.getTenant() != null) {
-      dto.setTenantId(entity.getTenant().getId());
-    }
+    dto.setStripeCustomerId(nullToEmpty(entity.getStripeCustomerId()));
+    dto.setStripeSubscriptionId(nullToEmpty(entity.getStripeSubscriptionId()));
+    dto.setPlanKey(BillingPlanKey.valueOf(entity.getPlanKey()));
+    dto.setSubscriptionStatus(BillingSubscriptionStatus.fromKey(entity.getSubscriptionStatus()));
+    dto.setPaymentStatus(BillingPaymentStatus.fromKey(entity.getPaymentStatus()));
+    dto.setCurrentPeriodEnd(entity.getCurrentPeriodEnd());
+    dto.setGraceUntil(entity.getGraceUntil());
+    dto.setHasValidPaymentMethod(entity.isHasValidPaymentMethod());
+    dto.setLastWebhookEventId(nullToEmpty(entity.getLastWebhookEventId()));
+    dto.setAdditionalLicenceOptions(toLicenceOptions(entity.getAdditionalLicenceOptions()));
 
     return dto;
   }
 
-  @Nullable
-  public static TenantBillingEntity toEntity(@Nullable final TenantBillingDto dto,
-                                             final long tenantId) {
-    if (dto == null) {
-      return null;
-    }
-
-    final var entity = new TenantBillingEntity(
-            TenantEntity.ref(tenantId),
-            dto.getPlanKey().name(),
-            dto.getSubscriptionStatus().getKey(),
-            dto.getPaymentStatus().getKey(),
-            dto.isHasValidPaymentMethod(),
-            dto.getAdditionalStringLicenceOptions()
-    );
-
-    if (dto.getId() != null && dto.getId() != 0) {
-      entity.setId(dto.getId());
-    }
-
-    entity.setStripeCustomerId(dto.getStripeCustomerId().isBlank() ? null : dto.getStripeCustomerId());
-    entity.setStripeSubscriptionId(dto.getStripeSubscriptionId().isBlank() ? null : dto.getStripeSubscriptionId());
-    entity.setCurrentPeriodEnd(dto.getCurrentPeriodEnd());
-    entity.setGraceUntil(dto.getGraceUntil());
-    entity.setLastWebhookEventId(dto.getLastWebhookEventId().isBlank() ? null : dto.getLastWebhookEventId());
-
+  @Nonnull
+  @Override
+  public TenantBillingEntity toNewEntity(@Nonnull final TenantBillingDto dto) {
+    final var entity = TenantBillingEntity.empty();
+    updateEntity(entity, dto);
     return entity;
   }
 
-  public static void updateEntity(@Nonnull final TenantBillingEntity entity,
-                                  @Nonnull final TenantBillingDto dto) {
-    entity.setStripeCustomerId(dto.getStripeCustomerId().isBlank() ? null : dto.getStripeCustomerId());
-    entity.setStripeSubscriptionId(dto.getStripeSubscriptionId().isBlank() ? null : dto.getStripeSubscriptionId());
+  @Override
+  public void updateEntity(@Nonnull final TenantBillingEntity entity,
+                           @Nonnull final TenantBillingDto dto) {
+    entity.setStripeCustomerId(nullToEmpty(dto.getStripeCustomerId()));
+    entity.setStripeSubscriptionId(nullToEmpty(dto.getStripeSubscriptionId()));
     entity.setPlanKey(dto.getPlanKey().name());
-    entity.setSubscriptionStatus(dto.getSubscriptionStatus().getKey());
-    entity.setPaymentStatus(dto.getPaymentStatus().getKey());
+    entity.setSubscriptionStatus(dto.getSubscriptionStatus().name());
+    entity.setPaymentStatus(dto.getPaymentStatus().name());
     entity.setCurrentPeriodEnd(dto.getCurrentPeriodEnd());
     entity.setGraceUntil(dto.getGraceUntil());
     entity.setHasValidPaymentMethod(dto.isHasValidPaymentMethod());
-    entity.setLastWebhookEventId(dto.getLastWebhookEventId().isBlank() ? null : dto.getLastWebhookEventId());
+    entity.setLastWebhookEventId(nullToEmpty(dto.getLastWebhookEventId()));
+    entity.setAdditionalLicenceOptions(dto.getAdditionalStringLicenceOptions());
+  }
+
+  @Nonnull
+  private List<BillingLicenceOption> toLicenceOptions(@Nonnull final List<String> values) {
+    return values.stream()
+            .map(BillingLicenceOption::valueOf)
+            .toList();
+  }
+
+  @Nonnull
+  private String nullToEmpty(final String value) {
+    return value == null ? Publ.EMPTY_STRING : value;
   }
 }

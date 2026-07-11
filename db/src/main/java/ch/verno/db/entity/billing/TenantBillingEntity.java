@@ -1,8 +1,8 @@
 package ch.verno.db.entity.billing;
 
-import ch.verno.common.db.type.billing.BillingPaymentStatus;
-import ch.verno.common.db.type.billing.BillingPlanKey;
-import ch.verno.common.db.type.billing.BillingSubscriptionStatus;
+import ch.verno.common.type.billing.BillingPaymentStatus;
+import ch.verno.common.type.billing.BillingPlanKey;
+import ch.verno.common.type.billing.BillingSubscriptionStatus;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
@@ -87,10 +87,33 @@ public class TenantBillingEntity extends TenantScopedEntity {
     this.additionalLicenceOptions = additionalLicenceOptions;
   }
 
+  public TenantBillingEntity(@Nonnull final String planKey,
+                             @Nonnull final String subscriptionStatus,
+                             @Nonnull final String paymentStatus,
+                             final boolean hasValidPaymentMethod,
+                             @Nonnull final List<String> additionalLicenceOptions) {
+    this.planKey = planKey;
+    this.subscriptionStatus = subscriptionStatus;
+    this.paymentStatus = paymentStatus;
+    this.hasValidPaymentMethod = hasValidPaymentMethod;
+    this.additionalLicenceOptions = additionalLicenceOptions;
+  }
+
   @Nonnull
   public static TenantBillingEntity createDefault(@Nonnull final TenantEntity tenant) {
     return new TenantBillingEntity(
             tenant,
+            BillingPlanKey.FREE.name(),
+            BillingSubscriptionStatus.INACTIVE.name(),
+            BillingPaymentStatus.UNPAID.name(),
+            false,
+            New.arrayList()
+    );
+  }
+
+  @Nonnull
+  public static TenantBillingEntity empty() {
+    return new TenantBillingEntity(
             BillingPlanKey.FREE.name(),
             BillingSubscriptionStatus.INACTIVE.name(),
             BillingPaymentStatus.UNPAID.name(),
@@ -161,7 +184,12 @@ public class TenantBillingEntity extends TenantScopedEntity {
   }
 
   public void setAdditionalLicenceOptions(@Nonnull final List<String> additionalLicenceOptions) {
-    this.additionalLicenceOptions = additionalLicenceOptions;
+    if (this.additionalLicenceOptions == null) {
+      this.additionalLicenceOptions = New.list(additionalLicenceOptions);
+      return;
+    }
+    this.additionalLicenceOptions.clear();
+    this.additionalLicenceOptions.addAll(additionalLicenceOptions);
   }
 
   @Nonnull

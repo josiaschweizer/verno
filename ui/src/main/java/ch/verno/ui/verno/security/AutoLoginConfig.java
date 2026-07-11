@@ -1,10 +1,13 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.VernoConstants;
-import ch.verno.server.service.intern.AppUserService;
-import ch.verno.server.tenant.TenantService;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.VernoConstants;
+import ch.verno.rpc.properties.tenant.TenantProperties;
+import ch.verno.rpc.properties.user.UserProperties;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
@@ -20,18 +23,18 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty("verno.dev.user")
 public class AutoLoginConfig implements VaadinServiceInitListener {
 
-  @Value("${verno.dev.user}")
+  @Value("${verno.dev.user}") //TODO property!
   private String devUser;
 
-  @Nonnull private final AppUserService appUserService;
-  @Nonnull private final TenantService tenantService;
+  @Nonnull private final Lazy<UserProperties> userProperties;
+  @Nonnull private final Lazy<TenantProperties> tenantProperties;
   @Nonnull private final AuthenticationContext authenticationContext;
 
-  public AutoLoginConfig(@Nonnull final AppUserService appUserService,
-                         @Nonnull final TenantService tenantService,
+  @Inject
+  public AutoLoginConfig(@Nonnull final Injector injector,
                          @Nonnull final AuthenticationContext authenticationContext) {
-    this.appUserService = appUserService;
-    this.tenantService = tenantService;
+    this.userProperties = Lazy.of(() -> injector.getInstance(UserProperties.class));
+    this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
     this.authenticationContext = authenticationContext;
   }
 
@@ -53,32 +56,40 @@ public class AutoLoginConfig implements VaadinServiceInitListener {
 
     applyTenant();
 
-    final var userDetails = appUserService.loadUserByUsername(devUser);
-    final var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    final var userDetailsOptional = userProperties.get().findOptionalByUsernameOrEmail(devUser);
+    if (userDetailsOptional.isEmpty()) {
+      return;
+    }
+
+    final var userDetails = userDetailsOptional.get();
+    final var authentication = new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            userDetailsOptional.get().getAuthorities()
+    );
 
     final var securityContext = SecurityContextHolder.createEmptyContext();
     securityContext.setAuthentication(authentication);
     SecurityContextHolder.setContext(securityContext);
     session.setAttribute(VernoConstants.SPRING_SECURITY_CONTEXT, securityContext);
 
-
     event.getUI().getPage().reload();
   }
 
   private void applyTenant() {
-    final var tenants = tenantService.findAllTenants();
+    final var tenants = tenantProperties.get().findAllTenants();
     if (tenants.isEmpty()) {
       return;
     }
 
     tenants.forEach(tenant -> {
-      if (tenant.getId() == 7777L) {
-        TenantContext.set(tenant.getId());
+      if (tenant.id() == 7777L) {
+        TenantContext.set(tenant.id());
       }
     });
 
     if (TenantContext.get() == null) {
-      TenantContext.set(tenants.getFirst().getId());
+      TenantContext.set(tenants.getFirst().id());
     }
   }
 }

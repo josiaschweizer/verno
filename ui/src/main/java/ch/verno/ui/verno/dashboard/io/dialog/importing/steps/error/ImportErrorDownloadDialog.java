@@ -1,38 +1,45 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error;
 
-import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
+import ch.verno.lib.New;
+import ch.verno.ui.base.components.anchor.variants.VAFileDownloadButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
 public class ImportErrorDownloadDialog extends VAAbstractDialog {
 
-  @Nonnull private final String errorFileToken;
-  @Nonnull private final String fileName;
+  @Nonnull private final Injector injector;
+  @Nonnull private final String fileToken;
 
-  public ImportErrorDownloadDialog(@Nonnull final String errorFileToken,
-                                   @Nonnull final String fileName) {
-    this.errorFileToken = errorFileToken;
-    this.fileName = fileName;
+  public ImportErrorDownloadDialog(@Nonnull final Injector injector,
+                                   @Nonnull final String fileToken) {
+    this.injector = injector;
+    this.fileToken = fileToken;
 
     initUI(getTranslation("shared.download"), DialogSize.MEDIUM);
   }
 
+  @Override
+  protected void initUI(@Nullable final String title, @Nonnull final DialogSize dialogSize) {
+    super.initUI(title, dialogSize);
+
+    getFooter().removeAll();
+    getFooter().add(createCancelButton());
+    getFooter().add(createDownloadButton());
+  }
+
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
+  protected VAHorizontalLayout createContent() {
     final var text = new Text(getTranslation("shared.beim.import.konnten.nicht.alle.datensatze.erfolgreich.verarbeitet.werden.die.betroffenen.eintrage.wurden.in.einer.separaten.datei.zusammengefasst.und.konnen.hier.heruntergeladen.werden"));
-    final var layout = new HorizontalLayout(text);
+    final var layout = new VAHorizontalLayout(text);
     layout.setWidthFull();
     layout.setPadding(false);
     layout.setSpacing(false);
@@ -42,30 +49,17 @@ public class ImportErrorDownloadDialog extends VAAbstractDialog {
   @Nonnull
   @Override
   protected Collection<Button> createActionButtons() {
-    final var cancelButton = new Button(getTranslation("shared.cancel"), e -> close());
-    final var downloadButton = createDownloadButton();
-    return List.of(cancelButton, downloadButton);
+    // return empty list because action buttons gets added by overridden initUI directly onto the footer
+    return New.list();
   }
 
   @Nonnull
-  private Button createDownloadButton() {
-    final var hidden = new Anchor(buildAttachmentUrl(errorFileToken), fileName);
-    hidden.getElement().setAttribute("download", true);
-    hidden.getStyle().setDisplay(Style.Display.NONE);
-    add(hidden);
-
-    final var downloadButton = new Button(getTranslation("shared.download"));
-    downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    downloadButton.addClickListener(e -> {
-      hidden.getElement().callJsFunction("click");
-      close();
-    });
-
+  private VAFileDownloadButton createDownloadButton() {
+    final var downloadButton = injector.getInstance(VAFileDownloadButton.class);
+    downloadButton.setFileToken(fileToken);
+    downloadButton.setFallbackFileName("import_errors.csv");
+    downloadButton.addClickListener(this::close);
     return downloadButton;
   }
 
-  @Nonnull
-  private String buildAttachmentUrl(@Nonnull final String token) {
-    return ApiUrl.TEMP_FILE_IMPORT + Publ.SLASH + token + ApiUrl.DISPOSITION_ATTACHMENT;
-  }
 }

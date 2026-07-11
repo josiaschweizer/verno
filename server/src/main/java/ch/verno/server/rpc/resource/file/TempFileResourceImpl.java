@@ -1,0 +1,55 @@
+package ch.verno.server.rpc.resource.file;
+
+import ch.verno.common.rpc.auth.pub.ResourceAccessTokenCodec;
+import ch.verno.common.tenant.TenantContext;
+import ch.verno.contract.dto.file.temp.FileDto;
+import ch.verno.contract.endpoint.file.TempFileResource;
+import ch.verno.contract.rpc.RpcResource;
+import ch.verno.lib.Lazy;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.file.TempFileBo;
+import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
+
+@Component
+@RpcResource(TempFileResource.class)
+public class TempFileResourceImpl implements TempFileResource {
+
+  @Nonnull private final Lazy<TempFileBo> tempFileBo;
+  @Nonnull private final Lazy<ResourceAccessTokenCodec> resourceAccessTokenCodec;
+
+  public TempFileResourceImpl(@Nonnull final ServerBean serverBean){
+    this.tempFileBo = Lazy.of(() -> serverBean.get(TempFileBo.class));
+    this.resourceAccessTokenCodec = Lazy.of(()->serverBean.get(ResourceAccessTokenCodec.class));
+  }
+
+  @Nonnull
+  @Override
+  public FileDto loadFile(@Nonnull final String token) {
+    return tempFileBo.get().load(token);
+  }
+
+  @Nonnull
+  @Override
+  public String store(@Nonnull final String filename, @Nonnull final byte[] fileBytes) {
+    return tempFileBo.get().store(new FileDto(filename, fileBytes));
+  }
+
+  @Override
+  public String store(@Nonnull final FileDto file) {
+    return tempFileBo.get().store(file);
+  }
+
+  @Override
+  public void delete(@Nonnull final String token) {
+    tempFileBo.get().delete(token);
+  }
+
+  @Nonnull
+  @Override
+  public String issueAccessToken(@Nonnull final String fileToken) {
+    final var tenantId = TenantContext.get(); //TODO possibly change?
+    return resourceAccessTokenCodec.get().issue(tenantId, fileToken);
+  }
+
+}

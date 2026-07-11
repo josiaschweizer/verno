@@ -1,67 +1,44 @@
 package ch.verno.server.repository.mail;
 
-import ch.verno.common.db.type.mail.MailLogStatus;
+import ch.verno.common.type.mail.MailLogStatus;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.jpa.mail.SpringDataMailLogJpaRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
+import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public class MailLogRepository {
-
-  @Nonnull
-  private final SpringDataMailLogJpaRepository repository;
+public class MailLogRepository extends AbstractEntityRepository<
+        MailLogEntity,
+        Long,
+        SpringDataMailLogJpaRepository> {
 
   public MailLogRepository(@Nonnull final SpringDataMailLogJpaRepository repository) {
-    this.repository = repository;
+    super(repository);
   }
 
   @Nonnull
-  public MailLogEntity save(@Nonnull final MailLogEntity entity) {
-    return repository.save(entity);
+  public List<MailLogEntity> findAllByStatus(@Nonnull final MailLogStatus status) {
+    return getRepository().findAllByStatusOrderByCreatedAtDesc(status);
   }
 
   @Nonnull
-  public Optional<MailLogEntity> findById(@Nonnull final Long id) {
-    return repository.findById(id);
+  public List<MailLogEntity> findAllByRecipientEmail(@Nonnull final String recipientEmail) {
+    return getRepository().findAllByRecipientEmailOrderByCreatedAtDesc(recipientEmail);
   }
 
+  /**
+   * Saves a tenant-unscoped entity (e.g. came via api from the landing page)
+   *
+   * @param entity Mail Log Entity which gets saved
+   * @return the saved entity
+   */
   @Nonnull
-  public List<MailLogEntity> findAll() {
-    return repository.findAll();
-  }
-
-  @Nonnull
-  public List<MailLogEntity> findAll(@Nonnull final Specification<MailLogEntity> spec,
-                                     @Nonnull final Pageable pageable) {
-    return repository.findAll(spec, pageable).getContent();
-  }
-
-  @Nonnull
-  public List<MailLogEntity> findAllByStatusOrderByCreatedAtDesc(@Nonnull final MailLogStatus status) {
-    return repository.findAllByStatusOrderByCreatedAtDesc(status);
-  }
-
-  @Nonnull
-  public List<MailLogEntity> findAllByRecipientEmailOrderByCreatedAtDesc(@Nonnull final String recipientEmail) {
-    return repository.findAllByRecipientEmailOrderByCreatedAtDesc(recipientEmail);
-  }
-
-  @Nonnull
-  public List<MailLogEntity> findTop100ByOrderByCreatedAtDesc() {
-    return repository.findTop100ByOrderByCreatedAtDesc();
-  }
-
-  public void deleteById(@Nonnull final Long id) {
-    repository.deleteById(id);
-  }
-
-  public boolean existsById(@Nonnull final Long id) {
-    return repository.existsById(id);
+  @UnscopedQuery
+  public MailLogEntity saveUnscoped(@Nonnull final MailLogEntity entity) {
+    return getRepository().save(entity);
   }
 }

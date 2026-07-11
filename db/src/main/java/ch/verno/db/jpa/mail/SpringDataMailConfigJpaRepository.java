@@ -1,14 +1,16 @@
 package ch.verno.db.jpa.mail;
 
 import ch.verno.db.entity.mail.MailConfigEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
+import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 
-public interface SpringDataMailConfigJpaRepository extends JpaRepository<MailConfigEntity, Long> {
+public interface SpringDataMailConfigJpaRepository extends AbstractEntityJpaRepository<MailConfigEntity, Long> {
 
-  Optional<MailConfigEntity> findByTenant_Id(Long tenantId);
+  @Nonnull
+  Optional<MailConfigEntity> findByTenant_Id(@Nonnull Long tenantId);
 
-  boolean existsByTenant_Id(Long tenantId);
+  boolean existsByTenant_Id(@Nonnull Long tenantId);
 
 }

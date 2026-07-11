@@ -1,13 +1,13 @@
 package ch.verno.ui.verno.settings.panels.gender;
 
 import ch.verno.common.db.constants.text.TextConstants;
-import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.db.dto.table.GenderDto;
-import ch.verno.common.db.dto.table.text.TextDto;
 import ch.verno.common.lib.gender.GenderUtil;
+import ch.verno.contract.dto.table.base.BaseDto;
+import ch.verno.contract.dto.table.gender.GenderDto;
+import ch.verno.contract.dto.table.text.TextDto;
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
-import ch.verno.lib.language.LanguageUtil;
+import ch.verno.lib.lib.language.Language;
+import ch.verno.lib.lib.language.LanguageUtil;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

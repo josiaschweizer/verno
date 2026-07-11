@@ -2,6 +2,20 @@ vaadin-button[theme~='xs'] {
     --lumo-button-size: var(--lumo-size-xs);
 }
 
+vaadin-button::part(prefix),
+vaadin-button::part(suffix) {
+    display: inline-flex;
+    align-items: center;
+}
+vaadin-button::part(prefix) span,
+vaadin-button::part(suffix) span {
+    color: inherit !important;
+}
+
+vaadin-button[theme~='primary'] {
+    --va-icon-color: var(--lumo-primary-contrast-color);
+}
+
 .va-button-readonly {
     opacity: 0.55;
     cursor: default;

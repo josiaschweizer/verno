@@ -1,20 +1,23 @@
 package ch.verno.ui.verno.mail.testmail;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.MailServerGate;
-import ch.verno.common.lib.i18n.TranslationHelper;
-import ch.verno.common.lib.mail.MailContentDto;
-import ch.verno.common.lib.test.testdata.TestDataUtil;
+import ch.verno.contract.mail.MailContentDto;
+import ch.verno.contract.test.lib.TestDataUtil;
 import ch.verno.lib.Lazy;
 import ch.verno.lib.New;
+import ch.verno.rpc.client.mail.MailClient;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.button.variants.VASaveButton;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
+import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
+import ch.verno.ui.base.shortcut.registry.ShortcutController;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.IconUtil;
 import ch.verno.ui.verno.dashboard.mail.CourseMailTemplateConfigLayout;
+import com.google.inject.Injector;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import jakarta.annotation.Nonnull;
@@ -23,20 +26,20 @@ import javax.annotation.Nullable;
 
 public class MailTemplateTabContent {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<MailClient> mailClient;
   @Nonnull private final MailTemplateTypeMapping textMapping;
-  @Nonnull private final Lazy<MailServerGate> mailServerGate;
 
   @Nonnull private final VAVerticalLayout layout;
   @Nullable private CourseMailTemplateConfigLayout templateLayout;
 
   @Nullable private TestMailTemplateDialog testMailTemplateDialog;
 
-  public MailTemplateTabContent(@Nonnull final GlobalInterface globalInterface,
+  public MailTemplateTabContent(@Nonnull final Injector injector,
                                 @Nonnull final MailTemplateTypeMapping mapping) {
-    this.globalInterface = globalInterface;
+    this.injector = injector;
+    this.mailClient = Lazy.of(() -> injector.getInstance(MailClient.class));
     this.textMapping = mapping;
-    this.mailServerGate = Lazy.of(() -> globalInterface.getService(MailServerGate.class));
 
     this.layout = initUI();
   }
@@ -56,14 +59,14 @@ public class MailTemplateTabContent {
   @Nonnull
   private VAInlineNotification createInlineNotification() {
     final var notification = new VAInlineNotification();
-    notification.setTitle(textMapping.getName(globalInterface));
-    notification.setDescription(textMapping.getDescription(globalInterface));
+    notification.setTitle(textMapping.getName(injector));
+    notification.setDescription(textMapping.getDescription(injector));
     return notification;
   }
 
   @Nonnull
   private CourseMailTemplateConfigLayout createMailTemplateLayout() {
-    final var config = new CourseMailTemplateConfigLayout(globalInterface, textMapping.getMailTemplateType());
+    final var config = new CourseMailTemplateConfigLayout(injector, textMapping.getMailTemplateType());
     config.getContent().setSizeFull();
     return config;
   }
@@ -89,7 +92,7 @@ public class MailTemplateTabContent {
 
   @Nonnull
   private VAButton createTestMailButton() {
-    final var button = new VAButton(TranslationHelper.getTranslation(globalInterface, "mail.test.mail.template"), IconUtil.createExtraSmall(VaadinIcon.PLAY));
+    final var button = new VAButton(injector.getInstance(TranslationHelper.class).getTranslation("mail.test.mail.template"), IconUtil.createExtraSmall(VaadinIcon.PLAY));
     templateLayout.addBinderValueChangeListener(e1 -> button.setEnabled(templateLayout.isValid()));
     button.setEnabled(templateLayout.isValid());
     button.addClickListener(e -> testMail());
@@ -98,7 +101,7 @@ public class MailTemplateTabContent {
 
   @Nonnull
   private VAButton createSaveButton() {
-    final var button = new VASaveButton(() -> templateLayout.hasChanges() && templateLayout.isValid());
+    final var button = new VASaveButton(null);
     templateLayout.addBinderValueChangeListener(e -> {
       button.setEnabled(templateLayout.isValid());
       button.refreshDirtyState();
@@ -107,7 +110,18 @@ public class MailTemplateTabContent {
       saveTemplate();
       button.refreshDirtyState();
     });
+    button.setDirtyActionProvider(() -> templateLayout.hasChanges() && templateLayout.isValid());
+    button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     button.setEnabled(templateLayout.isValid());
+
+    final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
+    injector.getInstance(ShortcutController.class).register(
+            DefaultVernoShortcuts.SAVE,
+            button::click,
+            layout,
+            registration
+    );
+
     return button;
   }
 
@@ -128,9 +142,8 @@ public class MailTemplateTabContent {
     final var course = TestDataUtil.createDemoCourse();
 
     final var bean = templateLayout.getBean();
-    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent());
-
-    mailServerGate.get().sendCourseEmails(
+    final var mailContent = new MailContentDto(bean.getSubject(), bean.getContent(), MailContentDto.MailContentType.PLAIN);
+    mailClient.get().sendCourseMails(
             mailContent,
             templateLayout.getPlaceholderValues(),
             New.list(demoParticipant),
@@ -138,7 +151,7 @@ public class MailTemplateTabContent {
             course
     );
 
-    NotificationFactory.showSuccessNotification(TranslationHelper.getTranslation(globalInterface, "mail.email.sent.successfully"));
+    NotificationFactory.showSuccessNotification(injector.getInstance(TranslationHelper.class).getTranslation("mail.email.sent.successfully"));
 
     if (testMailTemplateDialog != null) {
       testMailTemplateDialog.close();

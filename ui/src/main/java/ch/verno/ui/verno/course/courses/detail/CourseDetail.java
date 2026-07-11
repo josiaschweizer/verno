@@ -1,21 +1,24 @@
 package ch.verno.ui.verno.course.courses.detail;
 
-import ch.verno.common.db.dto.table.*;
-import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.server.service.intern.ICourseLevelService;
-import ch.verno.common.server.service.intern.ICourseScheduleService;
-import ch.verno.common.server.service.intern.ICourseService;
-import ch.verno.common.server.service.intern.IInstructorService;
-import ch.verno.publ.Routes;
-import ch.verno.server.service.intern.CourseLevelService;
-import ch.verno.server.service.intern.CourseScheduleService;
-import ch.verno.server.service.intern.CourseService;
-import ch.verno.server.service.intern.InstructorService;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.filter.ParticipantFilter;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.course.CourseLevelDto;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
+import ch.verno.contract.dto.table.instructor.InstructorDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.course.CourseLevelClient;
+import ch.verno.rpc.client.course.CourseScheduleClient;
+import ch.verno.rpc.client.instructor.InstructorClient;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.detail.BaseDetailView;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,33 +39,30 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.COURSES + Routes.DETAIL)
-@Menu(order = 3.11, icon = "vaadin:mobile", title = "course.course.detail")
+@Menu(order = 3.11, icon = VaadinIconConstants.MOBILE, title = "course.course.detail")
 public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynamicTitle {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final ICourseService courseService;
-  @Nonnull private final IInstructorService instructorService;
-  @Nonnull private final ICourseLevelService courseLevelService;
-  @Nonnull private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final Lazy<CourseClient> courseClient;
+  @Nonnull private final Lazy<InstructorClient> instructorClient;
+  @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
+  @Nonnull private final Lazy<CourseScheduleClient> courseScheduleClient;
 
-
-  public CourseDetail(@Nonnull final GlobalInterface globalInterface,
+  public CourseDetail(@Nonnull final Injector injector,
                       final boolean showHeaderToolbar,
                       final boolean showPaddingAroundDetail) {
-    this(globalInterface);
+    this(injector);
 
     this.setShowHeaderToolbar(showHeaderToolbar);
     this.setShowPaddingAroundDetail(showPaddingAroundDetail);
   }
 
   @Autowired
-  public CourseDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
-    this.globalInterface = globalInterface;
-    this.courseService = globalInterface.getService(CourseService.class);
-    this.instructorService = globalInterface.getService(InstructorService.class);
-    this.courseLevelService = globalInterface.getService(CourseLevelService.class);
-    this.courseScheduleService = globalInterface.getService(CourseScheduleService.class);
+  public CourseDetail(@Nonnull final Injector injector) {
+    super(injector);
+    this.courseClient = Lazy.of(() -> injector.getInstance(CourseClient.class));
+    this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
+    this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
+    this.courseScheduleClient = Lazy.of(() -> injector.getInstance(CourseScheduleClient.class));
 
     this.setShowHeaderToolbar(true);
     this.setShowPaddingAroundDetail(true);
@@ -100,7 +100,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @NonNull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL);
   }
 
   @Nonnull
@@ -117,12 +117,12 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Override
   protected void createBean(@Nonnull final CourseDto bean) {
-    courseService.createCourse(bean);
+    courseClient.get().saveCourse(bean);
   }
 
   @Override
   protected void updateBean(@Nonnull final CourseDto bean) {
-    courseService.updateCourse(bean);
+    courseClient.get().saveCourse(bean);
   }
 
   @Nonnull
@@ -134,12 +134,13 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
   @Nonnull
   @Override
   protected CourseDto newBeanInstance() {
-    return new CourseDto();
+    return CourseDto.empty();
   }
 
+  @Nonnull
   @Override
-  protected CourseDto getBeanById(@Nonnull final Long id) {
-    return courseService.getCourseById(id);
+  protected Optional<CourseDto> getBeanById(@Nonnull final Long id) {
+    return courseClient.get().getCourseById(id);
   }
 
   @Override
@@ -206,7 +207,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
   @Nonnull
   private VerticalLayout createCourseLayout() {
-    final var courseSchedules = courseScheduleService.getAllCourseSchedules();
+    final var courseSchedules = courseScheduleClient.get().getCourseSchedules();
     final var courseScheduleOptions = courseSchedules.stream()
             .collect(Collectors.toMap(CourseScheduleDto::getId, CourseScheduleDto::getTitle));
 
@@ -214,7 +215,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             dto -> dto.getCourseSchedule() != null ? dto.getCourseSchedule().getId() : null,
             (dto, value) -> dto.setCourseSchedule(value == null ?
                     null :
-                    courseScheduleService.getCourseScheduleById(value)),
+                    courseScheduleClient.get().getCourseScheduleById(value).orElseGet(CourseScheduleDto::empty)),
             getBinder(),
             Optional.of(getTranslation("courseSchedule.course.schedule.is.required")),
             getTranslation("courseSchedule.course.schedule"),
@@ -228,11 +229,11 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             getBinder(),
             Optional.empty(),
             getTranslation("courseLevel.course_levels"),
-            courseLevelService.getAllCourseLevels(),
+            courseLevelClient.get().getAllCourseLevels(),
             CourseLevelDto::displayName
     );
 
-    final List<InstructorDto> instructors = instructorService.getAllInstructors().stream()
+    final List<InstructorDto> instructors = instructorClient.get().getAllInstructors().stream()
             .sorted(Comparator.comparing(InstructorDto::displayName))
             .toList();
     final LinkedHashMap<Long, String> instructorOptions = instructors.stream()
@@ -247,7 +248,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
             dto -> dto.getInstructor() != null ? dto.getInstructor().getId() : null,
             (dto, value) -> dto.setInstructor(value == null ?
                     null :
-                    instructorService.getInstructorById(value)),
+                    instructorClient.get().getInstructorById(value).orElseGet(InstructorDto::empty)),
             getBinder(),
             Optional.empty(),
             getTranslation("shared.instructor"),
@@ -301,7 +302,7 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
     final var title = new Span(getTranslation("course.participants.in.this.course"));
     title.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
-    final var participantsGrid = new ParticipantsGrid(globalInterface, false, false) {
+    final var participantsGrid = new ParticipantsGrid(injector, false, false) {
 
       @Nonnull
       @Override

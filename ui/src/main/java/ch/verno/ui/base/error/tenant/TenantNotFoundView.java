@@ -1,7 +1,8 @@
 package ch.verno.ui.base.error.tenant;
 
-import ch.verno.publ.Routes;
-import ch.verno.server.tenant.TenantService;
+import ch.verno.common.lib.Routes;
+import ch.verno.lib.VernoUtility;
+import ch.verno.rpc.properties.tenant.TenantProperties;
 import ch.verno.ui.base.layout.PublicLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -16,18 +17,18 @@ import jakarta.annotation.Nonnull;
 @Route(value = Routes.TENANT_NOT_FOUND, layout = PublicLayout.class)
 public class TenantNotFoundView extends VerticalLayout {
 
-  public TenantNotFoundView(@Nonnull TenantService tenantService) {
+  public TenantNotFoundView(@Nonnull final TenantProperties tenantProperties) {
     setSpacing(true);
     setPadding(true);
     setMaxWidth("800px");
 
     final var title = new H2("Tenant not found");
     final var description = new Span("The requested tenant does not exist. Please choose one of the available tenants:");
-    description.getStyle().setColor("var(--lumo-secondary-text-color)");
+    description.getStyle().setColor(VernoUtility.LUMO_SECONDARY_TEXT_COLOR);
 
     add(title, description);
 
-    final var tenants = tenantService.findAllTenants();
+    final var tenants = tenantProperties.findAllTenants();
 
     if (tenants.isEmpty()) {
       final var empty = new Span("No tenant available.");
@@ -45,20 +46,19 @@ public class TenantNotFoundView extends VerticalLayout {
       final var card = new Div();
       card.getStyle()
               .setPadding("0.75rem 1rem")
-              .setBorder("1px solid var(--lumo-contrast-10pct)")
-              .setBorderRadius("var(--lumo-border-radius-m)")
-              .setBackground("var(--lumo-base-color)")
+              .setBorder(VernoUtility.LUMO_CONTRAST_10_BORDER)
+              .setBorderRadius(VernoUtility.LUMO_BORDER_RADIUS_M)
+              .setBackground(VernoUtility.LUMO_BASE_COLOR)
               .setDisplay(Style.Display.FLEX)
               .setFlexDirection(Style.FlexDirection.COLUMN)
               .setGap("0.25rem");
 
-      final var name = new Span(tenant.getName() != null ? tenant.getName() : tenant.getSlug());
-      name.getStyle().setFontWeight("600");
+      final var name = new Span(tenant.name() != null ? tenant.name() : tenant.slug());
+      name.getStyle().setFontWeight(VernoUtility.FONT_WEIGHT_SEMIBOLD);
 
-      final var meta = new Span("Slug: " + tenant.getSlug() + " · ID: " + tenant.getId());
-      meta.getStyle()
-              .setFontSize("var(--lumo-font-size-s)")
-              .set("color", "var(--lumo-secondary-text-color)");
+      final var meta = new Span("Slug: " + tenant.slug() + " - ID: " + tenant.id());
+      meta.getStyle().setFontSize(VernoUtility.LUMO_FONT_SIZE_S);
+      meta.getStyle().setColor(VernoUtility.LUMO_SECONDARY_TEXT_COLOR);
 
       card.add(name, meta);
       list.add(card);

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.settings;
 
-import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.ui.lib.settings.fields.VABaseBooleanSetting;
 import ch.verno.ui.lib.settings.fields.VABaseComboBoxSetting;
 import ch.verno.ui.lib.settings.fields.VABaseQuantitySetting;

@@ -1,6 +1,6 @@
 package ch.verno.common.exceptions.db;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
 public class DBNotFoundException extends IllegalArgumentException {

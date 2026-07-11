@@ -1,8 +1,8 @@
 package ch.verno.server.spec;
 
-import ch.verno.common.db.filter.CourseLevelFilter;
-import ch.verno.publ.Publ;
-import ch.verno.db.entity.CourseLevelEntity;
+import ch.verno.contract.dto.filter.CourseLevelFilter;
+import ch.verno.db.entity.course.CourseLevelEntity;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -77,9 +77,6 @@ public class CourseLevelSpec {
 
   @Nonnull
   private static String normalize(@Nullable final String s) {
-    if (s == null) {
-      return Publ.EMPTY_STRING;
-    }
-    return s.trim().toLowerCase(Locale.ROOT);
+    return BaseSpec.normalize(s);
   }
 }

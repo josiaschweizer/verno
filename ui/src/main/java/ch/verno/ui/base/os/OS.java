@@ -1,6 +1,6 @@
 package ch.verno.ui.base.os;
 
-import ch.verno.publ.VernoConstants;
+import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
 
 public enum OS {

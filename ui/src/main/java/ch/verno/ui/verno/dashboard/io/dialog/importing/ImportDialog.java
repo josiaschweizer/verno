@@ -1,11 +1,12 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing;
 
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.lib.New;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.DialogStepDto;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.error.ImportErrorDownloadDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1.ImportFile;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step2.ImportMapping;
 import ch.verno.ui.verno.dashboard.io.widgets.ImportEntityConfig;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -14,12 +15,12 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ImportDialog extends Dialog {
 
+  @Nonnull private final Injector injector;
   @Nonnull private final List<DialogStepDto> steps;
 
   @Nullable private HorizontalLayout contentLayout;
@@ -28,14 +29,15 @@ public class ImportDialog extends Dialog {
 
   private ImportDialogStep currentStep;
 
-  public ImportDialog(@Nonnull final GlobalInterface globalInterface,
+  public ImportDialog(@Nonnull final Injector injector,
                       @Nonnull final String dialogTitle,
                       @Nonnull final ImportEntityConfig<?> entityConfig) {
-    steps = new ArrayList<>();
-    currentStep = ImportDialogStep.ZERO;
+    this.injector = injector;
+    this.steps = New.list();
+    this.currentStep = ImportDialogStep.ZERO;
 
-    final var importFileStep = new ImportFile(globalInterface);
-    final var importMappingStep = new ImportMapping<>(globalInterface, entityConfig);
+    final var importFileStep = new ImportFile(injector);
+    final var importMappingStep = new ImportMapping<>(injector, entityConfig);
 
     importFileStep.setOnFileUploadedListener(this::updateButtonVisibility);
     importMappingStep.setOnValidationChangedListener(this::updateButtonVisibility);
@@ -115,8 +117,7 @@ public class ImportDialog extends Dialog {
         if (importResult.completeSuccess()) {
           close();
         } else if (importResult.fileToken() != null && !importResult.fileToken().isBlank()) {
-          final var fileName = importResult.fileName() != null ? importResult.fileName() : "import_errors.csv";
-          final var errorDialog = new ImportErrorDownloadDialog(importResult.fileToken(), fileName);
+          final var errorDialog = new ImportErrorDownloadDialog(injector, importResult.fileToken());
           errorDialog.addClosedListener(c -> close());
           errorDialog.open();
         }

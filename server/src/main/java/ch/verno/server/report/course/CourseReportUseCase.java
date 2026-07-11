@@ -1,39 +1,42 @@
 package ch.verno.server.report.course;
 
-import ch.verno.common.api.dto.internal.file.temp.FileDto;
-import ch.verno.common.db.dto.file.FileDownload;
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.server.service.intern.IFileStorageService;
-import ch.verno.common.server.service.intern.IParticipantService;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.file.temp.FileDto;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.file.FileDownload;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.Publ;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.bo.BoFactory;
+import ch.verno.server.bo.file.StorageBo;
+import ch.verno.server.bo.table.setting.TenantSettingBo;
+import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseReportUseCase {
 
-  @Nonnull private final IParticipantService participantService;
-  @Nonnull private final ITenantSettingService tenantSettingService;
-  @Nonnull private final IFileStorageService fileStorageService;
-  @Nonnull private final CourseReportRenderer courseReportRenderer;
+  @Nonnull private final Lazy<StorageBo> storageBo;
+  @Nonnull private final Lazy<TenantSettingBo> tenantSettingBo;
+  @Nonnull private final Lazy<ParticipantService> participantService;
+  @Nonnull private final Lazy<CourseReportRenderer> courseReportRenderer;
 
-  public CourseReportUseCase(@Nonnull final GlobalInterface globalInterface,
-                             @Nonnull final CourseReportRenderer courseReportRenderer) {
-    this.participantService = globalInterface.getService(IParticipantService.class);
-    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
-    this.fileStorageService = globalInterface.getService(IFileStorageService.class);
-    this.courseReportRenderer = courseReportRenderer;
+  public CourseReportUseCase(@Nonnull final ServerBean serverBean) {
+    this.storageBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(StorageBo.class));
+    this.tenantSettingBo = Lazy.of(() -> BoFactory.getInstance(serverBean).get(TenantSettingBo.class));
+    this.participantService = Lazy.of(() -> serverBean.get(ParticipantService.class));
+    this.courseReportRenderer = Lazy.of(() -> serverBean.get(CourseReportRenderer.class));
   }
 
   @Nonnull
   public FileDto generate(@Nonnull final CourseDto course) {
-    final var participants = participantService.findParticipantsByCourse(course);
+    final var participants = participantService.get().findParticipantsByCourse(course);
     return generate(course, participants);
   }
 
@@ -43,29 +46,21 @@ public class CourseReportUseCase {
     final var courseDates = new ArrayList<LocalDate>(); // TODO aus Schedules ableiten
     final var reportData = CourseReportMapper.map(course, participants, courseDates);
 
-    final var settings = tenantSettingService.getCurrentTenantSettingOrDefault();
+    final var settings = tenantSettingBo.get().getCurrentOrDefaultTenantSetting();
 
     byte[] templateBytes = null;
     if (settings.getCourseReportTemplate() != null) {
-      final var templateDownload = fileStorageService.download(settings.getCourseReportTemplate());
+      final var templateDownload = storageBo.get().download(settings.getCourseReportTemplate());
       templateBytes = getTemplateBytes(templateDownload);
     }
 
-    final var pdfBytes = courseReportRenderer.renderReportPdf(reportData, templateBytes);
-    final var filename = settings.getCourseReportName().toLowerCase() + "_" + course.getTitle().toLowerCase() + ".pdf";
+    final var pdfBytes = courseReportRenderer.get().renderReportPdf(reportData, templateBytes);
+    final var filename = settings.getCourseReportName().toLowerCase() + Publ.UNDERSCORE + course.getTitle().toLowerCase() + ".pdf";
     return new FileDto(filename, pdfBytes);
   }
 
   @Nonnull
   private byte[] getTemplateBytes(@Nonnull final FileDownload templateDownload) {
-    try (final var inputStream = templateDownload.stream()) {
-      if (inputStream != null) {
-        return inputStream.readAllBytes();
-      } else {
-        throw new RuntimeException("Template file not found");
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to load template file", e);
-    }
+    return Optional.ofNullable(templateDownload.byteData()).orElse(new byte[0]);
   }
 }

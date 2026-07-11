@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.notification;
 
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;

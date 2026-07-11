@@ -1,15 +1,16 @@
 package ch.verno.common.db.role;
 
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Objects;
 
 public enum Role {
-  ADMIN(1L, "ADMIN", "Admin", VABadgeLabelOptions.ERROR),
-  MANDANT_ADMIN(2L, "MANDANT_ADMIN", "Mandant Admin", VABadgeLabelOptions.WARNING),
-  USER(3L, "USER", "User", VABadgeLabelOptions.SUCCESS),
-  VIEWER(4L, "VIEWER", "Viewer", VABadgeLabelOptions.CONTRAST);
+  ADMIN(1L, RoleConstants.ROLE_ADMIN, RoleConstants.ROLE_NAME_KEY_ADMIN, VABadgeLabelOptions.ERROR),
+  MANDANT_ADMIN(2L, RoleConstants.ROLE_MANDANT_ADMIN, RoleConstants.ROLE_NAME_KEY_MANDANT_ADMIN, VABadgeLabelOptions.WARNING),
+  USER(3L, RoleConstants.ROLE_USER, RoleConstants.ROLE_NAME_KEY_USER, VABadgeLabelOptions.SUCCESS),
+  VIEWER(4L, RoleConstants.ROLE_VIEWER, RoleConstants.ROLE_NAME_KEY_VIEWER, VABadgeLabelOptions.CONTRAST);
 
   private final Long id;
   @Nonnull private final String role;
@@ -65,5 +66,19 @@ public enum Role {
   @Nonnull
   public VABadgeLabelOptions getBadgeLabelOptions() {
     return badgeLabelOptions;
+  }
+
+  private static class RoleConstants {
+
+    @NonNls public static final String ROLE_ADMIN = "ADMIN";
+    @NonNls public static final String ROLE_MANDANT_ADMIN = "MANDANT_ADMIN";
+    @NonNls public static final String ROLE_USER = "USER";
+    @NonNls public static final String ROLE_VIEWER = "VIEWER";
+
+    @NonNls public static final String ROLE_NAME_KEY_ADMIN = "Admin";
+    @NonNls public static final String ROLE_NAME_KEY_MANDANT_ADMIN = "Mandant Admin";
+    @NonNls public static final String ROLE_NAME_KEY_USER = "User";
+    @NonNls public static final String ROLE_NAME_KEY_VIEWER = "Viewer";
+
   }
 }

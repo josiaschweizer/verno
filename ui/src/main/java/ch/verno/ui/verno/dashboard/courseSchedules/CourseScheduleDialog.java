@@ -1,15 +1,16 @@
 package ch.verno.ui.verno.dashboard.courseSchedules;
 
-import ch.verno.common.db.dto.table.CourseScheduleDto;
-import ch.verno.common.db.filter.CourseScheduleFilter;
-import ch.verno.common.server.service.intern.ICourseScheduleService;
-import ch.verno.common.db.type.CourseScheduleStatus;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.course.CourseScheduleDto;
+import ch.verno.rpc.client.course.CourseScheduleClient;
+import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.verno.course.courseschedule.CourseSchedulesGrid;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -27,8 +28,8 @@ import java.util.stream.Stream;
 
 public class CourseScheduleDialog extends VAAbstractDialog {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final ICourseScheduleService courseScheduleService;
+  @Nonnull private final Injector injector;
+  @Nonnull private final CourseScheduleClient courseScheduleClient;
 
   @Nonnull private final CourseScheduleStatus courseScheduleStatus;
   private final boolean showConfirmDialogOnClose;
@@ -36,28 +37,29 @@ public class CourseScheduleDialog extends VAAbstractDialog {
   @Nullable private CourseSchedulesGrid grid;
   private VAButton confirmButton;
 
-  public CourseScheduleDialog(@Nonnull final GlobalInterface globalInterface,
+  public CourseScheduleDialog(@Nonnull final Injector injector,
+                              @Nonnull final CourseScheduleClient courseScheduleClient,
                               @Nonnull final CourseScheduleStatus courseScheduleStatus,
                               final boolean showConfirmDialogOnClose) {
-    this.globalInterface = globalInterface;
-    this.courseScheduleService = globalInterface.getService(ICourseScheduleService.class);
+    this.injector = injector;
+    this.courseScheduleClient = courseScheduleClient;
     this.courseScheduleStatus = courseScheduleStatus;
     this.showConfirmDialogOnClose = showConfirmDialogOnClose;
 
-    String titel;
+    String title;
     if (courseScheduleStatus == CourseScheduleStatus.PLANNED) {
-      titel = getTranslation("courseSchedule.select.course.schedules.to.activate");
+      title = getTranslation("courseSchedule.select.course.schedules.to.activate");
     } else {
-      titel = getTranslation("courseSchedule.select.course.schedules.to.finish");
+      title = getTranslation("courseSchedule.select.course.schedules.to.finish");
     }
 
-    initUI(titel, DialogSize.BIG);
+    initUI(title, DialogSize.BIG);
   }
 
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
-    grid = new CourseSchedulesGrid(globalInterface, false, false) {
+  protected VAHorizontalLayout createContent() {
+    grid = new CourseSchedulesGrid(injector, false, false) {
 
       @Nonnull
       @Override
@@ -75,7 +77,7 @@ public class CourseScheduleDialog extends VAAbstractDialog {
     grid.getGrid().setSelectionMode(Grid.SelectionMode.MULTI);
     grid.getGrid().addSelectionListener(e -> confirmButton.setEnabled(!grid.getGrid().getSelectedItems().isEmpty()));
 
-    final var layout = new HorizontalLayout(grid);
+    final var layout = new VAHorizontalLayout(grid);
     layout.setHeightFull();
     layout.expand(grid);
     return layout;
@@ -129,7 +131,7 @@ public class CourseScheduleDialog extends VAAbstractDialog {
                 : CourseScheduleStatus.COMPLETED
         );
 
-        courseScheduleService.updateCourseSchedule(course);
+        courseScheduleClient.saveCourseSchedule(course);
       }
     });
 

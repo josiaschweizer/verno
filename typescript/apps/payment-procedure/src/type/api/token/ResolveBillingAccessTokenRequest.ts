@@ -1,3 +1,3 @@
 export type ResolveBillingAccessTokenRequest = {
-    token: string
+  token: string
 }

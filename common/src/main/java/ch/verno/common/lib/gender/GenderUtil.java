@@ -1,7 +1,7 @@
 package ch.verno.common.lib.gender;
 
 import ch.verno.lib.New;
-import ch.verno.lib.language.Language;
+import ch.verno.lib.lib.language.Language;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

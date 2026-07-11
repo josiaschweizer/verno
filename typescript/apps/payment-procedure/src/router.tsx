@@ -1,23 +1,23 @@
-import {createBrowserRouter} from "react-router-dom";
-import RootLayout from "./components/layouts/RootLayout.tsx";
+import { createBrowserRouter } from 'react-router-dom'
+import RootLayout from './components/layouts/RootLayout.tsx'
 
-import Home from "@/routes/page";
-import EntryPage from "@/routes/entry/page.tsx";
-import PaymentPage from "@/routes/payment/page";
-import SuccessPage from "@/routes/success/page.tsx";
-import PaymentInfoPage from "@/routes/payment/info/page.tsx";
+import Home from '@/routes/page'
+import EntryPage from '@/routes/entry/page.tsx'
+import PaymentPage from '@/routes/payment/page'
+import SuccessPage from '@/routes/success/page.tsx'
+import PaymentInfoPage from '@/routes/payment/info/page.tsx'
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
 
-      { path: "entry", element: <EntryPage /> },
-      { path: "payment", element: <PaymentPage /> },
-      { path: "payment/info", element: <PaymentInfoPage /> },
-      { path: "success", element: <SuccessPage /> },
+      { path: 'entry', element: <EntryPage /> },
+      { path: 'payment', element: <PaymentPage /> },
+      { path: 'payment/info', element: <PaymentInfoPage /> },
+      { path: 'success', element: <SuccessPage /> },
     ],
   },
-]);
+])

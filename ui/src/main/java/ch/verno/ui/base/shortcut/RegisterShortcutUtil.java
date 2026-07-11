@@ -23,23 +23,19 @@ public class RegisterShortcutUtil {
    * @return the created {@link ShortcutRegistration}
    */
   @Nonnull
-  public static ShortcutRegistration addFocusShortcut(
-          @Nonnull final Focusable<?> target,
-          @Nonnull final VAShortcut shortcut
-  ) {
+  public static ShortcutRegistration addFocusShortcut(@Nonnull final Focusable<?> target,
+                                                      @Nonnull final VAShortcut shortcut) {
     final KeyModifier[] keyModifiers =
-            getKeyModifiersAccordingToOS(shortcut.keyModifier());
+            getKeyModifiersAccordingToOS(shortcut.getKeyModifier());
 
     return target.addFocusShortcut(
-            shortcut.key(),
+            shortcut.getKey(),
             keyModifiers
     );
   }
 
   @Nonnull
-  private static KeyModifier[] getKeyModifiersAccordingToOS(
-          @Nullable final KeyModifier... keyModifier
-  ) {
+  private static KeyModifier[] getKeyModifiersAccordingToOS(@Nullable final KeyModifier... keyModifier) {
     if (keyModifier == null || keyModifier.length == 0) {
       return new KeyModifier[0];
     }
@@ -52,10 +48,8 @@ public class RegisterShortcutUtil {
   }
 
   @Nonnull
-  private static KeyModifier translateModifier(
-          @Nonnull final KeyModifier modifier,
-          @Nonnull final OS os
-  ) {
+  private static KeyModifier translateModifier(@Nonnull final KeyModifier modifier,
+                                               @Nonnull final OS os) {
     return switch (modifier) {
       case CONTROL -> os == OS.MAC
               ? KeyModifier.META

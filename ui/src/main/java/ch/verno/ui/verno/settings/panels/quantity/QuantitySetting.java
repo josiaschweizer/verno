@@ -1,9 +1,11 @@
 package ch.verno.ui.verno.settings.panels.quantity;
 
-import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.setting.TenantSettingDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.setting.TenantSettingClient;
 import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
@@ -12,15 +14,16 @@ import java.util.Optional;
 
 public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
 
-  public static final String TITLE_KEY = "setting.quantity_settings";
-  @Nonnull
-  private final ITenantSettingService tenantSettingService;
+  private static final String TITLE_KEY = "setting.quantity_settings";
 
-  public QuantitySetting(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
+  @Nonnull private final Lazy<TenantSettingClient> tenantSettingClient;
 
-    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
-    this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
+  @Inject
+  public QuantitySetting(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
+
+    this.tenantSettingClient = Lazy.of(() -> injector.getInstance(TenantSettingClient.class));
+    this.dto = tenantSettingClient.get().getCurrentOrDefaultTenantSetting();
   }
 
   @Nonnull
@@ -50,7 +53,7 @@ public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      tenantSettingService.saveCurrentTenantSetting(dto);
+      tenantSettingClient.get().saveTenantSetting(dto);
     }
   }
 
@@ -62,6 +65,6 @@ public class QuantitySetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull
   @Override
   protected TenantSettingDto createNewBeanInstance() {
-    return new TenantSettingDto();
+    return TenantSettingDto.empty();
   }
 }

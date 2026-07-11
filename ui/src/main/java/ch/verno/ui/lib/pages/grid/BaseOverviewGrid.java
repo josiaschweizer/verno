@@ -1,11 +1,9 @@
 package ch.verno.ui.lib.pages.grid;
 
-import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.New;
-import ch.verno.publ.Publ;
-import ch.verno.publ.Routes;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.Publ;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.emptystate.VAEmptyState;
 import ch.verno.ui.base.components.filter.FilterEntryFactory;
@@ -14,6 +12,8 @@ import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.components.grid.VAGrid;
 import ch.verno.ui.base.components.toolbar.ViewToolbar;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
+import ch.verno.ui.lib.url.RoutesUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -29,19 +29,24 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLayout {
+public abstract class BaseOverviewGrid<T extends BaseDto<?>, F> extends VerticalLayout {
 
-  @Nonnull protected final GlobalInterface globalInterface;
+  @NonNls public static final String GRID_COLUMN_ACTION_COLUMN = "action-column";
+
+  @Nonnull protected final Injector injector;
+
   @Nonnull protected final VAGrid<T> grid;
   @Nonnull protected final Map<String, Grid.Column<T>> columnsByKey;
   @Nonnull private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
+
   @Nonnull private F filter;
-  @Nonnull protected final FilterEntryFactory<F> filterEntryFactory;
   @Nonnull protected final Binder<F> filterBinder;
+  @Nonnull protected final FilterEntryFactory<F> filterEntryFactory;
 
   protected boolean showGridToolbar = true;
   protected boolean showFilterToolbar = true;
@@ -51,28 +56,28 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nullable private List<?> cachedSortOrders;
   @Nonnull private final Object cacheLock;
 
-  protected BaseOverviewGrid(@Nonnull final GlobalInterface globalInterface,
+  protected BaseOverviewGrid(@Nonnull final Injector injector,
                              @Nonnull final F initialFilter,
                              final boolean showGridToolbar,
                              final boolean showFilterToolbar) {
-    this(globalInterface, initialFilter);
+    this(injector, initialFilter);
     this.showGridToolbar = showGridToolbar;
     this.showFilterToolbar = showFilterToolbar;
   }
 
-  protected BaseOverviewGrid(@Nonnull final GlobalInterface globalInterface,
+  protected BaseOverviewGrid(@Nonnull final Injector injector,
                              @Nonnull final F initialFilter) {
-    this.globalInterface = globalInterface;
-    this.columnsByKey = new HashMap<>();
+    this.injector = injector;
+    this.columnsByKey = New.map();
+
     this.filter = initialFilter;
-    this.filterEntryFactory = new FilterEntryFactory<>();
     this.filterBinder = new Binder<>();
-    this.cachedData = new ArrayList<>();
+    this.filterEntryFactory = new FilterEntryFactory<>();
+
+    this.cachedData = New.list();
     this.cachedFilter = null;
     this.cachedSortOrders = null;
     this.cacheLock = new Object();
-
-    this.grid = new VAGrid<>();
 
     final var backendProvider = DataProvider.fromFilteringCallbacks(
             this::fetchFromBackend,
@@ -84,6 +89,7 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
     setPadding(false);
     setSpacing(false);
 
+    this.grid = new VAGrid<>();
     grid.setSizeFull();
     grid.setDataProvider(dataProvider);
   }
@@ -127,20 +133,20 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   @Nonnull
   protected ViewToolbar createGridToolbar() {
     if (hasDetailPage()) {
-      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getDetailPageRoute());
+      return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName(), getDetailPageRoute());
     }
 
     final var customRunnable = getCustomActionButtonRunnable();
     if (customRunnable == null) {
-      return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName());
+      return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName());
     }
 
-    return ViewToolbarFactory.createGridToolbar(globalInterface, getGridObjectName(), getCustomActionButtonRunnable());
+    return ViewToolbarFactory.createGridToolbar(injector, getGridObjectName(), getCustomActionButtonRunnable());
   }
 
   @Nonnull
   private VerticalLayout createFilterBar() {
-    final var filterBar = new VAFilterBar();
+    final var filterBar = injector.getInstance(VAFilterBar.class);
     getFilterComponents().forEach(filterBar::addFilterComponent);
     filterBar.setSearchHandler(searchText -> setFilter(withSearchText(searchText)));
     filterBar.setOnFiltersChanged(() -> {
@@ -250,8 +256,8 @@ public abstract class BaseOverviewGrid<T extends BaseDto, F> extends VerticalLay
   }
 
   protected void navigateToDetail(@Nonnull final T dto) {
-    final var url = Routes.getDetailURL(this.getClass());
-    final var redirectURL = Routes.getURLWithId(url, dto.getId());
+    final var url = RoutesUtil.getDetailURL(this.getClass());
+    final var redirectURL = RoutesUtil.getURLWithId(url, dto.getId());
     UI.getCurrent().navigate(redirectURL);
   }
 

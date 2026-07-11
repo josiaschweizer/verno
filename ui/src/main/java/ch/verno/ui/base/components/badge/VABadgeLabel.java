@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.badge;
 
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.shared.Tooltip;
 import jakarta.annotation.Nonnull;

@@ -1,24 +1,26 @@
 package ch.verno.ui.verno.dashboard.io.widgets.instructor;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.verno.dashboard.io.dialog.export.ExportDialog;
 import ch.verno.ui.verno.dashboard.io.dialog.importing.ImportDialog;
 import ch.verno.ui.verno.instructor.InstructorsGrid;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 
 public class InstructorWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
   private InstructorsGrid instructorGrid;
 
-  public InstructorWidget(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  @Inject
+  public InstructorWidget(@Nonnull final Injector injector) {
+    this.injector = injector;
 
-    build();
+    buildUI();
   }
 
   @Nonnull
@@ -33,9 +35,9 @@ public class InstructorWidget extends VAAccordionWidgetBase {
             getTranslation("shared.import"),
             VaadinIcon.DOWNLOAD,
             e -> {
-              final var config = new InstructorImportConfig(globalInterface);
+              final var config = injector.getInstance(InstructorImportConfig.class);
               final var importDialog = new ImportDialog(
-                      globalInterface,
+                      injector,
                       getTranslation("shared.import") + Publ.SPACE + getTranslation("shared.instructor"),
                       config
               );
@@ -46,8 +48,8 @@ public class InstructorWidget extends VAAccordionWidgetBase {
             getTranslation("shared.export"),
             VaadinIcon.UPLOAD,
             e -> {
-              final var config = new InstructorExportConfig(globalInterface);
-              final var exportDialog = new ExportDialog<>(globalInterface, config);
+              final var config = injector.getInstance(InstructorExportConfig.class);
+              final var exportDialog = new ExportDialog<>(injector, config);
               exportDialog.open();
             });
 
@@ -56,7 +58,7 @@ public class InstructorWidget extends VAAccordionWidgetBase {
 
   @Override
   protected void initContent() {
-    instructorGrid = new InstructorsGrid(globalInterface, false, false);
+    instructorGrid = new InstructorsGrid(injector, false, false);
     instructorGrid.getGrid().setAllRowsVisible(true);
     add(instructorGrid);
   }

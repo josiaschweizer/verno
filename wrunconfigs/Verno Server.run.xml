@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Verno Server" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="server" />
+    <option name="PROGRAM_PARAMETERS" value="--server.address=0.0.0.0 --server.port=8081" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.verno.server.Application" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

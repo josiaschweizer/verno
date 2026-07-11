@@ -1,13 +1,13 @@
 package ch.verno.ui.base.factory;
 
-import ch.verno.common.db.dto.YearWeekDto;
-import ch.verno.common.db.dto.table.GenderDto;
+import ch.verno.common.dto.lib.YearWeekDto;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
+import ch.verno.contract.dto.table.gender.GenderDto;
 import ch.verno.ui.base.components.colorpicker.ColorPresets;
 import ch.verno.ui.base.components.colorpicker.VAColorPicker;
 import ch.verno.ui.base.components.entry.combobox.VAComboBox;
-import ch.verno.ui.base.components.entry.email.VAEmailField;
+import ch.verno.ui.base.components.entry.email.VAMailField;
 import ch.verno.ui.base.components.entry.numberfield.VANumberField;
 import ch.verno.ui.base.components.entry.phonenumber.PhoneEntry;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
@@ -112,12 +112,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAEmailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
-                                       @Nonnull final Setter<DTO, String> valueSetter,
-                                       @Nonnull final Binder<DTO> binder,
-                                       @Nonnull final Optional<String> required,
-                                       @Nonnull final String label) {
-    final var emailField = new VAEmailField(label);
+  public VAMailField createEmailEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
+                                      @Nonnull final Setter<DTO, String> valueSetter,
+                                      @Nonnull final Binder<DTO> binder,
+                                      @Nonnull final Optional<String> required,
+                                      @Nonnull final String label) {
+    final var emailField = new VAMailField(label);
     emailField.setClearButtonVisible(true);
     emailField.setWidthFull();
     emailField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -148,11 +148,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public PhoneEntry createPhoneNumberEntry(@Nonnull final ValueProvider<DTO, PhoneNumber> valueProvider,
-                                           @Nonnull final Setter<DTO, PhoneNumber> valueSetter,
-                                           @Nonnull final Binder<DTO> binder,
-                                           @Nonnull final Optional<String> required,
-                                           @Nonnull final String label) {
+  public PhoneEntry createPhoneNumberEntry(
+          @Nonnull final ValueProvider<DTO, PhoneNumber> valueProvider,
+          @Nonnull final Setter<DTO, PhoneNumber> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label) {
     final var phoneEntry = new PhoneEntry(label);
     phoneEntry.setWidthFull();
 
@@ -201,12 +202,13 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAComboBox<Long> createComboBoxEntry(@Nonnull final ValueProvider<DTO, Long> valueProvider,
-                                              @Nonnull final Setter<DTO, Long> valueSetter,
-                                              @Nonnull final Binder<DTO> binder,
-                                              @Nonnull final Optional<String> required,
-                                              @Nonnull final String label,
-                                              @Nonnull final Map<Long, String> options) {
+  public VAComboBox<Long> createComboBoxEntry(
+          @Nonnull final ValueProvider<DTO, Long> valueProvider,
+          @Nonnull final Setter<DTO, Long> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label,
+          @Nonnull final Map<Long, String> options) {
     final var comboBox = new VAComboBox<Long>(label);
     comboBox.setWidthFull();
 
@@ -220,13 +222,14 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAComboBox<String> createComboBoxEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
-                                                @Nonnull final Setter<DTO, String> valueSetter,
-                                                @Nonnull final Binder<DTO> binder,
-                                                @Nonnull final Optional<String> required,
-                                                @Nonnull final String label,
-                                                @Nonnull final List<String> options,
-                                                @Nonnull final ValueProvider<String, String> labelProvider) {
+  public VAComboBox<String> createComboBoxEntry(
+          @Nonnull final ValueProvider<DTO, String> valueProvider,
+          @Nonnull final Setter<DTO, String> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label,
+          @Nonnull final List<String> options,
+          @Nonnull final ValueProvider<String, String> labelProvider) {
     final var comboBox = new VAComboBox<String>(label);
     comboBox.setWidthFull();
 
@@ -240,13 +243,14 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public <E extends Enum<E>> VAComboBox<E> createEnumComboBoxEntry(@Nonnull final ValueProvider<DTO, E> valueProvider,
-                                                                   @Nonnull final Setter<DTO, E> valueSetter,
-                                                                   @Nonnull final Binder<DTO> binder,
-                                                                   @Nonnull final E[] values,
-                                                                   @Nonnull final Optional<String> required,
-                                                                   @Nonnull final String label,
-                                                                   @Nonnull final Function<E, String> labelProvider) {
+  public <E extends Enum<E>> VAComboBox<E> createEnumComboBoxEntry(
+          @Nonnull final ValueProvider<DTO, E> valueProvider,
+          @Nonnull final Setter<DTO, E> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final E[] values,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label,
+          @Nonnull final Function<E, String> labelProvider) {
     final var comboBox = new VAComboBox<E>(label);
     comboBox.setWidthFull();
 
@@ -288,13 +292,14 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public <T> MultiSelectComboBox<T> createMultiSelectComboBoxEntry(@Nonnull final ValueProvider<DTO, List<T>> valueProvider,
-                                                                   @Nonnull final Setter<DTO, List<T>> valueSetter,
-                                                                   @Nonnull final Binder<DTO> binder,
-                                                                   @Nonnull final Optional<String> required,
-                                                                   @Nonnull final String label,
-                                                                   @Nonnull final Collection<T> options,
-                                                                   @Nonnull final ValueProvider<T, String> optionLabelProvider) {
+  public <T> MultiSelectComboBox<T> createMultiSelectComboBoxEntry(
+          @Nonnull final ValueProvider<DTO, List<T>> valueProvider,
+          @Nonnull final Setter<DTO, List<T>> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label,
+          @Nonnull final Collection<T> options,
+          @Nonnull final ValueProvider<T, String> optionLabelProvider) {
     final var comboBox = new MultiSelectComboBox<T>(label);
     comboBox.setWidthFull();
 
@@ -324,13 +329,14 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VATwoOptionEntry<GenderDto> createGenderEntry(@Nonnull final ValueProvider<DTO, GenderDto> valueProvider,
-                                                       @Nonnull final Setter<DTO, GenderDto> valueSetter,
-                                                       @Nonnull final Binder<DTO> binder,
-                                                       @Nonnull final List<GenderDto> options,
-                                                       @Nonnull final ValueProvider<GenderDto, String> optionLabelProvider,
-                                                       @Nonnull final Optional<String> required,
-                                                       @Nonnull final String label) {
+  public VATwoOptionEntry<GenderDto> createGenderEntry(
+          @Nonnull final ValueProvider<DTO, GenderDto> valueProvider,
+          @Nonnull final Setter<DTO, GenderDto> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final List<GenderDto> options,
+          @Nonnull final ValueProvider<GenderDto, String> optionLabelProvider,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label) {
     final var entry = new VATwoOptionEntry<>(label, options, optionLabelProvider);
     bindEntry(entry, valueProvider, valueSetter, binder, required);
     entry.setWidthFull();
@@ -338,11 +344,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAColorPicker createColorPickerEntry(@Nonnull final ValueProvider<DTO, String> valueProvider,
-                                              @Nonnull final Setter<DTO, String> valueSetter,
-                                              @Nonnull final Binder<DTO> binder,
-                                              @Nonnull final Optional<String> required,
-                                              @Nonnull final String label) {
+  public VAColorPicker createColorPickerEntry(
+          @Nonnull final ValueProvider<DTO, String> valueProvider,
+          @Nonnull final Setter<DTO, String> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label) {
     final var colorPicker = new VAColorPicker(label);
     colorPicker.setPresets(ColorPresets.getDefaultColorPresets());
     colorPicker.setInputMode(ColorPicker.InputMode.PRESETANDCSS);
@@ -352,11 +359,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAWeekOption createWeekOptionEntry(@Nonnull final ValueProvider<DTO, List<DayOfWeek>> valueProvider,
-                                            @Nonnull final Setter<DTO, List<DayOfWeek>> valueSetter,
-                                            @Nonnull final Binder<DTO> binder,
-                                            @Nonnull final Optional<String> required,
-                                            @Nonnull final String label) {
+  public VAWeekOption createWeekOptionEntry(
+          @Nonnull final ValueProvider<DTO, List<DayOfWeek>> valueProvider,
+          @Nonnull final Setter<DTO, List<DayOfWeek>> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label) {
     final var weekOption = new VAWeekOption(label);
     weekOption.setWidthFull();
 
@@ -381,11 +389,12 @@ public class EntryFactory<DTO> {
   }
 
   @Nonnull
-  public VAScheduleWeekPicker createScheduleWeekPickerEntry(@Nonnull final ValueProvider<DTO, Set<YearWeekDto>> valueProvider,
-                                                            @Nonnull final Setter<DTO, Set<YearWeekDto>> valueSetter,
-                                                            @Nonnull final Binder<DTO> binder,
-                                                            @Nonnull final Optional<String> required,
-                                                            @Nonnull final String label) {
+  public VAScheduleWeekPicker createScheduleWeekPickerEntry(
+          @Nonnull final ValueProvider<DTO, Set<YearWeekDto>> valueProvider,
+          @Nonnull final Setter<DTO, Set<YearWeekDto>> valueSetter,
+          @Nonnull final Binder<DTO> binder,
+          @Nonnull final Optional<String> required,
+          @Nonnull final String label) {
     final var scheduleWeekPicker = new VAScheduleWeekPicker(label);
     scheduleWeekPicker.setWidthFull();
 

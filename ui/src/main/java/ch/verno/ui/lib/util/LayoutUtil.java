@@ -1,9 +1,10 @@
 package ch.verno.ui.lib.util;
 
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
 
 public class LayoutUtil {
@@ -18,11 +19,11 @@ public class LayoutUtil {
   }
 
   @Nonnull
-  public static HorizontalLayout createHorizontal(@Nonnull final Component... components) {
-    final var layout = new HorizontalLayout();
+  public static VAHorizontalLayout createHorizontal(@Nonnull final Component... components) {
+    final var layout = new VAHorizontalLayout();
     layout.setWidthFull();
 
-    layout.getStyle().set("flex-wrap", "wrap");
+    layout.getStyle().setFlexWrap(Style.FlexWrap.WRAP);
     layout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.START);
 
     for (final var component : components) {

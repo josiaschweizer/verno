@@ -1,15 +1,19 @@
 package ch.verno.ui.verno.settings.panels.report;
 
-import ch.verno.common.db.dto.table.TenantSettingDto;
-import ch.verno.common.server.service.intern.tenant.ITenantSettingService;
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.common.tenant.TenantContext;
-import ch.verno.publ.Publ;
-import ch.verno.publ.VernoConstants;
+import ch.verno.contract.dto.table.setting.TenantSettingDto;
+import ch.verno.contract.dto.table.tenant.TenantDto;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.Publ;
+import ch.verno.lib.VernoConstants;
+import ch.verno.rpc.client.setting.TenantSettingClient;
+import ch.verno.rpc.properties.tenant.TenantProperties;
 import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.notification.NotificationFactory;
-import ch.verno.ui.lib.settings.VABaseSetting;
 import ch.verno.ui.client.file.FileApiClient;
+import ch.verno.ui.lib.settings.VABaseSetting;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,16 +28,19 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
   public static final String TITLE_KEY = "setting.report.settings";
 
-  @Nonnull private final ITenantSettingService tenantSettingService;
-  @Nonnull private final FileApiClient fileApiClient;
+  @Nonnull private final Lazy<FileApiClient> fileApiClient;
+  @Nonnull private final Lazy<TenantProperties> tenantProperties;
+  @Nonnull private final Lazy<TenantSettingClient> tenantSettingClient;
 
-  public ReportSetting(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
+  @Inject
+  public ReportSetting(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
 
-    this.tenantSettingService = globalInterface.getService(ITenantSettingService.class);
-    this.fileApiClient = new FileApiClient(globalInterface, "http://localhost:8080"); //todo erweitern um die url nicht zu hardcoden
+    this.tenantProperties = Lazy.of(() -> injector.getInstance(TenantProperties.class));
+    this.tenantSettingClient = Lazy.of(() -> injector.getInstance(TenantSettingClient.class));
+    this.fileApiClient = Lazy.of(() -> injector.getInstance(FileApiClient.class));
 
-    this.dto = tenantSettingService.getCurrentTenantSettingOrDefault();
+    this.dto = tenantSettingClient.get().getCurrentOrDefaultTenantSetting();
   }
 
   @Nonnull
@@ -68,7 +75,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
         return;
       }
 
-      fileApiClient.deleteReportTemplate(
+      fileApiClient.get().deleteReportTemplate(
               resolveTenantSlug(),
               courseReportTemplate
       );
@@ -76,14 +83,14 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
       dto.setCourseReportTemplate(null);
 
       // we don't save the dto because then all changes would be saved and with this methode we can only remove the template without saving other changes that the user maybe made but doesn't want to save yet
-      final var toUpdate = tenantSettingService.getCurrentTenantSettingOrDefault();
+      final var toUpdate = tenantSettingClient.get().getCurrentOrDefaultTenantSetting();
       toUpdate.setCourseReportTemplate(null);
-      tenantSettingService.saveCurrentTenantSetting(toUpdate);
+      tenantSettingClient.get().saveTenantSetting(toUpdate);
     });
 
     final var templateId = dto.getCourseReportTemplate();
     if (templateId != null) {
-      final var report = fileApiClient.getReportTemplate(resolveTenantSlug(), templateId);
+      final var report = fileApiClient.get().getReportTemplate(resolveTenantSlug(), templateId);
 
       if (report != null && report.bytes().length > 0) {
         courseReportFileUpload.prefillUploadWithExistingFile(
@@ -104,8 +111,8 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
 
   @Nonnull
   private String resolveTenantSlug() {
-    final var tenant = globalInterface.resolveTenant();
-    return tenant != null ? tenant.getSlug() : Publ.EMPTY_STRING;
+    final var tenant = tenantProperties.get().resolveCurrentTenant();
+    return tenant.map(TenantDto::slug).orElse(Publ.EMPTY_STRING);
   }
 
   @Nonnull
@@ -132,7 +139,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
           return;
         }
 
-        final var fileStorageResponse = fileApiClient.uploadReportTemplate(
+        final var fileStorageResponse = fileApiClient.get().uploadReportTemplate(
                 resolveTenantSlug(),
                 event.getFileName(),
                 event.getContentType(),
@@ -141,7 +148,7 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
         );
 
         dto.setCourseReportTemplate(fileStorageResponse != null ? fileStorageResponse.id() : Publ.ZERO_LONG);
-        tenantSettingService.saveCurrentTenantSetting(dto);
+        tenantSettingClient.get().saveTenantSetting(dto);
       } finally {
         TenantContext.clear();
       }
@@ -157,13 +164,13 @@ public class ReportSetting extends VABaseSetting<TenantSettingDto> {
   @Nonnull
   @Override
   protected TenantSettingDto createNewBeanInstance() {
-    return new TenantSettingDto();
+    return TenantSettingDto.empty();
   }
 
   @Override
   protected void save() {
     if (binder.writeBeanIfValid(dto)) {
-      tenantSettingService.saveCurrentTenantSetting(dto);
+      tenantSettingClient.get().saveTenantSetting(dto);
       binder.setBean(dto);
     }
   }

@@ -57,6 +57,16 @@ public class BillingAccessTokenEntity extends TenantScopedEntity {
     this.expiresAt = expiresAt;
   }
 
+  public BillingAccessTokenEntity(@Nonnull final AppUserEntity user,
+                                  @Nonnull final String tokenHash,
+                                  @Nonnull final String purpose,
+                                  @Nonnull final OffsetDateTime expiresAt) {
+    this.user = user;
+    this.tokenHash = tokenHash;
+    this.purpose = purpose;
+    this.expiresAt = expiresAt;
+  }
+
   public Long getId() {
     return id;
   }

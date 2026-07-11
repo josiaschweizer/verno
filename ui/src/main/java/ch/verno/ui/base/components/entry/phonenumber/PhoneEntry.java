@@ -1,7 +1,7 @@
 package ch.verno.ui.base.components.entry.phonenumber;
 
-import ch.verno.common.ui.base.components.entry.phonenumber.PhoneNumber;
-import ch.verno.publ.Publ;
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.lib.Publ;
 import ch.verno.common.lib.calling.CallingCode;
 import ch.verno.common.lib.calling.CallingCodeHelper;
 import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;

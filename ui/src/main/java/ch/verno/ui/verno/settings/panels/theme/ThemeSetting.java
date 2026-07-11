@@ -1,18 +1,18 @@
 package ch.verno.ui.verno.settings.panels.theme;
 
-import ch.verno.common.db.dto.table.AppUserDto;
-import ch.verno.common.db.dto.table.AppUserSettingDto;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.server.service.intern.user.IAppUserSettingService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.lib.language.Language;
+import ch.verno.contract.dto.table.setting.AppUserSettingDto;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.lib.language.Language;
+import ch.verno.rpc.client.setting.AppUserSettingClient;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.lib.settings.VABaseSetting;
-import ch.verno.ui.lib.theme.ThemeConstants;
+import ch.verno.common.lib.theme.ThemeConstants;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
@@ -25,40 +25,21 @@ public class ThemeSetting extends VABaseSetting<UISettingDto> {
   @NonNls public static final String TOGGLE_DARK_MODE_JS = "document.documentElement.setAttribute('theme','dark'); localStorage.setItem('v-theme','dark');";
   @NonNls public static final String TOGGLE_LIGHT_MODE_JS = "document.documentElement.removeAttribute('theme'); localStorage.setItem('v-theme','light');";
 
-  @Nonnull private final IAppUserSettingService appUserSettingService;
+  @Nonnull private final Lazy<AppUserSettingClient> appUserSettingClient;
+  @Nonnull private final AppUserSettingDto currentAppUserSetting;
 
-  @Nullable private AppUserDto currentUser;
-  @Nullable private AppUserSettingDto currentSetting;
+  @Inject
+  public ThemeSetting(@Nonnull final Injector injector) {
+    super(injector, TITLE_KEY, true);
 
-  public ThemeSetting(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, TITLE_KEY, true);
-
-    this.appUserSettingService = globalInterface.getService(IAppUserSettingService.class);
-
-    final var currentSecurityContextUser = globalInterface.getUserProperties().getCurrentSpringUser();
-    if (currentSecurityContextUser == null) {
-      throw new IllegalStateException("No authenticated user found.");
-    }
-
-    final var userService = globalInterface.getService(IAppUserService.class);
-    final var currentUser = userService.findByUserName(currentSecurityContextUser.getUsername());
-    currentUser.ifPresent(appUserOptional -> this.currentUser = appUserOptional);
-
-    loadCurrentSetting();
+    this.appUserSettingClient = Lazy.of(() -> injector.getInstance(AppUserSettingClient.class));
+    this.currentAppUserSetting = injector.getInstance(AppUserClient.class).getCurrentOrEmptyAppUserSetting();
   }
 
-  private void loadCurrentSetting() {
-    if (currentUser == null || currentUser.getId() == null) {
-      return;
-    }
-
-    try {
-      this.currentSetting = appUserSettingService.getAppUserSettingByUserId(currentUser.getId());
-      dto.setDarkModeEnabled(ThemeConstants.SETTING_DARK.equals(currentSetting.getTheme()));
-      dto.setLocale(currentSetting.getLanguage().getLocale());
-    } catch (Exception e) {
-      dto.setDarkModeEnabled(false);
-    }
+  @Override
+  protected void loadDto() {
+    dto.setDarkModeEnabled(ThemeConstants.SETTING_DARK.equals(currentAppUserSetting.getTheme()));
+    dto.setLocale(currentAppUserSetting.getLanguage().getLocale());
   }
 
   @Nonnull
@@ -94,26 +75,13 @@ public class ThemeSetting extends VABaseSetting<UISettingDto> {
 
   @Override
   protected void save() {
-    if (!binder.writeBeanIfValid(dto) || currentUser == null || currentUser.getId() == null) {
+    if (!binder.writeBeanIfValid(dto)) {
       return;
     }
 
-    final var theme = dto.isDarkModeEnabled() ?
-            ThemeConstants.SETTING_DARK :
-            ThemeConstants.SETTING_LIGHT;
-
-    if (currentSetting != null) {
-      currentSetting.setTheme(theme);
-      currentSetting.setLanguage(dto.getLanguage());
-      currentSetting = appUserSettingService.saveAppUserSetting(currentSetting);
-    } else {
-      final var newSetting = new AppUserSettingDto(
-              currentUser.getId(),
-              theme,
-              dto.getLanguage()
-      );
-      currentSetting = appUserSettingService.saveAppUserSetting(newSetting);
-    }
+    currentAppUserSetting.setTheme(dto.isDarkModeEnabled() ? ThemeConstants.SETTING_DARK : ThemeConstants.SETTING_LIGHT);
+    currentAppUserSetting.setLanguage(dto.getLanguage());
+    appUserSettingClient.get().saveAppUserSetting(currentAppUserSetting);
 
     applyTheme(dto.isDarkModeEnabled());
     applyLanguage(dto.getLanguage());

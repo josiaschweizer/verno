@@ -1,0 +1,30 @@
+package ch.verno.server.service.entity.setting;
+
+import ch.verno.contract.dto.table.setting.AppUserSettingDto;
+import ch.verno.db.entity.setting.AppUserSettingEntity;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.mapper.setting.AppUserSettingMapper;
+import ch.verno.server.repository.setting.AppUserSettingRepository;
+import ch.verno.server.service.base.AbstractEntityServiceLongId;
+import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class AppUserSettingService extends AbstractEntityServiceLongId<
+        AppUserSettingEntity,
+        AppUserSettingDto,
+        AppUserSettingRepository,
+        AppUserSettingMapper> {
+
+  public AppUserSettingService(@Nonnull final ServerBean serverBean) {
+    super(serverBean.get(AppUserSettingRepository.class), serverBean.get(AppUserSettingMapper.class));
+  }
+
+  @Nonnull
+  public Optional<AppUserSettingDto> findByUserId(@Nonnull final Long userId) {
+    return getRepository().findByUserId(userId)
+            .map(getMapper()::toDto);
+  }
+}

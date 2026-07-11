@@ -1,11 +1,16 @@
 package ch.verno.ui.client.file;
 
-import ch.verno.common.api.dto.internal.file.storage.DownloadFileResponse;
-import ch.verno.common.api.dto.internal.file.storage.FileUploadResponse;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
+import ch.verno.common.lib.api.ApiUrl;
+import ch.verno.contract.dto.file.storage.api.DownloadFileResponse;
+import ch.verno.contract.dto.file.storage.api.FileUploadResponse;
+import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;
+import ch.verno.lib.New;
+import ch.verno.lib.Publ;
+import ch.verno.rpc.properties.env.EnvProperties;
+import ch.verno.rpc.rpc.RpcFactory;
 import ch.verno.ui.client.BaseApiClient;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.core.io.ByteArrayResource;
@@ -14,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,41 +26,35 @@ import java.util.Map;
 
 public class FileApiClient extends BaseApiClient {
 
-  public FileApiClient(@Nonnull final GlobalInterface globalInterface,
-                       @Nonnull final String baseUrl) {
-    super(globalInterface, BaseApiClient.build(baseUrl));
+  @Inject
+  public FileApiClient(@Nonnull final Injector injector) {
+    this(injector, getBasicAuthRequest(injector));
   }
 
-  public FileApiClient(@Nonnull final GlobalInterface globalInterface,
-                       @Nonnull final RestClient restClient) {
-    super(globalInterface, restClient);
+  public FileApiClient(@Nonnull final Injector injector,
+                       @Nonnull final BasicAuthRequest basicAuthRequest) {
+    super(injector, BaseApiClient.buildWithBasicAuth(basicAuthRequest), basicAuthRequest);
   }
 
   @Nullable
-  public FileUploadResponse uploadReportTemplate(@Nonnull final String tenantKey,
+  public FileUploadResponse uploadReportTemplate(@Nonnull final String tenantKey, //TODO delete tenant key?
                                                  @Nonnull final String filename,
                                                  @Nonnull final String contentType,
                                                  @Nonnull final InputStream inputStream,
                                                  final long size) {
 
     final var fileBytes = readBytes(inputStream);
-    final MultiValueMap<String, Object> multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
+    final var multipartBody = createMultipartBody(filename, contentType, fileBytes, size);
 
-    return post(ApiUrl.FILES, Map.of(
-                    "X-Mandant", tenantKey
-            ),
-            MediaType.MULTIPART_FORM_DATA,
-            multipartBody)
-            .retrieve()
-            .body(FileUploadResponse.class);
+    final var rc = post(ApiUrl.FILES, New.map(), MediaType.MULTIPART_FORM_DATA, multipartBody);
+    return rc.retrieve().body(FileUploadResponse.class);
   }
 
   @Nullable
-  public DownloadFileResponse getReportTemplate(@Nonnull final String tenantKey,
+  public DownloadFileResponse getReportTemplate(@Nonnull final String tenantKey, //TODO delete tenantKey - is no longer used because the tenant header is already set by the base
                                                 @Nonnull final Long id) {
-    return get(ApiUrl.FILES + Publ.SLASH + id, Map.of())
-            .retrieve()
-            .body(DownloadFileResponse.class);
+    final var rc = get(ApiUrl.FILES + Publ.SLASH + id, Map.of());
+    return rc.retrieve().body(DownloadFileResponse.class);
   }
 
   public void deleteReportTemplate(@Nonnull final String tenantKey, @Nonnull final Long fileId) {
@@ -75,7 +73,7 @@ public class FileApiClient extends BaseApiClient {
       }
       return bytes;
     } catch (IOException e) {
-      throw new RuntimeException("Failed to read input stream", e);
+      throw new RuntimeException("Failed to read input byteData", e);
     }
   }
 
@@ -103,6 +101,18 @@ public class FileApiClient extends BaseApiClient {
     body.add("file", fileEntity);
 
     return body;
+  }
+
+  @Nonnull
+  private static BasicAuthRequest getBasicAuthRequest(@Nonnull final Injector injector) {
+    final var apiProperties = injector.getInstance(RpcFactory.class).create(ApplicationConfigResource.class);
+    final var rpcUrl = apiProperties.getApiUrl();
+    final var username = apiProperties.getApiUsername();
+
+    final var envProperties = injector.getInstance(EnvProperties.class);
+    final var password = envProperties.getApiPassword();
+
+    return new BasicAuthRequest(rpcUrl, username, password);
   }
 
 }

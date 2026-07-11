@@ -1,33 +1,38 @@
 package ch.verno.ui.verno.dashboard.io.dialog.export;
 
-import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.ServerGate;
-import ch.verno.publ.ApiUrl;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.New;
+import ch.verno.rpc.client.file.CsvClient;
+import ch.verno.rpc.client.file.TempFileClient;
+import ch.verno.rpc.properties.application.ApplicationProperties;
+import ch.verno.ui.base.components.anchor.VAAnchor;
+import ch.verno.ui.base.components.anchor.variants.VAFileDownloadButton;
+import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
 import ch.verno.ui.base.components.file.csv.CsvPreview;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.verno.dashboard.io.widgets.ExportEntityConfig;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.dom.Style;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
-import java.util.List;
 
 public class ExportDialog<T> extends VAAbstractDialog {
 
-  @Nonnull private final ServerGate serverGate;
-  @Nonnull private final TempFileServerGate tempFileServerGate;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<CsvClient> csvClient;
+  @Nonnull private final Lazy<TempFileClient> tempFileClient;
+
   @Nonnull private String fileToken;
 
-  public ExportDialog(@Nonnull final GlobalInterface globalInterface,
+  public ExportDialog(@Nonnull final Injector injector,
                       @Nonnull final ExportEntityConfig<T> config) {
-    this.serverGate = globalInterface.getGate(ServerGate.class);
-    this.tempFileServerGate = globalInterface.getGate(TempFileServerGate.class);
+    this.injector = injector;
+    this.csvClient = Lazy.of(() -> injector.getInstance(CsvClient.class));
+    this.tempFileClient = Lazy.of(() -> injector.getInstance(TempFileClient.class));
 
     generateCsvFile(config);
     initUI(getTranslation("shared.export.csv"));
@@ -39,12 +44,21 @@ public class ExportDialog<T> extends VAAbstractDialog {
     addDialogCloseActionListener(e -> deleteTempOnServer());
   }
 
+  @Override
+  protected void initUI(@Nullable final String title, @Nonnull final DialogSize dialogSize) {
+    super.initUI(title, dialogSize);
+
+    getFooter().removeAll();
+    getFooter().add(createCancelButton());
+    getFooter().add(createDownloadButton());
+  }
+
   @Nonnull
   @Override
-  protected HorizontalLayout createContent() {
-    final var preview = new CsvPreview(buildInlineUrl(fileToken));
+  protected VAHorizontalLayout createContent() {
+    final var preview = new CsvPreview(tempFileClient, fileToken);
 
-    final var layout = new HorizontalLayout(preview);
+    final var layout = new VAHorizontalLayout(preview);
     layout.setSizeFull();
     layout.setPadding(false);
     layout.setSpacing(false);
@@ -54,45 +68,25 @@ public class ExportDialog<T> extends VAAbstractDialog {
   @Nonnull
   @Override
   protected Collection<Button> createActionButtons() {
-    final var cancelButton = new Button(getTranslation("shared.cancel"), e -> close());
-    final var downloadButton = createDownloadButton();
-
-    return List.of(cancelButton, downloadButton);
+    // return empty collection because we override the initUI and add there the download anchor to the footer
+    return New.list();
   }
+
 
   @Nonnull
-  private Button createDownloadButton() {
-    final var hidden = new Anchor(buildAttachmentUrl(fileToken), getTranslation("shared.download"));
-    hidden.getElement().setAttribute("download", true);
-    hidden.getStyle().setDisplay(Style.Display.NONE);
-    add(hidden);
-
-    final var downloadButton = new Button(getTranslation("shared.download"));
-    downloadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    downloadButton.addClickListener(e -> {
-      hidden.getElement().callJsFunction("click");
-      close();
-    });
-    return downloadButton;
+  private VAAnchor createDownloadButton() {
+    final var fileDownloadButton = injector.getInstance(VAFileDownloadButton.class);
+    fileDownloadButton.addClickListener(e -> close());
+    fileDownloadButton.setFileToken(fileToken);
+    return fileDownloadButton;
   }
 
-
   private void generateCsvFile(@Nonnull final ExportEntityConfig<T> config) {
-    final var fileDto = serverGate.generateFileFromCsv(config.getFileName(), config.getRows());
-    fileToken = tempFileServerGate.store(fileDto);
+    final var fileDto = csvClient.get().parseCsvRowsToFile(config.getFileName(), config.getRows());
+    this.fileToken = tempFileClient.get().store(fileDto);
   }
 
   private void deleteTempOnServer() {
-    tempFileServerGate.delete(fileToken);
-  }
-
-  @Nonnull
-  private String buildInlineUrl(@Nonnull final String token) {
-    return ApiUrl.TEMP_FILE_EXPORT + Publ.SLASH + token + ApiUrl.DISPOSITION_INLINE;
-  }
-
-  @Nonnull
-  private String buildAttachmentUrl(@Nonnull final String token) {
-    return ApiUrl.TEMP_FILE_EXPORT + Publ.SLASH + token + ApiUrl.DISPOSITION_ATTACHMENT;
+    tempFileClient.get().delete(fileToken);
   }
 }

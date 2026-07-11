@@ -37,6 +37,7 @@ public record CallingCode(
     }
   }
 
+  @Nonnull
   public static CallingCode defaultSwiss() {
     return new CallingCode(41, "+41", "CH");
   }

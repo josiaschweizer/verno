@@ -1,10 +1,11 @@
 package ch.verno.ui.base.components.dialog;
 
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.button.VAButton;
-import ch.verno.ui.lib.icon.CustomIcons;
-import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.base.components.button.variants.VASaveButton;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -14,7 +15,7 @@ import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-public abstract class VAAbstractDialog extends Dialog {
+public abstract class VAAbstractDialog extends VADialog {
 
   protected void initUI(@Nonnull final String title) {
     initUI(title, DialogSize.BIG);
@@ -22,7 +23,7 @@ public abstract class VAAbstractDialog extends Dialog {
 
   protected void initUI(@Nullable final String title,
                         @Nonnull final DialogSize dialogSize) {
-    setHeight("auto");
+    setHeight(VernoUtility.AUTO);
     setMaxHeight(dialogSize.getMaxHeight());
     setMinHeight(dialogSize.getMinHeight());
 
@@ -46,7 +47,7 @@ public abstract class VAAbstractDialog extends Dialog {
   }
 
   @Nonnull
-  protected abstract HorizontalLayout createContent();
+  protected abstract VAHorizontalLayout createContent();
 
   @Nonnull
   protected abstract Collection<Button> createActionButtons();
@@ -60,9 +61,15 @@ public abstract class VAAbstractDialog extends Dialog {
 
   @Nonnull
   protected VAButton createSaveButton(@Nonnull final Consumer<ClickEvent<Button>> action) {
-    final var button = new VAButton(getTranslation("shared.save"), IconUtil.creatExtraSmall(CustomIcons.SAVE));
-    button.addClickListener(action::accept);
+    final var button = new VASaveButton(action::accept);
+    button.setDirtyActionProvider(() -> true);
     return button;
   }
 
+  @Nonnull
+  protected VAButton createCloseButton() {
+    final var button = new VAButton(getTranslation("setting.close"));
+    button.addClickListener(e -> close());
+    return button;
+  }
 }

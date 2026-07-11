@@ -1,14 +1,16 @@
 package ch.verno.ui.base.navigation;
 
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.i18n.TranslationHelper;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.publ.Publ;
-import ch.verno.publ.Routes;
-import ch.verno.ui.lib.icon.CustomIconConstants;
+import ch.verno.common.lib.Routes;
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.Publ;
+import ch.verno.rpc.client.mail.MailConfigClient;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.lib.icon.IconUtil;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.charts.model.Cursor;
@@ -33,14 +35,15 @@ import java.util.Objects;
 
 public class MainLayoutSideNavFactory {
 
-  @Nonnull private final GlobalInterface globalInterface;
-  @Nonnull private final IMailConfigService mailConfigService;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigClient;
 
   @Nonnull private final List<MenuEntry> menuEntries;
 
-  public MainLayoutSideNavFactory(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
-    this.mailConfigService = globalInterface.getService(IMailConfigService.class);
+  @Inject
+  public MainLayoutSideNavFactory(@Nonnull final Injector injector) {
+    this.injector = injector;
+    this.mailConfigClient = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
 
     menuEntries = MenuConfiguration.getMenuEntries();
 
@@ -125,11 +128,12 @@ public class MainLayoutSideNavFactory {
 
   private boolean hasValidMailConfiguration() {
     try {
-      if (!mailConfigService.hasConfigForCurrentTenant()) {
+      final var config = mailConfigClient.get().getMailConfigForCurrentTenant();
+      if (config.isEmpty()) {
         return false;
       }
 
-      final var mailConfig = mailConfigService.getConfigForCurrentTenant();
+      final var mailConfig = config.get();
       return mailConfig.getMailValidity() == MailValidity.TESTED_VALID;
     } catch (Exception e) {
       return false;
@@ -138,9 +142,8 @@ public class MainLayoutSideNavFactory {
 
   @Nonnull
   private SideNavItem createSideNavItem(@Nonnull final MenuEntry menuEntry) {
-    final var title = TranslationHelper.getTranslation(globalInterface, menuEntry.title());
-
-    final SideNavItem item = (menuEntry.icon() != null)
+    final var title = injector.getInstance(TranslationHelper.class).getTranslation(menuEntry.title());
+    final var item = (menuEntry.icon() != null)
             ? new SideNavItem(title, menuEntry.path(), createIcon(menuEntry))
             : new SideNavItem(title, menuEntry.path());
 
@@ -156,11 +159,11 @@ public class MainLayoutSideNavFactory {
     final var icon = menuEntry.icon();
     if (icon == null) {
       return new Icon(VaadinIcon.CUBES);
-    } else if (icon.startsWith(CustomIconConstants.VAADIN_ICON)) {
+    } else if (icon.startsWith(VaadinIconConstants.VAADIN_PREFIX)) {
       return new Icon(icon);
-    } else {
-      final var customIcon = CustomIcons.of(icon);
-      return IconUtil.create(customIcon);
     }
+
+    final var customIcon = CustomIcons.of(icon);
+    return IconUtil.create(customIcon);
   }
 }

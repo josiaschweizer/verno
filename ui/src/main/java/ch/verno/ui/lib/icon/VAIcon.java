@@ -1,8 +1,8 @@
 package ch.verno.ui.lib.icon;
 
+import ch.verno.lib.Publ;
+import ch.verno.lib.VernoUtility;
 import ch.verno.lib.annotation.RestrictedTo;
-import ch.verno.publ.Publ;
-import ch.verno.publ.VernoUtility;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -16,23 +16,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class VAIcon extends Span {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(VAIcon.class);
 
   @NonNls private static final String RESOURCE_PREFIX = "META-INF/resources/";
-  @NonNls private static final String DEFAULT_COLOR = "var(--lumo-contrast-60pct)";
+  @NonNls private static final String DEFAULT_COLOR = "var(--va-icon-color, var(--lumo-contrast-60pct))";
   @NonNls public static final String CONFIGURE_SVG_ELEMENT_JS = """
           const svg = this.querySelector('svg');
           if (svg) {
             svg.style.width = $0;
             svg.style.height = $0;
             svg.style.display = 'block';
+            svg.querySelectorAll('[fill]').forEach(el => el.setAttribute('fill', 'currentColor'));
+            svg.querySelectorAll('[stroke]').forEach(el => el.setAttribute('stroke', 'currentColor'));
           }
           """;
 
   @RestrictedTo(IconUtil.class)
-  protected VAIcon(@Nonnull final String path, @Nonnull final String size) {
+  protected VAIcon(@Nonnull final String path,
+                   @Nonnull final String size) {
     initializeIcon(path, size);
   }
 
@@ -117,7 +121,7 @@ public class VAIcon extends Span {
     setText("⚠");
     getStyle()
             .setColor(VernoUtility.LUMO_ERROR_COLOR)
-            .setFontSize("1.2em");
+            .setFontSize("1.2rem");
   }
 
   public void setSize(@Nonnull final String size) {

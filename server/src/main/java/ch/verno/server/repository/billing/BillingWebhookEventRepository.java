@@ -2,51 +2,31 @@ package ch.verno.server.repository.billing;
 
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;
 import ch.verno.db.jpa.billing.SpringDataBillingWebhookEventJpaRepository;
+import ch.verno.server.config.tenant.UnscopedQuery;
+import ch.verno.server.repository.base.AbstractEntityRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class BillingWebhookEventRepository {
+@UnscopedQuery
+public class BillingWebhookEventRepository extends AbstractEntityRepository<
+        BillingWebhookEventEntity,
+        Long,
+        SpringDataBillingWebhookEventJpaRepository> {
 
-  @Nonnull
-  private final SpringDataBillingWebhookEventJpaRepository jpaRepository;
-
-  public BillingWebhookEventRepository(@Nonnull final SpringDataBillingWebhookEventJpaRepository jpaRepository) {
-    this.jpaRepository = jpaRepository;
-  }
-
-  @Nonnull
-  public BillingWebhookEventEntity save(@Nonnull final BillingWebhookEventEntity entity) {
-    return jpaRepository.save(entity);
-  }
-
-  @Nonnull
-  public Optional<BillingWebhookEventEntity> findById(@Nonnull final Long id) {
-    return jpaRepository.findById(id);
+  public BillingWebhookEventRepository(@Nonnull final SpringDataBillingWebhookEventJpaRepository repository) {
+    super(repository);
   }
 
   @Nonnull
   public Optional<BillingWebhookEventEntity> findByStripeEventId(@Nonnull final String stripeEventId) {
-    return jpaRepository.findByStripeEventId(stripeEventId);
+    return getRepository().findByStripeEventId(stripeEventId);
   }
 
   public boolean existsByStripeEventId(@Nonnull final String stripeEventId) {
-    return jpaRepository.existsByStripeEventId(stripeEventId);
+    return getRepository().existsByStripeEventId(stripeEventId);
   }
 
-  public boolean existsById(@Nonnull final Long id) {
-    return jpaRepository.existsById(id);
-  }
-
-  @Nonnull
-  public List<BillingWebhookEventEntity> findAll() {
-    return jpaRepository.findAll();
-  }
-
-  public void deleteById(@Nonnull final Long id) {
-    jpaRepository.deleteById(id);
-  }
 }

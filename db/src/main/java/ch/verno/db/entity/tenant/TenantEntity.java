@@ -29,6 +29,12 @@ public class TenantEntity {
     this.id = id;
   }
 
+  private TenantEntity(@Nonnull final String slug,
+                       @Nonnull final String name) {
+    this.slug = slug;
+    this.name = name;
+  }
+
   public static TenantEntity ref(@Nonnull final Long id) {
     return new TenantEntity(id);
   }

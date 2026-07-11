@@ -1,7 +1,8 @@
 package ch.verno.ui.base.components.calendar;
 
-import ch.verno.publ.Publ;
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
+import ch.verno.lib.Publ;
+import ch.verno.ui.lib.url.RoutesUtil;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -209,8 +210,7 @@ public class VAWeekCalendar extends Composite<Div> {
     block.getStyle().setCursor("pointer");
     block.addClickListener(e -> {
       if (event.courseId() != null) {
-        UI.getCurrent().navigate(
-                Routes.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId())));
+        UI.getCurrent().navigate(RoutesUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId())));
       }
     });
 

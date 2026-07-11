@@ -1,18 +1,22 @@
 package ch.verno.ui.lib.layouts;
 
 import ch.verno.common.db.role.Role;
-import ch.verno.common.server.service.intern.user.IAppUserService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.i18n.TranslationHelper;
-import ch.verno.common.ui.dto.UserDtoUnhashedPw;
-import ch.verno.publ.Publ;
+import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
+import ch.verno.lib.Lazy;
+import ch.verno.lib.Publ;
+import ch.verno.rpc.client.user.AppUserClient;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.base.factory.EntryFactory;
+import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
@@ -21,25 +25,28 @@ import java.util.Optional;
 
 public class UserLayout {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
+  @Nonnull private final Lazy<AppUserClient> appUserClient;
+  @Nonnull private final TranslationHelper translationHelper;
+
   @Nonnull private final EntryFactory<UserDtoUnhashedPw> entryFactory;
-  @Nonnull private final IAppUserService appUserService;
 
   @Nonnull private String usernamePanelDisabledReasonKey = Publ.EMPTY_STRING;
   @Nonnull private String roleDisabledReasonKey = Publ.EMPTY_STRING;
   @Nonnull private String passwordDisabledReasonKey = Publ.EMPTY_STRING;
 
-  public UserLayout(@Nonnull final GlobalInterface globalInterface,
-                    @Nonnull final EntryFactory<UserDtoUnhashedPw> entryFactory) {
-    this.globalInterface = globalInterface;
-    this.appUserService = globalInterface.getService(IAppUserService.class);
-    this.entryFactory = entryFactory;
+  @Inject
+  public UserLayout(@Nonnull final Injector injector) {
+    this.injector = injector;
+    this.appUserClient = Lazy.of(() -> injector.getInstance(AppUserClient.class));
+    this.entryFactory = new EntryFactory<>(injector.getInstance(I18NProvider.class));
+    this.translationHelper = injector.getInstance(TranslationHelper.class);
   }
 
   @Nonnull
-  public HorizontalLayout buildUserLayout(@Nonnull final Binder<UserDtoUnhashedPw> binder,
-                                          @Nonnull final FormMode formMode,
-                                          @Nonnull final String oldUserName) {
+  public VAHorizontalLayout buildUserLayout(@Nonnull final Binder<UserDtoUnhashedPw> binder,
+                                            @Nonnull final FormMode formMode,
+                                            @Nonnull final String oldUserName) {
     final var username = createUserNameField(binder, formMode, oldUserName);
 
     final var email = entryFactory.createEmailEntry(
@@ -47,7 +54,7 @@ public class UserLayout {
             UserDtoUnhashedPw::setEmail,
             binder,
             Optional.empty(),
-            TranslationHelper.getTranslation(globalInterface, "shared.e.mail")
+            translationHelper.getTranslation("shared.e.mail")
     );
 
     final var firstname = entryFactory.createTextField(
@@ -55,22 +62,22 @@ public class UserLayout {
             UserDtoUnhashedPw::setFirstname,
             binder,
             Optional.empty(),
-            TranslationHelper.getTranslation(globalInterface, "shared.first.name")
+            translationHelper.getTranslation( "shared.first.name")
     );
     final var lastname = entryFactory.createTextField(
             UserDtoUnhashedPw::getLastname,
             UserDtoUnhashedPw::setLastname,
             binder,
             Optional.empty(),
-            TranslationHelper.getTranslation(globalInterface, "shared.last.name")
+            translationHelper.getTranslation( "shared.last.name")
     );
 
     final var password = entryFactory.createPasswordField(
             UserDtoUnhashedPw::getPassword,
             UserDtoUnhashedPw::setPassword,
             binder,
-            Optional.of(TranslationHelper.getTranslation(globalInterface, "shared.password.is.required")),
-            TranslationHelper.getTranslation(globalInterface, "shared.password")
+            Optional.of(translationHelper.getTranslation( "shared.password.is.required")),
+            translationHelper.getTranslation( "shared.password")
     );
 
     final var role = entryFactory.createEnumComboBoxEntry(
@@ -80,24 +87,24 @@ public class UserLayout {
             Arrays.stream(Role.values())
                     .sorted(Comparator.comparing(Role::getId).reversed())
                     .toArray(Role[]::new),
-            Optional.of(TranslationHelper.getTranslation(globalInterface, "shared.role.is.required")),
-            TranslationHelper.getTranslation(globalInterface, "shared.role"),
+            Optional.of(translationHelper.getTranslation( "shared.role.is.required")),
+            translationHelper.getTranslation( "shared.role"),
             Role::getRoleNameKey
     );
 
 
     if (!usernamePanelDisabledReasonKey.isBlank()) {
       username.setReadOnly(true);
-      username.setTooltipText(TranslationHelper.getTranslation(globalInterface, usernamePanelDisabledReasonKey));
+      username.setTooltipText(translationHelper.getTranslation( usernamePanelDisabledReasonKey));
     }
     if (!roleDisabledReasonKey.isBlank()) {
       role.setReadOnly(true);
-      role.setTooltipText(TranslationHelper.getTranslation(globalInterface, roleDisabledReasonKey));
+      role.setTooltipText(translationHelper.getTranslation( roleDisabledReasonKey));
     }
     if (!passwordDisabledReasonKey.isBlank()) {
       password.setReadOnly(true);
       password.setRevealButtonVisible(false); // hide the reveal button so the user cannot see the password (used e.g. in edit user when the password is just the hash of the pw...)
-      password.setTooltipText(TranslationHelper.getTranslation(globalInterface, passwordDisabledReasonKey));
+      password.setTooltipText(translationHelper.getTranslation( passwordDisabledReasonKey));
     }
 
     return LayoutUtil.createHorizontal(username, email, firstname, lastname, password, role);
@@ -108,23 +115,23 @@ public class UserLayout {
   private TextField createUserNameField(@Nonnull final Binder<UserDtoUnhashedPw> binder,
                                         @Nonnull final FormMode formMode,
                                         @Nonnull final String oldUserName) {
-    final var username = new TextField(TranslationHelper.getTranslation(globalInterface, "shared.username"));
+    final var username = new TextField(translationHelper.getTranslation( "shared.username"));
     username.setWidthFull();
     username.setValueChangeMode(com.vaadin.flow.data.value.ValueChangeMode.EAGER);
 
     final var usernameBinding = binder.forField(username)
-            .asRequired(TranslationHelper.getTranslation(globalInterface, "shared.username.is.required"))
+            .asRequired(translationHelper.getTranslation( "shared.username.is.required"))
             .withValidator((value, context) -> {
               if (value == null || value.isBlank()) {
-                return ValidationResult.error(TranslationHelper.getTranslation(globalInterface, "shared.username.is.required"));
+                return ValidationResult.error(translationHelper.getTranslation( "shared.username.is.required"));
               }
-              final var userNameExists = appUserService.findByUserName(value);
+              final var userNameExists = appUserClient.get().findByUsername(value);
               if (userNameExists.isEmpty()) {
                 return ValidationResult.ok();
               } else if (formMode == FormMode.EDIT && value.equals(oldUserName)) {
                 return ValidationResult.ok(); // allow unchanged username in edit mode
               } else {
-                return ValidationResult.error(TranslationHelper.getTranslation(globalInterface, "shared.username.0.already.exists", value));
+                return ValidationResult.error(translationHelper.getTranslation( "shared.username.0.already.exists", value));
               }
             });
     usernameBinding.bind(UserDtoUnhashedPw::getUsername, UserDtoUnhashedPw::setUsername);

@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.security;
 
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
 import ch.verno.ui.MainLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
@@ -9,6 +9,7 @@ import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.Nonnull;
 
 @Route(Routes.LOGIN)
 @AnonymousAllowed
@@ -29,7 +30,7 @@ public class LoginView extends VerticalLayout {
     setDefaultHorizontalComponentAlignment(Alignment.CENTER);
     setJustifyContentMode(JustifyContentMode.CENTER);
 
-    login.getStyle().set("max-width", "360px");
+    login.getStyle().setMaxWidth("360px");
 
     add(login);
   }
@@ -37,7 +38,7 @@ public class LoginView extends VerticalLayout {
 
 
   @Override
-  protected void onAttach(final AttachEvent attachEvent) {
+  protected void onAttach(@Nonnull final AttachEvent attachEvent) {
     super.onAttach(attachEvent);
 
     UI.getCurrent()

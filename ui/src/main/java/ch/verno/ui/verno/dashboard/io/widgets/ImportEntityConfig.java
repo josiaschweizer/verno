@@ -1,10 +1,9 @@
 package ch.verno.ui.verno.dashboard.io.widgets;
 
-import ch.verno.common.db.dto.base.BaseDto;
-import ch.verno.server.io.importing.dto.DbField;
-import ch.verno.server.io.importing.dto.DbFieldNested;
-import ch.verno.server.io.importing.dto.DbFieldTyped;
-import ch.verno.server.io.importing.dto.DbFieldRelation;
+import ch.verno.common.io.importing.DbField;
+import ch.verno.common.io.importing.DbFieldNested;
+import ch.verno.common.io.importing.DbFieldRelation;
+import ch.verno.common.io.importing.DbFieldTyped;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 

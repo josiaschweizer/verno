@@ -1,10 +1,11 @@
 package ch.verno.ui.verno.dashboard.io.dialog.importing.steps.step1;
 
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.gate.server.TempFileServerGate;
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import ch.verno.ui.base.components.dialog.stepdialog.BaseDialogStep;
+import ch.verno.ui.base.components.file.FileType;
 import ch.verno.ui.base.components.upload.VAFileUploadArea;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -12,15 +13,15 @@ public class ImportFile extends BaseDialogStep {
 
   private final VAFileUploadArea fileUpload;
 
-  public ImportFile(@Nonnull final GlobalInterface globalInterface) {
+  @Inject
+  public ImportFile(@Nonnull final Injector injector) {
     setSizeFull();
     setPadding(false);
     setSpacing(false);
-    getStyle().setMargin(VernoUtility.LUMO_ZERO)
-            .setGap(VernoUtility.LUMO_ZERO);
+    getStyle().setMargin(VernoUtility.NONE).setGap(VernoUtility.NONE);
 
-    fileUpload = new VAFileUploadArea(globalInterface.getService(TempFileServerGate.class));
-    fileUpload.setAcceptedFileTypes(".csv");
+    fileUpload = injector.getInstance(VAFileUploadArea.class);
+    fileUpload.setAcceptedFileTypes(FileType.CSV.getFileExtension());
     fileUpload.setMaxFiles(1);
 
     addAndExpand(fileUpload);

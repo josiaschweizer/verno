@@ -1,0 +1,161 @@
+package ch.verno.contract.dto.table.instructor;
+
+import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
+import ch.verno.common.lib.phonenumber.PhoneNumberFormatter;
+import ch.verno.contract.dto.table.address.AddressDto;
+import ch.verno.contract.dto.table.base.BaseDto;
+import ch.verno.contract.dto.table.gender.GenderDto;
+import ch.verno.lib.Publ;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import java.util.Objects;
+
+public class InstructorDto extends BaseDto<Long> {
+
+  @Nonnull private String firstName;
+  @Nonnull private String lastName;
+
+  @Nonnull private String email;
+  @Nonnull private PhoneNumber phone;
+
+  @Nonnull private GenderDto gender;
+  @Nonnull private AddressDto address;
+
+  private InstructorDto() {
+    setId(null);
+    this.firstName = Publ.EMPTY_STRING;
+    this.lastName = Publ.EMPTY_STRING;
+    this.email = Publ.EMPTY_STRING;
+    this.phone = PhoneNumber.empty();
+    this.gender = GenderDto.empty();
+    this.address = AddressDto.empty();
+  }
+
+  public InstructorDto(@Nonnull final String firstName,
+                       @Nonnull final String lastName,
+                       @Nonnull final String email,
+                       @Nonnull final PhoneNumber phone,
+                       @Nonnull final GenderDto gender,
+                       @Nonnull final AddressDto address) {
+    this(null, firstName, lastName, email, phone, gender, address);
+  }
+
+  public InstructorDto(@Nullable final Long id,
+                       @Nonnull final String firstName,
+                       @Nonnull final String lastName,
+                       @Nonnull final String email,
+                       @Nonnull final PhoneNumber phone,
+                       @Nonnull final GenderDto gender,
+                       @Nonnull final AddressDto address) {
+    setId(id);
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.phone = phone;
+    this.gender = gender;
+    this.address = address;
+  }
+
+  @Nonnull
+  public static InstructorDto empty() {
+    return new InstructorDto();
+  }
+
+  @Nonnull
+  public static InstructorDto ref(@Nonnull final Long id) {
+    final var dto = new InstructorDto();
+    dto.setId(id);
+    return dto;
+  }
+
+  public boolean isEmpty() {
+    return getId() != null
+            && getId() == 0L
+            && firstName.isEmpty()
+            && lastName.isEmpty()
+            && email.isEmpty()
+            && phone.isEmpty();
+  }
+
+  @Nonnull
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(@Nonnull final String firstName) {
+    this.firstName = firstName;
+  }
+
+  @Nonnull
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(@Nonnull final String lastName) {
+    this.lastName = lastName;
+  }
+
+  @Nonnull
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(@Nonnull final String email) {
+    this.email = email;
+  }
+
+  @Nonnull
+  public PhoneNumber getPhone() {
+    return phone;
+  }
+
+  public void setPhone(@Nullable final PhoneNumber phone) {
+    this.phone = Objects.requireNonNullElseGet(phone, PhoneNumber::empty);
+  }
+
+  @Nonnull
+  public GenderDto getGender() {
+    return gender;
+  }
+
+  public void setGender(@Nonnull final GenderDto gender) {
+    this.gender = gender;
+  }
+
+  @Nonnull
+  public AddressDto getAddress() {
+    return address;
+  }
+
+  public void setAddress(@Nonnull final AddressDto address) {
+    this.address = address;
+  }
+
+  @Nonnull
+  public String displayName() {
+    return (firstName + Publ.SPACE + lastName).trim();
+  }
+
+  @Nonnull
+  public String phoneAsString() {
+    return PhoneNumberFormatter.formatPhoneNumber(phone);
+  }
+
+  @Nonnull
+  public String genderAsString() {
+    return gender.getDescription();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof InstructorDto other)) return false;
+    return getId() != null && getId().equals(other.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId());
+  }
+}

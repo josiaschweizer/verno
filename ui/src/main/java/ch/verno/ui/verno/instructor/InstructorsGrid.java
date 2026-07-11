@@ -1,17 +1,19 @@
 package ch.verno.ui.verno.instructor;
 
-import ch.verno.common.db.dto.table.InstructorDto;
-import ch.verno.common.db.filter.InstructorFilter;
-import ch.verno.common.server.service.intern.IInstructorService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.ui.base.components.badge.VABadgeLabelOptions;
-import ch.verno.publ.Routes;
+import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.filter.InstructorFilter;
+import ch.verno.contract.dto.table.instructor.InstructorDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.instructor.InstructorClient;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
+import ch.verno.ui.lib.url.RoutesUtil;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -36,20 +38,19 @@ import java.util.stream.Stream;
 @Menu(order = 2, icon = "vaadin:institution", title = "shared.instructors.overview")
 public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorFilter> implements HasDynamicTitle {
 
-  @Nonnull
-  private final IInstructorService instructorService;
+  @Nonnull private final Lazy<InstructorClient> instructorClient;
 
-  public InstructorsGrid(@Nonnull final GlobalInterface globalInterface,
+  public InstructorsGrid(@Nonnull final Injector injector,
                          final boolean showGridToolbar,
                          final boolean showFilterToolbar) {
-    super(globalInterface, InstructorFilter.empty(), showGridToolbar, showFilterToolbar);
-    this.instructorService = globalInterface.getService(IInstructorService.class);
+    super(injector, InstructorFilter.empty(), showGridToolbar, showFilterToolbar);
+    this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
   }
 
   @Autowired
-  public InstructorsGrid(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface, InstructorFilter.empty(), true, true);
-    this.instructorService = globalInterface.getService(IInstructorService.class);
+  public InstructorsGrid(@Nonnull final Injector injector) {
+    super(injector, InstructorFilter.empty(), true, true);
+    this.instructorClient = Lazy.of(() -> injector.getInstance(InstructorClient.class));
   }
 
   @Nonnull
@@ -59,7 +60,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
     final var limit = query.getLimit();
     final var sortOrders = query.getSortOrders();
 
-    return instructorService.findInstructors(filter, offset, limit, sortOrders).stream();
+    return instructorClient.get().getInstructors(filter, sortOrders, offset, limit).stream();
   }
 
   @Nonnull
@@ -71,7 +72,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Nonnull
   @Override
   protected String getDetailPageRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
   }
 
   @Override
@@ -106,12 +107,12 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   }
 
   private void deleteInstructor(@Nonnull final InstructorDto dto) {
-    instructorService.deleteInstructor(dto.getId());
+    instructorClient.get().deleteInstructor(dto);
     refreshGrid();
   }
 
   private boolean isInstructorDeletable(@Nonnull final InstructorDto dto) {
-    return !instructorService.isInstructorReferenced(dto.getId());
+    return !isInstructorReferenced(dto.getId());
   }
 
   @Nonnull
@@ -138,8 +139,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
 
   @Nonnull
   private Span getInstructorStatusBadge(@Nonnull final InstructorDto dto) {
-    final var referenced = instructorService.isInstructorReferenced(dto.getId());
-    if (referenced) {
+    if (isInstructorReferenced(dto.getId())) {
       final var badgeLabel = BadgeLabelFactory.createBadgeLabel(getTranslation("common.in.verwendung"), VABadgeLabelOptions.SUCCESS);
       badgeLabel.setTooltipText(getTranslation("common.dieser.kursleiter.ist.in.verwendung.dadurch.kann.er.nicht.geloscht.werden"));
       return badgeLabel;
@@ -186,5 +186,9 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Override
   public String getPageTitle() {
     return getTranslation("shared.instructors.overview");
+  }
+
+  private boolean isInstructorReferenced(@Nonnull final Long id) {
+    return instructorClient.get().isInstructorReferenced(id);
   }
 }

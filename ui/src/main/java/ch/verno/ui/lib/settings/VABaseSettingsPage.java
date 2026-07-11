@@ -1,7 +1,7 @@
 package ch.verno.ui.lib.settings;
 
-import ch.verno.common.gate.GlobalInterface;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
@@ -10,12 +10,18 @@ import java.util.List;
 
 public abstract class VABaseSettingsPage extends VerticalLayout {
 
-  protected void initUI(@Nonnull final GlobalInterface globalInterface) {
+  @Nonnull protected final Injector injector;
+
+  public VABaseSettingsPage(@Nonnull final Injector injector) {
+    this.injector = injector;
+  }
+
+  protected void initUI() {
     setPadding(false);
     setSpacing(false);
     setSizeFull();
 
-    add(ViewToolbarFactory.createSimpleToolbar(globalInterface, getSettingsPageName()));
+    add(ViewToolbarFactory.createSimpleToolbar(injector, getSettingsPageName()));
 
     final var settingsRow = new HorizontalLayout();
     settingsRow.setWidthFull();

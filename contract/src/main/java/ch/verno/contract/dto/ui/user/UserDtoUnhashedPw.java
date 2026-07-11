@@ -1,0 +1,120 @@
+package ch.verno.contract.dto.ui.user;
+
+import ch.verno.common.db.role.Role;
+import ch.verno.contract.dto.table.base.BaseDto;
+import ch.verno.contract.dto.table.user.AppUserDto;
+import ch.verno.lib.Publ;
+import jakarta.annotation.Nonnull;
+
+public class UserDtoUnhashedPw extends BaseDto<Long> {
+
+  @Nonnull private String username;
+  @Nonnull private String email;
+  @Nonnull private String firstname;
+  @Nonnull private String lastname;
+  @Nonnull private String password;
+  @Nonnull private Role role;
+  private boolean active;
+
+  public UserDtoUnhashedPw() {
+    username = Publ.EMPTY_STRING;
+    email = Publ.EMPTY_STRING;
+    firstname = Publ.EMPTY_STRING;
+    lastname = Publ.EMPTY_STRING;
+    password = Publ.EMPTY_STRING;
+    role = Role.USER;
+    active = false;
+  }
+
+  @Nonnull
+  public static UserDtoUnhashedPw fromAppUserDto(@Nonnull final AppUserDto appUserDto) {
+    final var dto = new UserDtoUnhashedPw();
+    dto.setId(appUserDto.getId());
+    dto.setUsername(appUserDto.getUsername());
+    dto.setEmail(appUserDto.getEmail());
+    dto.setFirstname(appUserDto.getFirstname());
+    dto.setLastname(appUserDto.getLastname());
+    dto.setPassword(appUserDto.getPasswordHash());
+    dto.setRole(appUserDto.getRole());
+    dto.setActive(appUserDto.isActive());
+    return dto;
+  }
+
+  @Nonnull
+  public AppUserDto toAppUserDtoUnhashedPw() {
+    final var user = AppUserDto.empty();
+
+    user.setId(getId());
+    user.setUsername(username);
+    user.setEmail(email);
+    user.setFirstname(firstname);
+    user.setLastname(lastname);
+    user.setPasswordHash(password);
+    user.setRole(role);
+    user.setActive(active);
+
+    return user;
+  }
+
+  @Nonnull
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(@Nonnull final String username) {
+    this.username = username;
+  }
+
+  @Nonnull
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(@Nonnull final String email) {
+    this.email = email;
+  }
+
+  @Nonnull
+  public String getFirstname() {
+    return firstname;
+  }
+
+  public void setFirstname(@Nonnull final String firstname) {
+    this.firstname = firstname;
+  }
+
+  @Nonnull
+  public String getLastname() {
+    return lastname;
+  }
+
+  public void setLastname(@Nonnull final String lastname) {
+    this.lastname = lastname;
+  }
+
+  @Nonnull
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(@Nonnull final String password) {
+    this.password = password;
+  }
+
+  @Nonnull
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(@Nonnull final Role role) {
+    this.role = role;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(final boolean active) {
+    this.active = active;
+  }
+}

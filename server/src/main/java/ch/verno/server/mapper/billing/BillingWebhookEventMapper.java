@@ -1,63 +1,62 @@
 package ch.verno.server.mapper.billing;
 
-import ch.verno.common.db.dto.table.billing.BillingWebhookEventDto;
-import ch.verno.common.db.type.billing.BillingWebhookEventStatus;
+import ch.verno.common.type.billing.BillingWebhookEventStatus;
+import ch.verno.contract.dto.table.billing.BillingWebhookEventDto;
 import ch.verno.db.entity.billing.BillingWebhookEventEntity;
-import ch.verno.publ.Publ;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.springframework.stereotype.Component;
 
-public final class BillingWebhookEventMapper {
+@Component
+public class BillingWebhookEventMapper extends AbstractEntityMapper<BillingWebhookEventEntity, BillingWebhookEventDto> {
 
-  private BillingWebhookEventMapper() {
+  @Nonnull
+  @Override
+  public BillingWebhookEventDto toDto(@Nonnull final BillingWebhookEventEntity entity) {
+
+    final var dto = BillingWebhookEventDto.empty();
+    dto.setId(entity.getId());
+
+    dto.setStripeEventId(entity.getStripeEventId());
+    dto.setEventType(entity.getEventType());
+    dto.setStatus(BillingWebhookEventStatus.fromKey(entity.getStatus()));
+
+    dto.setProcessedAt(entity.getProcessedAt());
+    dto.setCreatedAt(entity.getCreatedAt());
+
+    dto.setPayloadJson(entity.getPayloadJson());
+
+    return dto;
   }
 
   @Nonnull
-  public static BillingWebhookEventDto toDto(@Nullable final BillingWebhookEventEntity entity) {
-    if (entity == null) {
-      return new BillingWebhookEventDto();
-    }
-
-    return new BillingWebhookEventDto(
-            entity.getId(),
-            entity.getStripeEventId(),
-            entity.getEventType(),
-            BillingWebhookEventStatus.fromKey(entity.getStatus()),
-            entity.getProcessedAt(),
-            entity.getCreatedAt(),
-            entity.getPayloadJson() == null ? Publ.EMPTY_STRING : entity.getPayloadJson()
-    );
-  }
-
-  @Nullable
-  public static BillingWebhookEventEntity toEntity(@Nullable final BillingWebhookEventDto dto) {
-    if (dto == null) {
-      return null;
-    }
+  @Override
+  public BillingWebhookEventEntity toNewEntity(@Nonnull final BillingWebhookEventDto dto) {
 
     final var entity = new BillingWebhookEventEntity(
             dto.getStripeEventId(),
             dto.getEventType(),
             dto.getStatus().getKey(),
-            dto.getPayloadJson().isBlank() ? null : dto.getPayloadJson()
+            dto.getPayloadJson()
     );
 
-    if (dto.getId() != null && dto.getId() != 0) {
-      entity.setId(dto.getId());
-    }
-
-    entity.setProcessedAt(dto.getProcessedAt());
-    entity.setCreatedAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : java.time.OffsetDateTime.now());
+    updateEntity(entity, dto);
 
     return entity;
   }
 
-  public static void updateEntity(@Nonnull final BillingWebhookEventEntity entity,
-                                  @Nonnull final BillingWebhookEventDto dto) {
+  @Override
+  public void updateEntity(@Nonnull final BillingWebhookEventEntity entity,
+                           @Nonnull final BillingWebhookEventDto dto) {
+
     entity.setStripeEventId(dto.getStripeEventId());
     entity.setEventType(dto.getEventType());
     entity.setStatus(dto.getStatus().getKey());
+
+    entity.setPayloadJson(dto.getPayloadJson());
     entity.setProcessedAt(dto.getProcessedAt());
-    entity.setPayloadJson(dto.getPayloadJson().isBlank() ? null : dto.getPayloadJson());
+    if (dto.getCreatedAt() != null) {
+      entity.setCreatedAt(dto.getCreatedAt());
+    }
   }
 }

@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.widget;
 
-import ch.verno.publ.CssImportConstants;
+import ch.verno.lib.CssImportConstants;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.has.sessionstorage.HasSessionStorage;
 import com.vaadin.flow.component.ClickEvent;
@@ -24,7 +24,7 @@ public abstract class VAAccordionWidgetBase extends AccordionPanel implements Ha
     setWidthFull();
   }
 
-  protected final void build() {
+  protected final void buildUI() {
     removeAll();
 
     initSummary();

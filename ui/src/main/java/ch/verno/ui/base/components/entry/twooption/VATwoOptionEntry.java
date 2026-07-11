@@ -1,6 +1,6 @@
 package ch.verno.ui.base.components.entry.twooption;
 
-import ch.verno.common.db.dto.base.BaseDto;
+import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.ui.base.components.button.VAButton;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.customfield.CustomField;

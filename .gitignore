@@ -48,3 +48,4 @@ verno-provisioner-sa.json
 
 # secrets
 .env
+.vercel

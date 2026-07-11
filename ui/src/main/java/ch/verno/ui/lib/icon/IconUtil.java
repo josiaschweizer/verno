@@ -1,6 +1,6 @@
 package ch.verno.ui.lib.icon;
 
-import ch.verno.publ.VernoUtility;
+import ch.verno.lib.VernoUtility;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import jakarta.annotation.Nonnull;
 

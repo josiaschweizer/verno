@@ -1,15 +1,15 @@
 package ch.verno.db.jpa.text;
 
 import ch.verno.db.entity.text.TextEntity;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
-public interface SpringDataTextJpaRepository extends JpaRepository<TextEntity, Long> {
+public interface SpringDataTextJpaRepository extends AbstractEntityJpaRepository<TextEntity, Long> {
 
   @Nonnull
   List<TextEntity> findByIdentifier(@Nonnull String identifier);

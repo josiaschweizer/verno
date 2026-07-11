@@ -4,7 +4,7 @@ import ch.verno.common.server.io.importing.CsvAnalyzeOptions;
 import ch.verno.common.server.io.importing.CsvColumn;
 import ch.verno.common.server.io.importing.CsvDetectedType;
 import ch.verno.common.server.io.importing.CsvSchema;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

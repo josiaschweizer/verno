@@ -1,24 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.verno</groupId>
     <artifactId>verno</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
-    <modules>
-        <module>common</module>
-        <module>db</module>
-        <module>server</module>
-        <module>ui</module>
-        <module>report</module>
-        <module>publ</module>
-        <module>api</module>
-        <module>arch</module>
-    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,16 +15,51 @@
         <relativePath/>
     </parent>
 
+    <modules>
+        <module>lib</module>
+        <module>common</module>
+        <module>contract</module>
+        <module>client</module>
+        <module>db</module>
+        <module>report</module>
+        <module>server</module>
+        <module>ui</module>
+        <module>gateway</module>
+        <module>arch</module>
+    </modules>
+
     <properties>
         <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <vaadin.version>25.0.0</vaadin.version>
+        <guice.version>7.0.0</guice.version>
         <libphonenumber.version>8.13.41</libphonenumber.version>
         <jetbrains.annotations.version>26.0.2-1</jetbrains.annotations.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <classgraph.version>4.8.179</classgraph.version>
+
+        <postgres-socket-factory.version>1.25.3</postgres-socket-factory.version>
+        <simple-java-mail.version>8.12.6</simple-java-mail.version>
+        <dotenv-java.version>3.2.0</dotenv-java.version>
+        <stripe-java.version>31.3.0</stripe-java.version>
+        <commons-csv.version>1.10.0</commons-csv.version>
+
+        <jasperreports.version>6.20.6</jasperreports.version>
+        <itext.version>2.1.7</itext.version>
+        <openhtmltopdf.version>1.0.10</openhtmltopdf.version>
+        <ognl.version>3.3.4</ognl.version>
+        <jsoup.version>1.22.2</jsoup.version>
+
+        <report-ui.version>4.0.2</report-ui.version>
+        <colorpicker.version>2.0.0</colorpicker.version>
+
+        <archunit.version>1.4.2</archunit.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Vaadin BOM -->
             <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
@@ -45,10 +68,9 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- interne Module-Versionen zentral managen -->
             <dependency>
                 <groupId>ch.verno</groupId>
-                <artifactId>api</artifactId>
+                <artifactId>lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -58,7 +80,22 @@
             </dependency>
             <dependency>
                 <groupId>ch.verno</groupId>
+                <artifactId>contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.verno</groupId>
+                <artifactId>client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.verno</groupId>
                 <artifactId>db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.verno</groupId>
+                <artifactId>report</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -73,12 +110,7 @@
             </dependency>
             <dependency>
                 <groupId>ch.verno</groupId>
-                <artifactId>publ</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.verno</groupId>
-                <artifactId>report</artifactId>
+                <artifactId>gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -92,6 +124,91 @@
                 <artifactId>annotations</artifactId>
                 <version>${jetbrains.annotations.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.cloud.sql</groupId>
+                <artifactId>postgres-socket-factory</artifactId>
+                <version>${postgres-socket-factory.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>simple-java-mail</artifactId>
+                <version>${simple-java-mail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.simplejavamail</groupId>
+                <artifactId>core-module</artifactId>
+                <version>${simple-java-mail.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.cdimascio</groupId>
+                <artifactId>dotenv-java</artifactId>
+                <version>${dotenv-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.classgraph</groupId>
+                <artifactId>classgraph</artifactId>
+                <version>${classgraph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.stripe</groupId>
+                <artifactId>stripe-java</artifactId>
+                <version>${stripe-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-csv</artifactId>
+                <version>${commons-csv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>${jasperreports.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>${itext.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.openhtmltopdf</groupId>
+                <artifactId>openhtmltopdf-pdfbox</artifactId>
+                <version>${openhtmltopdf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ognl</groupId>
+                <artifactId>ognl</artifactId>
+                <version>${ognl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.reportui</groupId>
+                <artifactId>report-ui</artifactId>
+                <version>${report-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.addons.tatu</groupId>
+                <artifactId>colorpicker</artifactId>
+                <version>${colorpicker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit5</artifactId>
+                <version>${archunit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -102,27 +219,12 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
-
                 <plugin>
                     <groupId>com.vaadin</groupId>
                     <artifactId>vaadin-maven-plugin</artifactId>
                     <version>${vaadin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>build-frontend</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
     </build>
-
-    <repositories>
-        <repository>
-            <id>vaadin-directory</id>
-            <url>https://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
 </project>

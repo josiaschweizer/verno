@@ -1,19 +1,19 @@
 package ch.verno.ui.verno.dashboard.course;
 
-import ch.verno.common.db.dto.table.CourseDto;
-import ch.verno.common.db.dto.table.ParticipantDto;
-import ch.verno.common.db.filter.ParticipantFilter;
-import ch.verno.common.server.service.intern.ICourseService;
-import ch.verno.common.server.service.intern.IParticipantService;
-import ch.verno.common.server.service.intern.mail.IMailConfigService;
-import ch.verno.common.db.type.billing.BillingLicenceOption;
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.common.lib.mail.MailTemplateType;
-import ch.verno.common.properties.BillingProperties;
+import ch.verno.common.type.billing.BillingLicenceOption;
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.contract.dto.filter.ParticipantFilter;
+import ch.verno.contract.dto.table.course.CourseDto;
+import ch.verno.contract.dto.table.participant.ParticipantDto;
+import ch.verno.contract.mail.MailTemplateType;
 import ch.verno.lib.Lazy;
-import ch.verno.publ.Publ;
-import ch.verno.publ.VernoConstants;
+import ch.verno.lib.Publ;
+import ch.verno.lib.VernoConstants;
+import ch.verno.lib.exception.ExceptionUtil;
+import ch.verno.rpc.client.billing.BillingClient;
+import ch.verno.rpc.client.course.CourseClient;
+import ch.verno.rpc.client.mail.MailConfigClient;
+import ch.verno.rpc.client.participant.ParticipantClient;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.widget.VAAccordionWidgetBase;
 import ch.verno.ui.base.factory.SpanFactory;
@@ -21,6 +21,7 @@ import ch.verno.ui.verno.dashboard.assignment.AssignToCourseDialog;
 import ch.verno.ui.verno.dashboard.mail.CourseMailDialog;
 import ch.verno.ui.verno.dashboard.report.CourseReportDialog;
 import ch.verno.ui.verno.participant.ParticipantsGrid;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -35,32 +36,32 @@ import java.util.stream.Stream;
 
 public class CourseWidget extends VAAccordionWidgetBase {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
 
-  @Nonnull private final IParticipantService participantService;
-  @Nonnull private final Lazy<IMailConfigService> mailConfigService;
-  @Nonnull private final Lazy<BillingProperties> billingProperties;
+  @Nonnull private final Lazy<BillingClient> billingClient;
+  @Nonnull private final Lazy<MailConfigClient> mailConfigService;
+  @Nonnull private final Lazy<ParticipantClient> participantClient;
 
   @Nonnull private final CourseDto currentCourse;
   @Nullable private ParticipantsGrid participantsGrid;
   @Nonnull private List<ParticipantDto> participantsInCourse;
 
-  public CourseWidget(@Nonnull final Long currentCourseId,
-                      @Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  public CourseWidget(@Nonnull final Injector injector,
+                      @Nonnull final Long currentCourseId) {
+    this.injector = injector;
 
-    participantService = globalInterface.getService(IParticipantService.class);
-    mailConfigService = Lazy.of(() -> globalInterface.getService(IMailConfigService.class));
-    billingProperties = Lazy.of(() -> globalInterface.getService(BillingProperties.class));
+    this.billingClient = Lazy.of(()->injector.getInstance(BillingClient.class));
+    this.mailConfigService = Lazy.of(() -> injector.getInstance(MailConfigClient.class));
+    this.participantClient = Lazy.of(() -> injector.getInstance(ParticipantClient.class));
 
-    final var courseService = globalInterface.getService(ICourseService.class);
-    currentCourse = courseService.getCourseById(currentCourseId);
 
-    participantsInCourse = participantService.findParticipants(
-            ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null)
-    );
+    final var courseService = injector.getInstance(CourseClient.class);
+    currentCourse = courseService.getCourseById(currentCourseId).orElseThrow(ExceptionUtil::toEntityNotFoundException);
 
-    build();
+    final var participantClient = injector.getInstance(ParticipantClient.class);
+    participantsInCourse = participantClient.getParticipants(ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null));
+
+    buildUI();
   }
 
   @Nonnull
@@ -75,16 +76,16 @@ public class CourseWidget extends VAAccordionWidgetBase {
             getTranslation("setting.send.email"),
             VaadinIcon.MAILBOX,
             e -> {
-              final var dialog = new CourseMailDialog(globalInterface, MailTemplateType.COURSE_INVITE);
+              final var dialog = new CourseMailDialog(injector, MailTemplateType.COURSE_INVITE);
               dialog.setParticipants(participantsInCourse);
               dialog.setCourse(currentCourse);
               dialog.open();
             }
     );
 
-    if (mailConfigService.get().hasConfigForCurrentTenant()) {
-      if (mailConfigService.get().getConfigForCurrentTenant().getMailValidity().equals(MailValidity.TESTED_VALID) &&
-              !participantsInCourse.isEmpty()) {
+    final var mailConfig = mailConfigService.get().getMailConfigForCurrentTenant();
+    if (mailConfig.isPresent()) {
+      if (mailConfig.get().getMailValidity().equals(MailValidity.TESTED_VALID) && !participantsInCourse.isEmpty()) {
         emailButton.removePseudoEnabled();
       } else {
         String tooltipText;
@@ -106,22 +107,18 @@ public class CourseWidget extends VAAccordionWidgetBase {
             getTranslation("setting.report"),
             VaadinIcon.FILE_TEXT,
             e -> new CourseReportDialog(
-                    globalInterface,
+                    injector,
                     currentCourse,
                     participantsInCourse)
                     .open()
     );
-    if (!billingProperties.get().isOptionLicenced(BillingLicenceOption.REPORT)) {
+    if (!billingClient.get().isTenantBillingOptionLicenced(BillingLicenceOption.REPORT)) {
       reportButton.setPseudoEnabled(false, getTranslation("shared.the.report.option.is.not.licensed.for.your.tenant.please.contact.your.tenant.administrator.to.enable.this.feature"));
     }
 
     final var assignButton = createHeaderButton(getTranslation("participant.edit.participant"),
             VaadinIcon.COG, e -> {
-              final var dialog = new AssignToCourseDialog(
-                      globalInterface,
-                      currentCourse
-              );
-
+              final var dialog = new AssignToCourseDialog(injector, currentCourse);
               dialog.addClosedListener(ev -> refresh());
               dialog.addDialogCloseActionListener(ev -> refresh());
               dialog.open();
@@ -129,10 +126,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     final var detailButton = createHeaderButton(Publ.EMPTY_STRING,
             VaadinIcon.EXTERNAL_LINK, e -> {
-              final var courseDetailDialog = new CourseDetailDialog(
-                      globalInterface,
-                      currentCourse
-              );
+              final var courseDetailDialog = new CourseDetailDialog(injector, currentCourse);
               courseDetailDialog.open();
             });
 
@@ -142,9 +136,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
   @Override
   protected void initContent() {
     if (!participantsInCourse.isEmpty()) {
-      participantsGrid = new ParticipantsGrid(globalInterface,
-              false,
-              false) {
+      this.participantsGrid = new ParticipantsGrid(injector, false, false) {
 
         @Nonnull
         @Override
@@ -179,7 +171,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
   }
 
   private void removeParticipant(@Nonnull final ParticipantDto dto) {
-    participantService.removeCourse(dto.getId(), currentCourse);
+    participantClient.get().removeCourse(dto.getId(), currentCourse);
     refresh();
   }
 
@@ -188,9 +180,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
     final var oldParticipantsInCourse = participantsInCourse;
 
     if (participantsGrid == null) {
-      participantsInCourse = participantService.findParticipants(
-              ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null
-              ));
+      participantsInCourse = participantClient.get().getParticipants(ParticipantFilter.fromCourseId(currentCourse.getId() != null ? Set.of(currentCourse.getId()) : null));
     } else {
       participantsGrid.setFilter(participantsGrid.getFilter());
       participantsInCourse = participantsGrid.getGrid()
@@ -202,7 +192,7 @@ public class CourseWidget extends VAAccordionWidgetBase {
 
     if ((oldParticipantsInCourse.isEmpty() && !participantsInCourse.isEmpty()) ||
             (!oldParticipantsInCourse.isEmpty() && participantsInCourse.isEmpty())) {
-      build();
+      buildUI();
     }
   }
 }

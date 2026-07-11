@@ -5,7 +5,7 @@ import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.Page;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
 import java.util.Objects;

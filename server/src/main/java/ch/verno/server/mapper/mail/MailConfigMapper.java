@@ -1,57 +1,56 @@
 package ch.verno.server.mapper.mail;
 
-import ch.verno.common.db.dto.table.mail.MailConfigDto;
+import ch.verno.contract.dto.table.mail.MailConfigDto;
 import ch.verno.db.entity.mail.MailConfigEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
-import ch.verno.publ.Publ;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+@Component
+public class MailConfigMapper extends AbstractEntityMapper<MailConfigEntity, MailConfigDto> {
 
-public final class MailConfigMapper {
+  @Nonnull
+  @Override
+  public MailConfigDto toDto(@Nonnull final MailConfigEntity entity) {
+    final var dto = MailConfigDto.empty();
 
-  private MailConfigMapper() {
+    dto.setId(entity.getId());
+    dto.setTenantId(entity.getId());
+
+    dto.setFromName(entity.getFromName());
+    dto.setFromEmail(entity.getFromEmail());
+    dto.setReplyToEmail(entity.getReplyToEmail());
+    dto.setDefaultBcc(entity.getDefaultBcc());
+
+    dto.setSmtpHost(entity.getSmtpHost());
+    dto.setSmtpPort(entity.getSmtpPort());
+    dto.setSmtpUsername(entity.getSmtpUsername());
+    dto.setSmtpPasswordB64(entity.getSmtpPasswordB64());
+    dto.setSmtpSecurity(entity.getSmtpSecurity());
+    dto.setSmtpAuth(entity.isSmtpAuth());
+    dto.setMailValidity(entity.getMailValidity());
+
+    return dto;
   }
 
   @Nonnull
-  public static MailConfigDto toDto(@Nonnull final MailConfigEntity entity) {
-    return new MailConfigDto(
-            entity.getTenant().getId(),
-            entity.getFromName(),
-            entity.getFromEmail(),
-            Optional.ofNullable(entity.getReplyToEmail()).orElse(Publ.EMPTY_STRING),
-            Optional.ofNullable(entity.getDefaultBcc()).orElse(Publ.EMPTY_STRING),
-            entity.getSmtpHost(),
-            entity.getSmtpPort(),
-            entity.getSmtpUsername(),
-            entity.getSmtpPasswordB64(),
-            entity.getSmtpSecurity(),
-            entity.isSmtpAuth(),
-            entity.getMailValidity()
-    );
+  @Override
+  public MailConfigEntity toNewEntity(@Nonnull final MailConfigDto dto) {
+    final var entity = MailConfigEntity.empty();
+    updateEntity(entity, dto);
+
+    if (dto.getTenantId() != null) {
+      entity.setTenant(TenantEntity.ref(dto.getTenantId()));
+      entity.setId(dto.getTenantId());
+    }
+
+    return entity;
   }
 
-  @Nonnull
-  public static MailConfigEntity toEntity(@Nonnull final MailConfigDto dto,
-                                          @Nonnull final TenantEntity tenant) {
-    return new MailConfigEntity(
-            tenant,
-            dto.getFromName(),
-            dto.getFromEmail(),
-            dto.getReplyToEmail(),
-            dto.getDefaultBcc(),
-            dto.getSmtpHost(),
-            dto.getSmtpPort(),
-            dto.getSmtpUsername(),
-            dto.getSmtpPasswordB64(),
-            dto.getSmtpSecurity(),
-            dto.isSmtpAuth(),
-            dto.getMailValidity()
-    );
-  }
-
-  public static void updateEntity(@Nonnull final MailConfigEntity entity,
-                                  @Nonnull final MailConfigDto dto) {
+  @Override
+  public void updateEntity(@Nonnull final MailConfigEntity entity,
+                           @Nonnull final MailConfigDto dto) {
     entity.setFromName(dto.getFromName());
     entity.setFromEmail(dto.getFromEmail());
     entity.setReplyToEmail(dto.getReplyToEmail());

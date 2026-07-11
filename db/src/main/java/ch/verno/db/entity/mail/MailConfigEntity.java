@@ -1,8 +1,10 @@
 package ch.verno.db.entity.mail;
 
-import ch.verno.common.db.type.mail.MailValidity;
-import ch.verno.common.db.type.mail.SmtpSecurity;
+import ch.verno.common.type.mail.MailValidity;
+import ch.verno.common.type.mail.SmtpSecurity;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.lib.Publ;
+import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -75,9 +77,10 @@ public class MailConfigEntity {
   private OffsetDateTime updatedAt = OffsetDateTime.now();
 
   protected MailConfigEntity() {
+    // JPA
   }
 
-  public MailConfigEntity(@Nonnull final TenantEntity tenant,
+  public MailConfigEntity(@Nullable final TenantEntity tenant,
                           @Nonnull final String fromName,
                           @Nonnull final String fromEmail,
                           @Nullable final String replyToEmail,
@@ -103,6 +106,31 @@ public class MailConfigEntity {
     this.mailValidity = mailValidity;
   }
 
+  @Nonnull
+  public static MailConfigEntity ref(@Nonnull final Long id) {
+    final var entity = new MailConfigEntity();
+    entity.setId(id);
+    return entity;
+  }
+
+  @Nonnull
+  public static MailConfigEntity empty() {
+    return new MailConfigEntity(
+            null,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            VernoConstants.DEFAULT_SMTP_PORT,
+            Publ.EMPTY_STRING,
+            Publ.EMPTY_STRING,
+            SmtpSecurity.NONE,
+            false,
+            MailValidity.UNTESTED
+    );
+  }
+
   @PreUpdate
   protected void onPreUpdate() {
     updatedAt = OffsetDateTime.now();
@@ -110,6 +138,10 @@ public class MailConfigEntity {
 
   public Long getId() {
     return id;
+  }
+
+  public void setId(@Nonnull final Long id) {
+    this.id = id;
   }
 
   public TenantEntity getTenant() {

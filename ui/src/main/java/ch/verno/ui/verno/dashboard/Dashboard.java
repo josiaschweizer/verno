@@ -1,21 +1,21 @@
 package ch.verno.ui.verno.dashboard;
 
-import ch.verno.common.db.type.CourseScheduleStatus;
-import ch.verno.common.gate.GlobalInterface;
+import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;
 import ch.verno.ui.verno.dashboard.io.ImportExportWidgetGroup;
+import com.google.inject.Injector;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
 import jakarta.annotation.Nonnull;
 
 public class Dashboard extends VerticalLayout {
 
-  @Nonnull private final GlobalInterface globalInterface;
+  @Nonnull private final Injector injector;
 
-  public Dashboard(@Nonnull final GlobalInterface globalInterface) {
-    this.globalInterface = globalInterface;
+  public Dashboard(@Nonnull final Injector injector) {
+    this.injector = injector;
 
     setSizeFull();
     setPadding(false);
@@ -28,10 +28,10 @@ public class Dashboard extends VerticalLayout {
     final var tabSheet = new TabSheet();
     tabSheet.setWidthFull();
 
-    final var plannedTab = new CourseWidgetGroup(globalInterface, CourseScheduleStatus.PLANNED);
-    final var activeTab = new CourseWidgetGroup(globalInterface, CourseScheduleStatus.ACTIVE);
-    final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(globalInterface);
-    final var ioTab = new ImportExportWidgetGroup(globalInterface);
+    final var plannedTab = new CourseWidgetGroup(injector, CourseScheduleStatus.PLANNED);
+    final var activeTab = new CourseWidgetGroup(injector, CourseScheduleStatus.ACTIVE);
+    final var lifecycleTab = new CourseScheduleLifecycleWidgetGroup(injector);
+    final var ioTab = injector.getInstance(ImportExportWidgetGroup.class);
 
     tabSheet.add(getTranslation(CourseScheduleStatus.PLANNED.getDisplayNameKey()), plannedTab);
     tabSheet.add(getTranslation(CourseScheduleStatus.ACTIVE.getDisplayNameKey()), activeTab);

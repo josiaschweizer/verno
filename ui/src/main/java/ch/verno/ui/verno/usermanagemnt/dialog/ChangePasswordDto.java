@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.usermanagemnt.dialog;
 
-import ch.verno.publ.Publ;
+import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
 
 public class ChangePasswordDto {

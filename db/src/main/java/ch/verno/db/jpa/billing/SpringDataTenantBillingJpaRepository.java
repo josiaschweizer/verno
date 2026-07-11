@@ -1,12 +1,13 @@
 package ch.verno.db.jpa.billing;
 
 import ch.verno.db.entity.billing.TenantBillingEntity;
+import ch.verno.db.jpa.base.AbstractEntityJpaRepository;
 import jakarta.annotation.Nonnull;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SpringDataTenantBillingJpaRepository extends JpaRepository<TenantBillingEntity, Long> {
+public interface SpringDataTenantBillingJpaRepository extends
+        AbstractEntityJpaRepository<TenantBillingEntity, Long> {
 
   @Nonnull
   Optional<TenantBillingEntity> findByTenant_Id(@Nonnull Long tenantId);

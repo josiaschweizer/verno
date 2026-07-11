@@ -1,11 +1,14 @@
 package ch.verno.ui.verno.settings.panels.courselevel;
 
-import ch.verno.common.db.dto.table.CourseLevelDto;
-import ch.verno.common.server.service.intern.ICourseLevelService;
-import ch.verno.common.gate.GlobalInterface;
-import ch.verno.publ.Routes;
+import ch.verno.common.lib.Routes;
+import ch.verno.contract.dto.table.course.CourseLevelDto;
+import ch.verno.lib.Lazy;
+import ch.verno.rpc.client.course.CourseLevelClient;
 import ch.verno.ui.lib.settings.grid.BaseSettingDetail;
+import ch.verno.ui.lib.url.RoutesUtil;
 import ch.verno.ui.lib.util.LayoutUtil;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -17,12 +20,13 @@ import java.util.Optional;
 @SpringComponent
 public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
 
-  @Nonnull private final ICourseLevelService courseLevelService;
+  @Nonnull private final Lazy<CourseLevelClient> courseLevelClient;
 
-  public CourseLevelDetail(@Nonnull final GlobalInterface globalInterface) {
-    super(globalInterface);
+  @Inject
+  public CourseLevelDetail(@Nonnull final Injector injector) {
+    super(injector);
 
-    this.courseLevelService = globalInterface.getService(ICourseLevelService.class);
+    this.courseLevelClient = Lazy.of(() -> injector.getInstance(CourseLevelClient.class));
     init();
   }
 
@@ -69,7 +73,7 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
   @Nonnull
   @Override
   protected String getDetailRoute() {
-    return Routes.createUrlFromUrlSegments(Routes.COURSE_LEVELS, Routes.DETAIL);
+    return RoutesUtil.createUrlFromUrlSegments(Routes.COURSE_LEVELS, Routes.DETAIL);
   }
 
   @Nonnull
@@ -84,26 +88,25 @@ public class CourseLevelDetail extends BaseSettingDetail<CourseLevelDto> {
     return new Binder<>(CourseLevelDto.class);
   }
 
-  @Nonnull
   @Override
   protected void createBean(@Nonnull final CourseLevelDto bean) {
-    courseLevelService.createCourseLevel(bean);
+    courseLevelClient.get().saveCourseLevel(bean);
   }
 
-  @Nonnull
   @Override
   protected void updateBean(@Nonnull final CourseLevelDto bean) {
-    courseLevelService.updateCourseLevel(bean);
+    courseLevelClient.get().saveCourseLevel(bean);
   }
 
   @Nonnull
   @Override
   protected CourseLevelDto newBeanInstance() {
-    return new CourseLevelDto();
+    return CourseLevelDto.empty();
   }
 
+  @Nonnull
   @Override
-  protected CourseLevelDto getBeanById(@Nonnull final Long id) {
-    return courseLevelService.getCourseLevelById(id);
+  protected Optional<CourseLevelDto> getBeanById(@Nonnull final Long id) {
+    return courseLevelClient.get().getCourseLevelById(id);
   }
 }

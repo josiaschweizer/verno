@@ -1,46 +1,63 @@
 package ch.verno.server.mapper.mail;
 
-import ch.verno.common.db.dto.table.mail.MailLogDto;
-import ch.verno.common.tenant.TenantContext;
+import ch.verno.contract.dto.table.mail.MailLogDto;
 import ch.verno.db.entity.mail.MailLogEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.mapper.base.AbstractEntityMapper;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Component;
 
-public final class MailLogMapper {
+@Component
+public class MailLogMapper extends AbstractEntityMapper<MailLogEntity, MailLogDto> {
 
-  @Nonnull
-  public static MailLogDto toDto(@Nonnull final MailLogEntity entity) {
-    return new MailLogDto(
-            entity.getId(),
-            entity.getTenant() != null ? entity.getTenant().getId() : null,
-            entity.getRecipientEmail(),
-            entity.getRecipientName(),
-            entity.getTemplateName(),
-            entity.getSubject(),
-            entity.getContent(),
-            entity.getPlaceholdersJson(),
-            entity.getStatus(),
-            entity.getErrorMessage(),
-            entity.getProviderMessageId(),
-            entity.getSentAt(),
-            entity.getCreatedAt(),
-            entity.getCreatedBy()
-    );
+  @Nonnull private final EntityManager entityManager;
+
+  public MailLogMapper(@Nonnull final ServerBean serverBean) {
+    this.entityManager = serverBean.get(EntityManager.class);
   }
 
   @Nonnull
-  public static MailLogEntity toEntity(@Nonnull final MailLogDto dto) {
-    final var entity = new MailLogEntity();
-    updateEntity(dto, entity);
+  @Override
+  public MailLogDto toDto(@Nonnull final MailLogEntity entity) {
+    final var dto = MailLogDto.empty();
+
+    dto.setId(entity.getId());
+    dto.setTenantId(entity.getTenant() == null ? null : entity.getTenant().getId());
+
+    dto.setRecipientEmail(entity.getRecipientEmail());
+    dto.setRecipientName(entity.getRecipientName());
+    dto.setTemplateName(entity.getTemplateName());
+    dto.setSubject(entity.getSubject());
+    dto.setContent(entity.getContent());
+    dto.setPlaceholdersJson(entity.getPlaceholdersJson());
+    dto.setStatus(entity.getStatus());
+    dto.setErrorMessage(entity.getErrorMessage());
+    dto.setProviderMessageId(entity.getProviderMessageId());
+    dto.setSentAt(entity.getSentAt());
+    dto.setCreatedAt(entity.getCreatedAt());
+    dto.setCreatedBy(entity.getCreatedBy());
+
+    return dto;
+  }
+
+  @Nonnull
+  @Override
+  public MailLogEntity toNewEntity(@Nonnull final MailLogDto dto) {
+    final var entity = MailLogEntity.empty();
+    updateEntity(entity, dto);
+
+    if (dto.getTenantId() != null) {
+      entity.setTenant(entityManager.getReference(TenantEntity.class, dto.getTenantId()));
+    }
+
     return entity;
   }
 
-  public static void updateEntity(@Nonnull final MailLogDto dto,
-                                  @Nonnull final MailLogEntity entity) {
-    entity.setTenant(TenantContext.get() != null ?
-            TenantEntity.ref(TenantContext.getRequired()) :
-            null
-    );
+  @Override
+  public void updateEntity(@Nonnull final MailLogEntity entity,
+                           @Nonnull final MailLogDto dto) {
     entity.setRecipientEmail(dto.getRecipientEmail());
     entity.setRecipientName(dto.getRecipientName());
     entity.setTemplateName(dto.getTemplateName());
@@ -51,8 +68,11 @@ public final class MailLogMapper {
     entity.setErrorMessage(dto.getErrorMessage());
     entity.setProviderMessageId(dto.getProviderMessageId());
     entity.setSentAt(dto.getSentAt());
-    entity.setCreatedAt(dto.getCreatedAt());
+
+    if (dto.getCreatedAt() != null) {
+      entity.setCreatedAt(dto.getCreatedAt());
+    }
+
     entity.setCreatedBy(dto.getCreatedBy());
   }
-
 }
