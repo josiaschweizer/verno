@@ -36,7 +36,7 @@
     "typescript": "5.9.3",
     "vite": "7.3.0",
     "vite-plugin-checker": "0.12.0",
-    "workbox-build": "7.4.0"
+    "workbox-build": "7.4.1"
   },
   "vaadin": {
     "dependencies": {
@@ -73,7 +73,7 @@
       "typescript": "5.9.3",
       "vite": "7.3.0",
       "vite-plugin-checker": "0.12.0",
-      "workbox-build": "7.4.0"
+      "workbox-build": "7.4.1"
     },
     "hash": "ebf26c8f5d1c87991c7397efa19b7402061124a4e844f04a626873818c78e55b"
   },
