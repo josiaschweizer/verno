@@ -2,6 +2,7 @@ package ch.verno.ui.lib.settings;
 
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import com.google.inject.Injector;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jakarta.annotation.Nonnull;
@@ -42,6 +43,7 @@ public abstract class VABaseSettingsPage extends VerticalLayout {
       settingsRow.add(setting);
     }
 
+    add(new H1("Test"));
     add(settingsRow);
   }
 
