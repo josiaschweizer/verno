@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @Configuration
@@ -23,9 +24,12 @@ public class GatewayPropertySourceConfig {
     final var loadedEnvs = resolveLoadedEnvs(environment);
 
     final var props = new Properties();
-    for (final var entry : dotenv.entries()) {
-      if (loadedEnvs.contains(entry.getKey())) {
-        props.setProperty(entry.getKey(), entry.getValue());
+    for (final var key : loadedEnvs) {
+      final var fromDotenv = dotenv.get(key);
+
+      final var value = Optional.ofNullable(fromDotenv).orElseGet(() -> System.getenv(key));
+      if (value != null) {
+        props.setProperty(key, value);
       }
     }
 
