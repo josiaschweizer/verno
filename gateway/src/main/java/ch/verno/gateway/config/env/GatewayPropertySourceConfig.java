@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @Configuration
@@ -23,9 +24,12 @@ public class GatewayPropertySourceConfig {
     final var loadedEnvs = resolveLoadedEnvs(environment);
 
     final var props = new Properties();
-    for (final var entry : dotenv.entries()) {
-      if (loadedEnvs.contains(entry.getKey())) {
-        props.setProperty(entry.getKey(), entry.getValue());
+    for (final var key : loadedEnvs) {
+      final var fromDotenv = dotenv.get(key);
+
+      final var value = Optional.ofNullable(fromDotenv).orElseGet(() -> System.getenv(key));
+      if (value != null) {
+        props.setProperty(key, value);
       }
     }
 
@@ -37,7 +41,7 @@ public class GatewayPropertySourceConfig {
   @Nonnull
   private static List<String> resolveLoadedEnvs(@Nonnull final Environment environment) {
     final var raw = environment.getProperty(
-            ApplicationPropertiesConstants.VERNO_GATEWAY_LOADED_ENV,
+            ApplicationPropertiesConstants.GATEWAY_LOADED_ENV,
             Publ.EMPTY_STRING
     );
     return Arrays.asList(raw.split(Publ.COMMA));

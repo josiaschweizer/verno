@@ -54,7 +54,7 @@ public class GatewayRpcConfig {
   }
 
   @Bean
-  public InternalRpcTokenCodec internalRpcTokenCodec(@Value(ApplicationPropertiesConstants.VERNO_RPC_SECRET) @Nonnull final String rpcInternalSecret) {
+  public InternalRpcTokenCodec internalRpcTokenCodec(@Value(ApplicationPropertiesConstants.RPC_SECRET) @Nonnull final String rpcInternalSecret) {
     return new InternalRpcTokenCodec(rpcInternalSecret);
   }
 }

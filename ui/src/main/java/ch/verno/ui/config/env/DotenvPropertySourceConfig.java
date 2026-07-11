@@ -37,7 +37,7 @@ public class DotenvPropertySourceConfig {
   @Nonnull
   private static List<String> resolveLoadedEnvs(@Nonnull final Environment environment) {
     final var raw = environment.getProperty(
-            ApplicationPropertiesConstants.VERNO_UI_LOADED_ENV,
+            ApplicationPropertiesConstants.UI_LOADED_ENV,
             Publ.EMPTY_STRING
     );
     return Arrays.asList(raw.split(Publ.COMMA));
