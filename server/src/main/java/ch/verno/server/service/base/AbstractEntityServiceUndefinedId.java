@@ -78,9 +78,16 @@ public abstract class AbstractEntityServiceUndefinedId<
     return DeleteResponse.success();
   }
 
+  @Override
   @Transactional(readOnly = true)
   public long count() {
     return repository.count();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public long countUnscoped() {
+    return repository.countUnscoped();
   }
 
   @Transactional(readOnly = true)

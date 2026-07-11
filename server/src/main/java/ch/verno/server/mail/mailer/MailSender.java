@@ -28,14 +28,14 @@ public class MailSender {
     try (final var mailer = mailerFactory.get().create(origin)) {
       mailer.sendMail(email, true).get();
 
-      mailLogBo.get().logSent(email, Publ.EMPTY_STRING);
+      mailLogBo.get().logSent(email, Publ.EMPTY_STRING, origin);
 
     } catch (final Exception exception) {
       final var errorMessage = exception.getMessage() != null
               ? exception.getMessage()
               : "Unknown error";
 
-      mailLogBo.get().logFailed(email, errorMessage);
+      mailLogBo.get().logFailed(email, errorMessage, origin);
       throw new SendMailException("Failed to send mail", exception);
     }
 

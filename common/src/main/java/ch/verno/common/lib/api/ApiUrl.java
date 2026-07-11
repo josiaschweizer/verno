@@ -42,8 +42,6 @@ public class ApiUrl {
   @NonNls public static final String EMAIL = BASE_API + "/email";
 
   @NonNls public static final String BILLING = BASE_API + "/billing";
-  @NonNls public static final String BILLING_ACCESS_TOKEN = BILLING + "/access-token";
-  @NonNls public static final String BILLING_SESSION = BILLING + "/session";
 
   // public auth endpoints
   @NonNls public static final String TEMP_FILE_REPORT_PUBLIC_AUTH = PUBLIC_AUTH_BASE_API + "/temp-file/report";

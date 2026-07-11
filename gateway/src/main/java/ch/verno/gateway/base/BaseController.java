@@ -1,5 +1,7 @@
 package ch.verno.gateway.base;
 
+import ch.verno.contract.api.util.ApiErrorResponse;
+import ch.verno.lib.VernoConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpHeaders;
@@ -26,10 +28,10 @@ public abstract class BaseController {
   }
 
   @Nonnull
-  protected <T> ResponseEntity<T> failedCreating(@Nullable final T body) {
+  protected ResponseEntity<ApiErrorResponse> failedCreating(@Nonnull final String status) {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .headers(defaultHeaders())
-            .body(body);
+            .body(ApiErrorResponse.simple(status));
   }
 
   protected HttpHeaders defaultHeaders() {

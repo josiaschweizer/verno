@@ -3,7 +3,7 @@ package ch.verno.ui.verno.mail.testmail;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
 import ch.verno.ui.base.components.dialog.VAAbstractDialog;
-import ch.verno.ui.base.components.entry.email.VAEmailField;
+import ch.verno.ui.base.components.entry.email.VAMailField;
 import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import ch.verno.ui.lib.icon.CustomIcons;
 import ch.verno.ui.lib.icon.IconUtil;
@@ -20,7 +20,7 @@ public class TestMailTemplateDialog extends VAAbstractDialog {
 
   @Nonnull private final Consumer<String> sendEmail;
 
-  @Nonnull private final VAEmailField emailField;
+  @Nonnull private final VAMailField emailField;
 
   public TestMailTemplateDialog(@Nonnull final Consumer<String> sendEmail) {
     this.sendEmail = sendEmail;
@@ -39,8 +39,8 @@ public class TestMailTemplateDialog extends VAAbstractDialog {
   }
 
   @Nonnull
-  private VAEmailField createEmailField() {
-    final var emailField = new VAEmailField(
+  private VAMailField createEmailField() {
+    final var emailField = new VAMailField(
             getTranslation("mail.recipient.email"),
             getTranslation("mail.enter.your.recipient.email.to.teste.your.e.mail.config")
     );

@@ -38,7 +38,7 @@
     "errors": {
       "tenantAlreadyExists": {
         "title": "Tenant key already exists",
-        "message": "The tenant key/subdomain already exists. Please choose a different value."
+        "message": "The tenant URL already exists. Please choose a different value."
       },
       "validationFailed": {
         "title": "Invalid input",

@@ -1,4 +1,4 @@
-package ch.verno.gateway.security;
+package ch.verno.gateway.config.security;
 
 import ch.verno.common.rpc.auth.pub.ResourceAccessTokenCodec;
 import ch.verno.contract.endpoint.properties.env.EnvResource;

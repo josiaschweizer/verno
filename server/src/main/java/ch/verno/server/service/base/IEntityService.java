@@ -18,6 +18,8 @@ public interface IEntityService<DTO> {
 
   long count();
 
+  long countUnscoped();
+
   void flush();
 
 }

@@ -1,4 +1,4 @@
-package ch.verno.gateway.security;
+package ch.verno.gateway.config.security;
 
 import ch.verno.common.lib.api.ApiUrl;
 import ch.verno.contract.endpoint.properties.application.ApplicationConfigResource;

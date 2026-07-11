@@ -30,7 +30,7 @@ public class LoginView extends VerticalLayout {
     setDefaultHorizontalComponentAlignment(Alignment.CENTER);
     setJustifyContentMode(JustifyContentMode.CENTER);
 
-    login.getStyle().set("max-width", "360px");
+    login.getStyle().setMaxWidth("360px");
 
     add(login);
   }

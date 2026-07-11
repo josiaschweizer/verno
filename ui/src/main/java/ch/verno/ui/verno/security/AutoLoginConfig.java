@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty("verno.dev.user")
 public class AutoLoginConfig implements VaadinServiceInitListener {
 
-  @Value("${verno.dev.user}")
+  @Value("${verno.dev.user}") //TODO property!
   private String devUser;
 
   @Nonnull private final Lazy<UserProperties> userProperties;

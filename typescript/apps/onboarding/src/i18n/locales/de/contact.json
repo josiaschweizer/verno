@@ -38,7 +38,7 @@
     "errors": {
       "tenantAlreadyExists": {
         "title": "Mandantenschlüssel existiert bereits",
-        "message": "Der Mandantenschlüssel bzw. die Subdomain existiert bereits. Bitte wähle einen anderen Wert."
+        "message": "Die Mandanten-URL existiert bereits. Bitte wähle einen anderen Wert."
       },
       "validationFailed": {
         "title": "Ungültige Eingabe",

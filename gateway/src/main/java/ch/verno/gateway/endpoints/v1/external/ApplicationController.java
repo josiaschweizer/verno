@@ -25,13 +25,13 @@ public class ApplicationController extends BaseController {
   }
 
   @GetMapping("memberCount")
-  public ResponseEntity<?> getMemberCount() {
-    return ok(participantResource.get().getParticipantCount());
+  public ResponseEntity<?> getMemberCount() { //TODO no tenant for request? annotation?
+    return ok(participantResource.get().getParticipantCountUnscoped());
   }
 
   @GetMapping("courseCount")
   public ResponseEntity<?> getCoursesCount() {
-    return ok(courseResource.get().getCourseCount()); //TODO course count should be extended with only active and planned courses
+    return ok(courseResource.get().getCourseCountUnscoped()); //TODO course count should be extended with only active and planned courses
   }
 
 }

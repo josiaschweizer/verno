@@ -1,4 +1,4 @@
-package ch.verno.gateway.security;
+package ch.verno.gateway.config.security;
 
 import ch.verno.common.lib.api.ApiQueryParam;
 import ch.verno.common.lib.api.ApiUrl;
