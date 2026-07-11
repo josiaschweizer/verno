@@ -17,7 +17,7 @@
     "proj4": "2.17.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-router": "7.10.1"
+    "react-router": "7.15.1"
   },
   "devDependencies": {
     "@babel/preset-react": "7.28.5",
@@ -34,9 +34,9 @@
     "strip-css-comments": "5.0.0",
     "transform-ast": "2.4.4",
     "typescript": "5.9.3",
-    "vite": "7.3.6",
+    "vite": "8.1.4",
     "vite-plugin-checker": "0.12.0",
-    "workbox-build": "7.4.0"
+    "workbox-build": "7.4.1"
   },
   "vaadin": {
     "dependencies": {
@@ -54,7 +54,7 @@
       "proj4": "2.17.0",
       "react": "19.2.3",
       "react-dom": "19.2.3",
-      "react-router": "7.10.1"
+      "react-router": "7.15.1"
     },
     "devDependencies": {
       "@babel/preset-react": "7.28.5",
@@ -71,9 +71,9 @@
       "strip-css-comments": "5.0.0",
       "transform-ast": "2.4.4",
       "typescript": "5.9.3",
-      "vite": "7.3.6",
+      "vite": "8.1.4",
       "vite-plugin-checker": "0.12.0",
-      "workbox-build": "7.4.0"
+      "workbox-build": "7.4.1"
     },
     "hash": "ebf26c8f5d1c87991c7397efa19b7402061124a4e844f04a626873818c78e55b"
   },
