@@ -36,7 +36,7 @@ public abstract class BaseController {
 
   protected HttpHeaders defaultHeaders() {
     final var header = new HttpHeaders();
-    header.add("X-API-Version", "v1");
+    header.add("X-API-Version", "v1"); //TODO constants
     header.add("X-Request-Id", UUID.randomUUID().toString());
     header.add("X-Server-Time", Instant.now().toString());
     return header;

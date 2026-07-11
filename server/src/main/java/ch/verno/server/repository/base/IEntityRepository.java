@@ -1,6 +1,5 @@
 package ch.verno.server.repository.base;
 
-import ch.verno.server.config.tenant.UnscopedQuery;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

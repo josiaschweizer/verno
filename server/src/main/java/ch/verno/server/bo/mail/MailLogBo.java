@@ -10,7 +10,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.simplejavamail.api.email.Email;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.View;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
