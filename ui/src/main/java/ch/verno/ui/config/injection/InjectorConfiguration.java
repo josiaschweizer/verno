@@ -15,8 +15,8 @@ public class InjectorConfiguration {
 
   @Bean
   public Injector injector(@Nonnull final I18NProvider i18NProvider,
-                           @Value(ApplicationPropertiesConstants.VERNO_RPC_URL) @Nonnull final String rpcUrl,
-                           @Value(ApplicationPropertiesConstants.VERNO_RPC_SECRET) @Nonnull final String rpcInternalSecret) {
+                           @Value(ApplicationPropertiesConstants.RPC_URL) @Nonnull final String rpcUrl,
+                           @Value(ApplicationPropertiesConstants.RPC_SECRET) @Nonnull final String rpcInternalSecret) {
     return Guice.createInjector(
             new GuiceModule(rpcUrl, i18NProvider),
             new InternalRpcTokenModule(rpcInternalSecret)

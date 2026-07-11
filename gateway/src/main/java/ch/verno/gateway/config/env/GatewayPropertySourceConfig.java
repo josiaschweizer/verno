@@ -41,7 +41,7 @@ public class GatewayPropertySourceConfig {
   @Nonnull
   private static List<String> resolveLoadedEnvs(@Nonnull final Environment environment) {
     final var raw = environment.getProperty(
-            ApplicationPropertiesConstants.VERNO_GATEWAY_LOADED_ENV,
+            ApplicationPropertiesConstants.GATEWAY_LOADED_ENV,
             Publ.EMPTY_STRING
     );
     return Arrays.asList(raw.split(Publ.COMMA));
