@@ -43,7 +43,6 @@ public abstract class VABaseSettingsPage extends VerticalLayout {
       settingsRow.add(setting);
     }
 
-    add(new H1("Test"));
     add(settingsRow);
   }
 
