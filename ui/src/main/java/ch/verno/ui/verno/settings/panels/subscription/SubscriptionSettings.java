@@ -125,11 +125,6 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
   }
 
   @Override
-  protected void save() {
-    // keep save empty because the subscription settings are readonly in the app
-  }
-
-  @Override
   protected boolean isAlwaysReadOnly() {
     return true;
   }
