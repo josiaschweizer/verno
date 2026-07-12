@@ -107,7 +107,6 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
     addActionButtons(navButton);
   }
 
-
   @Override
   protected void loadDto() {
     this.dto = billingClient.get().getTenantBillingForCurrentTenant();
@@ -123,6 +122,11 @@ public class SubscriptionSettings extends VABaseSetting<TenantBillingDto> {
   @Override
   protected TenantBillingDto createNewBeanInstance() {
     return TenantBillingDto.empty();
+  }
+
+  @Override
+  protected void save() {
+    // keep save empty because the subscription settings are readonly in the app
   }
 
   @Override

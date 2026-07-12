@@ -39,7 +39,6 @@ public class CourseLevelSetting extends BaseGridDetailSetting<CourseLevelDto, Co
     return entity.getId();
   }
 
-
   @Nonnull
   @Override
   protected Class<CourseLevelDto> getBeanType() {
