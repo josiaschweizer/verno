@@ -9,7 +9,6 @@ import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.factory.EntryFactory;
 import ch.verno.ui.verno.settings.SettingEntryFactory;
 import com.google.inject.Injector;
-import com.vaadin.copilot.shaded.javaparser.utils.Log;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +19,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NonNls;
 
 @CssImport(CssImportConstants.VA_BASE_SETTING)
@@ -152,8 +152,7 @@ public abstract class VABaseSetting<T extends BaseDto> extends Div {
   protected abstract T createNewBeanInstance();
 
   protected void save() {
-//    throw new NotImplementedException("Save method not implemented"); //TODO check why not all have overridden it
-    Log.info("Saving settings");
+    throw new NotImplementedException("Save method not implemented");
   }
 
   @Nonnull

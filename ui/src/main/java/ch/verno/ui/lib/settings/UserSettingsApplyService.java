@@ -2,7 +2,6 @@ package ch.verno.ui.lib.settings;
 
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.user.AppUserClient;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.verno.settings.panels.theme.ThemeSetting;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -22,7 +21,7 @@ public class UserSettingsApplyService {
 
   public void applyCurrentUserSettings() {
     final var appUserOptional = appUserClient.get().getOptionalCurrentAppUser();
-    if (appUserOptional == null || appUserOptional.isEmpty()) {
+    if (appUserOptional.isEmpty()) {
       return;
     }
 
