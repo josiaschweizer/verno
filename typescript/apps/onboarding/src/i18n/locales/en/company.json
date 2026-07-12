@@ -35,6 +35,17 @@
     "title": "About Verno",
     "description": "Verno builds modern club software for teams, courses and venues. We help sports clubs replace scattered tools with one calm, reliable system for scheduling, memberships and everyday coordination."
   },
+  "teamSection": {
+    "title": "The team",
+    "description": "The people behind Verno.",
+    "members": {
+      "josia": {
+        "name": "Josia",
+        "role": "Founder & Engineering",
+        "text": "Josia leads the development of Verno – from the database up to the interface. He just as gladly talks to clubs and accompanies them from the first enquiry through to everyday operation."
+      }
+    }
+  },
   "footer": {
     "text": "Switzerland-first mindset. Long-term partnerships with clubs."
   },

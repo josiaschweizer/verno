@@ -35,6 +35,17 @@
     "title": "Über Verno",
     "description": "Verno entwickelt moderne Vereinssoftware für Teams, Kurse und Standorte. Wir helfen Sportvereinen dabei, verstreute Tools durch ein ruhiges, zuverlässiges System für Planung, Mitgliedschaften und die tägliche Koordination zu ersetzen."
   },
+  "teamSection": {
+    "title": "Das Team",
+    "description": "Die Menschen hinter Verno.",
+    "members": {
+      "josia": {
+        "name": "Josia",
+        "role": "Gründer & Entwicklung",
+        "text": "Josia verantwortet die Entwicklung von Verno – von der Datenbank bis zur Oberfläche. Genauso gerne ist er im Gespräch mit Vereinen und begleitet sie von der ersten Anfrage bis zum laufenden Betrieb."
+      }
+    }
+  },
   "footer": {
     "text": "Schweiz-first-Mindset. Langfristige Partnerschaften mit Vereinen."
   },
