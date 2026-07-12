@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 import { Button } from '@verno/components/ui/button'
+import TeamMemberUser from '@/components/common/company/team/TeamMemberUser'
+import { TeamMember } from '@/types/company/team/TeamMember'
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }
@@ -52,6 +54,18 @@ export default function Company() {
     [t],
   )
 
+  const team = useMemo<TeamMember[]>(
+    () => [
+      {
+        name: t('teamSection.members.josia.name'),
+        role: t('teamSection.members.josia.role'),
+        text: t('teamSection.members.josia.text'),
+        image: '/team/josia.jpg',
+      },
+    ],
+    [t],
+  )
+
   return (
     <div className="h-full bg-verno-bg text-verno-darker overflow-y-auto md:overflow-hidden">
       <div className="mx-auto min-h-full max-w-6xl px-6 sm:px-6 pt-12 sm:pt-20 md:pt-24 pb-8 flex flex-col md:justify-center">
@@ -95,6 +109,25 @@ export default function Company() {
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{v.text}</p>
                 </div>
+              ))}
+            </div>
+          </RevealSection>
+
+          <RevealSection stagger={90}>
+            <h2 className="text-lg sm:text-xl font-semibold text-verno-darker">
+              {t('teamSection.title')}
+            </h2>
+            <div
+              className={`mt-3 grid gap-3 sm:gap-4 ${
+                team.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'
+              }`}
+            >
+              {team.map((m) => (
+                <TeamMemberUser
+                  key={m.name}
+                  member={m}
+                  featured={team.length === 1}
+                />
               ))}
             </div>
           </RevealSection>

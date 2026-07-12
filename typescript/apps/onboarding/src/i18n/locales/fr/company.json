@@ -35,6 +35,17 @@
     "title": "À propos de Verno",
     "description": "Verno développe un logiciel moderne pour les clubs, les équipes, les cours et les lieux sportifs. Nous aidons les clubs sportifs à remplacer des outils dispersés par un système calme et fiable pour la planification, les adhésions et la coordination quotidienne."
   },
+  "teamSection": {
+    "title": "L'équipe",
+    "description": "Les personnes derrière Verno.",
+    "members": {
+      "josia": {
+        "name": "Josia",
+        "role": "Fondateur & développement",
+        "text": "Josia dirige le développement de Verno – de la base de données jusqu'à l'interface. Il aime tout autant échanger avec les clubs et les accompagner, de la première demande jusqu'à l'utilisation au quotidien."
+      }
+    }
+  },
   "footer": {
     "text": "Une approche Switzerland-first. Des partenariats à long terme avec les clubs."
   },
