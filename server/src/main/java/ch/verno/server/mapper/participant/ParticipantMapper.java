@@ -18,21 +18,21 @@ import ch.verno.server.mapper.address.AddressMapper;
 import ch.verno.server.mapper.base.AbstractEntityMapper;
 import ch.verno.server.mapper.course.CourseLevelMapper;
 import ch.verno.server.mapper.course.CourseMapper;
+import ch.verno.server.mapper.gender.GenderMapper;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ParticipantMapper extends AbstractEntityMapper<ParticipantEntity, ParticipantDto> {
 
   public ParticipantMapper(@Nonnull final ServerBean serverBean) {
     setContextMappers(
-            serverBean.get(AddressMapper.class),
+            this,
+            serverBean.get(GenderMapper.class),
             serverBean.get(ParentMapper.class),
-            serverBean.get(CourseLevelMapper.class),
-            serverBean.get(CourseMapper.class)
+            serverBean.get(CourseMapper.class),
+            serverBean.get(AddressMapper.class),
+            serverBean.get(CourseLevelMapper.class)
     );
   }
 
@@ -46,26 +46,20 @@ public class ParticipantMapper extends AbstractEntityMapper<ParticipantEntity, P
     dto.setFirstName(entity.getFirstname());
     dto.setLastName(entity.getLastname());
     dto.setBirthdate(entity.getBirthdate());
-    dto.setGender(entity.getGender() == null ? GenderDto.empty() : GenderDto.ref(entity.getGender().getId()));
+    dto.setGender(mapReference(entity.getGender(), GenderMapper.class, GenderDto::empty, e -> GenderDto.ref(e.getId())));
     dto.setEmail(entity.getEmail());
     dto.setPhone(PhoneNumber.ofNullable(entity.getPhone()));
     dto.setNote(entity.getNote());
     dto.setActive(entity.isActive());
 
-    dto.setAddress(mapAddress(entity.getAddress()));
-    dto.setParentOne(mapParent(entity.getParentOne()));
-    dto.setParentTwo(mapParent(entity.getParentTwo()));
+    dto.setAddress(mapReference(entity.getAddress(), AddressMapper.class, AddressDto::empty, e -> AddressDto.ref(e.getId())));
+    dto.setParentOne(mapReference(entity.getParentOne(), ParentMapper.class, ParentDto::empty, e -> ParentDto.ref(e.getId())));
+    dto.setParentTwo(mapReference(entity.getParentTwo(), ParentMapper.class, ParentDto::empty, e -> ParentDto.ref(e.getId())));
 
-    dto.setCourseLevels(mapCourseLevels(entity));
-    dto.setCourses(mapCourses(entity));
+    dto.setCourseLevels(mapReferences(entity.getCourseLevels(), CourseLevelMapper.class, CourseLevelDto::empty, e -> CourseLevelDto.ref(e.getId())));
+    dto.setCourses(mapReferences(entity.getCourses(), CourseMapper.class, CourseDto::empty, e -> CourseDto.ref(e.getId())));
 
-    //TODO also resolve siblings?
-    dto.setSiblings(entity.getSiblings()
-            .stream()
-            .map(ParticipantEntity::getId)
-            .map(ParticipantDto::ref)
-            .toList()
-    );
+    dto.setSiblings(mapReferences(entity.getSiblings(), ParticipantMapper.class, ParticipantDto::empty, e -> ParticipantDto.ref(e.getId())));
 
     return dto;
   }
@@ -114,51 +108,5 @@ public class ParticipantMapper extends AbstractEntityMapper<ParticipantEntity, P
             .map(sibling -> ParticipantEntity.ref(sibling.getId()))
             .toList()
     );
-  }
-
-  @Nonnull
-  private AddressDto mapAddress(@Nullable final AddressEntity address) {
-    if (address == null) {
-      return AddressDto.empty();
-    }
-
-    return getMapperContext().find(AddressMapper.class)
-            .map(mapper -> mapper.toDto(address))
-            .orElseGet(() -> AddressDto.ref(address.getId()));
-  }
-
-  @Nonnull
-  private ParentDto mapParent(@Nullable final ParentEntity parent) {
-    if (parent == null) {
-      return ParentDto.empty();
-    }
-
-    return getMapperContext().find(ParentMapper.class)
-            .map(mapper -> mapper.toDto(parent))
-            .orElseGet(() -> ParentDto.ref(parent.getId()));
-  }
-
-  @Nonnull
-  private List<CourseLevelDto> mapCourseLevels(@Nonnull final ParticipantEntity entity) {
-    final var mapper = getMapperContext().find(CourseLevelMapper.class);
-
-    return entity.getCourseLevels()
-            .stream()
-            .map(level -> mapper
-                    .map(m -> m.toDto(level))
-                    .orElseGet(() -> CourseLevelDto.ref(level.getId())))
-            .toList();
-  }
-
-  @Nonnull
-  private List<CourseDto> mapCourses(@Nonnull final ParticipantEntity entity) {
-    final var mapper = getMapperContext().find(CourseMapper.class);
-
-    return entity.getCourses()
-            .stream()
-            .map(course -> mapper
-                    .map(m -> m.toDto(course))
-                    .orElseGet(() -> CourseDto.ref(course.getId())))
-            .toList();
   }
 }

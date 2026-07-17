@@ -4,6 +4,7 @@ import ch.verno.db.entity.instructor.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.db.entity.tenant.TenantEntityListener;
 import ch.verno.db.entity.tenant.TenantScopedEntity;
+import ch.verno.db.lib.SchemaVisibility;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import jakarta.annotation.Nonnull;
@@ -13,11 +14,10 @@ import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "course", schema = "public")
+@Table(name = "course", schema = SchemaVisibility.PUBLIC)
 @EntityListeners(TenantEntityListener.class)
 public class CourseEntity extends TenantScopedEntity {
 
@@ -49,7 +49,7 @@ public class CourseEntity extends TenantScopedEntity {
           inverseJoinColumns = @JoinColumn(name = "course_level_id")
   )
   @OrderColumn(name = "sort_index")
-  private List<CourseLevelEntity> courseLevels = new ArrayList<>();
+  private List<CourseLevelEntity> courseLevels = New.list();
 
   @Nullable
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -65,7 +65,7 @@ public class CourseEntity extends TenantScopedEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "weekday", nullable = false)
   @OrderColumn(name = "sort_index")
-  private List<DayOfWeek> weekdays = new ArrayList<>();
+  private List<DayOfWeek> weekdays = New.list();
 
   @Nullable
   @Column(name = "start_time")

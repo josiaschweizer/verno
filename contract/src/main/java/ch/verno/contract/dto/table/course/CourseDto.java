@@ -4,6 +4,7 @@ import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.lib.New;
 import ch.verno.lib.Publ;
+import ch.verno.lib.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -59,7 +60,20 @@ public class CourseDto extends BaseDto<Long> {
                    @Nonnull final List<InstructorDto> secondaryInstructors,
                    @Nonnull final String note,
                    @Nonnull final String color) {
-    this(null, title, capacity, location, courseLevels, courseSchedule, weekdays, startTime, endTime, instructor, secondaryInstructors, note, color);
+    this(null,
+            title,
+            capacity,
+            location,
+            courseLevels,
+            courseSchedule,
+            weekdays,
+            startTime,
+            endTime,
+            instructor,
+            secondaryInstructors,
+            note,
+            color
+    );
   }
 
   public CourseDto(@Nullable final Long id,
@@ -103,21 +117,19 @@ public class CourseDto extends BaseDto<Long> {
   }
 
   public boolean isEmpty() {
-    return this.getId() != null
-            && this.getId() == 0L
-            && this.title.isEmpty()
-            && (this.capacity == null || this.capacity == 0)
-            && this.location.isEmpty()
-            && this.courseLevels.isEmpty()
-            && this.courseSchedule != null
-            && this.courseSchedule.isEmpty()
-            && this.weekdays.isEmpty()
-            && this.startTime == null
-            && this.endTime == null
-            && (this.instructor == null || this.instructor.isEmpty())
-            && this.secondaryInstructors.isEmpty()
-            && this.note.isEmpty()
-            && this.color.isEmpty();
+    return ObjectUtil.isEmpty(getId()) &&
+            ObjectUtil.isEmpty(title) &&
+            ObjectUtil.isEmpty(capacity) &&
+            ObjectUtil.isEmpty(location) &&
+            ObjectUtil.isEmpty(courseLevels) &&
+            ObjectUtil.isEmpty(courseSchedule) &&
+            ObjectUtil.isEmpty(weekdays) &&
+            ObjectUtil.isEmpty(startTime) &&
+            ObjectUtil.isEmpty(endTime) &&
+            ObjectUtil.isEmpty(instructor) &&
+            ObjectUtil.isEmpty(secondaryInstructors) &&
+            ObjectUtil.isEmpty(note) &&
+            ObjectUtil.isEmpty(color);
   }
 
   @Nonnull

@@ -5,6 +5,7 @@ import ch.verno.common.dto.ui.colorpicker.Colors;
 import ch.verno.common.type.CourseScheduleStatus;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.Publ;
+import ch.verno.lib.lang.ObjectUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -53,17 +54,16 @@ public class CourseScheduleDto extends BaseDto<Long> {
 
   @Nonnull
   public static CourseScheduleDto ref(@Nonnull final Long id) {
-    final var dto = new CourseScheduleDto();
+    final var dto = CourseScheduleDto.empty();
     dto.setId(id);
     return dto;
   }
 
   public boolean isEmpty() {
-    return getId() != null
-            && getId() == 0L
-            && title.isEmpty()
-            && status == CourseScheduleStatus.PLANNED
-            && weeks.isEmpty();
+    return ObjectUtil.isEmpty(getId()) &&
+            ObjectUtil.isEmpty(title) &&
+            status == CourseScheduleStatus.PLANNED &&
+            ObjectUtil.isEmpty(weeks);
   }
 
   @Nonnull

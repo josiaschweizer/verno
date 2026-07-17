@@ -285,7 +285,7 @@ public class ParticipantDto extends BaseDto<Long> {
   }
 
   public void setCourses(@Nonnull final List<CourseDto> courses) {
-    this.courses = new ArrayList<>(courses);
+    this.courses = New.list(courses);
   }
 
   public void addCourse(@Nonnull final CourseDto course) {

@@ -79,7 +79,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     final var columns = new ArrayList<ObjectGridColumn<CourseDto>>();
     columns.add(new ObjectGridColumn<>(CourseConstants.TITLE, CourseDto::getTitle, getTranslation("shared.title"), true));
     columns.add(new ObjectGridColumn<>(CourseConstants.CAPACITY, CourseDto::getCapacity, getTranslation("course.max.capacity"), true));
-    columns.add(new ObjectGridColumn<>(CourseConstants.WEEKDAYS, CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.WEEKDAYS, CourseDto::getWeekdaysAsString, getTranslation("course.weekdays"), false));
     columns.add(new ObjectGridColumn<>(InstructorConstants.ENTITY_NAME, CourseDto::getInstructorAsString, getTranslation("shared.instructor"), true));
     columns.add(new ObjectGridColumn<>(CourseScheduleConstants.ENTITY_NAME, CourseDto::getCourseScheduleAsString, getTranslation("course.schedule"), true));
     columns.add(new ObjectGridColumn<>(CourseLevelConstants.MANY_ENTITY_NAME, CourseDto::getCourseLevelAsString, getTranslation("course.level"), true));

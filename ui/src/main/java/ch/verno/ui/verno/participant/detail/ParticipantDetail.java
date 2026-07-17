@@ -269,6 +269,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             courseLevels,
             CourseLevelDto::displayName
     );
+    courseLevelsEntry.setEnabled(!courseLevels.isEmpty());
 
     final var courses = new ArrayList<CourseDto>();
     if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isLimitCourseAssignmentsToActive()) {
@@ -287,6 +288,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             courses,
             CourseDto::displayName
     );
+    coursesEntry.setEnabled(!courses.isEmpty());
 
     courseLevelsEntry.addValueChangeListener(e -> {
       if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isEnforceCourseLevelSettings()) {

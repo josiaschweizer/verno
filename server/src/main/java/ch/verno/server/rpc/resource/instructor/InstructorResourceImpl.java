@@ -45,7 +45,8 @@ public class InstructorResourceImpl implements InstructorResource {
   @Nonnull
   @Override
   public List<InstructorDto> getInstructors(@Nonnull final InstructorFilter filter,
-                                            @Nonnull final List<SortOrderDto> sortOrders, final int offset,
+                                            @Nonnull final List<SortOrderDto> sortOrders,
+                                            final int offset,
                                             final int limit) {
     return instructorService.get().findAll(filter, sortOrders, offset, limit);
   }
