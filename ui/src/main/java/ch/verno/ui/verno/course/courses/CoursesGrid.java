@@ -5,9 +5,11 @@ import ch.verno.common.db.constants.course.CourseLevelConstants;
 import ch.verno.common.db.constants.course.CourseScheduleConstants;
 import ch.verno.common.db.constants.instructor.InstructorConstants;
 import ch.verno.common.lib.Routes;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.lib.Lazy;
+import ch.verno.lib.New;
 import ch.verno.rpc.client.course.CourseClient;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
@@ -22,6 +24,7 @@ import ch.verno.ui.lib.url.RoutesUtil;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -33,7 +36,10 @@ import jakarta.annotation.Nullable;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @PermitAll
@@ -125,6 +131,26 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
 
     return new Span(button);
   }
+
+  @Nonnull
+  @Override
+  public List<ComboBoxBase<?, ?, ?>> getFilterBarComponents() {
+    final Map<Integer, String> items = Arrays.stream(CourseScheduleStatus.values())
+            .collect(Collectors.toMap(
+                    CourseScheduleStatus::getId,
+                    courseScheduleStatus -> getTranslation(courseScheduleStatus.getDisplayNameKey())
+            ));
+    final var courseScheduleStatusFilterEntry = filterEntryFactory.createMultiSelectComboboxFilter(
+            CourseFilter::getCourseScheduleStatusIds,
+            CourseFilter::setCourseScheduleStatusIds,
+            items,
+            filterBinder,
+            getTranslation("course.course.schedule.status")
+    );
+
+    return New.list(courseScheduleStatusFilterEntry);
+  }
+
 
   @Nonnull
   @Override

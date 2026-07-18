@@ -1,6 +1,6 @@
 package ch.verno.server.bo.table.course;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.lib.Lazy;

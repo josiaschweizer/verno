@@ -1,6 +1,6 @@
 package ch.verno.ui.verno.dashboard;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.ui.base.Refreshable;
 import ch.verno.ui.verno.dashboard.course.CourseWidgetGroup;
 import ch.verno.ui.verno.dashboard.courseSchedules.CourseScheduleLifecycleWidgetGroup;

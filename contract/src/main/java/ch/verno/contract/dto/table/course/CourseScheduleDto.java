@@ -2,7 +2,7 @@ package ch.verno.contract.dto.table.course;
 
 import ch.verno.common.dto.lib.YearWeekDto;
 import ch.verno.common.dto.ui.colorpicker.Colors;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.lib.Publ;
 import ch.verno.lib.lang.ObjectUtil;

@@ -1,7 +1,7 @@
 package ch.verno.ui.verno.course.courseschedule.detail;
 
 import ch.verno.common.lib.Routes;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.course.CourseScheduleClient;

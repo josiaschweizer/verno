@@ -15,6 +15,7 @@ public class CssImportConstants {
 
   @NonNls public static final String VA_NOTIFICATION = "./components/notification/va-notification.css";
   @NonNls public static final String VA_INLINE_NOTIFICATION = "./components/notification/inline/va-inline-notification.css";
+  @NonNls public static final String VA_FILTER_BAR = "./components/filter/va-filter-bar.css";
 
   @NonNls public static final String VA_BASE_SETTING = "./components/setting/va-base-setting.css";
   @NonNls public static final String VA_BASE_DASHBOARD_WIDGET = "./components/dashboard/va-base-dashboard-widget.css";

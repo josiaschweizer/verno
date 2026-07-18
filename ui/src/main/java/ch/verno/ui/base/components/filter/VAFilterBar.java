@@ -1,5 +1,8 @@
 package ch.verno.ui.base.components.filter;
 
+import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.VernoUtility;
+import ch.verno.ui.base.components.layout.horizontal.VAHorizontalLayout;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
@@ -14,24 +17,20 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
-@CssImport("./components/filter/va-filter-bar.css")
+@CssImport(CssImportConstants.VA_FILTER_BAR)
 public class VAFilterBar extends VerticalLayout {
 
-  @Nonnull
-  private final VASearchFilter searchFilter;
+  @NonNls public static final String VA_TOGGLE_FILTERS_CLASSNAME = "va-toggle-filters";
 
-  @Nonnull
-  private final Button toggleFiltersButton;
+  @Nonnull private final VASearchFilter searchFilter;
 
-  @Nonnull
-  private final HorizontalLayout advancedFiltersRow;
+  @Nonnull private final Button toggleFiltersButton;
+  @Nonnull private final VAHorizontalLayout advancedFiltersRow;
 
-  @Nullable
-  private SerializableConsumer<String> searchHandler;
-
-  @Nullable
-  private SerializableRunnable onFiltersChanged;
+  @Nullable private SerializableConsumer<String> searchHandler;
+  @Nullable private SerializableRunnable onFiltersChanged;
 
   private boolean filtersVisible = false;
 
@@ -46,23 +45,22 @@ public class VAFilterBar extends VerticalLayout {
     searchFilter.setWidthFull();
 
     toggleFiltersButton = new Button(getTranslation("base.filter"), VaadinIcon.FILTER.create());
-    toggleFiltersButton.addClassName("va-toggle-filters");
+    toggleFiltersButton.addClassName(VA_TOGGLE_FILTERS_CLASSNAME);
     toggleFiltersButton.addClickListener(e -> setFiltersVisible(!filtersVisible));
     toggleFiltersButton.setVisible(false);
 
-    final var topBar = new HorizontalLayout(searchFilter, toggleFiltersButton);
+    final var topBar = new VAHorizontalLayout(searchFilter, toggleFiltersButton);
     topBar.setWidthFull();
     topBar.setPadding(false);
-    topBar.setSpacing(true);
+    topBar.setSpacing(VernoUtility.LUMO_SPACE_S);
     topBar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
 
     topBar.setFlexGrow(1, searchFilter);
-//    toggleFiltersButton.addClassNames(LumoUtility.Margin.Right.SMALL);
 
-    advancedFiltersRow = new HorizontalLayout();
+    advancedFiltersRow = new VAHorizontalLayout();
     advancedFiltersRow.setWidthFull();
     advancedFiltersRow.setPadding(false);
-    advancedFiltersRow.setSpacing(true);
+    advancedFiltersRow.setSpacingS();
     advancedFiltersRow.setVisible(false);
 
     addClassName(LumoUtility.Gap.MEDIUM);

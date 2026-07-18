@@ -1,7 +1,7 @@
 package ch.verno.server.service.entity.course;
 
 import ch.verno.common.lib.WeekKey;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.db.entity.course.CourseScheduleEntity;
