@@ -1,6 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Impressum | Verno',
+    'Impressum und Kontaktangaben von Verno.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/legal/imprint')
+}
 
 export default function Imprint() {
   const { t } = useTranslation('legal')

@@ -4,6 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { HoverSplitImage } from '@/components/ui/custom/HoverSplitImage'
 import RevealSection from '@verno/components/ui/RevealSection'
 import { tenantsApi } from '@/lib/api/tenantsApi'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Vereinssoftware für Kurse, Teams und Mitglieder | Verno',
+    'Entdecke Verno für Kursplanung, Teilnehmerverwaltung, Kommunikation und die tägliche Organisation deines Sportvereins.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/product')
+}
 
 type PeopleView = 'participants' | 'users'
 type OrganizationView =
@@ -59,29 +71,29 @@ export default function Product() {
         title: t('organizationConfig.courseSchedules.title'),
         caption: t('organizationConfig.courseSchedules.caption'),
         alt: t('organizationConfig.courseSchedules.alt'),
-        lightSrc: '/course-schedules-light.png',
-        darkSrc: '/course-schedules.png',
+        lightSrc: '/product/course-schedules-light.png',
+        darkSrc: '/product/course-schedules.png',
       },
       courses: {
         title: t('organizationConfig.courses.title'),
         caption: t('organizationConfig.courses.caption'),
         alt: t('organizationConfig.courses.alt'),
-        lightSrc: '/courses-light.png',
-        darkSrc: '/courses.png',
+        lightSrc: '/product/courses-light.png',
+        darkSrc: '/product/courses.png',
       },
       instructors: {
         title: t('organizationConfig.instructors.title'),
         caption: t('organizationConfig.instructors.caption'),
         alt: t('organizationConfig.instructors.alt'),
-        lightSrc: '/instructors-light.png',
-        darkSrc: '/instructors.png',
+        lightSrc: '/product/instructors-light.png',
+        darkSrc: '/product/instructors.png',
       },
       participants: {
         title: t('organizationConfig.participants.title'),
         caption: t('organizationConfig.participants.caption'),
         alt: t('organizationConfig.participants.alt'),
-        lightSrc: '/participants-light.png',
-        darkSrc: '/participants.png',
+        lightSrc: '/product/participants-light.png',
+        darkSrc: '/product/participants.png',
       },
     }),
     [t],
@@ -202,21 +214,21 @@ export default function Product() {
 
   return (
     <main className="min-h-screen bg-verno-bg text-verno-darker overflow-x-hidden">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 space-y-16 sm:space-y-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 space-y-16 sm:space-y-20">
         <section aria-labelledby="verno-hero-title">
           <RevealSection stagger={0}>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] md:gap-10 items-center">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-center">
               <div>
                 <h1
                   id="verno-hero-title"
-                  className="text-2xl sm:text-3xl md:text-4xl font-semibold text-verno-darker"
+                  className="text-3xl sm:text-4xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('hero.title')}
                 </h1>
-                <p className="mt-3 sm:mt-4 text-sm text-muted-foreground">
+                <p className="mt-5 text-base leading-7 text-muted-foreground">
                   {t('hero.text1')}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-2 text-base leading-7 text-muted-foreground">
                   {t('hero.text2')}
                 </p>
               </div>
@@ -224,14 +236,14 @@ export default function Product() {
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   <HoverSplitImage
-                    lightSrc="/dashboard-light.png"
-                    darkSrc="/dashboard.png"
+                    lightSrc="/dashboard/dashboard-light.png"
+                    darkSrc="/dashboard/dashboard.png"
                     alt={t('hero.imageAlt')}
                     className="h-full"
-                    initialSplit={0.6}
+                    initialSplit={0}
                   />
                 </div>
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-sm leading-5 text-muted-foreground">
                   {t('hero.caption')}
                 </p>
               </div>
@@ -241,29 +253,29 @@ export default function Product() {
 
         <section id="organization" aria-labelledby="organization-title">
           <RevealSection stagger={30}>
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-start">
               <div>
                 <h2
                   id="organization-title"
-                  className="text-2xl font-semibold text-verno-darker"
+                  className="text-2xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('organization.title')}
                 </h2>
-                <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                <p className="mt-3 text-base font-medium text-verno-dark">
                   {t('organization.subtitle')}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-3 text-base leading-7 text-muted-foreground">
                   {t('organization.text1')}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-base leading-7 text-muted-foreground">
                   {t('organization.text2')}
                 </p>
 
                 <div className="mt-4">
-                  <p className="text-xs uppercase text-muted-foreground">
+                  <p className="text-sm font-medium text-verno-dark">
                     {t('common.keyPoints')}
                   </p>
-                  <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                     {organizationKeyPoints.map((item) => (
                       <li key={item}>• {item}</li>
                     ))}
@@ -273,7 +285,7 @@ export default function Product() {
 
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="flex items-center justify-between gap-3 mb-3">
-                  <p className="text-xs text-verno-darker shrink-0">
+                  <p className="text-sm font-medium text-verno-darker shrink-0">
                     {activeOrganization.title}
                   </p>
 
@@ -330,12 +342,12 @@ export default function Product() {
                     darkSrc={activeOrganization.darkSrc}
                     alt={activeOrganization.alt}
                     className="w-full h-full"
-                    initialSplit={0.6}
+                    initialSplit={0}
                     objectFit="contain"
                   />
                 </div>
 
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-sm leading-5 text-muted-foreground">
                   {activeOrganization.caption} {t('common.hoverCompare')}
                 </p>
               </div>
@@ -345,29 +357,29 @@ export default function Product() {
 
         <section id="scheduling" aria-labelledby="scheduling-title">
           <RevealSection stagger={60}>
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-start">
               <div>
                 <h2
                   id="scheduling-title"
-                  className="text-2xl font-semibold text-verno-darker"
+                  className="text-2xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('scheduling.title')}
                 </h2>
-                <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                <p className="mt-3 text-base font-medium text-verno-dark">
                   {t('scheduling.subtitle')}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-3 text-base leading-7 text-muted-foreground">
                   {t('scheduling.text1')}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-base leading-7 text-muted-foreground">
                   {t('scheduling.text2')}
                 </p>
 
                 <div className="mt-4">
-                  <p className="text-xs uppercase text-muted-foreground">
+                  <p className="text-sm font-medium text-verno-dark">
                     {t('common.keyPoints')}
                   </p>
-                  <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                     {schedulingKeyPoints.map((item) => (
                       <li key={item}>• {item}</li>
                     ))}
@@ -378,14 +390,14 @@ export default function Product() {
               <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
                 <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent overflow-hidden">
                   <HoverSplitImage
-                    lightSrc="/calendar-view-light.png"
-                    darkSrc="/calendar-view.png"
+                    lightSrc="/product/calendar-view-light.png"
+                    darkSrc="/product/calendar-view.png"
                     alt={t('scheduling.imageAlt')}
                     className="h-full"
-                    initialSplit={0.6}
+                    initialSplit={0}
                   />
                 </div>
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-sm leading-5 text-muted-foreground">
                   {t('scheduling.caption')}
                 </p>
               </div>
@@ -395,29 +407,29 @@ export default function Product() {
 
         <section id="participants" aria-labelledby="participants-title">
           <RevealSection stagger={90}>
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-start">
               <div>
                 <h2
                   id="participants-title"
-                  className="text-2xl font-semibold text-verno-darker"
+                  className="text-2xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('participants.title')}
                 </h2>
-                <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                <p className="mt-3 text-base font-medium text-verno-dark">
                   {t('participants.subtitle')}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-3 text-base leading-7 text-muted-foreground">
                   {t('participants.text1')}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-base leading-7 text-muted-foreground">
                   {t('participants.text2')}
                 </p>
 
                 <div className="mt-4">
-                  <p className="text-xs uppercase text-muted-foreground">
+                  <p className="text-sm font-medium text-verno-dark">
                     {t('common.keyPoints')}
                   </p>
-                  <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                     {participantsKeyPoints.map((item) => (
                       <li key={item}>• {item}</li>
                     ))}
@@ -427,7 +439,7 @@ export default function Product() {
 
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="flex items-center justify-between gap-3 mb-3">
-                  <p className="text-xs text-verno-darker shrink-0">
+                  <p className="text-sm font-medium text-verno-darker shrink-0">
                     {peopleView === 'participants'
                       ? t('participants.participantsOverview')
                       : t('participants.rolesUsers')}
@@ -479,24 +491,24 @@ export default function Product() {
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   {peopleView === 'participants' ? (
                     <HoverSplitImage
-                      lightSrc="/participants-list-light.png"
-                      darkSrc="/participants-list.png"
+                      lightSrc="/product/participants-list-light.png"
+                      darkSrc="/product/participants-list.png"
                       alt={t('participants.participantsAlt')}
                       className="h-full"
-                      initialSplit={0.6}
+                      initialSplit={0}
                     />
                   ) : (
                     <HoverSplitImage
-                      lightSrc="/user-administration-light.png"
-                      darkSrc="/user-administration.png"
+                      lightSrc="/product/user-administration-light.png"
+                      darkSrc="/product/user-administration.png"
                       alt={t('participants.usersAlt')}
                       className="h-full"
-                      initialSplit={0.6}
+                      initialSplit={0}
                     />
                   )}
                 </div>
 
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-sm leading-5 text-muted-foreground">
                   {peopleView === 'participants'
                     ? t('participants.participantsCaption')
                     : t('participants.usersCaption')}{' '}
@@ -509,29 +521,29 @@ export default function Product() {
 
         <section id="mailing" aria-labelledby="mailing-title">
           <RevealSection stagger={120}>
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-start">
               <div>
                 <h2
                   id="mailing-title"
-                  className="text-2xl font-semibold text-verno-darker"
+                  className="text-2xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('mailing.title')}
                 </h2>
-                <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                <p className="mt-3 text-base font-medium text-verno-dark">
                   {t('mailing.subtitle')}
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-3 text-base leading-7 text-muted-foreground">
                   {t('mailing.text1')}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-base leading-7 text-muted-foreground">
                   {t('mailing.text2')}
                 </p>
 
                 <div className="mt-4">
-                  <p className="text-xs uppercase text-muted-foreground">
+                  <p className="text-sm font-medium text-verno-dark">
                     {t('common.keyPoints')}
                   </p>
-                  <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                     {mailingKeyPoints.map((item) => (
                       <li key={item}>• {item}</li>
                     ))}
@@ -542,15 +554,15 @@ export default function Product() {
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   <HoverSplitImage
-                    lightSrc="/mail-overview-light.png"
-                    darkSrc="/mail-overview.png"
+                    lightSrc="/product/mail-overview-light.png"
+                    darkSrc="/product/mail-overview.png"
                     alt={t('mailing.imageAlt')}
                     className="w-full h-full"
-                    initialSplit={0.6}
+                    initialSplit={0}
                     objectFit="contain"
                   />
                 </div>
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-sm leading-5 text-muted-foreground">
                   {t('mailing.caption')}
                 </p>
               </div>
@@ -561,29 +573,29 @@ export default function Product() {
         {showReporting && (
           <section id="reporting" aria-labelledby="reporting-title">
             <RevealSection stagger={150}>
-              <div className="grid gap-10 md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-start">
+              <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-12 items-start">
                 <div>
                   <h2
                     id="reporting-title"
-                    className="text-2xl font-semibold text-verno-darker"
+                    className="text-2xl font-semibold tracking-tight text-verno-darker"
                   >
                     {t('reporting.title')}
                   </h2>
-                  <p className="mt-3 text-sm font-semibold uppercase text-verno-dark">
+                  <p className="mt-3 text-base font-medium text-verno-dark">
                     {t('reporting.subtitle')}
                   </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <p className="mt-3 text-base leading-7 text-muted-foreground">
                     {t('reporting.text1')}
                   </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
+                  <p className="mt-1 text-base leading-7 text-muted-foreground">
                     {t('reporting.text2')}
                   </p>
 
                   <div className="mt-4">
-                    <p className="text-xs uppercase text-muted-foreground">
+                    <p className="text-sm font-medium text-verno-dark">
                       {t('common.keyPoints')}
                     </p>
-                    <ul className="mt-2 space-y-1 text-sm text-verno-dark">
+                    <ul className="mt-2 space-y-2 text-sm leading-6 text-muted-foreground">
                       {reportingKeyPoints.map((item) => (
                         <li key={item}>• {item}</li>
                       ))}
@@ -598,7 +610,7 @@ export default function Product() {
                         <div className="text-2xl font-semibold text-verno-darker">
                           {formatCount(tenantsCount)}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="mt-1 text-sm text-muted-foreground">
                           {t('reporting.stats.activeClubs')}
                         </div>
                       </div>
@@ -607,7 +619,7 @@ export default function Product() {
                         <div className="text-2xl font-semibold text-verno-darker">
                           {formatCount(memberCount)}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="mt-1 text-sm text-muted-foreground">
                           {t('reporting.stats.totalParticipants')}
                         </div>
                       </div>
@@ -616,7 +628,7 @@ export default function Product() {
                         <div className="text-2xl font-semibold text-verno-darker">
                           {formatCount(courseCount)}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="mt-1 text-sm text-muted-foreground">
                           {t('reporting.stats.runningCourses')}
                         </div>
                       </div>
@@ -624,10 +636,10 @@ export default function Product() {
 
                     <div className="rounded-xl bg-verno-surface-light p-4 border border-transparent">
                       <div className="flex items-center justify-between mb-3">
-                        <p className="text-xs text-verno-darker">
+                        <p className="text-sm font-medium text-verno-darker">
                           {t('reporting.attendanceOverview')}
                         </p>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-sm text-muted-foreground">
                           {t('reporting.lastSixMonths')}
                         </span>
                       </div>
@@ -644,7 +656,7 @@ export default function Product() {
                                 style={{ height: `${height}%` }}
                               />
                             </div>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-sm text-muted-foreground">
                               {reportingMonths[i]}
                             </span>
                           </div>
@@ -653,7 +665,7 @@ export default function Product() {
                     </div>
                   </div>
 
-                  <p className="mt-3 text-xs text-muted-foreground">
+                  <p className="mt-3 text-sm leading-5 text-muted-foreground">
                     {t('reporting.caption')}
                   </p>
                 </div>
@@ -668,11 +680,11 @@ export default function Product() {
               <div>
                 <h2
                   id="closing-cta-title"
-                  className="text-xl font-semibold text-verno-darker"
+                  className="text-2xl font-semibold tracking-tight text-verno-darker"
                 >
                   {t('cta.title')}
                 </h2>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="mt-3 text-base leading-7 text-muted-foreground">
                   {t('cta.text')}
                 </p>
               </div>

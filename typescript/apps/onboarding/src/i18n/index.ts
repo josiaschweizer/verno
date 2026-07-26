@@ -34,10 +34,11 @@ import deWorkspace from './locales/de/workspace.json'
 import enWorkspace from './locales/en/workspace.json'
 import frWorkspace from './locales/fr/workspace.json'
 
-export default i18n
+void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: 'de',
     resources: {
       de: {
         home: deHome,
@@ -75,3 +76,5 @@ export default i18n
     defaultNS: 'home',
     interpolation: { escapeValue: false },
   })
+
+export default i18n

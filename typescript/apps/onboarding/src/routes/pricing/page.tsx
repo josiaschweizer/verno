@@ -4,6 +4,18 @@ import { Button } from '@verno/components/ui/button'
 import RegisterMultiStepDialog from '@/components/common/register/dialog/RegisterMultiStepDialog'
 import RevealSection from '@verno/components/ui/RevealSection'
 import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Preise für die Verno Vereinssoftware',
+    'Transparente Preise für Verno: eine moderne Vereinssoftware für Kurse, Teams, Mitglieder und Standorte.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/pricing')
+}
 
 type WhyItem = {
   title: string

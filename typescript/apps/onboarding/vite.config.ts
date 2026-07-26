@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import react from '@vitejs/plugin-react'
+import { reactRouter } from '@react-router/dev/vite'
 import path from 'node:path'
 
 const BFF_ENV_KEYS = [
@@ -68,7 +68,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, __dirname, '')
 
   return {
-    plugins: [react(), bffDev(env)],
+    plugins: [reactRouter(), bffDev(env)],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -76,6 +76,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: { port: 5173, strictPort: true },
-    build: { outDir: 'dist', sourcemap: true },
+    build: { sourcemap: false },
   }
 })

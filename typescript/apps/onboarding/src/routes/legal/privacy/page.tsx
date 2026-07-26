@@ -1,6 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Datenschutzerklärung | Verno',
+    'Informationen zum Datenschutz und zur Verarbeitung personenbezogener Daten bei Verno.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/legal/privacy')
+}
 
 export default function Privacy() {
   const { t } = useTranslation('legal')
