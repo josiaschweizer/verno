@@ -1,6 +1,6 @@
 {
   "errorDisplay": {
-    "closeError": "Fermer l?erreur"
+    "closeError": "Fermer l'erreur"
   },
   "dialog": {
     "title": "Commencer",
@@ -45,7 +45,7 @@
         "message": "Vérifie tes saisies et réessaie."
       },
       "dataIntegrityViolation": {
-        "title": "Conflit lors de l?enregistrement",
+        "title": "Conflit lors de l'enregistrement",
         "message": "Une contrainte de base de données a été violée. Vérifie tes saisies et réessaie."
       },
       "tenantProvisionFailed": {
@@ -64,7 +64,7 @@
     "fields": {
       "firstname": "Prénom",
       "lastname": "Nom",
-      "username": "Nom d?utilisateur",
+      "username": "Nom d'utilisateur",
       "email": "E-mail",
       "phone": "Téléphone",
       "preferredLanguage": "Langue préférée",
@@ -74,7 +74,7 @@
     "placeholders": {
       "firstname": "Prénom",
       "lastname": "Nom",
-      "username": "Nom d?utilisateur",
+      "username": "Nom d'utilisateur",
       "email": "E-mail",
       "phone": "Téléphone",
       "password": "Saisis ton mot de passe",
