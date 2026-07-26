@@ -59,29 +59,29 @@ export default function Product() {
         title: t('organizationConfig.courseSchedules.title'),
         caption: t('organizationConfig.courseSchedules.caption'),
         alt: t('organizationConfig.courseSchedules.alt'),
-        lightSrc: '/course-schedules-light.png',
-        darkSrc: '/course-schedules.png',
+        lightSrc: '/logos/course-schedules-light.png',
+        darkSrc: '/logos/course-schedules.png',
       },
       courses: {
         title: t('organizationConfig.courses.title'),
         caption: t('organizationConfig.courses.caption'),
         alt: t('organizationConfig.courses.alt'),
-        lightSrc: '/courses-light.png',
-        darkSrc: '/courses.png',
+        lightSrc: '/logos/courses-light.png',
+        darkSrc: '/logos/courses.png',
       },
       instructors: {
         title: t('organizationConfig.instructors.title'),
         caption: t('organizationConfig.instructors.caption'),
         alt: t('organizationConfig.instructors.alt'),
-        lightSrc: '/instructors-light.png',
-        darkSrc: '/instructors.png',
+        lightSrc: '/logos/instructors-light.png',
+        darkSrc: '/logos/instructors.png',
       },
       participants: {
         title: t('organizationConfig.participants.title'),
         caption: t('organizationConfig.participants.caption'),
         alt: t('organizationConfig.participants.alt'),
-        lightSrc: '/participants-light.png',
-        darkSrc: '/participants.png',
+        lightSrc: '/logos/participants-light.png',
+        darkSrc: '/logos/participants.png',
       },
     }),
     [t],
@@ -224,8 +224,8 @@ export default function Product() {
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   <HoverSplitImage
-                    lightSrc="/dashboard-light.png"
-                    darkSrc="/dashboard.png"
+                    lightSrc="/logos/dashboard-light.png"
+                    darkSrc="/logos/dashboard.png"
                     alt={t('hero.imageAlt')}
                     className="h-full"
                     initialSplit={0.6}
@@ -378,8 +378,8 @@ export default function Product() {
               <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
                 <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent overflow-hidden">
                   <HoverSplitImage
-                    lightSrc="/calendar-view-light.png"
-                    darkSrc="/calendar-view.png"
+                    lightSrc="/logos/calendar-view-light.png"
+                    darkSrc="/logos/calendar-view.png"
                     alt={t('scheduling.imageAlt')}
                     className="h-full"
                     initialSplit={0.6}
@@ -479,16 +479,16 @@ export default function Product() {
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   {peopleView === 'participants' ? (
                     <HoverSplitImage
-                      lightSrc="/participants-list-light.png"
-                      darkSrc="/participants-list.png"
+                      lightSrc="/logos/participants-list-light.png"
+                      darkSrc="/logos/participants-list.png"
                       alt={t('participants.participantsAlt')}
                       className="h-full"
                       initialSplit={0.6}
                     />
                   ) : (
                     <HoverSplitImage
-                      lightSrc="/user-administration-light.png"
-                      darkSrc="/user-administration.png"
+                      lightSrc="/logos/user-administration-light.png"
+                      darkSrc="/logos/user-administration.png"
                       alt={t('participants.usersAlt')}
                       className="h-full"
                       initialSplit={0.6}
@@ -542,8 +542,8 @@ export default function Product() {
               <div className="rounded-2xl bg-verno-surface shadow p-4">
                 <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
                   <HoverSplitImage
-                    lightSrc="/mail-overview-light.png"
-                    darkSrc="/mail-overview.png"
+                    lightSrc="/logos/mail-overview-light.png"
+                    darkSrc="/logos/mail-overview.png"
                     alt={t('mailing.imageAlt')}
                     className="w-full h-full"
                     initialSplit={0.6}

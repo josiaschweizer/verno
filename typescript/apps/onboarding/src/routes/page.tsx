@@ -21,7 +21,7 @@ export default function Home() {
 
               <div className="order-2 mt-8 overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl md:hidden">
                 <img
-                  src="/landing-page-opi.png"
+                  src="/logos/landing-page-opi.png"
                   alt={t('hero.imageAlt')}
                   className="h-56 w-full object-cover object-top sm:h-64"
                 />
@@ -68,7 +68,7 @@ export default function Home() {
 
             <div className="hidden overflow-hidden rounded-2xl shadow-lg sm:rounded-3xl md:block">
               <img
-                src="/landing-page-opi.png"
+                src="/logos/landing-page-opi.png"
                 alt={t('hero.imageAlt')}
                 className="h-64 w-full object-cover object-top lg:h-80"
               />

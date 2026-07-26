@@ -9,7 +9,7 @@ export default function HeaderLogo() {
       <span className="sr-only">{t('header.logo.label')}</span>
 
       <img
-        src="/verno-app.png"
+        src="/logos/verno-app.png"
         alt={t('header.logo.alt')}
         className="h-26 w-auto"
         loading="lazy"

@@ -308,8 +308,9 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
       @Override
       protected Stream<ParticipantDto> fetch(@Nonnull final Query<ParticipantDto, ParticipantFilter> query,
                                              @Nonnull final ParticipantFilter filter) {
-        if (getBinder().getBean() != null && getBinder().getBean().getId() != null) {
-          filter.setCourseIds(Set.of(getBinder().getBean().getId()));
+        final var bean = getBinder().getBean();
+        if (bean != null && bean.getId() != null) {
+          filter.setCourseIds(Set.of(bean.getId()));
         }
 
         return super.fetch(query, filter);
