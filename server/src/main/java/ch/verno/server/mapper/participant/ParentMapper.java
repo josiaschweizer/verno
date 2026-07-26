@@ -7,12 +7,22 @@ import ch.verno.contract.dto.table.participant.ParentDto;
 import ch.verno.db.entity.address.AddressEntity;
 import ch.verno.db.entity.gender.GenderEntity;
 import ch.verno.db.entity.participant.ParentEntity;
+import ch.verno.server.bean.ServerBean;
+import ch.verno.server.mapper.address.AddressMapper;
 import ch.verno.server.mapper.base.AbstractEntityMapper;
+import ch.verno.server.mapper.gender.GenderMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ParentMapper extends AbstractEntityMapper<ParentEntity, ParentDto> {
+
+  public ParentMapper(@Nonnull final ServerBean serverBean) {
+    setContextMappers(
+            serverBean.get(GenderMapper.class),
+            serverBean.get(AddressMapper.class)
+    );
+  }
 
   @Nonnull
   @Override
@@ -25,8 +35,8 @@ public class ParentMapper extends AbstractEntityMapper<ParentEntity, ParentDto> 
     dto.setLastName(entity.getLastname());
     dto.setEmail(entity.getEmail());
     dto.setPhone(PhoneNumber.ofNullable(entity.getPhone()));
-    dto.setGender(entity.getGender() == null ? GenderDto.empty() : GenderDto.ref(entity.getGender().getId()));
-    dto.setAddress(entity.getAddress() == null ? AddressDto.empty() : AddressDto.ref(entity.getAddress().getId()));
+    dto.setGender(mapReference(entity.getGender(), GenderMapper.class, GenderDto::empty, e -> GenderDto.ref(e.getId())));
+    dto.setAddress(mapReference(entity.getAddress(), AddressMapper.class, AddressDto::empty, e -> AddressDto.ref(e.getId())));
 
     return dto;
   }

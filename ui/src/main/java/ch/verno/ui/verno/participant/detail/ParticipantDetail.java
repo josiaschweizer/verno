@@ -3,7 +3,7 @@ package ch.verno.ui.verno.participant.detail;
 import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
 import ch.verno.common.lib.Routes;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseLevelDto;
 import ch.verno.contract.dto.table.gender.GenderDto;
@@ -269,6 +269,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             courseLevels,
             CourseLevelDto::displayName
     );
+    courseLevelsEntry.setEnabled(!courseLevels.isEmpty());
 
     final var courses = new ArrayList<CourseDto>();
     if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isLimitCourseAssignmentsToActive()) {
@@ -287,6 +288,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
             courses,
             CourseDto::displayName
     );
+    coursesEntry.setEnabled(!courses.isEmpty());
 
     courseLevelsEntry.addValueChangeListener(e -> {
       if (tenantSettingClient.get().getCurrentOrDefaultTenantSetting().isEnforceCourseLevelSettings()) {

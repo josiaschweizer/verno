@@ -2,7 +2,7 @@ package ch.verno.ui.verno.dashboard.courseSchedules;
 
 import ch.verno.contract.dto.table.course.CourseScheduleDto;
 import ch.verno.rpc.client.course.CourseScheduleClient;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.dialog.DialogSize;
@@ -16,7 +16,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemDoubleClickEvent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.Query;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

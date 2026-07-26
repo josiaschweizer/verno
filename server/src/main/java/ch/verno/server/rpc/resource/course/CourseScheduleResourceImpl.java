@@ -1,6 +1,6 @@
 package ch.verno.server.rpc.resource.course;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseScheduleFilter;
 import ch.verno.contract.dto.table.base.SortOrderDto;
 import ch.verno.contract.dto.table.course.CourseScheduleDto;

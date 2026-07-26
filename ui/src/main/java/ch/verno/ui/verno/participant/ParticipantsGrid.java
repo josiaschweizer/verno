@@ -34,6 +34,7 @@ import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.html.Span;
@@ -184,6 +185,9 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             getTranslation("shared.last.name"), true));
     columns.add(new ObjectGridColumn<>(ParticipantConstants.BIRTHDATE, ParticipantDto::getAgeFromBirthday,
             getTranslation("shared.age"), true));
+    columns.add(new ObjectGridColumn<>(CourseConstants.MANY_ENTITY_NAME, dto ->
+            joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
+            getTranslation("course.course"), true));
     columns.add(new ObjectGridColumn<>(CourseLevelConstants.MANY_ENTITY_NAME, dto ->
             joinDisplayNamesFromList(dto.getCourseLevels(), CourseLevelDto::displayName),
             getTranslation("courseLevel.course_level"), true));
@@ -196,9 +200,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
             getTranslation("shared.e.mail"), true));
     columns.add(new ObjectGridColumn<>(ParticipantConstants.PHONE, ParticipantDto::getPhoneString,
             getTranslation("shared.phone"), true));
-    columns.add(new ObjectGridColumn<>(CourseConstants.MANY_ENTITY_NAME, dto ->
-            joinDisplayNamesFromList(dto.getCourses(), CourseDto::displayName),
-            getTranslation("course.course"), true));
     columns.add(new ObjectGridColumn<>(ParticipantConstants.ENTITY_NAME, dto ->
             dto.getParentOne().displayName(), getTranslation("participant.parent_one"), true));
     columns.add(new ObjectGridColumn<>(ParticipantConstants.PARENT_ONE, dto ->
@@ -259,7 +260,7 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
 
   @Nonnull
   @Override
-  public List<ComboBoxBase<?, ?, ?>> getFilterComponents() {
+  public List<ComboBoxBase<?, ?, ?>> getFilterBarComponents() {
     final var courses = courseService.get().getAllCourses()
             .stream()
             .collect(Collectors.toMap(CourseDto::getId, CourseDto::getTitle));

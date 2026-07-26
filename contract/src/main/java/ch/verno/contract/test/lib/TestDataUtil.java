@@ -4,7 +4,7 @@ import ch.verno.common.dto.lib.YearWeekDto;
 import ch.verno.common.dto.ui.colorpicker.Colors;
 import ch.verno.common.dto.ui.phonenumber.PhoneNumber;
 import ch.verno.common.lib.gender.Gender;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.table.address.AddressDto;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.contract.dto.table.course.CourseLevelDto;

@@ -2,12 +2,18 @@ package ch.verno.server.mapper.gender;
 
 import ch.verno.contract.dto.table.gender.GenderDto;
 import ch.verno.db.entity.gender.GenderEntity;
+import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.base.AbstractEntityMapper;
+import ch.verno.server.mapper.text.TextMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GenderMapper extends AbstractEntityMapper<GenderEntity, GenderDto> {
+
+  public GenderMapper(@Nonnull final ServerBean serverBean) {
+    setContextMappers(serverBean.get(TextMapper.class));
+  }
 
   @Nonnull
   @Override
@@ -17,6 +23,7 @@ public class GenderMapper extends AbstractEntityMapper<GenderEntity, GenderDto> 
     dto.setName(entity.getName());
     dto.setDescription(entity.getDescription());
 
+    //TODO why the fuck do we need the gender translation context???
     getMapperContext().find(GenderTranslationContext.class).ifPresent(ctx -> dto.setUserDisplayTexts(ctx.translations()));
 
     return dto;

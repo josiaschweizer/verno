@@ -1,6 +1,6 @@
 package ch.verno.contract.dto.filter;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

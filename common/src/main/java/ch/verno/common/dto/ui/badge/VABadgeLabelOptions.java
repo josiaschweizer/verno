@@ -3,11 +3,11 @@ package ch.verno.common.dto.ui.badge;
 import jakarta.annotation.Nonnull;
 
 public enum VABadgeLabelOptions {
-  SUCCESS("badge success"),
-  WARNING("badge warning"),
-  ERROR("badge error"),
-  CONTRAST("badge contrast"),
-  NORMAL("badge"),
+  SUCCESS(BadgeLabelVariants.SUCCESS),
+  WARNING(BadgeLabelVariants.WARNING),
+  ERROR(BadgeLabelVariants.ERROR),
+  CONTRAST(BadgeLabelVariants.CONTRAST),
+  NORMAL(BadgeLabelVariants.NORMAL),
   ;
 
   @Nonnull

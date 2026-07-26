@@ -10,13 +10,23 @@ import ch.verno.db.entity.course.CourseScheduleEntity;
 import ch.verno.db.entity.instructor.InstructorEntity;
 import ch.verno.db.entity.tenant.TenantEntity;
 import ch.verno.lib.annotation.RestrictedTo;
+import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.base.AbstractEntityMapper;
+import ch.verno.server.mapper.instructor.InstructorMapper;
 import ch.verno.server.service.entity.participant.ParticipantService;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CourseMapper extends AbstractEntityMapper<CourseEntity, CourseDto> {
+
+  public CourseMapper(@Nonnull final ServerBean serverBean) {
+    setContextMappers(
+            serverBean.get(InstructorMapper.class),
+            serverBean.get(CourseLevelMapper.class),
+            serverBean.get(CourseScheduleMapper.class)
+    );
+  }
 
   @Nonnull
   @Override
@@ -28,29 +38,33 @@ public class CourseMapper extends AbstractEntityMapper<CourseEntity, CourseDto> 
     dto.setTitle(entity.getTitle());
     dto.setCapacity(entity.getCapacity());
     dto.setLocation(entity.getLocation());
-    dto.setCourseLevels(entity.getCourseLevels()
-            .stream()
-            .map(CourseLevelEntity::getId)
-            .map(CourseLevelDto::ref)
-            .toList()
-    );
-    dto.setCourseSchedule(entity.getCourseSchedule() == null
-            ? CourseScheduleDto.empty()
-            : CourseScheduleDto.ref(entity.getCourseSchedule().getId())
-    );
+    dto.setCourseLevels(mapReferences(
+            entity.getCourseLevels(),
+            CourseLevelMapper.class,
+            CourseLevelDto::empty,
+            e -> CourseLevelDto.ref(e.getId())
+    ));
+    dto.setCourseSchedule(mapReference(
+            entity.getCourseSchedule(),
+            CourseScheduleMapper.class,
+            CourseScheduleDto::empty,
+            e -> CourseScheduleDto.ref(e.getId())
+    ));
     dto.setWeekdays(entity.getWeekdays());
     dto.setStartTime(entity.getStartTime());
     dto.setEndTime(entity.getEndTime());
-    dto.setInstructor(entity.getInstructor() == null
-            ? InstructorDto.empty()
-            : InstructorDto.ref(entity.getInstructor().getId())
-    );
-    dto.setSecondaryInstructors(entity.getSecondaryInstructors()
-            .stream()
-            .map(InstructorEntity::getId)
-            .map(InstructorDto::ref)
-            .toList()
-    );
+    dto.setInstructor(mapReference(
+            entity.getInstructor(),
+            InstructorMapper.class,
+            InstructorDto::empty,
+            e -> InstructorDto.ref(e.getId())
+    ));
+    dto.setSecondaryInstructors(mapReferences(
+            entity.getSecondaryInstructors(),
+            InstructorMapper.class,
+            InstructorDto::empty,
+            e -> InstructorDto.ref(e.getId())
+    ));
     dto.setNote(entity.getNote());
     dto.setColor(entity.getColor());
 

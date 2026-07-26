@@ -1,6 +1,6 @@
 package ch.verno.server.repository.course;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.db.entity.course.CourseScheduleEntity;
 import ch.verno.db.jpa.course.SpringDataCourseScheduleJpaRepository;
 import ch.verno.server.repository.base.AbstractEntityRepository;

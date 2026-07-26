@@ -104,9 +104,14 @@ public class CourseLevelDto extends BaseDto<Long> {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof CourseLevelDto other)) return false;
+  public boolean equals(@Nullable final Object o) {
+    if (this == o){
+      return true;
+    }
+
+    if (!(o instanceof CourseLevelDto other)){
+      return false;
+    }
     return getId() != null && getId().equals(other.getId());
   }
 

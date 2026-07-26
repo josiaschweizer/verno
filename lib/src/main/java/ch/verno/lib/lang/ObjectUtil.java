@@ -6,6 +6,7 @@ import jakarta.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;

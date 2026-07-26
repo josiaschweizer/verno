@@ -2,6 +2,8 @@ package ch.verno.server.mapper.base;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +11,16 @@ import java.util.Optional;
 
 public final class MapperContext {
 
+  @NonNls private static final String NO_VALUE_FOUND_FOR_TYPE = "No value found for type {}";
+
   private final Map<Class<?>, Object> values;
 
   public MapperContext() {
     values = new HashMap<>();
+  }
+
+  public MapperContext(@Nonnull final Map<Class<?>, Object> values) {
+    this.values = values;
   }
 
   @Nonnull
@@ -32,6 +40,7 @@ public final class MapperContext {
     final var value = values.get(type);
 
     if (value == null) {
+      LoggerFactory.getLogger(MapperContext.class).debug(NO_VALUE_FOUND_FOR_TYPE, type);
       return Optional.empty();
     }
 

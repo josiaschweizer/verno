@@ -1,6 +1,6 @@
 package ch.verno.contract.endpoint.course;
 
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.contract.dto.response.base.delete.DeleteResponse;
 import ch.verno.contract.dto.table.base.SortOrderDto;

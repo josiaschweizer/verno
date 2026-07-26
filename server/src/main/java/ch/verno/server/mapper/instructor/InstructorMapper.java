@@ -10,6 +10,7 @@ import ch.verno.db.entity.instructor.InstructorEntity;
 import ch.verno.server.bean.ServerBean;
 import ch.verno.server.mapper.address.AddressMapper;
 import ch.verno.server.mapper.base.AbstractEntityMapper;
+import ch.verno.server.mapper.gender.GenderMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,10 @@ import org.springframework.stereotype.Component;
 public class InstructorMapper extends AbstractEntityMapper<InstructorEntity, InstructorDto> {
 
   public InstructorMapper(@Nonnull final ServerBean serverBean) {
-    setContextMappers(serverBean.get(AddressMapper.class));
+    setContextMappers(
+            serverBean.get(GenderMapper.class),
+            serverBean.get(AddressMapper.class)
+    );
   }
 
   @Nonnull
@@ -32,21 +36,10 @@ public class InstructorMapper extends AbstractEntityMapper<InstructorEntity, Ins
     dto.setLastName(entity.getLastname());
     dto.setEmail(entity.getEmail());
     dto.setPhone(PhoneNumber.ofNullable(entity.getPhone()));
-    dto.setGender(entity.getGender() == null ? GenderDto.empty() : GenderDto.ref(entity.getGender().getId()));
-    dto.setAddress(mapAddress(entity.getAddress()));
+    dto.setGender(mapReference(entity.getGender(), GenderMapper.class, GenderDto::empty, e -> GenderDto.ref(e.getId())));
+    dto.setAddress(mapReference(entity.getAddress(), AddressMapper.class, AddressDto::empty, e -> AddressDto.ref(e.getId())));
 
     return dto;
-  }
-
-  @Nonnull
-  private AddressDto mapAddress(@Nullable final AddressEntity address) {
-    if (address == null) {
-      return AddressDto.empty();
-    }
-
-    return getMapperContext().find(AddressMapper.class)
-            .map(mapper -> mapper.toDto(address))
-            .orElseGet(() -> AddressDto.ref(address.getId()));
   }
 
   @Nonnull

@@ -28,7 +28,7 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
       Join<?, ?> instructorJoin = null;
       Join<CourseEntity, DayOfWeek> weekdayJoin;
 
-      final var searchText = normalize(filter.searchText());
+      final var searchText = normalize(filter.getSearchText());
       if (!searchText.isEmpty()) {
         query.distinct(true);
         final var pattern = "%" + searchText + "%";
@@ -66,26 +66,26 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
         );
       }
 
-      if (filter.instructorId() != null) {
+      if (filter.getInstructorId() != null) {
         if (instructorJoin == null) {
           instructorJoin = root.join(InstructorConstants.ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(cb.equal(instructorJoin.get(InstructorConstants.ID), filter.instructorId()));
+        predicates.add(cb.equal(instructorJoin.get(InstructorConstants.ID), filter.getInstructorId()));
       }
 
-      if (filter.courseScheduleId() != null) {
+      if (filter.getCourseScheduleId() != null) {
         if (scheduleJoin == null) {
           scheduleJoin = root.join(CourseScheduleConstants.ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(cb.equal(scheduleJoin.get(CourseScheduleConstants.ID), filter.courseScheduleId()));
+        predicates.add(cb.equal(scheduleJoin.get(CourseScheduleConstants.ID), filter.getCourseScheduleId()));
       }
 
-      if (filter.courseLevelId() != null) {
+      if (filter.getCourseLevelId() != null) {
         query.distinct(true);
         if (levelJoin == null) {
           levelJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
         }
-        predicates.add(cb.equal(levelJoin.get(CourseLevelConstants.ID), filter.courseLevelId()));
+        predicates.add(cb.equal(levelJoin.get(CourseLevelConstants.ID), filter.getCourseLevelId()));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));

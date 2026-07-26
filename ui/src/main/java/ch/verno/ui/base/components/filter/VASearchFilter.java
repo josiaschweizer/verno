@@ -7,6 +7,7 @@ import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
 import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
 import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;
 import ch.verno.ui.base.shortcut.registry.ShortcutController;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -19,6 +20,7 @@ public class VASearchFilter extends CustomField<String> {
 
   @Nullable private String currentValue;
 
+  @Inject
   public VASearchFilter(@Nonnull final Injector injector) {
     this(injector, null, null);
   }
@@ -55,6 +57,7 @@ public class VASearchFilter extends CustomField<String> {
       } else {
         currentValue = newValue;
       }
+
       setValue(currentValue);
     });
     final var focusShortcut = DefaultVernoShortcuts.FOCUS;

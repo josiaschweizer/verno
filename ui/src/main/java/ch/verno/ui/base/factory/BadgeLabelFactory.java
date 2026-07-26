@@ -1,7 +1,7 @@
 package ch.verno.ui.base.factory;
 
 import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
-import ch.verno.common.type.CourseScheduleStatus;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.ui.base.components.badge.VABadgeLabel;
 import jakarta.annotation.Nonnull;
 
