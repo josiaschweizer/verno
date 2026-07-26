@@ -46,7 +46,7 @@
         <stripe-java.version>31.3.0</stripe-java.version>
         <commons-csv.version>1.10.0</commons-csv.version>
 
-        <jasperreports.version>6.20.6</jasperreports.version>
+        <jasperreports.version>7.0.7</jasperreports.version>
         <itext.version>2.1.7</itext.version>
         <openhtmltopdf.version>1.0.10</openhtmltopdf.version>
         <ognl.version>3.3.4</ognl.version>
