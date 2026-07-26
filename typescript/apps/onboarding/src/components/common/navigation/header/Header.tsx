@@ -1,6 +1,11 @@
-'use client'
-
-import { ComponentType, SVGProps, useMemo, useState } from 'react'
+import {
+  ComponentType,
+  ReactNode,
+  SVGProps,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid'
 import {
@@ -11,6 +16,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import MenuPopover from './MenuPopover'
 import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenu from './MobileMenu'
@@ -85,10 +91,21 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
-          <MenuPopover
-            title={t('header.navigation.product')}
-            products={products}
-          />
+          <ClientOnly
+            fallback={
+              <Link
+                to="/product"
+                className="link-underline-animated text-sm/6 font-semibold text-verno-dark hover:text-verno-dark-hover"
+              >
+                {t('header.navigation.product')}
+              </Link>
+            }
+          >
+            <MenuPopover
+              title={t('header.navigation.product')}
+              products={products}
+            />
+          </ClientOnly>
           <DesktopNavLinks />
         </div>
 
@@ -114,35 +131,53 @@ export default function Header() {
         </div>
       </nav>
 
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-        className="lg:hidden"
-      >
-        <MobileMenu
-          products={products}
-          onClose={() => setMobileMenuOpen(false)}
-          onRegisterOpen={() => {
-            setMobileMenuOpen(false)
-            setRegisterOpen(true)
-          }}
-          onStartWorkspace={() => {
-            setMobileMenuOpen(false)
-            setStartWorkspaceOpen(true)
-          }}
-        />
-      </Dialog>
+      <ClientOnly>
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
+          <MobileMenu
+            products={products}
+            onClose={() => setMobileMenuOpen(false)}
+            onRegisterOpen={() => {
+              setMobileMenuOpen(false)
+              setRegisterOpen(true)
+            }}
+            onStartWorkspace={() => {
+              setMobileMenuOpen(false)
+              setStartWorkspaceOpen(true)
+            }}
+          />
+        </Dialog>
 
-      <_StartWorkspaceDialogRenderer
-        open={startWorkspaceOpen}
-        onClose={() => setStartWorkspaceOpen(false)}
-      />
-      <_RegisterDialogRenderer
-        open={registerOpen}
-        onClose={() => setRegisterOpen(false)}
-      />
+        <_StartWorkspaceDialogRenderer
+          open={startWorkspaceOpen}
+          onClose={() => setStartWorkspaceOpen(false)}
+        />
+        <_RegisterDialogRenderer
+          open={registerOpen}
+          onClose={() => setRegisterOpen(false)}
+        />
+      </ClientOnly>
     </header>
   )
+}
+
+function ClientOnly({
+  children,
+  fallback = null,
+}: {
+  children: ReactNode
+  fallback?: ReactNode
+}) {
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    setHydrated(true)
+  }, [])
+
+  return hydrated ? children : fallback
 }
 
 function _RegisterDialogRenderer({

@@ -6,6 +6,18 @@ import GetInTouchDialog from '@/components/common/contact/GetInTouchDialog'
 import { Button } from '@verno/components/ui/button'
 import TeamMemberUser from '@/components/common/company/team/TeamMemberUser'
 import { TeamMember } from '@/types/company/team/TeamMember'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Über Verno – Vereinssoftware aus der Schweiz',
+    'Lerne Verno, unsere Werte und den Schweizer Fokus hinter unserer Vereinssoftware kennen.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/company')
+}
 
 type Stat = { label: string; value: string }
 type Value = { title: string; text: string }

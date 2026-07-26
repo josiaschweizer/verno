@@ -17,6 +17,13 @@ const POLL_INTERVAL_MS = 2000
 const REQUEST_TIMEOUT_MS = 5000
 const MAX_ATTEMPTS = 30
 
+export function meta() {
+  return [
+    { title: 'Workspace wird vorbereitet | Verno' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
+}
+
 export default function WorkspaceStartPage() {
   const { t } = useTranslation('workspace')
   const [searchParams] = useSearchParams()

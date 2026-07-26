@@ -40,6 +40,8 @@ build/
 
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
+.pnpm-store/
+**/.react-router/
 ui/src/main/frontend/generated/
 vite.generated.ts
 verno-provisioner-sa.json

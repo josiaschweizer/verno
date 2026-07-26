@@ -1,6 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import LegalPage from '@/components/common/legal/LegalPage'
 import LegalSection from '@/components/common/legal/LegalSection'
+import { createCanonicalLinks, createMeta } from '@/lib/seo'
+
+export function meta() {
+  return createMeta(
+    'Allgemeine Geschäftsbedingungen | Verno',
+    'Allgemeine Geschäftsbedingungen für die Nutzung von Verno.',
+  )
+}
+
+export function links() {
+  return createCanonicalLinks('/legal/terms')
+}
 
 export default function Terms() {
   const { t } = useTranslation('legal')
