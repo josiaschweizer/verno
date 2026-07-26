@@ -27,7 +27,7 @@
   },
   "hero": {
     "title": "Verno pour les clubs sportifs",
-    "text1": "Une structure claire, des plannings et une vue d?ensemble des membres pour les clubs qui gèrent des équipes, des cours et des lieux.",
+    "text1": "Une structure claire, des plannings et une vue d'ensemble des membres pour les clubs qui gèrent des équipes, des cours et des lieux.",
     "text2": "Conçu pour les coordinateurs, entraîneurs et responsables de club qui souhaitent un système calme et fiable pour les opérations quotidiennes.",
     "imageAlt": "Tableau de bord avec sections de cours, tableaux de participants et actions rapides",
     "caption": "Aperçu du tableau de bord avec sections de cours, tableaux triables et actions rapides. Survolez pour comparer le mode clair et le mode sombre."
@@ -36,7 +36,7 @@
     "title": "Organisation",
     "subtitle": "Gardez les clubs, équipes et lieux bien organisés.",
     "text1": "Conçu pour les clubs avec de nombreuses équipes et plusieurs lieux.",
-    "text2": "Une structure commune qui reste cohérente d?une saison à l?autre.",
+    "text2": "Une structure commune qui reste cohérente d'une saison à l'autre.",
     "keyPoints": [
       "Hiérarchie claire des clubs et des équipes",
       "Répertoire partagé pour les lieux et les contacts",
@@ -59,11 +59,11 @@
   "participants": {
     "title": "Participants & adhésions",
     "subtitle": "Gardez les joueurs, représentants légaux et collaborateurs alignés.",
-    "text1": "Profils, représentants légaux et rôles d?équipe au même endroit.",
-    "text2": "Voyez qui est actif et où les personnes s?entraînent.",
+    "text1": "Profils, représentants légaux et rôles d'équipe au même endroit.",
+    "text2": "Voyez qui est actif et où les personnes s'entraînent.",
     "keyPoints": [
       "Profils pour participants et représentants légaux",
-      "Statut d?adhésion par équipe ou saison",
+      "Statut d'adhésion par équipe ou saison",
       "Administration intégrée des utilisateurs et des rôles"
     ],
     "participantsOverview": "Aperçu des participants",
@@ -71,32 +71,32 @@
     "participants": "Participants",
     "rolesAndUsers": "Rôles & utilisateurs",
     "participantsAlt": "Tableau des participants avec recherche, filtres et badges de statut",
-    "usersAlt": "Administration des utilisateurs avec rôles et dialogue de création d?utilisateur",
+    "usersAlt": "Administration des utilisateurs avec rôles et dialogue de création d'utilisateur",
     "participantsCaption": "Recherche rapide, colonnes triables et statut actif/inactif clair.",
-    "usersCaption": "Accès basé sur les rôles avec un processus simplifié de création d?utilisateurs."
+    "usersCaption": "Accès basé sur les rôles avec un processus simplifié de création d'utilisateurs."
   },
   "mailing": {
-    "title": "Envoi d?e-mails & communication",
+    "title": "Envoi d'e-mails & communication",
     "subtitle": "Atteignez rapidement les participants, représentants légaux et entraîneurs.",
     "text1": "Envoyez des e-mails ciblés pour les mises à jour de cours, les rappels et les communications importantes du club.",
-    "text2": "Gardez les modèles, destinataires et l?historique d?envoi dans un endroit structuré.",
+    "text2": "Gardez les modèles, destinataires et l'historique d'envoi dans un endroit structuré.",
     "keyPoints": [
-      "Modèles d?e-mails pour les communications récurrentes",
+      "Modèles d'e-mails pour les communications récurrentes",
       "Envoi à des cours, groupes ou destinataires sélectionnés",
-      "Journaux d?envoi avec statut et visibilité des erreurs"
+      "Journaux d'envoi avec statut et visibilité des erreurs"
     ],
-    "imageAlt": "Aperçu des e-mails avec modèles, destinataires et journal d?envoi",
-    "caption": "Gérez les modèles, envoyez des messages au bon public et consultez l?historique d?envoi. Survolez pour comparer le mode clair et le mode sombre."
+    "imageAlt": "Aperçu des e-mails avec modèles, destinataires et journal d'envoi",
+    "caption": "Gérez les modèles, envoyez des messages au bon public et consultez l'historique d'envoi. Survolez pour comparer le mode clair et le mode sombre."
   },
   "reporting": {
     "title": "Rapports & analyses",
     "subtitle": "Suivez les tendances de participation et de capacité.",
-    "text1": "Des indicateurs simples pour comprendre les schémas de présence et l?utilisation des ressources dans votre organisation.",
+    "text1": "Des indicateurs simples pour comprendre les schémas de présence et l'utilisation des ressources dans votre organisation.",
     "text2": "Exportez les données pour les réunions du comité et la planification des saisons.",
     "keyPoints": [
       "Suivi des présences et des inscriptions",
       "Utilisation des lieux et des ressources",
-      "Comparaisons d?une saison à l?autre"
+      "Comparaisons d'une saison à l'autre"
     ],
     "stats": {
       "activeClubs": "Clubs actifs",
@@ -106,10 +106,10 @@
     "attendanceOverview": "Aperçu des présences",
     "lastSixMonths": "6 derniers mois",
     "months": ["Sep", "Oct", "Nov", "Déc", "Jan", "Fév"],
-    "caption": "Indicateurs montrant l?activité du club, la participation et la demande de cours."
+    "caption": "Indicateurs montrant l'activité du club, la participation et la demande de cours."
   },
   "cta": {
     "title": "Commencez avec une saison et développez ensuite",
-    "text": "Commencez avec une seule équipe ou un seul lieu, puis élargissez lorsque votre équipe est à l?aise."
+    "text": "Commencez avec une seule équipe ou un seul lieu, puis élargissez lorsque votre équipe est à l'aise."
   }
 }
