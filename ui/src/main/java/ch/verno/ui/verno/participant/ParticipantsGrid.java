@@ -34,7 +34,6 @@ import com.google.inject.Injector;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.html.Span;
@@ -105,24 +104,6 @@ public class ParticipantsGrid extends BaseOverviewGrid<ParticipantDto, Participa
   @Override
   protected String getDetailPageRoute() {
     return RoutesUtil.createUrlFromUrlSegments(Routes.PARTICIPANTS, Routes.DETAIL);
-  }
-
-  @Override
-  public void createContextMenu() {
-    final var gridContextMenu = grid.addContextMenu();
-
-    gridContextMenu.setDynamicContentHandler(dto -> {
-      gridContextMenu.removeAll();
-      if (dto == null) {
-        return false;
-      }
-
-      for (final var action : buildContextMenuActions(dto)) {
-        final var item = gridContextMenu.addItem(action.getComponent(), e -> action.getRunnable().run());
-        item.setEnabled(action.isEnabled());
-      }
-      return true;
-    });
   }
 
   @Nonnull

@@ -1,9 +1,9 @@
 package ch.verno.ui.lib.pages.detail;
 
 import ch.verno.ui.base.components.badge.VABadgeLabel;
-import ch.verno.ui.base.components.button.VAButton;
 import ch.verno.ui.base.components.button.variants.VASaveButton;
 import ch.verno.ui.base.components.form.FormMode;
+import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarFactory;
 import ch.verno.ui.base.components.toolbar.ViewToolbarResult;
 import ch.verno.ui.base.factory.EntryFactory;
@@ -26,12 +26,19 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrlParameter<Long> {
+
+  @NonNls public static final String MODE = "mode";
+  @NonNls public static final String FORM_MODE_VIEW = "view";
+  @NonNls public static final String FORM_MODE_EDIT = "edit";
+  @NonNls public static final String FORM_MODE_CREATE = "create";
 
   @Nonnull protected final Injector injector;
 
@@ -230,7 +237,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       return;
     }
 
-    afterSave.run();
+    afterSave();
   }
 
   protected abstract void initUI();
@@ -320,7 +327,7 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
     }
 
     final var params = event.getLocation().getQueryParameters().getParameters();
-    final List<String> values = params.getOrDefault("mode", List.of());
+    final List<String> values = params.getOrDefault(MODE, List.of());
     if (values.isEmpty()) {
       return null;
     }
@@ -330,13 +337,13 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
       return null;
     }
 
-    if ("view".equalsIgnoreCase(raw)) {
+    if (FORM_MODE_VIEW.equalsIgnoreCase(raw)) {
       return FormMode.VIEW;
     }
-    if ("edit".equalsIgnoreCase(raw)) {
+    if (FORM_MODE_EDIT.equalsIgnoreCase(raw)) {
       return FormMode.EDIT;
     }
-    if ("create".equalsIgnoreCase(raw)) {
+    if (FORM_MODE_CREATE.equalsIgnoreCase(raw)) {
       return FormMode.CREATE;
     }
 
@@ -361,5 +368,10 @@ public abstract class BaseDetailView<T> extends VerticalLayout implements HasUrl
 
   public void setAfterSave(@Nonnull final Runnable afterSave) {
     this.afterSave = afterSave;
+  }
+
+  protected void afterSave() {
+    NotificationFactory.showSuccessNotification(MessageFormat.format(getTranslation("shared.0.saved.successfully"), getDetailPageName()));
+    afterSave.run();
   }
 }

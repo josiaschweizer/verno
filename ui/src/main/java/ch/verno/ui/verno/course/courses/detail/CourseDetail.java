@@ -86,7 +86,6 @@ public class CourseDetail extends BaseDetailView<CourseDto> implements HasDynami
 
     initUI();
 
-    saveButton.addClickListener(event -> save());
     getBinder().addValueChangeListener(event -> updateSaveButtonState());
     getBinder().addStatusChangeListener(event -> updateSaveButtonState());
 

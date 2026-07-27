@@ -12,6 +12,7 @@ import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CourseScheduleDto extends BaseDto<Long> {
 
@@ -71,8 +72,8 @@ public class CourseScheduleDto extends BaseDto<Long> {
     return title;
   }
 
-  public void setTitle(@Nonnull final String title) {
-    this.title = title;
+  public void setTitle(@Nullable final String title) {
+    this.title = Optional.ofNullable(title).orElse(Publ.EMPTY_STRING);
   }
 
   @Nonnull
@@ -102,6 +103,7 @@ public class CourseScheduleDto extends BaseDto<Long> {
     this.weeks = weeks;
   }
 
+  @Nonnull
   public String displayName() {
     if (title.isEmpty()) {
       return Publ.EMPTY_STRING;

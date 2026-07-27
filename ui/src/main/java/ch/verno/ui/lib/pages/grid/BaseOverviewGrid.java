@@ -309,14 +309,15 @@ public abstract class BaseOverviewGrid<T extends BaseDto<?>, F> extends Vertical
   }
 
   public void createContextMenu() {
-    // Default implementation returns an empty context menu -> to be implemented by subclasses if needed
+    grid.addContextMenu(this::buildContextMenuActions);
   }
 
+  @Nonnull
   protected List<ActionDef> buildContextMenuActions(@Nonnull final T dto) {
     // Default implementation returns an empty list - to be implemented by subclass if needed
     // normally used by createContextMenu to get all context menu items and use the items at the same time
     // in the sticky action slot at the end of the grid
-    return new ArrayList<>();
+    return New.list();
   }
 
   @Nonnull

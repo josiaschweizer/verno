@@ -8,7 +8,6 @@ import ch.verno.contract.dto.table.user.AppUserDto;
 import ch.verno.contract.dto.ui.user.UserDtoUnhashedPw;
 import ch.verno.lib.Lazy;
 import ch.verno.rpc.client.user.AppUserClient;
-import ch.verno.rpc.properties.user.UserProperties;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.form.FormMode;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
@@ -113,24 +112,7 @@ public class UsersGrid extends BaseOverviewGrid<AppUserDto, AppUserFilter> imple
     }
   }
 
-  @Override
-  public void createContextMenu() {
-    final var gridContextMenu = grid.addContextMenu();
-
-    gridContextMenu.setDynamicContentHandler(dto -> {
-      gridContextMenu.removeAll();
-      if (dto == null) {
-        return false;
-      }
-
-      for (final var action : buildContextMenuActions(dto)) {
-        final var item = gridContextMenu.addItem(action.getComponent(), e -> action.getRunnable().run());
-        item.setEnabled(action.isEnabled());
-      }
-      return true;
-    });
-  }
-
+  @Nonnull
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final AppUserDto dto) {
     final var currentUser = injector.getInstance(AppUserClient.class).getCurrentAppUser();
