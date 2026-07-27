@@ -4,6 +4,7 @@ import ch.verno.common.db.constants.course.CourseConstants;
 import ch.verno.common.db.constants.course.CourseLevelConstants;
 import ch.verno.common.db.constants.course.CourseScheduleConstants;
 import ch.verno.common.db.constants.instructor.InstructorConstants;
+import ch.verno.common.type.course.courseschedule.status.CourseScheduleStatus;
 import ch.verno.contract.dto.filter.CourseFilter;
 import ch.verno.db.entity.course.CourseEntity;
 import ch.verno.lib.New;
@@ -14,6 +15,8 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.DayOfWeek;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
 
@@ -72,20 +75,29 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
         }
         predicates.add(cb.equal(instructorJoin.get(InstructorConstants.ID), filter.getInstructorId()));
       }
-
       if (filter.getCourseScheduleId() != null) {
         if (scheduleJoin == null) {
           scheduleJoin = root.join(CourseScheduleConstants.ENTITY_NAME, JoinType.LEFT);
         }
         predicates.add(cb.equal(scheduleJoin.get(CourseScheduleConstants.ID), filter.getCourseScheduleId()));
       }
-
       if (filter.getCourseLevelId() != null) {
         query.distinct(true);
         if (levelJoin == null) {
           levelJoin = root.join(CourseLevelConstants.MANY_ENTITY_NAME, JoinType.LEFT);
         }
         predicates.add(cb.equal(levelJoin.get(CourseLevelConstants.ID), filter.getCourseLevelId()));
+      }
+      if (filter.getCourseScheduleStatusIds() != null && !filter.getCourseScheduleStatusIds().isEmpty()) {
+        if (scheduleJoin == null) {
+          scheduleJoin = root.join(CourseScheduleConstants.ENTITY_NAME, JoinType.LEFT);
+        }
+
+        final var statuses = Arrays.stream(CourseScheduleStatus.values())
+                        .filter(status -> filter.getCourseScheduleStatusIds().contains(status.getId()))
+                        .collect(Collectors.toSet());
+
+        predicates.add(scheduleJoin.get(CourseScheduleConstants.STATUS).in(statuses));
       }
 
       return cb.and(predicates.toArray(new Predicate[0]));
