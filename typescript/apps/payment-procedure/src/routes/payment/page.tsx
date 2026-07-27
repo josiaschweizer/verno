@@ -1,6 +1,6 @@
 import { CreditCard, ShieldCheck, TriangleAlert } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import RevealSection from '@verno/components/ui/RevealSection'
 import { ApiError } from '@verno/lib/apiClient'

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router'
 import RootLayout from './components/layouts/RootLayout.tsx'
 
 import Home from '@/routes/page'

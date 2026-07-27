@@ -6,7 +6,7 @@ import {
   CloseButton,
 } from '@headlessui/react'
 import { ChevronDownIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import type { Product } from './Header'
 
 interface Props {

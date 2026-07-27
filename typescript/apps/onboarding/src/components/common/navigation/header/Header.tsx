@@ -16,7 +16,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import MenuPopover from './MenuPopover'
 import DesktopNavLinks from './DesktopNavLinks'
 import MobileMenu from './MobileMenu'
