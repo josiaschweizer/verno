@@ -17,4 +17,8 @@ public interface VAShortcut {
   @Nonnull
   String caption(@Nonnull TranslationHelper helper);
 
+  default boolean browserDefaultAllowed() {
+    return false;
+  }
+
 }

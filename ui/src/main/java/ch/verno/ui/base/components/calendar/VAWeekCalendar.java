@@ -1,6 +1,9 @@
 package ch.verno.ui.base.components.calendar;
 
 import ch.verno.common.lib.Routes;
+import ch.verno.lib.CssConstants;
+import ch.verno.lib.CssImportConstants;
+import ch.verno.lib.New;
 import ch.verno.lib.Publ;
 import ch.verno.ui.lib.url.RoutesUtil;
 import com.vaadin.flow.component.Composite;
@@ -12,6 +15,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -22,17 +26,36 @@ import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
-@CssImport("./components/va-week-calendar.css")
+@CssImport(CssImportConstants.VA_WEEK_CALENDAR)
 public class VAWeekCalendar extends Composite<Div> {
+
+  @NonNls public static final String WRAPPER_CLASSNAME = "va-week-calendar-wrapper";
+  @NonNls public static final String TOOLBAR_CLASSNAME = "va-week-calendar-toolbar";
+  @NonNls public static final String TITLE_CLASSNAME = "va-week-calendar-title";
+  @NonNls public static final String STACK_CLASSNAME = "va-week-calendar-stack";
+  @NonNls public static final String VA_WEEK_CALENDAR_CLASSNAME = "va-week-calendar";
+  @NonNls public static final String EVENTS_CLASSNAME = "va-week-calendar-events";
+  @NonNls public static final String CORNER_CLASSNAME = "va-week-calendar-corner";
+  @NonNls public static final String DAY_HEADER_CLASSNAME = "va-week-calendar-day-header";
+  @NonNls public static final String CALENDAR_CELL_CLASSNAME = "va-week-calendar-cell";
+  @NonNls public static final String CALENDAR_HOUR_CLASSNAME = "va-week-calendar-hour";
+  @NonNls public static final String COURSE_CLASSNAME = "va-week-calendar-course";
+  @NonNls public static final String COURSE_TITLE_CLASSNAME = "va-week-calendar-course-title";
+  @NonNls public static final String COURSE_INSTRUCTOR_CLASSNAME = "va-week-calendar-course-instructor";
+
+  @NonNls public static final String DATA_HOUR_ATTRIBUTE = "data-hour";
+  @NonNls public static final String DATA_DAY_INDEX_ATTRIBUTE = "data-day-index";
+
+  @NonNls public static final String EVENT_COLOR_CSS_VARIABLE = "--va-event-color";
+
+  @NonNls public static final String GRID_COLUMN_STYLE = "grid-column";
+  @NonNls public static final String GRID_ROW_STYLE = "grid-row";
 
   private static final int HOURS = 24;
 
-  @Nonnull
-  private static final DateTimeFormatter HEADER_DATE_FORMATTER =
-          DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-  @Nonnull
-  private static final DateTimeFormatter CELL_DATE_FORMATTER =
-          DateTimeFormatter.ofPattern("dd.MM", Locale.GERMAN);
+  @NonNls public static final String HOUR_FORMAT = "%02d:00";
+  @Nonnull private static final DateTimeFormatter HEADER_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
+  @Nonnull private static final DateTimeFormatter CELL_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM", Locale.GERMAN);
 
   @Nonnull
   private LocalDate weekStart;
@@ -52,20 +75,20 @@ public class VAWeekCalendar extends Composite<Div> {
 
   public VAWeekCalendar() {
     final var root = getContent();
-    root.addClassName("va-week-calendar-wrapper");
+    root.addClassName(WRAPPER_CLASSNAME);
 
     weekStart = startOfWeekMonday(LocalDate.now());
     events = List.of();
 
     final var toolbar = new HorizontalLayout();
-    toolbar.addClassName("va-week-calendar-toolbar");
+    toolbar.addClassName(TOOLBAR_CLASSNAME);
 
     final var prev = new Button(Publ.LEFT_SINGLE_ANGLE_QUOTATION_MARK);
     final var today = new Button(getTranslation("base.today"));
     final var next = new Button(Publ.RIGHT_SINGLE_ANGLE_QUOTATION_MARK);
 
     title = new Span();
-    title.addClassName("va-week-calendar-title");
+    title.addClassName(TITLE_CLASSNAME);
 
     prev.addClickListener(e -> {
       weekStart = weekStart.minusWeeks(1);
@@ -88,13 +111,13 @@ public class VAWeekCalendar extends Composite<Div> {
     toolbar.add(prev, today, next, title);
 
     final var stack = new Div();
-    stack.addClassName("va-week-calendar-stack");
+    stack.addClassName(STACK_CLASSNAME);
 
     grid = new Div();
-    grid.addClassName("va-week-calendar");
+    grid.addClassName(VA_WEEK_CALENDAR_CLASSNAME);
 
     eventsLayer = new Div();
-    eventsLayer.addClassName("va-week-calendar-events");
+    eventsLayer.addClassName(EVENTS_CLASSNAME);
 
     stack.add(grid, eventsLayer);
 
@@ -131,14 +154,14 @@ public class VAWeekCalendar extends Composite<Div> {
   @Nonnull
   private Div createCorner() {
     final var corner = new Div();
-    corner.addClassName("va-week-calendar-corner");
+    corner.addClassName(CORNER_CLASSNAME);
     return corner;
   }
 
   @Nonnull
   private Div createDayHeader(@Nonnull final LocalDate date) {
     final var header = new Div();
-    header.addClassName("va-week-calendar-day-header");
+    header.addClassName(DAY_HEADER_CLASSNAME);
 
     final String dayName = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.GERMAN);
 
@@ -149,17 +172,17 @@ public class VAWeekCalendar extends Composite<Div> {
   @Nonnull
   private Div createHourLabel(final int hour) {
     final var label = new Div();
-    label.addClassName("va-week-calendar-hour");
-    label.setText(String.format("%02d:00", hour));
+    label.addClassName(CALENDAR_HOUR_CLASSNAME);
+    label.setText(String.format(HOUR_FORMAT, hour));
     return label;
   }
 
   @Nonnull
   private Div createCell(final int hour, final int dayIndex) {
     final var cell = new Div();
-    cell.addClassName("va-week-calendar-cell");
-    cell.getElement().setAttribute("data-hour", String.valueOf(hour));
-    cell.getElement().setAttribute("data-day-index", String.valueOf(dayIndex));
+    cell.addClassName(CALENDAR_CELL_CLASSNAME);
+    cell.getElement().setAttribute(DATA_HOUR_ATTRIBUTE, String.valueOf(hour));
+    cell.getElement().setAttribute(DATA_DAY_INDEX_ATTRIBUTE, String.valueOf(dayIndex));
     return cell;
   }
 
@@ -192,22 +215,22 @@ public class VAWeekCalendar extends Composite<Div> {
                                final int laneIndex,
                                final int laneCount) {
     final var block = new Div();
-    block.addClassName("va-week-calendar-course");
+    block.addClassName(COURSE_CLASSNAME);
 
     final var hex = event.color();
-    block.getStyle().set("--va-event-color", hex);
+    block.getStyle().set(EVENT_COLOR_CSS_VARIABLE, hex);
 
     final var titleSpan = new Span(event.title());
-    titleSpan.addClassName("va-week-calendar-course-title");
+    titleSpan.addClassName(COURSE_TITLE_CLASSNAME);
     block.add(titleSpan);
 
     if (event.instructor() != null && !event.instructor().isBlank()) {
       final var instructorSpan = new Span(event.instructor());
-      instructorSpan.addClassName("va-week-calendar-course-instructor");
+      instructorSpan.addClassName(COURSE_INSTRUCTOR_CLASSNAME);
       block.add(instructorSpan);
     }
 
-    block.getStyle().setCursor("pointer");
+    block.getStyle().setCursor(CssConstants.CURSOR_POINTER);
     block.addClickListener(e -> {
       if (event.courseId() != null) {
         UI.getCurrent().navigate(RoutesUtil.createUrlFromUrlSegments(Routes.COURSES, Routes.DETAIL, String.valueOf(event.courseId())));
@@ -216,8 +239,8 @@ public class VAWeekCalendar extends Composite<Div> {
 
     final int col = 2 + dayIndexFromMonday(event.start().getDayOfWeek());
 
-    final int startHour = clamp(event.start().getHour(), 0, 23);
-    int endHour = clamp(event.end().getHour(), 0, 23);
+    final int startHour = clamp(event.start().getHour(), 23);
+    int endHour = clamp(event.end().getHour(), 23);
 
     if (event.end().toLocalTime().equals(LocalTime.MIDNIGHT) && event.end().isAfter(event.start())) {
       endHour = 23;
@@ -230,15 +253,15 @@ public class VAWeekCalendar extends Composite<Div> {
       rowEnd = Math.min(rowStart + 1, 26);
     }
 
-    block.getStyle().set("grid-column", String.valueOf(col));
-    block.getStyle().set("grid-row", rowStart + Publ.SPACE + Publ.SLASH + Publ.SPACE + rowEnd);
+    block.getStyle().set(GRID_COLUMN_STYLE, String.valueOf(col));
+    block.getStyle().set(GRID_ROW_STYLE, rowStart + Publ.SPACE + Publ.SLASH + Publ.SPACE + rowEnd);
 
     final int safeLaneCount = Math.max(1, laneCount);
-    final int safeLaneIndex = Math.max(0, Math.min(laneIndex, safeLaneCount - 1));
+    final int safeLaneIndex = clamp(laneIndex, safeLaneCount - 1);
 
-    block.getStyle().set("width", "calc((100% / " + safeLaneCount + ") - 8px)");
-    block.getStyle().set("margin-left", "calc((100% / " + safeLaneCount + ") * " + safeLaneIndex + ")");
-    block.getStyle().set("z-index", String.valueOf(10 + safeLaneIndex));
+    block.getStyle().setWidth("calc((100% / " + safeLaneCount + ") - 8px)");
+    block.getStyle().setMarginLeft("calc((100% / " + safeLaneCount + ") * " + safeLaneIndex + ")");
+    block.getStyle().setZIndex(10 + safeLaneIndex);
 
     return block;
   }
@@ -247,8 +270,8 @@ public class VAWeekCalendar extends Composite<Div> {
     return dayOfWeek.getValue() - DayOfWeek.MONDAY.getValue();
   }
 
-  private int clamp(final int value, final int min, final int max) {
-    return Math.max(min, Math.min(max, value));
+  private int clamp(final int value, final int max) {
+    return Math.clamp(max, 0, value);
   }
 
   @Nonnull
@@ -273,7 +296,9 @@ public class VAWeekCalendar extends Composite<Div> {
 
   @FunctionalInterface
   public interface WeekStartChangeListener {
+
     void onWeekStartChanged(@Nonnull final LocalDate newWeekStart);
+
   }
 
   private record EventLayout(@Nonnull WeekCalendarEventDto event, int laneIndex, int laneCount) {
@@ -295,11 +320,10 @@ public class VAWeekCalendar extends Composite<Div> {
             .filter(this::isInCurrentWeek)
             .toList();
 
-    final var result = new ArrayList<EventLayout>();
+    final var result = New.<EventLayout>list();
 
     for (int day = 0; day < 7; day++) {
-      final LocalDate date = weekStart.plusDays(day);
-
+      final var date = weekStart.plusDays(day);
       final var dayEvents = inWeek.stream()
               .filter(e -> intersectsDate(e, date))
               .filter(e -> e.start() != null && e.end() != null)
@@ -312,7 +336,8 @@ public class VAWeekCalendar extends Composite<Div> {
     return result;
   }
 
-  private boolean intersectsDate(@Nonnull WeekCalendarEventDto e, @Nonnull LocalDate date) {
+  private boolean intersectsDate(@Nonnull final WeekCalendarEventDto e,
+                                 @Nonnull final LocalDate date) {
     if (e.start() == null || e.end() == null) {
       return false;
     }
@@ -323,7 +348,8 @@ public class VAWeekCalendar extends Composite<Div> {
   }
 
   @Nonnull
-  private List<EventLayout> layoutDay(@Nonnull LocalDate day, @Nonnull List<WeekCalendarEventDto> dayEvents) {
+  private List<EventLayout> layoutDay(@Nonnull final LocalDate day,
+                                      @Nonnull final List<WeekCalendarEventDto> dayEvents) {
     final var layouts = new ArrayList<EventLayout>();
     if (dayEvents.isEmpty()) {
       return layouts;
@@ -336,7 +362,7 @@ public class VAWeekCalendar extends Composite<Div> {
     final var laneByEvent = new HashMap<WeekCalendarEventDto, Integer>();
     final var usedLanes = new BitSet();
 
-    final var currentCluster = new ArrayList<WeekCalendarEventDto>();
+    final var currentCluster = New.<WeekCalendarEventDto>list();
     int currentClusterPeak = 0;
     LocalDateTime currentClusterEnd = null;
 
@@ -381,20 +407,18 @@ public class VAWeekCalendar extends Composite<Div> {
       currentClusterPeak = Math.max(currentClusterPeak, active.size());
     }
 
-    if (!currentCluster.isEmpty()) {
-      final int laneCount = Math.max(1, currentClusterPeak);
-      for (final var ce : currentCluster) {
-        layouts.add(new EventLayout(ce, laneByEvent.get(ce), laneCount));
-      }
+    final var laneCount = Math.max(1, currentClusterPeak);
+    for (final var cluster : currentCluster) {
+      layouts.add(new EventLayout(cluster, laneByEvent.get(cluster), laneCount));
     }
 
     return layouts;
   }
 
   @Nonnull
-  private Interval clampToDay(@Nonnull WeekCalendarEventDto e,
-                              @Nonnull LocalDateTime dayStart,
-                              @Nonnull LocalDateTime dayEndExclusive) {
+  private Interval clampToDay(@Nonnull final WeekCalendarEventDto e,
+                              @Nonnull final LocalDateTime dayStart,
+                              @Nonnull final LocalDateTime dayEndExclusive) {
     LocalDateTime start = e.start();
     LocalDateTime end = e.end();
 

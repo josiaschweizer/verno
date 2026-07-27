@@ -1,5 +1,8 @@
 package ch.verno.ui.verno.instructor;
 
+import ch.verno.common.db.constants.address.AddressConstants;
+import ch.verno.common.db.constants.gender.GenderConstants;
+import ch.verno.common.db.constants.instructor.InstructorConstants;
 import ch.verno.common.dto.ui.badge.VABadgeLabelOptions;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.filter.InstructorFilter;
@@ -9,6 +12,7 @@ import ch.verno.rpc.client.instructor.InstructorClient;
 import ch.verno.ui.base.components.contextmenu.ActionDef;
 import ch.verno.ui.base.components.grid.GridActionRoles;
 import ch.verno.ui.base.factory.BadgeLabelFactory;
+import ch.verno.ui.lib.icon.VaadinIconConstants;
 import ch.verno.ui.lib.pages.grid.BaseOverviewGrid;
 import ch.verno.ui.lib.pages.grid.ComponentGridColumn;
 import ch.verno.ui.lib.pages.grid.ObjectGridColumn;
@@ -27,6 +31,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.security.PermitAll;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -35,8 +40,10 @@ import java.util.stream.Stream;
 
 @PermitAll
 @Route(Routes.INSTRUCTORS)
-@Menu(order = 2, icon = "vaadin:institution", title = "shared.instructors.overview")
+@Menu(order = 2, icon = VaadinIconConstants.INSTITUTION, title = "shared.instructors.overview")
 public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorFilter> implements HasDynamicTitle {
+
+  @NonNls public static final String GRID_COLUMN_STATUS_COLUMN = "status";
 
   @Nonnull private final Lazy<InstructorClient> instructorClient;
 
@@ -75,29 +82,12 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
     return RoutesUtil.createUrlFromUrlSegments(Routes.INSTRUCTORS, Routes.DETAIL);
   }
 
-  @Override
-  public void createContextMenu() {
-    final var gridContextMenu = grid.addContextMenu();
-
-    gridContextMenu.setDynamicContentHandler(dto -> {
-      gridContextMenu.removeAll();
-      if (dto == null) {
-        return false;
-      }
-
-      for (final var action : buildContextMenuActions(dto)) {
-        final var item = gridContextMenu.addItem(action.getComponent(), e -> action.getRunnable().run());
-        item.setEnabled(action.isEnabled());
-      }
-      return true;
-    });
-  }
-
+  @Nonnull
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final InstructorDto dto) {
     final var actions = new ArrayList<ActionDef>();
     actions.add(ActionDef.create(
-            "Delete Instructor",
+            getTranslation("shared.delete.instructor"),
             VaadinIcon.TRASH,
             () -> deleteInstructor(dto),
             isInstructorDeletable(dto)
@@ -119,12 +109,12 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Override
   protected List<ObjectGridColumn<InstructorDto>> getColumns() {
     final var columns = new ArrayList<ObjectGridColumn<InstructorDto>>();
-    columns.add(new ObjectGridColumn<>("lastname", InstructorDto::getLastName, getTranslation("shared.last.name"), true));
-    columns.add(new ObjectGridColumn<>("firstname", InstructorDto::getFirstName, getTranslation("shared.first.name"), true));
-    columns.add(new ObjectGridColumn<>("gender", InstructorDto::genderAsString, getTranslation("shared.gender"), true));
-    columns.add(new ObjectGridColumn<>("email", InstructorDto::getEmail, getTranslation("shared.e.mail"), true));
-    columns.add(new ObjectGridColumn<>("phone", InstructorDto::phoneAsString, getTranslation("shared.phone"), true));
-    columns.add(new ObjectGridColumn<>("address", (dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
+    columns.add(new ObjectGridColumn<>(InstructorConstants.LASTNAME, InstructorDto::getLastName, getTranslation("shared.last.name"), true));
+    columns.add(new ObjectGridColumn<>(InstructorConstants.FIRSTNAME, InstructorDto::getFirstName, getTranslation("shared.first.name"), true));
+    columns.add(new ObjectGridColumn<>(GenderConstants.ENTITY_NAME, InstructorDto::genderAsString, getTranslation("shared.gender"), true));
+    columns.add(new ObjectGridColumn<>(InstructorConstants.EMAIL, InstructorDto::getEmail, getTranslation("shared.e.mail"), true));
+    columns.add(new ObjectGridColumn<>(InstructorConstants.PHONE, InstructorDto::phoneAsString, getTranslation("shared.phone"), true));
+    columns.add(new ObjectGridColumn<>(AddressConstants.ENTITY_NAME, (dto) -> dto.getAddress().getFullAddressAsString(), getTranslation("shared.address"), true));
     return columns;
   }
 
@@ -132,8 +122,8 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
   @Override
   protected List<ComponentGridColumn<InstructorDto>> getComponentColumns() {
     final var components = new ArrayList<ComponentGridColumn<InstructorDto>>();
-    components.add(new ComponentGridColumn<>("status", this::getInstructorStatusBadge, getTranslation("shared.status"), false, GridActionRoles.STICK_COLUMN));
-    components.add(new ComponentGridColumn<>("actionColumn", this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
+    components.add(new ComponentGridColumn<>(GRID_COLUMN_STATUS_COLUMN, this::getInstructorStatusBadge, getTranslation("shared.status"), false, GridActionRoles.STICK_COLUMN));
+    components.add(new ComponentGridColumn<>(GRID_COLUMN_ACTION_COLUMN, this::getActionContextMenuButton, getTranslation("shared.action"), false, GridActionRoles.STICK_COLUMN));
     return components;
   }
 
@@ -175,7 +165,7 @@ public class InstructorsGrid extends BaseOverviewGrid<InstructorDto, InstructorF
 
   @Override
   protected void setDefaultSorting() {
-    final var lastNameCol = columnsByKey.get("lastname");
+    final var lastNameCol = columnsByKey.get(InstructorConstants.LASTNAME);
     if (lastNameCol == null) {
       return;
     }

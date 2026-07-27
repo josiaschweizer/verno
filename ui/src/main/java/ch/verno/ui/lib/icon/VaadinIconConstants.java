@@ -13,5 +13,6 @@ public class VaadinIconConstants {
   @NonNls public static final String SLIDERS =  VAADIN_PREFIX + "sliders";
   @NonNls public static final String MAILBOX = VAADIN_PREFIX + "mailbox";
   @NonNls public static final String DESKTOP = VAADIN_PREFIX + "desktop";
+  @NonNls public static final String INSTITUTION = VAADIN_PREFIX + "institution";
 
 }

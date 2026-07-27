@@ -163,26 +163,7 @@ public class CoursesGrid extends BaseOverviewGrid<CourseDto, CourseFilter> imple
     return getTranslation("course.course");
   }
 
-  @Override
-  public void createContextMenu() {
-    final var menu = grid.addContextMenu();
-
-    menu.setDynamicContentHandler(dto -> {
-      menu.removeAll();
-
-      if (dto == null) {
-        return false;
-      }
-
-      for (final var action : buildContextMenuActions(dto)) {
-        final var item = menu.addItem(action.getComponent(), e -> action.getRunnable().run());
-        item.setEnabled(action.isEnabled());
-      }
-
-      return true;
-    });
-  }
-
+  @Nonnull
   @Override
   protected List<ActionDef> buildContextMenuActions(@Nonnull final CourseDto dto) {
     final var actions = new ArrayList<ActionDef>();

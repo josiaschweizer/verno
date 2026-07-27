@@ -4,6 +4,7 @@ import ch.verno.common.dto.ui.colorpicker.Colors;
 import ch.verno.common.lib.Routes;
 import ch.verno.contract.dto.table.course.CourseDto;
 import ch.verno.lib.Lazy;
+import ch.verno.lib.New;
 import ch.verno.lib.VernoUtility;
 import ch.verno.rpc.client.course.CourseClient;
 import ch.verno.rpc.client.course.CourseScheduleClient;
@@ -61,7 +62,7 @@ public class CourseOverview extends VerticalLayout implements HasDynamicTitle {
     final var monday = weekStart.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     final var courseScheduleByWeek = courseScheduleClient.get().getCourseScheduleByWeek(monday);
 
-    final var courses = new ArrayList<CourseDto>();
+    final var courses = New.<CourseDto>list();
     for (final var courseScheduleDto : courseScheduleByWeek) {
       if (courseScheduleDto.getId() != null) {
         courses.addAll(courseClient.get().getCoursesByCourseSchedule(courseScheduleDto));

@@ -12,4 +12,5 @@ public class InstructorConstants extends BaseEntityConstants {
   @NonNls public static final String EMAIL = "email";
   @NonNls public static final String PHONE = "phone";
 
+
 }
