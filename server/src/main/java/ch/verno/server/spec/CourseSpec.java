@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
@@ -94,8 +93,7 @@ public class CourseSpec extends BaseSpec<CourseEntity, CourseFilter> {
           scheduleJoin = root.join(CourseScheduleConstants.ENTITY_NAME, JoinType.LEFT);
         }
 
-        final Set<CourseScheduleStatus> statuses =
-                Arrays.stream(CourseScheduleStatus.values())
+        final var statuses = Arrays.stream(CourseScheduleStatus.values())
                         .filter(status -> filter.getCourseScheduleStatusIds().contains(status.getId()))
                         .collect(Collectors.toSet());
 
