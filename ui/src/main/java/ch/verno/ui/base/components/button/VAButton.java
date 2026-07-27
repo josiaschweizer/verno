@@ -124,11 +124,6 @@ public class VAButton extends Button {
     });
   }
 
-  @Nonnull
-  public ShortcutRegistration addClickShortcut(@Nonnull final VAShortcut shortcut) {
-    return addClickShortcut(shortcut.getKey(), shortcut.getKeyModifier());
-  }
-
   public boolean isPseudoEnabled() {
     return pseudoEnabled;
   }

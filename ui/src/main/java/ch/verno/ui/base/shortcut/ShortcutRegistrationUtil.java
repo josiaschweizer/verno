@@ -2,6 +2,7 @@ package ch.verno.ui.base.shortcut;
 
 import ch.verno.ui.base.os.OS;
 import ch.verno.ui.base.os.OSUtil;
+import com.vaadin.flow.component.ClickNotifier;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.ShortcutRegistration;
@@ -10,9 +11,9 @@ import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 
-public class RegisterShortcutUtil {
+public class ShortcutRegistrationUtil {
 
-  private RegisterShortcutUtil() {
+  private ShortcutRegistrationUtil() {
   }
 
   /**
@@ -25,13 +26,28 @@ public class RegisterShortcutUtil {
   @Nonnull
   public static ShortcutRegistration addFocusShortcut(@Nonnull final Focusable<?> target,
                                                       @Nonnull final VAShortcut shortcut) {
-    final KeyModifier[] keyModifiers =
-            getKeyModifiersAccordingToOS(shortcut.getKeyModifier());
+    final var keyModifiers = getKeyModifiersAccordingToOS(shortcut.getKeyModifier());
 
-    return target.addFocusShortcut(
-            shortcut.getKey(),
-            keyModifiers
-    );
+    final var registration = target.addFocusShortcut(shortcut.getKey(), keyModifiers);
+    registration.setBrowserDefaultAllowed(shortcut.browserDefaultAllowed());
+    return registration;
+  }
+
+  /**
+   * Registers a click shortcut on the given target which implements {@code ClickNotifier}
+   *
+   * @param target the target component which implements {@code ClickNotifier} on which the shortcut should be registered on
+   * @param shortcut the shortcut definition containing key, modifiers & boolean whether the browser default is allowed
+   * @return te created {@link ShortcutRegistration}
+   */
+  @Nonnull
+  public static ShortcutRegistration addClickShortcut(@Nonnull final ClickNotifier<?> target,
+                                                      @Nonnull final VAShortcut shortcut) {
+    final var keyModifiers = getKeyModifiersAccordingToOS(shortcut.getKeyModifier());
+
+    final var registration = target.addClickShortcut(shortcut.getKey(), keyModifiers);
+    registration.setBrowserDefaultAllowed(shortcut.browserDefaultAllowed());
+    return registration;
   }
 
   @Nonnull
@@ -40,8 +56,7 @@ public class RegisterShortcutUtil {
       return new KeyModifier[0];
     }
 
-    final OS os = OSUtil.getOs();
-
+    final var os = OSUtil.getOs();
     return Arrays.stream(keyModifier)
             .map(modifier -> translateModifier(modifier, os))
             .toArray(KeyModifier[]::new);

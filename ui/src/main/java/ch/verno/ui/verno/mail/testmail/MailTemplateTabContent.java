@@ -12,6 +12,7 @@ import ch.verno.ui.base.components.layout.vertical.VAVerticalLayout;
 import ch.verno.ui.base.components.notification.NotificationFactory;
 import ch.verno.ui.base.components.notification.inline.VAInlineNotification;
 import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
+import ch.verno.ui.base.shortcut.ShortcutRegistrationUtil;
 import ch.verno.ui.base.shortcut.registry.ShortcutController;
 import ch.verno.ui.i18n.TranslationHelper;
 import ch.verno.ui.lib.icon.IconUtil;
@@ -114,7 +115,7 @@ public class MailTemplateTabContent {
     button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     button.setEnabled(templateLayout.isValid());
 
-    final var registration = button.addClickShortcut(DefaultVernoShortcuts.SAVE);
+    final var registration = ShortcutRegistrationUtil.addClickShortcut(button, DefaultVernoShortcuts.SAVE);
     injector.getInstance(ShortcutController.class).register(
             DefaultVernoShortcuts.SAVE,
             button::click,
