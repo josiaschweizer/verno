@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public record VAShortcutImpl(@Nonnull String captionKey,
+                             boolean browserDefaultAllowed,
                              @Nonnull Key key,
                              @Nullable KeyModifier... keyModifier) implements VAShortcut {
 
@@ -36,14 +37,18 @@ public record VAShortcutImpl(@Nonnull String captionKey,
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof VAShortcutImpl(String c, Key k, KeyModifier[] modifier))) {
+    if (!(obj instanceof VAShortcutImpl(String c, boolean browserDefault, Key k, KeyModifier[] modifier))) {
       return false;
     }
-    return Objects.equals(captionKey, c) && Objects.equals(key, k) && Arrays.equals(keyModifier, modifier);
+
+    return Objects.equals(captionKey, c) &&
+            Objects.equals(key, k) &&
+            Arrays.equals(keyModifier, modifier) &&
+            Objects.equals(browserDefaultAllowed, browserDefault);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(captionKey, key, Arrays.hashCode(keyModifier));
+    return Objects.hash(captionKey, browserDefaultAllowed, key, Arrays.hashCode(keyModifier));
   }
 }
