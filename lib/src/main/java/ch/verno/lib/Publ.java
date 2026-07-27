@@ -46,6 +46,7 @@ public class Publ {
   public static final String BRACKET_RIGHT = "]";
   public static final String OPENING_CURLY_BRACE = "{";
   public static final String CLOSING_CURLY_BRACE = "}";
+  public static final String PERCENTAGE = "%";
 
   public static final String CMD_SIGN = "⌘";
   public static final String CTRL_MAC_SIGN = "⌃";
