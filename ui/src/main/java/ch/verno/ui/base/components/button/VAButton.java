@@ -2,11 +2,9 @@ package ch.verno.ui.base.components.button;
 
 import ch.verno.lib.CssImportConstants;
 import ch.verno.lib.Publ;
-import ch.verno.ui.base.shortcut.VAShortcut;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.ShortcutRegistration;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.shared.Registration;
