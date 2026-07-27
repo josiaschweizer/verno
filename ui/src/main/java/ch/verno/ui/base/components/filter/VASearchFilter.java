@@ -4,7 +4,7 @@ import ch.verno.lib.Publ;
 import ch.verno.ui.base.components.entry.textfield.VATextField;
 import ch.verno.ui.base.os.OSUtil;
 import ch.verno.ui.base.shortcut.DefaultVernoShortcuts;
-import ch.verno.ui.base.shortcut.RegisterShortcutUtil;
+import ch.verno.ui.base.shortcut.ShortcutRegistrationUtil;
 import ch.verno.ui.base.shortcut.ShortcutDisplayComponent;
 import ch.verno.ui.base.shortcut.registry.ShortcutController;
 import com.google.inject.Inject;
@@ -62,7 +62,7 @@ public class VASearchFilter extends CustomField<String> {
     });
     final var focusShortcut = DefaultVernoShortcuts.FOCUS;
     if (!OSUtil.getOs().isMobile()) {
-      final var registration = RegisterShortcutUtil.addFocusShortcut(textField, focusShortcut);
+      final var registration = ShortcutRegistrationUtil.addFocusShortcut(textField, focusShortcut);
       textField.setSuffixComponent(ShortcutDisplayComponent.of(focusShortcut));
 
       injector.getInstance(ShortcutController.class).register(focusShortcut, textField::focus, textField, registration);
