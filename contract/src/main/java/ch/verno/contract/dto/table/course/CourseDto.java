@@ -1,5 +1,6 @@
 package ch.verno.contract.dto.table.course;
 
+import ch.verno.common.dto.ui.colorpicker.Colors;
 import ch.verno.contract.dto.table.base.BaseDto;
 import ch.verno.contract.dto.table.instructor.InstructorDto;
 import ch.verno.lib.New;
@@ -12,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CourseDto extends BaseDto<Long> {
 
@@ -306,8 +308,8 @@ public class CourseDto extends BaseDto<Long> {
     return color;
   }
 
-  public void setColor(@Nonnull final String color) {
-    this.color = color;
+  public void setColor(@Nullable final String color) {
+    this.color = Optional.ofNullable(color).orElse(Colors.PRIMARY_COLOR);
   }
 
   @Override
