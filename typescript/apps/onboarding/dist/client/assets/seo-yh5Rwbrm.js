@@ -1,1 +1,0 @@
-const n="https://www.verno-app.ch";function o(t,e){return[{title:t},{name:"description",content:e},{property:"og:title",content:t},{property:"og:description",content:e},{property:"og:type",content:"website"}]}function r(t){return[{rel:"canonical",href:`${n}${t}`}]}export{o as a,r as c};

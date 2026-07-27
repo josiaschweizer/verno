@@ -41,6 +41,7 @@ build/
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
 .pnpm-store/
+**/dist/
 **/.react-router/
 ui/src/main/frontend/generated/
 vite.generated.ts

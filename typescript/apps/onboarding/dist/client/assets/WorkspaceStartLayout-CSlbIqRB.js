@@ -1,1 +1,0 @@
-import{w as e,j as t,O as r}from"./jsx-runtime-CYk821ZB.js";const a=e(function(){return t.jsx("div",{className:"min-h-screen bg-verno-bg text-verno-darker items-center justify-center",children:t.jsx(r,{})})});export{a as default};
