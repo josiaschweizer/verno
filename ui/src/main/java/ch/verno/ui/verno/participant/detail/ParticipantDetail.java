@@ -260,6 +260,8 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
   @Nonnull
   private HorizontalLayout createParticipantCourseLayout() {
     final var courseLevels = courseLevelClient.get().getAllCourseLevels();
+    courseLevels.sort(Comparator.comparing(CourseLevelDto::getSortingOrder));
+
     final var courseLevelsEntry = entryFactory.createMultiSelectComboBoxEntry(
             ParticipantDto::getCourseLevels,
             ParticipantDto::setCourseLevels,
@@ -278,6 +280,7 @@ public class ParticipantDetail extends BaseDetailView<ParticipantDto> implements
     } else {
       courses.addAll(courseClient.get().getAllCourses());
     }
+    courses.sort(Comparator.comparing(CourseDto::displayName));
 
     final var coursesEntry = entryFactory.createMultiSelectComboBoxEntry(
             ParticipantDto::getCourses,
