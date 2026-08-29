@@ -1,9 +1,9 @@
 :host {
-    right: 16px;
+    right: var(--lumo-space-s);
     left: auto;
     transform: none;
     width: auto;
-    max-width: 420px;
+    max-width: min(360px, calc(100vw - 2 * var(--lumo-space-s)));
     padding: 0;
     margin: 0;
 }

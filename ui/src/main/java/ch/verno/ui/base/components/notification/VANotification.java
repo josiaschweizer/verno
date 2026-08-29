@@ -1,6 +1,8 @@
 package ch.verno.ui.base.components.notification;
 
 import ch.verno.lib.CssImportConstants;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -80,12 +82,13 @@ public class VANotification extends Notification {
       content.add(descriptionSpan);
     }
 
-    final var closeIcon = VaadinIcon.CLOSE_SMALL.create();
-    closeIcon.addClassName("notification-close");
-    closeIcon.getElement().setAttribute("aria-label", "Close");
-    closeIcon.addClickListener(e -> this.close());
+    final var closeButton = new Button(VaadinIcon.CLOSE_SMALL.create());
+    closeButton.addClassName("notification-close");
+    closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+    closeButton.getElement().setAttribute("aria-label", "Close");
+    closeButton.addClickListener(e -> this.close());
 
-    layout.add(icon, content, closeIcon);
+    layout.add(icon, content, closeButton);
     add(layout);
   }
 
