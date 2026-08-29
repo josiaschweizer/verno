@@ -162,7 +162,7 @@ export default function Product() {
               </div>
 
               <div className="rounded-2xl bg-verno-surface shadow p-4">
-                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
+                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[3600/2260]">
                   <HoverSplitImage
                     lightSrc="/dashboard/dashboard-light.png"
                     darkSrc="/dashboard/dashboard.png"
@@ -264,7 +264,7 @@ export default function Product() {
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
+                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[3600/2260]">
                   <HoverSplitImage
                     lightSrc={activeOrganization.lightSrc}
                     darkSrc={activeOrganization.darkSrc}
@@ -315,8 +315,8 @@ export default function Product() {
                 </div>
               </div>
 
-              <div className="h-64 rounded-2xl bg-verno-surface shadow p-4 flex flex-col">
-                <div className="flex-1 rounded-xl bg-verno-surface-light border border-transparent overflow-hidden">
+              <div className="rounded-2xl bg-verno-surface shadow p-4">
+                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[3600/2260]">
                   <HoverSplitImage
                     lightSrc="/product/calendar-view-light.png"
                     darkSrc="/product/calendar-view.png"
@@ -416,7 +416,7 @@ export default function Product() {
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
+                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-[3600/2260]">
                   {peopleView === 'participants' ? (
                     <HoverSplitImage
                       lightSrc="/product/participants-list-light.png"
@@ -480,7 +480,7 @@ export default function Product() {
               </div>
 
               <div className="rounded-2xl bg-verno-surface shadow p-4">
-                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-16/10">
+                <div className="rounded-xl bg-verno-surface-light border border-transparent overflow-hidden aspect-video">
                   <HoverSplitImage
                     lightSrc="/product/mail-overview-light.png"
                     darkSrc="/product/mail-overview.png"
