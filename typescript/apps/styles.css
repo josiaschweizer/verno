@@ -206,17 +206,25 @@
   }
 
   .reveal-section {
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    will-change: opacity, transform;
-  }
-
-  .reveal-section[data-visible='false'] {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  .reveal-section[data-visible='true'] {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-section {
+      animation: reveal-section-in 0.5s ease-out both;
+    }
+  }
+
+  @keyframes reveal-section-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
