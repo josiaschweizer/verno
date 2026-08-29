@@ -10,8 +10,8 @@ import { createCanonicalLinks, createMeta } from '@/lib/seo'
 
 export function meta() {
   return createMeta(
-    'Über Verno – Vereinssoftware aus der Schweiz',
-    'Lerne Verno, unsere Werte und den Schweizer Fokus hinter unserer Vereinssoftware kennen.',
+    'Über Verno – Kursverwaltung aus der Schweiz',
+    'Lerne Verno, unsere Werte und den Schweizer Fokus hinter unserer Kursverwaltung für Vereine kennen.',
   )
 }
 

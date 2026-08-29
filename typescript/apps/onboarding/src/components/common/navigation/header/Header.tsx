@@ -10,8 +10,8 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid'
 import {
   ArrowRightStartOnRectangleIcon,
+  ArrowDownTrayIcon,
   CalendarDaysIcon,
-  ChartBarIcon,
   FolderIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -63,7 +63,7 @@ export default function Header() {
         name: t('header.product.reporting.name'),
         description: t('header.product.reporting.description'),
         href: '/product#reporting',
-        icon: ChartBarIcon,
+        icon: ArrowDownTrayIcon,
       },
     ],
     [t],

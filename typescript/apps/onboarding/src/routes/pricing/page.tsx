@@ -8,8 +8,8 @@ import { createCanonicalLinks, createMeta } from '@/lib/seo'
 
 export function meta() {
   return createMeta(
-    'Preise für die Verno Vereinssoftware',
-    'Transparente Preise für Verno: eine moderne Vereinssoftware für Kurse, Teams, Mitglieder und Standorte.',
+    'Preise für die Verno Kursverwaltung',
+    'Transparente Preise für Verno: Kursplanung, Teilnehmende, Kursleitende, Kommunikation und Exporte in einem System.',
   )
 }
 

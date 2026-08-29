@@ -5,8 +5,8 @@ import { createCanonicalLinks, createMeta } from '@/lib/seo'
 
 export function meta() {
   return createMeta(
-    'Verno – Vereinsverwaltung für Schweizer Sportvereine',
-    'Verno hilft Sportvereinen, Teams, Kurse, Mitglieder und Standorte einfach und sicher zu organisieren.',
+    'Verno – Kursverwaltung für Schweizer Vereine',
+    'Verno hilft Vereinen und Sportschulen, Kursperioden, Kurse, Teilnehmende und Kursleitende übersichtlich zu organisieren.',
   )
 }
 

@@ -1,12 +1,12 @@
 {
   "hero": {
-    "title": "Einfache Preise für ruhige Vereinsverwaltung",
-    "description": "Starte mit einem klaren Paket und erhalte alles, was du brauchst, um deinen Verein modern und strukturiert zu führen."
+    "title": "Einfache Preise für ruhige Kursverwaltung",
+    "description": "Ein klares Paket für Vereine und Sportschulen, die ihren Kursbetrieb modern und strukturiert organisieren möchten."
   },
   "plan": {
     "badge": "Basic-Paket",
     "title": "Alles Wichtige für den Einstieg",
-    "description": "Ideal für Vereine, die ein sauberes und zuverlässiges System ohne unnötige Komplexität möchten.",
+    "description": "Ideal für Organisationen mit wiederkehrenden Kursen, Teilnehmenden und mehreren Kursleitenden.",
     "price": {
       "label": "Ab",
       "amount": "CHF 25",
@@ -17,12 +17,12 @@
   "included": {
     "title": "Enthalten",
     "items": [
-      "Mitgliederverwaltung",
-      "Team- und Rollenübersicht",
-      "Zentrale Kommunikationswerkzeuge",
-      "Modernes Admin-Dashboard",
-      "Responsives Design",
-      "Sicherer Cloud-Zugriff"
+      "Kursperioden, Kurse und Wochenkalender",
+      "Teilnehmende, Elternkontakte und Kursstufen",
+      "Kursleitende und Benutzerverwaltung",
+      "E-Mail-Vorlagen und Kurskommunikation",
+      "CSV-Import und -Export",
+      "PDF-Kurs- und Teilnehmerlisten"
     ]
   },
   "why": {
@@ -33,12 +33,12 @@
         "text": "Keine verwirrenden Preise. Einfach ein klares Angebot."
       },
       {
-        "title": "Schnell verständlich",
-        "text": "Perfekt, solange sich das Produkt noch weiterentwickelt."
+        "title": "Persönlich eingerichtet",
+        "text": "Wir begleiten die Einrichtung und helfen beim Übernehmen bestehender Daten."
       },
       {
-        "title": "Sauberer erster Eindruck",
-        "text": "Wirkt modern und schafft sofort Vertrauen."
+        "title": "Direkter Support",
+        "text": "Bei Fragen erreichst du in der Startphase direkt das Verno-Team."
       }
     ]
   },
@@ -55,7 +55,7 @@
       },
       {
         "question": "Ist Support enthalten?",
-        "answer": "Ja, Basic-Support ist enthalten."
+        "answer": "Ja, persönlicher Support ist im Basic-Paket enthalten."
       },
       {
         "question": "Können sich die Preise später ändern?",

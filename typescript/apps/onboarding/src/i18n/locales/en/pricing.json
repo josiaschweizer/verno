@@ -1,12 +1,12 @@
 {
   "hero": {
-    "title": "Simple pricing for calm club management",
-    "description": "Start with one clear package and get everything you need to run your club in a modern and structured way."
+    "title": "Simple pricing for calm course management",
+    "description": "Start with one clear package for course planning, participants, instructors and communication."
   },
   "plan": {
     "badge": "Basic Package",
     "title": "Everything essential to get started",
-    "description": "Ideal for clubs that want a clean and reliable system without unnecessary complexity.",
+    "description": "Ideal for clubs and sports schools that want to organize recurring courses clearly.",
     "price": {
       "label": "Starting at",
       "amount": "CHF 25",
@@ -17,12 +17,12 @@
   "included": {
     "title": "Included",
     "items": [
-      "Member management",
-      "Team and role overview",
-      "Central communication tools",
-      "Modern admin dashboard",
-      "Responsive design",
-      "Secure cloud access"
+      "Course periods and course planning",
+      "Participant and guardian profiles",
+      "Instructor and user administration",
+      "Email templates and delivery logs",
+      "CSV import and export",
+      "PDF course and participant lists"
     ]
   },
   "why": {
@@ -33,12 +33,12 @@
         "text": "No confusing pricing. Just one simple offer."
       },
       {
-        "title": "Fast to understand",
-        "text": "Perfect while the product is still evolving."
+        "title": "Personal setup",
+        "text": "We set up your organization together and help with the first steps."
       },
       {
-        "title": "Clean first impression",
-        "text": "Looks modern and builds trust immediately."
+        "title": "Direct support",
+        "text": "During the initial phase, questions and feedback go directly to Verno."
       }
     ]
   },
@@ -55,7 +55,7 @@
       },
       {
         "question": "Is support included?",
-        "answer": "Yes, basic support is included."
+        "answer": "Yes. During the initial phase, support is provided personally and directly by Verno."
       },
       {
         "question": "Can pricing change later?",

@@ -2,7 +2,7 @@
   "organizationConfig": {
     "courseSchedules": {
       "title": "Zeitpläne",
-      "caption": "Plane Wochen und Lektionen übersichtlich.",
+      "caption": "Plane Kursperioden und Kalenderwochen übersichtlich.",
       "alt": "Übersicht der Kurszeitpläne"
     },
     "courses": {
@@ -26,45 +26,45 @@
     "hoverCompare": "Zum Vergleichen von Light- und Dark-Mode darüberfahren."
   },
   "hero": {
-    "title": "Verno für Sportvereine",
-    "text1": "Klare Struktur, Zeitpläne und Mitgliederübersicht für Vereine mit Teams, Kursen und Standorten.",
-    "text2": "Entwickelt für Koordinatoren, Trainer und Vereinsverantwortliche, die ein ruhiges und zuverlässiges System für den Alltag möchten.",
+    "title": "Verno für Vereine und Sportschulen",
+    "text1": "Kursperioden, Kurse, Teilnehmende und Kursleitende in einem klaren System.",
+    "text2": "Entwickelt für Verantwortliche, die ihren wiederkehrenden Kursbetrieb ruhig und zuverlässig organisieren möchten.",
     "imageAlt": "Dashboard mit Kursbereichen, Teilnehmertabellen und Schnellaktionen",
     "caption": "Dashboard-Übersicht mit Kursbereichen, sortierbaren Tabellen und Schnellaktionen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
   },
   "organization": {
-    "title": "Organisation",
-    "subtitle": "Vereine, Teams und Standorte sauber organisiert.",
-    "text1": "Entwickelt für Vereine mit vielen Teams und Standorten.",
-    "text2": "Eine gemeinsame Struktur, die über Saisons hinweg konsistent bleibt.",
+    "title": "Kursbetrieb im Überblick",
+    "subtitle": "Alle wichtigen Kursdaten an einem Ort.",
+    "text1": "Verwalte Kursperioden, Kurse, Kursstufen, Kursleitende und Teilnehmende zentral.",
+    "text2": "Status, Kapazitäten, Zeiten und Zuordnungen bleiben für die Administration nachvollziehbar.",
     "keyPoints": [
-      "Klare Vereins- und Teamhierarchie",
-      "Gemeinsames Verzeichnis für Standorte und Kontakte",
-      "Vorlagen für Saisons und Programme"
+      "Kursperioden mit geplantem, aktivem oder abgeschlossenem Status",
+      "Kurse mit Stufen, Kapazitäten, Zeiten und Kursleitenden",
+      "Durchsuchbare Verzeichnisse für Teilnehmende und Kursleitende"
     ]
   },
   "scheduling": {
-    "title": "Planung & Kurse",
-    "subtitle": "Trainings, Spiele und Kurse klar planen.",
-    "text1": "Entwickelt für wöchentliches Training, Spiele und mehrwöchige Kurse.",
-    "text2": "Trainer sehen, wo und wann sie gebraucht werden.",
+    "title": "Kursplanung & Kalender",
+    "subtitle": "Wiederkehrende Kurse übersichtlich planen.",
+    "text1": "Lege Kalenderwochen, Wochentage, Zeiten und Kursorte für deine Kurse fest.",
+    "text2": "Die Wochenansicht zeigt auf einen Blick, wann und wo ein Kurs stattfindet und wer ihn leitet.",
     "keyPoints": [
-      "Kalenderansichten für Teams und Standorte",
-      "Lektionen mit Trainern und Kapazitäten",
-      "Filter für Trainings, Spiele und Events"
+      "Wochenkalender mit farblich markierten Kursen",
+      "Kursperioden mit frei wählbaren Kalenderwochen",
+      "Zeiten, Kursorte, Kapazitäten und Kursleitende pro Kurs"
     ],
     "imageAlt": "Übersicht der Wochenplanung",
     "caption": "Wochenplan mit klarem Stundenraster, Wochennavigation und farblich markierten Lektionen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
   },
   "participants": {
-    "title": "Teilnehmer & Mitgliedschaften",
-    "subtitle": "Spieler, Erziehungsberechtigte und Mitarbeitende auf dem gleichen Stand halten.",
-    "text1": "Profile, Erziehungsberechtigte und Teamrollen an einem Ort.",
-    "text2": "Sieh, wer aktiv ist und wo trainiert wird.",
+    "title": "Teilnehmende & Kontakte",
+    "subtitle": "Profile, Elternkontakte und Kurszuweisungen zentral pflegen.",
+    "text1": "Kontaktdaten, Adressen, Kursstufen, Erziehungsberechtigte und Geschwister bleiben miteinander verbunden.",
+    "text2": "Sieh, wer aktiv ist und welchen Kursen eine Person zugewiesen wurde.",
     "keyPoints": [
-      "Profile für Teilnehmer und Erziehungsberechtigte",
-      "Mitgliedschaftsstatus nach Team oder Saison",
-      "Integrierte Benutzer- und Rollenverwaltung"
+      "Profile für Teilnehmende und Erziehungsberechtigte",
+      "Kursstufen und direkte Kurszuweisungen",
+      "Benutzerverwaltung mit klaren Zugriffsrollen"
     ],
     "participantsOverview": "Teilnehmerübersicht",
     "rolesUsers": "Rollen & Benutzer",
@@ -78,38 +78,44 @@
   "mailing": {
     "title": "Mailversand & Kommunikation",
     "subtitle": "Teilnehmer, Erziehungsberechtigte und Trainer schnell erreichen.",
-    "text1": "Versende gezielte E-Mails für Kursupdates, Erinnerungen und wichtige Vereinskommunikation.",
+    "text1": "Versende gezielte E-Mails für Kursupdates, Erinnerungen und wichtige Informationen.",
     "text2": "Vorlagen, Empfänger und Versandhistorie an einem strukturierten Ort.",
     "keyPoints": [
       "E-Mail-Vorlagen für wiederkehrende Kommunikation",
-      "Versand an Kurse, Gruppen oder ausgewählte Empfänger",
+      "Versand an Kurse oder ausgewählte Teilnehmende",
       "Versandprotokolle mit Status und Fehlerübersicht"
     ],
     "imageAlt": "Mailübersicht mit Vorlagen, Empfängern und Versandprotokoll",
     "caption": "Vorlagen verwalten, Nachrichten an die richtige Zielgruppe senden und die Versandhistorie prüfen. Zum Vergleichen von Light- und Dark-Mode darüberfahren."
   },
   "reporting": {
-    "title": "Auswertungen & Einblicke",
-    "subtitle": "Teilnahme- und Kapazitätstrends verfolgen.",
-    "text1": "Einfache Kennzahlen, um Anwesenheitsmuster und Ressourcennutzung in deiner Organisation zu verstehen.",
-    "text2": "Daten für Vorstandssitzungen und Saisonplanung exportieren.",
+    "title": "Listen & Datenexport",
+    "subtitle": "Daten übernehmen, weiterverwenden und als Liste ausgeben.",
+    "text1": "Importiere bestehende Daten per CSV und exportiere Teilnehmende oder Kursleitende bei Bedarf wieder.",
+    "text2": "Erstelle PDF-Listen für einzelne Kurse oder eine Übersicht aller Teilnehmenden.",
     "keyPoints": [
-      "Anwesenheits- und Anmeldetracking",
-      "Nutzung von Standorten und Ressourcen",
-      "Vergleiche zwischen Saisons"
+      "CSV-Import und -Export für Teilnehmende und Kursleitende",
+      "PDF-Listen für Kurse und Teilnehmende",
+      "Eigene Vorlage für Kursberichte hinterlegen"
     ],
-    "stats": {
-      "activeClubs": "Aktive Vereine",
-      "totalParticipants": "Teilnehmer insgesamt",
-      "runningCourses": "Laufende Kurse"
+    "cards": {
+      "participants": {
+        "title": "Teilnehmende",
+        "description": "Teilnehmerdaten per CSV importieren oder exportieren."
+      },
+      "instructors": {
+        "title": "Kursleitende",
+        "description": "Kontaktdaten von Kursleitenden als CSV austauschen."
+      },
+      "reports": {
+        "title": "PDF-Listen",
+        "description": "Kurs- und Teilnehmerlisten direkt als PDF erstellen."
+      }
     },
-    "attendanceOverview": "Anwesenheitsübersicht",
-    "lastSixMonths": "Letzte 6 Monate",
-    "months": ["Sep", "Okt", "Nov", "Dez", "Jan", "Feb"],
-    "caption": "Kennzahlen zu Vereinsaktivität, Teilnahme und Kursnachfrage."
+    "caption": "Vorhandene Daten bleiben für den täglichen Kursbetrieb einfach verfügbar."
   },
   "cta": {
-    "title": "Mit einer Saison starten und wachsen",
-    "text": "Beginne mit einem einzelnen Team oder Standort und erweitere danach, sobald sich dein Team eingearbeitet hat."
+    "title": "Mit dem eigenen Kursbetrieb starten",
+    "text": "Richte deine Kursperioden, Kurse und Teilnehmenden ein und bringe die tägliche Administration an einen Ort."
   }
 }

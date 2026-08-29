@@ -20,7 +20,7 @@
   "values": {
     "clarity": {
       "title": "Klarheit statt Komplexität",
-      "text": "Wir entwickeln ruhige Arbeitsabläufe, die über Teams, Saisons und Standorte hinweg konsistent bleiben."
+      "text": "Wir entwickeln ruhige Arbeitsabläufe für Kursplanung, Teilnehmende und Kommunikation."
     },
     "trust": {
       "title": "Vertrauen und Stabilität",
@@ -33,7 +33,7 @@
   },
   "hero": {
     "title": "Über Verno",
-    "description": "Verno entwickelt moderne Vereinssoftware für Teams, Kurse und Standorte. Wir helfen Sportvereinen dabei, verstreute Tools durch ein ruhiges, zuverlässiges System für Planung, Mitgliedschaften und die tägliche Koordination zu ersetzen."
+    "description": "Verno entwickelt moderne Kursverwaltung für Vereine und Sportschulen. Wir bringen Kursperioden, Kurse, Teilnehmende, Kursleitende und Kommunikation in einem ruhigen, zuverlässigen System zusammen."
   },
   "teamSection": {
     "title": "Das Team",
