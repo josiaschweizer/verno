@@ -55,7 +55,7 @@
     "sections": {
       "scope": {
         "title": "1. Scope",
-        "text": "Verno provides software for managing clubs, teams, and related operations."
+        "text": "Verno provides software for managing courses, participants, instructors and related operations."
       },
       "accounts": {
         "title": "2. User accounts",

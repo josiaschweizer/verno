@@ -20,7 +20,7 @@
   "values": {
     "clarity": {
       "title": "Clarity over complexity",
-      "text": "We design calm workflows that stay consistent across teams, seasons and venues."
+      "text": "We design calm workflows for recurring courses, participants and instructors."
     },
     "trust": {
       "title": "Trust and stability",
@@ -33,7 +33,7 @@
   },
   "hero": {
     "title": "About Verno",
-    "description": "Verno builds modern club software for teams, courses and venues. We help sports clubs replace scattered tools with one calm, reliable system for scheduling, memberships and everyday coordination."
+    "description": "Verno builds modern course management software for clubs and sports schools. We bring course periods, courses, participants, instructors and communication together in one calm, reliable system."
   },
   "teamSection": {
     "title": "The team",

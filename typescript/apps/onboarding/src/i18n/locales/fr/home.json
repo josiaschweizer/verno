@@ -1,13 +1,13 @@
 {
   "hero": {
-    "title": "La gestion de club, en toute sérénité.",
-    "description": "Verno aide les clubs de sport à organiser les équipes, les cours et les lieux dans un système clair. Plus d'outils dispersés. Plus de chaos. Juste de la structure.",
+    "title": "La gestion des cours, en toute sérénité.",
+    "description": "Verno aide les clubs et les écoles de sport à organiser les périodes de cours, les cours, les participants et les moniteurs dans un système clair. Plus de listes dispersées. Plus de chaos. Juste de la structure.",
     "imageAlt": "Responsable de club satisfait utilisant Verno"
   },
   "badges": {
     "secureByDefault": "Sécurisé par défaut",
     "switzerlandFirst": "Infrastructure centrée sur la Suisse",
-    "designedForClubs": "Conçu pour de vrais clubs"
+    "designedForClubs": "Conçu pour la gestion quotidienne des cours"
   },
   "actions": {
     "exploreProduct": "Découvrir le produit",

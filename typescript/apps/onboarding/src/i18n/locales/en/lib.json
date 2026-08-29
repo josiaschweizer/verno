@@ -34,20 +34,20 @@
     },
     "product": {
       "organization": {
-        "name": "Organization",
-        "description": "Manage members, instructors, roles and structure"
+        "name": "Course operations",
+        "description": "Manage course periods, courses and instructors centrally"
       },
       "scheduling": {
         "name": "Scheduling & Courses",
-        "description": "Plan courses, trainings and schedules in one place"
+        "description": "Plan recurring courses and weekly schedules in one place"
       },
       "participants": {
-        "name": "Participants & Memberships",
-        "description": "Keep track of participants, memberships and statuses"
+        "name": "Participants & contacts",
+        "description": "Keep track of profiles, guardians and course assignments"
       },
       "reporting": {
-        "name": "Reporting & Insights",
-        "description": "Get clear insights, reports and exports instantly"
+        "name": "Lists & exports",
+        "description": "Create CSV exports and PDF course lists"
       }
     }
   }

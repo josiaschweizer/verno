@@ -20,7 +20,7 @@
   "values": {
     "clarity": {
       "title": "La clarté plutôt que la complexité",
-      "text": "Nous concevons des processus calmes qui restent cohérents entre les équipes, les saisons et les lieux."
+      "text": "Nous concevons des processus calmes pour les cours récurrents, les participants et les moniteurs."
     },
     "trust": {
       "title": "Confiance et stabilité",
@@ -33,7 +33,7 @@
   },
   "hero": {
     "title": "À propos de Verno",
-    "description": "Verno développe un logiciel moderne pour les clubs, les équipes, les cours et les lieux sportifs. Nous aidons les clubs sportifs à remplacer des outils dispersés par un système calme et fiable pour la planification, les adhésions et la coordination quotidienne."
+    "description": "Verno développe un logiciel moderne de gestion des cours pour les clubs et les écoles de sport. Nous réunissons les périodes de cours, les cours, les participants, les moniteurs et la communication dans un système calme et fiable."
   },
   "teamSection": {
     "title": "L'équipe",

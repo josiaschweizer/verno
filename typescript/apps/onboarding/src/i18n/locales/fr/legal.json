@@ -55,7 +55,7 @@
     "sections": {
       "scope": {
         "title": "1. Champ d’application",
-        "text": "Verno fournit un logiciel pour gérer les clubs, les équipes et les opérations associées."
+        "text": "Verno fournit un logiciel pour gérer les cours, les participants, les moniteurs et les opérations associées."
       },
       "accounts": {
         "title": "2. Comptes utilisateurs",

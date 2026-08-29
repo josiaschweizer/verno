@@ -1,12 +1,12 @@
 {
   "hero": {
-    "title": "Des prix simples pour une gestion de club sereine",
-    "description": "Commencez avec une offre claire et obtenez tout ce dont vous avez besoin pour gérer votre club de manière moderne et structurée."
+    "title": "Des prix simples pour une gestion des cours sereine",
+    "description": "Commencez avec une offre claire pour la planification des cours, les participants, les moniteurs et la communication."
   },
   "plan": {
     "badge": "Pack Basic",
     "title": "Tout l’essentiel pour commencer",
-    "description": "Idéal pour les clubs qui souhaitent un système clair et fiable, sans complexité inutile.",
+    "description": "Idéal pour les clubs et les écoles de sport qui souhaitent organiser clairement leurs cours récurrents.",
     "price": {
       "label": "À partir de",
       "amount": "CHF 25",
@@ -17,12 +17,12 @@
   "included": {
     "title": "Inclus",
     "items": [
-      "Gestion des membres",
-      "Vue d’ensemble des équipes et des rôles",
-      "Outils de communication centralisés",
-      "Tableau de bord d’administration moderne",
-      "Design responsive",
-      "Accès cloud sécurisé"
+      "Périodes de cours et planification des cours",
+      "Profils des participants et représentants légaux",
+      "Gestion des moniteurs et des utilisateurs",
+      "Modèles d'e-mails et journaux d'envoi",
+      "Import et export CSV",
+      "Listes PDF de cours et de participants"
     ]
   },
   "why": {
@@ -33,12 +33,12 @@
         "text": "Pas de tarifs confus. Une seule offre simple."
       },
       {
-        "title": "Facile à comprendre",
-        "text": "Parfait pendant que le produit continue d’évoluer."
+        "title": "Mise en place personnalisée",
+        "text": "Nous configurons ensemble votre organisation et vous accompagnons dans les premières étapes."
       },
       {
-        "title": "Une première impression soignée",
-        "text": "Une apparence moderne qui inspire immédiatement confiance."
+        "title": "Support direct",
+        "text": "Durant la phase initiale, les questions et les retours sont traités directement par Verno."
       }
     ]
   },
@@ -55,7 +55,7 @@
       },
       {
         "question": "Le support est-il inclus ?",
-        "answer": "Oui, le support de base est inclus."
+        "answer": "Oui. Durant la phase initiale, le support est assuré personnellement et directement par Verno."
       },
       {
         "question": "Les prix peuvent-ils changer plus tard ?",

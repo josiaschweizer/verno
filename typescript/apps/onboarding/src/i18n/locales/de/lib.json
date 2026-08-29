@@ -34,20 +34,20 @@
     },
     "product": {
       "organization": {
-        "name": "Organisation",
-        "description": "Mitglieder, Kursleiter, Rollen und Strukturen verwalten"
+        "name": "Kursbetrieb",
+        "description": "Kursperioden, Kurse, Kursleitende und Teilnehmende verwalten"
       },
       "scheduling": {
         "name": "Planung & Kurse",
-        "description": "Kurse, Trainings und Zeitpläne an einem Ort planen"
+        "description": "Wiederkehrende Kurse und Zeitpläne an einem Ort planen"
       },
       "participants": {
-        "name": "Teilnehmer & Mitgliedschaften",
-        "description": "Teilnehmer, Mitgliedschaften und Status im Blick behalten"
+        "name": "Teilnehmende & Kontakte",
+        "description": "Profile, Elternkontakte und Kurszuweisungen im Blick behalten"
       },
       "reporting": {
-        "name": "Auswertungen & Einblicke",
-        "description": "Klare Einblicke, Berichte und Exporte sofort erhalten"
+        "name": "Listen & Exporte",
+        "description": "CSV-Daten austauschen und PDF-Listen erstellen"
       }
     }
   }

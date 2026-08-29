@@ -1,7 +1,7 @@
 {
   "name": "Verno",
   "short_name": "Verno",
-  "description": "Swiss software for club and course management.",
+  "description": "Swiss software for course management in clubs and sports schools.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

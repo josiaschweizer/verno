@@ -34,20 +34,20 @@
     },
     "product": {
       "organization": {
-        "name": "Organisation",
-        "description": "Gérer les membres, les moniteurs, les rôles et la structure"
+        "name": "Gestion des cours",
+        "description": "Gérer les périodes de cours, les cours et les moniteurs de manière centralisée"
       },
       "scheduling": {
         "name": "Planification & cours",
-        "description": "Planifier les cours, les entraînements et les horaires au même endroit"
+        "description": "Planifier les cours récurrents et les horaires hebdomadaires au même endroit"
       },
       "participants": {
-        "name": "Participants & adhésions",
-        "description": "Suivre les participants, les adhésions et les statuts"
+        "name": "Participants & contacts",
+        "description": "Suivre les profils, les représentants légaux et les affectations aux cours"
       },
       "reporting": {
-        "name": "Rapports & analyses",
-        "description": "Obtenir rapidement des analyses claires, des rapports et des exports"
+        "name": "Listes & exports",
+        "description": "Créer des exports CSV et des listes de cours au format PDF"
       }
     }
   }

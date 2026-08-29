@@ -2,7 +2,7 @@
   "organizationConfig": {
     "courseSchedules": {
       "title": "Schedules",
-      "caption": "Plan weeks and sessions with clarity.",
+      "caption": "Plan course periods and calendar weeks with clarity.",
       "alt": "Course schedules overview"
     },
     "courses": {
@@ -26,44 +26,44 @@
     "hoverCompare": "Hover to compare light and dark mode."
   },
   "hero": {
-    "title": "Verno for sports clubs",
-    "text1": "Clear structure, schedules and membership overview for clubs running teams, courses and venues.",
-    "text2": "Built for coordinators, coaches and club managers who want a calm, reliable system for everyday operations.",
+    "title": "Verno for clubs and sports schools",
+    "text1": "Course periods, courses, participants and instructors in one clear system.",
+    "text2": "Designed for people who want to organize recurring course operations calmly and reliably.",
     "imageAlt": "Dashboard with course sections, participant tables and quick actions",
     "caption": "Dashboard overview with course sections, sortable tables and quick actions. Hover to compare light and dark mode."
   },
   "organization": {
-    "title": "Organization",
-    "subtitle": "Keep clubs, teams and venues organized.",
-    "text1": "Designed for clubs with many teams and locations.",
-    "text2": "A shared structure that stays consistent across seasons.",
+    "title": "Course operations at a glance",
+    "subtitle": "All essential course data in one place.",
+    "text1": "Manage course periods, courses, participants and instructors centrally.",
+    "text2": "Statuses, capacities, times and assignments remain clear in everyday work.",
     "keyPoints": [
-      "Clear club and team hierarchy",
-      "Shared directory for venues and contacts",
-      "Templates for seasons and programs"
+      "Course periods with planned, active and completed status",
+      "Course details with levels, capacities, times and locations",
+      "Searchable directories for participants and instructors"
     ]
   },
   "scheduling": {
-    "title": "Scheduling & Courses",
-    "subtitle": "Plan training, matches and courses clearly.",
-    "text1": "Built for weekly training, fixtures and multi-week courses.",
-    "text2": "Coaches can see where they are needed and when.",
+    "title": "Course scheduling & calendar",
+    "subtitle": "Plan recurring courses clearly.",
+    "text1": "Define calendar weeks, weekdays, times, locations and instructors for every course.",
+    "text2": "The weekly view makes the complete timetable easy to understand.",
     "keyPoints": [
-      "Calendar views for teams and venues",
-      "Sessions with instructors and capacity",
-      "Filters for training, games and events"
+      "Weekly timetable with course colors",
+      "Courses with instructors and capacity",
+      "Course periods for recurring programs"
     ],
     "imageAlt": "Weekly schedules overview",
     "caption": "Weekly timetable with a clear hour grid, week navigation and color-coded sessions. Hover to compare light and dark mode."
   },
   "participants": {
-    "title": "Participants & Memberships",
-    "subtitle": "Keep players, guardians and staff aligned.",
-    "text1": "Profiles, guardians and team roles in one place.",
-    "text2": "See who is active and where they train.",
+    "title": "Participants & contacts",
+    "subtitle": "Maintain profiles, guardians and course assignments.",
+    "text1": "Contact details, guardians and siblings are kept together in one profile.",
+    "text2": "See who is active and which courses each person attends.",
     "keyPoints": [
       "Profiles for participants and guardians",
-      "Membership status by team or season",
+      "Active status and course assignments",
       "Integrated user and role administration"
     ],
     "participantsOverview": "Participants overview",
@@ -78,38 +78,44 @@
   "mailing": {
     "title": "Mail Delivery & Communication",
     "subtitle": "Reach participants, guardians and instructors quickly.",
-    "text1": "Send targeted emails for course updates, reminders and important club communication.",
+    "text1": "Send targeted emails for course updates, reminders and important information.",
     "text2": "Keep templates, recipients and delivery history in one structured place.",
     "keyPoints": [
       "Email templates for recurring communication",
-      "Send to courses, groups or selected recipients",
+      "Send to courses or selected participants",
       "Delivery logs with status and error visibility"
     ],
     "imageAlt": "Mail overview with templates, recipients and delivery log",
     "caption": "Manage templates, send messages to the right audience and review delivery history. Hover to compare light and dark mode."
   },
   "reporting": {
-    "title": "Reporting & Insights",
-    "subtitle": "Track participation and capacity trends.",
-    "text1": "Simple metrics to understand attendance patterns and resource usage across your organization.",
-    "text2": "Export data for board meetings and season planning.",
+    "title": "Lists & data export",
+    "subtitle": "Reuse course data without extra manual work.",
+    "text1": "Import and export participant and instructor data as CSV.",
+    "text2": "Create PDF course and participant lists or use your own course report template.",
     "keyPoints": [
-      "Attendance and enrollment tracking",
-      "Venue and resource utilization",
-      "Season-over-season comparisons"
+      "CSV import and export",
+      "PDF course and participant lists",
+      "Custom course report template"
     ],
-    "stats": {
-      "activeClubs": "Active clubs",
-      "totalParticipants": "Total participants",
-      "runningCourses": "Running courses"
+    "cards": {
+      "participants": {
+        "title": "Participants",
+        "description": "Import or export participant data in a structured CSV file."
+      },
+      "instructors": {
+        "title": "Instructors",
+        "description": "Export instructor data whenever you need to process it elsewhere."
+      },
+      "reports": {
+        "title": "PDF lists",
+        "description": "Create ready-to-use course and participant lists directly from Verno."
+      }
     },
-    "attendanceOverview": "Attendance overview",
-    "lastSixMonths": "Last 6 months",
-    "months": ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
-    "caption": "Metrics showing club activity, participation and course demand."
+    "caption": "Exports and lists based on the data already maintained in Verno."
   },
   "cta": {
-    "title": "Start with one season and grow",
-    "text": "Begin with a single team or venue, then expand as your staff get comfortable."
+    "title": "Start with your own course operations",
+    "text": "Set up course periods, courses, instructors and participants and manage them centrally from day one."
   }
 }
