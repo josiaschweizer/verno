@@ -270,10 +270,10 @@ public class ParticipantDto extends BaseDto<Long> {
 
   @Nonnull
   public String getCourseLevelsAsString() {
-    final var names = new ArrayList<String>();
+    final var names = New.<String>list();
 
     for (final var level : courseLevels) {
-      names.add(level.getName());
+      names.add(level.getCode());
     }
 
     return String.join(Publ.COMMA + Publ.SPACE, names);

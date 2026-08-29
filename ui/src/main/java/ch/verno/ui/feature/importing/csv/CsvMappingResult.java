@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public record CsvMappingResult<T extends BaseDto>(
+public record CsvMappingResult<T extends BaseDto<?>>(
         @Nonnull List<T> saveables,
         @Nonnull List<CsvMappingRowError> errors
 ) {
